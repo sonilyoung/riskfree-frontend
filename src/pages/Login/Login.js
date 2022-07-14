@@ -9,6 +9,8 @@ import Button from '@mui/material/Button';
 
 import { makeStyles } from '@mui/styles';
 import logoLogin from '../../logo_login.png';
+import checkIcon from '../../ic_chk2.png';
+import checkIconOn from '../../ic_chk2_on.png';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -56,7 +58,15 @@ const Login = () => {
                         <TextField id="standard-basic" placeholder="비밀번호" variant="outlined" />
                     </div>
                     <div className={classes.loginOptions}>
-                        <FormControlLabel control={<Checkbox defaultChecked />} label="아이디저장" />
+                        <FormControlLabel
+                            label="아이디저장"
+                            control={
+                                <Checkbox 
+                                    icon={<img src={checkIcon} />}
+                                    checkedIcon={<img src={checkIconOn} />}
+                                />
+                            }  
+                        />
                         <Link href="#">비밀번호 찾기 / 재설정</Link>
                     </div>
                     <Button variant="contained">로그인</Button>
