@@ -1,0 +1,1 @@
+export { default as WideLayout } from './Wide';
