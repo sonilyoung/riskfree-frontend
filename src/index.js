@@ -4,12 +4,16 @@ import './index.css';
 import RiskFree from './RiskFree';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles';
+import { mainTheme } from './themes/Main';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <BrowserRouter>
-            <RiskFree />
+            <ThemeProvider theme={mainTheme}>
+                <RiskFree />
+            </ThemeProvider>
         </BrowserRouter>
     </React.StrictMode>
 );
