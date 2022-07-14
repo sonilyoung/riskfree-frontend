@@ -8,7 +8,6 @@ import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 
 import { makeStyles } from '@mui/styles';
-
 import logoLogin from '../../logo_login.png';
 
 const useStyles = makeStyles(() => ({
@@ -54,7 +53,7 @@ const Login = () => {
                     </div>
                     <div className={classes.loginInput}>
                         <TextField id="standard-basic" placeholder="아이디" variant="outlined" />
-                        <TextField id="standard-basic" label="비밀번호" variant="outlined" />
+                        <TextField id="standard-basic" placeholder="비밀번호" variant="outlined" />
                     </div>
                     <div className={classes.loginOptions}>
                         <FormControlLabel control={<Checkbox defaultChecked />} label="아이디저장" />
