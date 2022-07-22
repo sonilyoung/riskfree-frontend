@@ -8,9 +8,9 @@ import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 
 import { makeStyles } from '@mui/styles';
-import logoLogin from '../../logo_login.png';
-import checkIcon from '../../ic_chk2.png';
-import checkIconOn from '../../ic_chk2_on.png';
+import logoLogin from '../../assets/images/logo_login.png';
+import checkIcon from '../../assets/images/ic_chk2.png';
+import checkIconOn from '../../assets/images/ic_chk2_on.png';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -51,7 +51,7 @@ const Login = () => {
             <div className={classes.pageWrap}>
                 <div className={classes.loginWrap}>
                     <div className={classes.loginLogo}>
-                        <img src={logoLogin} alt="logo" />
+                        <img src={logoLogin} alt="login logo" />
                     </div>
                     <div className={classes.loginInput}>
                         <TextField id="standard-basic" placeholder="아이디" variant="outlined" />
@@ -67,7 +67,7 @@ const Login = () => {
                                 />
                             }  
                         />
-                        <Link href="#">비밀번호 찾기 / 재설정</Link>
+                        <Link href="#" underline="hover">비밀번호 찾기 / 재설정</Link>
                     </div>
                     <Button variant="contained">로그인</Button>
                 </div>

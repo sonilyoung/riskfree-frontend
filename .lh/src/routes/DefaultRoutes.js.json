@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/routes/DefaultRoutes.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1658331575416,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1658331575416,
+            "name": "Commit-0",
+            "content": "import React from 'react';\r\nimport { Routes, Route } from 'react-router-dom';\r\nimport { LoginPage } from '../pages/Login';\r\nimport { RegistrationPage } from '../pages/Registration';\r\nimport { DashboardPage } from '../pages/Dashoard';\r\nimport { ForgottenPasswordPage } from '../pages/Login/pages/ForgottenPassword';\r\n\r\nconst DefaultRoutes = () => (\r\n    <Routes>\r\n        <Route path=\"/\" element={ <DashboardPage /> } />\r\n        <Route path=\"/login\" element={ <LoginPage /> } />\r\n        <Route path=\"/registration\" element={ <RegistrationPage /> } />\r\n        <Route path=\"/forgotten-password\" element={ <ForgottenPasswordPage /> } />\r\n    </Routes>\r\n);\r\n\r\nexport default DefaultRoutes;\r\n"
+        }
+    ]
+}
