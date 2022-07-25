@@ -183,12 +183,6 @@ const main = createTheme({
                     height: 18
                 }
             }
-        },
-        MuiGrid: {
-            styleOverrides: {
-                root: {
-                }
-            }
         }
     },
 });

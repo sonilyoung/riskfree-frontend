@@ -62,8 +62,8 @@ const Login = () => {
                             label="아이디저장"
                             control={
                                 <Checkbox 
-                                    icon={<img src={checkIcon} />}
-                                    checkedIcon={<img src={checkIconOn} />}
+                                    icon={<img src={checkIcon} alt="check icon" />}
+                                    checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                 />
                             }  
                         />

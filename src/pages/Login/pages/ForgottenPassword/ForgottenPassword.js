@@ -88,7 +88,7 @@ const ForgottenPassword = () => {
                         <Grid item xs={3}></Grid>
                         <Grid item xs={9}>
                             <Alert
-                                icon={<img src={alertIcon} />}
+                                icon={<img src={alertIcon} alt="alert icon" />}
                                 severity="error">
                                     특수문자 포함 영대소문자+숫자 8자리 이상으로 설정해 주세요.
                             </Alert>
