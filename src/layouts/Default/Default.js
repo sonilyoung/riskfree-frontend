@@ -192,7 +192,7 @@ const Default = ({ children }) => {
                         <Grid className={classes.mainLogo} item xs={3}>
                             <img src={logo} alt="logo" />
                         </Grid>
-                        <Grid className={classes.mainMenu} item xs={6}>
+                        <Grid className={classes.mainMenu} item xs={6.3}>
                             <div className={classes.leftMenu}>
                                 <UserButton className={classes.mainMenuButton}></UserButton>
                                 <FormControl sx={{width: 180}}>

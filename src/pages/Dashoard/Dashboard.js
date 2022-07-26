@@ -28,6 +28,9 @@ import circleGreen from '../../assets/images/bg_circle_green.png';
 // import circleYellow from '../../assets/images/bg_circle_yellow.png';
 // import circleOrange from '../../assets/images/bg_circle_orange.png';
 import circleRed from '../../assets/images/bg_circle_red.png';
+import gageImg from '../../assets/images/bg_gage.png';
+import needleImg from '../../assets/images/img_needle.png';
+import gageState from '../../assets/images/txt_warning.png';
 
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -62,7 +65,7 @@ const useStyles = makeStyles(() => ({
     },
     mainLogo: {
         '& img': {
-            transform: 'translate(20px, 15px)'
+            transform: 'translate(20px, 10px)'
         }
     },
     mainMenu: {
@@ -201,7 +204,6 @@ const useStyles = makeStyles(() => ({
         alignItems: 'center',
         width: '60px',
         height: '60px',
-        marginTop: '8px',
         border: 'none',
         cursor: 'pointer',
         transition: 'background .3s'
@@ -246,8 +248,8 @@ const useStyles = makeStyles(() => ({
         backgroundImage: 'linear-gradient(#424762, #1e2130)',
         borderRadius: '32px',
         width: '1720px',
-        height: '540px',
-        padding: '0 190px'
+        height: '545px',
+        padding: '0 165px'
     },
     slickCircle: {
         position: 'relative',
@@ -298,6 +300,7 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center',
         height: '66px',
         width: '100%',
+        marginTop: '1px',
         backgroundImage: 'url(' + orderBackground + ')',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center center',
@@ -312,10 +315,12 @@ const useStyles = makeStyles(() => ({
     },
     dashSlider: {
         '& .slick-list': {
-            padding: '1px 0 25px 0'
+            padding: '1px 0 20px 0',
+            marginTop: '8px',
         },
-        '--arrow_offset': '-255px',
+        '--arrow_offset': '-245px',
         '& .slick-arrow': {
+            top: '42%',
             width: '50px',
             height: '111px'
         },
@@ -337,6 +342,105 @@ const useStyles = makeStyles(() => ({
     dashboardSlide: {
         display: 'flex !important',
         flexWrap: 'wrap'
+    },
+    gageWrap: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+        height: '147px',
+        backgroundImage: 'url(' + gageImg + ')',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+    },
+    lowerDashboard: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        padding: '8px 20px',
+    },
+    gageArrow: {
+        position: 'relative',
+        width: '69px',
+        height: '123px',
+        bottom: '-32px',
+        '& div': {
+            position: 'absolute',
+            width: 'inherit',
+            height: 'inherit',
+            backgroundRepeat: 'no-repeat',
+        },
+        '& :first-of-type': {
+            backgroundImage: 'url(' + needleImg + ')',
+            backgroundPosition: 'center',
+            transform: 'rotateZ(25deg)',
+            transformOrigin: '35px 87px'
+        },
+        '& :last-of-type': {
+            backgroundImage: 'url(' + gageState + ')',
+            backgroundPosition: 'center 58px', 
+        }
+    },
+    boxWrap: {
+        height: '180px',
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignContent: 'space-between',
+        // paddingLeft: '15px',
+    },
+    footBox: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        border: '1px solid #1e2132',
+        background: '#1e2132',
+        color: '#fff',
+        marginLeft: '7px !important',
+        '&.boxUp': {
+            height: '120px'
+        },
+        '&.boxDown': {
+            height: '50px',
+            borderRadius: '8px'
+        },
+    },
+    footLink: {
+        width: '100%',
+        lineHeight: '43px',
+        textAlign: 'center',
+        fontSize: '20px',
+        fontWeight: '500',
+        background: '#3a5298',
+        letterSpacing: '-1.08px'
+    },
+    bottomBox: {
+        display: 'flex',
+        justifyContent: 'space-around',
+        width: '100%',
+        height: '77px',
+        '& div': {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            '& *': {
+                margin: '0 5px'
+            },
+            '& strong': {
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '50px',
+                height: '50px',
+                fontSize: '30px',
+                fontWeight: '500',
+                background: '#556478',
+                borderRadius: '50%',
+            }
+        },
+        '& div:first-of-type strong': {
+            color: '#fdcb05',
+        },
+        '& div:last-of-type strong': {
+            color: '#00adef',
+        }
     },
 }));
 
@@ -373,7 +477,7 @@ const ChartButton = styled(ButtonUnstyled)`
     background-repeat: no-repeat;
     position: absolute;
     top: -15px;
-    left: -230px;
+    left: -245px;
     width: 80px;
     height: 72px;
     border: none;
@@ -436,7 +540,7 @@ const Dashboard = () => {
                         <Grid className={classes.mainLogo} item xs={3}>
                             <img src={logo} alt="logo" />
                         </Grid>
-                        <Grid className={classes.mainMenu} item xs={6}>
+                        <Grid className={classes.mainMenu} item xs={6.3}>
                             <div className={classes.leftMenu}>
                                 <UserButton className={classes.mainMenuButton}></UserButton>
                                 <FormControl sx={{width: 180}}>
@@ -502,7 +606,7 @@ const Dashboard = () => {
                             <div className={classes.adminFieldText}>신뢰받는 세계 NO1. 사업장 구축</div>
                         </div>
                     </Grid>
-                    <Grid className={classes.headerNavigation} item xs={6}>
+                    <Grid className={classes.headerNavigation} item xs={5.8}>
                         <ChartButton></ChartButton>
                         <div className={classes.navSlider}>
                             <Slider {...headerSlider}>
@@ -519,8 +623,7 @@ const Dashboard = () => {
                     </Grid>
 
                 </Grid>
-
-                <Grid className={classes.pageBody} item xs={11}>
+                <Grid className={classes.pageBody} item xs={10.7}>
                     <div className={classes.managementOrder}>
                         관리차수<strong>12</strong>차 :<strong>22.01.01 ~ 22.04.30</strong> 
                     </div>
@@ -675,7 +778,61 @@ const Dashboard = () => {
                             </div>  
                         </div>
                     </Slider>
+                </Grid>
+                <Grid className={classes.lowerDashboard} container item xs={12}>
 
+                    <Grid className={classes.gageWrap} item xs={2}>
+                        <div className={classes.gageArrow}>
+                            <div className={classes.needleImg}></div>
+                            <div className={classes.gageState}></div>
+                        </div>
+                    </Grid>
+
+                    <Grid className={classes.boxWrap} item xs={10}>
+                        
+                        <Grid container item xs={12}>
+                            <Grid className={classes.footBox + ' boxUp'} item xs={3.7}>
+                                <Link className={classes.footLink} href="#" underline="none">대표이사 개선조치</Link>
+                                <div className={classes.bottomBox}>
+                                    <div>
+                                        <div>지시</div>
+                                        <strong>3</strong>
+                                        <div>건</div>
+                                    </div>
+                                    <div>
+                                        <div>진행</div>
+                                        <strong>1</strong>
+                                        <div>건</div>
+                                    </div>
+                                    <div>
+                                        <div>완료</div>
+                                        <strong>12</strong>
+                                        <div>건</div>
+                                    </div>
+                                </div>
+                            </Grid>
+                            <Grid className={classes.footBox + ' boxUp'} item xs={5}>
+                                <div className={classes.footLink} href="#" underline="none">산업재해 누적 집계</div>
+                                <div className={classes.bottomBox}>
+                                    <div>
+                                        <div>사망</div>
+                                        <div><strong>0</strong>건</div>
+                                    </div>
+                                </div>
+                            </Grid>
+                            <Grid className={classes.footBox + ' boxUp'} item xs={3}>
+                                <div className={classes.footLink} href="#" underline="none">11/27(화) - 안전작업허가 공사내역</div>
+                                <div className={classes.bottomBox}></div>
+                            </Grid>
+                        </Grid>
+
+                        <Grid container item xs={12} sx={{marginBottom: '3px'}}>
+                            <Grid className={classes.footBox + ' boxDown'} item xs={8.75}></Grid>
+                            <Grid className={classes.footBox + ' boxDown'} item xs={3}></Grid>
+                        </Grid>
+                                  
+                    </Grid>
+                
                 </Grid>
 
             </Grid>
