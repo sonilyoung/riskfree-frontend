@@ -19,6 +19,13 @@ import weatherIcon from '../../assets/images/weather_icon.png';
 import chartIcon from '../../assets/images/btn_chart.png';
 import orderBackground from '../../assets/images/bg_body_order.png';
 
+import numOne from '../../assets/images/num1.png';
+import numTwo from '../../assets/images/num2.png';
+import numThree from '../../assets/images/num3.png';
+import numFour from '../../assets/images/num4.png';
+import numFive from '../../assets/images/num5.png';
+import numNine from '../../assets/images/num9.png';
+
 import btnNext from '../../assets/images/btn_next.png';
 import btnPrev from '../../assets/images/btn_prev.png';
 import arrowNext from '../../assets/images/arrow_next.png';
@@ -48,7 +55,7 @@ import Slider from 'react-slick';
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
         backgroundColor: '#33374f',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     pageHeader: {
         // height: '225px',
@@ -318,7 +325,7 @@ const useStyles = makeStyles(() => ({
             padding: '1px 0 20px 0',
             marginTop: '8px',
         },
-        '--arrow_offset': '-245px',
+        '--arrow_offset': '-240px',
         '& .slick-arrow': {
             top: '42%',
             width: '50px',
@@ -362,30 +369,29 @@ const useStyles = makeStyles(() => ({
         position: 'relative',
         width: '69px',
         height: '123px',
-        bottom: '-32px',
+        bottom: '-27px',
         '& div': {
             position: 'absolute',
             width: 'inherit',
             height: 'inherit',
             backgroundRepeat: 'no-repeat',
         },
-        '& :first-of-type': {
-            backgroundImage: 'url(' + needleImg + ')',
-            backgroundPosition: 'center',
-            transform: 'rotateZ(25deg)',
-            transformOrigin: '35px 87px'
-        },
-        '& :last-of-type': {
-            backgroundImage: 'url(' + gageState + ')',
-            backgroundPosition: 'center 58px', 
-        }
+    },
+    needleImg: {
+        position: 'absolute',
+        backgroundImage: 'url(' + needleImg + ')',
+        backgroundPosition: 'center',
+        transformOrigin: '35px 87px'
+    },
+    gageState: {
+        backgroundImage: 'url(' + gageState + ')',
+        backgroundPosition: 'center 58px', 
     },
     boxWrap: {
         height: '180px',
         display: 'flex',
         flexWrap: 'wrap',
         alignContent: 'space-between',
-        // paddingLeft: '15px',
     },
     footBox: {
         display: 'flex',
@@ -394,6 +400,7 @@ const useStyles = makeStyles(() => ({
         background: '#1e2132',
         color: '#fff',
         marginLeft: '7px !important',
+        overflow: 'hidden',
         '&.boxUp': {
             height: '120px'
         },
@@ -401,6 +408,9 @@ const useStyles = makeStyles(() => ({
             height: '50px',
             borderRadius: '8px'
         },
+        '&:nth-of-type(2) .rightBox div:first-of-type div:last-of-type': {
+            color: '#fdcb05'
+        }
     },
     footLink: {
         width: '100%',
@@ -413,33 +423,100 @@ const useStyles = makeStyles(() => ({
     },
     bottomBox: {
         display: 'flex',
-        justifyContent: 'space-around',
         width: '100%',
         height: '77px',
-        '& div': {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            '& *': {
-                margin: '0 5px'
-            },
-            '& strong': {
+        '&.leftBox': {
+            justifyContent: 'space-around',
+            '& div': {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                width: '50px',
-                height: '50px',
-                fontSize: '30px',
-                fontWeight: '500',
-                background: '#556478',
-                borderRadius: '50%',
+                '& *': {
+                    margin: '0 5px'
+                },
+                '& strong': {
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '50px',
+                    height: '50px',
+                    fontSize: '30px',
+                    fontWeight: '500',
+                    background: '#556478',
+                    borderRadius: '50%',
+                }
+            },
+            '& div:first-of-type strong': {
+                color: '#fdcb05',
+            },
+            '& div:last-of-type strong': {
+                color: '#00adef',
             }
         },
-        '& div:first-of-type strong': {
-            color: '#fdcb05',
+        '&.rightBox': {
+            display: 'flex',
+            '& div': {
+                width: '100%',
+                color: '#e7e7e9',
+                boxSizing: 'content-box',
+                textAlign: 'center',
+                '& div:first-of-type': {
+                    backgroundColor: '#4d5867',
+                    borderTop: '1px solid #1e2132',
+                    borderLeft: '1px solid #1e2132',
+                    lineHeight: '29px',
+                },
+                '& div:last-of-type': {
+                        borderRight: '1px solid #556478',
+                        lineHeight: '46px',
+                    '& strong': {
+                        fontSize: '30px',
+                        fontWeight: '500',
+                        marginRight: '3px'
+                    },
+                }
+            },
+            '& div:last-of-type div:last-of-type': {
+                border: '0'
+            }
+        }
+    },
+    footDate: {
+        display: 'flex',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        '& .dateBox': {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '50px',
+            color: '#d5d5d8'
+        }
+    },
+    dayNums: {
+        display: 'flex',
+        marginLeft: '15px',
+        '& div': {
+            width: '19px',
+        }
+    },
+    timeNums: {
+        display: 'flex',
+        color: '#FBA325',
+        marginLeft: '7px',
+        '& div': {
+            display: 'flex',
+            marginLeft: '4px',
+            padding: '4px 8px',
+            background: 'linear-gradient(0deg, rgba(0,0,0,1) 40%, rgba(98,98,98,1) 100%)',
+            borderRadius: '4px'
         },
-        '& div:last-of-type strong': {
-            color: '#00adef',
+        '& span': {
+            fontSize: '32px',
+            height: '32px',
+            padding: '0px 2px 0px 6px',
+            textAlign: 'center',
+            lineHeight: '23px',
         }
     },
 }));
@@ -783,7 +860,7 @@ const Dashboard = () => {
 
                     <Grid className={classes.gageWrap} item xs={2}>
                         <div className={classes.gageArrow}>
-                            <div className={classes.needleImg}></div>
+                            <div className={classes.needleImg} style={{transform: 'rotate(25deg)'}}></div>
                             <div className={classes.gageState}></div>
                         </div>
                     </Grid>
@@ -793,7 +870,7 @@ const Dashboard = () => {
                         <Grid container item xs={12}>
                             <Grid className={classes.footBox + ' boxUp'} item xs={3.7}>
                                 <Link className={classes.footLink} href="#" underline="none">대표이사 개선조치</Link>
-                                <div className={classes.bottomBox}>
+                                <div className={classes.bottomBox + ' leftBox'}>
                                     <div>
                                         <div>지시</div>
                                         <strong>3</strong>
@@ -813,22 +890,91 @@ const Dashboard = () => {
                             </Grid>
                             <Grid className={classes.footBox + ' boxUp'} item xs={5}>
                                 <div className={classes.footLink} href="#" underline="none">산업재해 누적 집계</div>
-                                <div className={classes.bottomBox}>
+                                <div className={classes.bottomBox + ' rightBox'}>
                                     <div>
                                         <div>사망</div>
                                         <div><strong>0</strong>건</div>
+                                    </div>
+                                    <div>
+                                        <div>추락</div>
+                                        <div><strong>1</strong>건</div>
+                                    </div>
+                                    <div>
+                                        <div>화재</div>
+                                        <div><strong>4</strong>건</div>
+                                    </div>
+                                    <div>
+                                        <div>충돌</div>
+                                        <div><strong>2</strong>건</div>
+                                    </div>
+                                    <div>
+                                        <div>전기</div>
+                                        <div><strong>3</strong>건</div>
+                                    </div>
+                                    <div>
+                                        <div>고소</div>
+                                        <div><strong>4</strong>건</div>
+                                    </div>
+                                    <div>
+                                        <div>급성독성</div>
+                                        <div><strong>6</strong>건</div>
+                                    </div>
+                                    <div>
+                                        <div>끼임</div>
+                                        <div><strong>12</strong>건</div>
                                     </div>
                                 </div>
                             </Grid>
                             <Grid className={classes.footBox + ' boxUp'} item xs={3}>
                                 <div className={classes.footLink} href="#" underline="none">11/27(화) - 안전작업허가 공사내역</div>
-                                <div className={classes.bottomBox}></div>
+                                <div className={classes.bottomBox + ' rightBox'}>
+                                    <div>
+                                        <div>고소</div>
+                                        <div><strong>4</strong>건</div>
+                                    </div>
+                                    <div>
+                                        <div>화학물</div>
+                                        <div><strong>1</strong>건</div>
+                                    </div>
+                                    <div>
+                                        <div>밀폐</div>
+                                        <div><strong>2</strong>건</div>
+                                    </div>
+                                    <div>
+                                        <div>굴착</div>
+                                        <div><strong>3</strong>건</div>
+                                    </div>
+                                    <div>
+                                        <div>기타</div>
+                                        <div><strong>4</strong>건</div>
+                                    </div>
+                                </div>
                             </Grid>
                         </Grid>
 
                         <Grid container item xs={12} sx={{marginBottom: '3px'}}>
                             <Grid className={classes.footBox + ' boxDown'} item xs={8.75}></Grid>
-                            <Grid className={classes.footBox + ' boxDown'} item xs={3}></Grid>
+                            <Grid className={classes.footBox + ' boxDown ' + classes.footDate} item xs={3}>
+                                <div className={classes.footDay + ' dateBox'}>
+                                    <div>DAY</div>
+                                    <div className={classes.dayNums}>
+                                        <div><img src={numThree} alt="number three" /></div>
+                                        <div><img src={numTwo} alt="number two" /></div>
+                                        <div><img src={numFour} alt="number four" /></div>
+                                        <div><img src={numFive} alt="number five" /></div>
+                                    </div>
+                                </div>
+                                <div className={classes.footTime + ' dateBox'}>
+                                    <div>TIME</div>
+                                    <div className={classes.timeNums}>
+                                        <div><img src={numTwo} alt="number two" /></div>
+                                        <div><img src={numOne} alt="number one" /></div>
+                                        <span>:</span>
+                                        <div><img src={numThree} alt="number three" /></div>
+                                        <div><img src={numNine} alt="number nine" /></div>
+                                    </div>
+                                </div>
+                            </Grid>
                         </Grid>
                                   
                     </Grid>
