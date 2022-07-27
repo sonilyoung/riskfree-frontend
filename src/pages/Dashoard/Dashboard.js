@@ -30,6 +30,8 @@ import btnNext from '../../assets/images/btn_next.png';
 import btnPrev from '../../assets/images/btn_prev.png';
 import arrowNext from '../../assets/images/arrow_next.png';
 import arrowPrev from '../../assets/images/arrow_prev.png';
+import arrowUp from '../../assets/images/ic_up.png';
+import arrowDown from '../../assets/images/ic_down.png';
 
 import circleGreen from '../../assets/images/bg_circle_green.png';
 // import circleYellow from '../../assets/images/bg_circle_yellow.png';
@@ -405,6 +407,7 @@ const useStyles = makeStyles(() => ({
             height: '120px'
         },
         '&.boxDown': {
+            position: 'relative',
             height: '50px',
             borderRadius: '8px'
         },
@@ -516,9 +519,92 @@ const useStyles = makeStyles(() => ({
             height: '32px',
             padding: '0px 2px 0px 6px',
             textAlign: 'center',
-            lineHeight: '23px',
+            lineHeight: '23px'
         }
     },
+    footSlider: {
+        width: '100% !important',
+        '& .slick-track .slick-slide': {
+            display: 'flex',
+            alignItems: 'center',
+            height: '50px',
+            padding: '0px 110px 0px 40px',
+            boxSizing: 'border-box',
+            '& div': {
+                display: 'flex !important',
+                alignItems: 'center',
+                marginRight: '25px'
+            },
+        },
+        '& .slick-arrow': {
+            width: '25px',
+            height: '25px',
+            right: '51px',
+            zIndex: '1',
+            transition: 'background-color .2s',
+            '&:hover': {
+                backgroundColor: '#3f4d72'
+            },
+        },
+        '& .slick-next': {
+            background: 'url(' + arrowDown + ') no-repeat 50% 50% #3a5298',
+            top: '37px',
+            '&:before': {
+                display: 'none'
+            }
+        },
+        '& .slick-prev': {
+            background: 'url(' + arrowUp + ') no-repeat 50% 50% #3a5298',
+            left: 'unset',
+            top: '11px',
+            '&:before': {
+                display: 'none'
+            }
+        }  
+    },
+    sliderLink: {
+        position: 'absolute',
+        right: '0',
+        width: '50px',
+        height: '50px',
+        background: '#3a5298',
+        cursor: 'pointer',
+        transition: 'background-color .2s',
+        '&:hover': {
+            backgroundColor: '#3f4d72'
+        },
+        '&:before, &:after': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            margin: 'auto',
+            background: '#979dad',
+            pointerEvents: 'none',
+        },
+        '&:before': {
+            width: '25px',
+            height: '2px'
+        },
+        '&:after': {
+            width: '2px',
+            height: '25px',
+        }
+    },
+    slideLabel: {
+        width: '34px',
+        height: '18px',
+        lineHeight: '18px',
+        marginRight: '10px',
+        textAlign: 'center',
+        color: '#fff',
+        fontSize: '12px',
+        background: '#fd4b05',
+        borderRadius: '2px',
+        fontWeight: '500'
+    }
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -595,6 +681,19 @@ const dashboardSlider = {
     speed: 1000,
     slidesToShow: 1,
     slidesToScroll: 1
+}
+
+const footerSlider = {
+    dots: false,
+    infinite: true,
+    speed: 300,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    vertical: true,
+    verticalSwiping: true,
+    swipeToSlide: true,
+    autoplay: true,
+    autoplaySpeed: 3000,
 }
 
 
@@ -953,7 +1052,24 @@ const Dashboard = () => {
                         </Grid>
 
                         <Grid container item xs={12} sx={{marginBottom: '3px'}}>
-                            <Grid className={classes.footBox + ' boxDown'} item xs={8.75}></Grid>
+                            <Grid className={classes.footBox + ' boxDown'} item xs={8.75}>
+                                <Slider className={classes.footSlider} {...footerSlider}>
+                                    <div>
+                                        <div>2021/12/04  14:28</div>
+                                        <span className={classes.slideLabel}>HOT</span>
+                                        <Link href="#" sx={{color: '#fdcb05'}}>서산사업장 BTX 공정 3번 Tank 화재 발생 !!  [중요 공지일 경우]</Link>
+                                    </div>
+                                    <div>
+                                        <div>2021/12/05  14:28</div>
+                                        <Link href="#">울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
+                                    </div>
+                                    <div>
+                                    <div>2021/12/05  14:28</div>
+                                        <Link href="#">울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
+                                    </div>
+                                </Slider>
+                                <Link className={classes.sliderLink} href="#" underline="none"></Link>
+                            </Grid>
                             <Grid className={classes.footBox + ' boxDown ' + classes.footDate} item xs={3}>
                                 <div className={classes.footDay + ' dateBox'}>
                                     <div>DAY</div>
