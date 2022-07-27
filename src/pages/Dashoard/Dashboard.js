@@ -58,6 +58,8 @@ const useStyles = makeStyles(() => ({
     dashboardWrap: {
         backgroundColor: '#33374f',
         justifyContent: 'center',
+        minWidth: '1900px !important',
+        height: '100vh'
     },
     pageHeader: {
         // height: '225px',
@@ -252,8 +254,6 @@ const useStyles = makeStyles(() => ({
         }
     },
     pageBody: {
-        // display: 'flex',
-        // flexWrap: 'wrap',
         backgroundImage: 'linear-gradient(#424762, #1e2130)',
         borderRadius: '32px',
         width: '1720px',
@@ -323,6 +323,14 @@ const useStyles = makeStyles(() => ({
         }
     },
     dashSlider: {
+        // '& .slick-slide [class*=slickCircle]': {
+        //     transition: '.5s',
+        //     transform: 'scale(0.5)'
+        // },
+        // '& .slick-active [class*=slickCircle]': {
+        //     transition: '.5s',
+        //     transform: 'scale(1)'
+        // },
         '& .slick-list': {
             padding: '1px 0 20px 0',
             marginTop: '8px',
@@ -350,7 +358,7 @@ const useStyles = makeStyles(() => ({
     },
     dashboardSlide: {
         display: 'flex !important',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
     },
     gageWrap: {
         display: 'flex',
