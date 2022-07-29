@@ -18,6 +18,8 @@ import adminIconHover from '../../assets/images/btn_admin_ov.png';
 import weatherIcon from '../../assets/images/weather_icon.png';
 import chartIcon from '../../assets/images/btn_chart.png';
 import orderBackground from '../../assets/images/bg_body_order.png';
+import dashBtnUp from '../../assets/images/btn_up.png';
+import dashBtnDown from '../../assets/images/btn_down.png';
 
 import numOne from '../../assets/images/num1.png';
 import numTwo from '../../assets/images/num2.png';
@@ -28,15 +30,9 @@ import numNine from '../../assets/images/num9.png';
 
 import btnNext from '../../assets/images/btn_next.png';
 import btnPrev from '../../assets/images/btn_prev.png';
-import arrowNext from '../../assets/images/arrow_next.png';
-import arrowPrev from '../../assets/images/arrow_prev.png';
 import arrowUp from '../../assets/images/ic_up.png';
 import arrowDown from '../../assets/images/ic_down.png';
 
-import circleGreen from '../../assets/images/bg_circle_green.png';
-// import circleYellow from '../../assets/images/bg_circle_yellow.png';
-// import circleOrange from '../../assets/images/bg_circle_orange.png';
-import circleRed from '../../assets/images/bg_circle_red.png';
 import gageImg from '../../assets/images/bg_gage.png';
 import needleImg from '../../assets/images/img_needle.png';
 import gageState from '../../assets/images/txt_warning.png';
@@ -59,10 +55,27 @@ const useStyles = makeStyles(() => ({
         backgroundColor: '#33374f',
         justifyContent: 'center',
         minWidth: '1900px !important',
-        height: '100vh'
+        height: '100vh',
+        overflowY: 'scroll',
+        '&::-webkit-scrollbar': {
+            width: '6px',
+            height: '6px',
+            border: '6px solid #1e2132'
+        },
+        '&::-webkit-scrollbar-track': {
+            background: '#1e2132',
+            borderRadius: '10px',
+            boxShadow: 'inset 0 0 4px rgb(0 0 0 / 20%)'
+        },
+        '&::-webkit-scrollbar-thumb': {
+            height: '50px',
+            width: '6px',
+            background: '#3f4d72',
+            borderRadius: '8px',
+            boxShadow: 'inset 0 0 4px rgb(0 0 0 / 10%)'
+        },
     },
     pageHeader: {
-        // height: '225px',
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'center',
@@ -151,8 +164,6 @@ const useStyles = makeStyles(() => ({
         backgroundImage: 'url(' + workplaceBackground + ')',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center top',
-        // backgroundSize: 'contain',
-        // pointerEvents: 'none'
     },
     adminLogo: {
         display: 'flex',
@@ -254,55 +265,11 @@ const useStyles = makeStyles(() => ({
         }
     },
     pageBody: {
-        backgroundImage: 'linear-gradient(#424762, #1e2130)',
-        borderRadius: '32px',
-        width: '1720px',
-        height: '545px',
-        padding: '0 165px'
-    },
-    slickCircle: {
         position: 'relative',
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width:'210px',
-        height: '210px',
-        margin: '1% .6% 0',
-        backgroundRepeat: 'no-repeat',
-        transition: 'transform .3s',
-        '&:hover': {
-            transform: 'scale(1.08)'
-        },
-        '&.green': {
-            backgroundImage: 'url(' + circleGreen + ')',
-        },
-        '&.red': {
-            backgroundImage: 'url(' + circleRed + ')',
-        }
-    },
-    slickLink: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '10%',
-        boxSizing: 'border-box',
-        borderRadius: '50%',
-        '& div:first-of-type': {
-            fontSize: '52px',
-            fontWeight: '700',
-            color: '#fff'
-        },
-        '& div:last-of-type': {
-            fontSize: '22px',
-            fontWeight: '400',
-            color: '#202231',
-            letterSpacing: '-2.08px',
-            textAlign: 'center'
-        }
+        backgroundImage: 'linear-gradient(#424762, #33374f)',
+        borderRadius: '32px 32px 0 0',
+        width: '1720px'
     },
     managementOrder: {
         display: 'flex',
@@ -322,43 +289,148 @@ const useStyles = makeStyles(() => ({
             margin: '0 10px'
         }
     },
-    dashSlider: {
-        // '& .slick-slide [class*=slickCircle]': {
-        //     transition: '.5s',
-        //     transform: 'scale(0.5)'
-        // },
-        // '& .slick-active [class*=slickCircle]': {
-        //     transition: '.5s',
-        //     transform: 'scale(1)'
-        // },
-        '& .slick-list': {
-            padding: '1px 0 20px 0',
-            marginTop: '8px',
-        },
-        '--arrow_offset': '-240px',
-        '& .slick-arrow': {
-            top: '42%',
-            width: '50px',
-            height: '111px'
-        },
-        '& .slick-next': {
-            backgroundImage: 'url(' + arrowNext + ')',
-            right: 'var(--arrow_offset)',
-            '&:before': {
-                display: 'none'
-            }
-        },
-        '& .slick-prev': {
-            backgroundImage: 'url(' + arrowPrev + ')',
-            left: 'var(--arrow_offset)',
-            '&:before': {
-                display: 'none'
-            }
-        }  
+    managementSide: {
+        position: 'absolute',
+        top: '16px',
+        right: '40px',
+        display: 'flex'
     },
-    dashboardSlide: {
-        display: 'flex !important',
-        flexWrap: 'wrap',
+    pageContent: {
+        display: 'flex',
+        height: 'calc(100vh - 333px)',
+        padding: '10px 20px 5px 10px',
+        '& >.MuiGrid-root': {
+            height: '100%'
+        }
+    },
+    contentList: {
+        height: '100%',
+        borderRadius: '6px 6px 0 0',
+        background: '#1e2132',
+        overflow: 'hidden',
+        '&.moreContent': {
+            display: 'flex',
+            '& >div': {
+                width: '100%',
+            },
+            '& [class*=listTitle]': {
+                justifyContent: 'flex-start',
+                borderRight: '1px solid #17191c'
+            },
+            '& :last-of-type [class*=listTitle]': {
+                borderRight: 'none'
+            }
+        }
+    },
+    listTitle: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: '0 20px',
+        lineHeight: '40px',
+        fontSize: '17px',
+        fontWeight: '500',
+        color: '#e7e7e9',
+        background: '#3f4d72',
+        '& strong': {
+            color: '#00adef'
+        }
+
+    },
+    menuList: {
+        width: '100%',
+        overflow: 'hidden auto',
+        height: 'calc(100% - 39px)',
+        padding: '0',
+        margin: '0',
+        listStyle: 'none',
+        color: '#fff',
+        letterSpacing: '-1.08px',
+        '& li': {
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            width: '100%',
+            '& span': {
+                width: '90px',
+                height: '40px',
+                lineHeight: '40px',
+                fontSize: '16px',
+                fontWeight: '500',
+                textAlign: 'center',
+                letterSpacing: '0px',
+                '&.normal': {
+                    color: '#22e004'
+                },
+                '&.caution': {
+                    color: '#f6db28'
+                },
+                '&.warning': {
+                    color: '#fc4b07'
+                },
+                '&.risk': {
+                    color: '#fe9c05'
+                },
+            },
+            '& p, & a': {
+                width: 'calc(100% - 110px)',
+                paddingLeft: '20px',
+                margin: '0'
+            },
+        },
+        '&.parentList li .parentLink': {
+            height: '40px',
+            background: '#333542',
+            color: '#00adef',
+            borderBottom: '1px solid #1e2132',
+            '& +span': {
+                background: 'linear-gradient(#275dc6, #263781)',
+                fontSize: '20px',
+            }
+        },
+        '& .nestedList li': {
+            padding: '0'
+        },
+        '&.secondList': {
+            padding: '0 10px 0 0',
+            boxSizing: 'border-box',
+            '& li': {
+                marginRight: '10px',
+                borderBottom: '1px solid #363c4c',
+                '& a': {
+                    padding: '22px',
+                    width: '100%'
+                },
+                '&.activeLink': {
+                    background: '#2e3b65'
+                }
+            },
+        },
+        '&::-webkit-scrollbar': {
+            width: '6px',
+            height: '6px',
+            border: '6px solid #1e2132'
+        },
+        '&::-webkit-scrollbar-track': {
+            background: '#1e2132',
+            borderRadius: '10px',
+            boxShadow: 'inset 0 0 4px rgb(0 0 0 / 20%)'
+        },
+        '&::-webkit-scrollbar-thumb': {
+            height: '50px',
+            width: '6px',
+            background: '#3f4d72',
+            borderRadius: '8px',
+            boxShadow: 'inset 0px 10px 0px 0px #1e2132, inset 0px -10px 0px 0px #1e2132'
+        },
+
+    },
+    listLink: {
+        display: 'flex',
+        alignItems: 'center',
+        color: '#fff',
+        '&.activeLink': {
+            background: '#2e3b65'
+        }
     },
     gageWrap: {
         display: 'flex',
@@ -370,10 +442,23 @@ const useStyles = makeStyles(() => ({
         backgroundPosition: 'center',
     },
     lowerDashboard: {
+        position: 'relative',
+        top: '39px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        padding: '8px 20px',
+        padding: '8px 0px 25px 0px',
+        background: 'linear-gradient(#097ef5, #266aa9)',
+        zIndex: '1',
+        '&:hover': {
+
+        }
+    },
+    dashTrigger: {
+        display: 'flex',
+        justifyContent: 'center',
+        width: '90%',
+        margin: '-39px auto',
     },
     gageArrow: {
         position: 'relative',
@@ -419,9 +504,35 @@ const useStyles = makeStyles(() => ({
             height: '50px',
             borderRadius: '8px'
         },
-        '&:nth-of-type(2) .rightBox div:first-of-type div:last-of-type': {
+        '&:nth-of-type(2) div[class*=bottomBox] div:first-of-type div:last-of-type': {
             color: '#fdcb05'
-        }
+        },
+        '&.multiBox': {
+            flexDirection: 'column',
+            '& >div:not([class*=tiltBox])': {
+                display: 'flex',
+                flexWrap: 'wrap',
+                width: 'calc(50% - 20px)',
+                '& a': {
+                    borderLeft: '1px solid #1e2132'
+                }
+            },
+            '& div[class*=bottomBox] div:first-of-type div strong': {
+                color: '#fdcb05'
+            },
+            '& div[class*=bottomBox] div:last-of-type div strong': {
+                color: '#00adef'
+            }
+        },
+    },
+    tiltBox: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '40px',
+        height: '100%',
+        background: '#3a5298'
     },
     footLink: {
         width: '100%',
@@ -436,60 +547,29 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         width: '100%',
         height: '77px',
-        '&.leftBox': {
-            justifyContent: 'space-around',
-            '& div': {
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                '& *': {
-                    margin: '0 5px'
-                },
+        '& div': {
+            width: '100%',
+            color: '#e7e7e9',
+            boxSizing: 'content-box',
+            textAlign: 'center',
+            '& div:first-of-type': {
+                backgroundColor: '#4d5867',
+                borderTop: '1px solid #1e2132',
+                borderLeft: '1px solid #1e2132',
+                lineHeight: '29px',
+            },
+            '& div:last-of-type': {
+                    borderRight: '1px solid #556478',
+                    lineHeight: '46px',
                 '& strong': {
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '50px',
-                    height: '50px',
                     fontSize: '30px',
                     fontWeight: '500',
-                    background: '#556478',
-                    borderRadius: '50%',
-                }
-            },
-            '& div:first-of-type strong': {
-                color: '#fdcb05',
-            },
-            '& div:last-of-type strong': {
-                color: '#00adef',
+                    marginRight: '3px'
+                },
             }
         },
-        '&.rightBox': {
-            display: 'flex',
-            '& div': {
-                width: '100%',
-                color: '#e7e7e9',
-                boxSizing: 'content-box',
-                textAlign: 'center',
-                '& div:first-of-type': {
-                    backgroundColor: '#4d5867',
-                    borderTop: '1px solid #1e2132',
-                    borderLeft: '1px solid #1e2132',
-                    lineHeight: '29px',
-                },
-                '& div:last-of-type': {
-                        borderRight: '1px solid #556478',
-                        lineHeight: '46px',
-                    '& strong': {
-                        fontSize: '30px',
-                        fontWeight: '500',
-                        marginRight: '3px'
-                    },
-                }
-            },
-            '& div:last-of-type div:last-of-type': {
-                border: '0'
-            }
+        '& div:last-of-type div:last-of-type': {
+            // border: '0'
         }
     },
     footDate: {
@@ -612,7 +692,7 @@ const useStyles = makeStyles(() => ({
         background: '#fd4b05',
         borderRadius: '2px',
         fontWeight: '500'
-    }
+    },
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -675,19 +755,41 @@ const MainNavButton = styled(ButtonUnstyled)`
     }   
 `;
 
+const PageSideButton = styled(ButtonUnstyled)`
+    width: 90px;
+    height: 40px;
+    border-radius: 6px;
+    font-size: 17px;
+    font-weight: 500;
+    color: #fff;
+    margin-left: 14px;
+    background: linear-gradient(to right, #1482f4, #0565c8);
+    transition: background .2s;
+    border: none;
+    cursor: pointer;
+    &:hover {
+        background: linear-gradient(to right, #0565c8, #0565c8);
+    }   
+`;
+
+const DashTrigButton = styled(ButtonUnstyled)`
+    width: 89px;
+    height: 31px;
+    font-size: 0;
+    background: url(${dashBtnUp}) no-repeat 50% 50%;
+    transition: background .3s;
+    border: none;
+    cursor: pointer;
+    &:hover {
+        background: url(${dashBtnDown}) no-repeat 50% 50%;
+    }   
+`;
+
 const headerSlider = {
     dots: false,
     infinite: false,
     speed: 300,
     slidesToShow: 5,
-    slidesToScroll: 1
-}
-
-const dashboardSlider = {
-    dots: false,
-    infinite: true,
-    speed: 1000,
-    slidesToShow: 1,
     slidesToScroll: 1
 }
 
@@ -705,7 +807,7 @@ const footerSlider = {
 }
 
 
-const Dashboard = () => {
+const Employee = () => {
     const classes = useStyles();
 
     const [num, setNum] = React.useState('');
@@ -735,10 +837,9 @@ const Dashboard = () => {
                                     displayEmpty
                                     inputProps={{'aria-label': 'Without label'}}
                                     >
-                                        <MenuItem value="">one</MenuItem>
-                                        <MenuItem value={2}>two</MenuItem>
-                                        <MenuItem value={3}>three</MenuItem>
-                                        <MenuItem value={4}>four</MenuItem>
+                                        <MenuItem value="">550~300인 이하</MenuItem>
+                                        <MenuItem value={2}>300~500인 이하</MenuItem>
+                                        <MenuItem value={3}>500~1000인 이하</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl sx={{width: 150, marginLeft: '8px'}}>
@@ -749,10 +850,9 @@ const Dashboard = () => {
                                     displayEmpty
                                     inputProps={{'aria-label': 'Without label'}}
                                     >
-                                        <MenuItem value="">one</MenuItem>
-                                        <MenuItem value={2}>two</MenuItem>
-                                        <MenuItem value={3}>three</MenuItem>
-                                        <MenuItem value={4}>four</MenuItem>
+                                        <MenuItem value="">건설업</MenuItem>
+                                        <MenuItem value={2}>제조업</MenuItem>
+                                        <MenuItem value={3}>IT</MenuItem>
                                     </Select>
                                 </FormControl>
                             </div>
@@ -809,161 +909,157 @@ const Dashboard = () => {
                 </Grid>
                 <Grid className={classes.pageBody} item xs={10.7}>
                     <div className={classes.managementOrder}>
-                        관리차수<strong>12</strong>차 :<strong>22.01.01 ~ 22.04.30</strong> 
+                        관리차수<strong>11</strong>차 :<strong>22.01.01 ~ 22.04.30</strong> 
                     </div>
-                    <Slider className={classes.dashSlider} {...dashboardSlider}>
-                        <div className={classes.dashboardSlide}>
-                            <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                        </div>
-
-                        <div className={classes.dashboardSlide}>
-                            <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>
-                            <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
-                                    <div><strong>100</strong>%</div>
-                                    <div>안전보건 목표 및 경영방침</div>
-                                </Link>
-                            </div>  
-                        </div>
-                    </Slider>
+                    <div className={classes.managementSide}>
+                        <FormControl sx={{width: 130}}>
+                            <Select
+                                className={classes.selectMenu}
+                                value={num}
+                                onChange={handleChange}
+                                displayEmpty
+                                inputProps={{'aria-label': 'Without label'}}
+                            >
+                                <MenuItem value="">차수선택</MenuItem>
+                                <MenuItem value={2}>88차</MenuItem>
+                                <MenuItem value={3}>87차</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <div><PageSideButton>이동</PageSideButton></div>
+                    </div>
                 </Grid>
+
+                <Grid className={classes.pageContent} item container rowSpacing={0} columnSpacing={1} xs={12}>
+                    <Grid item xs={2.7}>
+                        <div className={classes.contentList}>
+                            <div className={classes.listTitle}>필수 의무조치 내역 <span>시행율</span></div>
+                            <ul className={classes.menuList + ' parentList'}>
+                                <li>
+                                    <p className={classes.listLink + ' parentLink'} href="#none" underline="none">안전보건관리체계의 구축 및 이행</p>
+                                    <span className={'normal'}>93%</span>
+                                    <ul className={classes.menuList + ' nestedList'}>
+                                        <li>
+                                            <Link className={classes.listLink} href="#none" underline="none">안전보건 목표 및 경영방침 설정</Link>
+                                            <span className={'normal'}>100%</span>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink + ' activeLink'} href="#none" underline="none">유해.위험 요인 개선 업무절차 마련 및 점검</Link>
+                                            <span className={'caution'}>87%</span>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} href="#none" underline="none">안전보건업무 총괄관리 전담조직 구축</Link>
+                                            <span className={'warning'}>32%</span>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} href="#none" underline="none">안전보건관리책임자 권한 부여 및 집행 점검</Link>
+                                            <span className={'risk'}>60%</span>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} href="#none" underline="none">안전.보건관련 필요예산 편성 및 집행</Link>
+                                            <span className={'risk'}>32%</span>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} href="#none" underline="none">안전보건 전문인력 배치 및 업무시간 보장</Link>
+                                            <span className={'caution'}>87%</span>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} href="#none" underline="none">종사자 의견수렴 및 개선방안 이행점검</Link>
+                                            <span className={'warning'}>32%</span>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} href="#none" underline="none">중대재해발생 비상대응 매뉴얼 마련&점검</Link>
+                                            <span className={'caution'}>87%</span>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} href="#none" underline="none">도급용역 위탁시 평가기준 및 절차 점검</Link>
+                                            <span className={'normal'}>97%</span>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <Link className={classes.listLink + ' parentLink'} href="#none" underline="none">재해발생 방지대책 및 이행현황</Link>
+                                        <span className={'caution'}>86%</span>
+                                </li>
+                                <li>
+                                    <Link className={classes.listLink + ' parentLink'} href="#none" underline="none">관계법령에 따른 개선.시정명령 조치</Link>
+                                        <span className={'warning'}>32%</span>
+                                </li>
+                                <li>
+                                    <Link className={classes.listLink + ' parentLink'} href="#none" underline="none">관계법령에 의무이행의 관리의 조치</Link>
+                                        <span className={'risk'}>76%</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </Grid>
+                    <Grid item xs={2.7}>
+                        <div className={classes.contentList}>
+                            <div className={classes.listTitle}>의무조치별 상세 점검 항목  <span>총 <strong>40</strong> 건</span></div>
+                            <ul className={classes.menuList + ' secondList'}>
+                                <li>
+                                    <Link className={classes.listLink} href="#none" underline="none">재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지·증진하기 위한 책임과 책무를 다하여야 한다.</Link>
+                                </li>
+                                <li>
+                                    <Link className={classes.listLink + ' activeLink'} href="#none" underline="none">안전보건방침과 이에 따른 목표가 수립되고 이들이 조직의 전략적 방향과 조화되도록 하여야 한다.</Link>
+                                </li>
+                                <li>
+                                    <Link className={classes.listLink} href="#none" underline="none">안전보건경영시스템의 구축, 실행, 유지, 개선에 필요한 자원(물적, 인적)을 제공하고 안전보건경영시스템의 효과성에 기여하도록 인원을 지휘하여야 한다. </Link>
+                                </li>
+                                <li>
+                                    <Link className={classes.listLink} href="#none" underline="none">효과적인 안전보건경영의 중요성과 안전보건경영시스템 요구사항 이행의 중요성에 대한 의사소통이 되도록 하여야 한다.</Link>
+                                </li>
+                                <li>
+                                    <Link className={classes.listLink} href="#none" underline="none">안전보건경영시스템이 의도된 결과를 달성할 수 있도록 하여야 한다.</Link>
+                                </li>
+                                <li>
+                                    <Link className={classes.listLink} href="#none" underline="none">지속적인 개선을 보장하고 촉진하여야 한다.</Link>
+                                </li>
+                                <li>
+                                    <Link className={classes.listLink} href="#none" underline="none">안전보건경영시스템의 의도된 결과를 지원하는 조직 문화의 개발, 실행 및 촉진하여야 한다.</Link>
+                                </li>
+                                <li>
+                                    <Link className={classes.listLink} href="#none" underline="none">안전보건경영시스템의 구축, 실행, 유지, 개선에 필요한 자원(물적, 인적)을 제공하고 안전보건경영시스템의 효과성에 기여하도록 인원을 지휘하여야 한다.</Link>
+                                </li>
+                                <li>
+                                    <Link className={classes.listLink} href="#none" underline="none">효과적인 안전보건경영의 중요성과 안전보건경영시스템 </Link>
+                                </li>
+                            </ul>
+                        </div>
+                    </Grid>
+                    <Grid item container xs={6.6}>
+                        <Grid item xs={12}>
+                            <div className={classes.contentList + ' moreContent'}>
+                                <div>
+                                    <div className={classes.listTitle}>점검서류 등 목록</div>
+                                </div>
+                                <div>
+                                    <div className={classes.listTitle}><strong>3</strong>건 / 6건</div>
+                                </div>
+                                <div>
+                                    <div className={classes.listTitle}>이행주기</div>
+                                </div>
+                                <div>
+                                    <div className={classes.listTitle}>준수대상</div>
+                                </div>
+                                <div>
+                                    <div className={classes.listTitle}>관계법령</div>
+                                </div>
+                                <div>
+                                    <div className={classes.listTitle}>Check</div>
+                                </div>
+                            </div>
+                        </Grid>
+                        <Grid item xs={12} sx={{mt: 1}}>
+                            <div className={classes.contentList}>
+                                <div className={classes.listTitle}>현장 작동성 평가 작성 지침서</div>
+                            </div>
+                        </Grid>
+                    </Grid>
+                </Grid>
+
                 <Grid className={classes.lowerDashboard} container item xs={12}>
+                    <div className={classes.dashTrigger}>
+                        <DashTrigButton></DashTrigButton>
+                    </div>
 
                     <Grid className={classes.gageWrap} item xs={2}>
                         <div className={classes.gageArrow}>
@@ -975,29 +1071,52 @@ const Dashboard = () => {
                     <Grid className={classes.boxWrap} item xs={10}>
                         
                         <Grid container item xs={12}>
-                            <Grid className={classes.footBox + ' boxUp'} item xs={3.7}>
-                                <Link className={classes.footLink} href="#" underline="none">대표이사 개선조치</Link>
-                                <div className={classes.bottomBox + ' leftBox'}>
-                                    <div>
-                                        <div>지시</div>
-                                        <strong>3</strong>
-                                        <div>건</div>
+                            <Grid className={classes.footBox + ' boxUp multiBox'} item xs={3.7}>
+                                <div className={classes.tiltBox}>
+                                    <span>개</span>
+                                    <span>선</span>
+                                    <span>/</span>
+                                    <span>조</span>
+                                    <span>치</span>
+                                </div>
+                                <div>
+                                    <Link className={classes.footLink} href="#none" underline="none">대표이사</Link>
+                                    <div className={classes.bottomBox}>
+                                        <div>
+                                            <div>지시</div>
+                                            <div><strong>3</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>진행</div>
+                                            <div><strong>1</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>완료</div>
+                                            <div><strong>12</strong>건</div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <div>진행</div>
-                                        <strong>1</strong>
-                                        <div>건</div>
-                                    </div>
-                                    <div>
-                                        <div>완료</div>
-                                        <strong>12</strong>
-                                        <div>건</div>
+                                </div>
+                                <div>
+                                    <Link className={classes.footLink} href="#none" underline="none">안전보건팀장</Link>
+                                    <div className={classes.bottomBox}>
+                                        <div>
+                                            <div>지시</div>
+                                            <div><strong>3</strong>건</div>
+                                            </div>
+                                        <div>
+                                            <div>진행</div>
+                                            <div><strong>1</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>완료</div>
+                                            <div><strong>12</strong>건</div>
+                                        </div>
                                     </div>
                                 </div>
                             </Grid>
                             <Grid className={classes.footBox + ' boxUp'} item xs={5}>
-                                <div className={classes.footLink} href="#" underline="none">산업재해 누적 집계</div>
-                                <div className={classes.bottomBox + ' rightBox'}>
+                                <div className={classes.footLink} href="#none" underline="none">산업재해 누적 집계</div>
+                                <div className={classes.bottomBox}>
                                     <div>
                                         <div>사망</div>
                                         <div><strong>0</strong>건</div>
@@ -1033,8 +1152,8 @@ const Dashboard = () => {
                                 </div>
                             </Grid>
                             <Grid className={classes.footBox + ' boxUp'} item xs={3}>
-                                <div className={classes.footLink} href="#" underline="none">11/27(화) - 안전작업허가 공사내역</div>
-                                <div className={classes.bottomBox + ' rightBox'}>
+                                <div className={classes.footLink} href="#none" underline="none">11/27(화) - 안전작업허가 공사내역</div>
+                                <div className={classes.bottomBox}>
                                     <div>
                                         <div>고소</div>
                                         <div><strong>4</strong>건</div>
@@ -1065,18 +1184,18 @@ const Dashboard = () => {
                                     <div>
                                         <div>2021/12/04  14:28</div>
                                         <span className={classes.slideLabel}>HOT</span>
-                                        <Link href="#" sx={{color: '#fdcb05'}}>서산사업장 BTX 공정 3번 Tank 화재 발생 !!  [중요 공지일 경우]</Link>
+                                        <Link href="#none" sx={{color: '#fdcb05'}}>서산사업장 BTX 공정 3번 Tank 화재 발생 !!  [중요 공지일 경우]</Link>
                                     </div>
                                     <div>
                                         <div>2021/12/05  14:28</div>
-                                        <Link href="#">울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
+                                        <Link href="#none">울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
                                     </div>
                                     <div>
                                     <div>2021/12/05  14:28</div>
-                                        <Link href="#">울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
+                                        <Link href="#none">울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
                                     </div>
                                 </Slider>
-                                <Link className={classes.sliderLink} href="#" underline="none"></Link>
+                                <Link className={classes.sliderLink} href="#none" underline="none"></Link>
                             </Grid>
                             <Grid className={classes.footBox + ' boxDown ' + classes.footDate} item xs={3}>
                                 <div className={classes.footDay + ' dateBox'}>
@@ -1111,4 +1230,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default Employee;
