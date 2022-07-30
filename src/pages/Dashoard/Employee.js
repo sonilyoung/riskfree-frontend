@@ -20,6 +20,10 @@ import chartIcon from '../../assets/images/btn_chart.png';
 import orderBackground from '../../assets/images/bg_body_order.png';
 import dashBtnUp from '../../assets/images/btn_up.png';
 import dashBtnDown from '../../assets/images/btn_down.png';
+import checkIcon from '../../assets/images/ic_chk.png';
+import checkIconHover from '../../assets/images/ic_chk_hover.png';
+import fileExis from '../../assets/images/file_exis.png';
+import fileNone from '../../assets/images/file_none.png';
 
 import numOne from '../../assets/images/num1.png';
 import numTwo from '../../assets/images/num2.png';
@@ -310,17 +314,69 @@ const useStyles = makeStyles(() => ({
         overflow: 'hidden',
         '&.moreContent': {
             display: 'flex',
-            '& >div': {
-                width: '100%',
-            },
             '& [class*=listTitle]': {
                 justifyContent: 'flex-start',
                 borderRight: '1px solid #17191c'
             },
             '& :last-of-type [class*=listTitle]': {
                 borderRight: 'none'
-            }
-        }
+            },
+            '& >div:first-of-type': {
+                width: '28%'
+            },
+            '& >div:nth-of-type(2)': {
+                width: '12%'
+            },
+            '& >div:nth-of-type(3)': {
+                width: '12%'
+            },
+            '& >div:nth-of-type(4)': {
+                width: '18%'
+            },
+            '& >div:nth-of-type(5)': {
+                width: '22%'
+            },
+            '& >div:last-of-type': {
+                width: '8%'
+            },
+            '& >div:nth-of-type(3), >div:nth-of-type(4), >div:nth-of-type(5)': {
+                '& ul': {
+                    paddingLeft: '20px',
+                    paddingRight: '10px',
+                    boxSizing: 'border-box'
+                }
+            },
+            '& [class*=menuList]': {
+                borderRight: '1px solid #4d5867',
+                '& li, a': {
+                    height: '40px',
+                    width: '100%',
+                    transition: 'background .2s',
+                    '& a:hover': {
+                        background: '#2e3b65'
+                    }
+                }
+            },
+            '& .checkList': {
+                '& li': {
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                },
+                '& [class*=listLink]': {
+                    justifyContent: 'center',
+                    padding: '0',
+                    '&.check': {
+                        width: '18px',
+                        height: '18px',
+                        backgroundImage: 'url(' + checkIcon + ')',
+                        '&:hover': {
+                            backgroundImage: 'url(' + checkIconHover + ')',
+                            backgroundColor: 'transparent'
+                        }
+                    }
+                },
+            },
+        },
     },
     listTitle: {
         display: 'flex',
@@ -350,6 +406,15 @@ const useStyles = makeStyles(() => ({
             justifyContent: 'space-between',
             flexWrap: 'wrap',
             width: '100%',
+            wordBreak: 'keep-all',
+            lineHeight: '24px',
+            '& p, & a': {
+                width: 'calc(100% - 110px)',
+                paddingLeft: '20px',
+                margin: '0'
+            },
+        },
+        '&.parentList': {
             '& span': {
                 width: '90px',
                 height: '40px',
@@ -371,21 +436,16 @@ const useStyles = makeStyles(() => ({
                     color: '#fe9c05'
                 },
             },
-            '& p, & a': {
-                width: 'calc(100% - 110px)',
-                paddingLeft: '20px',
-                margin: '0'
+            '& li .parentLink': {
+                height: '40px',
+                background: '#333542',
+                color: '#00adef',
+                borderBottom: '1px solid #1e2132',
+                '& +span': {
+                    background: 'linear-gradient(#275dc6, #263781)',
+                    fontSize: '20px',
+                }
             },
-        },
-        '&.parentList li .parentLink': {
-            height: '40px',
-            background: '#333542',
-            color: '#00adef',
-            borderBottom: '1px solid #1e2132',
-            '& +span': {
-                background: 'linear-gradient(#275dc6, #263781)',
-                fontSize: '20px',
-            }
         },
         '& .nestedList li': {
             padding: '0'
@@ -405,6 +465,72 @@ const useStyles = makeStyles(() => ({
                 }
             },
         },
+        '& .bulletList': {
+            position: 'relative',
+            paddingLeft: '10px',
+            display: 'flex',
+            alignItems: 'center',
+            '&:before': {
+                content: '""',
+                position: 'absolute',
+                left: '0',
+                width: '4px',
+                height: '4px',
+                background: '#d4d4d6'
+            }
+        },
+        '&.buttonList': {
+            '& li': {
+                paddingLeft: '20px',
+                display: 'flex',
+                flexWrap: 'nowrap',
+                alignItems: 'center',
+                '& span': {
+                    fontSize: '16px',
+                    marginLeft: '25px',
+                    '&.green': {
+                        color: '#22e004'
+                    },
+                    '&.orange': {
+                        color: '#fe9c05'
+                    },
+                    '&.red': {
+                        color: '#fc4b07'
+                    },
+                }
+            }
+        },
+        '&.fourthList': {
+            padding: '22px',
+            boxSizing: 'border-box',
+            '& .bulletList': {
+                marginBottom: '12px',
+                color: '#00adef',
+            },
+            '& ol': {
+                padding: '0',
+                marginLeft: '12px',
+                '& li': {
+                    boxSizing: 'border-box',
+                    marginBottom: '6px',
+                    paddingLeft: '22px',
+                    textIndent: '-22px',
+                    lineHeight: '24px',
+                    flexDirection: 'column',
+                }
+            },
+            '& li': {
+                marginBottom: '24px',
+                flexDirection: 'column',
+                '&:last-of-type': {
+                    margin: '0'
+                }
+            },
+            '& >li:last-of-type li': {
+                textIndent: 'unset',
+                paddingLeft: 'unset'
+            }
+        },
         '&::-webkit-scrollbar': {
             width: '6px',
             height: '6px',
@@ -422,7 +548,6 @@ const useStyles = makeStyles(() => ({
             borderRadius: '8px',
             boxShadow: 'inset 0px 10px 0px 0px #1e2132, inset 0px -10px 0px 0px #1e2132'
         },
-
     },
     listLink: {
         display: 'flex',
@@ -785,6 +910,25 @@ const DashTrigButton = styled(ButtonUnstyled)`
     }   
 `;
 
+const FileButtonExis = styled(ButtonUnstyled)`
+    width: 16px;
+    height: 21px;
+    background: url(${fileExis}) no-repeat 50% 50%;
+    transition: background .3s;
+    border: none;
+    cursor: pointer;
+`;
+
+const FileButtonNone = styled(ButtonUnstyled)`
+    width: 16px;
+    height: 21px;
+    background: url(${fileNone}) no-repeat 50% 50%;
+    transition: background .3s;
+    border: none;
+    cursor: pointer;
+`;
+
+
 const headerSlider = {
     dots: false,
     infinite: false,
@@ -1020,37 +1164,130 @@ const Employee = () => {
                                     <Link className={classes.listLink} href="#none" underline="none">안전보건경영시스템의 구축, 실행, 유지, 개선에 필요한 자원(물적, 인적)을 제공하고 안전보건경영시스템의 효과성에 기여하도록 인원을 지휘하여야 한다.</Link>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink} href="#none" underline="none">효과적인 안전보건경영의 중요성과 안전보건경영시스템 </Link>
+                                    <Link className={classes.listLink} href="#none" underline="none">효과적인 안전보건경영의 중요성과 안전보건경영시스템</Link>
                                 </li>
                             </ul>
                         </div>
                     </Grid>
                     <Grid item container xs={6.6}>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sx={{height: '50%'}}>
                             <div className={classes.contentList + ' moreContent'}>
                                 <div>
                                     <div className={classes.listTitle}>점검서류 등 목록</div>
+                                    <ul className={classes.menuList}>
+                                        <li>
+                                            <Link className={classes.listLink} href="#none" underline="none">안전보건이사회 발표자료</Link>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} href="#none" underline="none">경영목표 및 방침 내역 및 실행내역서</Link>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} href="#none" underline="none">산업안전보건위원회 회의록</Link>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} href="#none" underline="none">사내 협력사 회의록</Link>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} href="#none" underline="none">교육계획서 및 교육결과서</Link>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} href="#none" underline="none">사내.외 경영방침 게시내역</Link>
+                                        </li>
+                                    </ul>
                                 </div>
                                 <div>
                                     <div className={classes.listTitle}><strong>3</strong>건 / 6건</div>
+                                    <ul className={classes.menuList + ' buttonList'}>
+                                        <li>
+                                            <FileButtonNone></FileButtonNone>
+                                        </li>
+                                        <li>
+                                            <FileButtonExis><span className={'orange'}>중</span></FileButtonExis>
+                                            
+                                        </li>
+                                        <li>
+                                            <FileButtonExis><span className={'green'}>상</span></FileButtonExis>
+                                        </li>
+                                        <li>
+                                            <FileButtonNone></FileButtonNone>
+                                        </li>
+                                        <li>
+                                            <FileButtonExis><span className={'red'}>하</span></FileButtonExis>
+                                        </li>
+                                        <li>
+                                            <FileButtonNone></FileButtonNone>
+                                        </li>
+                                    </ul>
                                 </div>
                                 <div>
                                     <div className={classes.listTitle}>이행주기</div>
+                                    <ul className={classes.menuList}>
+                                        <li className={'bulletList'}>반기 1회</li>
+                                    </ul>
                                 </div>
                                 <div>
                                     <div className={classes.listTitle}>준수대상</div>
+                                    <ul className={classes.menuList}>
+                                        <li className={'bulletList'}>경영책임자</li>
+                                        <li className={'bulletList'}>안전보건관리책임자</li>
+                                    </ul>
                                 </div>
                                 <div>
                                     <div className={classes.listTitle}>관계법령</div>
+                                    <ul className={classes.menuList}>
+                                        <li className={'bulletList'}>산업안전보건법 제4조</li>
+                                        <li className={'bulletList'}>산업안전보건밥 시행령 제3조 2항1호</li>
+                                    </ul>
                                 </div>
                                 <div>
                                     <div className={classes.listTitle}>Check</div>
+                                    <ul className={classes.menuList + ' checkList'}>
+                                        <li>
+                                            <Link className={classes.listLink + ' check'} href="#none" underline="none"></Link>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink + ' check'} href="#none" underline="none"></Link>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink + ' check'} href="#none" underline="none"></Link>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink + ' check'} href="#none" underline="none"></Link>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink + ' check'} href="#none" underline="none"></Link>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink + ' check'} href="#none" underline="none"></Link>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </Grid>
-                        <Grid item xs={12} sx={{mt: 1}}>
+                        <Grid item xs={12} sx={{mt: 1, height: 'calc(50% - 8px)'}}>
                             <div className={classes.contentList}>
                                 <div className={classes.listTitle}>현장 작동성 평가 작성 지침서</div>
+                                <ul className={classes.menuList + ' fourthList'}>
+                                    <li>
+                                        <div className={'bulletList'}>안전보건관리규정] 작성 가이드</div>
+                                        <ol>
+                                            <li>(1) 최고경영자는 공표한 안전보건방침, 목표를 달성할 수 있도록 모든 부서에서 안전보건경영시스템이 이 기준의 요구사항에 적합하게 실행 및 운영되고 있는가에 대하여 주기적으로 확인하여야 한다.</li>
+                                            <li>(2) 최고경영자는 안전보건경영시스템의 의도한 결과를 달성할 수 있도록 모든 계층별, 부서별로 안전보건활동에 대한 책임과 권한을 부여하고 문서화하여 공유되도록 하여야 한다.</li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        <div className={'bulletList'}>이행 참고사항</div>
+                                        <ol>
+                                            <li>① 사업장 안전보건 확보를 위한 충분한 인력이 있는지 확인하고, 부족한 경우 추가 확보</li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        <div className={'bulletList'}>안전보건관리규정] 작성 가이드</div>
+                                        <ol>
+                                            <li>최고경영자는 공표한 안전보건방침, 목표를 달성할 수 있도록 모든 부서에서 안전보건경영시스템이 이 기준의 요구사항에 적합하게 실행 및 운영되고 있는가에 대하여 주기적으로 확인하여야 한다.</li>
+                                        </ol>
+                                    </li>
+                                </ul>
                             </div>
                         </Grid>
                     </Grid>
