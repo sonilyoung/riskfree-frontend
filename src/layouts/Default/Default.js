@@ -25,7 +25,8 @@ import { styled } from '@mui/system';
 const useStyles = makeStyles(() => ({
     bodyWrap: {
         backgroundColor: '#33374f',
-        minWidth: '1900px !important'
+        minWidth: '1900px !important',
+        height: '100%',
     },
     headerWrap: {
         backgroundColor: '#33374f',

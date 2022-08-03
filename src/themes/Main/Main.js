@@ -15,6 +15,11 @@ const main = createTheme({
             fontSize: '40px',
             letterSpacing: '-1.08px'
         },
+        headline2: {
+            fontWeight: '500',
+            fontSize: '28px',
+            letterSpacing: '-1.08px'
+        },
         body1: {
             fontWeight: '400',
             fontSize: '22px',
