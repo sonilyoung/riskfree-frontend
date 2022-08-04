@@ -51,17 +51,6 @@ const useStyles = makeStyles(() => ({
         marginBottom: '28px !important',
         background: '#fff'
     },
-    searchRadio: {
-        '& [class*=body1]': {
-            fontSize: '16px'
-        },
-        '& input': {
-            cursor: 'default'
-        },
-        '& label': {
-            marginRight: '14px'
-        }
-    },
     searchInfo: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -71,10 +60,6 @@ const useStyles = makeStyles(() => ({
             display: 'flex',
             alignItems: 'center'
         }
-    },
-    infoTitle: {
-        minWidth: '65px',
-        marginRight: '14px'
     },
     searchButtons: {
         display: 'flex',
@@ -276,7 +261,7 @@ const ExcelButton = styled(ButtonUnstyled)`
     }
 `;
 
-const IMStatus = () => {
+const NoticeList = () => {
     const classes = useStyles();
 
     const [num, setNum] = React.useState('');
@@ -296,35 +281,6 @@ const IMStatus = () => {
                 <Grid item xs={12} className={classes.searchBox}>
                     <div className={classes.searchInfo}>
                         <div>
-                            <div className={classes.infoTitle}>사업장</div>
-                                <Select
-                                    className={classes.selectMenu}
-                                    sx={{width: 204}}
-                                    value={num}
-                                    onChange={handleChange}
-                                    displayEmpty
-                                >
-                                    <MenuItem value="">전체</MenuItem>
-                                </Select>
-                        </div>
-                        <div>
-                            <div className={classes.infoTitle}>요청일자</div>
-                                <TextField
-                                    sx={{width: 140}}
-                                    id="date"
-                                    className={classes.selectMenu}
-                                    type="date"
-                                />
-                                &nbsp;~&nbsp;
-                                <TextField
-                                    sx={{width: 140}}
-                                    id="date"
-                                    className={classes.selectMenu}
-                                    type="date"
-                                />
-                        </div>
-                        <div>
-                            <div className={classes.infoTitle}>요청자</div>
                             <Select
                                 sx={{width: 160}}
                                 className={classes.selectMenu}
@@ -334,53 +290,6 @@ const IMStatus = () => {
                             >
                                 <MenuItem value="">전체</MenuItem>
                             </Select>
-                        </div>
-                        <div>
-                            <div className={classes.infoTitle}>조치상태</div>
-                            <FormControl className={classes.searchRadio}>
-                                <RadioGroup row>
-                                    <FormControlLabel
-                                        value="요청중"
-                                        label="요청중"
-                                        control={
-                                            <Radio 
-                                                icon={<img src={radioIcon} alt="check icon" />}
-                                                checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                            />
-                                        } 
-                                    />
-                                    <FormControlLabel
-                                        value="접수"
-                                        label="접수"
-                                        control={
-                                            <Radio 
-                                                icon={<img src={radioIcon} alt="check icon" />}
-                                                checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                            />
-                                        } 
-                                    />
-                                    <FormControlLabel
-                                        value="진행중"
-                                        label="진행중"
-                                        control={
-                                            <Radio 
-                                                icon={<img src={radioIcon} alt="check icon" />}
-                                                checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                            />
-                                        } 
-                                    />
-                                    <FormControlLabel
-                                        value="조치완료"
-                                        label="조치완료"
-                                        control={
-                                            <Radio 
-                                                icon={<img src={radioIcon} alt="check icon" />}
-                                                checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                            />
-                                        } 
-                                    />
-                                </RadioGroup>
-                            </FormControl>
                         </div>
                     </div>
                     <div className={classes.searchButtons}>
@@ -514,4 +423,4 @@ const IMStatus = () => {
     );
 };
 
-export default IMStatus;
+export default NoticeList;
