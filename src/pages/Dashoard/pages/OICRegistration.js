@@ -56,6 +56,9 @@ const useStyles = makeStyles(() => ({
         '& [class*=boxRow]:last-of-type [class*=rowInfo]': {
             width: '100%',
         },
+        '& [class*=boxContent] [class*=boxRow]:first-of-type]': {
+            height: '60px'
+        }
     },
     boxTitle: {
         display: 'flex',
@@ -78,7 +81,6 @@ const useStyles = makeStyles(() => ({
         flexWrap: 'wrap',
         width: 'calc(100% - 100px)',
         '& [class*=boxRow]:first-of-type': {
-            height: '60px',
             '& [class*=rowContent]': {
                 borderTop: 'none'
             },
@@ -128,29 +130,11 @@ const useStyles = makeStyles(() => ({
     boxRegistration: {
         '& [class*=boxRow]': {
             height: '100px',
-            '&:nth-of-type(2)': {
-                height: '60px'
-            },
             '&:last-of-type': {
                 height: 'auto'
             },
         },
-        '& [class*=boxRow]:first-of-type [class*=rowInfo]:first-of-type': {
-            width: '160px',
-        },
-        '& [class*=boxRow]:first-of-type [class*=rowInfo]': {
-            width: '306px'
-        },
-        '& [class*=boxRow]:first-of-type [class*=rowContent] [class*=rowInfo]:nth-of-type(3)': {
-            width: '520px'
-        },
-        '& [class*=boxRow]:nth-of-type(3) [class*=rowContent] [class*=rowInfo]:first-of-type': {
-            width: '100%'
-        },
-        '& [class*=boxRow]:nth-of-type(3) [class*=rowContent] [class*=rowInfo]:last-of-type': {
-            paddingLeft: '0px'
-        },
-        '& [class*=boxRow]:nth-of-type(4) [class*=rowContent] [class*=rowInfo]': {
+        '& [class*=boxRow] [class*=rowContent] [class*=rowInfo]': {
             width: '100%'
         },
         '& [class*=boxRow]:last-of-type [class*=rowContent]': {
@@ -232,20 +216,6 @@ const useStyles = makeStyles(() => ({
 
 }));
 
-const AccidentReportButton = styled(ButtonUnstyled)`
-    width: 90px;
-    height: 80px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #6e7884;
-    background: #e8ebf4;
-    transition: background .2s;
-    cursor: pointer;
-    &:hover {
-        background: #d2dcf3;
-    }
-`;
-
 const UploadButton = styled(ButtonUnstyled)`
     width: 140px;
     height: 40px;
@@ -299,7 +269,7 @@ const WhiteButton = styled(ButtonUnstyled)`
 }
 `;
 
-const ACIRegistration = () => {
+const OICRegistration = () => {
     const classes = useStyles();
 
     return (
@@ -307,11 +277,14 @@ const ACIRegistration = () => {
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
                 <Grid item xs={12} className={classes.listTitle}>
                     <Typography variant="headline2" component="div" gutterBottom>
-                        재해발생 및 방지대책 등 이행현황
+                        관계법령에 따른 개선.시정 명령에 따른 조치 현황
                     </Typography>
                 </Grid>
                 <Grid item xs={12} className={classes.boxReception}>
-                    <div className={classes.boxTitle}>사고접수</div>
+                    <div className={classes.boxTitle}>
+                        <span>개선.조치</span>
+                        <span>접수</span>
+                    </div>
                     <div className={classes.boxContent}>
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>접수일자</div>
@@ -324,8 +297,8 @@ const ACIRegistration = () => {
                                 <FormControl className={classes.searchRadio}>
                                     <RadioGroup row>
                                         <FormControlLabel
-                                            value="전화"
-                                            label="전화"
+                                            value="공문"
+                                            label="공문"
                                             control={
                                                 <Radio 
                                                     icon={<img src={radioIcon} alt="radio icon" />}
@@ -334,8 +307,8 @@ const ACIRegistration = () => {
                                             } 
                                         />
                                         <FormControlLabel
-                                            value="싸이렌"
-                                            label="싸이렌"
+                                            value="현장점검"
+                                            label="현장점검"
                                             control={
                                                 <Radio 
                                                     icon={<img src={radioIcon} alt="radio icon" />}
@@ -344,8 +317,8 @@ const ACIRegistration = () => {
                                             } 
                                         />
                                         <FormControlLabel
-                                            value="안전순찰중"
-                                            label="안전순찰중"
+                                            value="신고"
+                                            label="신고"
                                             control={
                                                 <Radio 
                                                     icon={<img src={radioIcon} alt="radio icon" />}
@@ -356,13 +329,13 @@ const ACIRegistration = () => {
                                     </RadioGroup>
                                 </FormControl>
                                 </div>
-                                <div className={classes.rowTitle}>접수유형</div>
+                                <div className={classes.rowTitle}>명령구분</div>
                                 <div className={classes.rowInfo}>
                                     <FormControl className={classes.searchRadio}>
                                         <RadioGroup row>
                                             <FormControlLabel
-                                                value="추락"
-                                                label="추락"
+                                                value="고용노동부"
+                                                label="고용노동부"
                                                 control={
                                                     <Checkbox 
                                                         icon={<img src={checkIcon} alt="check icon" />}
@@ -371,8 +344,8 @@ const ACIRegistration = () => {
                                                 } 
                                             />
                                             <FormControlLabel
-                                                value="끼임"
-                                                label="끼임"
+                                                value="소방청(소)"
+                                                label="소방청(소)"
                                                 control={
                                                     <Checkbox 
                                                         icon={<img src={checkIcon} alt="check icon" />}
@@ -381,8 +354,8 @@ const ACIRegistration = () => {
                                                 } 
                                             />
                                             <FormControlLabel
-                                                value="화재"
-                                                label="화재"
+                                                value="환경부(청)"
+                                                label="환경부(청)"
                                                 control={
                                                     <Checkbox 
                                                         icon={<img src={checkIcon} alt="check icon" />}
@@ -391,28 +364,8 @@ const ACIRegistration = () => {
                                                 } 
                                             />
                                             <FormControlLabel
-                                                value="전기"
-                                                label="전기"
-                                                control={
-                                                    <Checkbox 
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                            <FormControlLabel
-                                                value="밀폐"
-                                                label="밀폐"
-                                                control={
-                                                    <Checkbox 
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                            <FormControlLabel
-                                                value="중량물"
-                                                label="중량물"
+                                                value="자체점검"
+                                                label="자체점검"
                                                 control={
                                                     <Checkbox 
                                                         icon={<img src={checkIcon} alt="check icon" />}
@@ -427,8 +380,8 @@ const ACIRegistration = () => {
                         </div>
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>
-                                <span>사고조치 </span>
-                                <span>내용</span>
+                                <span>개선.조치 </span>
+                                <span>지적내용</span>
                             </div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
@@ -437,7 +390,7 @@ const ACIRegistration = () => {
                                         id="outlined-multiline-static"
                                         multiline
                                         rows={4}
-                                        defaultValue="3층에서 2층으로 추락사고 발생하여 병원 이송함. "
+                                        defaultValue="작업 감독자 미배치로 인한 지적"
                                     />                      
                                 </div>
                             </div>
@@ -445,151 +398,13 @@ const ACIRegistration = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.boxRegistration}>
-                    <div className={classes.boxTitle}>사고접수</div>
+                    <div className={classes.boxTitle}>
+                        <span>개선.조치 </span>
+                        <span>대응내역</span>
+                    </div>
                     <div className={classes.boxContent}>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>발생일자</div>
-                            <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>
-                                    <TextField
-                                        sx={{width: 140}}
-                                        id="date"
-                                        className={classes.selectMenu}
-                                        type="date"
-                                    />
-                                </div>
-                                <div className={classes.rowTitle}>사고유형</div>
-                                <div className={classes.rowInfo}>
-                                    <FormControl className={classes.searchRadio}>
-                                        <RadioGroup row>
-                                            <FormControlLabel
-                                                value="추락"
-                                                label="추락"
-                                                control={
-                                                    <Checkbox 
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                            <FormControlLabel
-                                                value="끼임"
-                                                label="끼임"
-                                                control={
-                                                    <Checkbox 
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                            <FormControlLabel
-                                                value="화재"
-                                                label="화재"
-                                                control={
-                                                    <Checkbox 
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                            <FormControlLabel
-                                                value="전기"
-                                                label="전기"
-                                                control={
-                                                    <Checkbox 
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                            <FormControlLabel
-                                                value="밀폐"
-                                                label="밀폐"
-                                                control={
-                                                    <Checkbox 
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                            <FormControlLabel
-                                                value="중량물"
-                                                label="중량물"
-                                                control={
-                                                    <Checkbox 
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                        </RadioGroup>
-                                    </FormControl>
-                                </div>
-                                <div className={classes.rowTitle}>사고등급</div>
-                                <div className={classes.rowInfo}>
-                                    <FormControl className={classes.searchRadio}>
-                                        <RadioGroup row>
-                                            <FormControlLabel
-                                                value="1급"
-                                                label="1급"
-                                                control={
-                                                    <Radio 
-                                                        icon={<img src={radioIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                            <FormControlLabel
-                                                value="2급"
-                                                label="2급"
-                                                control={
-                                                    <Radio 
-                                                        icon={<img src={radioIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                            <FormControlLabel
-                                                value="3급"
-                                                label="3급"
-                                                control={
-                                                    <Radio 
-                                                        icon={<img src={radioIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                        </RadioGroup>
-                                    </FormControl>
-                                </div>
-                                <div className={classes.rowTitle}>발생장소</div>
-                                <div className={classes.rowInfo}>
-                                    <TextField 
-                                        id="standard-basic" 
-                                        variant="outlined" 
-                                        value="3층 중앙 계단"
-                                        sx={{width: 200}}
-                                        className={classes.selectMenu}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>현장책임자</div>
-                            <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>
-                                    <TextField 
-                                        id="standard-basic" 
-                                        variant="outlined" 
-                                        value="홍길동"
-                                        sx={{width: 140}}
-                                        className={classes.selectMenu}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>발생원인</div>
+                            <div className={classes.rowTitle}>지적원인</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
                                     <TextField
@@ -597,12 +412,8 @@ const ACIRegistration = () => {
                                         id="outlined-multiline-static"
                                         multiline
                                         rows={4}
-                                        defaultValue="건물 신축 공사장에서 승강기 설치를 하다 추락하여 지게차에 끼임"
+                                        defaultValue="담당자 퇴사로 이한 작업 감독자 미배치로 인한 지적"
                                     /> 
-                                </div>
-                                <div className={classes.rowInfo}>
-                                    <AccidentReportButton  sx={{marginRight: '10px'}}>초기사고 보고서</AccidentReportButton>
-                                    <AccidentReportButton>최종사고 보고서</AccidentReportButton>
                                 </div>
                             </div>
                         </div>
@@ -618,7 +429,7 @@ const ACIRegistration = () => {
                                         id="outlined-multiline-static"
                                         multiline
                                         rows={4}
-                                        defaultValue="지게차 운전은 자격을 가진자가 자가운전가능하며 안전장치를 부착함. 
+                                        defaultValue="건물 신축 공사장에서 안전 난간 설치함. 
                                         정상적으로 작동하는지 정기적으로 관리하며 근로자들이 안전수칙으로 일을 진행하는지 관리감독함."
                                     /> 
                                 </div>
@@ -677,4 +488,4 @@ const ACIRegistration = () => {
     );
 };
 
-export default ACIRegistration;
+export default OICRegistration;

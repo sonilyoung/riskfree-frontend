@@ -59,7 +59,7 @@ const useStyles = makeStyles(() => ({
         backgroundColor: '#33374f',
         justifyContent: 'center',
         minWidth: '1900px !important',
-        height: '100vh'
+        height: '100vh',
     },
     pageHeader: {
         display: 'flex',

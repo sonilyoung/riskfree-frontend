@@ -36,11 +36,14 @@ import checkIconOn from '../../../assets/images/ic_chk3_on.png';
 const useStyles = makeStyles(() => ({
     pageWrap: {
         // minHeight: 'calc(100vh - 94px)',
+        whiteSpace: 'nowrap',
+        letterSpacing: '-1.08px'
     },
     listTitle: {
         height: '33px',
         marginBottom: '20px !important',
         color: '#111',
+        wordBreak: 'keep-all'
     },
     searchBox: {
         display: 'flex',
@@ -58,9 +61,12 @@ const useStyles = makeStyles(() => ({
                 marginTop: '12px'
             }
         },
-        '& >div:first-of-type [class*=searchRadio]': {
-            width: '640px',
-        }
+        '& >div:first-of-type [class*=searchInfo] >div:nth-of-type(2), & >div:last-of-type [class*=searchInfo] >div:nth-of-type(2)': {
+            width: '700px',
+        },
+        '& >div:first-of-type [class*=searchInfo] >div:last-of-type, & >div:last-of-type [class*=searchInfo] >div:last-of-type': {
+            marginLeft: '30px'
+        },
     },
     searchRadio: {
         '& [class*=body1]': {
@@ -81,7 +87,7 @@ const useStyles = makeStyles(() => ({
             display: 'flex',
             alignItems: 'center',
             '&:not(&:first-of-type)': {
-                marginLeft: '58px'
+                marginLeft: '58px',
             }
         }
     },
@@ -131,7 +137,7 @@ const useStyles = makeStyles(() => ({
             '&:last-of-type': {
                 borderRight: '0',
             },
-            '&:nth-of-type(8), &:nth-of-type(9)': {
+            '&:nth-of-type(6), &:nth-of-type(7), &:nth-of-type(8)': {
                 justifyContent: 'flex-start',
             },
         },
@@ -154,16 +160,16 @@ const useStyles = makeStyles(() => ({
             minWidth: '90px'
         },
         '&:nth-of-type(2)': {
-            minWidth: '148px'
+            minWidth: '150px'
         },
-        '&:nth-of-type(3), &:nth-of-type(4), &:nth-of-type(5)': {
+        '&:nth-of-type(3), &:nth-of-type(4)': {
             minWidth: '120px'
         },
-        '&:nth-of-type(6)': {
+        '&:nth-of-type(5), &:nth-of-type(6)': {
             minWidth: '240px'
         },
-        '&:nth-of-type(7)': {
-            minWidth: '110px'
+        '&:nth-of-type(7), &:nth-of-type(8)': {
+            minWidth: '420px'
         },
     },
     pagingBox: {
@@ -300,7 +306,7 @@ const ExcelButton = styled(ButtonUnstyled)`
     }
 `;
 
-const ACIStatus = () => {
+const OICLaw = () => {
     const classes = useStyles();
 
     const [num, setNum] = React.useState('');
@@ -314,7 +320,7 @@ const ACIStatus = () => {
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
                 <Grid item xs={12} className={classes.listTitle}>
                     <Typography variant="headline2" component="div" gutterBottom>
-                        재해발생 및 방지대책 등 이행현황
+                        관계법령에 따른 개선.시정 명령에 따른 조치 현황
                     </Typography>
                 </Grid>
                 <Grid item xs={12} className={classes.searchBox}>
@@ -333,7 +339,7 @@ const ACIStatus = () => {
                                     </Select>
                             </div>
                             <div>
-                                <div className={classes.infoTitle}>재해유형</div>
+                                <div className={classes.infoTitle}>조치요청 명령구분</div>
                                 <FormControl className={classes.searchRadio}>
                                     <RadioGroup row>
                                         <FormControlLabel
@@ -347,8 +353,8 @@ const ACIStatus = () => {
                                             } 
                                         />
                                         <FormControlLabel
-                                            value="추락"
-                                            label="추락"
+                                            value="고용노동부"
+                                            label="고용노동부"
                                             control={
                                                 <Checkbox 
                                                     icon={<img src={checkIcon} alt="check icon" />}
@@ -357,8 +363,8 @@ const ACIStatus = () => {
                                             } 
                                         />
                                         <FormControlLabel
-                                            value="끼임"
-                                            label="끼임"
+                                            value="소방청(소)"
+                                            label="소방청(소)"
                                             control={
                                                 <Checkbox 
                                                     icon={<img src={checkIcon} alt="check icon" />}
@@ -367,8 +373,8 @@ const ACIStatus = () => {
                                             } 
                                         />
                                         <FormControlLabel
-                                            value="화재"
-                                            label="화재"
+                                            value="환경부(청)"
+                                            label="환경부(청)"
                                             control={
                                                 <Checkbox 
                                                     icon={<img src={checkIcon} alt="check icon" />}
@@ -377,28 +383,8 @@ const ACIStatus = () => {
                                             } 
                                         />
                                         <FormControlLabel
-                                            value="전기"
-                                            label="전기"
-                                            control={
-                                                <Checkbox 
-                                                    icon={<img src={checkIcon} alt="check icon" />}
-                                                    checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                />
-                                            } 
-                                        />
-                                        <FormControlLabel
-                                            value="밀폐"
-                                            label="밀폐"
-                                            control={
-                                                <Checkbox 
-                                                    icon={<img src={checkIcon} alt="check icon" />}
-                                                    checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                />
-                                            } 
-                                        />
-                                        <FormControlLabel
-                                            value="중량물"
-                                            label="중량물"
+                                            value="자체점검"
+                                            label="자체점검"
                                             control={
                                                 <Checkbox 
                                                     icon={<img src={checkIcon} alt="check icon" />}
@@ -410,23 +396,38 @@ const ACIStatus = () => {
                                 </FormControl>
                             </div>
                             <div>
-                                <div className={classes.infoTitle}>사고등급</div>
-                                    <Select
-                                        sx={{width: 100}}
-                                        className={classes.selectMenu}
-                                        value={num}
-                                        onChange={handleChange}
-                                        displayEmpty
-                                    >
-                                        <MenuItem value="">2급</MenuItem>
-                                    </Select>
+                                <div className={classes.infoTitle}>구분</div>
+                                <FormControl className={classes.searchRadio}>
+                                    <RadioGroup row>
+                                        <FormControlLabel
+                                            value="개선"
+                                            label="개선"
+                                            control={
+                                                <Radio 
+                                                    icon={<img src={radioIcon} alt="check icon" />}
+                                                    checkedIcon={<img src={radioIconOn} alt="check icon on" />}
+                                                />
+                                            } 
+                                        />
+                                        <FormControlLabel
+                                            value="조치"
+                                            label="조치"
+                                            control={
+                                                <Radio 
+                                                    icon={<img src={radioIcon} alt="check icon" />}
+                                                    checkedIcon={<img src={radioIconOn} alt="check icon on" />}
+                                                />
+                                            } 
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
                             </div>
                         </div>
                     </div>
                     <div>
                         <div className={classes.searchInfo}>
                             <div>
-                                <div className={classes.infoTitle}>발생장소</div>
+                                <div className={classes.infoTitle}>지적원인</div>
                                     <Select
                                         className={classes.selectMenu}
                                         sx={{width: 204}}
@@ -434,7 +435,7 @@ const ACIStatus = () => {
                                         onChange={handleChange}
                                         displayEmpty
                                     >
-                                        <MenuItem value="">38L-조립5공구</MenuItem>
+                                        <MenuItem value="">작업감독자미배치</MenuItem>
                                     </Select>
                             </div>
                             <div>
@@ -454,22 +455,12 @@ const ACIStatus = () => {
                                     />
                             </div>
                             <div>
-                                <div className={classes.infoTitle}>현장 책임자</div>
-                                <TextField 
-                                    id="standard-basic" 
-                                    placeholder="이름입력" 
-                                    variant="outlined" 
-                                    sx={{width: 185}}
-                                    className={classes.selectMenu}
-                                />
-                            </div>
-                            <div>
-                                <div className={classes.infoTitle}>사고구분</div>
+                                <div className={classes.infoTitle}>조치상태</div>
                                 <FormControl className={classes.searchRadio}>
                                     <RadioGroup row>
                                         <FormControlLabel
-                                            value="자사"
-                                            label="자사"
+                                            value="전체"
+                                            label="전체"
                                             control={
                                                 <Radio 
                                                     icon={<img src={radioIcon} alt="check icon" />}
@@ -478,8 +469,8 @@ const ACIStatus = () => {
                                             } 
                                         />
                                         <FormControlLabel
-                                            value="도급"
-                                            label="도급"
+                                            value="조치중"
+                                            label="조치중"
                                             control={
                                                 <Radio 
                                                     icon={<img src={radioIcon} alt="check icon" />}
@@ -488,8 +479,8 @@ const ACIStatus = () => {
                                             } 
                                         />
                                         <FormControlLabel
-                                            value="기타"
-                                            label="기타"
+                                            value="조치완료"
+                                            label="조치완료"
                                             control={
                                                 <Radio 
                                                     icon={<img src={radioIcon} alt="check icon" />}
@@ -511,134 +502,112 @@ const ACIStatus = () => {
                     <div className={classes.tableHead}>
                         <div className={classes.tableRow}>발생년도</div>
                         <div className={classes.tableRow}>사업장</div>
-                        <div className={classes.tableRow}>발생일자</div>
-                        <div className={classes.tableRow}>재해종류</div>
-                        <div className={classes.tableRow}>사고등급</div>
+                        <div className={classes.tableRow}>조치상태</div>
+                        <div className={classes.tableRow}>지적일자</div>
+                        <div className={classes.tableRow}>조치명령 기관</div>
                         <div className={classes.tableRow}>발생장소</div>
-                        <div className={classes.tableRow}>현장책임자</div>
-                        <div className={classes.tableRow}>발생원인</div>
-                        <div className={classes.tableRow}>재해발생대책</div>
-                        <div className={classes.tableRow}>이행실적</div>
+                        <div className={classes.tableRow}>조치명령 원인</div>
+                        <div className={classes.tableRow}>개선조치 내용</div>
                     </div>
                     <div className={classes.tableBody}>
                         <div className={classes.tableRow}>2022</div>
                         <div className={classes.tableRow}>여수</div>
+                        <div className={classes.tableRow}>개선중</div>
                         <div className={classes.tableRow}>22.04.01</div>
-                        <div className={classes.tableRow}>끼임</div>
-                        <div className={classes.tableRow}>B</div>
+                        <div className={classes.tableRow}>고용노동부</div>
                         <div className={classes.tableRow}>2BL-3-2공구</div>
-                        <div className={classes.tableRow}>김xx</div>
                         <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
                         <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                        <div className={classes.tableRow}>&nbsp;</div>
                     </div>
                     <div className={classes.tableBody}>
                         <div className={classes.tableRow}>2022</div>
                         <div className={classes.tableRow}>여수</div>
+                        <div className={classes.tableRow}>개선중</div>
                         <div className={classes.tableRow}>22.04.01</div>
-                        <div className={classes.tableRow}>급성독성</div>
-                        <div className={classes.tableRow}>B</div>
-                        <div className={classes.tableRow}>발전설비 3호기 </div>
-                        <div className={classes.tableRow}>김xx</div>
-                        <div className={classes.tableRow}>철근작업중 철근 쓰러짐에 따른 압사</div>
-                        <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                        <div className={classes.tableRow}>&nbsp;</div>
-                    </div>
-                    <div className={classes.tableBody}>
-                        <div className={classes.tableRow}>2022</div>
-                        <div className={classes.tableRow}>여수</div>
-                        <div className={classes.tableRow}>22.04.01</div>
-                        <div className={classes.tableRow}>끼임</div>
-                        <div className={classes.tableRow}>B</div>
+                        <div className={classes.tableRow}>고용노동부</div>
                         <div className={classes.tableRow}>2BL-3-2공구</div>
-                        <div className={classes.tableRow}>김xx</div>
                         <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
                         <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                        <div className={classes.tableRow}>&nbsp;</div>
                     </div>
                     <div className={classes.tableBody}>
                         <div className={classes.tableRow}>2022</div>
                         <div className={classes.tableRow}>여수</div>
+                        <div className={classes.tableRow}>개선중</div>
                         <div className={classes.tableRow}>22.04.01</div>
-                        <div className={classes.tableRow}>급성독성</div>
-                        <div className={classes.tableRow}>B</div>
-                        <div className={classes.tableRow}>발전설비 3호기 </div>
-                        <div className={classes.tableRow}>김xx</div>
-                        <div className={classes.tableRow}>철근작업중 철근 쓰러짐에 따른 압사</div>
-                        <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                        <div className={classes.tableRow}>&nbsp;</div>
-                    </div>
-                    <div className={classes.tableBody}>
-                        <div className={classes.tableRow}>2022</div>
-                        <div className={classes.tableRow}>여수</div>
-                        <div className={classes.tableRow}>22.04.01</div>
-                        <div className={classes.tableRow}>끼임</div>
-                        <div className={classes.tableRow}>B</div>
+                        <div className={classes.tableRow}>고용노동부</div>
                         <div className={classes.tableRow}>2BL-3-2공구</div>
-                        <div className={classes.tableRow}>김xx</div>
                         <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
                         <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                        <div className={classes.tableRow}>&nbsp;</div>
                     </div>
                     <div className={classes.tableBody}>
                         <div className={classes.tableRow}>2022</div>
                         <div className={classes.tableRow}>여수</div>
+                        <div className={classes.tableRow}>개선중</div>
                         <div className={classes.tableRow}>22.04.01</div>
-                        <div className={classes.tableRow}>급성독성</div>
-                        <div className={classes.tableRow}>B</div>
-                        <div className={classes.tableRow}>발전설비 3호기 </div>
-                        <div className={classes.tableRow}>김xx</div>
-                        <div className={classes.tableRow}>철근작업중 철근 쓰러짐에 따른 압사</div>
-                        <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                        <div className={classes.tableRow}>&nbsp;</div>
-                    </div>
-                    <div className={classes.tableBody}>
-                        <div className={classes.tableRow}>2022</div>
-                        <div className={classes.tableRow}>여수</div>
-                        <div className={classes.tableRow}>22.04.01</div>
-                        <div className={classes.tableRow}>끼임</div>
-                        <div className={classes.tableRow}>B</div>
+                        <div className={classes.tableRow}>고용노동부</div>
                         <div className={classes.tableRow}>2BL-3-2공구</div>
-                        <div className={classes.tableRow}>김xx</div>
                         <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
                         <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                        <div className={classes.tableRow}>&nbsp;</div>
                     </div>
                     <div className={classes.tableBody}>
                         <div className={classes.tableRow}>2022</div>
                         <div className={classes.tableRow}>여수</div>
+                        <div className={classes.tableRow}>개선중</div>
                         <div className={classes.tableRow}>22.04.01</div>
-                        <div className={classes.tableRow}>급성독성</div>
-                        <div className={classes.tableRow}>B</div>
-                        <div className={classes.tableRow}>발전설비 3호기 </div>
-                        <div className={classes.tableRow}>김xx</div>
-                        <div className={classes.tableRow}>철근작업중 철근 쓰러짐에 따른 압사</div>
-                        <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                        <div className={classes.tableRow}>&nbsp;</div>
-                    </div>
-                    <div className={classes.tableBody}>
-                        <div className={classes.tableRow}>2022</div>
-                        <div className={classes.tableRow}>여수</div>
-                        <div className={classes.tableRow}>22.04.01</div>
-                        <div className={classes.tableRow}>끼임</div>
-                        <div className={classes.tableRow}>B</div>
+                        <div className={classes.tableRow}>고용노동부</div>
                         <div className={classes.tableRow}>2BL-3-2공구</div>
-                        <div className={classes.tableRow}>김xx</div>
                         <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
                         <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                        <div className={classes.tableRow}>&nbsp;</div>
                     </div>
                     <div className={classes.tableBody}>
                         <div className={classes.tableRow}>2022</div>
                         <div className={classes.tableRow}>여수</div>
+                        <div className={classes.tableRow}>개선중</div>
                         <div className={classes.tableRow}>22.04.01</div>
-                        <div className={classes.tableRow}>급성독성</div>
-                        <div className={classes.tableRow}>B</div>
-                        <div className={classes.tableRow}>발전설비 3호기 </div>
-                        <div className={classes.tableRow}>김xx</div>
-                        <div className={classes.tableRow}>철근작업중 철근 쓰러짐에 따른 압사</div>
+                        <div className={classes.tableRow}>고용노동부</div>
+                        <div className={classes.tableRow}>2BL-3-2공구</div>
+                        <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
                         <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                        <div className={classes.tableRow}>&nbsp;</div>
+                    </div>
+                    <div className={classes.tableBody}>
+                        <div className={classes.tableRow}>2022</div>
+                        <div className={classes.tableRow}>여수</div>
+                        <div className={classes.tableRow}>개선중</div>
+                        <div className={classes.tableRow}>22.04.01</div>
+                        <div className={classes.tableRow}>고용노동부</div>
+                        <div className={classes.tableRow}>2BL-3-2공구</div>
+                        <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
+                        <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
+                    </div>
+                    <div className={classes.tableBody}>
+                        <div className={classes.tableRow}>2022</div>
+                        <div className={classes.tableRow}>여수</div>
+                        <div className={classes.tableRow}>개선중</div>
+                        <div className={classes.tableRow}>22.04.01</div>
+                        <div className={classes.tableRow}>고용노동부</div>
+                        <div className={classes.tableRow}>2BL-3-2공구</div>
+                        <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
+                        <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
+                    </div>
+                    <div className={classes.tableBody}>
+                        <div className={classes.tableRow}>2022</div>
+                        <div className={classes.tableRow}>여수</div>
+                        <div className={classes.tableRow}>개선중</div>
+                        <div className={classes.tableRow}>22.04.01</div>
+                        <div className={classes.tableRow}>고용노동부</div>
+                        <div className={classes.tableRow}>2BL-3-2공구</div>
+                        <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
+                        <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
+                    </div>
+                    <div className={classes.tableBody}>
+                        <div className={classes.tableRow}>2022</div>
+                        <div className={classes.tableRow}>여수</div>
+                        <div className={classes.tableRow}>개선중</div>
+                        <div className={classes.tableRow}>22.04.01</div>
+                        <div className={classes.tableRow}>고용노동부</div>
+                        <div className={classes.tableRow}>2BL-3-2공구</div>
+                        <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
+                        <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
@@ -655,4 +624,4 @@ const ACIStatus = () => {
     );
 };
 
-export default ACIStatus;
+export default OICLaw;

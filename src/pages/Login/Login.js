@@ -15,7 +15,8 @@ import checkIconOn from '../../assets/images/ic_chk2_on.png';
 const useStyles = makeStyles(() => ({
     pageWrap: {
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        minWidth: '1900px !important',
     },
     loginWrap: {
         display: 'flex',

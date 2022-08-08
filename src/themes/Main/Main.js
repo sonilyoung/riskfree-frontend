@@ -3,7 +3,7 @@ import '../../assets/fonts/Pretendard-Regular.otf';
 
 const main = createTheme({
     typography: {
-        fontFamily: ['pretendard', '맑은 고딕','Malgun Gothic', 'AppleGothic', 'sans-serif'].join(','),
+        fontFamily: ['pretendard', '맑은 고딕', 'Malgun Gothic', 'AppleGothic', 'sans-serif'].join(','),
         button: {
             height: 60,
             fontSize: 20,
