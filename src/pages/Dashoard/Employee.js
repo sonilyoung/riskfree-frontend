@@ -25,6 +25,13 @@ import checkIconHover from '../../assets/images/ic_chk_hover.png';
 import fileExis from '../../assets/images/file_exis.png';
 import fileNone from '../../assets/images/file_none.png';
 
+import graphNext from '../../assets/images/next_report.png';
+import graphPrev from '../../assets/images/prev_report.png';
+import graphNextHov from '../../assets/images/next_report_ov.png';
+import graphPrevHov from '../../assets/images/prev_report_ov.png';
+import imageGraph from '../../assets/images/graph.jpg';
+import popupClose from '../../assets/images/btn_popClose.png';
+
 import numOne from '../../assets/images/num1.png';
 import numTwo from '../../assets/images/num2.png';
 import numThree from '../../assets/images/num3.png';
@@ -218,6 +225,154 @@ const useStyles = makeStyles(() => ({
     headerNavigation: {
         position: 'relative',
         height: '64px'
+    },
+    chartPopup: {
+        zIndex: '1000',
+        position: 'absolute',
+        top: '-20px',
+        left: '-140px',
+        display: 'flex',
+    },
+    chartPopList: {
+        border: '1px solid cyan',
+        display: 'flex',
+        flexWrap: 'wrap',
+        width: '345px',
+        height: 'fit-content',
+        border: '2px solid #018de7',
+        borderRadius: '5px',
+        overflow: 'hidden',
+        '& >div': {
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            '& button': {
+                marginRight: '20px'
+            }
+        }
+    },
+    popHeader: {
+        position: 'relative',
+        height: '54px',
+        paddingLeft: '20px',
+        backgroundImage: 'linear-gradient(#0943c3, #0481d8)',
+        color: '#fff',
+        fontSize: '20px',
+        '& button': {
+            position: 'absolute',
+            right: '0px'
+        }
+    },
+    popList: {
+        display: 'flex',
+        flexWrap: 'wrap'
+    },
+    PopListItem: {
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        height: '46px',
+        background: '#1e2132',
+        color: '#fff',
+        fontSize: '17px',
+        letterSpacing: '-1.08px',
+        paddingLeft: '24px',
+        borderBottom: '1px solid #4d5867',
+        cursor: 'pointer',
+        '&:last-of-type': {
+            borderBottom: 'none'
+        },
+        '&.active': {
+            background: '#2e3b65',
+            color: '#5fdefe'
+        }
+    },
+    chartPopGraph: {
+        width: '1024px',
+        border: '2px solid #018de7',
+        padding: '34px',
+        borderRadius: '12px',
+        background: '#d3e1fb',
+        marginLeft: '5px'
+    },
+    graphHeader: {
+        position: 'relative',
+        display: 'flex',
+        justifyContent: 'center',
+        marginBottom: '20px',
+        '& >div:first-of-type': {
+            position: 'absolute',
+            left: '0'
+        },
+        '& >div:last-of-type': {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '700px',
+            '& >div': {
+                display: 'flex',
+                justifyContent: 'center',
+                alignContent: 'center',
+                flexWrap: 'wrap',
+                width: '450px',
+                '& span': {
+                    textAlign: 'center',
+                    fontSize: '20px',
+                    fontWeight: '500',
+                    '&:first-of-type': {
+                        fontSize: '30px',
+                        fontWeight: '700'
+                    }
+                }
+            }
+        },
+
+    },
+    graphImage: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        padding: '34px',
+        borderRadius: '8px',
+        background: '#fff',
+        boxShadow: '0 0 10px rgb(0 0 0 / 30%)'
+    },
+    graphLabel: {
+        display: 'flex',
+        marginTop: '30px',
+        height: '50px',
+        border: '1px solid #bbbdc0',
+        borderRadius: '6px',
+        padding: '0 14px',
+    },
+    labelItem: {
+        display: 'flex',
+        alignItems: 'center',
+        margin: '0 14px',
+        fontSize: '15px',
+        '& span:first-of-type': {
+            width: '15px',
+            height: '10px',
+            borderRadius: '6px',
+            marginRight: '4px',
+            backgroundColor: '#018ce7'
+        },
+        '&:nth-of-type(2) span:first-of-type': {
+            backgroundColor: '#1b969e'
+        },
+        '&:nth-of-type(3) span:first-of-type': {
+            backgroundColor: '#ffba5a'
+        },
+        '&:nth-of-type(4) span:first-of-type': {
+            backgroundColor: '#898ddd'
+        },
+        '&:nth-of-type(5) span:first-of-type': {
+            backgroundColor: '#b9d581'
+        },
+        '&:nth-of-type(6) span:first-of-type': {
+            backgroundColor: '#d28cbd'
+        },
+
     },
     circleButton: {
         height: '60px',
@@ -928,6 +1083,54 @@ const FileButtonNone = styled(ButtonUnstyled)`
     cursor: pointer;
 `;
 
+const ButtonClosePop = styled(ButtonUnstyled)`
+    width: 24px;
+    height: 24px;
+    background: url(${popupClose}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+`;
+
+const ButtonGraphNext = styled(ButtonUnstyled)`
+    width: 88px;
+    height: 50px;
+    background: url(${graphNext}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: url(${graphNextHov}) no-repeat 50% 50%;
+    }   
+`;
+
+const ButtonGraphPrev = styled(ButtonUnstyled)`
+    width: 88px;
+    height: 50px;
+    background: url(${graphPrev}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: url(${graphPrevHov}) no-repeat 50% 50%;
+    }   
+`;
+
+const ButtonGrid = styled(ButtonUnstyled)`
+    width: 105px;
+    height: 50px;
+    background: #6682c1;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 500;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #355aae;
+    } 
+`;
+
 
 const headerSlider = {
     dots: false,
@@ -1036,6 +1239,67 @@ const Employee = () => {
                     </Grid>
                     <Grid className={classes.headerNavigation} item xs={5.8}>
                         <ChartButton></ChartButton>
+                        <div className={classes.chartPopup}>
+                            <div className={classes.chartPopList}>
+                                <div className={classes.popHeader}>
+                                    중대재해 대응수준 Report
+                                    <ButtonClosePop></ButtonClosePop>
+                                </div>
+                                <div className={classes.popList}>
+                                    <div className={classes.PopListItem + ' active'}>차수별 대응수준 현황 (통합)</div>
+                                    <div className={classes.PopListItem}>차수별 대응수준 현황 (사업장별)</div>
+                                    <div className={classes.PopListItem}>항목별 대응수준 현황 (통합)</div>
+                                    <div className={classes.PopListItem}>항목별 대응수준 현황 (사업장별)</div>
+                                    <div className={classes.PopListItem}>사업장별 재해발생 통계</div>
+                                    <div className={classes.PopListItem}>개선.시정명령 조치내역 통계</div>
+                                    <div className={classes.PopListItem}>안전보건 법정교육 실시내역 통계</div>
+                                </div>
+                            </div>
+                            <div className={classes.chartPopGraph}>
+                                <div className={classes.graphHeader}>
+                                    <div>
+                                        <ButtonGrid>Grid</ButtonGrid>
+                                    </div>
+                                    <div>
+                                        <ButtonGraphPrev></ButtonGraphPrev>
+                                        <div>
+                                            <span>중대대해처벌법 대응수준 현황</span>
+                                            <span>(3차 : 22/01/01 ~ 22/04/30)</span>
+                                        </div>
+                                        <ButtonGraphNext></ButtonGraphNext>
+                                    </div>
+                                </div>
+                                <div className={classes.graphImage}>
+                                    <img src={imageGraph} alt="graph" />
+                                    <div className={classes.graphLabel}>
+                                        <div className={classes.labelItem}>
+                                            <span></span>
+                                            <span>여수사업장</span>
+                                        </div>
+                                        <div className={classes.labelItem}>
+                                            <span></span>
+                                            <span>인천사업장</span>
+                                        </div>
+                                        <div className={classes.labelItem}>
+                                            <span></span>
+                                            <span>울산사업장</span>
+                                        </div>
+                                        <div className={classes.labelItem}>
+                                            <span></span>
+                                            <span>서산사업장</span>
+                                        </div>
+                                        <div className={classes.labelItem}>
+                                            <span></span>
+                                            <span>춘천사업장</span>
+                                        </div>
+                                        <div className={classes.labelItem}>
+                                            <span></span>
+                                            <span>세종사업장</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div className={classes.navSlider}>
                             <Slider {...headerSlider}>
                                 <div><MainNavButton>전체사업장</MainNavButton></div>

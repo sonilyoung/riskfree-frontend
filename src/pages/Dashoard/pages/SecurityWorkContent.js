@@ -22,6 +22,9 @@ import Checkbox from '@mui/material/Checkbox';
 import checkIcon from '../../../assets/images/ic_chk3.png';
 import checkIconOn from '../../../assets/images/ic_chk3_on.png';
 
+import fileIcon from '../../../assets/images/file_exis.png';
+import icoUploaded from '../../../assets/images/ic_excel.png';
+
 const useStyles = makeStyles(() => ({
     pageWrap: {
         display: 'flex',
@@ -140,7 +143,8 @@ const useStyles = makeStyles(() => ({
         }
     },
     uploadBox: {
-        maxWidth: '50% !important'
+        maxWidth: '50% !important',
+        border: '1px solid #bdcbe9',
     },
     uploadTable: {
         borderRadius: '6px',
@@ -219,14 +223,10 @@ const useStyles = makeStyles(() => ({
         }
     },
     fileIcon: {
-        width: '20px',
-        height: '20px',
-        border: '1px solid #bdcbe9'
+
     },
     uploadStatus: {
-        width: '20px',
-        height: '20px',
-        border: '1px solid #bdcbe9'
+
     }
 
 }));
@@ -382,13 +382,13 @@ const SecurityWorkContent = () => {
 					            </div>
 					            <div className={classes.tableBody}>
 					                <div className={classes.tableRow}>
-						                <div className={classes.tableData}><img className={classes.fileIcon}></img>file_name.ext</div>
-						                <div className={classes.tableData}></div>
+						                <div className={classes.tableData}><img src={fileIcon} alt="file icon" className={classes.fileIcon} />file_name.ext</div>
+						                <div className={classes.tableData}>Data</div>
 						                <div className={classes.tableData}>999.99KB</div>
 					                </div>
 					                <div className={classes.tableRow}>
-						                <div className={classes.tableData}><img className={classes.fileIcon}></img>file_name.ext</div>
-						                <div className={classes.tableData}></div>
+						                <div className={classes.tableData}><img src={fileIcon} alt="file icon" className={classes.fileIcon} />file_name.ext</div>
+						                <div className={classes.tableData}>Data</div>
 						                <div className={classes.tableData}>999.99KB</div>
 					                </div>
 					            </div>
@@ -401,8 +401,8 @@ const SecurityWorkContent = () => {
                     </div>                      
                 </Grid>
                 <Grid item xs={12} className={classes.menuBox + ' ' + classes.uploadInfo}>
-                    <div className={classes.finishedUpload}><img className={classes.fileIcon}></img>file_name.ext<img className={classes.uploadStatus}></img></div>
-                    <div className={classes.activeUpload}><img className={classes.fileIcon}></img>file_name.ext<img className={classes.uploadStatus}></img></div>
+                    <div className={classes.finishedUpload}><img src={fileIcon} alt="file icon" className={classes.fileIcon} />file_name.ext<img src={icoUploaded} alt="file uploaded" className={classes.uploadStatus} /></div>
+                    <div className={classes.activeUpload}><img src={fileIcon} alt="file icon" className={classes.fileIcon} />file_name.ext<img src={icoUploaded} alt="file uploaded" className={classes.uploadStatus} /></div>
                     <CloseButton>x</CloseButton>
                 </Grid>
             </Grid>
