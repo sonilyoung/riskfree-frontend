@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { LoginPage } from '../pages/Login';
 import { RegistrationPage } from '../pages/Registration';
 import { DashboardDirectorPage, DashboardEmployeePage } from '../pages/Dashoard';
-import { IMStatusPage, IMRegistrationPage, NoticeListPage, NoticeDetailsPage, NoticeRegistrationPage, ACIStatusPage, ACIRegistrationPage, OICLawPage, OICRegistrationPage, MPDLawFirstPage, MPDLawSecondPage, MPDLawThirdPage } from '../pages/Dashoard/pages';
+import { IMStatusPage, IMRegistrationPage, NoticeListPage, NoticeDetailsPage, NoticeRegistrationPage, ACIStatusPage, ACIRegistrationPage, OICLawPage, OICRegistrationPage, MPDLawFirstPage, MPDLawSecondPage, MPDLawThirdPage, SecurityWorkContentPage } from '../pages/Dashoard/pages';
 import { ForgottenPasswordPage } from '../pages/Login/pages/ForgottenPassword';
 
 const DefaultRoutes = () => (
@@ -21,6 +21,7 @@ const DefaultRoutes = () => (
         <Route path="/dashboard/director/measure-manage-performance-od-duties-law-first" element={ <MPDLawFirstPage /> } />
         <Route path="/dashboard/director/measure-manage-performance-od-duties-law-second" element={ <MPDLawSecondPage /> } />
         <Route path="/dashboard/director/measure-manage-performance-od-duties-law-third" element={ <MPDLawThirdPage /> } />
+        <Route path="/dashboard/director/security-work-content" element={ <SecurityWorkContentPage /> } />
         <Route path="/dashboard/employee" element={ <DashboardEmployeePage /> } />
         <Route path="/login" element={ <LoginPage /> } />
         <Route path="/registration" element={ <RegistrationPage /> } />
