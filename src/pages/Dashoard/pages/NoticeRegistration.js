@@ -35,7 +35,7 @@ const useStyles = makeStyles(() => ({
     boxRow: {
         display: 'flex',
         width: '100%',
-        height: '60px',
+        minHeight: '60px',
         '&:nth-last-of-type(2)': {
             height: '460px',
             borderBottom: 'none',

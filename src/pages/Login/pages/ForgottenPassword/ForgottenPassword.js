@@ -44,7 +44,7 @@ const useStyles = makeStyles(() => ({
         '& .MuiStepLabel-label.Mui-active': {
             color: '#018de7'
         }
-      }
+    }
 }));
 
 const ForgottenPassword = () => {

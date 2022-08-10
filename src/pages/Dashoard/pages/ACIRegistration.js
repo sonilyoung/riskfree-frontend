@@ -26,7 +26,6 @@ import noImg from '../../../assets/images/ic_no_image.png';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
-        // minHeight: 'calc(100vh - 94px)',
         '& >div[class*=box]': {
             display: 'flex',
             borderRadius: '6px',
@@ -90,6 +89,7 @@ const useStyles = makeStyles(() => ({
     boxRow: {
         display: 'flex',
         width: '100%',
+        minHeight: '60px',
         '& [class*=rowTitle]': {
             borderBottom: 'none'
         }
@@ -174,7 +174,8 @@ const useStyles = makeStyles(() => ({
                         alignItems: 'center',
                         background: '#eff2f6',
                         fontWeight: '500',
-                        height: '50px'
+                        height: '50px',
+                        padding: '0'
                     },
                     '& .Mui-disabled input': {
                         '-webkit-text-fill-color': '#333'
@@ -199,12 +200,12 @@ const useStyles = makeStyles(() => ({
     },
     textArea: {
         '& .MuiOutlinedInput-root textarea': {
-            height: '50px !important',
+            height: '49px !important',
             fontSize: '16px'
         }
     },
     selectMenu: {
-        height: '40px',
+        height: '38px',
         overflow: 'hidden',
         '& div': {
             height: 'inherit',
