@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
         flexDirection: 'column',
         marginTop: '140px',
         width: '460px',
-        height: '470px', 
+        height: '470px',
     },
     loginLogo: {
         display: 'flex',
@@ -47,6 +47,11 @@ const useStyles = makeStyles(() => ({
 const Login = () => {
     const classes = useStyles();
 
+
+    const handleLogin = () => {
+
+    }
+
     return (
         <WideLayout>
             <div className={classes.pageWrap}>
@@ -62,13 +67,13 @@ const Login = () => {
                         <FormControlLabel
                             label="아이디저장"
                             control={
-                                <Checkbox 
+                                <Checkbox
                                     icon={<img src={checkIcon} alt="check icon" />}
                                     checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                 />
-                            }  
+                            }
                         />
-                        <Link href="#" underline="hover">비밀번호 찾기 / 재설정</Link>
+                        <Link href="/forgotten-password" underline="hover">비밀번호 찾기 / 재설정</Link>
                     </div>
                     <Button variant="contained">로그인</Button>
                 </div>

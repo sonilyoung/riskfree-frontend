@@ -1,2 +1,1 @@
-export { default as DashboardDirectorPage } from './Director';
-export { default as DashboardEmployeePage } from './Employee';
+export { default as EmployeePage } from './Employee';
