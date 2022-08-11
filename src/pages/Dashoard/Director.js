@@ -225,8 +225,7 @@ const useStyles = makeStyles(() => ({
         top: '-20px',
         left: '-140px',
         display: 'flex',
-        opacity: '0',
-        pointerEvents: 'none'
+        display: 'none !important'
     },
     chartPopList: {
         display: 'flex',
@@ -776,6 +775,7 @@ const useStyles = makeStyles(() => ({
         fontWeight: '500'
     },
     headerPopup: {
+        display: 'none !important',
         position: 'absolute',
         top: '0px',
         left: '0px',

@@ -47,6 +47,7 @@ import arrowDown from '../../assets/images/ic_down.png';
 import gageImg from '../../assets/images/bg_gage.png';
 import needleImg from '../../assets/images/img_needle.png';
 import gageState from '../../assets/images/txt_warning.png';
+import searchIcon from '../../assets/images/ic_search.png';
 
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -69,6 +70,8 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
+
+import popupClose2 from '../../assets/images/btn_popClose2.png';
 
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
@@ -243,8 +246,7 @@ const useStyles = makeStyles(() => ({
         top: '-20px',
         left: '-140px',
         display: 'flex',
-        opacity: '0',
-        pointerEvents: 'none'
+        display: 'none !important'
     },
     chartPopList: {
         display: 'flex',
@@ -490,7 +492,7 @@ const useStyles = makeStyles(() => ({
                 width: '28%'
             },
             '& >div:nth-of-type(2)': {
-                width: '12%'
+                width: '12%',
             },
             '& >div:nth-of-type(3)': {
                 width: '12%'
@@ -984,6 +986,7 @@ const useStyles = makeStyles(() => ({
         fontWeight: '500'
     },
     headerPopup: {
+        display: 'none !important',
         position: 'absolute',
         top: '0px',
         left: '0px',
@@ -1136,6 +1139,66 @@ const useStyles = makeStyles(() => ({
             marginBottom: '10px'
         },
         '& button': {
+            marginLeft: '10px'
+        }
+    },
+    uploadPopup: {
+        position: 'absolute',
+        zIndex: '1000',
+        top: '0px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '400px',
+        height: '400px',
+        background: '#fff',
+        borderRadius: '30px',
+        padding: '40px',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexWrap: 'wrap',
+        display: 'none !important',
+        '& >span': {
+            width: '20%',
+            height: '20px',
+            borderBottom: '1px solid #bdcbe9',
+            transform: 'translateY(-5px)',
+            '&:nth-of-type(2)': {
+                width: '60%',
+                border: 'none',
+                padding: '0 10px',
+                boxSizing: 'border-box',
+                textAlign: 'center',
+                transform: 'unset',
+            }
+        },
+        '& >button': {
+            position: 'absolute',
+            top: '0px',
+            right: '-65px'
+        }
+    },
+    uploadInfo: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        height: '50%',
+        '& >*': {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        '& img': {
+            width: '30px',
+            height: '30px',
+        }
+    },
+    uploadSearch: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        '& button:first-of-type': {
             marginLeft: '10px'
         }
     }
@@ -1361,6 +1424,64 @@ const PromptButtonWhite = styled(ButtonUnstyled)`
     &:hover {
         border-color: #222;
     } 
+`;
+
+const UnknownButton1 = styled(ButtonUnstyled)`
+    width: 150px;
+    height: 46px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: -2.08px;
+    border-radius: 46px;
+    background: #00adef;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #3a5298;
+    }   
+`;
+
+const UnknownButton2 = styled(ButtonUnstyled)`
+    width: 200px;
+    height: 46px;
+    color: #000;
+    font-size: 20px;
+    letter-spacing: -2.08px;
+    border-radius: 46px;
+    background: #eff2f9;
+    border: 2px solid #00adef;
+    cursor: pointer;
+    transition: border-color .2s;
+    &:hover {
+        border-color: #3a5298;
+    }  
+`;
+
+const SearchButton = styled(ButtonUnstyled)`
+    width: 46px;
+    height: 46px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: -2.08px;
+    border-radius: 50%;
+    background: #00adef url(${searchIcon}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #3a5298 url(${searchIcon}) no-repeat 50% 50%;
+    }   
+`;
+
+const ClosePopupButton2 = styled(ButtonUnstyled)`
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: url(${popupClose2}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s; 
 `;
 
 
@@ -1732,6 +1853,28 @@ const Employee = () => {
 
                 </Grid>
                 <Grid className={classes.pageBody} item xs={10.7}>
+                    <div className={classes.uploadPopup}>
+                        <ClosePopupButton2></ClosePopupButton2>
+                        <div className={classes.uploadInfo}>
+                            <img src={alertIcon} alt="alert icon" />
+                            <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
+                            <UnknownButton2>전체사업장</UnknownButton2>
+                        </div>
+                        <span></span>
+                        <span>의무조치별 상세 점검</span>
+                        <span></span>
+                        <div className={classes.uploadSearch}>
+                            <TextField 
+                                id="standard-basic" 
+                                placeholder="여수공장 시정조치요청 파일.hwp" 
+                                variant="outlined" 
+                                sx={{width: 250}}
+                                className={classes.popupTextField}
+                            />
+                            <SearchButton></SearchButton>
+                            <UnknownButton1>전체사업장</UnknownButton1>
+                        </div>
+                    </div>
                     <div className={classes.managementOrder}>
                         관리차수<strong>11</strong>차 :<strong>22.01.01 ~ 22.04.30</strong> 
                     </div>
