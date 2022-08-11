@@ -135,7 +135,7 @@ const useStyles = makeStyles(() => ({
         border: 'none',
         cursor: 'pointer',
         transition: 'background .3s'
-    },
+    }
 }));
 
 const UserButton = styled(ButtonUnstyled)`
