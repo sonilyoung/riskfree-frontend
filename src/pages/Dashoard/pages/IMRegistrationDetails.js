@@ -1,11 +1,13 @@
 import React from 'react';
 import { DefaultLayout } from '../../../layouts/Default';
 
-import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
+
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -19,10 +21,8 @@ import { makeStyles } from '@mui/styles';
 import radioIcon from '../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../assets/images/ic_radio_on.png';
 
-import checkIcon from '../../../assets/images/ic_chk3.png';
-import checkIconOn from '../../../assets/images/ic_chk3_on.png';
 import imgPrev from '../../../assets/images/prw_photo.jpg';
-import noImg from '../../../assets/images/ic_no_image.png';
+import imgPrev2 from '../../../assets/images/prw_photo2.jpg';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -39,23 +39,28 @@ const useStyles = makeStyles(() => ({
         marginBottom: '20px !important',
         color: '#111',
     },
-    boxReception: {
+    boxFirst: {
         display: 'flex',
         marginBottom: '16px !important',
         '& [class*=boxRow]:first-of-type [class*=rowInfo]:first-of-type': {
-            width: '160px',
+            width: '580px',
         },
-        '& [class*=boxRow]:first-of-type [class*=rowInfo]': {
-            width: '306px'
+        '& [class*=boxRow]:first-of-type [class*=rowContent] [class*=rowTitle]': {
+            width: '110px',
         },
-        '& [class*=boxRow]:first-of-type [class*=rowInfo]:last-of-type': {
-            width: 'auto'
+        '& [class*=boxRow]:nth-of-type(2) [class*=rowInfo]': {
+            width: '100%'
         },
         '& [class*=boxRow]:last-of-type [class*=rowInfo]': {
-            width: '100%',
-        },
-        '& [class*=boxContent] [class*=boxRow]:first-of-type]': {
-            height: '60px'
+            width: '240px',
+            '&:last-of-type': {
+                width: '560px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                '& .Mui-disabled input': {
+                    '-webkit-text-fill-color': '#333'
+                }
+            }
         }
     },
     boxTitle: {
@@ -83,6 +88,11 @@ const useStyles = makeStyles(() => ({
                 borderTop: 'none'
             },
             '& [class*=rowTitle]': {
+                borderTop: 'none'
+            }
+        },
+        '& [class*=boxRow]:last-of-type': {
+            '& [class*=rowTitle]:not(:first-of-type)': {
                 borderTop: 'none'
             }
         },
@@ -126,11 +136,9 @@ const useStyles = makeStyles(() => ({
         padding: '10px',
         boxSizing: 'border-box',
     },
-    boxRegistration: {
-        '& [class*=boxRow]': {
-            '&:last-of-type': {
-                height: 'auto'
-            },
+    boxSecond: {
+        '& [class*=boxRow]:last-of-type': {
+            height: 'auto'
         },
         '& [class*=boxRow] [class*=rowContent] [class*=rowInfo]': {
             width: '100%'
@@ -268,174 +276,80 @@ const WhiteButton = styled(ButtonUnstyled)`
 }
 `;
 
-const OICRegistration = () => {
+const IMRegistrationDetails = () => {
     const classes = useStyles();
+
+    const [num, setNum] = React.useState('');
+
+    const handleChange = (event) => {
+        setNum(event.target.value);
+    };
 
     return (
         <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
                 <Grid item xs={12} className={classes.listTitle}>
                     <Typography variant="headline2" component="div" gutterBottom>
-                        관계법령에 따른 개선.시정 명령에 따른 조치 현황
+                        개선조치 현황
                     </Typography>
                 </Grid>
-                <Grid item xs={12} className={classes.boxReception}>
+                <Grid item xs={12} className={classes.boxFirst}>
                     <div className={classes.boxTitle}>
                         <span>개선.조치</span>
                         <span>접수</span>
                     </div>
                     <div className={classes.boxContent}>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>접수일자</div>
+                            <div className={classes.rowTitle}>사업장</div>
                             <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>2022.06.01</div>
-                                <div className={classes.rowTitle}>접수자</div>
-                                <div className={classes.rowInfo}>[홍xx] / 방제센터 사고접수부</div>
-                                <div className={classes.rowTitle}>접수형태</div>
-                                <div className={classes.rowInfo}>
-                                <FormControl className={classes.searchRadio}>
-                                    <RadioGroup row>
-                                        <FormControlLabel
-                                            value="공문"
-                                            label="공문"
-                                            control={
-                                                <Radio 
-                                                    icon={<img src={radioIcon} alt="radio icon" />}
-                                                    checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                />
-                                            } 
-                                        />
-                                        <FormControlLabel
-                                            value="현장점검"
-                                            label="현장점검"
-                                            control={
-                                                <Radio 
-                                                    icon={<img src={radioIcon} alt="radio icon" />}
-                                                    checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                />
-                                            } 
-                                        />
-                                        <FormControlLabel
-                                            value="신고"
-                                            label="신고"
-                                            control={
-                                                <Radio 
-                                                    icon={<img src={radioIcon} alt="radio icon" />}
-                                                    checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                />
-                                            } 
-                                        />
-                                    </RadioGroup>
-                                </FormControl>
-                                </div>
-                                <div className={classes.rowTitle}>명령구분</div>
-                                <div className={classes.rowInfo}>
-                                    <FormControl className={classes.searchRadio}>
-                                        <RadioGroup row>
-                                            <FormControlLabel
-                                                value="고용노동부"
-                                                label="고용노동부"
-                                                control={
-                                                    <Checkbox 
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                            <FormControlLabel
-                                                value="소방청(소)"
-                                                label="소방청(소)"
-                                                control={
-                                                    <Checkbox 
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                            <FormControlLabel
-                                                value="환경부(청)"
-                                                label="환경부(청)"
-                                                control={
-                                                    <Checkbox 
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                            <FormControlLabel
-                                                value="자체점검"
-                                                label="자체점검"
-                                                control={
-                                                    <Checkbox 
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                        </RadioGroup>
-                                    </FormControl>
-                                </div>
+                                <div className={classes.rowInfo}></div>
+                                <div className={classes.rowTitle}>개선조치 NO</div>
+                                <div className={classes.rowInfo}></div>
                             </div>
                         </div>
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>
                                 <span>개선.조치 </span>
-                                <span>지적내용</span>
+                                <span>내용</span>
                             </div>
                             <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>
-                                    <TextField
-                                        className={classes.textArea}
-                                        id="outlined-multiline-static"
-                                        multiline
-                                        rows={4}
-                                        defaultValue="작업 감독자 미배치로 인한 지적"
-                                    />                      
-                                </div>
+                                <div className={classes.rowInfo}></div>
+                            </div>
+                        </div>
+                        <div className={classes.boxRow}>
+                            <div className={classes.rowTitle}>요청일자</div>
+                            <div className={classes.rowContent}>
+                                <div className={classes.rowInfo}></div>
+                                <div className={classes.rowTitle}>요청자</div>
+                                <div className={classes.rowInfo}></div>
+                                <div className={classes.rowTitle}>완료요청일</div>
+                                <div className={classes.rowInfo}></div>
+                                <div className={classes.rowTitle}>첨부파일</div>
+                                <div className={classes.rowInfo}></div>
                             </div>
                         </div>
                     </div>
                 </Grid>
-                <Grid item xs={12} className={classes.boxRegistration}>
+                <Grid item xs={12} className={classes.boxSecond}>
                     <div className={classes.boxTitle}>
                         <span>개선.조치 </span>
-                        <span>대응내역</span>
+                        <span>내역</span>
                     </div>
                     <div className={classes.boxContent}>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>지적원인</div>
+                            <div className={classes.rowTitle}>조치구분</div>
                             <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>
-                                    <TextField
-                                        className={classes.textArea}
-                                        id="outlined-multiline-static"
-                                        multiline
-                                        rows={4}
-                                        defaultValue="담당자 퇴사로 이한 작업 감독자 미배치로 인한 지적"
-                                    /> 
-                                </div>
+                                <div className={classes.rowInfo}></div>
                             </div>
                         </div>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>
-                                <span>재발방지 </span>
-                                <span>대책</span>
-                            </div>
+                            <div className={classes.rowTitle}>조치구분</div>
                             <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>
-                                    <TextField
-                                        className={classes.textArea}
-                                        id="outlined-multiline-static"
-                                        multiline
-                                        rows={4}
-                                        defaultValue="건물 신축 공사장에서 안전 난간 설치함. 
-                                        정상적으로 작동하는지 정기적으로 관리하며 근로자들이 안전수칙으로 일을 진행하는지 관리감독함."
-                                    /> 
-                                </div>
+                                <div className={classes.rowInfo}></div>
                             </div>
                         </div>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>이행실적</div>
+                            <div className={classes.rowTitle}>조치내용</div>
                             <div className={classes.rowContent}>
                                 <div>
                                     <div>조치 전</div>
@@ -443,7 +357,7 @@ const OICRegistration = () => {
                                         <TextField 
                                             id="standard-basic" 
                                             variant="outlined" 
-                                            value="20220607사고등록 전 사진.jpg"
+                                            value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
                                             sx={{width: 610}}
                                             className={classes.selectMenu}
                                             disabled
@@ -467,7 +381,7 @@ const OICRegistration = () => {
                                         />
                                         <UploadButton>찾아보기</UploadButton>
                                         <div className={classes.imgPreview}>
-                                            <img src={noImg} alt="no image" />
+                                            <img src={imgPrev2} alt="preview image" />
                                         </div>
                                     </div>
                                 </div>
@@ -477,8 +391,6 @@ const OICRegistration = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
                     <BlueButton className={'button-correction'}>수정</BlueButton>
-                    <BlueButton className={'button-registration'}>등록</BlueButton>
-                    <WhiteButton className={'button-cancellation'}>취소</WhiteButton>
                     <WhiteButton className={'button-delete'}>삭제</WhiteButton>
                     <WhiteButton className={'button-list'}>목록</WhiteButton>
                 </Grid>
@@ -487,4 +399,4 @@ const OICRegistration = () => {
     );
 };
 
-export default OICRegistration;
+export default IMRegistrationDetails;

@@ -7,6 +7,8 @@ import { IMStatusPage, IMRegistrationPage, NoticeListPage, NoticeDetailsPage, No
 import { ForgottenPasswordPage } from '../pages/Login/pages/ForgottenPassword';
 
 const DefaultRoutes = () => (
+
+    
     <Routes>
         <Route path="/dashboard/director" element={ <DashboardDirectorPage /> } />
         <Route path="/dashboard/director/improvement-measure-status" element={ <IMStatusPage /> } />

@@ -41,8 +41,6 @@ import arrowUp from '../../assets/images/ic_up.png';
 import arrowDown from '../../assets/images/ic_down.png';
 
 import circleGreen from '../../assets/images/bg_circle_green.png';
-// import circleYellow from '../../assets/images/bg_circle_yellow.png';
-// import circleOrange from '../../assets/images/bg_circle_orange.png';
 import circleRed from '../../assets/images/bg_circle_red.png';
 import gageImg from '../../assets/images/bg_gage.png';
 import needleImg from '../../assets/images/img_needle.png';

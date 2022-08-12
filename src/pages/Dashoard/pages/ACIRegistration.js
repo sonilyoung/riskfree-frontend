@@ -42,7 +42,6 @@ const useStyles = makeStyles(() => ({
     boxReception: {
         display: 'flex',
         marginBottom: '16px !important',
-        height: '160px',
         '& [class*=boxRow]:first-of-type [class*=rowInfo]:first-of-type': {
             width: '160px',
         },
@@ -127,7 +126,6 @@ const useStyles = makeStyles(() => ({
     },
     boxRegistration: {
         '& [class*=boxRow]': {
-            height: '100px',
             '&:nth-of-type(2)': {
                 height: '60px'
             },

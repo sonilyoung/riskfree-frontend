@@ -268,7 +268,7 @@ const WhiteButton = styled(ButtonUnstyled)`
 }
 `;
 
-const OICRegistration = () => {
+const OICRegistrationDetails = () => {
     const classes = useStyles();
 
     return (
@@ -288,93 +288,13 @@ const OICRegistration = () => {
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>접수일자</div>
                             <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>2022.06.01</div>
+                                <div className={classes.rowInfo}></div>
                                 <div className={classes.rowTitle}>접수자</div>
-                                <div className={classes.rowInfo}>[홍xx] / 방제센터 사고접수부</div>
+                                <div className={classes.rowInfo}></div>
                                 <div className={classes.rowTitle}>접수형태</div>
-                                <div className={classes.rowInfo}>
-                                <FormControl className={classes.searchRadio}>
-                                    <RadioGroup row>
-                                        <FormControlLabel
-                                            value="공문"
-                                            label="공문"
-                                            control={
-                                                <Radio 
-                                                    icon={<img src={radioIcon} alt="radio icon" />}
-                                                    checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                />
-                                            } 
-                                        />
-                                        <FormControlLabel
-                                            value="현장점검"
-                                            label="현장점검"
-                                            control={
-                                                <Radio 
-                                                    icon={<img src={radioIcon} alt="radio icon" />}
-                                                    checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                />
-                                            } 
-                                        />
-                                        <FormControlLabel
-                                            value="신고"
-                                            label="신고"
-                                            control={
-                                                <Radio 
-                                                    icon={<img src={radioIcon} alt="radio icon" />}
-                                                    checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                />
-                                            } 
-                                        />
-                                    </RadioGroup>
-                                </FormControl>
-                                </div>
+                                <div className={classes.rowInfo}></div>
                                 <div className={classes.rowTitle}>명령구분</div>
-                                <div className={classes.rowInfo}>
-                                    <FormControl className={classes.searchRadio}>
-                                        <RadioGroup row>
-                                            <FormControlLabel
-                                                value="고용노동부"
-                                                label="고용노동부"
-                                                control={
-                                                    <Checkbox 
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                            <FormControlLabel
-                                                value="소방청(소)"
-                                                label="소방청(소)"
-                                                control={
-                                                    <Checkbox 
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                            <FormControlLabel
-                                                value="환경부(청)"
-                                                label="환경부(청)"
-                                                control={
-                                                    <Checkbox 
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                            <FormControlLabel
-                                                value="자체점검"
-                                                label="자체점검"
-                                                control={
-                                                    <Checkbox 
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    />
-                                                } 
-                                            />
-                                        </RadioGroup>
-                                    </FormControl>
-                                </div>
+                                <div className={classes.rowInfo}></div>
                             </div>
                         </div>
                         <div className={classes.boxRow}>
@@ -383,15 +303,7 @@ const OICRegistration = () => {
                                 <span>지적내용</span>
                             </div>
                             <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>
-                                    <TextField
-                                        className={classes.textArea}
-                                        id="outlined-multiline-static"
-                                        multiline
-                                        rows={4}
-                                        defaultValue="작업 감독자 미배치로 인한 지적"
-                                    />                      
-                                </div>
+                                <div className={classes.rowInfo}></div>
                             </div>
                         </div>
                     </div>
@@ -405,15 +317,7 @@ const OICRegistration = () => {
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>지적원인</div>
                             <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>
-                                    <TextField
-                                        className={classes.textArea}
-                                        id="outlined-multiline-static"
-                                        multiline
-                                        rows={4}
-                                        defaultValue="담당자 퇴사로 이한 작업 감독자 미배치로 인한 지적"
-                                    /> 
-                                </div>
+                                <div className={classes.rowInfo}></div>
                             </div>
                         </div>
                         <div className={classes.boxRow}>
@@ -422,16 +326,7 @@ const OICRegistration = () => {
                                 <span>대책</span>
                             </div>
                             <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>
-                                    <TextField
-                                        className={classes.textArea}
-                                        id="outlined-multiline-static"
-                                        multiline
-                                        rows={4}
-                                        defaultValue="건물 신축 공사장에서 안전 난간 설치함. 
-                                        정상적으로 작동하는지 정기적으로 관리하며 근로자들이 안전수칙으로 일을 진행하는지 관리감독함."
-                                    /> 
-                                </div>
+                                <div className={classes.rowInfo}></div>
                             </div>
                         </div>
                         <div className={classes.boxRow}>
@@ -477,8 +372,6 @@ const OICRegistration = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
                     <BlueButton className={'button-correction'}>수정</BlueButton>
-                    <BlueButton className={'button-registration'}>등록</BlueButton>
-                    <WhiteButton className={'button-cancellation'}>취소</WhiteButton>
                     <WhiteButton className={'button-delete'}>삭제</WhiteButton>
                     <WhiteButton className={'button-list'}>목록</WhiteButton>
                 </Grid>
@@ -487,4 +380,4 @@ const OICRegistration = () => {
     );
 };
 
-export default OICRegistration;
+export default OICRegistrationDetails;
