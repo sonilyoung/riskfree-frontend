@@ -1201,6 +1201,17 @@ const useStyles = makeStyles(() => ({
         '& button:first-of-type': {
             marginLeft: '10px'
         }
+    },
+    dropMenu: {
+        '& .MuiOutlinedInput-root': {
+            border: '1px solid #777b91',
+            background: '#26283d',
+            color: '#ddd',
+            fontSize: '17px',
+            '& svg': {
+                color: '#ddd'
+            }
+        }
     }
 }));
 
@@ -1625,7 +1636,7 @@ const Employee = () => {
                                         <PopupFootButton>저장하기</PopupFootButton>
                                     </div>
                                 </div>
-                                <FormControl sx={{width: 180}}>
+                                <FormControl sx={{width: 180}} className={classes.dropMenu}>
                                     <Select
                                     className={classes.selectMenu}
                                     value={num}
@@ -1638,7 +1649,7 @@ const Employee = () => {
                                         <MenuItem value={3}>500~1000인 이하</MenuItem>
                                     </Select>
                                 </FormControl>
-                                <FormControl sx={{width: 150, marginLeft: '8px'}}>
+                                <FormControl sx={{width: 150, marginLeft: '8px'}} className={classes.dropMenu}>
                                     <Select
                                     className={classes.selectMenu}
                                     value={num}

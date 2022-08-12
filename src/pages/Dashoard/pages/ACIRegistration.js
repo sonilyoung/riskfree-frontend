@@ -199,7 +199,7 @@ const useStyles = makeStyles(() => ({
     textArea: {
         '& .MuiOutlinedInput-root textarea': {
             height: '49px !important',
-            fontSize: '16px'
+            fontSize: '16px',
         }
     },
     selectMenu: {
