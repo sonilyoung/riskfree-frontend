@@ -971,7 +971,7 @@ const Director = () => {
 
                         <Grid container item xs={12}>
                             <Grid className={classes.footBox + ' boxUp'} item xs={3.7}>
-                                <Link className={classes.footLink} href="#" underline="none">대표이사 개선조치</Link>
+                                <Link className={classes.footLink} href="/dashboard/director/improvement-measures/list" underline="none">대표이사 개선조치</Link>
                                 <div className={classes.bottomBox + ' leftBox'}>
                                     <div>
                                         <div>지시</div>
@@ -1028,7 +1028,7 @@ const Director = () => {
                                 </div>
                             </Grid>
                             <Grid className={classes.footBox + ' boxUp'} item xs={3}>
-                                <div className={classes.footLink} href="#" underline="none">11/27(화) - 안전작업허가 공사내역</div>
+                                <Link className={classes.footLink} href="/dashboard/director/security-work-content" underline="none">11/27(화) - 안전작업허가 공사내역</Link>
                                 <div className={classes.bottomBox + ' rightBox'}>
                                     <div>
                                         <div>고소</div>
@@ -1071,7 +1071,7 @@ const Director = () => {
                                         <Link href="#">울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
                                     </div>
                                 </Slider>
-                                <Link className={classes.sliderLink} href="#" underline="none"></Link>
+                                <Link className={classes.sliderLink} href="/dashboard/director/notifications/list" underline="none"></Link>
                             </Grid>
                             <Grid className={classes.footBox + ' boxDown ' + classes.footDate} item xs={3}>
                                 <div className={classes.footDay + ' dateBox'}>

@@ -26,7 +26,6 @@ import icoFile from '../../../assets/images/ic_file.png';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
-        // minHeight: 'calc(100vh - 94px)',
     },
     listTitle: {
         height: '33px',

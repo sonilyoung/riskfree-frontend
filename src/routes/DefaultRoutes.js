@@ -7,10 +7,14 @@ import { ImprovementMeasuresPage } from '../pages/Dashboard/pages/Employee/pages
 import { NotificationsPage } from '../pages/Dashboard/pages/Employee/pages/Notifications';
 import { CountermeasuresForTheOccurrencePage } from '../pages/Dashboard/pages/Employee/pages/CountermeasuresForTheOccurrence';
 import { OrdersForImprovementPage } from '../pages/Dashboard/pages/Employee/pages/OrdersForImprovement'
-import { IMStatusPage, IMRegistrationPage, NoticeListPage, NoticeDetailsPage, NoticeRegistrationPage, ACIStatusPage, ACIRegistrationPage, OICLawPage, OICRegistrationPage, MPDLawFirstPage, MPDLawSecondPage, MPDLawThirdPage } from '../pages/Dashoard/pages';
+import { MeasureToManageThePerformancePage } from '../pages/Dashboard/pages/Employee/pages/MeasureToManageThePerformance'
+import { ContentsOfWorkPage } from '../pages/Dashboard/pages/Employee/pages/ContentsOfWork';
+import { IMStatusPage, IMRegistrationPage, NoticeListPage, NoticeDetailsPage, NoticeRegistrationPage, ACIStatusPage, ACIRegistrationPage, OICLawPage, OICRegistrationPage, MPDLawFirstPage, MPDLawSecondPage, MPDLawThirdPage, SecurityWorkContentPage } from '../pages/Dashoard/pages';
 import { ForgottenPasswordPage } from '../pages/Login/pages/ForgottenPassword';
 
 const DefaultRoutes = () => (
+
+
     <Routes>
         <Route path="/dashboard/director" element={<DashboardDirectorPage />} />
         <Route path="/dashboard/director/improvement-measure-status" element={<IMStatusPage />} />
@@ -22,11 +26,23 @@ const DefaultRoutes = () => (
         <Route path="/dashboard/director/accident-countermeasures-implementation-registration" element={<ACIRegistrationPage />} />
         <Route path="/dashboard/director/order-for-improvement-and-correction-under-related-law" element={<OICLawPage />} />
         <Route path="/dashboard/director/order-for-improvement-and-correction-registration" element={<OICRegistrationPage />} />
+        <Route path="/dashboard/director/measure-manage-performance-od-duties-law-first" element={<MPDLawFirstPage />} />
+        <Route path="/dashboard/director/measure-manage-performance-od-duties-law-second" element={<MPDLawSecondPage />} />
+        <Route path="/dashboard/director/measure-manage-performance-od-duties-law-third" element={<MPDLawThirdPage />} />
+        {/* <Route path="/dashboard/director/security-work-content" element={<SecurityWorkContentPage />} /> */}
         <Route path="/dashboard/employee" element={<DashboardEmployeePage />} />
         <Route path="/dashboard/employee/improvement-measures/:page" element={<ImprovementMeasuresPage />} />
         <Route path="/dashboard/employee/notifications/:page" element={<NotificationsPage />} />
         <Route path="/dashboard/employee/accident-countermeasures-implementation/:page" element={<CountermeasuresForTheOccurrencePage />} />
         <Route path="/dashboard/employee/order-for-improvement-and-correction-under-related-law/:page" element={<OrdersForImprovementPage />} />
+        <Route path="/dashboard/employee/measure-to-manage-performance-od-duties-law/:page" element={<MeasureToManageThePerformancePage />} />
+        <Route path="/dashboard/employee/security-work-content" element={<ContentsOfWorkPage />} />
+        <Route path="/dashboard/director/improvement-measures/:page" element={<ImprovementMeasuresPage />} />
+        <Route path="/dashboard/director/notifications/:page" element={<NotificationsPage />} />
+        <Route path="/dashboard/director/accident-countermeasures-implementation/:page" element={<CountermeasuresForTheOccurrencePage />} />
+        <Route path="/dashboard/director/order-for-improvement-and-correction-under-related-law/:page" element={<OrdersForImprovementPage />} />
+        <Route path="/dashboard/director/measure-to-manage-performance-od-duties-law/:page" element={<MeasureToManageThePerformancePage />} />
+        <Route path="/dashboard/director/security-work-content" element={<ContentsOfWorkPage />} />
         <Route exact path="/" element={<LoginPage />} />
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/forgotten-password" element={<ForgottenPasswordPage />} />

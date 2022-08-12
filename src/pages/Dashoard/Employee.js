@@ -25,6 +25,13 @@ import checkIconHover from '../../assets/images/ic_chk_hover.png';
 import fileExis from '../../assets/images/file_exis.png';
 import fileNone from '../../assets/images/file_none.png';
 
+import graphNext from '../../assets/images/next_report.png';
+import graphPrev from '../../assets/images/prev_report.png';
+import graphNextHov from '../../assets/images/next_report_ov.png';
+import graphPrevHov from '../../assets/images/prev_report_ov.png';
+import imageGraph from '../../assets/images/graph.jpg';
+import popupClose from '../../assets/images/btn_popClose.png';
+
 import numOne from '../../assets/images/num1.png';
 import numTwo from '../../assets/images/num2.png';
 import numThree from '../../assets/images/num3.png';
@@ -40,6 +47,7 @@ import arrowDown from '../../assets/images/ic_down.png';
 import gageImg from '../../assets/images/bg_gage.png';
 import needleImg from '../../assets/images/img_needle.png';
 import gageState from '../../assets/images/txt_warning.png';
+import searchIcon from '../../assets/images/ic_search.png';
 
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -53,6 +61,17 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 import Slider from 'react-slick';
+
+import TextField from '@mui/material/TextField';
+import Alert from '@mui/material/Alert';
+import alertIcon from '../../assets/images/ic_refer.png';
+
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+
+import popupClose2 from '../../assets/images/btn_popClose2.png';
 
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
@@ -89,7 +108,7 @@ const useStyles = makeStyles(() => ({
     },
     mainHeader: {
         display: 'flex',
-        zIndex: 1
+        zIndex: '1000'
     },
     mainLogo: {
         '& img': {
@@ -106,13 +125,15 @@ const useStyles = makeStyles(() => ({
     },
     leftMenu: {
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        position: 'relative'
     },
     rightMenu: {
         display: 'flex',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        color: '#fff'
+        color: '#fff',
+        position: 'relative'
     },
     userInformation: {
         fontSize: '16px',
@@ -218,6 +239,152 @@ const useStyles = makeStyles(() => ({
     headerNavigation: {
         position: 'relative',
         height: '64px'
+    },
+    chartPopup: {
+        zIndex: '1000',
+        position: 'absolute',
+        top: '-20px',
+        left: '-140px',
+        display: 'flex',
+        display: 'none !important'
+    },
+    chartPopList: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        width: '345px',
+        height: 'fit-content',
+        border: '2px solid #018de7',
+        borderRadius: '5px',
+        overflow: 'hidden',
+        '& >div': {
+            width: '100%',
+        }
+    },
+    popHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        position: 'relative',
+        height: '54px',
+        paddingLeft: '20px',
+        backgroundImage: 'linear-gradient(#0943c3, #0481d8)',
+        color: '#fff',
+        fontSize: '20px',
+        '& button': {
+            position: 'absolute',
+            right: '0px',
+            marginRight: '20px'
+        }
+    },
+    popList: {
+        display: 'flex',
+        flexWrap: 'wrap'
+    },
+    PopListItem: {
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        height: '46px',
+        background: '#1e2132',
+        color: '#fff',
+        fontSize: '17px',
+        letterSpacing: '-1.08px',
+        paddingLeft: '24px',
+        borderBottom: '1px solid #4d5867',
+        cursor: 'pointer',
+        '&:last-of-type': {
+            borderBottom: 'none'
+        },
+        '&.active': {
+            background: '#2e3b65',
+            color: '#5fdefe'
+        }
+    },
+    chartPopGraph: {
+        width: '1024px',
+        border: '2px solid #018de7',
+        padding: '34px',
+        borderRadius: '12px',
+        background: '#d3e1fb',
+        marginLeft: '5px'
+    },
+    graphHeader: {
+        position: 'relative',
+        display: 'flex',
+        justifyContent: 'center',
+        marginBottom: '20px',
+        '& >div:first-of-type': {
+            position: 'absolute',
+            left: '0'
+        },
+        '& >div:last-of-type': {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '700px',
+            '& >div': {
+                display: 'flex',
+                justifyContent: 'center',
+                alignContent: 'center',
+                flexWrap: 'wrap',
+                width: '450px',
+                '& span': {
+                    textAlign: 'center',
+                    fontSize: '20px',
+                    fontWeight: '500',
+                    '&:first-of-type': {
+                        fontSize: '30px',
+                        fontWeight: '700'
+                    }
+                }
+            }
+        },
+
+    },
+    graphImage: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        padding: '34px',
+        borderRadius: '8px',
+        background: '#fff',
+        boxShadow: '0 0 10px rgb(0 0 0 / 30%)'
+    },
+    graphLabel: {
+        display: 'flex',
+        marginTop: '30px',
+        height: '50px',
+        border: '1px solid #bbbdc0',
+        borderRadius: '6px',
+        padding: '0 14px',
+    },
+    labelItem: {
+        display: 'flex',
+        alignItems: 'center',
+        margin: '0 14px',
+        fontSize: '15px',
+        '& span:first-of-type': {
+            width: '15px',
+            height: '10px',
+            borderRadius: '6px',
+            marginRight: '4px',
+            backgroundColor: '#018ce7'
+        },
+        '&:nth-of-type(2) span:first-of-type': {
+            backgroundColor: '#1b969e'
+        },
+        '&:nth-of-type(3) span:first-of-type': {
+            backgroundColor: '#ffba5a'
+        },
+        '&:nth-of-type(4) span:first-of-type': {
+            backgroundColor: '#898ddd'
+        },
+        '&:nth-of-type(5) span:first-of-type': {
+            backgroundColor: '#b9d581'
+        },
+        '&:nth-of-type(6) span:first-of-type': {
+            backgroundColor: '#d28cbd'
+        },
+
     },
     circleButton: {
         height: '60px',
@@ -325,7 +492,7 @@ const useStyles = makeStyles(() => ({
                 width: '28%'
             },
             '& >div:nth-of-type(2)': {
-                width: '12%'
+                width: '12%',
             },
             '& >div:nth-of-type(3)': {
                 width: '12%'
@@ -818,6 +985,234 @@ const useStyles = makeStyles(() => ({
         borderRadius: '2px',
         fontWeight: '500'
     },
+    headerPopup: {
+        display: 'none !important',
+        position: 'absolute',
+        top: '0px',
+        left: '0px',
+        width: '397px',
+        height: '700px',
+        border: '2px solid #018de7',
+        borderRadius: '5px',
+        background: '#eeeff7',
+        overflow: 'hidden',
+        '&.user_popup': {
+            top: '60px',
+            left: '5px',
+        },
+        '&.settings_popup': {
+            top: '65px',
+            left: '-80px'
+        },
+        '& [class*=popupAccord]': {
+            background: 'transparent',
+            boxShadow: 'none',
+            '& .MuiButtonBase-root': {
+                padding: '0',
+            },
+            '& .MuiAccordionDetails-root': {
+                padding: '0',
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'space-between',
+                '& >span': {
+                    height: '40px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    color: '#018de7'
+                },
+                '& [class*=popupTextField]': {
+                    marginBottom: '0 !important'
+                }
+
+            },
+            '& p': {
+                fontSize: '16px'
+            },
+            '& +span': {
+                margin: '0',
+                padding: '0'
+            }
+        },
+        '& [class*=popupLink]': {
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            color: '#333',
+            width: '100%',
+            padding: '16px 0',
+            boxSizing: 'border-box',
+            borderBottom: '1px solid #c1c6d0',
+        },
+        '& .MuiAlert-message': {
+            fontSize: '14px',
+            letterSpacing: '-1.6px',
+            overflow: 'visible'
+        }
+    },
+    headerPopList: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        width: '100%',
+        padding: '24px',
+        boxSizing: 'border-box',
+        '& >span': {
+            width: '100%',
+            borderTop: '1px solid #c1c6d0',
+            marginTop: '9px',
+            paddingTop: '19px'
+        }
+    },
+    headerPopFooter: {
+        position: 'absolute',
+        bottom: '0px',
+        height: '52px',
+        width: '100%'
+    },
+    settingPopup: {
+
+    },
+    popupTextField: {
+        marginBottom: '10px !important',
+        overflow: 'hidden',
+        height: '40px',
+        '& >div': {
+            background: '#fff',
+            fontSize: '16px',
+        },
+        '& input': {
+            fontSize: '16px',
+            height: '40px',
+            boxSizing: 'border-box',
+        }
+    },
+    preFootPop: {
+        width: '100%',
+        display: 'flex',
+        flexWrap: 'wrap',
+        '& >div': {
+            '&:first-of-type': {
+                width: '194px',
+                marginRight: '10px',
+                border: '1px solid #bbbdc0',
+                borderRadius: '5px',
+                background: '#fff',
+                boxSizing: 'border-box',
+                padding: '10px'
+            },
+            '&:last-of-type': {
+                width: '145px',
+                '& button': {
+                    marginBottom: '10px'
+                },
+            }
+        }
+    },
+    popupAccord: {
+        width: '350px',
+        '& .MuiAccordionDetails-root': {
+            
+        },
+    },
+    popupLink: {
+        '& >img': {
+            transform: 'rotate(-90deg)'
+        }
+    },
+    popupPrompt: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        padding: '20px',
+        boxSizing: 'border-box',
+        border: '1px solid #bbbdc0',
+        background: '#fff',
+        borderRadius: '5px',
+        marginTop: '20px',
+        marginBottom: '25px',
+        width: '100%',
+        height: '130px',
+        '& >div': {
+            width: '75%',
+            textAlign: 'center',
+            marginBottom: '10px'
+        },
+        '& button': {
+            marginLeft: '10px'
+        }
+    },
+    uploadPopup: {
+        position: 'absolute',
+        zIndex: '1000',
+        top: '0px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '400px',
+        height: '400px',
+        background: '#fff',
+        borderRadius: '30px',
+        padding: '40px',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexWrap: 'wrap',
+        display: 'none !important',
+        '& >span': {
+            width: '20%',
+            height: '20px',
+            borderBottom: '1px solid #bdcbe9',
+            transform: 'translateY(-5px)',
+            '&:nth-of-type(2)': {
+                width: '60%',
+                border: 'none',
+                padding: '0 10px',
+                boxSizing: 'border-box',
+                textAlign: 'center',
+                transform: 'unset',
+            }
+        },
+        '& >button': {
+            position: 'absolute',
+            top: '0px',
+            right: '-65px'
+        }
+    },
+    uploadInfo: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        height: '50%',
+        '& >*': {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        '& img': {
+            width: '30px',
+            height: '30px',
+        }
+    },
+    uploadSearch: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        '& button:first-of-type': {
+            marginLeft: '10px'
+        }
+    },
+    dropMenu: {
+        '& .MuiOutlinedInput-root': {
+            border: '1px solid #777b91',
+            background: '#26283d',
+            color: '#ddd',
+            fontSize: '17px',
+            '& svg': {
+                color: '#ddd'
+            }
+        }
+    }
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -928,6 +1323,178 @@ const FileButtonNone = styled(ButtonUnstyled)`
     cursor: pointer;
 `;
 
+const ButtonClosePop = styled(ButtonUnstyled)`
+    width: 24px;
+    height: 24px;
+    background: url(${popupClose}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+`;
+
+const ButtonGraphNext = styled(ButtonUnstyled)`
+    width: 88px;
+    height: 50px;
+    background: url(${graphNext}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: url(${graphNextHov}) no-repeat 50% 50%;
+    }   
+`;
+
+const ButtonGraphPrev = styled(ButtonUnstyled)`
+    width: 88px;
+    height: 50px;
+    background: url(${graphPrev}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: url(${graphPrevHov}) no-repeat 50% 50%;
+    }   
+`;
+
+const ButtonGrid = styled(ButtonUnstyled)`
+    width: 105px;
+    height: 50px;
+    background: #6682c1;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 500;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #355aae;
+    } 
+`;
+
+const PopupFootButton = styled(ButtonUnstyled)`
+    width: 100%;
+    height: 100%;
+    background: #018de7;
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #0355b0;
+    } 
+`;
+
+const UploadImageButton = styled(ButtonUnstyled)`
+    width: 145px;
+    height: 34px;
+    background: #3f4c72;
+    padding: 0 20px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #192b5e;
+    } 
+`;
+
+const PromptButtonBlue = styled(ButtonUnstyled)`
+    width: 80px;
+    height: 34px;
+    background: #3f4c72;
+    padding: 0 20px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #192b5e;
+    } 
+`;
+
+const PromptButtonWhite = styled(ButtonUnstyled)`
+    width: 80px;
+    height: 34px;
+    background: #fff;
+    padding: 0 20px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    color: #6e7884;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border: 1px solid #6e7884;
+    transition: background .2s;
+    &:hover {
+        border-color: #222;
+    } 
+`;
+
+const UnknownButton1 = styled(ButtonUnstyled)`
+    width: 150px;
+    height: 46px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: -2.08px;
+    border-radius: 46px;
+    background: #00adef;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #3a5298;
+    }   
+`;
+
+const UnknownButton2 = styled(ButtonUnstyled)`
+    width: 200px;
+    height: 46px;
+    color: #000;
+    font-size: 20px;
+    letter-spacing: -2.08px;
+    border-radius: 46px;
+    background: #eff2f9;
+    border: 2px solid #00adef;
+    cursor: pointer;
+    transition: border-color .2s;
+    &:hover {
+        border-color: #3a5298;
+    }  
+`;
+
+const SearchButton = styled(ButtonUnstyled)`
+    width: 46px;
+    height: 46px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: -2.08px;
+    border-radius: 50%;
+    background: #00adef url(${searchIcon}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #3a5298 url(${searchIcon}) no-repeat 50% 50%;
+    }   
+`;
+
+const ClosePopupButton2 = styled(ButtonUnstyled)`
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: url(${popupClose2}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s; 
+`;
+
 
 const headerSlider = {
     dots: false,
@@ -973,7 +1540,103 @@ const Employee = () => {
                         <Grid className={classes.mainMenu} item xs={6.3}>
                             <div className={classes.leftMenu}>
                                 <UserButton className={classes.mainMenuButton}></UserButton>
-                                <FormControl sx={{width: 180}}>
+                                <div className={classes.headerPopup + ' user_popup'}>
+                                    <div className={classes.popHeader}>
+                                        최초 사용자 설정
+                                        <ButtonClosePop></ButtonClosePop>
+                                    </div>
+                                    <div className={classes.headerPopList}>
+                                        <TextField 
+                                            id="standard-basic" 
+                                            placeholder="회사 상호명" 
+                                            variant="outlined" 
+                                            sx={{width: 350}}
+                                            className={classes.popupTextField}
+                                        />
+                                        <TextField 
+                                            id="standard-basic" 
+                                            placeholder="사업장 명칭" 
+                                            variant="outlined" 
+                                            sx={{width: 350}}
+                                            className={classes.popupTextField}
+                                        />
+                                        <Select
+                                            className={classes.popupTextField}
+                                            sx={{width: 350}}
+                                            value={num}
+                                            onChange={handleChange}
+                                            displayEmpty
+                                            inputProps={{'aria-label': 'Without label'}}
+                                        >
+                                            <MenuItem value="">업종선택</MenuItem>
+                                        </Select>
+                                        <Select
+                                            className={classes.popupTextField}
+                                            sx={{width: 350}}
+                                            value={num}
+                                            onChange={handleChange}
+                                            displayEmpty
+                                            inputProps={{'aria-label': 'Without label'}}
+                                        >
+                                            <MenuItem value="">규모선택</MenuItem>
+                                        </Select>
+                                        <span></span>
+                                        <TextField 
+                                            id="standard-basic" 
+                                            placeholder="사용자 성명" 
+                                            variant="outlined" 
+                                            sx={{width: 350}}
+                                            className={classes.popupTextField}
+                                        />
+                                        <Select
+                                            className={classes.popupTextField}
+                                            sx={{width: 350}}
+                                            value={num}
+                                            onChange={handleChange}
+                                            displayEmpty
+                                            inputProps={{'aria-label': 'Without label'}}
+                                        >
+                                            <MenuItem value="">직책 선택</MenuItem>
+                                        </Select>
+                                        <span></span>
+                                        <TextField 
+                                            id="standard-basic" 
+                                            placeholder="안전보건 목표 등록 (띠어쓰기 포함 16자 이내)" 
+                                            variant="outlined" 
+                                            sx={{width: 350}}
+                                            className={classes.popupTextField}
+                                        />
+                                        <Select
+                                            className={classes.popupTextField}
+                                            sx={{width: 350}}
+                                            value={num}
+                                            onChange={handleChange}
+                                            displayEmpty
+                                            inputProps={{'aria-label': 'Without label'}}
+                                        >
+                                            <MenuItem value="">경영방침 등록 (띠어쓰기 포함 16자 이내)</MenuItem>
+                                        </Select>
+                                        <div className={classes.preFootPop}>
+                                            <div>   
+                                                <span>로고등록</span>
+                                            </div>
+                                            <div>
+                                                <UploadImageButton>찾아보기</UploadImageButton>
+                                                <Alert
+                                                    icon={<img src={alertIcon} alt="alert icon" />}
+                                                    severity="error">
+                                                    사이즈 83px*67px
+                                                    <br/>
+                                                (   gif, jpg, png 파일허용)
+                                                </Alert>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={classes.headerPopFooter}>
+                                        <PopupFootButton>저장하기</PopupFootButton>
+                                    </div>
+                                </div>
+                                <FormControl sx={{width: 180}} className={classes.dropMenu}>
                                     <Select
                                     className={classes.selectMenu}
                                     value={num}
@@ -986,7 +1649,7 @@ const Employee = () => {
                                         <MenuItem value={3}>500~1000인 이하</MenuItem>
                                     </Select>
                                 </FormControl>
-                                <FormControl sx={{width: 150, marginLeft: '8px'}}>
+                                <FormControl sx={{width: 150, marginLeft: '8px'}} className={classes.dropMenu}>
                                     <Select
                                     className={classes.selectMenu}
                                     value={num}
@@ -1007,6 +1670,94 @@ const Employee = () => {
                                 </div>
                                 <LogButton className={classes.mainMenuButton}></LogButton>
                                 <SettingsButton className={classes.mainMenuButton}></SettingsButton>
+                                <div className={classes.headerPopup + ' settings_popup'}>
+                                    <div className={classes.popHeader}>
+                                        중대재해 자체점검 등록 차수 설정
+                                        <ButtonClosePop></ButtonClosePop>
+                                    </div>
+                                    <div className={classes.headerPopList}>
+                                        <Accordion className={classes.popupAccord}>
+                                            <AccordionSummary
+                                                expandIcon={<img src={arrowDown} alt="arrow down" />}
+                                                aria-controls="panel1a-content"
+                                                id="panel1a-header"
+                                            >
+                                                <Typography>관리차수 신규등록</Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                <TextField 
+                                                    id="standard-basic" 
+                                                    placeholder="관리차수" 
+                                                    variant="outlined" 
+                                                    sx={{width: 115}}
+                                                    className={classes.popupTextField}
+                                                />
+                                                <TextField
+                                                    sx={{width: 220}}
+                                                    id="date"
+                                                    className={classes.popupTextField}
+                                                    type="date"
+                                                />
+                                            </AccordionDetails>
+                                        </Accordion>
+                                        <Accordion className={classes.popupAccord}>
+                                            <AccordionSummary
+                                                expandIcon={<img src={arrowDown} alt="arrow down" />}
+                                                aria-controls="panel1a-content"
+                                                id="panel1a-header"
+                                            >
+                                                <Typography>관리차수 조회</Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                <TextField 
+                                                    id="standard-basic" 
+                                                    placeholder="관리차수 조회" 
+                                                    variant="outlined" 
+                                                    sx={{width: 350}}
+                                                    className={classes.popupTextField}
+                                                />
+                                            </AccordionDetails>
+                                        </Accordion>
+                                        <Accordion className={classes.popupAccord}>
+                                            <AccordionSummary
+                                                expandIcon={<img src={arrowDown} alt="arrow down" />}
+                                                aria-controls="panel1a-content"
+                                                id="panel1a-header"
+                                            >
+                                                <Typography>관리차수 복사</Typography>
+                                            </AccordionSummary>
+                                            <AccordionDetails>
+                                                <Select
+                                                    className={classes.popupTextField}
+                                                    sx={{width: 150, marginBottom: '25px !important'}}
+                                                    value={num}
+                                                    onChange={handleChange}
+                                                    displayEmpty
+                                                >
+                                                    <MenuItem value="">복사할 차수</MenuItem>
+                                                </Select>
+                                                <span>2022-07-01 ~ 2022-12-31</span>
+                                                <div className={classes.popupPrompt}>
+                                                    <Alert
+                                                        icon={<img src={alertIcon} alt="alert icon" />}
+                                                        severity="error">
+                                                        <strong>2차 차수의 DATA</strong>
+                                                        를 현재 차수에 복사 하시겠습니까 
+                                                    </Alert>
+                                                    <PromptButtonBlue>예</PromptButtonBlue>
+                                                    <PromptButtonWhite>예</PromptButtonWhite>
+                                                </div>
+                                            </AccordionDetails>
+                                        </Accordion>
+                                        <span></span>
+                                        <Link href="#none" className={classes.popupLink}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link href="#none" className={classes.popupLink}>전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link href="#none" className={classes.popupLink}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
+                                    </div>
+                                    <div className={classes.headerPopFooter}>
+                                        <PopupFootButton>저장하기</PopupFootButton>
+                                    </div>
+                                </div>
                             </div>
                         </Grid>
                         <Grid className={classes.mainAsside} item xs={3}>
@@ -1036,6 +1787,67 @@ const Employee = () => {
                     </Grid>
                     <Grid className={classes.headerNavigation} item xs={5.8}>
                         <ChartButton></ChartButton>
+                        <div className={classes.chartPopup}>
+                            <div className={classes.chartPopList}>
+                                <div className={classes.popHeader}>
+                                    중대재해 대응수준 Report
+                                    <ButtonClosePop></ButtonClosePop>
+                                </div>
+                                <div className={classes.popList}>
+                                    <div className={classes.PopListItem + ' active'}>차수별 대응수준 현황 (통합)</div>
+                                    <div className={classes.PopListItem}>차수별 대응수준 현황 (사업장별)</div>
+                                    <div className={classes.PopListItem}>항목별 대응수준 현황 (통합)</div>
+                                    <div className={classes.PopListItem}>항목별 대응수준 현황 (사업장별)</div>
+                                    <div className={classes.PopListItem}>사업장별 재해발생 통계</div>
+                                    <div className={classes.PopListItem}>개선.시정명령 조치내역 통계</div>
+                                    <div className={classes.PopListItem}>안전보건 법정교육 실시내역 통계</div>
+                                </div>
+                            </div>
+                            <div className={classes.chartPopGraph}>
+                                <div className={classes.graphHeader}>
+                                    <div>
+                                        <ButtonGrid>Grid</ButtonGrid>
+                                    </div>
+                                    <div>
+                                        <ButtonGraphPrev></ButtonGraphPrev>
+                                        <div>
+                                            <span>중대대해처벌법 대응수준 현황</span>
+                                            <span>(3차 : 22/01/01 ~ 22/04/30)</span>
+                                        </div>
+                                        <ButtonGraphNext></ButtonGraphNext>
+                                    </div>
+                                </div>
+                                <div className={classes.graphImage}>
+                                    <img src={imageGraph} alt="graph" />
+                                    <div className={classes.graphLabel}>
+                                        <div className={classes.labelItem}>
+                                            <span></span>
+                                            <span>여수사업장</span>
+                                        </div>
+                                        <div className={classes.labelItem}>
+                                            <span></span>
+                                            <span>인천사업장</span>
+                                        </div>
+                                        <div className={classes.labelItem}>
+                                            <span></span>
+                                            <span>울산사업장</span>
+                                        </div>
+                                        <div className={classes.labelItem}>
+                                            <span></span>
+                                            <span>서산사업장</span>
+                                        </div>
+                                        <div className={classes.labelItem}>
+                                            <span></span>
+                                            <span>춘천사업장</span>
+                                        </div>
+                                        <div className={classes.labelItem}>
+                                            <span></span>
+                                            <span>세종사업장</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div className={classes.navSlider}>
                             <Slider {...headerSlider}>
                                 <div><MainNavButton>전체사업장</MainNavButton></div>
@@ -1052,6 +1864,28 @@ const Employee = () => {
 
                 </Grid>
                 <Grid className={classes.pageBody} item xs={10.7}>
+                    <div className={classes.uploadPopup}>
+                        <ClosePopupButton2></ClosePopupButton2>
+                        <div className={classes.uploadInfo}>
+                            <img src={alertIcon} alt="alert icon" />
+                            <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
+                            <UnknownButton2>전체사업장</UnknownButton2>
+                        </div>
+                        <span></span>
+                        <span>의무조치별 상세 점검</span>
+                        <span></span>
+                        <div className={classes.uploadSearch}>
+                            <TextField 
+                                id="standard-basic" 
+                                placeholder="여수공장 시정조치요청 파일.hwp" 
+                                variant="outlined" 
+                                sx={{width: 250}}
+                                className={classes.popupTextField}
+                            />
+                            <SearchButton></SearchButton>
+                            <UnknownButton1>전체사업장</UnknownButton1>
+                        </div>
+                    </div>
                     <div className={classes.managementOrder}>
                         관리차수<strong>11</strong>차 :<strong>22.01.01 ~ 22.04.30</strong> 
                     </div>

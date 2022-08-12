@@ -1121,15 +1121,15 @@ const Employee = () => {
                                     </ul>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink + ' parentLink'} href="#none" underline="none">재해발생 방지대책 및 이행현황</Link>
+                                    <Link className={classes.listLink + ' parentLink'} href="/dashboard/employee/accident-countermeasures-implementation/list" underline="none">재해발생 방지대책 및 이행현황</Link>
                                     <span className={'caution'}>86%</span>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink + ' parentLink'} href="#none" underline="none">관계법령에 따른 개선.시정명령 조치</Link>
+                                    <Link className={classes.listLink + ' parentLink'} href="/dashboard/employee/order-for-improvement-and-correction-under-related-law/list" underline="none">관계법령에 따른 개선.시정명령 조치</Link>
                                     <span className={'warning'}>32%</span>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink + ' parentLink'} href="#none" underline="none">관계법령에 의무이행의 관리의 조치</Link>
+                                    <Link className={classes.listLink + ' parentLink'} href="/dashboard/employee/measure-to-manage-performance-od-duties-law/list" underline="none">관계법령에 의무이행의 관리의 조치</Link>
                                     <span className={'risk'}>76%</span>
                                 </li>
                             </ul>
@@ -1317,7 +1317,7 @@ const Employee = () => {
                                     <span>치</span>
                                 </div>
                                 <div>
-                                    <Link className={classes.footLink} href="#none" underline="none">대표이사</Link>
+                                    <Link className={classes.footLink} href="/dashboard/employee/improvement-measures/list" underline="none">대표이사</Link>
                                     <div className={classes.bottomBox}>
                                         <div>
                                             <div>지시</div>
@@ -1389,7 +1389,7 @@ const Employee = () => {
                                 </div>
                             </Grid>
                             <Grid className={classes.footBox + ' boxUp'} item xs={3}>
-                                <div className={classes.footLink} href="#none" underline="none">11/27(화) - 안전작업허가 공사내역</div>
+                                <Link className={classes.footLink} href="/dashboard/employee/security-work-content" underline="none">11/27(화) - 안전작업허가 공사내역</Link>
                                 <div className={classes.bottomBox}>
                                     <div>
                                         <div>고소</div>
@@ -1432,7 +1432,7 @@ const Employee = () => {
                                         <Link href="#none">울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
                                     </div>
                                 </Slider>
-                                <Link className={classes.sliderLink} href="#none" underline="none"></Link>
+                                <Link className={classes.sliderLink} href="/dashboard/employee/notifications/list" underline="none"></Link>
                             </Grid>
                             <Grid className={classes.footBox + ' boxDown ' + classes.footDate} item xs={3}>
                                 <div className={classes.footDay + ' dateBox'}>

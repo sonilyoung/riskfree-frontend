@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { makeStyles } from '@mui/styles';
 import Grid from '@mui/material/Grid';
@@ -136,6 +137,17 @@ const useStyles = makeStyles(() => ({
         cursor: 'pointer',
         transition: 'background .3s'
     },
+    dropMenu: {
+        '& .MuiOutlinedInput-root': {
+            border: '1px solid #777b91',
+            background: '#26283d',
+            color: '#ddd',
+            fontSize: '17px',
+            '& svg': {
+                color: '#ddd'
+            }
+        }
+    }
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -179,12 +191,19 @@ const BackButton = styled(ButtonUnstyled)`
 
 const Default = ({ children }) => {
     const classes = useStyles();
+    const location = useLocation()
+    const navigate = useNavigate()
 
     const [num, setNum] = React.useState('');
 
     const handleChange = (event) => {
         setNum(event.target.value);
     };
+
+    const handleRedirect = () => {
+        String(location.pathname).includes("director") ? (navigate("/dashboard/director")) : (navigate("/dashboard/employee"))
+    }
+
     return (
         <div className={classes.bodyWrap}>
             <Grid className={classes.headerWrap} container rowSpacing={0} columnSpacing={0}>
@@ -197,7 +216,7 @@ const Default = ({ children }) => {
                         <Grid className={classes.mainMenu} item xs={6.3}>
                             <div className={classes.leftMenu}>
                                 <UserButton className={classes.mainMenuButton}></UserButton>
-                                <FormControl sx={{ width: 180 }}>
+                                <FormControl sx={{ width: 180 }} className={classes.dropMenu}>
                                     <Select
                                         className={classes.selectMenu}
                                         value={num}
@@ -205,13 +224,12 @@ const Default = ({ children }) => {
                                         displayEmpty
                                         inputProps={{ 'aria-label': 'Without label' }}
                                     >
-                                        <MenuItem value="">one</MenuItem>
-                                        <MenuItem value={2}>two</MenuItem>
-                                        <MenuItem value={3}>three</MenuItem>
-                                        <MenuItem value={4}>four</MenuItem>
+                                        <MenuItem value="">550~300인 이하</MenuItem>
+                                        <MenuItem value={2}>300~500인 이하</MenuItem>
+                                        <MenuItem value={3}>500~1000인 이하</MenuItem>
                                     </Select>
                                 </FormControl>
-                                <FormControl sx={{ width: 150, marginLeft: '8px' }}>
+                                <FormControl sx={{ width: 150, marginLeft: '8px' }} className={classes.dropMenu}>
                                     <Select
                                         className={classes.selectMenu}
                                         value={num}
@@ -219,10 +237,9 @@ const Default = ({ children }) => {
                                         displayEmpty
                                         inputProps={{ 'aria-label': 'Without label' }}
                                     >
-                                        <MenuItem value="">one</MenuItem>
-                                        <MenuItem value={2}>two</MenuItem>
-                                        <MenuItem value={3}>three</MenuItem>
-                                        <MenuItem value={4}>four</MenuItem>
+                                        <MenuItem value="">건설업</MenuItem>
+                                        <MenuItem value={2}>제조업</MenuItem>
+                                        <MenuItem value={3}>IT</MenuItem>
                                     </Select>
                                 </FormControl>
                             </div>
@@ -250,7 +267,7 @@ const Default = ({ children }) => {
                 </Grid>
 
             </Grid>
-            <BackButton></BackButton>
+            <BackButton onClick={() => handleRedirect()}></BackButton>
             <div className={classes.sectionWrap}>
                 {children}
             </div>

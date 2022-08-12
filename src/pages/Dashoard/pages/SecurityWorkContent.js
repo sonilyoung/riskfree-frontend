@@ -1,5 +1,5 @@
 import React from 'react';
-import { DefaultLayout } from '../../../../../../layouts/Default';
+import { DefaultLayout } from '../../../layouts/Default';
 
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -16,11 +16,11 @@ import Select from '@mui/material/Select';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
-import checkIcon from '../../../../../../assets/images/ic_chk3.png';
-import checkIconOn from '../../../../../../assets/images/ic_chk3_on.png';
+import checkIcon from '../../../assets/images/ic_chk3.png';
+import checkIconOn from '../../../assets/images/ic_chk3_on.png';
 
-import fileIcon from '../../../../../../assets/images/file_exis.png';
-import icoUploaded from '../../../../../../assets/images/ic_excel.png';
+import fileIcon from '../../../assets/images/file_exis.png';
+import icoUploaded from '../../../assets/images/ic_excel.png';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -77,23 +77,23 @@ const useStyles = makeStyles(() => ({
         flexWrap: 'wrap',
         padding: '13px 12px',
         '&:first-of-type': {
-            width: '4%',
+            width: '4%', 
         },
         '&:nth-of-type(2)': {
-            width: '4%',
+            width: '4%', 
         },
         '&:nth-of-type(3)': {
-            width: '23%',
+            width: '23%', 
         },
         '&:nth-of-type(4)': {
-            width: '23%',
+            width: '23%', 
         },
         '&:nth-of-type(5)': {
-            width: '23%',
+            width: '23%', 
         },
         '&:nth-of-type(6)': {
             width: '23%',
-            borderRight: 'none'
+            borderRight: 'none' 
         },
     },
     headerButtons: {
@@ -153,14 +153,14 @@ const useStyles = makeStyles(() => ({
             boxSizing: 'border-box',
             justifyContent: 'flex-start !important',
             '&:first-of-type': {
-                width: '70%',
+                width: '70%', 
             },
             '&:nth-of-type(2)': {
-                width: '15%',
+                width: '15%', 
             },
             '&:nth-of-type(3)': {
                 width: '15%',
-                borderRight: 'none'
+                borderRight: 'none' 
             },
             '& [class*=fileIcon]': {
                 marginRight: '10px'
@@ -281,32 +281,32 @@ const SecurityWorkContent = () => {
                     <div className={classes.menuInfo}>
                         <div>
                             <div className={classes.menuTitle}>Factory</div>
-                            <Select
-                                className={classes.selectMenu}
-                                sx={{ width: 200 }}
-                                value={num}
-                                onChange={handleChange}
-                                displayEmpty
-                            >
-                                <MenuItem value="">All</MenuItem>
-                            </Select>
+                                <Select
+                                    className={classes.selectMenu}
+                                    sx={{width: 200}}
+                                    value={num}
+                                    onChange={handleChange}
+                                    displayEmpty
+                                >
+                                    <MenuItem value="">All</MenuItem>
+                                </Select>
                         </div>
                         <div>
                             <div className={classes.menuTitle}>Registration Date</div>
-                            <TextField
-                                sx={{ width: 200 }}
-                                id="date"
-                                className={classes.selectMenu}
-                                type="date"
-                            />
+                                <TextField
+                                    sx={{width: 200}}
+                                    id="date"
+                                    className={classes.selectMenu}
+                                    type="date"
+                                />
                         </div>
                         <div>
                             <div className={classes.menuTitle}>Registrant</div>
-                            <TextField
-                                id="standard-basic"
-                                placeholder=""
-                                variant="outlined"
-                                sx={{ width: 200 }}
+                            <TextField 
+                                id="standard-basic" 
+                                placeholder="" 
+                                variant="outlined" 
+                                sx={{width: 200}}
                                 className={classes.selectMenu}
                             />
                         </div>
@@ -316,51 +316,51 @@ const SecurityWorkContent = () => {
                     <div className={classes.boxRow}>
                         <div className={classes.tableHead}>
                             <div className={classes.tableRow}>
-                                <div className={classes.tableData}></div>
-                                <div className={classes.tableData}>No.</div>
-                                <div className={classes.tableData}>Factory</div>
-                                <div className={classes.tableData}>Registration Date</div>
-                                <div className={classes.tableData}>Registrant</div>
-                                <div className={classes.tableData}>Registration Info</div>
+                        	    <div className={classes.tableData}></div>
+                        	    <div className={classes.tableData}>No.</div>
+                        	    <div className={classes.tableData}>Factory</div>
+                        	    <div className={classes.tableData}>Registration Date</div>
+                        	    <div className={classes.tableData}>Registrant</div>
+                        	    <div className={classes.tableData}>Registration Info</div>
                             </div>
-                        </div>
-                        <div className={classes.tableBody}>
-                            <div className={classes.tableRow}>
-                                <div className={classes.tableData}>
+					    </div>
+					    <div className={classes.tableBody}>
+					        <div className={classes.tableRow}>
+						        <div className={classes.tableData}>
                                     <FormControlLabel
                                         control={
-                                            <Checkbox
+                                            <Checkbox 
                                                 icon={<img src={checkIcon} alt="check icon" />}
                                                 checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                             />
-                                        }
+                                        } 
                                     />
                                 </div>
-                                <div className={classes.tableData}>2</div>
-                                <div className={classes.tableData}>Data</div>
-                                <div className={classes.tableData}>2022-01-03 14:00</div>
-                                <div className={classes.tableData}>Data</div>
-                                <div className={classes.tableData}>Data</div>
-                            </div>
-                            <div className={classes.tableRow}>
-                                <div className={classes.tableData}>
+						        <div className={classes.tableData}>2</div>
+						        <div className={classes.tableData}>Data</div>
+						        <div className={classes.tableData}>2022-01-03 14:00</div>
+						        <div className={classes.tableData}>Data</div>
+						        <div className={classes.tableData}>Data</div>
+					        </div>
+					        <div className={classes.tableRow}>
+						        <div className={classes.tableData}>
                                     <FormControlLabel
                                         control={
-                                            <Checkbox
+                                            <Checkbox 
                                                 icon={<img src={checkIcon} alt="check icon" />}
                                                 checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                             />
-                                        }
+                                        } 
                                     />
                                 </div>
-                                <div className={classes.tableData}>1</div>
-                                <div className={classes.tableData}>Data</div>
-                                <div className={classes.tableData}>2022-01-02 14:00</div>
-                                <div className={classes.tableData}>Data</div>
-                                <div className={classes.tableData}>Data</div>
-                            </div>
-                        </div>
-                    </div>
+						        <div className={classes.tableData}>1</div>
+						        <div className={classes.tableData}>Data</div>
+						        <div className={classes.tableData}>2022-01-02 14:00</div>
+						        <div className={classes.tableData}>Data</div>
+						        <div className={classes.tableData}>Data</div>
+					        </div>
+					    </div>
+                    </div> 
                 </Grid>
                 <Grid item xs={12} className={classes.menuBox + ' ' + classes.uploadBox}>
                     <div className={classes.fileUpload}>
@@ -369,33 +369,33 @@ const SecurityWorkContent = () => {
                             <div>
                                 <MenuButton className={'button-add'}>Add</MenuButton>
                             </div>
-                            <div className={classes.uploadTable}>
+                            <div className={classes.uploadTable}> 
                                 <div className={classes.tableHead}>
                                     <div className={classes.tableRow}>
-                                        <div className={classes.tableData}>File Name</div>
-                                        <div className={classes.tableData}>Details</div>
-                                        <div className={classes.tableData}>Size</div>
+                        	            <div className={classes.tableData}>File Name</div>
+                        	            <div className={classes.tableData}>Details</div>
+                        	            <div className={classes.tableData}>Size</div>
                                     </div>
-                                </div>
-                                <div className={classes.tableBody}>
-                                    <div className={classes.tableRow}>
-                                        <div className={classes.tableData}><img src={fileIcon} alt="file icon" className={classes.fileIcon} />file_name.ext</div>
-                                        <div className={classes.tableData}>Data</div>
-                                        <div className={classes.tableData}>999.99KB</div>
-                                    </div>
-                                    <div className={classes.tableRow}>
-                                        <div className={classes.tableData}><img src={fileIcon} alt="file icon" className={classes.fileIcon} />file_name.ext</div>
-                                        <div className={classes.tableData}>Data</div>
-                                        <div className={classes.tableData}>999.99KB</div>
-                                    </div>
-                                </div>
+					            </div>
+					            <div className={classes.tableBody}>
+					                <div className={classes.tableRow}>
+						                <div className={classes.tableData}><img src={fileIcon} alt="file icon" className={classes.fileIcon} />file_name.ext</div>
+						                <div className={classes.tableData}>Data</div>
+						                <div className={classes.tableData}>999.99KB</div>
+					                </div>
+					                <div className={classes.tableRow}>
+						                <div className={classes.tableData}><img src={fileIcon} alt="file icon" className={classes.fileIcon} />file_name.ext</div>
+						                <div className={classes.tableData}>Data</div>
+						                <div className={classes.tableData}>999.99KB</div>
+					                </div>
+					            </div>
                             </div>
                         </div>
                         <div className={classes.uploadButtons}>
                             <MenuButton className={'button-save'}>Save</MenuButton>
                             <MenuButton className={'button-cancel'}>Cancel</MenuButton>
-                        </div>
-                    </div>
+                        </div>                        
+                    </div>                      
                 </Grid>
                 <Grid item xs={12} className={classes.menuBox + ' ' + classes.uploadInfo}>
                     <div className={classes.finishedUpload}><img src={fileIcon} alt="file icon" className={classes.fileIcon} />file_name.ext<img src={icoUploaded} alt="file uploaded" className={classes.uploadStatus} /></div>
