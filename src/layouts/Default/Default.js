@@ -197,13 +197,13 @@ const Default = ({ children }) => {
                         <Grid className={classes.mainMenu} item xs={6.3}>
                             <div className={classes.leftMenu}>
                                 <UserButton className={classes.mainMenuButton}></UserButton>
-                                <FormControl sx={{width: 180}}>
+                                <FormControl sx={{ width: 180 }}>
                                     <Select
-                                    className={classes.selectMenu}
-                                    value={num}
-                                    onChange={handleChange}
-                                    displayEmpty
-                                    inputProps={{'aria-label': 'Without label'}}
+                                        className={classes.selectMenu}
+                                        value={num}
+                                        onChange={handleChange}
+                                        displayEmpty
+                                        inputProps={{ 'aria-label': 'Without label' }}
                                     >
                                         <MenuItem value="">one</MenuItem>
                                         <MenuItem value={2}>two</MenuItem>
@@ -211,13 +211,13 @@ const Default = ({ children }) => {
                                         <MenuItem value={4}>four</MenuItem>
                                     </Select>
                                 </FormControl>
-                                <FormControl sx={{width: 150, marginLeft: '8px'}}>
+                                <FormControl sx={{ width: 150, marginLeft: '8px' }}>
                                     <Select
-                                    className={classes.selectMenu}
-                                    value={num}
-                                    onChange={handleChange}
-                                    displayEmpty
-                                    inputProps={{'aria-label': 'Without label'}}
+                                        className={classes.selectMenu}
+                                        value={num}
+                                        onChange={handleChange}
+                                        displayEmpty
+                                        inputProps={{ 'aria-label': 'Without label' }}
                                     >
                                         <MenuItem value="">one</MenuItem>
                                         <MenuItem value={2}>two</MenuItem>
@@ -238,7 +238,7 @@ const Default = ({ children }) => {
                         <Grid className={classes.mainAsside} item xs={3}>
                             <AdminButton className={classes.mainMenuButton}></AdminButton>
                             <div className={classes.weatherSection}>
-                                <span>    
+                                <span>
                                     <img src={weatherIcon} alt="weather icon" />
                                 </span>
                                 <span>18.0</span>
@@ -252,7 +252,7 @@ const Default = ({ children }) => {
             </Grid>
             <BackButton></BackButton>
             <div className={classes.sectionWrap}>
-            { children } 
+                {children}
             </div>
         </div>
     );

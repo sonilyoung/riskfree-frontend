@@ -322,40 +322,40 @@ const ACIRegistration = () => {
                                 <div className={classes.rowInfo}>[홍xx] / 방제센터 사고접수부</div>
                                 <div className={classes.rowTitle}>접수형태</div>
                                 <div className={classes.rowInfo}>
-                                <FormControl className={classes.searchRadio}>
-                                    <RadioGroup row>
-                                        <FormControlLabel
-                                            value="전화"
-                                            label="전화"
-                                            control={
-                                                <Radio 
-                                                    icon={<img src={radioIcon} alt="radio icon" />}
-                                                    checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                />
-                                            } 
-                                        />
-                                        <FormControlLabel
-                                            value="싸이렌"
-                                            label="싸이렌"
-                                            control={
-                                                <Radio 
-                                                    icon={<img src={radioIcon} alt="radio icon" />}
-                                                    checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                />
-                                            } 
-                                        />
-                                        <FormControlLabel
-                                            value="안전순찰중"
-                                            label="안전순찰중"
-                                            control={
-                                                <Radio 
-                                                    icon={<img src={radioIcon} alt="radio icon" />}
-                                                    checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                />
-                                            } 
-                                        />
-                                    </RadioGroup>
-                                </FormControl>
+                                    <FormControl className={classes.searchRadio}>
+                                        <RadioGroup row>
+                                            <FormControlLabel
+                                                value="전화"
+                                                label="전화"
+                                                control={
+                                                    <Radio
+                                                        icon={<img src={radioIcon} alt="radio icon" />}
+                                                        checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
+                                                    />
+                                                }
+                                            />
+                                            <FormControlLabel
+                                                value="싸이렌"
+                                                label="싸이렌"
+                                                control={
+                                                    <Radio
+                                                        icon={<img src={radioIcon} alt="radio icon" />}
+                                                        checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
+                                                    />
+                                                }
+                                            />
+                                            <FormControlLabel
+                                                value="안전순찰중"
+                                                label="안전순찰중"
+                                                control={
+                                                    <Radio
+                                                        icon={<img src={radioIcon} alt="radio icon" />}
+                                                        checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
+                                                    />
+                                                }
+                                            />
+                                        </RadioGroup>
+                                    </FormControl>
                                 </div>
                                 <div className={classes.rowTitle}>접수유형</div>
                                 <div className={classes.rowInfo}>
@@ -365,61 +365,61 @@ const ACIRegistration = () => {
                                                 value="추락"
                                                 label="추락"
                                                 control={
-                                                    <Checkbox 
+                                                    <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
                                                         checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                                     />
-                                                } 
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="끼임"
                                                 label="끼임"
                                                 control={
-                                                    <Checkbox 
+                                                    <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
                                                         checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                                     />
-                                                } 
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="화재"
                                                 label="화재"
                                                 control={
-                                                    <Checkbox 
+                                                    <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
                                                         checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                                     />
-                                                } 
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="전기"
                                                 label="전기"
                                                 control={
-                                                    <Checkbox 
+                                                    <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
                                                         checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                                     />
-                                                } 
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="밀폐"
                                                 label="밀폐"
                                                 control={
-                                                    <Checkbox 
+                                                    <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
                                                         checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                                     />
-                                                } 
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="중량물"
                                                 label="중량물"
                                                 control={
-                                                    <Checkbox 
+                                                    <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
                                                         checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                                     />
-                                                } 
+                                                }
                                             />
                                         </RadioGroup>
                                     </FormControl>
@@ -439,7 +439,7 @@ const ACIRegistration = () => {
                                         multiline
                                         rows={4}
                                         defaultValue="3층에서 2층으로 추락사고 발생하여 병원 이송함. "
-                                    />                      
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -453,7 +453,7 @@ const ACIRegistration = () => {
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
                                     <TextField
-                                        sx={{width: 140}}
+                                        sx={{ width: 140 }}
                                         id="date"
                                         className={classes.selectMenu}
                                         type="date"
@@ -467,61 +467,61 @@ const ACIRegistration = () => {
                                                 value="추락"
                                                 label="추락"
                                                 control={
-                                                    <Checkbox 
+                                                    <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
                                                         checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                                     />
-                                                } 
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="끼임"
                                                 label="끼임"
                                                 control={
-                                                    <Checkbox 
+                                                    <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
                                                         checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                                     />
-                                                } 
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="화재"
                                                 label="화재"
                                                 control={
-                                                    <Checkbox 
+                                                    <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
                                                         checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                                     />
-                                                } 
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="전기"
                                                 label="전기"
                                                 control={
-                                                    <Checkbox 
+                                                    <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
                                                         checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                                     />
-                                                } 
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="밀폐"
                                                 label="밀폐"
                                                 control={
-                                                    <Checkbox 
+                                                    <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
                                                         checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                                     />
-                                                } 
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="중량물"
                                                 label="중량물"
                                                 control={
-                                                    <Checkbox 
+                                                    <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
                                                         checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                                     />
-                                                } 
+                                                }
                                             />
                                         </RadioGroup>
                                     </FormControl>
@@ -534,42 +534,42 @@ const ACIRegistration = () => {
                                                 value="1급"
                                                 label="1급"
                                                 control={
-                                                    <Radio 
+                                                    <Radio
                                                         icon={<img src={radioIcon} alt="check icon" />}
                                                         checkedIcon={<img src={radioIconOn} alt="check icon on" />}
                                                     />
-                                                } 
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="2급"
                                                 label="2급"
                                                 control={
-                                                    <Radio 
+                                                    <Radio
                                                         icon={<img src={radioIcon} alt="check icon" />}
                                                         checkedIcon={<img src={radioIconOn} alt="check icon on" />}
                                                     />
-                                                } 
+                                                }
                                             />
                                             <FormControlLabel
                                                 value="3급"
                                                 label="3급"
                                                 control={
-                                                    <Radio 
+                                                    <Radio
                                                         icon={<img src={radioIcon} alt="check icon" />}
                                                         checkedIcon={<img src={radioIconOn} alt="check icon on" />}
                                                     />
-                                                } 
+                                                }
                                             />
                                         </RadioGroup>
                                     </FormControl>
                                 </div>
                                 <div className={classes.rowTitle}>발생장소</div>
                                 <div className={classes.rowInfo}>
-                                    <TextField 
-                                        id="standard-basic" 
-                                        variant="outlined" 
+                                    <TextField
+                                        id="standard-basic"
+                                        variant="outlined"
                                         value="3층 중앙 계단"
-                                        sx={{width: 200}}
+                                        sx={{ width: 200 }}
                                         className={classes.selectMenu}
                                     />
                                 </div>
@@ -579,11 +579,11 @@ const ACIRegistration = () => {
                             <div className={classes.rowTitle}>현장책임자</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    <TextField 
-                                        id="standard-basic" 
-                                        variant="outlined" 
+                                    <TextField
+                                        id="standard-basic"
+                                        variant="outlined"
                                         value="홍길동"
-                                        sx={{width: 140}}
+                                        sx={{ width: 140 }}
                                         className={classes.selectMenu}
                                     />
                                 </div>
@@ -599,10 +599,10 @@ const ACIRegistration = () => {
                                         multiline
                                         rows={4}
                                         defaultValue="건물 신축 공사장에서 승강기 설치를 하다 추락하여 지게차에 끼임"
-                                    /> 
+                                    />
                                 </div>
                                 <div className={classes.rowInfo}>
-                                    <AccidentReportButton  sx={{marginRight: '10px'}}>초기사고 보고서</AccidentReportButton>
+                                    <AccidentReportButton sx={{ marginRight: '10px' }}>초기사고 보고서</AccidentReportButton>
                                     <AccidentReportButton>최종사고 보고서</AccidentReportButton>
                                 </div>
                             </div>
@@ -621,7 +621,7 @@ const ACIRegistration = () => {
                                         rows={4}
                                         defaultValue="지게차 운전은 자격을 가진자가 자가운전가능하며 안전장치를 부착함. 
                                         정상적으로 작동하는지 정기적으로 관리하며 근로자들이 안전수칙으로 일을 진행하는지 관리감독함."
-                                    /> 
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -631,11 +631,11 @@ const ACIRegistration = () => {
                                 <div>
                                     <div>조치 전</div>
                                     <div>
-                                        <TextField 
-                                            id="standard-basic" 
-                                            variant="outlined" 
+                                        <TextField
+                                            id="standard-basic"
+                                            variant="outlined"
                                             value="20220607사고등록 전 사진.jpg"
-                                            sx={{width: 610}}
+                                            sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             disabled
                                         />
@@ -648,11 +648,11 @@ const ACIRegistration = () => {
                                 <div>
                                     <div>조치 후</div>
                                     <div>
-                                        <TextField 
-                                            id="standard-basic" 
-                                            variant="outlined" 
+                                        <TextField
+                                            id="standard-basic"
+                                            variant="outlined"
                                             value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
-                                            sx={{width: 610}}
+                                            sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             disabled
                                         />

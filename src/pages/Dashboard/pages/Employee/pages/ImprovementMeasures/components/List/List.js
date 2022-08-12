@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from "react-router-dom"
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
@@ -272,12 +273,16 @@ const ExcelButton = styled(ButtonUnstyled)`
 
 function List() {
     const classes = useStyles();
-
+    const navigate = useNavigate()
     const [num, setNum] = React.useState('');
 
     const handleChange = (event) => {
         setNum(event.target.value);
     };
+
+    const handleRedirect = () => {
+        navigate("/dashboard/employee/improvement-measures/registration")
+    }
 
     return (
         <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
@@ -378,7 +383,7 @@ function List() {
                 </div>
                 <div className={classes.searchButtons}>
                     <SearchButton>조회</SearchButton>
-                    <RegisterButton sx={{ marginLeft: '10px' }}>조회</RegisterButton>
+                    <RegisterButton sx={{ marginLeft: '10px' }} onClick={() => handleRedirect()}>조회</RegisterButton>
                 </div>
             </Grid>
             <Grid item xs={12} className={classes.dataTable}>
