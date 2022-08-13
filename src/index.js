@@ -6,13 +6,17 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import { mainTheme } from './themes/Main';
+import { store } from './store/Store';
+import { Provider } from 'react-redux';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <BrowserRouter>
             <ThemeProvider theme={mainTheme}>
-                <RiskFree />
+                <Provider store={store}>
+                    <RiskFree />
+                </Provider>
             </ThemeProvider>
         </BrowserRouter>
     </React.StrictMode>

@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { WideLayout } from '../../layouts/Wide';
-
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
+import { selectUser, setUser } from '../../slices/User';
 
 import { makeStyles } from '@mui/styles';
 import logoLogin from '../../assets/images/logo_login.png';
@@ -46,11 +47,22 @@ const useStyles = makeStyles(() => ({
 
 const Login = () => {
     const classes = useStyles();
-
+    const dispatch = useDispatch();
 
     const handleLogin = () => {
-
+        //TODO
     }
+
+    useEffect(() => {
+        dispatch(setUser({
+            id: 1,
+            fistName: 'Milivoje',
+            lastName: 'Vujadinovic'
+        }));
+    },[]);
+
+    const user = useSelector(selectUser);
+    console.log(user);
 
     return (
         <WideLayout>
