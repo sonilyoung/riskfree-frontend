@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 import { WideLayout } from '../../../../layouts/Wide';
 import { makeStyles } from '@mui/styles';
 import Grid from '@mui/material/Grid';
@@ -44,7 +45,7 @@ import gageState from '../../../../assets/images/txt_warning.png';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
@@ -553,9 +554,7 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         alignItems: 'center',
         color: '#fff',
-        '&.activeLink': {
-            background: '#2e3b65'
-        }
+        textDecoration: "none"
     },
     gageWrap: {
         display: 'flex',
@@ -666,7 +665,11 @@ const useStyles = makeStyles(() => ({
         fontSize: '20px',
         fontWeight: '500',
         background: '#3a5298',
-        letterSpacing: '-1.08px'
+        letterSpacing: '-1.08px',
+        '&:visited': {
+            color: "#ffffff"
+        },
+        textDecoration: "none"
     },
     bottomBox: {
         display: 'flex',
@@ -818,6 +821,12 @@ const useStyles = makeStyles(() => ({
         borderRadius: '2px',
         fontWeight: '500'
     },
+    linkBtn: {
+        textDecoration: "none",
+        '&:visited': {
+            color: '#ffffff'
+        }
+    }
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -1079,57 +1088,57 @@ const Employee = () => {
                             <div className={classes.listTitle}>필수 의무조치 내역 <span>시행율</span></div>
                             <ul className={classes.menuList + ' parentList'}>
                                 <li>
-                                    <p className={classes.listLink + ' parentLink'} href="#none" underline="none">안전보건관리체계의 구축 및 이행</p>
+                                    <p className={classes.listLink + ' parentLink'} to={"#none"} underline="none">안전보건관리체계의 구축 및 이행</p>
                                     <span className={'normal'}>93%</span>
                                     <ul className={classes.menuList + ' nestedList'}>
                                         <li>
-                                            <Link className={classes.listLink} href="#none" underline="none">안전보건 목표 및 경영방침 설정</Link>
+                                            <Link className={classes.listLink} to={"#none"} underline="none">안전보건 목표 및 경영방침 설정</Link>
                                             <span className={'normal'}>100%</span>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink + ' activeLink'} href="#none" underline="none">유해.위험 요인 개선 업무절차 마련 및 점검</Link>
+                                            <Link className={classes.listLink + ' activeLink'} to={"#none"} underline="none">유해.위험 요인 개선 업무절차 마련 및 점검</Link>
                                             <span className={'caution'}>87%</span>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink} href="#none" underline="none">안전보건업무 총괄관리 전담조직 구축</Link>
+                                            <Link className={classes.listLink} to={"#none"} underline="none">안전보건업무 총괄관리 전담조직 구축</Link>
                                             <span className={'warning'}>32%</span>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink} href="#none" underline="none">안전보건관리책임자 권한 부여 및 집행 점검</Link>
+                                            <Link className={classes.listLink} to={"#none"} underline="none">안전보건관리책임자 권한 부여 및 집행 점검</Link>
                                             <span className={'risk'}>60%</span>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink} href="#none" underline="none">안전.보건관련 필요예산 편성 및 집행</Link>
+                                            <Link className={classes.listLink} to={"#none"} underline="none">안전.보건관련 필요예산 편성 및 집행</Link>
                                             <span className={'risk'}>32%</span>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink} href="#none" underline="none">안전보건 전문인력 배치 및 업무시간 보장</Link>
+                                            <Link className={classes.listLink} to={"#none"} underline="none">안전보건 전문인력 배치 및 업무시간 보장</Link>
                                             <span className={'caution'}>87%</span>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink} href="#none" underline="none">종사자 의견수렴 및 개선방안 이행점검</Link>
+                                            <Link className={classes.listLink} to={"#none"} underline="none">종사자 의견수렴 및 개선방안 이행점검</Link>
                                             <span className={'warning'}>32%</span>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink} href="#none" underline="none">중대재해발생 비상대응 매뉴얼 마련&점검</Link>
+                                            <Link className={classes.listLink} to={"#none"} underline="none">중대재해발생 비상대응 매뉴얼 마련&점검</Link>
                                             <span className={'caution'}>87%</span>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink} href="#none" underline="none">도급용역 위탁시 평가기준 및 절차 점검</Link>
+                                            <Link className={classes.listLink} to={"#none"} underline="none">도급용역 위탁시 평가기준 및 절차 점검</Link>
                                             <span className={'normal'}>97%</span>
                                         </li>
                                     </ul>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink + ' parentLink'} href="/dashboard/employee/accident-countermeasures-implementation/list" underline="none">재해발생 방지대책 및 이행현황</Link>
+                                    <Link className={classes.listLink + ' parentLink'} to={"/dashboard/employee/accident-countermeasures-implementation/list"} underline="none">재해발생 방지대책 및 이행현황</Link>
                                     <span className={'caution'}>86%</span>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink + ' parentLink'} href="/dashboard/employee/order-for-improvement-and-correction-under-related-law/list" underline="none">관계법령에 따른 개선.시정명령 조치</Link>
+                                    <Link className={classes.listLink + ' parentLink'} to={"/dashboard/employee/order-for-improvement-and-correction-under-related-law/list"} underline="none">관계법령에 따른 개선.시정명령 조치</Link>
                                     <span className={'warning'}>32%</span>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink + ' parentLink'} href="/dashboard/employee/measure-to-manage-performance-od-duties-law/list" underline="none">관계법령에 의무이행의 관리의 조치</Link>
+                                    <Link className={classes.listLink + ' parentLink'} to={"/dashboard/employee/measure-to-manage-performance-od-duties-law/list"} underline="none">관계법령에 의무이행의 관리의 조치</Link>
                                     <span className={'risk'}>76%</span>
                                 </li>
                             </ul>
@@ -1140,31 +1149,31 @@ const Employee = () => {
                             <div className={classes.listTitle}>의무조치별 상세 점검 항목  <span>총 <strong>40</strong> 건</span></div>
                             <ul className={classes.menuList + ' secondList'}>
                                 <li>
-                                    <Link className={classes.listLink} href="#none" underline="none">재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지·증진하기 위한 책임과 책무를 다하여야 한다.</Link>
+                                    <Link className={classes.listLink} to={"#none"} underline="none">재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지·증진하기 위한 책임과 책무를 다하여야 한다.</Link>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink + ' activeLink'} href="#none" underline="none">안전보건방침과 이에 따른 목표가 수립되고 이들이 조직의 전략적 방향과 조화되도록 하여야 한다.</Link>
+                                    <Link className={classes.listLink + ' activeLink'} to={"#none"} underline="none">안전보건방침과 이에 따른 목표가 수립되고 이들이 조직의 전략적 방향과 조화되도록 하여야 한다.</Link>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink} href="#none" underline="none">안전보건경영시스템의 구축, 실행, 유지, 개선에 필요한 자원(물적, 인적)을 제공하고 안전보건경영시스템의 효과성에 기여하도록 인원을 지휘하여야 한다. </Link>
+                                    <Link className={classes.listLink} to={"#none"} underline="none">안전보건경영시스템의 구축, 실행, 유지, 개선에 필요한 자원(물적, 인적)을 제공하고 안전보건경영시스템의 효과성에 기여하도록 인원을 지휘하여야 한다. </Link>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink} href="#none" underline="none">효과적인 안전보건경영의 중요성과 안전보건경영시스템 요구사항 이행의 중요성에 대한 의사소통이 되도록 하여야 한다.</Link>
+                                    <Link className={classes.listLink} to={"#none"} underline="none">효과적인 안전보건경영의 중요성과 안전보건경영시스템 요구사항 이행의 중요성에 대한 의사소통이 되도록 하여야 한다.</Link>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink} href="#none" underline="none">안전보건경영시스템이 의도된 결과를 달성할 수 있도록 하여야 한다.</Link>
+                                    <Link className={classes.listLink} to={"#none"} underline="none">안전보건경영시스템이 의도된 결과를 달성할 수 있도록 하여야 한다.</Link>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink} href="#none" underline="none">지속적인 개선을 보장하고 촉진하여야 한다.</Link>
+                                    <Link className={classes.listLink} to={"#none"} underline="none">지속적인 개선을 보장하고 촉진하여야 한다.</Link>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink} href="#none" underline="none">안전보건경영시스템의 의도된 결과를 지원하는 조직 문화의 개발, 실행 및 촉진하여야 한다.</Link>
+                                    <Link className={classes.listLink} to={"#none"} underline="none">안전보건경영시스템의 의도된 결과를 지원하는 조직 문화의 개발, 실행 및 촉진하여야 한다.</Link>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink} href="#none" underline="none">안전보건경영시스템의 구축, 실행, 유지, 개선에 필요한 자원(물적, 인적)을 제공하고 안전보건경영시스템의 효과성에 기여하도록 인원을 지휘하여야 한다.</Link>
+                                    <Link className={classes.listLink} to={"#none"} underline="none">안전보건경영시스템의 구축, 실행, 유지, 개선에 필요한 자원(물적, 인적)을 제공하고 안전보건경영시스템의 효과성에 기여하도록 인원을 지휘하여야 한다.</Link>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink} href="#none" underline="none">효과적인 안전보건경영의 중요성과 안전보건경영시스템</Link>
+                                    <Link className={classes.listLink} to={"#none"} underline="none">효과적인 안전보건경영의 중요성과 안전보건경영시스템</Link>
                                 </li>
                             </ul>
                         </div>
@@ -1176,22 +1185,22 @@ const Employee = () => {
                                     <div className={classes.listTitle}>점검서류 등 목록</div>
                                     <ul className={classes.menuList}>
                                         <li>
-                                            <Link className={classes.listLink} href="#none" underline="none">안전보건이사회 발표자료</Link>
+                                            <Link className={classes.listLink} to={"#none"} underline="none">안전보건이사회 발표자료</Link>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink} href="#none" underline="none">경영목표 및 방침 내역 및 실행내역서</Link>
+                                            <Link className={classes.listLink} to={"#none"} underline="none">경영목표 및 방침 내역 및 실행내역서</Link>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink} href="#none" underline="none">산업안전보건위원회 회의록</Link>
+                                            <Link className={classes.listLink} to={"#none"} underline="none">산업안전보건위원회 회의록</Link>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink} href="#none" underline="none">사내 협력사 회의록</Link>
+                                            <Link className={classes.listLink} to={"#none"} underline="none">사내 협력사 회의록</Link>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink} href="#none" underline="none">교육계획서 및 교육결과서</Link>
+                                            <Link className={classes.listLink} to={"#none"} underline="none">교육계획서 및 교육결과서</Link>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink} href="#none" underline="none">사내.외 경영방침 게시내역</Link>
+                                            <Link className={classes.listLink} to={"#none"} underline="none">사내.외 경영방침 게시내역</Link>
                                         </li>
                                     </ul>
                                 </div>
@@ -1243,22 +1252,22 @@ const Employee = () => {
                                     <div className={classes.listTitle}>Check</div>
                                     <ul className={classes.menuList + ' checkList'}>
                                         <li>
-                                            <Link className={classes.listLink + ' check'} href="#none" underline="none"></Link>
+                                            <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink + ' check'} href="#none" underline="none"></Link>
+                                            <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink + ' check'} href="#none" underline="none"></Link>
+                                            <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink + ' check'} href="#none" underline="none"></Link>
+                                            <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink + ' check'} href="#none" underline="none"></Link>
+                                            <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>
                                         </li>
                                         <li>
-                                            <Link className={classes.listLink + ' check'} href="#none" underline="none"></Link>
+                                            <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>
                                         </li>
                                     </ul>
                                 </div>
@@ -1317,7 +1326,7 @@ const Employee = () => {
                                     <span>치</span>
                                 </div>
                                 <div>
-                                    <Link className={classes.footLink} href="/dashboard/employee/improvement-measures/list" underline="none">대표이사</Link>
+                                    <Link className={classes.footLink} to={"/dashboard/employee/improvement-measures/list"} underline="none">대표이사</Link>
                                     <div className={classes.bottomBox}>
                                         <div>
                                             <div>지시</div>
@@ -1334,7 +1343,7 @@ const Employee = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <Link className={classes.footLink} href="#none" underline="none">안전보건팀장</Link>
+                                    <Link className={classes.footLink} to={"#none"} underline="none">안전보건팀장</Link>
                                     <div className={classes.bottomBox}>
                                         <div>
                                             <div>지시</div>
@@ -1352,7 +1361,7 @@ const Employee = () => {
                                 </div>
                             </Grid>
                             <Grid className={classes.footBox + ' boxUp'} item xs={5}>
-                                <div className={classes.footLink} href="#none" underline="none">산업재해 누적 집계</div>
+                                <Link className={classes.footLink} to={"#none"} underline="none">산업재해 누적 집계</Link>
                                 <div className={classes.bottomBox}>
                                     <div>
                                         <div>사망</div>
@@ -1389,7 +1398,7 @@ const Employee = () => {
                                 </div>
                             </Grid>
                             <Grid className={classes.footBox + ' boxUp'} item xs={3}>
-                                <Link className={classes.footLink} href="/dashboard/employee/security-work-content" underline="none">11/27(화) - 안전작업허가 공사내역</Link>
+                                <Link className={classes.footLink} to={"/dashboard/employee/security-work-content"} underline="none">11/27(화) - 안전작업허가 공사내역</Link>
                                 <div className={classes.bottomBox}>
                                     <div>
                                         <div>고소</div>
@@ -1421,18 +1430,18 @@ const Employee = () => {
                                     <div>
                                         <div>2021/12/04  14:28</div>
                                         <span className={classes.slideLabel}>HOT</span>
-                                        <Link href="#none" sx={{ color: '#fdcb05' }}>서산사업장 BTX 공정 3번 Tank 화재 발생 !!  [중요 공지일 경우]</Link>
+                                        <Link to={"#none"} className={classes.linkBtn}>서산사업장 BTX 공정 3번 Tank 화재 발생 !!  [중요 공지일 경우]</Link>
                                     </div>
                                     <div>
                                         <div>2021/12/05  14:28</div>
-                                        <Link href="#none">울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
+                                        <Link to={"#none"} className={classes.linkBtn}>울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
                                     </div>
                                     <div>
                                         <div>2021/12/05  14:28</div>
-                                        <Link href="#none">울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
+                                        <Link to={"#none"} className={classes.linkBtn}>울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
                                     </div>
                                 </Slider>
-                                <Link className={classes.sliderLink} href="/dashboard/employee/notifications/list" underline="none"></Link>
+                                <Link className={classes.sliderLink} to={"/dashboard/employee/notifications/list"} underline="none"></Link>
                             </Grid>
                             <Grid className={classes.footBox + ' boxDown ' + classes.footDate} item xs={3}>
                                 <div className={classes.footDay + ' dateBox'}>

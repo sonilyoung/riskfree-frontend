@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 import { WideLayout } from '../../../../layouts/Wide';
 import { makeStyles } from '@mui/styles';
 import Grid from '@mui/material/Grid';
@@ -44,7 +45,7 @@ import gageState from '../../../../assets/images/txt_warning.png';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
@@ -299,7 +300,8 @@ const useStyles = makeStyles(() => ({
             color: '#202231',
             letterSpacing: '-2.08px',
             textAlign: 'center'
-        }
+        },
+        textDecoration: "none"
     },
     managementOrder: {
         display: 'flex',
@@ -427,7 +429,11 @@ const useStyles = makeStyles(() => ({
         fontSize: '20px',
         fontWeight: '500',
         background: '#3a5298',
-        letterSpacing: '-1.08px'
+        letterSpacing: '-1.08px',
+        '&:visited': {
+            color: "#ffffff"
+        },
+        textDecoration: "none"
     },
     bottomBox: {
         display: 'flex',
@@ -609,6 +615,12 @@ const useStyles = makeStyles(() => ({
         background: '#fd4b05',
         borderRadius: '2px',
         fontWeight: '500'
+    },
+    linkBtn: {
+        textDecoration: "none",
+        '&:visited': {
+            color: '#ffffff'
+        }
     }
 }));
 
@@ -809,73 +821,73 @@ const Director = () => {
                     <Slider className={classes.dashSlider} {...dashboardSlider}>
                         <div className={classes.dashboardSlide}>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
@@ -884,73 +896,73 @@ const Director = () => {
 
                         <div className={classes.dashboardSlide}>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
+                                <Link className={classes.slickLink} to={"/dashboard/employee"} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
@@ -971,7 +983,7 @@ const Director = () => {
 
                         <Grid container item xs={12}>
                             <Grid className={classes.footBox + ' boxUp'} item xs={3.7}>
-                                <Link className={classes.footLink} href="/dashboard/director/improvement-measures/list" underline="none">대표이사 개선조치</Link>
+                                <Link className={classes.footLink} to="/dashboard/director/improvement-measures/list" underline="none">대표이사 개선조치</Link>
                                 <div className={classes.bottomBox + ' leftBox'}>
                                     <div>
                                         <div>지시</div>
@@ -991,7 +1003,7 @@ const Director = () => {
                                 </div>
                             </Grid>
                             <Grid className={classes.footBox + ' boxUp'} item xs={5}>
-                                <div className={classes.footLink} href="#" underline="none">산업재해 누적 집계</div>
+                                <Link className={classes.footLink} to="#" underline="none">산업재해 누적 집계</Link>
                                 <div className={classes.bottomBox + ' rightBox'}>
                                     <div>
                                         <div>사망</div>
@@ -1028,7 +1040,7 @@ const Director = () => {
                                 </div>
                             </Grid>
                             <Grid className={classes.footBox + ' boxUp'} item xs={3}>
-                                <Link className={classes.footLink} href="/dashboard/director/security-work-content" underline="none">11/27(화) - 안전작업허가 공사내역</Link>
+                                <Link className={classes.footLink} to="/dashboard/director/security-work-content" underline="none">11/27(화) - 안전작업허가 공사내역</Link>
                                 <div className={classes.bottomBox + ' rightBox'}>
                                     <div>
                                         <div>고소</div>
@@ -1060,18 +1072,18 @@ const Director = () => {
                                     <div>
                                         <div>2021/12/04  14:28</div>
                                         <span className={classes.slideLabel}>HOT</span>
-                                        <Link href="#" sx={{ color: '#fdcb05' }}>서산사업장 BTX 공정 3번 Tank 화재 발생 !!  [중요 공지일 경우]</Link>
+                                        <Link to="#" className={classes.linkBtn}>서산사업장 BTX 공정 3번 Tank 화재 발생 !!  [중요 공지일 경우]</Link>
                                     </div>
                                     <div>
                                         <div>2021/12/05  14:28</div>
-                                        <Link href="#">울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
+                                        <Link to="#" className={classes.linkBtn}>울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
                                     </div>
                                     <div>
                                         <div>2021/12/05  14:28</div>
-                                        <Link href="#">울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
+                                        <Link to="#" className={classes.linkBtn}>울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
                                     </div>
                                 </Slider>
-                                <Link className={classes.sliderLink} href="/dashboard/director/notifications/list" underline="none"></Link>
+                                <Link className={classes.sliderLink} to="/dashboard/director/notifications/list" underline="none"></Link>
                             </Grid>
                             <Grid className={classes.footBox + ' boxDown ' + classes.footDate} item xs={3}>
                                 <div className={classes.footDay + ' dateBox'}>
