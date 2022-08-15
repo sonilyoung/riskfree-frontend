@@ -809,73 +809,73 @@ const Director = () => {
                     <Slider className={classes.dashSlider} {...dashboardSlider}>
                         <div className={classes.dashboardSlide}>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
@@ -884,73 +884,73 @@ const Director = () => {
 
                         <div className={classes.dashboardSlide}>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} href="#" underline="none">
+                                <Link className={classes.slickLink} href="/dashboard/employee" underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>안전보건 목표 및 경영방침</div>
                                 </Link>
