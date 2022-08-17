@@ -7,6 +7,8 @@ import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import { selectUser, setUser } from '../../slices/User';
+import { useLoginMutation } from '../../hooks/api/LoginManagement/LoginManagement';
+import { useViewMutation } from '../../hooks/api/UserManagement/UserManagement';
 
 import { makeStyles } from '@mui/styles';
 import logoLogin from '../../assets/images/logo_login.png';
@@ -49,20 +51,34 @@ const Login = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const handleLogin = () => {
-        //TODO
+    const [login, { isLoading: isLoginLoading }] = useLoginMutation();
+    const [view, { isLoading: isUserViewLoading }] = useViewMutation();
+    
+
+    const handleLogin = async() => {
+        const loginResponse = await login({
+            loginId: "AAA222",
+            loginPw: "test"
+        });
+        const jwtToken = loginResponse.data.RET_DATA.accessToken;
+        localStorage.setItem('userToken', jwtToken)
+        const userViewResponse = await view();
+        console.log(userViewResponse);
     }
+
+    //console.log(isLoginLoading);
+    //console.log(isUserViewLoading);
 
     useEffect(() => {
         dispatch(setUser({
             id: 1,
             fistName: 'Milivoje',
-            lastName: 'Vujadinovic'
+            lastName: 'Vujadinovic2'
         }));
     },[]);
 
     const user = useSelector(selectUser);
-    console.log(user);
+    //console.log(user);
 
     return (
         <WideLayout>
@@ -87,7 +103,7 @@ const Login = () => {
                         />
                         <Link href="/forgotten-password" underline="hover">비밀번호 찾기 / 재설정</Link>
                     </div>
-                    <Button variant="contained">로그인</Button>
+                    <Button variant="contained" onClick={handleLogin}>로그인</Button>
                 </div>
             </div>
         </WideLayout>
