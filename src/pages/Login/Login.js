@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { WideLayout } from '../../layouts/Wide';
 import TextField from '@mui/material/TextField';
@@ -8,9 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import { selectUser, setUser } from '../../slices/User';
 import { useLoginMutation } from '../../hooks/api/LoginManagement/LoginManagement';
-import { useUserViewMutation } from '../../hooks/api/UserManagement/UserManagement';
-import { useNoticesSelectMutation } from '../../hooks/api/NoticesManagment/NoticesManagement';
-import { useSubscribersSelectMutation } from '../../hooks/api/SubscribersManagement/SubscribersManagement';
+import { UserTokenService } from '../../services/core/User';
 
 import { makeStyles } from '@mui/styles';
 import logoLogin from '../../assets/images/logo_login.png';
@@ -61,41 +60,48 @@ const useStyles = makeStyles(() => ({
 const Login = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const [values, setValues] = useState({
+        id: {
+            value: '',
+            error: 'Invalid id'
+        },
+        password: {
+            value: '',
+            error: ''
+        },
+    });
+    const navigate = useNavigate();
 
-    const [login, { isLoading: isLoginLoading }] = useLoginMutation();
-    const [userView, { isLoading: isUserViewLoading }] = useUserViewMutation();
+    const [login] = useLoginMutation();
 
-    const [subscribersSelect] = useSubscribersSelectMutation()
-
-
-    const handleLogin = async () => {
-        const loginResponse = await login({
-            loginId: "AAA222",
-            loginPw: "test"
+    const handleChange = (prop) => (event) => {
+        setValues({
+            ...values,
+            [prop]: { ...values[prop], value: event.target.value }
         });
-        const jwtToken = loginResponse.data.RET_DATA.accessToken;
-        localStorage.setItem('userToken', jwtToken)
-        const userViewResponse = await userView();
-        console.log(userViewResponse);
+    };    
+
+    const handleLogin = async() => {
+        const userLoginResponse = await login({
+            loginId: values.id.value,
+            loginPw: values.password.value
+        });
+        if (userLoginResponse.data.RET_CODE === '0000') {
+            const jwtToken = userLoginResponse.data.RET_DATA.accessToken;
+            UserTokenService.setItem(jwtToken);
+            dispatch(setUser({
+                id: 1,
+                fistName: 'Milivoje',
+                lastName: 'Vujadinovic'
+            }));
+            navigate('/dashboard/director');
+        } else {
+            //TODO: This message has to be replaced with dialog.
+            alert('Credentials are wrong. Please try again.');
+        }
     }
 
-    const handleView = async () => {
-        const noticesViewResponse = await subscribersSelect({})
-        console.log(noticesViewResponse)
-    }
-
-    //console.log(isLoginLoading);
-    //console.log(isUserViewLoading);
-
-    useEffect(() => {
-        dispatch(setUser({
-            id: 1,
-            fistName: 'Milivoje',
-            lastName: 'Vujadinovic2'
-        }));
-    }, []);
-
-    const user = useSelector(selectUser);
+    //const user = useSelector(selectUser);
     //console.log(user);
 
     return (
@@ -106,8 +112,8 @@ const Login = () => {
                         <img src={logoLogin} alt="login logo" />
                     </div>
                     <div className={classes.loginInput}>
-                        <TextField id="standard-basic" placeholder="아이디" variant="outlined" />
-                        <TextField id="standard-basic" placeholder="비밀번호" variant="outlined" />
+                        <TextField id="id" onChange={handleChange("id")}placeholder="아이디" variant="outlined" />
+                        <TextField id="pawwword" type="password" onChange={handleChange("password")} placeholder="비밀번호" variant="outlined" />
                     </div>
                     <div className={classes.loginOptions}>
                         <FormControlLabel
@@ -121,10 +127,7 @@ const Login = () => {
                         />
                         <Link to={"/forgotten-password/step-1"} className={classes.linkBtn} underline="hover">비밀번호 찾기 / 재설정</Link>
                     </div>
-                    <Button variant="contained" onClick={() => {
-                        handleLogin()
-                        handleView()
-                    }}>로그인</Button>
+                    <Button variant="contained" onClick={handleLogin}>로그인</Button>
                 </div>
             </div>
         </WideLayout>

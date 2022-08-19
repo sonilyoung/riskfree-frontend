@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { LoginPage } from '../pages/Login';
 import { RegistrationPage } from '../pages/Registration';
 import { DashboardDirectorPage, DashboardEmployeePage } from '../pages/Dashboard';
@@ -11,11 +11,29 @@ import { MeasureToManageThePerformancePage } from '../pages/Dashboard/pages/Empl
 import { ContentsOfWorkPage } from '../pages/Dashboard/pages/Employee/pages/ContentsOfWork';
 import { IMStatusPage, IMRegistrationPage, NoticeListPage, NoticeDetailsPage, NoticeRegistrationPage, ACIStatusPage, ACIRegistrationPage, OICLawPage, OICRegistrationPage, MPDLawFirstPage, MPDLawSecondPage, MPDLawThirdPage, SecurityWorkContentPage } from '../pages/Dashoard/pages';
 import { ForgottenPasswordPage } from '../pages/Login/pages/ForgottenPassword';
+import { UserTokenService } from '../services/core/User';
+
+const isUserLoggedIn = () => {
+    let isLoggedIn = false;
+
+    const token = UserTokenService.getItem();
+    if (token) {
+        isLoggedIn = true;
+    }
+
+    return isLoggedIn;
+};
+
+const PrivateRoute = () => {
+    return isUserLoggedIn() ? <Outlet /> : <Navigate to="/" />
+};
 
 const DefaultRoutes = () => (
 
-
     <Routes>
+        <Route path="/dashboard" element={<PrivateRoute />}>
+            <Route path="/dashboard/director" element={<DashboardDirectorPage />} />
+        </Route>
         <Route path="/dashboard/director" element={<DashboardDirectorPage />} />
         <Route path="/dashboard/director/improvement-measure-status" element={<IMStatusPage />} />
         <Route path="/dashboard/director/improvement-measure-registration" element={<IMRegistrationPage />} />
