@@ -8,22 +8,37 @@ export const userManagement = createApi({
         baseUrl: `${BASE_URL}`,
         prepareHeaders: (headers) => {
             const jwtToken = localStorage.getItem('userToken');
-        
+
             if (jwtToken) {
                 headers.set('authorization', `Bearer ${jwtToken}`)
             }
-        
+
             return headers
-          },
+        },
     }),
     endpoints: (builder) => ({
-        view: builder.mutation({
-            query: () => ({
+        userView: builder.mutation({
+            query: (body) => ({
                 url: 'users/view',
                 method: 'POST',
+                body: body
+            }),
+        }),
+        userUpdate: builder.mutation({
+            query: (body) => ({
+                url: 'users/update',
+                method: 'POST',
+                body: body
+            }),
+        }),
+        userPasswordUpdate: builder.mutation({
+            query: (body) => ({
+                url: 'users/passwd/update',
+                method: 'POST',
+                body: body
             }),
         }),
     }),
-  });
+});
 
-  export const { useViewMutation } = userManagement;
+export const { useUserViewMutation, useUserUpdateMutation, useUserPasswordUpdateMutation } = userManagement;

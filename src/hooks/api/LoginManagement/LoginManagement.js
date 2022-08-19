@@ -16,7 +16,21 @@ export const loginManagement = createApi({
             }),
             //transformResponse: (response, meta, arg) => response.RET_DATA,
         }),
+        passwordConfirm: builder.mutation({
+            query: (body) => ({
+                url: 'login/passwd/confirm',
+                method: 'POST',
+                body: body
+            })
+        }),
+        passwordReset: builder.mutation({
+            query: (body) => ({
+                url: 'login/passwd/reset',
+                method: 'POST',
+                body: body
+            })
+        })
     }),
-  });
+});
 
-  export const { useLoginMutation } = loginManagement;
+export const { useLoginMutation, usePasswordConfirmMutation, usePasswordResetMutation } = loginManagement;

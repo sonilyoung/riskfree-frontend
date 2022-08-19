@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import { WideLayout } from '../../layouts/Wide';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import { selectUser, setUser } from '../../slices/User';
 import { useLoginMutation } from '../../hooks/api/LoginManagement/LoginManagement';
-import { useViewMutation } from '../../hooks/api/UserManagement/UserManagement';
+import { useUserViewMutation } from '../../hooks/api/UserManagement/UserManagement';
+import { useNoticesSelectMutation } from '../../hooks/api/NoticesManagment/NoticesManagement';
+import { useSubscribersSelectMutation } from '../../hooks/api/SubscribersManagement/SubscribersManagement';
 
 import { makeStyles } from '@mui/styles';
 import logoLogin from '../../assets/images/logo_login.png';
@@ -44,6 +46,15 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'space-between',
         alignItems: 'center',
         margin: '10px 0 20px 0'
+    },
+    linkBtn: {
+        textDecoration: "none",
+        '&:visited': {
+            color: '#0000'
+        },
+        '&:hover': {
+            textDecoration: "underline"
+        }
     }
 }));
 
@@ -52,18 +63,25 @@ const Login = () => {
     const dispatch = useDispatch();
 
     const [login, { isLoading: isLoginLoading }] = useLoginMutation();
-    const [view, { isLoading: isUserViewLoading }] = useViewMutation();
-    
+    const [userView, { isLoading: isUserViewLoading }] = useUserViewMutation();
 
-    const handleLogin = async() => {
+    const [subscribersSelect] = useSubscribersSelectMutation()
+
+
+    const handleLogin = async () => {
         const loginResponse = await login({
             loginId: "AAA222",
             loginPw: "test"
         });
         const jwtToken = loginResponse.data.RET_DATA.accessToken;
         localStorage.setItem('userToken', jwtToken)
-        const userViewResponse = await view();
+        const userViewResponse = await userView();
         console.log(userViewResponse);
+    }
+
+    const handleView = async () => {
+        const noticesViewResponse = await subscribersSelect({})
+        console.log(noticesViewResponse)
     }
 
     //console.log(isLoginLoading);
@@ -75,7 +93,7 @@ const Login = () => {
             fistName: 'Milivoje',
             lastName: 'Vujadinovic2'
         }));
-    },[]);
+    }, []);
 
     const user = useSelector(selectUser);
     //console.log(user);
@@ -101,9 +119,12 @@ const Login = () => {
                                 />
                             }
                         />
-                        <Link href="/forgotten-password" underline="hover">비밀번호 찾기 / 재설정</Link>
+                        <Link to={"/forgotten-password/step-1"} className={classes.linkBtn} underline="hover">비밀번호 찾기 / 재설정</Link>
                     </div>
-                    <Button variant="contained" onClick={handleLogin}>로그인</Button>
+                    <Button variant="contained" onClick={() => {
+                        handleLogin()
+                        handleView()
+                    }}>로그인</Button>
                 </div>
             </div>
         </WideLayout>

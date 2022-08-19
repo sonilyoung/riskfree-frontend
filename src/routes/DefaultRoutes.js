@@ -45,7 +45,7 @@ const DefaultRoutes = () => (
         <Route path="/dashboard/director/security-work-content" element={<ContentsOfWorkPage />} />
         <Route exact path="/" element={<LoginPage />} />
         <Route path="/registration" element={<RegistrationPage />} />
-        <Route path="/forgotten-password" element={<ForgottenPasswordPage />} />
+        <Route path="/forgotten-password/:step" element={<ForgottenPasswordPage />} />
     </Routes>
 );
 
