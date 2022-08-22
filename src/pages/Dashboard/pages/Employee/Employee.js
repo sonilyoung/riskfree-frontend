@@ -73,6 +73,13 @@ import 'slick-carousel/slick/slick-theme.css';
 
 import Slider from 'react-slick';
 
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
+import radioIcon from '../../../../assets/images/ic_radio.png';
+import radioIconOn from '../../../../assets/images/ic_radio_on.png';
+
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
         backgroundColor: '#33374f',
@@ -246,7 +253,7 @@ const useStyles = makeStyles(() => ({
         top: '-20px',
         left: '-140px',
         display: 'flex',
-        display: 'none !important'
+        // display: 'none !important'
     },
     chartPopList: {
         display: 'flex',
@@ -347,7 +354,8 @@ const useStyles = makeStyles(() => ({
         padding: '34px',
         borderRadius: '8px',
         background: '#fff',
-        boxShadow: '0 0 10px rgb(0 0 0 / 30%)'
+        boxShadow: '0 0 10px rgb(0 0 0 / 30%)',
+        display: 'none !important',
     },
     graphLabel: {
         display: 'flex',
@@ -1007,6 +1015,7 @@ const useStyles = makeStyles(() => ({
         '&.user_popup': {
             top: '60px',
             left: '5px',
+            height: '535px'
         },
         '&.settings_popup': {
             top: '65px',
@@ -1066,10 +1075,20 @@ const useStyles = makeStyles(() => ({
         padding: '24px',
         boxSizing: 'border-box',
         '& >span': {
+            position: 'relative',
+            display: 'flex',
+            justifyContent: 'center',
             width: '100%',
             borderTop: '1px solid #c1c6d0',
             marginTop: '9px',
-            paddingTop: '19px'
+            paddingTop: '19px',
+            '& >span': {
+                position: 'absolute',
+                top: '-15px',
+                background: '#eeeff7',
+                padding: '0 10px',
+                fontWeight: '700'
+            }
         }
     },
     headerPopFooter: {
@@ -1221,6 +1240,127 @@ const useStyles = makeStyles(() => ({
             }
         }
     },
+    userTab: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        marginBottom: '30px',
+        '& >div': {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        }
+    },
+    userImage: {
+        width: '60px',
+        height: '60px',
+        borderRadius: '50%',
+        border: '4px solid #fff',
+        overflow: 'hidden',
+        background: '#C3C4C9',
+        marginBottom: '20px',
+        boxShadow: '1px 2px 8px -2px rgb(0 0 0 / 40%)',
+        '& img': {
+            width: '100%',
+            height: '100%'
+        }
+    },
+    userName: {
+        width: '100%',
+        marginBottom: '10px',
+        fontWeight: '700'
+    },
+    userInfo: {
+        width: '100%'
+    },
+    uploadedPopup: {
+        position: 'absolute',
+        zIndex: '1000',
+        top: '120px',
+        right: '440px',
+        width: '140px',
+        height: '240px',
+        background: '#fff',
+        borderRadius: '30px',
+        padding: '25px 25px',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignContent: 'space-between',
+        display: 'none !important',
+        '& button': {
+            marginTop: '15px'
+        }
+    },
+    searchRadio: {
+        '& [role=radiogroup]': {
+            flexWrap: 'wrap',
+        },
+        '& [class*=body1]': {
+            fontSize: '16px'
+        },
+        '& input': {
+            cursor: 'default'
+        },
+        '& label': {
+            marginRight: '10px'
+        }
+    },
+    boxTable: {
+        borderRadius: '6px',
+        overflow: 'hidden',
+        boxShadow: '0 0 12px rgb(189 203 203 / 50%)',
+        background: '#fff',
+        padding: '34px',
+        '& *': {
+            boxSizing: 'border-box',
+            letterSpacing: '-1.08px',
+            wordBreak: 'keep-all'
+        }
+    },
+    tableHead: {
+        background: '#bdcbe9',
+        '& [class*=tableData]': {
+            borderRight: '1px solid #fff',
+            '&:last-of-type': {
+                borderRight: 'none',
+            },
+        }
+    },
+    tableBody: {
+        width: '100%',
+        '& [class*=tableData]': {
+            borderRight: '1px solid #bdcbe9',
+            borderBottom: '1px solid #bdcbe9',
+            '&:first-of-type': {
+                background: '#EFF2F7'
+            }
+        },
+        '& [class*=tableRow]': {
+            transition: 'background .2s',
+            '&:hover': {
+                '& [class*=tableData]': {
+                    background: '#e1e8f7'
+                }
+            }
+        }
+    },
+    tableRow: {
+        display: 'flex',
+    },
+    tableData: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '15px 10px',
+        width: '100%',
+        '&:last-of-type': {
+            borderRight: 'none',
+        },
+        '&:first-of-type': {
+            width: '150%'
+        }
+    }
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -1503,6 +1643,21 @@ const ClosePopupButton2 = styled(ButtonUnstyled)`
     transition: background .2s; 
 `;
 
+const SubmitButton = styled(ButtonUnstyled)`
+    width: 150px;
+    height: 46px;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 46px;
+    background: #00adef;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #3a5298;
+    }   
+`;
+
 
 const headerSlider = {
     dots: false,
@@ -1554,59 +1709,20 @@ const Employee = () => {
                                         <ButtonClosePop></ButtonClosePop>
                                     </div>
                                     <div className={classes.headerPopList}>
-                                        <TextField 
-                                            id="standard-basic" 
-                                            placeholder="회사 상호명" 
-                                            variant="outlined" 
-                                            sx={{width: 350}}
-                                            className={classes.popupTextField}
-                                        />
-                                        <TextField 
-                                            id="standard-basic" 
-                                            placeholder="사업장 명칭" 
-                                            variant="outlined" 
-                                            sx={{width: 350}}
-                                            className={classes.popupTextField}
-                                        />
-                                        <Select
-                                            className={classes.popupTextField}
-                                            sx={{width: 350}}
-                                            value={num}
-                                            onChange={handleChange}
-                                            displayEmpty
-                                            inputProps={{'aria-label': 'Without label'}}
-                                        >
-                                            <MenuItem value="">업종선택</MenuItem>
-                                        </Select>
-                                        <Select
-                                            className={classes.popupTextField}
-                                            sx={{width: 350}}
-                                            value={num}
-                                            onChange={handleChange}
-                                            displayEmpty
-                                            inputProps={{'aria-label': 'Without label'}}
-                                        >
-                                            <MenuItem value="">규모선택</MenuItem>
-                                        </Select>
-                                        <span></span>
-                                        <TextField 
-                                            id="standard-basic" 
-                                            placeholder="사용자 성명" 
-                                            variant="outlined" 
-                                            sx={{width: 350}}
-                                            className={classes.popupTextField}
-                                        />
-                                        <Select
-                                            className={classes.popupTextField}
-                                            sx={{width: 350}}
-                                            value={num}
-                                            onChange={handleChange}
-                                            displayEmpty
-                                            inputProps={{'aria-label': 'Without label'}}
-                                        >
-                                            <MenuItem value="">직책 선택</MenuItem>
-                                        </Select>
-                                        <span></span>
+                                        <div className={classes.userTab}>
+                                            <div className={classes.userImage}>
+                                                <img/>
+                                            </div>
+                                            <div className={classes.userName}>
+                                                Lorem ipsum
+                                            </div>
+                                            <div className={classes.userInfo}>
+                                                Lorem ipsum dolor sit amet
+                                            </div>
+                                        </div>
+                                        <span>
+                                            <span>Lorem ipsum</span>
+                                        </span>
                                         <TextField 
                                             id="standard-basic" 
                                             placeholder="안전보건 목표 등록 (띠어쓰기 포함 16자 이내)" 
@@ -1854,6 +1970,89 @@ const Employee = () => {
                                         </div>
                                     </div>
                                 </div>
+                                <Grid item xs={12} className={classes.boxTable}>
+					            <div className={classes.tableHead}>
+                                    <div className={classes.tableRow}>
+                                    	<div className={classes.tableData}>구분</div>
+                                    	<div className={classes.tableData}>인천사업장</div>
+                                    	<div className={classes.tableData}>여수사업장</div>
+                                    	<div className={classes.tableData}>울산사업장</div>
+                                    	<div className={classes.tableData}>세종사업장</div>
+                                    </div>
+					            </div>
+					            <div className={classes.tableBody}>
+                                    <div className={classes.tableRow}>
+                                    	<div className={classes.tableData}>안전보건 목표 및 경영방침</div>
+                                    	<div className={classes.tableData}>98</div>
+                                    	<div className={classes.tableData}>98</div>
+                                    	<div className={classes.tableData}>98</div>
+                                    	<div className={classes.tableData}>98</div>
+                                    </div>
+                                    <div className={classes.tableRow}>
+                                    	<div className={classes.tableData}>안전보건업무 종괄관리</div>
+                                    	<div className={classes.tableData}>96</div>
+                                    	<div className={classes.tableData}>96</div>
+                                    	<div className={classes.tableData}>96</div>
+                                    	<div className={classes.tableData}>96</div>
+                                    </div>
+                                    <div className={classes.tableRow}>
+                                    	<div className={classes.tableData}>유해.위혐요인 개선절차</div>
+                                    	<div className={classes.tableData}>80</div>
+                                    	<div className={classes.tableData}>80</div>
+                                    	<div className={classes.tableData}>80</div>
+                                    	<div className={classes.tableData}>80</div>
+                                    </div>
+                                    <div className={classes.tableRow}>
+                                    	<div className={classes.tableData}>유해.위험요인 개선절차</div>
+                                    	<div className={classes.tableData}>82</div>
+                                    	<div className={classes.tableData}>82</div>
+                                    	<div className={classes.tableData}>82</div>
+                                    	<div className={classes.tableData}>82</div>
+                                    </div>
+                                    <div className={classes.tableRow}>
+                                    	<div className={classes.tableData}>안전보건관리책임자권한</div>
+                                    	<div className={classes.tableData}>76</div>
+                                    	<div className={classes.tableData}>76</div>
+                                    	<div className={classes.tableData}>76</div>
+                                    	<div className={classes.tableData}>76</div>
+                                    </div>
+                                    <div className={classes.tableRow}>
+                                    	<div className={classes.tableData}>안전|보건관련 필요예산편성</div>
+                                    	<div className={classes.tableData}>90</div>
+                                    	<div className={classes.tableData}>90</div>
+                                    	<div className={classes.tableData}>90</div>
+                                    	<div className={classes.tableData}>90</div>
+                                    </div>
+                                    <div className={classes.tableRow}>
+                                    	<div className={classes.tableData}>안전보건 전문인력 배치</div>
+                                    	<div className={classes.tableData}>89</div>
+                                    	<div className={classes.tableData}>89</div>
+                                    	<div className={classes.tableData}>89</div>
+                                    	<div className={classes.tableData}>89</div>
+                                    </div>
+                                    <div className={classes.tableRow}>
+                                    	<div className={classes.tableData}>종사자의견수렴</div>
+                                    	<div className={classes.tableData}>87</div>
+                                    	<div className={classes.tableData}>87</div>
+                                    	<div className={classes.tableData}>87</div>
+                                    	<div className={classes.tableData}>87</div>
+                                    </div>
+                                    <div className={classes.tableRow}>
+                                    	<div className={classes.tableData}>중대재해발생 비상대응 매뉴얼</div>
+                                    	<div className={classes.tableData}>96</div>
+                                    	<div className={classes.tableData}>96</div>
+                                    	<div className={classes.tableData}>96</div>
+                                    	<div className={classes.tableData}>96</div>
+                                    </div>
+                                    <div className={classes.tableRow}>
+                                    	<div className={classes.tableData}>도급용역위탁시 평가기준</div>
+                                    	<div className={classes.tableData}>100</div>
+                                    	<div className={classes.tableData}>100</div>
+                                    	<div className={classes.tableData}>100</div>
+                                    	<div className={classes.tableData}>100</div>
+                                    </div>
+					            </div>
+                            </Grid>
                             </div>
                         </div>
                         <div className={classes.navSlider}>
@@ -1893,6 +2092,43 @@ const Employee = () => {
                             <SearchButton></SearchButton>
                             <UnknownButton1>전체사업장</UnknownButton1>
                         </div>
+                    </div>
+                    <div className={classes.uploadedPopup}>
+                        <FormControl className={classes.searchRadio}>
+                            <RadioGroup row>
+                                <FormControlLabel
+                                    value="Opt1"
+                                    label="Opt1"
+                                    control={
+                                        <Radio 
+                                            icon={<img src={radioIcon} alt="radio icon" />}
+                                            checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
+                                        />
+                                    } 
+                                />
+                                <FormControlLabel
+                                    value="Opt2"
+                                    label="Opt2"
+                                    control={
+                                        <Radio 
+                                            icon={<img src={radioIcon} alt="radio icon" />}
+                                            checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
+                                        />
+                                    } 
+                                />
+                                <FormControlLabel
+                                    value="Opt3"
+                                    label="Opt3"
+                                    control={
+                                        <Radio 
+                                            icon={<img src={radioIcon} alt="radio icon" />}
+                                            checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
+                                        />
+                                    } 
+                                />
+                            </RadioGroup>
+                        </FormControl>
+                        <SubmitButton>Submit</SubmitButton>
                     </div>
                     <div className={classes.managementOrder}>
                         관리차수<strong>11</strong>차 :<strong>22.01.01 ~ 22.04.30</strong>
