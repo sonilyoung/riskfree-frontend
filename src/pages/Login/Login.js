@@ -15,6 +15,11 @@ import { makeStyles } from '@mui/styles';
 import logoLogin from '../../assets/images/logo_login.png';
 import checkIcon from '../../assets/images/ic_chk2.png';
 import checkIconOn from '../../assets/images/ic_chk2_on.png';
+import welcomeImg from '../../assets/images/img_first.png';
+import popupClose2 from '../../assets/images/btn_popClose2.png';
+
+import ButtonUnstyled from '@mui/base/ButtonUnstyled';
+import { styled } from '@mui/system';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -54,8 +59,37 @@ const useStyles = makeStyles(() => ({
         '&:hover': {
             textDecoration: "underline"
         }
+    },
+    welcomePopup: {
+        position: 'absolute',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100vw',
+        height: '100vh',
+        background: 'rgba(0, 0, 0, 0.7)',
+        zIndex: '1000',
+        display: 'none !important',
+        '& >div': {
+            position: 'relative',
+            '& button': {
+                position: 'absolute',
+                top: '-80px',
+                right: '0'
+            }
+        }
     }
 }));
+
+const ClosePopupButton2 = styled(ButtonUnstyled)`
+    width: 60px;
+    height: 60px;
+    padding: 0;
+    background: url(${popupClose2}) no-repeat center;
+    border: none;
+    cursor: pointer;
+    transition: background .2s; 
+`;
 
 const Login = () => {
     const classes = useStyles();
@@ -107,6 +141,12 @@ const Login = () => {
     return (
         <WideLayout>
             <div className={classes.pageWrap}>
+                <div className={classes.welcomePopup}>
+                    <div>
+                        <img src={welcomeImg} alt="welcome" />
+                        <ClosePopupButton2></ClosePopupButton2>
+                    </div>
+                </div>
                 <div className={classes.loginWrap}>
                     <div className={classes.loginLogo}>
                         <img src={logoLogin} alt="login logo" />
