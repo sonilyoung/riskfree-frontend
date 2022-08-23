@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
@@ -18,7 +18,7 @@ import radioIcon from '../../../../../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../../../../../assets/images/ic_radio_on.png';
 import deleteButton from '../../../../../../../../assets/images/btn_del.png';
 
-import { useNoticesInsertMutation } from '../../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
+import { useNoticesUpdateMutation, useNoticesViewMutation } from '../../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -224,37 +224,59 @@ const WhiteButton = styled(ButtonUnstyled)`
 }
 `;
 
-const Registration = () => {
+const Update = () => {
     const classes = useStyles();
-    const [noticesInsert] = useNoticesInsertMutation()
-    const [title, setTitle] = useState("")
-    const [important, setImportant] = useState("")
-    const [content, setContent] = useState("")
+    const { updateid } = useParams()
+    const [noticesUpdate] = useNoticesUpdateMutation()
+    const [noticesView] = useNoticesViewMutation()
+    const [notice, setNotice] = useState({
+        "attachId": 0,
+        "companyId": 1,
+        "content": "",
+        "improtCd": "",
+        "insertId": 0,
+        "noticeId": 0,
+        "title": "",
+        "updateId": 0
+    })
 
+    const HOT = "001"
+    const NOT_HOT = "002"
 
     const navigate = useNavigate()
     const handleRedirect = () => {
         navigate("/dashboard/director/notifications/list")
     }
 
-    const handlePost = async () => {
-        noticesInsert({
-            "attachId": 0,
-            "companyId": 1,
-            "content": content,
-            "improtCd": important || "002",
-            "insertId": 0,
-            "noticeId": 0,
-            "title": title,
-            "updateId": 0
+    const handleFetchView = async () => {
+        const response = await noticesView({
+            "noticeId": updateid
+        })
+        setNotice(response.data.RET_DATA)
+    }
+
+
+    const handleUpdate = async () => {
+        noticesUpdate({
+            "attachId": notice.attachId,
+            "companyId": notice.companyId,
+            "content": notice.content,
+            "improtCd": notice.improtCd,
+            "insertId": notice.insertId,
+            "noticeId": updateid,
+            "title": notice.title,
+            "updateId": notice.updateId
         })
             .then(() => navigate("/dashboard/director/notifications/list"))
     }
 
-    const handleSelect = (event) => {
-        setImportant(event.target.value);
-        console.log(important)
+    const handleSelect = (e) => {
+        setNotice({ ...notice, "improtCd": e.target.value });
     };
+
+    useEffect(() => {
+        handleFetchView()
+    }, [])
 
     return (
         <DefaultLayout>
@@ -275,7 +297,8 @@ const Registration = () => {
                                 className={classes.textArea}
                                 id="outlined-basic"
                                 placeholder="제목을 입력하세요"
-                                onChange={(e) => setTitle(e.target.value)}
+                                value={notice.title}
+                                onChange={(e) => setNotice({ ...notice, "title": e.target.value })}
                             />
                         </div>
                     </div>
@@ -285,10 +308,10 @@ const Registration = () => {
                             중요공지여부
                         </div>
                         <div className={classes.rowInfo}>
-                            <FormControl className={classes.radioSelect} onChange={handleSelect}>
-                                <RadioGroup row >
+                            <FormControl className={classes.radioSelect} onChange={handleSelect} >
+                                <RadioGroup row defaultValue={notice.improtCd}>
                                     <FormControlLabel
-                                        value="001"
+                                        value={HOT}
                                         label="중요"
                                         control={
                                             <Radio
@@ -300,7 +323,7 @@ const Registration = () => {
                                         }
                                     />
                                     <FormControlLabel
-                                        value="002"
+                                        value={NOT_HOT}
                                         label="일반"
                                         control={
                                             <Radio
@@ -327,8 +350,8 @@ const Registration = () => {
                                 multiline
                                 rows={14}
                                 placeholder="내용을 입력하세요"
-                                onChange={(e) => setContent(e.target.value)}
-                            />
+                                value={notice.content}
+                                onChange={(e) => setNotice({ ...notice, "content": e.target.value })} />
                         </div>
                     </div>
                     <div className={classes.boxRow}>
@@ -356,7 +379,7 @@ const Registration = () => {
                     표시는 필수 입력 항목입니다.
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
-                    <BlueButton className={'button-registration'} onClick={handlePost}>등록</BlueButton>
+                    <BlueButton className={'button-registration'} onClick={handleUpdate}>등록</BlueButton>
                     <WhiteButton className={'button-cancelation'} onClick={() => handleRedirect()}>취소</WhiteButton>
                 </Grid>
             </Grid>
@@ -365,4 +388,4 @@ const Registration = () => {
     );
 };
 
-export default Registration;
+export default Update;

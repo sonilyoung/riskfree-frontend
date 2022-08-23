@@ -1,6 +1,7 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
-import Link from '@mui/material/Link';
+import React, { useState, useEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom';
+
+// import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
@@ -16,12 +17,15 @@ import { styled } from '@mui/system';
 import { makeStyles } from '@mui/styles';
 
 import searchIcon from '../../../../../../../../assets/images/ic_search.png';
-
 import pageFirst from '../../../../../../../../assets/images/btn_first.png';
 import pageLast from '../../../../../../../../assets/images/btn_last.png';
 import pageNext from '../../../../../../../../assets/images/btn_nxt.png';
 import pagePrev from '../../../../../../../../assets/images/btn_pre.png';
 import icoFile from '../../../../../../../../assets/images/ic_file.png';
+import { DefaultLayout } from '../../../../../../../../layouts/Default';
+
+import { useNoticesSelectMutation } from '../../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
+
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -216,6 +220,13 @@ const useStyles = makeStyles(() => ({
         borderRadius: '2px',
         border: '1px solid #0b876d',
     },
+    linkBtn: {
+        textDecoration: "none",
+        color: "black",
+        '&:visited': {
+            color: 'black'
+        }
+    }
 }));
 
 const SearchButton = styled(ButtonUnstyled)`
@@ -260,189 +271,141 @@ const RegisterButton = styled(ButtonUnstyled)`
 `;
 
 function List() {
+    const [noticesSelect] = useNoticesSelectMutation()
+    const [noticesList, setNoticesList] = useState()
+    const [noticesForCount, setNoticesForCount] = useState()
     const classes = useStyles();
     const navigate = useNavigate()
+    const [select, setSelect] = useState("all");
+    const [query, setQuery] = useState("")
+    const [page, setPage] = useState(1)
 
-    const [num, setNum] = React.useState('');
+    const HOT = "001"
 
-    const handleChange = (event) => {
-        setNum(event.target.value);
+    const handleSelect = (event) => {
+        setSelect(event.target.value);
     };
 
     const handleRedirect = () => {
-        navigate("/dashboard/employee/notifications/registration")
+        navigate("/dashboard/director/notifications/registration")
     }
 
+    const handleFetchList = async () => {
+        const response = await noticesSelect({
+            "col": select,
+            "companyId": null,
+            "countPerPage": 10,
+            "noticeId": null,
+            "pageNum": page,
+            "param": query
+        })
+        setNoticesList(response)
+    }
+
+    const handleSearch = () => {
+        handleFetchList()
+    }
+
+    const handlePageChange = (event, value) => {
+        setPage(value)
+    }
+
+    const handleFetchListForCount = async () => {
+        const response = await noticesSelect({
+            "col": "all",
+            "companyId": null,
+            "countPerPage": null,
+            "noticeId": null,
+            "pageNum": null,
+            "param": null
+        })
+        setNoticesForCount(response)
+    }
+
+    useEffect(() => {
+        handleFetchList()
+    }, [page])
+
+    useEffect(() => {
+        handleFetchListForCount()
+    }, [])
+
     return (
-        <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
-            <Grid item xs={12} className={classes.listTitle}>
-                <Typography variant="headline2" component="div" gutterBottom>
-                    공지사항
-                </Typography>
-            </Grid>
-            <Grid item xs={12} className={classes.searchBox}>
-                <div className={classes.searchInfo}>
-                    <div>
-                        <Select
-                            sx={{ width: 200 }}
-                            className={classes.selectMenu}
-                            value={num}
-                            onChange={handleChange}
-                            displayEmpty
-                        >
-                            <MenuItem value="">전체</MenuItem>
-                        </Select>
-                        <TextField
-                            id="standard-basic"
-                            variant="outlined"
-                            placeholder="검색어를 입력하세요."
-                            sx={{ width: 370 }}
-                            className={classes.selectMenu}
-                        />
+        <DefaultLayout>
+            <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
+                <Grid item xs={12} className={classes.listTitle}>
+                    <Typography variant="headline2" component="div" gutterBottom>
+                        공지사항
+                    </Typography>
+                </Grid>
+                <Grid item xs={12} className={classes.searchBox}>
+                    <div className={classes.searchInfo}>
+                        <div>
+                            <Select
+                                sx={{ width: 200 }}
+                                className={classes.selectMenu}
+                                value={select}
+                                onChange={handleSelect}
+                                displayEmpty
+                                defaultValue={select}
+                            >
+                                <MenuItem value={"all"}>전체</MenuItem>
+                                <MenuItem value={"title"}>제목</MenuItem>
+                                <MenuItem value={"name"}>작성자</MenuItem>
+                            </Select>
+                            <TextField
+                                id="standard-basic"
+                                variant="outlined"
+                                placeholder="검색어를 입력하세요."
+                                sx={{ width: 370 }}
+                                className={classes.selectMenu}
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className={classes.searchButtons}>
-                    <SearchButton>조회</SearchButton>
-                    <RegisterButton sx={{ marginLeft: '10px' }} onClick={() => handleRedirect()}>조회</RegisterButton>
-                </div>
-            </Grid>
-            <Grid item xs={12} className={classes.dataTable}>
-                <div className={classes.tableHead}>
-                    <div className={classes.tableRow}>No</div>
-                    <div className={classes.tableRow}>제목</div>
-                    <div className={classes.tableRow}>첨부파일</div>
-                    <div className={classes.tableRow}>작성자</div>
-                    <div className={classes.tableRow}>작성일</div>
-                    <div className={classes.tableRow}>조회수</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>10</div>
-                    <div className={classes.tableRow}>
-                        <span className={classes.slideLabelHot}>HOT</span>
-                        <Link href="#none">서산사업장 BTX 공정 3번 Tank 화재 발생 !!  [중요 공지일 경우]</Link>
+                    <div className={classes.searchButtons}>
+                        <SearchButton onClick={handleSearch}>조회</SearchButton>
+                        <RegisterButton sx={{ marginLeft: '10px' }} onClick={() => handleRedirect()}>조회</RegisterButton>
                     </div>
-                    <div className={classes.tableRow}>
-                        <img src={icoFile} alt="file icon" />
+                </Grid>
+                <Grid item xs={12} className={classes.dataTable}>
+                    <div className={classes.tableHead}>
+                        <div className={classes.tableRow}>No</div>
+                        <div className={classes.tableRow}>제목</div>
+                        <div className={classes.tableRow}>첨부파일</div>
+                        <div className={classes.tableRow}>작성자</div>
+                        <div className={classes.tableRow}>작성일</div>
+                        <div className={classes.tableRow}>조회수</div>
                     </div>
-                    <div className={classes.tableRow}>홍길동</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>123</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>9</div>
-                    <div className={classes.tableRow}>
-                        <Link href="#none">울산공장  시스템 점검으로 인한 2022년 7/2 토 00시 ~ 05시 (5시간) 서비스를 중단합니다.</Link>
-                        <span className={classes.slideLabelN}>N</span>
-                    </div>
-                    <div className={classes.tableRow}>
-                        <img src={icoFile} alt="file icon" />
-                    </div>
-                    <div className={classes.tableRow}>홍길동</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>123</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>8</div>
-                    <div className={classes.tableRow}>
-                        <Link href="#none">시행 5개월만에 중대재해처벌법 개정 그 이유는?</Link>
-                        <span className={classes.slideLabelN}>N</span>
-                    </div>
-                    <div className={classes.tableRow}>
-                        <img src={icoFile} alt="file icon" />
-                    </div>
-                    <div className={classes.tableRow}>홍길동</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>123</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>7</div>
-                    <div className={classes.tableRow}>
-                        <Link href="#none">서산사업장 BTX 공정 3번 Tank 화재 발생 !!  [중요 공지일 경우] 서산사업장 서산사업장 BTX 공정 3번BTX 공정 3번 서산사업장 BTX 공정 3번 서산사업장 BTX 공정 3번</Link>
-                        <span className={classes.slideLabelN}>N</span>
-                    </div>
-                    <div className={classes.tableRow}>
-                        <img src={icoFile} alt="file icon" />
-                    </div>
-                    <div className={classes.tableRow}>홍길동</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>123</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>6</div>
-                    <div className={classes.tableRow}>
-                        <Link href="#none">울산공장  시스템 점검으로 인한 2022년 7/2 토 00시 ~ 05시 (5시간) 서비스를 중단합니다.</Link>
-                    </div>
-                    <div className={classes.tableRow}>
-                        <img src={icoFile} alt="file icon" />
-                    </div>
-                    <div className={classes.tableRow}>홍길동</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>123</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>5</div>
-                    <div className={classes.tableRow}>
-                        <Link href="#none">서산사업장 BTX 공정 3번 Tank 화재 발생 !!</Link>
-                    </div>
-                    <div className={classes.tableRow}></div>
-                    <div className={classes.tableRow}>홍길동</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>123</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>4</div>
-                    <div className={classes.tableRow}>
-                        <Link href="#none">울산공장  시스템 점검으로 인한 2022년 7/2 토 00시 ~ 05시 (5시간) 서비스를 중단합니다.</Link>
-                    </div>
-                    <div className={classes.tableRow}>
-                        <img src={icoFile} alt="file icon" />
-                    </div>
-                    <div className={classes.tableRow}>홍길동</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>123</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>3</div>
-                    <div className={classes.tableRow}>
-                        <Link href="#none">서산사업장 BTX 공정 3번 Tank 화재 발생 !!</Link>
-                    </div>
-                    <div className={classes.tableRow}>
-                        <img src={icoFile} alt="file icon" />
-                    </div>
-                    <div className={classes.tableRow}>홍길동</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>123</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>2</div>
-                    <div className={classes.tableRow}>
-                        <Link href="#none">울산공장  시스템 점검으로 인한 2022년 7/2 토 00시 ~ 05시 (5시간) 서비스를 중단합니다. 울산공장  시스템 점검으로 인한 2022년 7/2 토 00시 ~ 05시 (5시간) 서비스를 중단합니다.</Link>
-                    </div>
-                    <div className={classes.tableRow}></div>
-                    <div className={classes.tableRow}>홍길동</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>123</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>1</div>
-                    <div className={classes.tableRow}>
-                        <Link href="#none">서산사업장 BTX 공정 3번 Tank 화재 발생 !!</Link>
-                    </div>
-                    <div className={classes.tableRow}>
-                        <img src={icoFile} alt="file icon" />
-                    </div>
-                    <div className={classes.tableRow}>홍길동</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>123</div>
-                </div>
-            </Grid>
-            <Grid item xs={12} className={classes.pagingBox}>
-                <div>총 게시글 <strong>126</strong> 건</div>
-                <Stack spacing={2}>
-                    <Pagination count={10} boundaryCount={10} shape="rounded" showFirstButton showLastButton />
-                </Stack>
-            </Grid>
-        </Grid>
+                    <>
+                        {noticesList?.data.RET_DATA.map((notice, index) =>
+                        (
+                            <div className={classes.tableBody}>
+                                <div className={classes.tableRow}>{index + 1}</div>
+                                <div className={classes.tableRow}>
+                                    {notice.improtCd === HOT && <span className={classes.slideLabelHot}>HOT</span>}
+                                    <Link to={`/dashboard/director/notifications/view/${notice.noticeId}`} className={classes.linkBtn}>{notice.title}</Link>
+                                </div>
+                                <div className={classes.tableRow}>
+                                    {notice.attachId === 0 && <img src={icoFile} alt="file icon" />}
+                                </div>
+                                <div className={classes.tableRow}>{notice.insertName}</div>
+                                <div className={classes.tableRow}>{notice.insertDate}</div>
+                                <div className={classes.tableRow}>{notice.viewCnt}</div>
+                            </div>
+                        )
+                        )}
+                    </>
+                </Grid>
+                <Grid item xs={12} className={classes.pagingBox}>
+                    <div>총 게시글 <strong>{noticesList?.data.RET_DATA.length > 0 ? noticesList?.data.RET_DATA[0].totalCount : 0}</strong> 건</div>
+                    <Stack spacing={2}>
+                        <Pagination count={(noticesForCount?.data.RET_DATA[0].totalCount > 10 && noticesForCount?.data.RET_DATA[0].totalCount < 101) ? 10 : (Math.ceil(noticesForCount?.data.RET_DATA[0].totalCount / 10))} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
+                    </Stack>
+                </Grid>
+            </Grid >
+        </DefaultLayout>
     )
 }
 

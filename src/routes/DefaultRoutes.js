@@ -31,36 +31,36 @@ const PrivateRoute = () => {
 const DefaultRoutes = () => (
 
     <Routes>
-        <Route path="/dashboard" element={<PrivateRoute />}>
+        <Route element={<PrivateRoute />}>
             <Route path="/dashboard/director" element={<DashboardDirectorPage />} />
+            <Route path="/dashboard/director" element={<DashboardDirectorPage />} />
+            <Route path="/dashboard/director/improvement-measure-status" element={<IMStatusPage />} />
+            <Route path="/dashboard/director/improvement-measure-registration" element={<IMRegistrationPage />} />
+            <Route path="/dashboard/director/notice-list" element={<NoticeListPage />} />
+            <Route path="/dashboard/director/notice-details" element={<NoticeDetailsPage />} />
+            <Route path="/dashboard/director/notice-registration" element={<NoticeRegistrationPage />} />
+            <Route path="/dashboard/director/accident-countermeasures-implementation-status" element={<ACIStatusPage />} />
+            <Route path="/dashboard/director/accident-countermeasures-implementation-registration" element={<ACIRegistrationPage />} />
+            <Route path="/dashboard/director/order-for-improvement-and-correction-under-related-law" element={<OICLawPage />} />
+            <Route path="/dashboard/director/order-for-improvement-and-correction-registration" element={<OICRegistrationPage />} />
+            <Route path="/dashboard/director/measure-manage-performance-od-duties-law-first" element={<MPDLawFirstPage />} />
+            <Route path="/dashboard/director/measure-manage-performance-od-duties-law-second" element={<MPDLawSecondPage />} />
+            <Route path="/dashboard/director/measure-manage-performance-od-duties-law-third" element={<MPDLawThirdPage />} />
+            {/* <Route path="/dashboard/director/security-work-content" element={<SecurityWorkContentPage />} /> */}
+            <Route path="/dashboard/employee" element={<DashboardEmployeePage />} />
+            <Route path="/dashboard/employee/improvement-measures/:page" element={<ImprovementMeasuresPage />} />
+            <Route path="/dashboard/director/notifications/*" element={<NotificationsPage />} />
+            <Route path="/dashboard/employee/accident-countermeasures-implementation/:page" element={<CountermeasuresForTheOccurrencePage />} />
+            <Route path="/dashboard/employee/order-for-improvement-and-correction-under-related-law/:page" element={<OrdersForImprovementPage />} />
+            <Route path="/dashboard/employee/measure-to-manage-performance-od-duties-law/:page" element={<MeasureToManageThePerformancePage />} />
+            <Route path="/dashboard/employee/security-work-content" element={<ContentsOfWorkPage />} />
+            <Route path="/dashboard/director/improvement-measures/:page" element={<ImprovementMeasuresPage />} />
+            <Route path="/dashboard/director/notifications/*" element={<NotificationsPage />} />
+            <Route path="/dashboard/director/accident-countermeasures-implementation/:page" element={<CountermeasuresForTheOccurrencePage />} />
+            <Route path="/dashboard/director/order-for-improvement-and-correction-under-related-law/:page" element={<OrdersForImprovementPage />} />
+            <Route path="/dashboard/director/measure-to-manage-performance-od-duties-law/:page" element={<MeasureToManageThePerformancePage />} />
+            <Route path="/dashboard/director/security-work-content" element={<ContentsOfWorkPage />} />
         </Route>
-        <Route path="/dashboard/director" element={<DashboardDirectorPage />} />
-        <Route path="/dashboard/director/improvement-measure-status" element={<IMStatusPage />} />
-        <Route path="/dashboard/director/improvement-measure-registration" element={<IMRegistrationPage />} />
-        <Route path="/dashboard/director/notice-list" element={<NoticeListPage />} />
-        <Route path="/dashboard/director/notice-details" element={<NoticeDetailsPage />} />
-        <Route path="/dashboard/director/notice-registration" element={<NoticeRegistrationPage />} />
-        <Route path="/dashboard/director/accident-countermeasures-implementation-status" element={<ACIStatusPage />} />
-        <Route path="/dashboard/director/accident-countermeasures-implementation-registration" element={<ACIRegistrationPage />} />
-        <Route path="/dashboard/director/order-for-improvement-and-correction-under-related-law" element={<OICLawPage />} />
-        <Route path="/dashboard/director/order-for-improvement-and-correction-registration" element={<OICRegistrationPage />} />
-        <Route path="/dashboard/director/measure-manage-performance-od-duties-law-first" element={<MPDLawFirstPage />} />
-        <Route path="/dashboard/director/measure-manage-performance-od-duties-law-second" element={<MPDLawSecondPage />} />
-        <Route path="/dashboard/director/measure-manage-performance-od-duties-law-third" element={<MPDLawThirdPage />} />
-        {/* <Route path="/dashboard/director/security-work-content" element={<SecurityWorkContentPage />} /> */}
-        <Route path="/dashboard/employee" element={<DashboardEmployeePage />} />
-        <Route path="/dashboard/employee/improvement-measures/:page" element={<ImprovementMeasuresPage />} />
-        <Route path="/dashboard/employee/notifications/:page" element={<NotificationsPage />} />
-        <Route path="/dashboard/employee/accident-countermeasures-implementation/:page" element={<CountermeasuresForTheOccurrencePage />} />
-        <Route path="/dashboard/employee/order-for-improvement-and-correction-under-related-law/:page" element={<OrdersForImprovementPage />} />
-        <Route path="/dashboard/employee/measure-to-manage-performance-od-duties-law/:page" element={<MeasureToManageThePerformancePage />} />
-        <Route path="/dashboard/employee/security-work-content" element={<ContentsOfWorkPage />} />
-        <Route path="/dashboard/director/improvement-measures/:page" element={<ImprovementMeasuresPage />} />
-        <Route path="/dashboard/director/notifications/:page" element={<NotificationsPage />} />
-        <Route path="/dashboard/director/accident-countermeasures-implementation/:page" element={<CountermeasuresForTheOccurrencePage />} />
-        <Route path="/dashboard/director/order-for-improvement-and-correction-under-related-law/:page" element={<OrdersForImprovementPage />} />
-        <Route path="/dashboard/director/measure-to-manage-performance-od-duties-law/:page" element={<MeasureToManageThePerformancePage />} />
-        <Route path="/dashboard/director/security-work-content" element={<ContentsOfWorkPage />} />
         <Route exact path="/" element={<LoginPage />} />
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/forgotten-password/:step" element={<ForgottenPasswordPage />} />

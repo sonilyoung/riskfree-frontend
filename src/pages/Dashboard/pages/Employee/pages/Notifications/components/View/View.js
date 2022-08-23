@@ -1,12 +1,13 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
-
 import { makeStyles } from '@mui/styles';
+import { DefaultLayout } from '../../../../../../../../layouts/Default';
+import { useNoticesViewMutation, useNoticesDeleteMutation } from '../../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
+
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -124,47 +125,73 @@ const WhiteButton = styled(ButtonUnstyled)`
 }
 `;
 
-const View = () => {
+const View = (props) => {
     const classes = useStyles();
+    const { id } = useParams()
+
+    const [noticesView] = useNoticesViewMutation()
+    const [noticesDelete] = useNoticesDeleteMutation()
+    const [notice, setNotice] = useState()
+
+
 
     const navigate = useNavigate()
     const handleRedirect = () => {
-        navigate("/dashboard/employee/notifications/list")
+        navigate("/dashboard/director/notifications/list")
+    }
+
+    const handleFetch = () => {
+        noticesView({
+            "noticeId": id
+        })
+            .then((response) => setNotice(response))
+    }
+
+    useEffect(() => {
+        handleFetch()
+    }, [])
+
+    const handleDelete = () => {
+        noticesDelete({
+            "noticeId": id
+        })
+            .then(() => navigate("/dashboard/director/notifications/list"))
     }
 
     return (
-        <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
-            <Grid item xs={12} className={classes.listTitle}>
-                <Typography variant="headline2" component="div" gutterBottom>
-                    공지사항
-                </Typography>
-            </Grid>
-            <Grid item xs={12} className={classes.boxTable}>
-                <div className={classes.boxRow}>
-                    <div className={classes.rowTitle}>제목</div>
-                    <div className={classes.rowInfo}>
-                        개선조치 관련 내부 점검 파일 양식 변경으로 인한 개선조치 보고서 파일을 공유합니다.
+        <DefaultLayout>
+            <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
+                <Grid item xs={12} className={classes.listTitle}>
+                    <Typography variant="headline2" component="div" gutterBottom>
+                        공지사항
+                    </Typography>
+                </Grid>
+                <Grid item xs={12} className={classes.boxTable}>
+                    <div className={classes.boxRow}>
+                        <div className={classes.rowTitle}>제목</div>
+                        <div className={classes.rowInfo}>
+                            {notice && notice.data.RET_DATA.title}
+                        </div>
                     </div>
-                </div>
-                <div className={classes.boxRow}>
-                    <div className={classes.rowTitle}>중요공지여부</div>
-                    <div className={classes.rowInfo}>
-                        <div className={classes.infoContent}>일반</div>
-                        <div className={classes.infoTitle}>작성자</div>
+                    <div className={classes.boxRow}>
+                        <div className={classes.rowTitle}>중요공지여부</div>
+                        <div className={classes.rowInfo}>
+                            <div className={classes.infoContent}>{notice?.data.RET_DATA.importCd === "001" ? "Normal" : "Important"}</div>
+                            <div className={classes.infoTitle}>작성자</div>
 
-                        <div className={classes.infoContent}>홍길동</div>
-                        <div className={classes.infoTitle}>작성일</div>
+                            <div className={classes.infoContent}>{notice?.data.RET_DATA.insertName}</div>
+                            <div className={classes.infoTitle}>작성일</div>
 
-                        <div className={classes.infoContent}>22.04.01</div>
-                        <div className={classes.infoTitle}>조회수</div>
+                            <div className={classes.infoContent}>{notice?.data.RET_DATA.insertDate}</div>
+                            <div className={classes.infoTitle}>조회수</div>
 
-                        <div className={classes.infoContent}>22</div>
+                            <div className={classes.infoContent}>{notice?.data.RET_DATA.viewCnt}</div>
+                        </div>
                     </div>
-                </div>
-                <div className={classes.boxRow}>
-                    <div className={classes.rowTitle}>내용</div>
-                    <div className={classes.rowInfo}>
-                        <span>
+                    <div className={classes.boxRow}>
+                        <div className={classes.rowTitle}>내용</div>
+                        <div className={classes.rowInfo}>
+                            {/* <span>
                             중대재해처벌법이 시행된 지 반년이 채 안 돼 대폭 손질될 전망이다. 정부는 지난 16일 오는 7월부터 중대재해처벌법 시행령을 추진하겠다고 발표했다. 중대재해처벌법 개정은 윤석열 대통령의 공약이기도 하다. 시행령에는 ▷경영책임자 의무 명확화 ▷중대재해 감축 로드맵 마련 ▷현장애로 및 법리적 문제점 등에 대한 개선방안 마련 내용 등이 담겼다.
                         </span>
                         <span>
@@ -178,22 +205,24 @@ const View = () => {
                         </span>
                         <span>
                             이를 위반해 중대산업재해가 발생할 경우 사망에 대해선 ‘1년 이상의 징역 또는 10억 원 이하의 벌금’, 부상·질병에 대해서는 7년 이하의 징역 또는 1억 원 이하의 벌금‘이 경영책임자에게 부과된다. 중대재해처벌법은 현재 상시근로자 ’50인 이상인 사업 또는 사업장‘, ’건설업의 경우 공시금액 50억 원 이상인 공사’ 가 대상이다. 50인 미만인 사업 또는 사업장은 2024년1월27일부터 시행되며, 상시근로자 5인 미만인 사업 또는 사업장은 처벌 대상에서 제외된다.
-                        </span>
+                        </span> */}
+                            {notice?.data.RET_DATA.content}
+                        </div>
                     </div>
-                </div>
-                <div className={classes.boxRow}>
-                    <div className={classes.rowTitle}>첨부파일</div>
-                    <div className={classes.rowInfo}>
-                        개선조치 관련 내부 점검 파일_수정20220701.hwp
+                    <div className={classes.boxRow}>
+                        <div className={classes.rowTitle}>첨부파일</div>
+                        <div className={classes.rowInfo}>
+                            {`${notice?.data.RET_DATA.originalFilename}${notice?.data.RET_DATA.filePath}`}
+                        </div>
                     </div>
-                </div>
+                </Grid>
+                <Grid item xs={12} className={classes.footerButtons}>
+                    <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/director/notifications/update/${notice?.data.RET_DATA.noticeId}`)}>수정</BlueButton>
+                    <WhiteButton className={'button-delete'} onClick={handleDelete}>삭제</WhiteButton>
+                    <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
+                </Grid>
             </Grid>
-            <Grid item xs={12} className={classes.footerButtons}>
-                <BlueButton className={'button-correction'}>수정</BlueButton>
-                <WhiteButton className={'button-delete'}>삭제</WhiteButton>
-                <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
-            </Grid>
-        </Grid>
+        </DefaultLayout>
     );
 };
 

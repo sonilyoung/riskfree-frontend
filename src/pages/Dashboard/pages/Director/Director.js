@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import { WideLayout } from '../../../../layouts/Wide';
 import { makeStyles } from '@mui/styles';
@@ -71,6 +71,9 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 import Slider from 'react-slick';
+
+import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
+
 
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
@@ -787,10 +790,23 @@ const useStyles = makeStyles(() => ({
         borderRadius: '2px',
         fontWeight: '500'
     },
+    slideLabelHot: {
+        width: '34px',
+        height: '18px',
+        lineHeight: '18px',
+        marginRight: '10px',
+        textAlign: 'center',
+        color: '#fff',
+        fontSize: '12px',
+        background: '#fd4b05',
+        borderRadius: '2px',
+        fontWeight: '500'
+    },
     linkBtn: {
         textDecoration: "none",
+        color: "white",
         '&:visited': {
-            color: '#ffffff'
+            color: 'white'
         }
     },
     headerPopup: {
@@ -920,7 +936,7 @@ const useStyles = makeStyles(() => ({
     popupAccord: {
         width: '350px',
         '& .MuiAccordionDetails-root': {
-            
+
         },
     },
     popupLink: {
@@ -1229,12 +1245,30 @@ const footerSlider = {
 
 const Director = () => {
     const classes = useStyles();
+    const [noticesSelect] = useNoticesSelectMutation()
+    const [noticesList, setNoticesList] = useState()
 
     const [num, setNum] = React.useState('');
 
     const handleChange = (event) => {
         setNum(event.target.value);
     };
+
+    const handleFetchList = async () => {
+        const response = await noticesSelect({
+            "col": null,
+            "companyId": null,
+            "countPerPage": null,
+            "noticeId": null,
+            "pageNum": null,
+            "param": null
+        })
+        setNoticesList(response)
+    }
+
+    useEffect(() => {
+        handleFetchList()
+    }, [])
 
     return (
         <WideLayout>
@@ -1255,78 +1289,78 @@ const Director = () => {
                                         <ButtonClosePop></ButtonClosePop>
                                     </div>
                                     <div className={classes.headerPopList}>
-                                        <TextField 
-                                            id="standard-basic" 
-                                            placeholder="회사 상호명" 
-                                            variant="outlined" 
-                                            sx={{width: 350}}
+                                        <TextField
+                                            id="standard-basic"
+                                            placeholder="회사 상호명"
+                                            variant="outlined"
+                                            sx={{ width: 350 }}
                                             className={classes.popupTextField}
                                         />
-                                        <TextField 
-                                            id="standard-basic" 
-                                            placeholder="사업장 명칭" 
-                                            variant="outlined" 
-                                            sx={{width: 350}}
+                                        <TextField
+                                            id="standard-basic"
+                                            placeholder="사업장 명칭"
+                                            variant="outlined"
+                                            sx={{ width: 350 }}
                                             className={classes.popupTextField}
                                         />
                                         <Select
                                             className={classes.popupTextField}
-                                            sx={{width: 350}}
+                                            sx={{ width: 350 }}
                                             value={num}
                                             onChange={handleChange}
                                             displayEmpty
-                                            inputProps={{'aria-label': 'Without label'}}
+                                            inputProps={{ 'aria-label': 'Without label' }}
                                         >
                                             <MenuItem value="">업종선택</MenuItem>
                                         </Select>
                                         <Select
                                             className={classes.popupTextField}
-                                            sx={{width: 350}}
+                                            sx={{ width: 350 }}
                                             value={num}
                                             onChange={handleChange}
                                             displayEmpty
-                                            inputProps={{'aria-label': 'Without label'}}
+                                            inputProps={{ 'aria-label': 'Without label' }}
                                         >
                                             <MenuItem value="">규모선택</MenuItem>
                                         </Select>
                                         <span></span>
-                                        <TextField 
-                                            id="standard-basic" 
-                                            placeholder="사용자 성명" 
-                                            variant="outlined" 
-                                            sx={{width: 350}}
+                                        <TextField
+                                            id="standard-basic"
+                                            placeholder="사용자 성명"
+                                            variant="outlined"
+                                            sx={{ width: 350 }}
                                             className={classes.popupTextField}
                                         />
                                         <Select
                                             className={classes.popupTextField}
-                                            sx={{width: 350}}
+                                            sx={{ width: 350 }}
                                             value={num}
                                             onChange={handleChange}
                                             displayEmpty
-                                            inputProps={{'aria-label': 'Without label'}}
+                                            inputProps={{ 'aria-label': 'Without label' }}
                                         >
                                             <MenuItem value="">직책 선택</MenuItem>
                                         </Select>
                                         <span></span>
-                                        <TextField 
-                                            id="standard-basic" 
-                                            placeholder="안전보건 목표 등록 (띠어쓰기 포함 16자 이내)" 
-                                            variant="outlined" 
-                                            sx={{width: 350}}
+                                        <TextField
+                                            id="standard-basic"
+                                            placeholder="안전보건 목표 등록 (띠어쓰기 포함 16자 이내)"
+                                            variant="outlined"
+                                            sx={{ width: 350 }}
                                             className={classes.popupTextField}
                                         />
                                         <Select
                                             className={classes.popupTextField}
-                                            sx={{width: 350}}
+                                            sx={{ width: 350 }}
                                             value={num}
                                             onChange={handleChange}
                                             displayEmpty
-                                            inputProps={{'aria-label': 'Without label'}}
+                                            inputProps={{ 'aria-label': 'Without label' }}
                                         >
                                             <MenuItem value="">경영방침 등록 (띠어쓰기 포함 16자 이내)</MenuItem>
                                         </Select>
                                         <div className={classes.preFootPop}>
-                                            <div>   
+                                            <div>
                                                 <span>로고등록</span>
                                             </div>
                                             <div>
@@ -1335,8 +1369,8 @@ const Director = () => {
                                                     icon={<img src={alertIcon} alt="alert icon" />}
                                                     severity="error">
                                                     사이즈 83px*67px
-                                                    <br/>
-                                                (   gif, jpg, png 파일허용)
+                                                    <br />
+                                                    (   gif, jpg, png 파일허용)
                                                 </Alert>
                                             </div>
                                         </div>
@@ -1394,15 +1428,15 @@ const Director = () => {
                                                 <Typography>관리차수 신규등록</Typography>
                                             </AccordionSummary>
                                             <AccordionDetails>
-                                                <TextField 
-                                                    id="standard-basic" 
-                                                    placeholder="관리차수" 
-                                                    variant="outlined" 
-                                                    sx={{width: 115}}
+                                                <TextField
+                                                    id="standard-basic"
+                                                    placeholder="관리차수"
+                                                    variant="outlined"
+                                                    sx={{ width: 115 }}
                                                     className={classes.popupTextField}
                                                 />
                                                 <TextField
-                                                    sx={{width: 220}}
+                                                    sx={{ width: 220 }}
                                                     id="date"
                                                     className={classes.popupTextField}
                                                     type="date"
@@ -1418,11 +1452,11 @@ const Director = () => {
                                                 <Typography>관리차수 조회</Typography>
                                             </AccordionSummary>
                                             <AccordionDetails>
-                                                <TextField 
-                                                    id="standard-basic" 
-                                                    placeholder="관리차수 조회" 
-                                                    variant="outlined" 
-                                                    sx={{width: 350}}
+                                                <TextField
+                                                    id="standard-basic"
+                                                    placeholder="관리차수 조회"
+                                                    variant="outlined"
+                                                    sx={{ width: 350 }}
                                                     className={classes.popupTextField}
                                                 />
                                             </AccordionDetails>
@@ -1438,7 +1472,7 @@ const Director = () => {
                                             <AccordionDetails>
                                                 <Select
                                                     className={classes.popupTextField}
-                                                    sx={{width: 150, marginBottom: '25px !important'}}
+                                                    sx={{ width: 150, marginBottom: '25px !important' }}
                                                     value={num}
                                                     onChange={handleChange}
                                                     displayEmpty
@@ -1451,7 +1485,7 @@ const Director = () => {
                                                         icon={<img src={alertIcon} alt="alert icon" />}
                                                         severity="error">
                                                         <strong>2차 차수의 DATA</strong>
-                                                        를 현재 차수에 복사 하시겠습니까 
+                                                        를 현재 차수에 복사 하시겠습니까
                                                     </Alert>
                                                     <PromptButtonBlue>예</PromptButtonBlue>
                                                     <PromptButtonWhite>예</PromptButtonWhite>
@@ -1827,19 +1861,13 @@ const Director = () => {
                         <Grid container item xs={12} sx={{ marginBottom: '3px' }}>
                             <Grid className={classes.footBox + ' boxDown'} item xs={8.75}>
                                 <Slider className={classes.footSlider} {...footerSlider}>
-                                    <div>
-                                        <div>2021/12/04  14:28</div>
-                                        <span className={classes.slideLabel}>HOT</span>
-                                        <Link to="#" className={classes.linkBtn}>서산사업장 BTX 공정 3번 Tank 화재 발생 !!  [중요 공지일 경우]</Link>
-                                    </div>
-                                    <div>
-                                        <div>2021/12/05  14:28</div>
-                                        <Link to="#" className={classes.linkBtn}>울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
-                                    </div>
-                                    <div>
-                                        <div>2021/12/05  14:28</div>
-                                        <Link to="#" className={classes.linkBtn}>울산사업장 워크샵으로 인한 06.18 [토] 오전 12시까지 운영합니다.  [일반 공지일 경우]</Link>
-                                    </div>
+                                    {noticesList?.data.RET_DATA.map((notice) => (
+                                        <div>
+                                            <div>{notice.insertDate}</div>
+                                            {notice.improtCd === "001" && <span className={classes.slideLabelHot}>HOT</span>}
+                                            <Link to={`/dashboard/director/notifications/list/${notice.noticeId}`} className={classes.linkBtn}>{notice.title}</Link>
+                                        </div>
+                                    ))}
                                 </Slider>
                                 <Link className={classes.sliderLink} to="/dashboard/director/notifications/list" underline="none"></Link>
                             </Grid>

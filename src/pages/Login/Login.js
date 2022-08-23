@@ -53,6 +53,7 @@ const useStyles = makeStyles(() => ({
     },
     linkBtn: {
         textDecoration: "none",
+        color: "black",
         '&:visited': {
             color: '#0000'
         },
@@ -113,9 +114,9 @@ const Login = () => {
             ...values,
             [prop]: { ...values[prop], value: event.target.value }
         });
-    };    
+    };
 
-    const handleLogin = async() => {
+    const handleLogin = async () => {
         const userLoginResponse = await login({
             loginId: values.id.value,
             loginPw: values.password.value
@@ -152,7 +153,7 @@ const Login = () => {
                         <img src={logoLogin} alt="login logo" />
                     </div>
                     <div className={classes.loginInput}>
-                        <TextField id="id" onChange={handleChange("id")}placeholder="아이디" variant="outlined" />
+                        <TextField id="id" onChange={handleChange("id")} placeholder="아이디" variant="outlined" />
                         <TextField id="pawwword" type="password" onChange={handleChange("password")} placeholder="비밀번호" variant="outlined" />
                     </div>
                     <div className={classes.loginOptions}>
