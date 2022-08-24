@@ -242,7 +242,7 @@ const Registration = () => {
             "attachId": 0,
             "companyId": 1,
             "content": content,
-            "improtCd": important || "002",
+            "importCd": important || "002",
             "insertId": 0,
             "noticeId": 0,
             "title": title,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
@@ -19,15 +19,14 @@ import { makeStyles } from '@mui/styles';
 import { DefaultLayout } from '../../../../../../../../layouts/Default';
 
 
+
 import radioIcon from '../../../../../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../../../../../assets/images/ic_radio_on.png';
 
 import imgPrev from '../../../../../../../../assets/images/prw_photo.jpg';
 import imgPrev2 from '../../../../../../../../assets/images/prw_photo2.jpg';
 
-import { useCompanyWorkplaceSelectMutation } from '../../../../../../../../hooks/api/CompanyManagement/CompanyManagement';
-import { useImprovementInsertMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement';
-
+import { useImprovementViewMutation, useImprovementDeleteMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement'
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -284,58 +283,35 @@ const WhiteButton = styled(ButtonUnstyled)`
 const Registration = () => {
     const classes = useStyles();
     const navigate = useNavigate()
-    const [companyWorkplaceSelect] = useCompanyWorkplaceSelectMutation()
-    const [improvementInsert] = useImprovementInsertMutation()
-    const [workplaces, setWorkplaces] = useState([])
-    const [workplaceSelect, setWorkplaceSelect] = useState("")
-    const [reqUserCd, setReqUserCd] = useState("")
-    const [improvement, setImprovement] = useState(
-        {
-            "actionAfterId": null,
-            "actionBeforeId": null,
-            "actionCn": "",
-            "companyId": 1,
-            "finDate": "",
-            "improveCn": "",
-            "improveId": null,
-            "improveNo": "",
-            "insertId": null,
-            "reqDate": "",
-            "reqFileId": 1,
-            "reqUserCd": reqUserCd,
-            "statusCd": "",
-            "updateId": null,
-            "workplaceId": workplaceSelect
-        }
-    )
+    const { id } = useParams()
+    const [improvementView] = useImprovementViewMutation()
+    const [improvemetnDelete] = useImprovementDeleteMutation()
+    const [improvement, setImprovement] = useState({})
+    const [num, setNum] = React.useState('');
 
-    // const [num, setNum] = React.useState('');
-
-    // const handleChange = (event) => {
-    //     setNum(event.target.value);
-    // };
+    const handleChange = (event) => {
+        setNum(event.target.value);
+    };
 
     const handleRedirect = () => {
         navigate("/dashboard/employee/improvement-measures/list")
     }
 
-    const fetchComapanyWorkplace = async () => {
-        const response = await companyWorkplaceSelect({})
-        setWorkplaces(response.data.RET_DATA)
+    const handleFetchView = async () => {
+        const response = await improvementView({ "improveId": id })
+        setImprovement(response.data.RET_DATA)
     }
 
-    const handleImprovementInsert = () => {
-        improvementInsert(improvement)
-            .then(res => console.log(res))
+    const handleDeleteImprovement = () => {
+        improvemetnDelete({ "improveId": id })
             .then(() => handleRedirect())
     }
 
     useEffect(() => {
-        fetchComapanyWorkplace()
+        handleFetchView()
     }, [])
 
     console.log(improvement)
-
     return (
         <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
@@ -354,25 +330,11 @@ const Registration = () => {
                             <div className={classes.rowTitle}>사업장</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    <Select
-                                        sx={{ width: 200 }}
-                                        className={classes.selectMenu}
-                                        value={improvement && improvement.workplaceId}
-                                        onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
-                                        displayEmpty
-                                    >
-                                        {workplaces?.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
-                                    </Select>
+                                    {improvement && improvement.workplaceName}
                                 </div>
                                 <div className={classes.rowTitle}>개선조치 NO</div>
                                 <div className={classes.rowInfo}>
-                                    <TextField
-                                        id="standard-basic"
-                                        variant="outlined"
-                                        sx={{ width: 200 }}
-                                        className={classes.selectMenu}
-                                        onChange={(event) => setImprovement({ ...improvement, "improveNo": event.target.value })}
-                                    />
+                                    {improvement && improvement.improveNo}
                                 </div>
                             </div>
                         </div>
@@ -383,13 +345,7 @@ const Registration = () => {
                             </div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    <TextField
-                                        className={classes.textArea}
-                                        id="outlined-multiline-static"
-                                        multiline
-                                        rows={4}
-                                        onChange={(event) => setImprovement({ ...improvement, "improveCn": event.target.value })}
-                                    />
+                                    {improvement && improvement.improveCn}
                                 </div>
                             </div>
                         </div>
@@ -397,52 +353,19 @@ const Registration = () => {
                             <div className={classes.rowTitle}>요청일자</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    <TextField
-                                        sx={{ width: 200 }}
-                                        id="date"
-                                        className={classes.selectMenu}
-                                        type="date"
-                                        format={"YYYY-MM-DD"}
-                                        onInput={(event) => setImprovement({ ...improvement, "reqDate": event.target.value })}
-                                    />
+                                    {improvement && improvement.reqDate}
                                 </div>
                                 <div className={classes.rowTitle}>요청자</div>
                                 <div className={classes.rowInfo}>
-                                    <Select
-                                        sx={{ width: 200 }}
-                                        className={classes.selectMenu}
-                                        value={improvement && improvement.reqUserCd}
-                                        onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
-                                        displayEmpty
-                                    >
-                                        <MenuItem value="002">대표이사</MenuItem>
-                                        <MenuItem value="003">안전책임자</MenuItem>안전책임자
-                                        <MenuItem value="004">안전실무자</MenuItem>
-                                    </Select>
+                                    {improvement && improvement.reqUserName}
                                 </div>
                                 <div className={classes.rowTitle}>완료요청일</div>
                                 <div className={classes.rowInfo}>
-                                    <TextField
-                                        sx={{ width: 200 }}
-                                        id="date"
-                                        className={classes.selectMenu}
-                                        type="date"
-                                        format={"YYYY-MM-DD"}
-                                        onInput={(event) => setImprovement({ ...improvement, "finDate": event.target.value })}
-                                    />
+                                    {improvement && improvement.finDate}
                                 </div>
                                 <div className={classes.rowTitle}>첨부파일</div>
                                 <div className={classes.rowInfo}>
-                                    <TextField
-                                        id="standard-basic"
-                                        variant="outlined"
-                                        placeholder="여수공장 시정조치요청 파일.hwp"
-                                        value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
-                                        sx={{ width: 390 }}
-                                        className={classes.selectMenu}
-                                        disabled
-                                    />
-                                    <UploadButton>찾아보기</UploadButton>
+                                    {improvement && improvement.reqFileId}
                                 </div>
                             </div>
                         </div>
@@ -458,54 +381,7 @@ const Registration = () => {
                             <div className={classes.rowTitle}>조치구분</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    <FormControl className={classes.searchRadio} onChange={(event) => setImprovement({ ...improvement, "statusCd": event.target.value })}>
-                                        <RadioGroup row>
-                                            <FormControlLabel
-                                                value="001"
-                                                label="요청중"
-                                                control={
-                                                    <Radio
-                                                        icon={<img src={radioIcon} alt="radio icon" />}
-                                                        checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                        value={"001"}
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value="002"
-                                                label="접수"
-                                                control={
-                                                    <Radio
-                                                        icon={<img src={radioIcon} alt="radio icon" />}
-                                                        checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                        value={"002"}
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value="003"
-                                                label="진행중"
-                                                control={
-                                                    <Radio
-                                                        icon={<img src={radioIcon} alt="radio icon" />}
-                                                        checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                        value={"003"}
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value="004"
-                                                label="조치완료"
-                                                control={
-                                                    <Radio
-                                                        icon={<img src={radioIcon} alt="radio icon" />}
-                                                        checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                        value={"004"}
-                                                    />
-                                                }
-                                            />
-                                        </RadioGroup>
-                                    </FormControl>
+                                    {(improvement?.statusCd === "001" && "요청중") || (improvement?.statusCd === "002" && "접수") || (improvement?.statusCd === "003" && "진행중") || (improvement?.statusCd === "004" && "조치완료")}
                                 </div>
                             </div>
                         </div>
@@ -513,13 +389,7 @@ const Registration = () => {
                             <div className={classes.rowTitle}>조치구분</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    <TextField
-                                        className={classes.textArea}
-                                        id="outlined-multiline-static"
-                                        multiline
-                                        rows={4}
-                                        onChange={(event) => setImprovement({ ...improvement, "actionCn": event.target.value })}
-                                    />
+                                    {improvement && improvement.actionCn}
                                 </div>
                             </div>
                         </div>
@@ -529,35 +399,13 @@ const Registration = () => {
                                 <div>
                                     <div>조치 전</div>
                                     <div>
-                                        <TextField
-                                            id="standard-basic"
-                                            variant="outlined"
-                                            value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
-                                            sx={{ width: 610 }}
-                                            className={classes.selectMenu}
-                                            disabled
-                                        />
-                                        <UploadButton>찾아보기</UploadButton>
-                                        <div className={classes.imgPreview}>
-                                            <img src={imgPrev} alt="uploaded image" />
-                                        </div>
+
                                     </div>
                                 </div>
                                 <div>
                                     <div>조치 후</div>
                                     <div>
-                                        <TextField
-                                            id="standard-basic"
-                                            variant="outlined"
-                                            value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
-                                            sx={{ width: 610 }}
-                                            className={classes.selectMenu}
-                                            disabled
-                                        />
-                                        <UploadButton>찾아보기</UploadButton>
-                                        <div className={classes.imgPreview}>
-                                            <img src={imgPrev2} alt="preview image" />
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -565,8 +413,8 @@ const Registration = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
-                    <BlueButton className={'button-registration'} onClick={handleImprovementInsert}>등록</BlueButton>
-                    <WhiteButton className={'button-cancellation'} onClick={() => handleRedirect()}>취소</WhiteButton>
+                    <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/employee/improvement-measures/update/${improvement.improveId}`)}>수정</BlueButton>
+                    <WhiteButton className={'button-delete'} onClick={handleDeleteImprovement}>삭제</WhiteButton>
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
             </Grid>

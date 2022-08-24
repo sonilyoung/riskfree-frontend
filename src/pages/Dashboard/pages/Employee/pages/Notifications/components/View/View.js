@@ -132,6 +132,8 @@ const View = (props) => {
     const [noticesView] = useNoticesViewMutation()
     const [noticesDelete] = useNoticesDeleteMutation()
     const [notice, setNotice] = useState()
+    const HOT = "001"
+    const NOT_HOT = "002"
 
 
 
@@ -176,7 +178,7 @@ const View = (props) => {
                     <div className={classes.boxRow}>
                         <div className={classes.rowTitle}>중요공지여부</div>
                         <div className={classes.rowInfo}>
-                            <div className={classes.infoContent}>{notice?.data.RET_DATA.importCd === "001" ? "Normal" : "Important"}</div>
+                            <div className={classes.infoContent}>{(notice && notice.data.RET_DATA.importCd === "001") ? "중요" : "일반"}</div>
                             <div className={classes.infoTitle}>작성자</div>
 
                             <div className={classes.infoContent}>{notice?.data.RET_DATA.insertName}</div>

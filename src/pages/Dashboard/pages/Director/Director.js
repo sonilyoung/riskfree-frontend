@@ -1864,7 +1864,7 @@ const Director = () => {
                                     {noticesList?.data.RET_DATA.map((notice) => (
                                         <div>
                                             <div>{notice.insertDate}</div>
-                                            {notice.improtCd === "001" && <span className={classes.slideLabelHot}>HOT</span>}
+                                            {notice.importCd === "001" && <span className={classes.slideLabelHot}>HOT</span>}
                                             <Link to={`/dashboard/director/notifications/list/${notice.noticeId}`} className={classes.linkBtn}>{notice.title}</Link>
                                         </div>
                                     ))}

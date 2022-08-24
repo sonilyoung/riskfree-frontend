@@ -384,7 +384,7 @@ function List() {
                             <div className={classes.tableBody}>
                                 <div className={classes.tableRow}>{index + 1}</div>
                                 <div className={classes.tableRow}>
-                                    {notice.improtCd === HOT && <span className={classes.slideLabelHot}>HOT</span>}
+                                    {notice.importCd === HOT && <span className={classes.slideLabelHot}>HOT</span>}
                                     <Link to={`/dashboard/director/notifications/view/${notice.noticeId}`} className={classes.linkBtn}>{notice.title}</Link>
                                 </div>
                                 <div className={classes.tableRow}>
@@ -401,7 +401,7 @@ function List() {
                 <Grid item xs={12} className={classes.pagingBox}>
                     <div>총 게시글 <strong>{noticesList?.data.RET_DATA.length > 0 ? noticesList?.data.RET_DATA[0].totalCount : 0}</strong> 건</div>
                     <Stack spacing={2}>
-                        <Pagination count={(noticesForCount?.data.RET_DATA[0].totalCount > 10 && noticesForCount?.data.RET_DATA[0].totalCount < 101) ? 10 : (Math.ceil(noticesForCount?.data.RET_DATA[0].totalCount / 10))} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
+                        <Pagination count={(Math.ceil(noticesForCount?.data.RET_DATA[0].totalCount / 10))} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
                     </Stack>
                 </Grid>
             </Grid >

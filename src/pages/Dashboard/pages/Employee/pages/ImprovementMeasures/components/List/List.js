@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom"
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -17,6 +17,8 @@ import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
 
 import { makeStyles } from '@mui/styles';
+import { DefaultLayout } from '../../../../../../../../layouts/Default';
+
 
 import searchIcon from '../../../../../../../../assets/images/ic_search.png';
 import radioIcon from '../../../../../../../../assets/images/ic_radio.png';
@@ -27,6 +29,12 @@ import pageFirst from '../../../../../../../../assets/images/btn_first.png';
 import pageLast from '../../../../../../../../assets/images/btn_last.png';
 import pageNext from '../../../../../../../../assets/images/btn_nxt.png';
 import pagePrev from '../../../../../../../../assets/images/btn_pre.png';
+
+import { useCompanyWorkplaceSelectMutation } from '../../../../../../../../hooks/api/CompanyManagement/CompanyManagement';
+import { useImprovementSelectMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement'
+import moment from "moment";
+
+
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -274,240 +282,236 @@ const ExcelButton = styled(ButtonUnstyled)`
 function List() {
     const classes = useStyles();
     const navigate = useNavigate()
-    const [num, setNum] = React.useState('');
+    const [companyWorkplaceSelect] = useCompanyWorkplaceSelectMutation()
+    const [improvementSelect] = useImprovementSelectMutation()
+    const [workplaces, setWorkplaces] = useState([])
+    const [workplaceSelect, setWorkplaceSelect] = useState("")
+    const [reqUser, setReqUser] = useState("")
+    const [statusCd, setStatusCd] = useState("")
+    const [improvements, setImprovements] = useState([])
+    const [startDate, setStartDate] = useState("")
+    const [endDate, setEndDate] = useState("")
+    const [page, setPage] = useState(1)
+    const todaysDate = moment().utcOffset("+09:00").format("YYYY-MM-DD");
 
-    const handleChange = (event) => {
-        setNum(event.target.value);
+
+    const handleWorkplaceSelect = (event) => {
+        setWorkplaceSelect(event.target.value);
+    };
+
+    const handleReqUserSelect = (event) => {
+        setReqUser(event.target.value);
+    };
+
+    const handleStatusCd = (event) => {
+        setStatusCd(event.target.value);
     };
 
     const handleRedirect = () => {
         navigate("/dashboard/employee/improvement-measures/registration")
     }
+    const handleComapanyWorkplace = async () => {
+        const response = await companyWorkplaceSelect({})
+        setWorkplaces(response.data.RET_DATA)
+    }
 
+    const handleStartDate = (event) => {
+        setStartDate(event.target.value)
+    }
+
+    const handleEndDate = (event) => {
+        setEndDate(event.target.value)
+    }
+
+    const handlePageChange = (event, value) => {
+        setPage(value)
+    }
+    const handleFetchList = async () => {
+        const response = await improvementSelect(
+            {
+                "companyId": null,
+                "countPerPage": 10,
+                "endDate": endDate,
+                "improveId": null,
+                "pageNum": page,
+                "reqUserCd": reqUser,
+                "startDate": startDate,
+                "statusCd": statusCd,
+                "workplaceId": workplaceSelect
+            }
+        )
+        setImprovements(response.data.RET_DATA)
+    }
+
+    useEffect(() => {
+        handleComapanyWorkplace()
+        handleFetchList()
+    }, [])
+
+    useEffect(() => {
+        handleFetchList()
+    }, [page])
+
+    // console.log(reqUser)
+    // console.log(statusCd)
+    // console.log(improvements)
+    // console.log(startDate)
+    // console.log(todaysDate)
+    // console.log(endDate)
+    // console.log(workplaces)
     return (
-        <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
-            <Grid item xs={12} className={classes.listTitle}>
-                <Typography variant="headline2" component="div" gutterBottom>
-                    개선조치 현황
-                </Typography>
-            </Grid>
-            <Grid item xs={12} className={classes.searchBox}>
-                <div className={classes.searchInfo}>
-                    <div>
-                        <div className={classes.infoTitle}>사업장</div>
-                        <Select
-                            className={classes.selectMenu}
-                            sx={{ width: 204 }}
-                            value={num}
-                            onChange={handleChange}
-                            displayEmpty
-                        >
-                            <MenuItem value="">전체</MenuItem>
-                        </Select>
+        <DefaultLayout>
+            <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
+                <Grid item xs={12} className={classes.listTitle}>
+                    <Typography variant="headline2" component="div" gutterBottom>
+                        개선조치 현황
+                    </Typography>
+                </Grid>
+                <Grid item xs={12} className={classes.searchBox}>
+                    <div className={classes.searchInfo}>
+                        <div>
+                            <div className={classes.infoTitle}>사업장</div>
+                            <Select
+                                className={classes.selectMenu}
+                                sx={{ width: 204 }}
+                                onChange={handleWorkplaceSelect}
+                                value={workplaceSelect}
+                                displayEmpty
+                            >
+                                {workplaces?.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
+                            </Select>
+                        </div>
+                        <div>
+                            <div className={classes.infoTitle}>요청일자</div>
+                            <TextField
+                                sx={{ width: 140 }}
+                                id="date"
+                                className={classes.selectMenu}
+                                type="date"
+                                format={"YYYY-MM-DD"}
+                                max={todaysDate}
+                                onInput={handleStartDate}
+                            />
+                            &nbsp;~&nbsp;
+                            <TextField
+                                sx={{ width: 140 }}
+                                id="date"
+                                className={classes.selectMenu}
+                                type="date"
+                                format={"YYYY-MM-DD"}
+                                max={todaysDate}
+                                onInput={handleEndDate}
+                            />
+                        </div>
+                        <div>
+                            <div className={classes.infoTitle}>요청자</div>
+                            <Select
+                                sx={{ width: 160 }}
+                                className={classes.selectMenu}
+                                value={reqUser}
+                                onChange={handleReqUserSelect}
+                                displayEmpty
+                            >
+                                <MenuItem value="002">대표이사</MenuItem>
+                                <MenuItem value="003">안전책임자</MenuItem>안전책임자
+                                <MenuItem value="004">안전실무자</MenuItem>
+                            </Select>
+                        </div>
+                        <div>
+                            <div className={classes.infoTitle}>조치상태</div>
+                            <FormControl className={classes.searchRadio} onChange={handleStatusCd}>
+                                <RadioGroup row >
+                                    <FormControlLabel
+                                        value="001"
+                                        label="요청중"
+                                        control={
+                                            <Radio
+                                                icon={<img src={radioIcon} alt="check icon" />}
+                                                checkedIcon={<img src={radioIconOn} alt="check icon on" />}
+                                                value={"001"}
+                                            />
+                                        }
+                                    />
+                                    <FormControlLabel
+                                        value="002"
+                                        label="접수"
+                                        control={
+                                            <Radio
+                                                icon={<img src={radioIcon} alt="check icon" />}
+                                                checkedIcon={<img src={radioIconOn} alt="check icon on" />}
+                                                value={"002"}
+                                            />
+                                        }
+                                    />
+                                    <FormControlLabel
+                                        value="003"
+                                        label="진행중"
+                                        control={
+                                            <Radio
+                                                icon={<img src={radioIcon} alt="check icon" />}
+                                                checkedIcon={<img src={radioIconOn} alt="check icon on" />}
+                                                value={"003"}
+                                            />
+                                        }
+                                    />
+                                    <FormControlLabel
+                                        value="004"
+                                        label="조치완료"
+                                        control={
+                                            <Radio
+                                                icon={<img src={radioIcon} alt="check icon" />}
+                                                checkedIcon={<img src={radioIconOn} alt="check icon on" />}
+                                                value={"004"}
+                                            />
+                                        }
+                                    />
+                                </RadioGroup>
+                            </FormControl>
+                        </div>
                     </div>
-                    <div>
-                        <div className={classes.infoTitle}>요청일자</div>
-                        <TextField
-                            sx={{ width: 140 }}
-                            id="date"
-                            className={classes.selectMenu}
-                            type="date"
-                        />
-                        &nbsp;~&nbsp;
-                        <TextField
-                            sx={{ width: 140 }}
-                            id="date"
-                            className={classes.selectMenu}
-                            type="date"
-                        />
+                    <div className={classes.searchButtons}>
+                        <SearchButton onClick={handleFetchList}>조회</SearchButton>
+                        <RegisterButton sx={{ marginLeft: '10px' }} onClick={() => handleRedirect()}>조회</RegisterButton>
                     </div>
-                    <div>
-                        <div className={classes.infoTitle}>요청자</div>
-                        <Select
-                            sx={{ width: 160 }}
-                            className={classes.selectMenu}
-                            value={num}
-                            onChange={handleChange}
-                            displayEmpty
-                        >
-                            <MenuItem value="">전체</MenuItem>
-                        </Select>
+                </Grid>
+                <Grid item xs={12} className={classes.dataTable}>
+                    <div className={classes.tableHead}>
+                        <div className={classes.tableRow}>No</div>
+                        <div className={classes.tableRow}>개선조치No</div>
+                        <div className={classes.tableRow}>사업장</div>
+                        <div className={classes.tableRow}>요청일</div>
+                        <div className={classes.tableRow}>조치요청자</div>
+                        <div className={classes.tableRow}>조치요청 내용</div>
+                        <div className={classes.tableRow}>완료요청일</div>
+                        <div className={classes.tableRow}>조치요청 상태</div>
                     </div>
+                    <>
+                        {improvements?.map((improvement, index) => (
+                            <div className={classes.tableBody} onDoubleClick={() => navigate(`/dashboard/employee/improvement-measures/view/${improvement.improveId}`)}>
+                                <div className={classes.tableRow}>{index + 1}</div>
+                                <div className={classes.tableRow}>{improvement.improveNo}</div>
+                                <div className={classes.tableRow}>{improvement.workplaceName}</div>
+                                <div className={classes.tableRow}>{improvement.reqDate}</div>
+                                <div className={classes.tableRow}>{improvement.reqUserName}</div>
+                                <div className={classes.tableRow}>{improvement.improveCn}</div>
+                                <div className={classes.tableRow}>{improvement.finDate}</div>
+                                <div className={classes.tableRow}>{improvement.status}</div>
+                            </div>
+                        ))}
+                    </>
+                </Grid>
+                <Grid item xs={12} className={classes.pagingBox}>
+                    <div>총 게시글 <strong>{improvements[0]?.totalCount}</strong> 건</div>
+                    <Stack spacing={2}>
+                        <Pagination count={(Math.ceil(improvements[0]?.totalCount / 10))} boundaryCount={10} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
+                    </Stack>
                     <div>
-                        <div className={classes.infoTitle}>조치상태</div>
-                        <FormControl className={classes.searchRadio}>
-                            <RadioGroup row>
-                                <FormControlLabel
-                                    value="요청중"
-                                    label="요청중"
-                                    control={
-                                        <Radio
-                                            icon={<img src={radioIcon} alt="check icon" />}
-                                            checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                        />
-                                    }
-                                />
-                                <FormControlLabel
-                                    value="접수"
-                                    label="접수"
-                                    control={
-                                        <Radio
-                                            icon={<img src={radioIcon} alt="check icon" />}
-                                            checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                        />
-                                    }
-                                />
-                                <FormControlLabel
-                                    value="진행중"
-                                    label="진행중"
-                                    control={
-                                        <Radio
-                                            icon={<img src={radioIcon} alt="check icon" />}
-                                            checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                        />
-                                    }
-                                />
-                                <FormControlLabel
-                                    value="조치완료"
-                                    label="조치완료"
-                                    control={
-                                        <Radio
-                                            icon={<img src={radioIcon} alt="check icon" />}
-                                            checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                        />
-                                    }
-                                />
-                            </RadioGroup>
-                        </FormControl>
+                        <ExcelButton>엑셀 다운로드</ExcelButton>
                     </div>
-                </div>
-                <div className={classes.searchButtons}>
-                    <SearchButton>조회</SearchButton>
-                    <RegisterButton sx={{ marginLeft: '10px' }} onClick={() => handleRedirect()}>조회</RegisterButton>
-                </div>
+                </Grid>
             </Grid>
-            <Grid item xs={12} className={classes.dataTable}>
-                <div className={classes.tableHead}>
-                    <div className={classes.tableRow}>No</div>
-                    <div className={classes.tableRow}>개선조치No</div>
-                    <div className={classes.tableRow}>사업장</div>
-                    <div className={classes.tableRow}>요청일</div>
-                    <div className={classes.tableRow}>조치요청자</div>
-                    <div className={classes.tableRow}>조치요청 내용</div>
-                    <div className={classes.tableRow}>완료요청일</div>
-                    <div className={classes.tableRow}>조치요청 상태</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>10</div>
-                    <div className={classes.tableRow}>CE-001</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>대표이사</div>
-                    <div className={classes.tableRow}>지하배관시설 누수에 따른 조치 요청</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>요청중</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>9</div>
-                    <div className={classes.tableRow}>CE-001</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>대표이사</div>
-                    <div className={classes.tableRow}>지하배관시설 누수에 따른 조치 요청</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>요청중</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>8</div>
-                    <div className={classes.tableRow}>CE-001</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>대표이사</div>
-                    <div className={classes.tableRow}>지하배관시설 누수에 따른 조치 요청</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>요청중</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>7</div>
-                    <div className={classes.tableRow}>CE-001</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>대표이사</div>
-                    <div className={classes.tableRow}>지하배관시설 누수에 따른 조치 요청</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>요청중</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>6</div>
-                    <div className={classes.tableRow}>CE-001</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>대표이사</div>
-                    <div className={classes.tableRow}>지하배관시설 누수에 따른 조치 요청</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>요청중</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>5</div>
-                    <div className={classes.tableRow}>CE-001</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>대표이사</div>
-                    <div className={classes.tableRow}>지하배관시설 누수에 따른 조치 요청</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>요청중</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>4</div>
-                    <div className={classes.tableRow}>CE-001</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>대표이사</div>
-                    <div className={classes.tableRow}>지하배관시설 누수에 따른 조치 요청</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>요청중</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>3</div>
-                    <div className={classes.tableRow}>CE-001</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>대표이사</div>
-                    <div className={classes.tableRow}>지하배관시설 누수에 따른 조치 요청</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>요청중</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>2</div>
-                    <div className={classes.tableRow}>CE-001</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>대표이사</div>
-                    <div className={classes.tableRow}>지하배관시설 누수에 따른 조치 요청</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>요청중</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>1</div>
-                    <div className={classes.tableRow}>CE-001</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>대표이사</div>
-                    <div className={classes.tableRow}>지하배관시설 누수에 따른 조치 요청</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>요청중</div>
-                </div>
-            </Grid>
-            <Grid item xs={12} className={classes.pagingBox}>
-                <div>총 게시글 <strong>126</strong> 건</div>
-                <Stack spacing={2}>
-                    <Pagination count={10} boundaryCount={10} shape="rounded" showFirstButton showLastButton />
-                </Stack>
-                <div>
-                    <ExcelButton>엑셀 다운로드</ExcelButton>
-                </div>
-            </Grid>
-        </Grid>
+        </DefaultLayout>
+
     )
 }
 

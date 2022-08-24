@@ -233,7 +233,7 @@ const Update = () => {
         "attachId": 0,
         "companyId": 1,
         "content": "",
-        "improtCd": "",
+        "importCd": "",
         "insertId": 0,
         "noticeId": 0,
         "title": "",
@@ -261,7 +261,7 @@ const Update = () => {
             "attachId": notice.attachId,
             "companyId": notice.companyId,
             "content": notice.content,
-            "improtCd": notice.improtCd,
+            "importCd": notice.importCd,
             "insertId": notice.insertId,
             "noticeId": updateid,
             "title": notice.title,
@@ -271,12 +271,14 @@ const Update = () => {
     }
 
     const handleSelect = (e) => {
-        setNotice({ ...notice, "improtCd": e.target.value });
+        setNotice({ ...notice, "importCd": e.target.value });
     };
 
     useEffect(() => {
         handleFetchView()
     }, [])
+
+    console.log(notice)
 
     return (
         <DefaultLayout>
@@ -309,7 +311,7 @@ const Update = () => {
                         </div>
                         <div className={classes.rowInfo}>
                             <FormControl className={classes.radioSelect} onChange={handleSelect} >
-                                <RadioGroup row defaultValue={notice.improtCd}>
+                                <RadioGroup row value={notice.importCd}>
                                     <FormControlLabel
                                         value={HOT}
                                         label="중요"

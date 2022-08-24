@@ -1,23 +1,22 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { DefaultLayout } from '../../../../../../layouts/Default';
+import { Routes, Route } from 'react-router-dom';
 
 import List from './components/List/List';
+import View from './components/View/View'
 import Registration from './components/Registration/Registration'
+import Update from './components/Update/Update'
 
 
 
 const ImprovementMeasures = () => {
-    const { page } = useParams()
-    console.log(page)
 
     return (
-        <DefaultLayout>
-            {page === "list" && <List />}
-            {page === "registration" && <Registration />}
-            {page === "modify" && <div>Modify</div>}
-            {page === "view" && <div>View</div>}
-        </DefaultLayout>
+        <Routes>
+            <Route path="list" element={<List />} />
+            <Route path="registration" element={<Registration />} />
+            <Route path="view/:id" element={<View />} />
+            <Route path="update/:updateid" element={<Update />} />
+        </Routes >
     );
 };
 

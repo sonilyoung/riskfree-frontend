@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
@@ -26,7 +26,7 @@ import imgPrev from '../../../../../../../../assets/images/prw_photo.jpg';
 import imgPrev2 from '../../../../../../../../assets/images/prw_photo2.jpg';
 
 import { useCompanyWorkplaceSelectMutation } from '../../../../../../../../hooks/api/CompanyManagement/CompanyManagement';
-import { useImprovementInsertMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement';
+import { useImprovementViewMutation, useImprovementUpdateMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement';
 
 
 const useStyles = makeStyles(() => ({
@@ -284,8 +284,10 @@ const WhiteButton = styled(ButtonUnstyled)`
 const Registration = () => {
     const classes = useStyles();
     const navigate = useNavigate()
+    const { updateid } = useParams()
     const [companyWorkplaceSelect] = useCompanyWorkplaceSelectMutation()
-    const [improvementInsert] = useImprovementInsertMutation()
+    const [improvementUpdate] = useImprovementUpdateMutation()
+    const [improvementView] = useImprovementViewMutation()
     const [workplaces, setWorkplaces] = useState([])
     const [workplaceSelect, setWorkplaceSelect] = useState("")
     const [reqUserCd, setReqUserCd] = useState("")
@@ -301,7 +303,7 @@ const Registration = () => {
             "improveNo": "",
             "insertId": null,
             "reqDate": "",
-            "reqFileId": 1,
+            "reqFileId": null,
             "reqUserCd": reqUserCd,
             "statusCd": "",
             "updateId": null,
@@ -324,17 +326,39 @@ const Registration = () => {
         setWorkplaces(response.data.RET_DATA)
     }
 
-    const handleImprovementInsert = () => {
-        improvementInsert(improvement)
+    const fetchImprovementView = async () => {
+        const response = await improvementView({ "improveId": updateid })
+        setImprovement(response.data.RET_DATA)
+    }
+
+    const handleUpdateImprovement = () => {
+        improvementUpdate(
+            {
+                "actionAfterId": null,
+                "actionBeforeId": null,
+                "actionCn": improvement.actionCn,
+                "companyId": 1,
+                "finDate": improvement.finDate,
+                "improveCn": improvement.improveCn,
+                "improveId": improvement.improveId,
+                "improveNo": improvement.improveNo,
+                "insertId": null,
+                "reqDate": improvement.reqDate,
+                "reqFileId": 1,
+                "reqUserCd": improvement.reqUserCd,
+                "statusCd": improvement.statusCd,
+                "updateId": null,
+                "workplaceId": improvement.workplaceId
+            }
+        )
             .then(res => console.log(res))
             .then(() => handleRedirect())
     }
 
     useEffect(() => {
         fetchComapanyWorkplace()
+        fetchImprovementView()
     }, [])
-
-    console.log(improvement)
 
     return (
         <DefaultLayout>
@@ -359,7 +383,6 @@ const Registration = () => {
                                         className={classes.selectMenu}
                                         value={improvement && improvement.workplaceId}
                                         onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
-                                        displayEmpty
                                     >
                                         {workplaces?.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
                                     </Select>
@@ -371,6 +394,7 @@ const Registration = () => {
                                         variant="outlined"
                                         sx={{ width: 200 }}
                                         className={classes.selectMenu}
+                                        value={improvement && improvement.improveNo}
                                         onChange={(event) => setImprovement({ ...improvement, "improveNo": event.target.value })}
                                     />
                                 </div>
@@ -388,6 +412,7 @@ const Registration = () => {
                                         id="outlined-multiline-static"
                                         multiline
                                         rows={4}
+                                        value={improvement && improvement.improveCn}
                                         onChange={(event) => setImprovement({ ...improvement, "improveCn": event.target.value })}
                                     />
                                 </div>
@@ -403,6 +428,7 @@ const Registration = () => {
                                         className={classes.selectMenu}
                                         type="date"
                                         format={"YYYY-MM-DD"}
+                                        value={improvement && improvement.reqDate}
                                         onInput={(event) => setImprovement({ ...improvement, "reqDate": event.target.value })}
                                     />
                                 </div>
@@ -428,6 +454,7 @@ const Registration = () => {
                                         className={classes.selectMenu}
                                         type="date"
                                         format={"YYYY-MM-DD"}
+                                        value={improvement && improvement.finDate}
                                         onInput={(event) => setImprovement({ ...improvement, "finDate": event.target.value })}
                                     />
                                 </div>
@@ -458,8 +485,8 @@ const Registration = () => {
                             <div className={classes.rowTitle}>조치구분</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    <FormControl className={classes.searchRadio} onChange={(event) => setImprovement({ ...improvement, "statusCd": event.target.value })}>
-                                        <RadioGroup row>
+                                    <FormControl className={classes.searchRadio} onChange={(event) => setImprovement({ ...improvement, "statusCd": event.target.value })} >
+                                        <RadioGroup row value={improvement && improvement.statusCd}>
                                             <FormControlLabel
                                                 value="001"
                                                 label="요청중"
@@ -518,6 +545,7 @@ const Registration = () => {
                                         id="outlined-multiline-static"
                                         multiline
                                         rows={4}
+                                        value={improvement && improvement.actionCn}
                                         onChange={(event) => setImprovement({ ...improvement, "actionCn": event.target.value })}
                                     />
                                 </div>
@@ -565,9 +593,9 @@ const Registration = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
-                    <BlueButton className={'button-registration'} onClick={handleImprovementInsert}>등록</BlueButton>
+                    <BlueButton className={'button-correction'} onClick={handleUpdateImprovement}>수정</BlueButton>
                     <WhiteButton className={'button-cancellation'} onClick={() => handleRedirect()}>취소</WhiteButton>
-                    <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
+                    {/* <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton> */}
                 </Grid>
             </Grid>
         </DefaultLayout>

@@ -31,37 +31,37 @@ export const companyManagement = createApi({
                 body: body
             })
         }),
-        companyWorkspaceView: builder.mutation({
+        companyWorkplaceView: builder.mutation({
             query: (body) => ({
-                url: 'company/workspaces/view',
+                url: 'company/workplaces/view',
                 method: 'POST',
                 body: body,
             }),
         }),
-        companyWorkspaceUpdate: builder.mutation({
+        companyWorkplaceUpdate: builder.mutation({
             query: (body) => ({
-                url: 'company/workspaces/update',
+                url: 'company/workplaces/update',
                 method: 'POST',
                 body: body,
             }),
         }),
-        companyWorkspaceInsert: builder.mutation({
+        companyWorkplaceInsert: builder.mutation({
             query: (body) => ({
-                url: 'company/workspaces/insert',
+                url: 'company/workplaces/insert',
                 method: 'POST',
                 body: body,
             }),
         }),
-        companyWorkspaceDelete: builder.mutation({
+        companyWorkplaceDelete: builder.mutation({
             query: (body) => ({
-                url: 'company/workspaces/delete',
+                url: 'company/workplaces/delete',
                 method: 'POST',
                 body: body,
             }),
         }),
-        companyWorkspaceSelect: builder.mutation({
+        companyWorkplaceSelect: builder.mutation({
             query: (body) => ({
-                url: 'company/workspaces/select',
+                url: 'company/workplace/select',
                 method: 'POST',
                 body: body,
             }),
@@ -111,4 +111,4 @@ export const companyManagement = createApi({
     }),
 });
 
-export const { useCompanyViewMutation, useCompanyUpdateMutation, useCompanyWorkspaceViewMutation, useCompanyWorkspaceUpdateMutation, useCompanyWorkspaceSelectMutation, useCompanyWorkspaceInsertMutation, useCompanyWorkspaceDeleteMutation, useCompanyBaselineViewMutation, useCompanyBaselineUpdateMutation, useCompanyBaselineSelectMutation, useCompanyBaselineInsertMutation, useCompanyBaselineDeleteMutation, useCompanyBaselineCloseMutation } = companyManagement;
+export const { useCompanyViewMutation, useCompanyUpdateMutation, useCompanyWorkplaceViewMutation, useCompanyWorkplaceUpdateMutation, useCompanyWorkplaceSelectMutation, useCompanyWorkplaceInsertMutation, useCompanyWorkplaceDeleteMutation, useCompanyBaselineViewMutation, useCompanyBaselineUpdateMutation, useCompanyBaselineSelectMutation, useCompanyBaselineInsertMutation, useCompanyBaselineDeleteMutation, useCompanyBaselineCloseMutation } = companyManagement;

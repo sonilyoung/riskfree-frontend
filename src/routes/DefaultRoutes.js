@@ -48,13 +48,13 @@ const DefaultRoutes = () => (
             <Route path="/dashboard/director/measure-manage-performance-od-duties-law-third" element={<MPDLawThirdPage />} />
             {/* <Route path="/dashboard/director/security-work-content" element={<SecurityWorkContentPage />} /> */}
             <Route path="/dashboard/employee" element={<DashboardEmployeePage />} />
-            <Route path="/dashboard/employee/improvement-measures/:page" element={<ImprovementMeasuresPage />} />
+            <Route path="/dashboard/employee/improvement-measures/*" element={<ImprovementMeasuresPage />} />
             <Route path="/dashboard/director/notifications/*" element={<NotificationsPage />} />
             <Route path="/dashboard/employee/accident-countermeasures-implementation/:page" element={<CountermeasuresForTheOccurrencePage />} />
             <Route path="/dashboard/employee/order-for-improvement-and-correction-under-related-law/:page" element={<OrdersForImprovementPage />} />
             <Route path="/dashboard/employee/measure-to-manage-performance-od-duties-law/:page" element={<MeasureToManageThePerformancePage />} />
             <Route path="/dashboard/employee/security-work-content" element={<ContentsOfWorkPage />} />
-            <Route path="/dashboard/director/improvement-measures/:page" element={<ImprovementMeasuresPage />} />
+            <Route path="/dashboard/director/improvement-measures/*" element={<ImprovementMeasuresPage />} />
             <Route path="/dashboard/director/notifications/*" element={<NotificationsPage />} />
             <Route path="/dashboard/director/accident-countermeasures-implementation/:page" element={<CountermeasuresForTheOccurrencePage />} />
             <Route path="/dashboard/director/order-for-improvement-and-correction-under-related-law/:page" element={<OrdersForImprovementPage />} />
