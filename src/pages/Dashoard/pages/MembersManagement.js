@@ -113,6 +113,9 @@ const useStyles = makeStyles(() => ({
                 padding: '0',
                 justifyContent: 'flex-start',
                 '& >div': {
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     height: '40px',
                     width: '110px',
                     background: '#c8ddf2',
@@ -316,7 +319,7 @@ const useStyles = makeStyles(() => ({
         // display: 'none !important',
         position: 'absolute',
         zIndex: '1',
-        width: '650px',
+        width: '700px',
         height: 'auto',
         border: '2px solid #018de7',
         borderRadius: '5px',
@@ -404,6 +407,7 @@ const useStyles = makeStyles(() => ({
             width: '30%',
             background: '#c8ddf2',
             borderBottom: '1px solid #fff',
+            justifyContent: 'center'
         },
     },
     dataNest: {
@@ -423,12 +427,13 @@ const useStyles = makeStyles(() => ({
             '& >div': {
                 display: 'flex',
                 alignItems: 'center',
-                width: '162px',
+                width: '179px',
                 height: '44px',
                 '&:nth-of-type(2)': {
                     width: '100px',
                     background: '#bdcbe9',
-                    borderBottom: '1px solid #fff'
+                    borderBottom: '1px solid #fff',
+                    justifyContent: 'center'
                 }
             },
         }
@@ -437,12 +442,14 @@ const useStyles = makeStyles(() => ({
         height: '100%',
         display: 'flex',
         flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'center',
         '&:first-of-type': {
-            width: '45%',
+            width: '40%',
             borderRight: '1px solid #fff',
         },
         '&:last-of-type': {
-            width: '55%',
+            width: '60%',
             '& [class*=dataNest]': {
                 background: '#bdcbe9',
                 borderBottom: '1px solid #fff',
@@ -451,6 +458,9 @@ const useStyles = makeStyles(() => ({
                 }
             },
         },
+        '& [class*=dataNest]': {
+            justifyContent: 'center'
+        }
     },
     popBody: {
         display: 'flex',
@@ -492,6 +502,10 @@ const useStyles = makeStyles(() => ({
         borderRadius: '6px',
         background: '#fff',
         marginRight: '15px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: '#53699A',
     },
 
 }));
@@ -631,7 +645,7 @@ const MembersManagement = () => {
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
                 <Grid item xs={12} className={classes.listTitle}>
                     <Typography variant="headline2" component="div" gutterBottom>
-                        관계법령에 의무이행의 관리상의 조치
+                        가입자 관리
                     </Typography>
                 </Grid>
                 <Grid item xs={12} className={classes.searchBox}>
@@ -662,238 +676,238 @@ const MembersManagement = () => {
                 <Grid item xs={12} className={classes.boxTable}>
                     <div className={classes.tableHead}>
                         <div className={classes.tableRow}>
-                            <div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
+                            <div className={classes.tableData}>No</div>
+                        	<div className={classes.tableData}>|회사명</div>
                         	<div className={classes.tableData}>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
+                                <div>사용자</div>
+                                <div>사업장명</div>
+                                <div>사업자등록번호</div>
+                                <div>업종</div>
+                                <div>규모</div>
+                                <div>ID</div>
+                                <div>권한</div>
+                                <div>담당자명</div>
+                                <div>연락처</div>
                             </div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
+                        	<div className={classes.tableData}>계약금액</div>
+                        	<div className={classes.tableData}>계약기간</div>
+                        	<div className={classes.tableData}>상태</div>
+                        	<div className={classes.tableData}>계약서</div>
+                        	<div className={classes.tableData}>화면</div>
                         </div>
 					</div>
 					<div className={classes.tableBody}>
                         <div className={classes.tableRow}>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
+                        	<div className={classes.tableData}>1</div>
+                        	<div className={classes.tableData}>홍길동소프트주식회사</div>
+                        	<div className={classes.tableData}>본사</div>
+                        	<div className={classes.tableData}>123-12-12345</div>
+                        	<div className={classes.tableData}>제조업</div>
+                        	<div className={classes.tableData}>550인~300인</div>
+                        	<div className={classes.tableData}>MMJM001</div>
+                        	<div className={classes.tableData}>대표이사</div>
+                        	<div className={classes.tableData}>홍길동대표</div>
+                            <div className={classes.tableData}>010-1234-1234</div>
+                            <div className={classes.tableData}>15,000,000</div>
+                            <div className={classes.tableData}>2022-07-18 ~ 2023-07-18</div>
+                            <div className={classes.tableData}>사용</div>
                             <div className={classes.tableData}></div>
                             <div className={classes.tableData}></div>
+                        </div>
+                        <div className={classes.tableRow}>
+                        	<div className={classes.tableData}>2</div>
+                        	<div className={classes.tableData}>홍길동소프트주식회사</div>
+                        	<div className={classes.tableData}>본사</div>
+                        	<div className={classes.tableData}>123-12-12345</div>
+                        	<div className={classes.tableData}>제조업</div>
+                        	<div className={classes.tableData}>550인~300인</div>
+                        	<div className={classes.tableData}>MMJM001</div>
+                        	<div className={classes.tableData}>대표이사</div>
+                        	<div className={classes.tableData}>홍길동대표</div>
+                            <div className={classes.tableData}>010-1234-1234</div>
+                            <div className={classes.tableData}>15,000,000</div>
+                            <div className={classes.tableData}>2022-07-18 ~ 2023-07-18</div>
+                            <div className={classes.tableData}>사용</div>
                             <div className={classes.tableData}></div>
                             <div className={classes.tableData}></div>
+                        </div>
+                        <div className={classes.tableRow}>
+                        	<div className={classes.tableData}>3</div>
+                        	<div className={classes.tableData}>홍길동소프트주식회사</div>
+                        	<div className={classes.tableData}>본사</div>
+                        	<div className={classes.tableData}>123-12-12345</div>
+                        	<div className={classes.tableData}>제조업</div>
+                        	<div className={classes.tableData}>550인~300인</div>
+                        	<div className={classes.tableData}>MMJM001</div>
+                        	<div className={classes.tableData}>대표이사</div>
+                        	<div className={classes.tableData}>홍길동대표</div>
+                            <div className={classes.tableData}>010-1234-1234</div>
+                            <div className={classes.tableData}>15,000,000</div>
+                            <div className={classes.tableData}>2022-07-18 ~ 2023-07-18</div>
+                            <div className={classes.tableData}>사용</div>
+                            <div className={classes.tableData}></div>
+                            <div className={classes.tableData}></div>
+                        </div>
+                        <div className={classes.tableRow}>
+                        	<div className={classes.tableData}>4</div>
+                        	<div className={classes.tableData}>홍길동소프트주식회사</div>
+                        	<div className={classes.tableData}>본사</div>
+                        	<div className={classes.tableData}>123-12-12345</div>
+                        	<div className={classes.tableData}>제조업</div>
+                        	<div className={classes.tableData}>550인~300인</div>
+                        	<div className={classes.tableData}>MMJM001</div>
+                        	<div className={classes.tableData}>대표이사</div>
+                        	<div className={classes.tableData}>홍길동대표</div>
+                            <div className={classes.tableData}>010-1234-1234</div>
+                            <div className={classes.tableData}>15,000,000</div>
+                            <div className={classes.tableData}>2022-07-18 ~ 2023-07-18</div>
+                            <div className={classes.tableData}>사용</div>
+                            <div className={classes.tableData}></div>
+                            <div className={classes.tableData}></div>
+                        </div>
+                        <div className={classes.tableRow}>
+                        	<div className={classes.tableData}>5</div>
+                        	<div className={classes.tableData}>홍길동소프트주식회사</div>
+                        	<div className={classes.tableData}>본사</div>
+                        	<div className={classes.tableData}>123-12-12345</div>
+                        	<div className={classes.tableData}>제조업</div>
+                        	<div className={classes.tableData}>550인~300인</div>
+                        	<div className={classes.tableData}>MMJM001</div>
+                        	<div className={classes.tableData}>대표이사</div>
+                        	<div className={classes.tableData}>홍길동대표</div>
+                            <div className={classes.tableData}>010-1234-1234</div>
+                            <div className={classes.tableData}>15,000,000</div>
+                            <div className={classes.tableData}>2022-07-18 ~ 2023-07-18</div>
+                            <div className={classes.tableData}>사용</div>
+                            <div className={classes.tableData}></div>
+                            <div className={classes.tableData}></div>
+                        </div>
+                        <div className={classes.tableRow}>
+                        	<div className={classes.tableData}>6</div>
+                        	<div className={classes.tableData}>홍길동소프트주식회사</div>
+                        	<div className={classes.tableData}>본사</div>
+                        	<div className={classes.tableData}>123-12-12345</div>
+                        	<div className={classes.tableData}>제조업</div>
+                        	<div className={classes.tableData}>550인~300인</div>
+                        	<div className={classes.tableData}>MMJM001</div>
+                        	<div className={classes.tableData}>대표이사</div>
+                        	<div className={classes.tableData}>홍길동대표</div>
+                            <div className={classes.tableData}>010-1234-1234</div>
+                            <div className={classes.tableData}>15,000,000</div>
+                            <div className={classes.tableData}>2022-07-18 ~ 2023-07-18</div>
+                            <div className={classes.tableData}>사용</div>
                             <div className={classes.tableData}></div>
                             <div className={classes.tableData}></div>
                         </div>
                         <div className={classes.tableRow}>
                         	<div className={classes.tableData}></div>
                         	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
+                        	<div className={classes.tableData}>본사</div>
+                        	<div className={classes.tableData}>123-12-12345</div>
+                        	<div className={classes.tableData}>제조업</div>
+                        	<div className={classes.tableData}>550인~300인</div>
+                        	<div className={classes.tableData}>MMJM001</div>
+                        	<div className={classes.tableData}>대표이사</div>
+                        	<div className={classes.tableData}>홍길동대표</div>
+                            <div className={classes.tableData}>010-1234-1234</div>
                             <div className={classes.tableData}></div>
                             <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                        </div>
-                        <div className={classes.tableRow}>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
+                            <div className={classes.tableData}>사용</div>
                             <div className={classes.tableData}></div>
                             <div className={classes.tableData}></div>
                         </div>
                         <div className={classes.tableRow}>
                         	<div className={classes.tableData}></div>
                         	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
+                        	<div className={classes.tableData}>본사</div>
+                        	<div className={classes.tableData}>123-12-12345</div>
+                        	<div className={classes.tableData}>제조업</div>
+                        	<div className={classes.tableData}>550인~300인</div>
+                        	<div className={classes.tableData}>MMJM001</div>
+                        	<div className={classes.tableData}>대표이사</div>
+                        	<div className={classes.tableData}>홍길동대표</div>
+                            <div className={classes.tableData}>010-1234-1234</div>
                             <div className={classes.tableData}></div>
                             <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                        </div>
-                        <div className={classes.tableRow}>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
+                            <div className={classes.tableData}>사용</div>
                             <div className={classes.tableData}></div>
                             <div className={classes.tableData}></div>
                         </div>
                         <div className={classes.tableRow}>
                         	<div className={classes.tableData}></div>
                         	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                        </div>
-                        <div className={classes.tableRow}>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
+                        	<div className={classes.tableData}>본사</div>
+                        	<div className={classes.tableData}>123-12-12345</div>
+                        	<div className={classes.tableData}>제조업</div>
+                        	<div className={classes.tableData}>550인~300인</div>
+                        	<div className={classes.tableData}>MMJM001</div>
+                        	<div className={classes.tableData}>대표이사</div>
+                        	<div className={classes.tableData}>홍길동대표</div>
+                            <div className={classes.tableData}>010-1234-1234</div>
+                            <div className={classes.tableData}>15,000,000</div>
+                            <div className={classes.tableData}>2022-07-18 ~ 2023-07-18</div>
+                            <div className={classes.tableData}>사용</div>
                             <div className={classes.tableData}></div>
                             <div className={classes.tableData}></div>
                         </div>
                         <div className={classes.tableRow}>
                         	<div className={classes.tableData}></div>
                         	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                        </div>
-                        <div className={classes.tableRow}>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                        </div>
-                        <div className={classes.tableRow}>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                        	<div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
-                            <div className={classes.tableData}></div>
+                        	<div className={classes.tableData}>본사</div>
+                        	<div className={classes.tableData}>123-12-12345</div>
+                        	<div className={classes.tableData}>제조업</div>
+                        	<div className={classes.tableData}>550인~300인</div>
+                        	<div className={classes.tableData}>MMJM001</div>
+                        	<div className={classes.tableData}>대표이사</div>
+                        	<div className={classes.tableData}>홍길동대표</div>
+                            <div className={classes.tableData}>010-1234-1234</div>
+                            <div className={classes.tableData}>15,000,000</div>
+                            <div className={classes.tableData}>2022-07-18 ~ 2023-07-18</div>
+                            <div className={classes.tableData}>사용</div>
                             <div className={classes.tableData}></div>
                             <div className={classes.tableData}></div>
                         </div>
 					</div>
                     <div className={classes.adminPopup + ' regMember'}>
                         <div className={classes.popHeader}>
-                            Popup title
+                            가입자 등록
                         </div>
                         <div className={classes.popupTable}>
                             <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}></div>
+                                <div className={classes.popupData + ' data_head'}>회사명</div>
                                 <div className={classes.popupData}>
                                     <TextField 
                                         variant="outlined" 
-                                        value="이미지를 등록하세요"
+                                        value="회사명을 입력하세요"
                                         className={classes.tableTextField}
                                     />
                                 </div>
                             </div>
                             <div className={classes.popupRow}>
                                 <div className={classes.popupData + ' data_head'}>
-                                    <div className={classes.headNest}></div>
+                                    <div className={classes.headNest}>사용자</div>
                                     <div className={classes.headNest}>
-                                        <div className={classes.dataNest}></div>
-                                        <div className={classes.dataNest}></div>
-                                        <div className={classes.dataNest}></div>
-                                        <div className={classes.dataNest}></div>
-                                        <div className={classes.dataNest}></div>
-                                        <div className={classes.dataNest}></div>
-                                        <div className={classes.dataNest}></div>
+                                        <div className={classes.dataNest}>사업장명</div>
+                                        <div className={classes.dataNest}>사업자등록번호</div>
+                                        <div className={classes.dataNest}>업종</div>
+                                        <div className={classes.dataNest}>규모</div>
+                                        <div className={classes.dataNest}>ID</div>
+                                        <div className={classes.dataNest}>담당자명</div>
+                                        <div className={classes.dataNest}>이메일</div>
                                     </div>
                                 </div>
                                 <div className={classes.popupData}>
                                     <div className={classes.dataNest}>
                                         <TextField 
                                             variant="outlined" 
-                                            value="이미지를 등록하세요"
+                                            value="사업장명을 입력하세요"
                                             className={classes.tableTextField}
                                         />
                                     </div>
                                     <div className={classes.dataNest}>
                                         <TextField 
                                             variant="outlined" 
-                                            value="이미지를 등록하세요"
+                                            value="사업자등록번호를 입력하세요"
                                             className={classes.tableTextField}
                                         />
                                     </div>
@@ -904,7 +918,7 @@ const MembersManagement = () => {
                                             onChange={handleChange}
                                             displayEmpty
                                         >
-                                            <MenuItem value="">이미지를 등록하세요</MenuItem>
+                                            <MenuItem value="">업종을 입력하세요</MenuItem>
                                         </Select>
                                     </div>
                                     <div className={classes.dataNest}>
@@ -914,18 +928,18 @@ const MembersManagement = () => {
                                             onChange={handleChange}
                                             displayEmpty
                                         >
-                                            <MenuItem value="">이미지를 등록하세요</MenuItem>
+                                            <MenuItem value="">규모를 입력하세요</MenuItem>
                                         </Select>
                                     </div>
                                     <div className={classes.dataNest + ' headTitle'}>
                                         <div>
                                             <TextField 
                                                 variant="outlined" 
-                                                value="이미지를"
+                                                value="ID를 입력하세요"
                                                 className={classes.tableTextField}
                                             />
                                         </div>
-                                        <div></div>
+                                        <div>사용자권한</div>
                                         <div>
                                             <Select
                                                 className={classes.tableTextField}
@@ -933,7 +947,7 @@ const MembersManagement = () => {
                                                 onChange={handleChange}
                                                 displayEmpty
                                             >
-                                                <MenuItem value="">이미지를</MenuItem>
+                                                <MenuItem value="">권한을 입력하세요</MenuItem>
                                             </Select>
                                         </div>
                                     </div>
@@ -941,11 +955,11 @@ const MembersManagement = () => {
                                         <div>
                                             <TextField 
                                                 variant="outlined" 
-                                                value=""
+                                                value="담당자명을 입력하세요"
                                                 className={classes.tableTextField}
                                             />
                                         </div>
-                                        <div style={{borderBottom: 'none'}}></div>
+                                        <div style={{borderBottom: 'none'}}>연락처</div>
                                         <div>
                                             <TextField 
                                                 variant="outlined" 
@@ -959,48 +973,48 @@ const MembersManagement = () => {
                                             variant="outlined" 
                                             value=""
                                             className={classes.tableTextField}
-                                            sx={{width: 160}}
+                                            sx={{width: 180}}
                                         />
                                         &nbsp;@&nbsp;
                                         <TextField 
                                             variant="outlined" 
                                             value=""
                                             className={classes.tableTextField}
-                                            sx={{width: 218}}
+                                            sx={{width: 232}}
                                         />
                                     </div>
                                 </div>
                             </div>
                             <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}></div>
+                                <div className={classes.popupData + ' data_head'}>계약금액</div>
                                 <div className={classes.popupData}>
                                     <TextField 
                                         variant="outlined" 
                                         value=""
                                         className={classes.tableTextField}
-                                        sx={{width: 160}}
+                                        sx={{width: 180}}
                                     />
                                     &nbsp;세
                                 </div>
                             </div>
                             <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}></div>
+                                <div className={classes.popupData + ' data_head'}>계약기간</div>
                                 <div className={classes.popupData}>
                                     <TextField 
                                         type="date"
                                         className={classes.tableTextField}
-                                        sx={{width: 160}}
+                                        sx={{width: 180}}
                                     />
                                     &nbsp;‒&nbsp;
                                     <TextField 
                                         type="date"
                                         className={classes.tableTextField}
-                                        sx={{width: 160}}
+                                        sx={{width: 180}}
                                     />
                                 </div>
                             </div>
                             <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}></div>
+                                <div className={classes.popupData + ' data_head'}>상태</div>
                                 <div className={classes.popupData}>
                                     <Select
                                         className={classes.tableTextField}
@@ -1008,97 +1022,70 @@ const MembersManagement = () => {
                                         onChange={handleChange}
                                         displayEmpty
                                     >
-                                        <MenuItem value="">이미지를 등록하세요</MenuItem>
+                                        <MenuItem value="">사용상태를 선택해주세요</MenuItem>
                                     </Select>
                                 </div>
                             </div>
                             <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}></div>
+                                <div className={classes.popupData + ' data_head'}>계약서</div>
                                 <div className={classes.popupData}>
                                     <TextField 
                                         variant="outlined" 
-                                        value="이미지를 등록하세요"
+                                        value="파일을 등록하세요"
                                         className={classes.tableTextField}
-                                        sx={{width: 270}}
+                                        sx={{width: 300}}
                                     />
-                                    <SearchUserButton>Search user</SearchUserButton>
+                                    <SearchUserButton>찾아보기</SearchUserButton>
                                 </div>
                             </div>
                         </div>
                         <div className={classes.popButtons}>
-                            <YesButton>Yes</YesButton>
-                            <NoButton>No</NoButton>
+                            <YesButton>수정</YesButton>
+                            <NoButton>취소</NoButton>
                         </div>
                     </div>
                     <div className={classes.adminPopup + ' infoMember'}>
                         <div className={classes.popHeader}>
-                            Popup title
+                            가입자 정보 수정
                         </div>
                         <div className={classes.popupTable}>
                             <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}></div>
+                                <div className={classes.popupData + ' data_head'}>회사명</div>
                                 <div className={classes.popupData}>
                                     <TextField 
                                         variant="outlined" 
-                                        value="이미지를 등록하세요"
+                                        value="진화소프트"
                                         className={classes.tableTextField}
                                     />
                                 </div>
                             </div>
                             <div className={classes.popupRow}>
                                 <div className={classes.popupData + ' data_head'}>
-                                    <div className={classes.headNest}></div>
+                                    <div className={classes.headNest}>사용자</div>
                                     <div className={classes.headNest}>
-                                        <div className={classes.dataNest}></div>
-                                        <div className={classes.dataNest}></div>
-                                        <div className={classes.dataNest}></div>
-                                        <div className={classes.dataNest}></div>
-                                        <div className={classes.dataNest}></div>
-                                        <div className={classes.dataNest}></div>
-                                        <div className={classes.dataNest}></div>
-                                        <div className={classes.dataNest}></div>
-                                        <div className={classes.dataNest}></div>
+                                        <div className={classes.dataNest}>사업장명</div>
+                                        <div className={classes.dataNest}>사업자등록번호</div>
+                                        <div className={classes.dataNest}>업종</div>
+                                        <div className={classes.dataNest}>규모</div>
+                                        <div className={classes.dataNest}>ID</div>
+                                        <div className={classes.dataNest}>사용자권한</div>
+                                        <div className={classes.dataNest}>담당자명</div>
+                                        <div className={classes.dataNest}>연락처</div>
+                                        <div className={classes.dataNest}>이메일</div>
                                     </div>
                                 </div>
                                 <div className={classes.popupData}>
                                     <div className={classes.dataNest}>
                                         <TextField 
                                             variant="outlined" 
-                                            value="이미지를 등록하세요"
+                                            value="본사"
                                             className={classes.tableTextField}
                                         />
                                     </div>
                                     <div className={classes.dataNest}>
                                         <TextField 
                                             variant="outlined" 
-                                            value="이미지를 등록하세요"
-                                            className={classes.tableTextField}
-                                        />
-                                    </div>
-                                    <div className={classes.dataNest}>
-                                        <Select
-                                            className={classes.tableTextField}
-                                            value={num}
-                                            onChange={handleChange}
-                                            displayEmpty
-                                        >
-                                            <MenuItem value="">이미지를 등록하세요</MenuItem>
-                                        </Select>
-                                    </div>
-                                    <div className={classes.dataNest}>
-                                        <Select
-                                            className={classes.tableTextField}
-                                            value={num}
-                                            onChange={handleChange}
-                                            displayEmpty
-                                        >
-                                            <MenuItem value="">이미지를 등록하세요</MenuItem>
-                                        </Select>
-                                    </div>
-                                    <div className={classes.dataNest}>
-                                        <TextField 
-                                            variant="outlined" 
-                                            value="이미지를 등록하세요"
+                                            value="167-51-11234"
                                             className={classes.tableTextField}
                                         />
                                     </div>
@@ -1109,13 +1096,40 @@ const MembersManagement = () => {
                                             onChange={handleChange}
                                             displayEmpty
                                         >
-                                            <MenuItem value="">이미지를 등록하세요</MenuItem>
+                                            <MenuItem value="">제조업</MenuItem>
+                                        </Select>
+                                    </div>
+                                    <div className={classes.dataNest}>
+                                        <Select
+                                            className={classes.tableTextField}
+                                            value={num}
+                                            onChange={handleChange}
+                                            displayEmpty
+                                        >
+                                            <MenuItem value="">5인 50인</MenuItem>
                                         </Select>
                                     </div>
                                     <div className={classes.dataNest}>
                                         <TextField 
                                             variant="outlined" 
-                                            value="이미지를 등록하세요"
+                                            value="USDEDG93"
+                                            className={classes.tableTextField}
+                                        />
+                                    </div>
+                                    <div className={classes.dataNest}>
+                                        <Select
+                                            className={classes.tableTextField}
+                                            value={num}
+                                            onChange={handleChange}
+                                            displayEmpty
+                                        >
+                                            <MenuItem value="">대표이사</MenuItem>
+                                        </Select>
+                                    </div>
+                                    <div className={classes.dataNest}>
+                                        <TextField 
+                                            variant="outlined" 
+                                            value="김길동 대표"
                                             className={classes.tableTextField}
                                         />
                                     </div>
@@ -1144,14 +1158,14 @@ const MembersManagement = () => {
                                     <div className={classes.dataNest}>
                                         <TextField 
                                             variant="outlined" 
-                                            value="이미지를 등록하세요"
+                                            value="ceo"
                                             className={classes.tableTextField}
                                             sx={{width: 189}}
                                         />
                                         &nbsp;@&nbsp;
                                         <TextField 
                                             variant="outlined" 
-                                            value="이미지를 등록하세요"
+                                            value="Jinhwasoft.co.kr"
                                             className={classes.tableTextField}
                                             sx={{width: 189}}
                                         />
@@ -1159,11 +1173,11 @@ const MembersManagement = () => {
                                 </div>
                             </div>
                             <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}></div>
+                                <div className={classes.popupData + ' data_head'}>계약금액</div>
                                 <div className={classes.popupData}>
                                     <TextField 
                                         variant="outlined" 
-                                        value="이미지를 등록하세요"
+                                        value="5,000,000"
                                         className={classes.tableTextField}
                                         sx={{width: 190}}
                                     />
@@ -1171,25 +1185,25 @@ const MembersManagement = () => {
                                 </div>
                             </div>
                             <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}></div>
+                                <div className={classes.popupData + ' data_head'}>계약기간</div>
                                 <div className={classes.popupData}>
                                     <TextField 
                                         variant="outlined" 
-                                        value="이미지를 등록하세요"
+                                        value="2021-07-18"
                                         className={classes.tableTextField}
                                         sx={{width: 190}}
                                     />
                                     &nbsp;~&nbsp;
                                     <TextField 
                                         variant="outlined" 
-                                        value="이미지를 등록하세요"
+                                        value="2022-07-17"
                                         className={classes.tableTextField}
                                         sx={{width: 190}}
                                     />
                                 </div>
                             </div>
                             <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}></div>
+                                <div className={classes.popupData + ' data_head'}>상태</div>
                                 <div className={classes.popupData}>
                                     <Select
                                         className={classes.tableTextField}
@@ -1198,12 +1212,12 @@ const MembersManagement = () => {
                                         displayEmpty
                                         sx={{width: 250}}
                                     >
-                                        <MenuItem value="">이미지를 등록하세요</MenuItem>
+                                        <MenuItem value="">사용</MenuItem>
                                     </Select>
                                 </div>
                             </div>
                             <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}></div>
+                                <div className={classes.popupData + ' data_head'}>계약서</div>
                                 <div className={classes.popupData}>
                                     <Select
                                         className={classes.tableTextField}
@@ -1212,34 +1226,34 @@ const MembersManagement = () => {
                                         displayEmpty
                                         sx={{width: 250}}
                                     >
-                                        <MenuItem value="">이미지를 등록하세요</MenuItem>
+                                        <MenuItem value="">0</MenuItem>
                                     </Select>
                                 </div>
                             </div>
                         </div>
                         <div className={classes.popButtons}>
-                            <YesButton>Yes</YesButton>
-                            <NoButton>No</NoButton>
+                            <YesButton>수정</YesButton>
+                            <NoButton>취소</NoButton>
                         </div>
                     </div>
                     <div className={classes.adminPopup + ' popSettings'}>
                         <div className={classes.popHeader}>
-                            Popup title
+                            파일업로드
                         </div>
                         <div className={classes.popBody}>
                             <div className={classes.popAlert}>
                                 <Alert
                                     icon={<img src={alertIcon} alt="alert icon" />}
                                     severity="error">
-                                    Alert message
+                                        필수 의무조치내역 양식 엑셀 파일을 업로드 하십시오
                                 </Alert>
                             </div>
-                            <UploadButton1>Upload button 1</UploadButton1>
+                            <UploadButton1>등록된 양식 다운로드</UploadButton1>
                             <div className={classes.popUpload}>
-                                <div className={classes.uploadTitle}>Upload title</div>
+                                <div className={classes.uploadTitle}>양식파일 업로드</div>
                                 <div className={classes.uploadField}>
-                                    <div className={classes.uploadBox}></div>
-                                    <UploadButton2>Upload button 2</UploadButton2>
+                                    <div className={classes.uploadBox}>파일을 이곳에 드래그해 주세요.</div>
+                                    <UploadButton2>파일 업로드</UploadButton2>
                                 </div>
                             </div>
                         </div>
