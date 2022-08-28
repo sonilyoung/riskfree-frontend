@@ -24,6 +24,9 @@ import checkIconOn from '../../../assets/images/ic_chk3_on.png';
 import imgPrev from '../../../assets/images/prw_photo.jpg';
 import noImg from '../../../assets/images/ic_no_image.png';
 
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
 const useStyles = makeStyles(() => ({
     pageWrap: {
         '& >div[class*=box]': {
@@ -84,6 +87,17 @@ const useStyles = makeStyles(() => ({
                 borderTop: 'none'
             }
         },
+        '& [class*=boxRow]:nth-of-type(2) [class*=rowContent]': {
+            '& [class*=rowInfo]:first-of-type': {
+                marginRight: '334px'
+            },
+            '& [class*=rowInfo]:nth-of-type(3)': {
+                marginRight: '66px'
+            },
+            '& [class*=rowTitle]': {
+                borderTop: 'none'
+            }
+        }
     },
     boxRow: {
         display: 'flex',
@@ -137,7 +151,10 @@ const useStyles = makeStyles(() => ({
             width: '160px',
         },
         '& [class*=boxRow]:first-of-type [class*=rowInfo]': {
-            width: '306px'
+            width: '340px'
+        },
+        '& [class*=boxRow]:first-of-type [class*=rowContent] [class*=rowInfo]:nth-of-type(5)': {
+            width: '260px'
         },
         '& [class*=boxRow]:first-of-type [class*=rowContent] [class*=rowInfo]:nth-of-type(3)': {
             width: '520px'
@@ -300,6 +317,12 @@ const WhiteButton = styled(ButtonUnstyled)`
 
 const ACIRegistration = () => {
     const classes = useStyles();
+
+    const [num, setNum] = React.useState('');
+
+    const handleChange = (event) => {
+        setNum(event.target.value);
+    };
 
     return (
         <DefaultLayout>
@@ -526,40 +549,15 @@ const ACIRegistration = () => {
                                 </div>
                                 <div className={classes.rowTitle}>사고등급</div>
                                 <div className={classes.rowInfo}>
-                                    <FormControl className={classes.searchRadio}>
-                                        <RadioGroup row>
-                                            <FormControlLabel
-                                                value="1급"
-                                                label="1급"
-                                                control={
-                                                    <Radio
-                                                        icon={<img src={radioIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value="2급"
-                                                label="2급"
-                                                control={
-                                                    <Radio
-                                                        icon={<img src={radioIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value="3급"
-                                                label="3급"
-                                                control={
-                                                    <Radio
-                                                        icon={<img src={radioIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                                    />
-                                                }
-                                            />
-                                        </RadioGroup>
-                                    </FormControl>
+                                    <Select
+                                        sx={{width: 100}}
+                                        className={classes.selectMenu}
+                                        value={num}
+                                        onChange={handleChange}
+                                        displayEmpty
+                                    >
+                                        <MenuItem value="">2급</MenuItem>
+                                    </Select>
                                 </div>
                                 <div className={classes.rowTitle}>발생장소</div>
                                 <div className={classes.rowInfo}>
@@ -567,7 +565,6 @@ const ACIRegistration = () => {
                                         id="standard-basic"
                                         variant="outlined"
                                         value="3층 중앙 계단"
-                                        sx={{ width: 200 }}
                                         className={classes.selectMenu}
                                     />
                                 </div>
@@ -584,6 +581,48 @@ const ACIRegistration = () => {
                                         sx={{ width: 140 }}
                                         className={classes.selectMenu}
                                     />
+                                </div>
+                                <div className={classes.rowTitle}>사고구분</div>
+                                <div className={classes.rowInfo}>
+                                    <Select
+                                        sx={{width: 100}}
+                                        className={classes.selectMenu}
+                                        value={num}
+                                        onChange={handleChange}
+                                        displayEmpty
+                                    >
+                                        <MenuItem value="">자사</MenuItem>
+                                    </Select>
+                                </div>
+                                <div className={classes.rowTitle}>사고분류</div>
+                                <div className={classes.rowInfo}>
+                                    사망&nbsp;
+                                    <TextField
+                                        id="standard-basic"
+                                        variant="outlined"
+                                        value=""
+                                        sx={{ width: 80 }}
+                                        className={classes.selectMenu}
+                                    />
+                                    명&ensp;&ensp;
+                                    동일사고유형&nbsp;
+                                    <TextField
+                                        id="standard-basic"
+                                        variant="outlined"
+                                        value=""
+                                        sx={{ width: 80 }}
+                                        className={classes.selectMenu}
+                                    />
+                                    명&ensp;&ensp;
+                                    직업성질환&nbsp;
+                                    <TextField
+                                        id="standard-basic"
+                                        variant="outlined"
+                                        value=""
+                                        sx={{ width: 80 }}
+                                        className={classes.selectMenu}
+                                    />
+                                    명
                                 </div>
                             </div>
                         </div>

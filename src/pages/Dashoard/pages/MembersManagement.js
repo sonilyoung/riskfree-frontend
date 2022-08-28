@@ -670,7 +670,7 @@ const MembersManagement = () => {
                     </div>
                     <div className={classes.searchButtons}>
                         <SearchButton>조회</SearchButton>
-                        <RegisterButton sx={{marginLeft: '10px'}}>조회</RegisterButton>
+                        <RegisterButton sx={{marginLeft: '10px'}}>등록</RegisterButton>
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.boxTable}>

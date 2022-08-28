@@ -24,6 +24,9 @@ import checkIconOn from '../../../assets/images/ic_chk3_on.png';
 import imgPrev from '../../../assets/images/prw_photo.jpg';
 import noImg from '../../../assets/images/ic_no_image.png';
 
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
 const useStyles = makeStyles(() => ({
     pageWrap: {
         '& >div[class*=box]': {
@@ -52,10 +55,16 @@ const useStyles = makeStyles(() => ({
             width: 'auto'
         },
         '& [class*=boxRow]:last-of-type [class*=rowInfo]': {
-            width: '100%',
+            width: 'auto',
+            '&:first-of-type': {
+                width: '672px'
+            }
         },
-        '& [class*=boxContent] [class*=boxRow]:first-of-type]': {
+        '& [class*=boxContent] [class*=boxRow]:first-of-type': {
             height: '60px'
+        },
+        '& [class*=boxContent] [class*=boxRow]:nth-of-type(2) [class*=rowTitle]': {
+            borderTop: 'none'
         }
     },
     boxTitle: {
@@ -271,6 +280,12 @@ const WhiteButton = styled(ButtonUnstyled)`
 const OICRegistration = () => {
     const classes = useStyles();
 
+    const [num, setNum] = React.useState('');
+
+    const handleChange = (event) => {
+        setNum(event.target.value);
+    };
+
     return (
         <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
@@ -390,7 +405,37 @@ const OICRegistration = () => {
                                         multiline
                                         rows={4}
                                         defaultValue="작업 감독자 미배치로 인한 지적"
-                                    />                      
+                                    />                   
+                                </div>
+                                <div className={classes.rowTitle}>구분</div>
+                                <div className={classes.rowInfo}>
+                                    <Select
+                                        sx={{width: 180}}
+                                        className={classes.selectMenu}
+                                        value={num}
+                                        onChange={handleChange}
+                                        displayEmpty
+                                    >
+                                        <MenuItem value="">개선</MenuItem>
+                                    </Select>                  
+                                </div>
+                                <div className={classes.rowTitle}>지적일자</div>
+                                <div className={classes.rowInfo}>
+                                    <TextField
+                                        sx={{width: 180}}
+                                        id="date"
+                                        className={classes.selectMenu}
+                                        type="date"
+                                    />                  
+                                </div>
+                                <div className={classes.rowTitle}>완료요청일</div>
+                                <div className={classes.rowInfo}>
+                                    <TextField
+                                        sx={{width: 180}}
+                                        id="date"
+                                        className={classes.selectMenu}
+                                        type="date"
+                                    />                  
                                 </div>
                             </div>
                         </div>
