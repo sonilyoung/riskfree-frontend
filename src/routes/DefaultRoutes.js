@@ -9,7 +9,7 @@ import { CountermeasuresForTheOccurrencePage } from '../pages/Dashboard/pages/Em
 import { OrdersForImprovementPage } from '../pages/Dashboard/pages/Employee/pages/OrdersForImprovement'
 import { MeasureToManageThePerformancePage } from '../pages/Dashboard/pages/Employee/pages/MeasureToManageThePerformance'
 import { ContentsOfWorkPage } from '../pages/Dashboard/pages/Employee/pages/ContentsOfWork';
-import { IMStatusPage, IMRegistrationPage, NoticeListPage, NoticeDetailsPage, NoticeRegistrationPage, ACIStatusPage, ACIRegistrationPage, OICLawPage, OICRegistrationPage, MPDLawFirstPage, MPDLawSecondPage, MPDLawThirdPage, SecurityWorkContentPage } from '../pages/Dashoard/pages';
+import { IMStatusPage, IMRegistrationPage, NoticeListPage, NoticeDetailsPage, NoticeRegistrationPage, ACIStatusPage, ACIRegistrationPage, OICLawPage, OICRegistrationPage, MPDLawFirstPage, MPDLawSecondPage, MPDLawThirdPage, SecurityWorkContentPage, MembersManagementPage } from '../pages/Dashoard/pages';
 import { ForgottenPasswordPage } from '../pages/Login/pages/ForgottenPassword';
 import { UserTokenService } from '../services/core/User';
 

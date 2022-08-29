@@ -11,3 +11,4 @@ export { default as MPDLawFirstPage } from './MPDLawFirst';
 export { default as MPDLawSecondPage } from './MPDLawSecond';
 export { default as MPDLawThirdPage } from './MPDLawThird';
 export { default as SecurityWorkContentPage } from './SecurityWorkContent';
+export { default as MembersManagementPage } from './MembersManagement';

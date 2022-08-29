@@ -256,7 +256,7 @@ const useStyles = makeStyles(() => ({
         top: '-20px',
         left: '-140px',
         display: 'flex',
-        // display: 'none !important'
+        display: 'none !important'
     },
     chartPopList: {
         display: 'flex',
@@ -1015,6 +1015,366 @@ const useStyles = makeStyles(() => ({
         color: "white",
         '&:visited': {
             color: '#ffffff'
+        }
+    },
+    headerPopup: {
+        // display: 'none !important',
+        position: 'absolute',
+        top: '0px',
+        left: '0px',
+        width: '397px',
+        height: '700px',
+        border: '2px solid #018de7',
+        borderRadius: '5px',
+        background: '#eeeff7',
+        overflow: 'hidden',
+        '&.user_popup': {
+            top: '60px',
+            left: '5px',
+            height: '535px'
+        },
+        '&.settings_popup': {
+            top: '65px',
+            left: '-80px'
+        },
+        '& [class*=popupAccord]': {
+            background: 'transparent',
+            boxShadow: 'none',
+            '& .MuiButtonBase-root': {
+                padding: '0',
+            },
+            '& .MuiAccordionDetails-root': {
+                padding: '0',
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'space-between',
+                '& >span': {
+                    height: '40px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    color: '#018de7'
+                },
+                '& [class*=popupTextField]': {
+                    marginBottom: '0 !important'
+                }
+
+            },
+            '& p': {
+                fontSize: '16px'
+            },
+            '& +span': {
+                margin: '0',
+                padding: '0'
+            }
+        },
+        '& [class*=popupLink]': {
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            color: '#333',
+            width: '100%',
+            padding: '16px 0',
+            boxSizing: 'border-box',
+            borderBottom: '1px solid #c1c6d0',
+        },
+        '& .MuiAlert-message': {
+            fontSize: '14px',
+            letterSpacing: '-1.6px',
+            overflow: 'visible'
+        }
+    },
+    headerPopList: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        width: '100%',
+        padding: '24px',
+        boxSizing: 'border-box',
+        '& >span': {
+            position: 'relative',
+            display: 'flex',
+            justifyContent: 'center',
+            width: '100%',
+            borderTop: '1px solid #c1c6d0',
+            marginTop: '9px',
+            paddingTop: '19px',
+            '& >span': {
+                position: 'absolute',
+                top: '-15px',
+                background: '#eeeff7',
+                padding: '0 10px',
+                fontWeight: '700'
+            }
+        }
+    },
+    headerPopFooter: {
+        position: 'absolute',
+        bottom: '0px',
+        height: '52px',
+        width: '100%'
+    },
+    settingPopup: {
+
+    },
+    popupTextField: {
+        marginBottom: '10px !important',
+        overflow: 'hidden',
+        height: '40px',
+        '& >div': {
+            background: '#fff',
+            fontSize: '16px',
+        },
+        '& input': {
+            fontSize: '16px',
+            height: '40px',
+            boxSizing: 'border-box',
+        }
+    },
+    preFootPop: {
+        width: '100%',
+        display: 'flex',
+        flexWrap: 'wrap',
+        '& >div': {
+            '&:first-of-type': {
+                width: '194px',
+                marginRight: '10px',
+                border: '1px solid #bbbdc0',
+                borderRadius: '5px',
+                background: '#fff',
+                boxSizing: 'border-box',
+                padding: '10px'
+            },
+            '&:last-of-type': {
+                width: '145px',
+                '& button': {
+                    marginBottom: '10px'
+                },
+            }
+        }
+    },
+    popupAccord: {
+        width: '350px',
+        '& .MuiAccordionDetails-root': {
+            
+        },
+    },
+    popupLink: {
+        '& >img': {
+            transform: 'rotate(-90deg)'
+        }
+    },
+    popupPrompt: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        padding: '20px',
+        boxSizing: 'border-box',
+        border: '1px solid #bbbdc0',
+        background: '#fff',
+        borderRadius: '5px',
+        marginTop: '20px',
+        marginBottom: '25px',
+        width: '100%',
+        height: '130px',
+        '& >div': {
+            width: '75%',
+            textAlign: 'center',
+            marginBottom: '10px'
+        },
+        '& button': {
+            marginLeft: '10px'
+        }
+    },
+    uploadPopup: {
+        position: 'absolute',
+        zIndex: '1000',
+        top: '0px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '400px',
+        height: '400px',
+        background: '#fff',
+        borderRadius: '30px',
+        padding: '40px',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexWrap: 'wrap',
+        display: 'none !important',
+        '& >span': {
+            width: '20%',
+            height: '20px',
+            borderBottom: '1px solid #bdcbe9',
+            transform: 'translateY(-5px)',
+            '&:nth-of-type(2)': {
+                width: '60%',
+                border: 'none',
+                padding: '0 10px',
+                boxSizing: 'border-box',
+                textAlign: 'center',
+                transform: 'unset',
+            }
+        },
+        '& >button': {
+            position: 'absolute',
+            top: '0px',
+            right: '-65px'
+        }
+    },
+    uploadInfo: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        height: '50%',
+        '& >*': {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        '& img': {
+            width: '30px',
+            height: '30px',
+        }
+    },
+    uploadSearch: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        '& button:first-of-type': {
+            marginLeft: '10px'
+        }
+    },
+    dropMenu: {
+        '& .MuiOutlinedInput-root': {
+            border: '1px solid #777b91',
+            background: '#26283d',
+            color: '#ddd',
+            fontSize: '17px',
+            '& svg': {
+                color: '#ddd'
+            }
+        }
+    },
+    userTab: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        marginBottom: '30px',
+        '& >div': {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        }
+    },
+    userImage: {
+        width: '60px',
+        height: '60px',
+        borderRadius: '50%',
+        border: '4px solid #fff',
+        overflow: 'hidden',
+        background: '#C3C4C9',
+        marginBottom: '20px',
+        boxShadow: '1px 2px 8px -2px rgb(0 0 0 / 40%)',
+        '& img': {
+            width: '100%',
+            height: '100%'
+        }
+    },
+    userName: {
+        width: '100%',
+        marginBottom: '10px',
+        fontWeight: '700'
+    },
+    userInfo: {
+        width: '100%'
+    },
+    uploadedPopup: {
+        position: 'absolute',
+        zIndex: '1000',
+        top: '120px',
+        right: '440px',
+        width: '140px',
+        height: '240px',
+        background: '#fff',
+        borderRadius: '30px',
+        padding: '25px 25px',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignContent: 'space-between',
+        display: 'none !important',
+        '& button': {
+            marginTop: '15px'
+        }
+    },
+    searchRadio: {
+        '& [role=radiogroup]': {
+            flexWrap: 'wrap',
+        },
+        '& [class*=body1]': {
+            fontSize: '16px'
+        },
+        '& input': {
+            cursor: 'default'
+        },
+        '& label': {
+            marginRight: '10px'
+        }
+    },
+    boxTable: {
+        borderRadius: '6px',
+        overflow: 'hidden',
+        boxShadow: '0 0 12px rgb(189 203 203 / 50%)',
+        background: '#fff',
+        padding: '34px',
+        '& *': {
+            boxSizing: 'border-box',
+            letterSpacing: '-1.08px',
+            wordBreak: 'keep-all'
+        }
+    },
+    tableHead: {
+        background: '#bdcbe9',
+        '& [class*=tableData]': {
+            borderRight: '1px solid #fff',
+            '&:last-of-type': {
+                borderRight: 'none',
+            },
+        }
+    },
+    tableBody: {
+        width: '100%',
+        '& [class*=tableData]': {
+            borderRight: '1px solid #bdcbe9',
+            borderBottom: '1px solid #bdcbe9',
+            '&:first-of-type': {
+                background: '#EFF2F7'
+            }
+        },
+        '& [class*=tableRow]': {
+            transition: 'background .2s',
+            '&:hover': {
+                '& [class*=tableData]': {
+                    background: '#e1e8f7'
+                }
+            }
+        }
+    },
+    tableRow: {
+        display: 'flex',
+    },
+    tableData: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '15px 10px',
+        width: '100%',
+        '&:last-of-type': {
+            borderRight: 'none',
+        },
+        '&:first-of-type': {
+            width: '150%'
         }
     }
 }));

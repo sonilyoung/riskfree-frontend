@@ -24,8 +24,7 @@ import { styled } from '@mui/system';
 const useStyles = makeStyles(() => ({
     pageWrap: {
         display: 'flex',
-        justifyContent: 'center',
-        minWidth: '1900px !important',
+        justifyContent: 'center'
     },
     loginWrap: {
         display: 'flex',

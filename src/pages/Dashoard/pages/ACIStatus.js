@@ -59,8 +59,24 @@ const useStyles = makeStyles(() => ({
             }
         },
         '& >div:first-of-type [class*=searchRadio]': {
-            width: '640px',
-        }
+            width: '610px',
+        },
+        '& >div:first-of-type [class*=searchInfo] >div': {
+            '&:nth-of-type(2) >div +div, &:nth-of-type(4) >div +div': {
+                border: '1px solid rgba(0, 0, 0, 0.23)',
+                borderRadius: '6px',
+            },
+            '&:nth-of-type(4)': {
+                marginLeft: '74px',
+                width: '437px',
+            },
+        },
+        '& >div:last-of-type [class*=searchInfo] >div': {
+            '&:nth-of-type(4) >div +div': {
+                border: '1px solid rgba(0, 0, 0, 0.23)',
+                borderRadius: '6px',
+            },
+        },
     },
     searchRadio: {
         '& [class*=body1]': {
@@ -81,9 +97,9 @@ const useStyles = makeStyles(() => ({
             display: 'flex',
             alignItems: 'center',
             '&:not(&:first-of-type)': {
-                marginLeft: '58px'
-            }
-        }
+                marginLeft: '30px'
+            },
+        },
     },
     infoTitle: {
         minWidth: '65px',
@@ -420,6 +436,43 @@ const ACIStatus = () => {
                                     >
                                         <MenuItem value="">2급</MenuItem>
                                     </Select>
+                            </div>
+                            <div>
+                                <div className={classes.infoTitle}>사고유형</div>
+                                <FormControl className={classes.searchRadio}>
+                                    <RadioGroup row>
+                                        <FormControlLabel
+                                            value="사망"
+                                            label="사망"
+                                            control={
+                                                <Checkbox 
+                                                    icon={<img src={checkIcon} alt="check icon" />}
+                                                    checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                />
+                                            } 
+                                        />
+                                        <FormControlLabel
+                                            value="동일사고유형"
+                                            label="동일사고유형"
+                                            control={
+                                                <Checkbox 
+                                                    icon={<img src={checkIcon} alt="check icon" />}
+                                                    checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                />
+                                            } 
+                                        />
+                                        <FormControlLabel
+                                            value="직업성질환"
+                                            label="직업성질환"
+                                            control={
+                                                <Checkbox 
+                                                    icon={<img src={checkIcon} alt="check icon" />}
+                                                    checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                />
+                                            } 
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
                             </div>
                         </div>
                     </div>
