@@ -293,15 +293,12 @@ function List() {
     const handleFetchList = async () => {
         const response = await noticesSelect({
             "col": select,
-            "companyId": null,
             "countPerPage": 10,
-            "noticeId": null,
             "pageNum": page,
             "param": query
         })
         setNoticesList(response)
     }
-
     const handleSearch = () => {
         handleFetchList()
     }
@@ -313,9 +310,7 @@ function List() {
     const handleFetchListForCount = async () => {
         const response = await noticesSelect({
             "col": "all",
-            "companyId": null,
             "countPerPage": null,
-            "noticeId": null,
             "pageNum": null,
             "param": null
         })
@@ -381,11 +376,11 @@ function List() {
                     <>
                         {noticesList?.data.RET_DATA.map((notice, index) =>
                         (
-                            <div className={classes.tableBody}>
+                            <div className={classes.tableBody} onDoubleClick={() => navigate(`/dashboard/director/notifications/view/${notice.noticeId}`)}>
                                 <div className={classes.tableRow}>{index + 1}</div>
                                 <div className={classes.tableRow}>
                                     {notice.importCd === HOT && <span className={classes.slideLabelHot}>HOT</span>}
-                                    <Link to={`/dashboard/director/notifications/view/${notice.noticeId}`} className={classes.linkBtn}>{notice.title}</Link>
+                                    {notice.title}
                                 </div>
                                 <div className={classes.tableRow}>
                                     {notice.attachId === 0 && <img src={icoFile} alt="file icon" />}

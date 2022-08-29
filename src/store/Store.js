@@ -7,7 +7,7 @@ import { noticesManagement } from '../hooks/api/NoticesManagement/NoticesManagem
 import { improvementsManagement } from '../hooks/api/ImprovementsManagement/ImprovementsManagement';
 import { accidentManagement } from '../hooks/api/AccidentManagement/AccidentManagement';
 import { constructionManagement } from '../hooks/api/ConstructionManagement/ConstructionManagement';
-import { companyManagement } from '../hooks/api/CompanyManagement/CompanyManagement';
+import { mainManagement } from '../hooks/api/MainManagement/MainManagement';
 import { subscribersManagement } from '../hooks/api/SubscribersManagement/SubscribersManagement';
 import { commCodeManagement } from '../hooks/api/CommCodeManagement/CommCodeManagement';
 import { lawImprovementsManagement } from '../hooks/api/LawImprovementsManagement/LawImprovementsManagement';
@@ -21,7 +21,7 @@ export const store = configureStore({
         [improvementsManagement.reducerPath]: improvementsManagement.reducer,
         [accidentManagement.reducerPath]: accidentManagement.reducer,
         [constructionManagement.reducerPath]: constructionManagement.reducer,
-        [companyManagement.reducerPath]: companyManagement.reducer,
+        [mainManagement.reducerPath]: mainManagement.reducer,
         [subscribersManagement.reducerPath]: subscribersManagement.reducer,
         [commCodeManagement.reducerPath]: commCodeManagement.reducer,
         [lawImprovementsManagement.reducerPath]: lawImprovementsManagement.reducer,
@@ -34,7 +34,7 @@ export const store = configureStore({
         .concat(improvementsManagement.middleware)
         .concat(accidentManagement.middleware)
         .concat(constructionManagement.middleware)
-        .concat(companyManagement.middleware)
+        .concat(mainManagement.middleware)
         .concat(subscribersManagement.middleware)
         .concat(commCodeManagement.middleware)
         .concat(lawImprovementsManagement.middleware)

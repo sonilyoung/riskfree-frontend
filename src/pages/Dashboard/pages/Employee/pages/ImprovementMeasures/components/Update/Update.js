@@ -25,7 +25,7 @@ import radioIconOn from '../../../../../../../../assets/images/ic_radio_on.png';
 import imgPrev from '../../../../../../../../assets/images/prw_photo.jpg';
 import imgPrev2 from '../../../../../../../../assets/images/prw_photo2.jpg';
 
-import { useCompanyWorkplaceSelectMutation } from '../../../../../../../../hooks/api/CompanyManagement/CompanyManagement';
+import { useGetWorkplaceListMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
 import { useImprovementViewMutation, useImprovementUpdateMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement';
 
 
@@ -285,7 +285,7 @@ const Registration = () => {
     const classes = useStyles();
     const navigate = useNavigate()
     const { updateid } = useParams()
-    const [companyWorkplaceSelect] = useCompanyWorkplaceSelectMutation()
+    const [getWorkplaceList] = useGetWorkplaceListMutation()
     const [improvementUpdate] = useImprovementUpdateMutation()
     const [improvementView] = useImprovementViewMutation()
     const [workplaces, setWorkplaces] = useState([])
@@ -322,12 +322,12 @@ const Registration = () => {
     }
 
     const fetchComapanyWorkplace = async () => {
-        const response = await companyWorkplaceSelect({})
+        const response = await getWorkplaceList({})
         setWorkplaces(response.data.RET_DATA)
     }
 
     const fetchImprovementView = async () => {
-        const response = await improvementView({ "improveId": updateid })
+        const response = await improvementView(updateid)
         setImprovement(response.data.RET_DATA)
     }
 

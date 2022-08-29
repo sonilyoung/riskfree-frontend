@@ -1353,9 +1353,7 @@ const Employee = () => {
     const handleFetchList = async () => {
         const response = await noticesSelect({
             "col": null,
-            "companyId": null,
             "countPerPage": null,
-            "noticeId": null,
             "pageNum": null,
             "param": null
         })

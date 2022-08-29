@@ -143,9 +143,7 @@ const View = (props) => {
     }
 
     const handleFetch = () => {
-        noticesView({
-            "noticeId": id
-        })
+        noticesView(id)
             .then((response) => setNotice(response))
     }
 
@@ -154,9 +152,7 @@ const View = (props) => {
     }, [])
 
     const handleDelete = () => {
-        noticesDelete({
-            "noticeId": id
-        })
+        noticesDelete(id)
             .then(() => navigate("/dashboard/director/notifications/list"))
     }
 

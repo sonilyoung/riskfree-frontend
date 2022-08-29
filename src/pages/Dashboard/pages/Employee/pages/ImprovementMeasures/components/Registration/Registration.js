@@ -25,7 +25,7 @@ import radioIconOn from '../../../../../../../../assets/images/ic_radio_on.png';
 import imgPrev from '../../../../../../../../assets/images/prw_photo.jpg';
 import imgPrev2 from '../../../../../../../../assets/images/prw_photo2.jpg';
 
-import { useCompanyWorkplaceSelectMutation } from '../../../../../../../../hooks/api/CompanyManagement/CompanyManagement';
+import { useGetWorkplaceListMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
 import { useImprovementInsertMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement';
 
 
@@ -284,7 +284,7 @@ const WhiteButton = styled(ButtonUnstyled)`
 const Registration = () => {
     const classes = useStyles();
     const navigate = useNavigate()
-    const [companyWorkplaceSelect] = useCompanyWorkplaceSelectMutation()
+    const [getWorkplaceList] = useGetWorkplaceListMutation()
     const [improvementInsert] = useImprovementInsertMutation()
     const [workplaces, setWorkplaces] = useState([])
     const [workplaceSelect, setWorkplaceSelect] = useState("")
@@ -320,7 +320,7 @@ const Registration = () => {
     }
 
     const fetchComapanyWorkplace = async () => {
-        const response = await companyWorkplaceSelect({})
+        const response = await getWorkplaceList({})
         setWorkplaces(response.data.RET_DATA)
     }
 

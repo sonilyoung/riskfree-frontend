@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from "react-router-dom"
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
+import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
-
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -16,17 +14,18 @@ import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
 
 import { makeStyles } from '@mui/styles';
+
 import { DefaultLayout } from '../../../../../../../../layouts/Default';
-
-
 
 import radioIcon from '../../../../../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../../../../../assets/images/ic_radio_on.png';
 
+import checkIcon from '../../../../../../../../assets/images/ic_chk3.png';
+import checkIconOn from '../../../../../../../../assets/images/ic_chk3_on.png';
 import imgPrev from '../../../../../../../../assets/images/prw_photo.jpg';
-import imgPrev2 from '../../../../../../../../assets/images/prw_photo2.jpg';
+import noImg from '../../../../../../../../assets/images/ic_no_image.png';
 
-import { useImprovementViewMutation, useImprovementDeleteMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement'
+import { useAccidentViewMutation, useAccidentDeleteMutation } from '../../../../../../../../hooks/api/AccidentManagement/AccidentManagement';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -43,29 +42,22 @@ const useStyles = makeStyles(() => ({
         marginBottom: '20px !important',
         color: '#111',
     },
-    boxFirst: {
+    boxReception: {
         display: 'flex',
         marginBottom: '16px !important',
+        height: '160px',
         '& [class*=boxRow]:first-of-type [class*=rowInfo]:first-of-type': {
-            width: '580px',
+            width: '160px',
         },
-        '& [class*=boxRow]:first-of-type [class*=rowContent] [class*=rowTitle]': {
-            width: '110px',
+        '& [class*=boxRow]:first-of-type [class*=rowInfo]': {
+            width: '306px'
         },
-        '& [class*=boxRow]:nth-of-type(2) [class*=rowInfo]': {
-            width: '100%'
+        '& [class*=boxRow]:first-of-type [class*=rowInfo]:last-of-type': {
+            width: 'auto'
         },
         '& [class*=boxRow]:last-of-type [class*=rowInfo]': {
-            width: '240px',
-            '&:last-of-type': {
-                width: '560px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                '& .Mui-disabled input': {
-                    '-webkit-text-fill-color': '#333'
-                }
-            }
-        }
+            width: '100%',
+        },
     },
     boxTitle: {
         display: 'flex',
@@ -88,15 +80,11 @@ const useStyles = makeStyles(() => ({
         flexWrap: 'wrap',
         width: 'calc(100% - 100px)',
         '& [class*=boxRow]:first-of-type': {
+            height: '60px',
             '& [class*=rowContent]': {
                 borderTop: 'none'
             },
             '& [class*=rowTitle]': {
-                borderTop: 'none'
-            }
-        },
-        '& [class*=boxRow]:last-of-type': {
-            '& [class*=rowTitle]:not(:first-of-type)': {
                 borderTop: 'none'
             }
         },
@@ -140,11 +128,32 @@ const useStyles = makeStyles(() => ({
         padding: '10px',
         boxSizing: 'border-box',
     },
-    boxSecond: {
-        '& [class*=boxRow]:last-of-type': {
-            height: 'auto'
+    boxRegistration: {
+        '& [class*=boxRow]': {
+            height: '100px',
+            '&:nth-of-type(2)': {
+                height: '60px'
+            },
+            '&:last-of-type': {
+                height: 'auto'
+            },
         },
-        '& [class*=boxRow] [class*=rowContent] [class*=rowInfo]': {
+        '& [class*=boxRow]:first-of-type [class*=rowInfo]:first-of-type': {
+            width: '160px',
+        },
+        '& [class*=boxRow]:first-of-type [class*=rowInfo]': {
+            width: '306px'
+        },
+        '& [class*=boxRow]:first-of-type [class*=rowContent] [class*=rowInfo]:nth-of-type(3)': {
+            width: '520px'
+        },
+        '& [class*=boxRow]:nth-of-type(3) [class*=rowContent] [class*=rowInfo]:first-of-type': {
+            width: '100%'
+        },
+        '& [class*=boxRow]:nth-of-type(3) [class*=rowContent] [class*=rowInfo]:last-of-type': {
+            paddingLeft: '0px'
+        },
+        '& [class*=boxRow]:nth-of-type(4) [class*=rowContent] [class*=rowInfo]': {
             width: '100%'
         },
         '& [class*=boxRow]:last-of-type [class*=rowContent]': {
@@ -227,6 +236,20 @@ const useStyles = makeStyles(() => ({
 
 }));
 
+const AccidentReportButton = styled(ButtonUnstyled)`
+    width: 90px;
+    height: 80px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #6e7884;
+    background: #e8ebf4;
+    transition: background .2s;
+    cursor: pointer;
+    &:hover {
+        background: #d2dcf3;
+    }
+`;
+
 const UploadButton = styled(ButtonUnstyled)`
     width: 140px;
     height: 40px;
@@ -280,132 +303,157 @@ const WhiteButton = styled(ButtonUnstyled)`
 }
 `;
 
-const Registration = () => {
+const View = () => {
     const classes = useStyles();
     const navigate = useNavigate()
     const { id } = useParams()
-    const [improvementView] = useImprovementViewMutation()
-    const [improvemetnDelete] = useImprovementDeleteMutation()
-    const [improvement, setImprovement] = useState({})
-    const [num, setNum] = React.useState('');
-
-    const handleChange = (event) => {
-        setNum(event.target.value);
-    };
+    const [accidentView] = useAccidentViewMutation()
+    const [accidentDelete] = useAccidentDeleteMutation()
+    const [accident, setAccident] = useState({})
 
     const handleRedirect = () => {
-        navigate("/dashboard/employee/improvement-measures/list")
+        navigate("/dashboard/employee/accident-countermeasures-implementation/list")
     }
 
-    const handleFetchView = async () => {
-        const response = await improvementView(id)
-        setImprovement(response.data.RET_DATA)
+    const fetchAccidentView = async () => {
+        const response = await accidentView(id)
+        setAccident(response.data.RET_DATA)
     }
-
-    const handleDeleteImprovement = () => {
-        improvemetnDelete(id)
-            .then(() => handleRedirect())
-    }
+    console.log(accident)
 
     useEffect(() => {
-        handleFetchView()
+        fetchAccidentView()
     }, [])
 
-    console.log(improvement)
     return (
         <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
                 <Grid item xs={12} className={classes.listTitle}>
                     <Typography variant="headline2" component="div" gutterBottom>
-                        개선조치 현황
+                        재해발생 및 방지대책 등 이행현황
                     </Typography>
                 </Grid>
-                <Grid item xs={12} className={classes.boxFirst}>
-                    <div className={classes.boxTitle}>
-                        <span>개선.조치</span>
-                        <span>접수</span>
-                    </div>
+                <Grid item xs={12} className={classes.boxReception}>
+                    <div className={classes.boxTitle}>사고접수</div>
                     <div className={classes.boxContent}>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>사업장</div>
+                            <div className={classes.rowTitle}>접수일자</div>
                             <div className={classes.rowContent}>
+                                <div className={classes.rowInfo}>{accident && accident.recvDate}</div>
+                                <div className={classes.rowTitle}>접수자</div>
+                                <div className={classes.rowInfo}>{accident && accident.recvUserName}</div>
+                                <div className={classes.rowTitle}>접수형태</div>
                                 <div className={classes.rowInfo}>
-                                    {improvement && improvement.workplaceName}
+                                    {accident && accident.recvForm}
                                 </div>
-                                <div className={classes.rowTitle}>개선조치 NO</div>
+                                <div className={classes.rowTitle}>접수유형</div>
                                 <div className={classes.rowInfo}>
-                                    {improvement && improvement.improveNo}
+                                    {(accident && accident.accType001) || (accident && accident.accType002) || (accident && accident.accType003) || (accident && accident.accType004) || (accident && accident.accType005) || (accident && accident.accType006)}
                                 </div>
                             </div>
                         </div>
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>
-                                <span>개선.조치 </span>
+                                <span>사고조치 </span>
                                 <span>내용</span>
                             </div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    {improvement && improvement.improveCn}
-                                </div>
-                            </div>
-                        </div>
-                        <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>요청일자</div>
-                            <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>
-                                    {improvement && improvement.reqDate}
-                                </div>
-                                <div className={classes.rowTitle}>요청자</div>
-                                <div className={classes.rowInfo}>
-                                    {improvement && improvement.reqUserName}
-                                </div>
-                                <div className={classes.rowTitle}>완료요청일</div>
-                                <div className={classes.rowInfo}>
-                                    {improvement && improvement.finDate}
-                                </div>
-                                <div className={classes.rowTitle}>첨부파일</div>
-                                <div className={classes.rowInfo}>
-                                    {improvement && improvement.reqFileId}
+                                    {accident && accident.accdntCn}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </Grid>
-                <Grid item xs={12} className={classes.boxSecond}>
-                    <div className={classes.boxTitle}>
-                        <span>개선.조치 </span>
-                        <span>내역</span>
-                    </div>
+                <Grid item xs={12} className={classes.boxRegistration}>
+                    <div className={classes.boxTitle}>사고접수</div>
                     <div className={classes.boxContent}>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>조치구분</div>
+                            <div className={classes.rowTitle}>발생일자</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    {(improvement?.statusCd === "001" && "요청중") || (improvement?.statusCd === "002" && "접수") || (improvement?.statusCd === "003" && "진행중") || (improvement?.statusCd === "004" && "조치완료")}
+                                    {accident && accident.occurDate}
+                                </div>
+                                <div className={classes.rowTitle}>사고유형</div>
+                                <div className={classes.rowInfo}>
+                                    {(accident && accident.accType001) || (accident && accident.accType002) || (accident && accident.accType003) || (accident && accident.accType004) || (accident && accident.accType005) || (accident && accident.accType006)}
+                                </div>
+                                <div className={classes.rowTitle}>사고등급</div>
+                                <div className={classes.rowInfo}>
+                                    {accident && accident.accLevel}
+                                </div>
+                                <div className={classes.rowTitle}>발생장소</div>
+                                <div className={classes.rowInfo}>
+                                    {accident && accident.occurPlace}
                                 </div>
                             </div>
                         </div>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>조치구분</div>
+                            <div className={classes.rowTitle}>현장책임자</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    {improvement && improvement.actionCn}
+                                    {accident && accident.managerName}
                                 </div>
                             </div>
                         </div>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>조치내용</div>
+                            <div className={classes.rowTitle}>발생원인</div>
+                            <div className={classes.rowContent}>
+                                <div className={classes.rowInfo}>
+                                    {accident && accident.occurReason}
+                                </div>
+                                <div className={classes.rowInfo}>
+                                    <AccidentReportButton sx={{ marginRight: '10px' }}>초기사고 보고서</AccidentReportButton>
+                                    <AccidentReportButton>최종사고 보고서</AccidentReportButton>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={classes.boxRow}>
+                            <div className={classes.rowTitle}>
+                                <span>재발방지 </span>
+                                <span>대책</span>
+                            </div>
+                            <div className={classes.rowContent}>
+                                <div className={classes.rowInfo}>
+                                    {accident && accident.preventCn}
+                                </div>
+                            </div>
+                        </div>
+                        <div className={classes.boxRow}>
+                            <div className={classes.rowTitle}>이행실적</div>
                             <div className={classes.rowContent}>
                                 <div>
                                     <div>조치 전</div>
                                     <div>
-
+                                        <TextField
+                                            id="standard-basic"
+                                            variant="outlined"
+                                            value="20220607사고등록 전 사진.jpg"
+                                            sx={{ width: 610 }}
+                                            className={classes.selectMenu}
+                                            disabled
+                                        />
+                                        <UploadButton>찾아보기</UploadButton>
+                                        <div className={classes.imgPreview}>
+                                            <img src={imgPrev} alt="uploaded image" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div>
                                     <div>조치 후</div>
                                     <div>
-
+                                        <TextField
+                                            id="standard-basic"
+                                            variant="outlined"
+                                            value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
+                                            sx={{ width: 610 }}
+                                            className={classes.selectMenu}
+                                            disabled
+                                        />
+                                        <UploadButton>찾아보기</UploadButton>
+                                        <div className={classes.imgPreview}>
+                                            <img src={noImg} alt="no image" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -413,13 +461,15 @@ const Registration = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
-                    <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/employee/improvement-measures/update/${improvement.improveId}`)}>수정</BlueButton>
-                    <WhiteButton className={'button-delete'} onClick={handleDeleteImprovement}>삭제</WhiteButton>
+                    <BlueButton className={'button-correction'}>수정</BlueButton>
+                    <BlueButton className={'button-registration'}>등록</BlueButton>
+                    <WhiteButton className={'button-cancellation'} onClick={() => handleRedirect()}>취소</WhiteButton>
+                    <WhiteButton className={'button-delete'}>삭제</WhiteButton>
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
             </Grid>
         </DefaultLayout>
-    );
-};
+    )
+}
 
-export default Registration;
+export default View

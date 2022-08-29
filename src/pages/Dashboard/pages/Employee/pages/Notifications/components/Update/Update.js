@@ -249,9 +249,7 @@ const Update = () => {
     }
 
     const handleFetchView = async () => {
-        const response = await noticesView({
-            "noticeId": updateid
-        })
+        const response = await noticesView(updateid)
         setNotice(response.data.RET_DATA)
     }
 

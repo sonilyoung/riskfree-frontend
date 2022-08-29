@@ -30,7 +30,7 @@ import pageLast from '../../../../../../../../assets/images/btn_last.png';
 import pageNext from '../../../../../../../../assets/images/btn_nxt.png';
 import pagePrev from '../../../../../../../../assets/images/btn_pre.png';
 
-import { useCompanyWorkplaceSelectMutation } from '../../../../../../../../hooks/api/CompanyManagement/CompanyManagement';
+import { useGetWorkplaceListMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
 import { useImprovementSelectMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement'
 import moment from "moment";
 
@@ -282,7 +282,7 @@ const ExcelButton = styled(ButtonUnstyled)`
 function List() {
     const classes = useStyles();
     const navigate = useNavigate()
-    const [companyWorkplaceSelect] = useCompanyWorkplaceSelectMutation()
+    const [getWorkplaceList] = useGetWorkplaceListMutation()
     const [improvementSelect] = useImprovementSelectMutation()
     const [workplaces, setWorkplaces] = useState([])
     const [workplaceSelect, setWorkplaceSelect] = useState("")
@@ -311,7 +311,7 @@ function List() {
         navigate("/dashboard/employee/improvement-measures/registration")
     }
     const handleComapanyWorkplace = async () => {
-        const response = await companyWorkplaceSelect({})
+        const response = await getWorkplaceList({})
         setWorkplaces(response.data.RET_DATA)
     }
 
@@ -329,10 +329,10 @@ function List() {
     const handleFetchList = async () => {
         const response = await improvementSelect(
             {
+                "baselineId": 6,
                 "companyId": null,
                 "countPerPage": 10,
                 "endDate": endDate,
-                "improveId": null,
                 "pageNum": page,
                 "reqUserCd": reqUser,
                 "startDate": startDate,

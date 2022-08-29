@@ -19,9 +19,8 @@ export const accidentManagement = createApi({
     endpoints: (builder) => ({
         accidentView: builder.mutation({
             query: (body) => ({
-                url: 'accidents/view',
+                url: `accidents/view?accidentId=${body}`,
                 method: 'POST',
-                body: body,
             }),
         }),
         accidentUpdate: builder.mutation({
@@ -40,9 +39,8 @@ export const accidentManagement = createApi({
         }),
         accidentOccurPlaceSelect: builder.mutation({
             query: (body) => ({
-                url: 'accidents/occurPlace/select',
+                url: `accidents/occurPlace/select?baselineId=${body}`,
                 method: 'POST',
-                body: body,
             })
         }),
         accidentInsert: builder.mutation({
@@ -54,9 +52,8 @@ export const accidentManagement = createApi({
         }),
         accidentDelete: builder.mutation({
             query: (body) => ({
-                url: 'accidents/delete',
+                url: `accidents/delete?accidentId=${body}`,
                 method: 'POST',
-                body: body,
             })
         }),
     }),

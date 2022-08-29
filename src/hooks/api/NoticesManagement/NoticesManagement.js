@@ -19,9 +19,8 @@ export const noticesManagement = createApi({
     endpoints: (builder) => ({
         noticesView: builder.mutation({
             query: (body) => ({
-                url: 'notices/view',
+                url: `notices/view?noticeId=${body}`,
                 method: 'POST',
-                body: body,
             }),
         }),
         noticesUpdate: builder.mutation({
@@ -47,9 +46,8 @@ export const noticesManagement = createApi({
         }),
         noticesDelete: builder.mutation({
             query: (body) => ({
-                url: 'notices/delete',
+                url: `notices/delete?noticeId=${body}`,
                 method: 'POST',
-                body: body,
             })
         }),
     }),

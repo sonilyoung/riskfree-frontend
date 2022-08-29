@@ -1257,9 +1257,7 @@ const Director = () => {
     const handleFetchList = async () => {
         const response = await noticesSelect({
             "col": null,
-            "companyId": null,
             "countPerPage": null,
-            "noticeId": null,
             "pageNum": null,
             "param": null
         })
@@ -1865,7 +1863,7 @@ const Director = () => {
                                         <div>
                                             <div>{notice.insertDate}</div>
                                             {notice.importCd === "001" && <span className={classes.slideLabelHot}>HOT</span>}
-                                            <Link to={`/dashboard/director/notifications/list/${notice.noticeId}`} className={classes.linkBtn}>{notice.title}</Link>
+                                            <Link to={`/dashboard/director/notifications/view/${notice.noticeId}`} className={classes.linkBtn}>{notice.title}</Link>
                                         </div>
                                     ))}
                                 </Slider>

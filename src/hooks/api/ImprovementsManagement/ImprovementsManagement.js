@@ -19,9 +19,8 @@ export const improvementsManagement = createApi({
     endpoints: (builder) => ({
         improvementView: builder.mutation({
             query: (body) => ({
-                url: 'improvement/view',
+                url: `improvement/view?improveId=${body}`,
                 method: 'POST',
-                body: body
             }),
         }),
         improvementUpdate: builder.mutation({
@@ -54,9 +53,8 @@ export const improvementsManagement = createApi({
         }),
         improvementDelete: builder.mutation({
             query: (body) => ({
-                url: 'improvement/delete',
+                url: `improvement/delete?improveId=${body}`,
                 method: 'POST',
-                body: body
             }),
         }),
     }),
