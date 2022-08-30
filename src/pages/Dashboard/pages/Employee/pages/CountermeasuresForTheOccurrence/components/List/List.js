@@ -411,10 +411,9 @@ const List = () => {
     const handleClick = e => {
         const { id, checked } = e.target;
         setIsCheck([...isCheck, id]);
+        setterFunction(id)
         if (!checked) {
             setIsCheck(isCheck.filter(item => item !== id));
-        } else {
-            setterFunction(id)
         }
         console.log(accTypeFirst, accTypeSecond, accTypeThird, accTypeFourth, accTypeFifth, accTypeSixth)
     };
@@ -566,7 +565,7 @@ const List = () => {
                                             checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                             value={value}
                                             checked={isCheck.includes(id)}
-                                            onChange={handleClick}
+                                            onClick={handleClick}
                                         />
                                         {label}
                                     </label>

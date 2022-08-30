@@ -346,11 +346,11 @@ function List() {
     useEffect(() => {
         handleComapanyWorkplace()
         handleFetchList()
-    }, [])
-
-    useEffect(() => {
-        handleFetchList()
     }, [page])
+
+    // useEffect(() => {
+    //     handleFetchList()
+    // }, [page])
 
     // console.log(reqUser)
     // console.log(statusCd)
@@ -501,7 +501,7 @@ function List() {
                     </>
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
-                    <div>총 게시글 <strong>{improvements[0]?.totalCount}</strong> 건</div>
+                    <div>총 게시글 <strong>{improvements && improvements[0]?.totalCount}</strong> 건</div>
                     <Stack spacing={2}>
                         <Pagination count={(Math.ceil(improvements[0]?.totalCount / 10))} boundaryCount={10} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
                     </Stack>

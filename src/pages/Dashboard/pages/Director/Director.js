@@ -604,7 +604,6 @@ const useStyles = makeStyles(() => ({
         fontWeight: '500',
         background: '#3a5298',
         letterSpacing: '-1.08px',
-        color: '#fff',
         '&:visited': {
             color: "#fff"
         },

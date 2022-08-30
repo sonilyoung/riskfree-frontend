@@ -360,6 +360,8 @@ const Registration = () => {
         fetchImprovementView()
     }, [])
 
+    console.log(improvement)
+
     return (
         <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>

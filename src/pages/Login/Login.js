@@ -122,6 +122,7 @@ const Login = () => {
         });
         if (userLoginResponse.data.RET_CODE === '0000') {
             const jwtToken = userLoginResponse.data.RET_DATA.accessToken;
+            console.log(userLoginResponse)
             UserTokenService.setItem(jwtToken);
             dispatch(setUser({
                 id: 1,

@@ -12,7 +12,7 @@ const CountermeasuresForTheOccurrence = () => {
     return (
         <Routes>
             <Route path="list" element={<List />} />
-            <Route path="registration" element={<Registration />} />
+            <Route path="registration/:id" element={<Registration />} />
             <Route path="view/:id" element={<View />} />
             {/* <Route path="update/:updateid" element={<Update />} /> */}
         </Routes >
