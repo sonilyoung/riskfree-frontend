@@ -80,7 +80,7 @@ const useStyles = makeStyles(() => ({
         backgroundColor: '#33374f',
         justifyContent: 'center',
         minWidth: '1900px !important',
-        height: '100vh',
+        height: '100%',
     },
     pageHeader: {
         display: 'flex',
@@ -604,8 +604,9 @@ const useStyles = makeStyles(() => ({
         fontWeight: '500',
         background: '#3a5298',
         letterSpacing: '-1.08px',
+        color: '#fff',
         '&:visited': {
-            color: "#ffffff"
+            color: "#fff"
         },
         textDecoration: "none"
     },
@@ -804,9 +805,9 @@ const useStyles = makeStyles(() => ({
     },
     linkBtn: {
         textDecoration: "none",
-        color: "white",
+        color: "#fff",
         '&:visited': {
-            color: 'white'
+            color: '#fff'
         }
     },
     headerPopup: {

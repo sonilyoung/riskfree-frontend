@@ -453,6 +453,7 @@ const List = () => {
             "workplaceId": workplaceSelect
         })
         setAccidents(response.data.RET_DATA)
+        console.log(response);
     }
 
     const fetchWorkplaceList = async () => {

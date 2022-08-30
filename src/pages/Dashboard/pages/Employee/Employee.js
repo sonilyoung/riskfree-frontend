@@ -1018,7 +1018,7 @@ const useStyles = makeStyles(() => ({
         }
     },
     headerPopup: {
-        // display: 'none !important',
+        display: 'none !important',
         position: 'absolute',
         top: '0px',
         left: '0px',
