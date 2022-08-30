@@ -9,7 +9,7 @@ import { CountermeasuresForTheOccurrencePage } from '../pages/Dashboard/pages/Em
 import { OrdersForImprovementPage } from '../pages/Dashboard/pages/Employee/pages/OrdersForImprovement'
 import { MeasureToManageThePerformancePage } from '../pages/Dashboard/pages/Employee/pages/MeasureToManageThePerformance'
 import { ContentsOfWorkPage } from '../pages/Dashboard/pages/Employee/pages/ContentsOfWork';
-import { IMStatusPage, IMRegistrationPage, NoticeListPage, NoticeDetailsPage, NoticeRegistrationPage, ACIStatusPage, ACIRegistrationPage, OICLawPage, OICRegistrationPage, MPDLawFirstPage, MPDLawSecondPage, MPDLawThirdPage, SecurityWorkContentPage, MembersManagementPage } from '../pages/Dashoard/pages';
+import { IMStatusPage, IMRegistrationPage, NoticeListPage, NoticeDetailsPage, NoticeRegistrationPage, ACIStatusPage, ACIRegistrationPage, OICLawPage, OICRegistrationPage, MPDLawFirstPage, MPDLawSecondPage, MPDLawThirdPage, SecurityWorkContentPage, MembersManagementPage, WorkHistoryListPage } from '../pages/Dashoard/pages';
 import { ForgottenPasswordPage } from '../pages/Login/pages/ForgottenPassword';
 import { UserTokenService } from '../services/core/User';
 
@@ -47,6 +47,7 @@ const DefaultRoutes = () => (
             <Route path="/dashboard/director/measure-manage-performance-od-duties-law-first" element={<MPDLawFirstPage />} />
             <Route path="/dashboard/director/measure-manage-performance-od-duties-law-second" element={<MPDLawSecondPage />} />
             <Route path="/dashboard/director/measure-manage-performance-od-duties-law-third" element={<MPDLawThirdPage />} />
+            <Route path="/dashboard/director/work-history-list" element={<WorkHistoryListPage />} />
             {/* <Route path="/dashboard/director/security-work-content" element={<SecurityWorkContentPage />} /> */}
             <Route path="/dashboard/employee" element={<DashboardEmployeePage />} />
             <Route path="/dashboard/employee/improvement-measures/*" element={<ImprovementMeasuresPage />} />
