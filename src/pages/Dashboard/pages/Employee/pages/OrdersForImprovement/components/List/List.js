@@ -1,5 +1,5 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
@@ -32,6 +32,12 @@ import pagePrev from '../../../../../../../../assets/images/btn_pre.png';
 
 import checkIcon from '../../../../../../../../assets/images/ic_chk3.png';
 import checkIconOn from '../../../../../../../../assets/images/ic_chk3_on.png';
+import { useGetWorkplaceListMutation } from "../../../../../../../../hooks/api/MainManagement/MainManagement";
+import {
+    useLawIssueReassonSelectMutation,
+    useLawSelectMutation,
+} from "../../../../../../../../hooks/api/LawImprovementsManagement/LawImprovementsManagement";
+import { DefaultLayout } from "../../../../../../../../layouts/Default";
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -308,322 +314,489 @@ const ExcelButton = styled(ButtonUnstyled)`
 
 const List = () => {
     const classes = useStyles();
-    const navigate = useNavigate()
 
-    const [num, setNum] = React.useState('');
+    const [lawSelect] = useLawSelectMutation();
+    const [getWorkplaceList] = useGetWorkplaceListMutation();
+    const [lawIssueReassonSelect] = useLawIssueReassonSelectMutation();
 
-    const handleChange = (event) => {
-        setNum(event.target.value);
-    };
+    const navigate = useNavigate();
+
+    // to store data for select
+    const [page, setPage] = useState(1);
+    const [workplaceList, setWorkplaceList] = useState([]);
+    const [issueReasson, setIssueReasson] = useState([]);
+
+    const [lawImprovements, setLawImprovements] = useState({
+        baselineId: 6,
+        cmmdOrgCd001: "",
+        cmmdOrgCd002: "",
+        cmmdOrgCd003: "",
+        cmmdOrgCd004: "",
+        countPerPage: 10,
+        dueDate: "",
+        endDate: "",
+        improveTypeCd: "",
+        issueReason: "",
+        pageNum: 1,
+        startDate: "",
+        statusCd: "",
+        workplaceId: "",
+    });
+
+    const [lawList, setLawList] = useState([]);
+
+    // all checked
+    const [checked, setChecked] = useState(false);
+    const [checkedRadio, setCheckedRadio] = useState(false);
 
     const handleRedirect = () => {
-        navigate("/dashboard/employee/order-for-improvement-and-correction-under-related-law/registration")
-    }
-    return (
-        <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
-            <Grid item xs={12} className={classes.listTitle}>
-                <Typography variant="headline2" component="div" gutterBottom>
-                    관계법령에 따른 개선.시정 명령에 따른 조치 현황
-                </Typography>
-            </Grid>
-            <Grid item xs={12} className={classes.searchBox}>
-                <div>
-                    <div className={classes.searchInfo}>
-                        <div>
-                            <div className={classes.infoTitle}>사업장</div>
-                            <Select
-                                className={classes.selectMenu}
-                                sx={{ width: 204 }}
-                                value={num}
-                                onChange={handleChange}
-                                displayEmpty
-                            >
-                                <MenuItem value="">여수사업장</MenuItem>
-                            </Select>
-                        </div>
-                        <div>
-                            <div className={classes.infoTitle}>조치요청 명령구분</div>
-                            <FormControl className={classes.searchRadio}>
-                                <RadioGroup row>
-                                    <FormControlLabel
-                                        value="전체"
-                                        label="전체"
-                                        control={
-                                            <Checkbox
-                                                icon={<img src={checkIcon} alt="check icon" />}
-                                                checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                            />
-                                        }
-                                    />
-                                    <FormControlLabel
-                                        value="고용노동부"
-                                        label="고용노동부"
-                                        control={
-                                            <Checkbox
-                                                icon={<img src={checkIcon} alt="check icon" />}
-                                                checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                            />
-                                        }
-                                    />
-                                    <FormControlLabel
-                                        value="소방청(소)"
-                                        label="소방청(소)"
-                                        control={
-                                            <Checkbox
-                                                icon={<img src={checkIcon} alt="check icon" />}
-                                                checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                            />
-                                        }
-                                    />
-                                    <FormControlLabel
-                                        value="환경부(청)"
-                                        label="환경부(청)"
-                                        control={
-                                            <Checkbox
-                                                icon={<img src={checkIcon} alt="check icon" />}
-                                                checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                            />
-                                        }
-                                    />
-                                    <FormControlLabel
-                                        value="자체점검"
-                                        label="자체점검"
-                                        control={
-                                            <Checkbox
-                                                icon={<img src={checkIcon} alt="check icon" />}
-                                                checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                            />
-                                        }
-                                    />
-                                </RadioGroup>
-                            </FormControl>
-                        </div>
-                        <div>
-                            <div className={classes.infoTitle}>구분</div>
-                            <FormControl className={classes.searchRadio}>
-                                <RadioGroup row>
-                                    <FormControlLabel
-                                        value="개선"
-                                        label="개선"
-                                        control={
-                                            <Radio
-                                                icon={<img src={radioIcon} alt="check icon" />}
-                                                checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                            />
-                                        }
-                                    />
-                                    <FormControlLabel
-                                        value="조치"
-                                        label="조치"
-                                        control={
-                                            <Radio
-                                                icon={<img src={radioIcon} alt="check icon" />}
-                                                checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                            />
-                                        }
-                                    />
-                                </RadioGroup>
-                            </FormControl>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div className={classes.searchInfo}>
-                        <div>
-                            <div className={classes.infoTitle}>지적원인</div>
-                            <Select
-                                className={classes.selectMenu}
-                                sx={{ width: 204 }}
-                                value={num}
-                                onChange={handleChange}
-                                displayEmpty
-                            >
-                                <MenuItem value="">작업감독자미배치</MenuItem>
-                            </Select>
-                        </div>
-                        <div>
-                            <div className={classes.infoTitle}>발행일자</div>
-                            <TextField
-                                sx={{ width: 140 }}
-                                id="date"
-                                className={classes.selectMenu}
-                                type="date"
-                            />
-                            &nbsp;~&nbsp;
-                            <TextField
-                                sx={{ width: 140 }}
-                                id="date"
-                                className={classes.selectMenu}
-                                type="date"
-                            />
-                        </div>
-                        <div>
-                            <div className={classes.infoTitle}>조치상태</div>
-                            <FormControl className={classes.searchRadio}>
-                                <RadioGroup row>
-                                    <FormControlLabel
-                                        value="전체"
-                                        label="전체"
-                                        control={
-                                            <Radio
-                                                icon={<img src={radioIcon} alt="check icon" />}
-                                                checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                            />
-                                        }
-                                    />
-                                    <FormControlLabel
-                                        value="조치중"
-                                        label="조치중"
-                                        control={
-                                            <Radio
-                                                icon={<img src={radioIcon} alt="check icon" />}
-                                                checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                            />
-                                        }
-                                    />
-                                    <FormControlLabel
-                                        value="조치완료"
-                                        label="조치완료"
-                                        control={
-                                            <Radio
-                                                icon={<img src={radioIcon} alt="check icon" />}
-                                                checkedIcon={<img src={radioIconOn} alt="check icon on" />}
-                                            />
-                                        }
-                                    />
-                                </RadioGroup>
-                            </FormControl>
-                        </div>
-                    </div>
-                    <div className={classes.searchButtons}>
-                        <SearchButton>조회</SearchButton>
-                        <RegisterButton sx={{ marginLeft: '10px' }} onClick={() => handleRedirect()}>등록</RegisterButton>
-                    </div>
-                </div>
-            </Grid>
-            <Grid item xs={12} className={classes.dataTable}>
-                <div className={classes.tableHead}>
-                    <div className={classes.tableRow}>발생년도</div>
-                    <div className={classes.tableRow}>사업장</div>
-                    <div className={classes.tableRow}>조치상태</div>
-                    <div className={classes.tableRow}>지적일자</div>
-                    <div className={classes.tableRow}>조치명령 기관</div>
-                    <div className={classes.tableRow}>발생장소</div>
-                    <div className={classes.tableRow}>조치명령 원인</div>
-                    <div className={classes.tableRow}>개선조치 내용</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>2022</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>개선중</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>고용노동부</div>
-                    <div className={classes.tableRow}>2BL-3-2공구</div>
-                    <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
-                    <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>2022</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>개선중</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>고용노동부</div>
-                    <div className={classes.tableRow}>2BL-3-2공구</div>
-                    <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
-                    <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>2022</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>개선중</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>고용노동부</div>
-                    <div className={classes.tableRow}>2BL-3-2공구</div>
-                    <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
-                    <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>2022</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>개선중</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>고용노동부</div>
-                    <div className={classes.tableRow}>2BL-3-2공구</div>
-                    <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
-                    <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>2022</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>개선중</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>고용노동부</div>
-                    <div className={classes.tableRow}>2BL-3-2공구</div>
-                    <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
-                    <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>2022</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>개선중</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>고용노동부</div>
-                    <div className={classes.tableRow}>2BL-3-2공구</div>
-                    <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
-                    <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>2022</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>개선중</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>고용노동부</div>
-                    <div className={classes.tableRow}>2BL-3-2공구</div>
-                    <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
-                    <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>2022</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>개선중</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>고용노동부</div>
-                    <div className={classes.tableRow}>2BL-3-2공구</div>
-                    <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
-                    <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>2022</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>개선중</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>고용노동부</div>
-                    <div className={classes.tableRow}>2BL-3-2공구</div>
-                    <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
-                    <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                </div>
-                <div className={classes.tableBody}>
-                    <div className={classes.tableRow}>2022</div>
-                    <div className={classes.tableRow}>여수</div>
-                    <div className={classes.tableRow}>개선중</div>
-                    <div className={classes.tableRow}>22.04.01</div>
-                    <div className={classes.tableRow}>고용노동부</div>
-                    <div className={classes.tableRow}>2BL-3-2공구</div>
-                    <div className={classes.tableRow}>컨베이어 벨트수리중 Tag 미부착</div>
-                    <div className={classes.tableRow}>전원반 Tag부착 및 안전요원 배치</div>
-                </div>
-            </Grid>
-            <Grid item xs={12} className={classes.pagingBox}>
-                <div>총 게시글 <strong>126</strong> 건</div>
-                <Stack spacing={2}>
-                    <Pagination count={10} boundaryCount={10} shape="rounded" showFirstButton showLastButton />
-                </Stack>
-                <div>
-                    <ExcelButton>엑셀 다운로드</ExcelButton>
-                </div>
-            </Grid>
-        </Grid>
-    )
-}
+        navigate(
+            "/dashboard/employee/order-for-improvement-and-correction-under-related-law/registration"
+        );
+    };
 
-export default List
+    // handleChange make it for everthing
+    const handleChange = (prop) => (event) => {
+        if (prop.includes("cmmdOrgCd00")) {
+            setLawImprovements({
+                ...lawImprovements,
+                [prop]: event.target.checked ? event.target.value : "",
+            });
+            setChecked(false);
+        } else if (prop === "allCheckboxes") {
+            handleCheckBoxes(event);
+        } else {
+            setLawImprovements({
+                ...lawImprovements,
+                [prop]: event.target.value,
+            });
+        }
+    };
+
+    const handleCheckBoxes = (event) => {
+        event.target.checked
+            ? setLawImprovements({
+                ...lawImprovements,
+                cmmdOrgCd001: "001",
+                cmmdOrgCd002: "002",
+                cmmdOrgCd003: "003",
+                cmmdOrgCd004: "004",
+            })
+            : setLawImprovements({
+                ...lawImprovements,
+                cmmdOrgCd001: "",
+                cmmdOrgCd002: "",
+                cmmdOrgCd003: "",
+                cmmdOrgCd004: "",
+            });
+        setChecked(!checked);
+    };
+
+    const fetchWorkplaceList = async () => {
+        const response = await getWorkplaceList();
+        setWorkplaceList(response.data.RET_DATA);
+    };
+
+    const fetchIssueReasson = async () => {
+        const response = await lawIssueReassonSelect(6);
+        setIssueReasson(response.data.RET_DATA);
+    };
+
+    const fetchLawList = async () => {
+        const response = await lawSelect(lawImprovements);
+        setLawList(response.data.RET_DATA);
+        console.log(response);
+    };
+
+    useEffect(() => {
+        fetchWorkplaceList();
+        fetchIssueReasson();
+        fetchLawList();
+    }, []);
+
+    // console.log(issueReasson, workplaceList);
+    // console.log(lawImprovements);
+    // console.log(lawList);
+    // console.log(checked);
+
+    return (
+        <DefaultLayout>
+            <Grid
+                className={classes.pageWrap}
+                container
+                rowSpacing={0}
+                columnSpacing={0}
+            >
+                <Grid item xs={12} className={classes.listTitle}>
+                    <Typography variant="headline2" component="div" gutterBottom>
+                        관계법령에 따른 개선.시정 명령에 따른 조치 현황
+                    </Typography>
+                </Grid>
+                <Grid item xs={12} className={classes.searchBox}>
+                    <div>
+                        <div className={classes.searchInfo}>
+                            <div>
+                                <div className={classes.infoTitle}>사업장</div>
+                                <Select
+                                    className={classes.selectMenu}
+                                    sx={{ width: 204 }}
+                                    value={lawImprovements.workplaceId}
+                                    onChange={handleChange("workplaceId")}
+                                    // onChange={(event) =>
+                                    //   setLawImprovements({
+                                    //     ...lawImprovements,
+                                    //     workplaceId: event.target.value,
+                                    //   })
+                                    // }
+                                    displayEmpty
+                                >
+                                    {workplaceList &&
+                                        workplaceList.map((workplace) => (
+                                            <MenuItem value={workplace.workplaceId}>
+                                                {workplace.workplaceName}
+                                            </MenuItem>
+                                        ))}
+                                </Select>
+                            </div>
+                            <div>
+                                <div className={classes.infoTitle}>조치요청 명령구분</div>
+                                <FormControl className={classes.searchRadio}>
+                                    <RadioGroup row>
+                                        {/* ALL SELECTED -THIS CHECKBOX */}
+                                        <FormControlLabel
+                                            value=""
+                                            label="전체"
+                                            control={
+                                                <Checkbox
+                                                    icon={<img src={checkIcon} alt="check icon" />}
+                                                    checkedIcon={
+                                                        <img src={checkIconOn} alt="check icon on" />
+                                                    }
+                                                    onChange={handleChange("allCheckboxes")}
+                                                    checked={checked ? true : false}
+                                                />
+                                            }
+                                        />
+                                        <FormControlLabel
+                                            value="001"
+                                            label="고용노동부"
+                                            control={
+                                                <Checkbox
+                                                    icon={<img src={checkIcon} alt="check icon" />}
+                                                    checkedIcon={
+                                                        <img src={checkIconOn} alt="check icon on" />
+                                                    }
+                                                    onChange={handleChange("cmmdOrgCd001")}
+                                                    // onChange={() => {
+                                                    //   setLawImprovements({
+                                                    //     ...lawImprovements,
+                                                    //     cmmdOrgCd001: lawImprovements.cmmdOrgCd001
+                                                    //       ? ""
+                                                    //       : "001",
+                                                    //   });
+                                                    //   setChecked(false);
+                                                    // }}
+                                                    checked={lawImprovements.cmmdOrgCd001 ? true : false}
+                                                />
+                                            }
+                                        />
+                                        <FormControlLabel
+                                            value="002"
+                                            label="소방청(소)"
+                                            control={
+                                                <Checkbox
+                                                    icon={<img src={checkIcon} alt="check icon" />}
+                                                    checkedIcon={
+                                                        <img src={checkIconOn} alt="check icon on" />
+                                                    }
+                                                    onChange={handleChange("cmmdOrgCd002")}
+                                                    // onChange={() => {
+                                                    //   setLawImprovements({
+                                                    //     ...lawImprovements,
+                                                    //     cmmdOrgCd002: lawImprovements.cmmdOrgCd002
+                                                    //       ? ""
+                                                    //       : "002",
+                                                    //   });
+                                                    //   setChecked(false);
+                                                    // }}
+                                                    checked={lawImprovements.cmmdOrgCd002 ? true : false}
+                                                />
+                                            }
+                                        />
+                                        <FormControlLabel
+                                            value="003"
+                                            label="환경부(청)"
+                                            control={
+                                                <Checkbox
+                                                    icon={<img src={checkIcon} alt="check icon" />}
+                                                    checkedIcon={
+                                                        <img src={checkIconOn} alt="check icon on" />
+                                                    }
+                                                    onChange={handleChange("cmmdOrgCd003")}
+                                                    // onChange={() => {
+                                                    //   setLawImprovements({
+                                                    //     ...lawImprovements,
+                                                    //     cmmdOrgCd003: lawImprovements.cmmdOrgCd003
+                                                    //       ? ""
+                                                    //       : "003",
+                                                    //   });
+                                                    //   setChecked(false);
+                                                    // }}
+                                                    checked={lawImprovements.cmmdOrgCd003 ? true : false}
+                                                />
+                                            }
+                                        />
+                                        <FormControlLabel
+                                            value="004"
+                                            label="자체점검"
+                                            control={
+                                                <Checkbox
+                                                    icon={<img src={checkIcon} alt="check icon" />}
+                                                    checkedIcon={
+                                                        <img src={checkIconOn} alt="check icon on" />
+                                                    }
+                                                    onChange={handleChange("cmmdOrgCd004")}
+                                                    // onChange={() => {
+                                                    //   setLawImprovements({
+                                                    //     ...lawImprovements,
+                                                    //     cmmdOrgCd004: lawImprovements.cmmdOrgCd004
+                                                    //       ? ""
+                                                    //       : "004",
+                                                    //   });
+                                                    //   setChecked(false);
+                                                    // }}
+                                                    checked={lawImprovements.cmmdOrgCd004 ? true : false}
+                                                />
+                                            }
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
+                            </div>
+                            <div>
+                                <div className={classes.infoTitle}>구분</div>
+                                <FormControl
+                                    className={classes.searchRadio}
+                                    onChange={handleChange("improveTypeCd")}
+                                // onChange={(event) =>
+                                //   setLawImprovements({
+                                //     ...lawImprovements,
+                                //     improveTypeCd: event.target.value,
+                                //   })
+                                // }
+                                >
+                                    <RadioGroup row>
+                                        <FormControlLabel
+                                            value="001"
+                                            label="개선"
+                                            control={
+                                                <Radio
+                                                    icon={<img src={radioIcon} alt="check icon" />}
+                                                    checkedIcon={
+                                                        <img src={radioIconOn} alt="check icon on" />
+                                                    }
+                                                />
+                                            }
+                                        />
+                                        <FormControlLabel
+                                            value="002"
+                                            label="조치"
+                                            control={
+                                                <Radio
+                                                    icon={<img src={radioIcon} alt="check icon" />}
+                                                    checkedIcon={
+                                                        <img src={radioIconOn} alt="check icon on" />
+                                                    }
+                                                />
+                                            }
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div className={classes.searchInfo}>
+                            <div>
+                                <div className={classes.infoTitle}>지적원인</div>
+                                <Select
+                                    className={classes.selectMenu}
+                                    sx={{ width: 204 }}
+                                    value={lawImprovements.issueReason}
+                                    onChange={handleChange("issueReason")}
+                                    // onChange={(event) =>
+                                    //   setLawImprovements({
+                                    //     ...lawImprovements,
+                                    //     issueReason: event.target.value,
+                                    //   })
+                                    // }
+                                    displayEmpty
+                                >
+                                    {issueReasson &&
+                                        issueReasson.map((issue) => (
+                                            <MenuItem value={issue.issuereason}>
+                                                {issue.issuereason}
+                                            </MenuItem>
+                                        ))}
+                                </Select>
+                            </div>
+                            <div>
+                                <div className={classes.infoTitle}>발행일자</div>
+                                <TextField
+                                    sx={{ width: 140 }}
+                                    id="date"
+                                    className={classes.selectMenu}
+                                    type="date"
+                                    value={lawImprovements.startDate}
+                                    onChange={handleChange("startDate")}
+                                // onChange={(event) =>
+                                //   setLawImprovements({
+                                //     ...lawImprovements,
+                                //     startDate: event.target.value,
+                                //   })
+                                // }
+                                />
+                                &nbsp;~&nbsp;
+                                <TextField
+                                    sx={{ width: 140 }}
+                                    id="date"
+                                    className={classes.selectMenu}
+                                    type="date"
+                                    value={lawImprovements.endDate}
+                                    onChange={handleChange("endDate")}
+                                // onChange={(event) =>
+                                //   setLawImprovements({
+                                //     ...lawImprovements,
+                                //     endDate: event.target.value,
+                                //   })
+                                // }
+                                />
+                            </div>
+                            <div>
+                                <div className={classes.infoTitle}>조치상태</div>
+                                <FormControl
+                                    className={classes.searchRadio}
+                                    onChange={handleChange("statusCd")}
+                                // onChange={(event) =>
+                                //   setLawImprovements({
+                                //     ...lawImprovements,
+                                //     statusCd: event.target.value,
+                                //   })
+                                // }
+                                >
+                                    <RadioGroup row>
+                                        {/* BOTH VALUES */}
+                                        <FormControlLabel
+                                            value=""
+                                            label="전체"
+                                            control={
+                                                <Radio
+                                                    icon={<img src={radioIcon} alt="check icon" />}
+                                                    checkedIcon={
+                                                        <img src={radioIconOn} alt="check icon on" />
+                                                    }
+                                                />
+                                            }
+                                        />
+                                        <FormControlLabel
+                                            value="005"
+                                            label="조치중"
+                                            control={
+                                                <Radio
+                                                    icon={<img src={radioIcon} alt="check icon" />}
+                                                    checkedIcon={
+                                                        <img src={radioIconOn} alt="check icon on" />
+                                                    }
+                                                />
+                                            }
+                                        />
+                                        <FormControlLabel
+                                            value="006"
+                                            label="조치완료"
+                                            control={
+                                                <Radio
+                                                    icon={<img src={radioIcon} alt="check icon" />}
+                                                    checkedIcon={
+                                                        <img src={radioIconOn} alt="check icon on" />
+                                                    }
+                                                />
+                                            }
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
+                            </div>
+                        </div>
+                        <div className={classes.searchButtons}>
+                            <SearchButton onClick={fetchLawList}>조회</SearchButton>
+                            <RegisterButton
+                                sx={{ marginLeft: "10px" }}
+                                onClick={() => handleRedirect()}
+                            >
+                                등록
+                            </RegisterButton>
+                        </div>
+                    </div>
+                </Grid>
+                <Grid item xs={12} className={classes.dataTable}>
+                    <div className={classes.tableHead}>
+                        <div className={classes.tableRow}>발생년도</div>
+                        <div className={classes.tableRow}>사업장</div>
+                        <div className={classes.tableRow}>조치상태</div>
+                        <div className={classes.tableRow}>지적일자</div>
+                        <div className={classes.tableRow}>조치명령 기관</div>
+                        <div className={classes.tableRow}>발생장소</div>
+                        <div className={classes.tableRow}>조치명령 원인</div>
+                        <div className={classes.tableRow}>개선조치 내용</div>
+                    </div>
+
+                    {lawList &&
+                        lawList.map((lawItem) => (
+                            <div
+                                className={classes.tableBody}
+                                onDoubleClick={() =>
+                                    navigate(
+                                        `/dashboard/employee/accident-countermeasures-implementation/view/${lawItem.lawImproveId}`
+                                    )
+                                }
+                            >
+                                <div className={classes.tableRow}>{lawItem.recvYear}</div>
+                                <div className={classes.tableRow}>{lawItem.workplaceName}</div>
+                                <div className={classes.tableRow}>{lawItem.status}</div>
+                                <div className={classes.tableRow}>
+                                    {lawItem.issueDate}Not in Object
+                                </div>
+                                <div className={classes.tableRow}>
+                                    {lawItem.cmmdOrgName001 && lawItem.cmmdOrgName001}&nbsp;
+                                    {lawItem.cmmdOrgName002 && lawItem.cmmdOrgName002}&nbsp;
+                                    {lawItem.cmmdOrgName003 && lawItem.cmmdOrgName003}&nbsp;
+                                    {lawItem.cmmdOrgName004 && lawItem.cmmdOrgName004}
+                                </div>
+                                <div className={classes.tableRow}>{lawItem.occurPlace}</div>
+                                <div className={classes.tableRow}>{lawItem.issueReason}</div>
+                                <div className={classes.tableRow}>{lawItem.preventCn} null</div>
+                            </div>
+                        ))}
+                </Grid>
+                <Grid item xs={12} className={classes.pagingBox}>
+                    <div>
+                        총 게시글 <strong>{lawList[0]?.totalCount}</strong> 건
+                    </div>
+                    <Stack spacing={2}>
+                        <Pagination
+                            count={Math.ceil(lawList[0]?.totalCount / 10)}
+                            boundaryCount={10}
+                            shape="rounded"
+                            onChange={(event) => setPage(event.target.value)}
+                            showFirstButton
+                            showLastButton
+                        />
+                    </Stack>
+                    <div>
+                        <ExcelButton>엑셀 다운로드</ExcelButton>
+                    </div>
+                </Grid>
+            </Grid>
+        </DefaultLayout>
+    );
+};
+
+export default List;

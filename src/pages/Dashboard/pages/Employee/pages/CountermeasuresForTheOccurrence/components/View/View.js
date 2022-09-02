@@ -25,6 +25,9 @@ import checkIconOn from '../../../../../../../../assets/images/ic_chk3_on.png';
 import imgPrev from '../../../../../../../../assets/images/prw_photo.jpg';
 import noImg from '../../../../../../../../assets/images/ic_no_image.png';
 
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
 import { useAccidentViewMutation, useAccidentDeleteMutation } from '../../../../../../../../hooks/api/AccidentManagement/AccidentManagement';
 
 const useStyles = makeStyles(() => ({
@@ -392,7 +395,60 @@ const View = () => {
                             <div className={classes.rowTitle}>현장책임자</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    {accident && accident.managerName}
+                                    {/* <TextField
+                                        id="standard-basic"
+                                        variant="outlined"
+                                        value="홍길동"
+                                        sx={{ width: 140 }}
+                                        className={classes.selectMenu}
+                                    /> */}
+                                    <div style={{ width: 140 }}>{accident && accident.managerName}</div>
+                                </div>
+                                <div className={classes.rowTitle}>사고구분</div>
+                                <div className={classes.rowInfo}>
+                                    {/* <Select
+                                        sx={{ width: 100 }}
+                                        className={classes.selectMenu}
+                                        // value={num}
+                                        // onChange={handleChange}
+                                        displayEmpty
+                                    >
+                                        <MenuItem value="">자사</MenuItem>
+                                    </Select> */}
+                                    <div style={{ width: 140 }}>{accident && accident.accidentType}</div>
+                                </div>
+                                <div className={classes.rowTitle}>사고분류</div>
+                                <div className={classes.rowInfo}>
+                                    사망&nbsp;
+                                    {/* <TextField
+                                        id="standard-basic"
+                                        variant="outlined"
+                                        value=""
+                                        sx={{ width: 80 }}
+                                        className={classes.selectMenu}
+                                    /> */}
+                                    {accident && accident.deathToll}
+                                    명&ensp;&ensp;
+                                    동일사고유형&nbsp;
+                                    {/* <TextField
+                                        id="standard-basic"
+                                        variant="outlined"
+                                        value=""
+                                        sx={{ width: 80 }}
+                                        className={classes.selectMenu}
+                                    /> */}
+                                    {accident && accident.jobDeseaseToll}
+                                    명&ensp;&ensp;
+                                    직업성질환&nbsp;
+                                    {/* <TextField
+                                        id="standard-basic"
+                                        variant="outlined"
+                                        value=""
+                                        sx={{ width: 80 }}
+                                        className={classes.selectMenu}
+                                    /> */}
+                                    {accident && accident.sameAccidentInjury}
+                                    명
                                 </div>
                             </div>
                         </div>
@@ -461,7 +517,7 @@ const View = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
-                    <BlueButton className={'button-correction'}>수정</BlueButton>
+                    <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/director/accident-countermeasures-implementation/update/${accident.accidentId}`)}>수정</BlueButton>
                     <BlueButton className={'button-registration'}>등록</BlueButton>
                     <WhiteButton className={'button-cancellation'} onClick={() => handleRedirect()}>취소</WhiteButton>
                     <WhiteButton className={'button-delete'}>삭제</WhiteButton>

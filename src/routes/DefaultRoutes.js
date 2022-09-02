@@ -13,19 +13,13 @@ import { IMStatusPage, IMRegistrationPage, NoticeListPage, NoticeDetailsPage, No
 import { ForgottenPasswordPage } from '../pages/Login/pages/ForgottenPassword';
 import { UserTokenService } from '../services/core/User';
 
-const isUserLoggedIn = () => {
-    let isLoggedIn = false;
-
-    const token = UserTokenService.getItem();
-    if (token) {
-        isLoggedIn = true;
-    }
-
-    return isLoggedIn;
-};
+import { isValid } from "../services/core/User/Token";
 
 const PrivateRoute = () => {
-    return isUserLoggedIn() ? <Outlet /> : <Navigate to="/" />
+    return isValid() ? <Outlet /> : <Navigate to="/" />;
+};
+const PublicRoute = () => {
+    return !isValid() ? <Outlet /> : <Navigate to="/dashboard/director" />;
 };
 
 const DefaultRoutes = () => (
@@ -53,19 +47,21 @@ const DefaultRoutes = () => (
             <Route path="/dashboard/employee/improvement-measures/*" element={<ImprovementMeasuresPage />} />
             <Route path="/dashboard/director/notifications/*" element={<NotificationsPage />} />
             <Route path="/dashboard/employee/accident-countermeasures-implementation/*" element={<CountermeasuresForTheOccurrencePage />} />
-            <Route path="/dashboard/employee/order-for-improvement-and-correction-under-related-law/:page" element={<OrdersForImprovementPage />} />
+            <Route path="/dashboard/employee/order-for-improvement-and-correction-under-related-law/*" element={<OrdersForImprovementPage />} />
             <Route path="/dashboard/employee/measure-to-manage-performance-od-duties-law/:page" element={<MeasureToManageThePerformancePage />} />
             <Route path="/dashboard/employee/security-work-content" element={<ContentsOfWorkPage />} />
             <Route path="/dashboard/director/improvement-measures/*" element={<ImprovementMeasuresPage />} />
             <Route path="/dashboard/director/notifications/*" element={<NotificationsPage />} />
             <Route path="/dashboard/director/accident-countermeasures-implementation/*" element={<CountermeasuresForTheOccurrencePage />} />
-            <Route path="/dashboard/director/order-for-improvement-and-correction-under-related-law/:page" element={<OrdersForImprovementPage />} />
+            <Route path="/dashboard/director/order-for-improvement-and-correction-under-related-law/*" element={<OrdersForImprovementPage />} />
             <Route path="/dashboard/director/measure-to-manage-performance-od-duties-law/:page" element={<MeasureToManageThePerformancePage />} />
             <Route path="/dashboard/director/security-work-content" element={<ContentsOfWorkPage />} />
         </Route>
-        <Route exact path="/" element={<LoginPage />} />
-        <Route path="/registration" element={<RegistrationPage />} />
-        <Route path="/forgotten-password/:step" element={<ForgottenPasswordPage />} />
+        <Route element={<PublicRoute />}>
+            <Route exact path="/" element={<LoginPage />} />
+            <Route path="/registration" element={<RegistrationPage />} />
+            <Route path="/forgotten-password/:step" element={<ForgottenPasswordPage />} />
+        </Route>
     </Routes>
 );
 

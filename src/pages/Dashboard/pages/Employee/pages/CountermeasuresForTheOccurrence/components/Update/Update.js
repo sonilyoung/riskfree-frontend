@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -13,6 +14,11 @@ import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
 
 import { makeStyles } from '@mui/styles';
+import { DefaultLayout } from '../../../../../../../../layouts/Default';
+
+
+import { useAccidentViewMutation, useAccidentDeleteMutation, useAccidentUpdateMutation } from '../../../../../../../../hooks/api/AccidentManagement/AccidentManagement';
+
 
 import radioIcon from '../../../../../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../../../../../assets/images/ic_radio_on.png';
@@ -24,9 +30,6 @@ import noImg from '../../../../../../../../assets/images/ic_no_image.png';
 
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { DefaultLayout } from '../../../../../../../../layouts/Default';
-import { useAccidentInsertMutation } from "../../../../../../../../hooks/api/AccidentManagement/AccidentManagement";
-import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -46,6 +49,7 @@ const useStyles = makeStyles(() => ({
     boxReception: {
         display: 'flex',
         marginBottom: '16px !important',
+        height: '160px',
         '& [class*=boxRow]:first-of-type [class*=rowInfo]:first-of-type': {
             width: '160px',
         },
@@ -88,17 +92,6 @@ const useStyles = makeStyles(() => ({
                 borderTop: 'none'
             }
         },
-        '& [class*=boxRow]:nth-of-type(2) [class*=rowContent]': {
-            '& [class*=rowInfo]:first-of-type': {
-                marginRight: '334px'
-            },
-            '& [class*=rowInfo]:nth-of-type(3)': {
-                marginRight: '66px'
-            },
-            '& [class*=rowTitle]': {
-                borderTop: 'none'
-            }
-        }
     },
     boxRow: {
         display: 'flex',
@@ -141,6 +134,7 @@ const useStyles = makeStyles(() => ({
     },
     boxRegistration: {
         '& [class*=boxRow]': {
+            height: '100px',
             '&:nth-of-type(2)': {
                 height: '60px'
             },
@@ -152,10 +146,7 @@ const useStyles = makeStyles(() => ({
             width: '160px',
         },
         '& [class*=boxRow]:first-of-type [class*=rowInfo]': {
-            width: '340px'
-        },
-        '& [class*=boxRow]:first-of-type [class*=rowContent] [class*=rowInfo]:nth-of-type(5)': {
-            width: '260px'
+            width: '306px'
         },
         '& [class*=boxRow]:first-of-type [class*=rowContent] [class*=rowInfo]:nth-of-type(3)': {
             width: '520px'
@@ -217,7 +208,7 @@ const useStyles = makeStyles(() => ({
     textArea: {
         '& .MuiOutlinedInput-root textarea': {
             height: '49px !important',
-            fontSize: '16px',
+            fontSize: '16px'
         }
     },
     selectMenu: {
@@ -316,65 +307,102 @@ const WhiteButton = styled(ButtonUnstyled)`
 }
 `;
 
-const Registration = () => {
+const Update = () => {
     const classes = useStyles();
-
-    const [accidentInsert] = useAccidentInsertMutation();
-    const navigate = useNavigate();
-
+    const navigate = useNavigate()
+    const { updateid } = useParams()
+    const [accidentView] = useAccidentViewMutation()
+    const [accidentUpdate] = useAccidentUpdateMutation()
     const [accident, setAccident] = useState({
-        accLevelCd: "",
-        accTypeCd001: "",
-        accTypeCd002: "",
-        accTypeCd003: "",
-        accTypeCd004: "",
-        accTypeCd005: "",
-        accTypeCd006: "",
-        accdntCn: "",
-        accidentId: 1,
-        accidentTypeCd: "",
-        deathToll: null,
-        finalReportId: 2,
-        initReportId: 1,
-        jobDeseaseToll: null,
-        managerName: "",
-        occurDate: "",
-        occurPlace: "",
-        occurReason: "",
-        performAfterId: 4,
-        performBeforeId: 3,
-        preventCn: "",
-        recvDate: "2022-08-25",
-        recvFormCd: "",
-        recvTypeCd001: "",
-        recvTypeCd002: "",
-        recvTypeCd003: "",
-        recvTypeCd004: "",
-        recvTypeCd005: "",
-        recvTypeCd006: "",
-        recvUserName: "김한영",
-        sameAccidentInjury: null,
-    });
-    const handleRedirect = () => {
-        navigate(
-            "/dashboard/employee/accident-countermeasures-implementation/list"
-        );
-    };
+        "accLevelCd": "",
+        "accTypeCd001": "",
+        "accTypeCd002": "",
+        "accTypeCd003": "",
+        "accTypeCd004": "",
+        "accTypeCd005": "",
+        "accTypeCd006": "",
+        "accdntCn": "",
+        "accidentId": updateid,
+        "accidentTypeCd": "",
+        "deathToll": null,
+        "finalReportId": null,
+        "initReportId": null,
+        "jobDeseaseToll": null,
+        "managerName": "",
+        "occurDate": "",
+        "occurPlace": "",
+        "occurReason": "",
+        "performAfterId": null,
+        "performBeforeId": null,
+        "preventCn": "",
+        "recvDate": "",
+        "recvFormCd": "",
+        "recvTypeCd001": "",
+        "recvTypeCd002": "",
+        "recvTypeCd003": "",
+        "recvTypeCd004": "",
+        "recvTypeCd005": "",
+        "recvTypeCd006": "",
+        "recvUserName": "",
+        "sameAccidentInjury": null
+    })
 
-    const handleAccidentInsert = () => {
-        accidentInsert(accident)
-            .then((res) => console.log(res))
-            .then(() => handleRedirect());
-    };
+    const handleRedirect = () => {
+        navigate("/dashboard/employee/accident-countermeasures-implementation/list")
+    }
+
+    const fetchAccidentView = async () => {
+        const response = await accidentView(updateid)
+        setAccident(response.data.RET_DATA)
+    }
+
+    const handleUpdate = () => {
+        accidentUpdate(
+            {
+                "accLevelCd": "001",
+                "accTypeCd001": accident.accTypeCd001,
+                "accTypeCd002": accident.accTypeCd002,
+                "accTypeCd003": accident.accTypeCd003,
+                "accTypeCd004": accident.accTypeCd004,
+                "accTypeCd005": accident.accTypeCd005,
+                "accTypeCd006": accident.accTypeCd006,
+                "accdntCn": accident.accdntCn,
+                "accidentId": accident.accidentId,
+                "accidentTypeCd": accident.accidentTypeCd,
+                "deathToll": accident.deathToll,
+                "finalReportId": null,
+                "initReportId": null,
+                "jobDeseaseToll": accident.jobDeseaseToll,
+                "managerName": accident.managerName,
+                "occurDate": accident.occurDate,
+                "occurPlace": accident.occurPlace,
+                "occurReason": accident.occurReason,
+                "performAfterId": null,
+                "performBeforeId": null,
+                "preventCn": accident.preventCn,
+                "recvDate": accident.recvDate,
+                "recvFormCd": accident.recvFormCd,
+                "recvTypeCd001": accident.recvTypeCd001,
+                "recvTypeCd002": accident.recvTypeCd002,
+                "recvTypeCd003": accident.recvTypeCd003,
+                "recvTypeCd004": accident.recvTypeCd004,
+                "recvTypeCd005": accident.recvTypeCd005,
+                "recvTypeCd006": accident.recvTypeCd006,
+                "recvUserName": accident.recvUserName,
+                "sameAccidentInjury": accident.sameAccidentInjury
+            }
+        )
+            .then(() => navigate("/dashboard/employee/accident-countermeasures-implementation/list"))
+    }
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        fetchAccidentView()
+    }, [])
 
     return (
         <DefaultLayout>
-            <Grid
-                className={classes.pageWrap}
-                container
-                rowSpacing={0}
-                columnSpacing={0}
-            >
+            <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
                 <Grid item xs={12} className={classes.listTitle}>
                     <Typography variant="headline2" component="div" gutterBottom>
                         재해발생 및 방지대책 등 이행현황
@@ -388,30 +416,19 @@ const Registration = () => {
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>2022.06.01</div>
                                 <div className={classes.rowTitle}>접수자</div>
-                                <div className={classes.rowInfo}>
-                                    [홍xx] / 방제센터 사고접수부
-                                </div>
+                                <div className={classes.rowInfo}>[홍xx] / 방제센터 사고접수부</div>
                                 <div className={classes.rowTitle}>접수형태</div>
                                 <div className={classes.rowInfo}>
-                                    <FormControl
-                                        className={classes.searchRadio}
-                                        onChange={(event) =>
-                                            setAccident({
-                                                ...accident,
-                                                "recvFormCd": event.target.value,
-                                            })
-                                        }
-                                    >
-                                        <RadioGroup row>
+                                    <FormControl className={classes.searchRadio} onChange={(e) => setAccident({ ...accident, "recvFormCd": e.target.value })}>
+                                        <RadioGroup row value={accident && accident.recvFormCd}>
                                             <FormControlLabel
                                                 value="001"
                                                 label="전화"
                                                 control={
                                                     <Radio
                                                         icon={<img src={radioIcon} alt="radio icon" />}
-                                                        checkedIcon={
-                                                            <img src={radioIconOn} alt="radio icon on" />
-                                                        }
+                                                        checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
+                                                        value={"001"}
                                                     />
                                                 }
                                             />
@@ -421,9 +438,8 @@ const Registration = () => {
                                                 control={
                                                     <Radio
                                                         icon={<img src={radioIcon} alt="radio icon" />}
-                                                        checkedIcon={
-                                                            <img src={radioIconOn} alt="radio icon on" />
-                                                        }
+                                                        checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
+                                                        value={"002"}
                                                     />
                                                 }
                                             />
@@ -433,9 +449,8 @@ const Registration = () => {
                                                 control={
                                                     <Radio
                                                         icon={<img src={radioIcon} alt="radio icon" />}
-                                                        checkedIcon={
-                                                            <img src={radioIconOn} alt="radio icon on" />
-                                                        }
+                                                        checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
+                                                        value={"003"}
                                                     />
                                                 }
                                             />
@@ -447,122 +462,74 @@ const Registration = () => {
                                     <FormControl className={classes.searchRadio}>
                                         <RadioGroup row>
                                             <FormControlLabel
-                                                value={accident.recvTypeCd001}
+                                                value={""}
                                                 label="추락"
+                                                onChange={(e) => setAccident({ ...accident, "recvTypeCd001": accident.recvTypeCd001 ? "" : "001" })}
                                                 control={
                                                     <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={
-                                                            <img src={checkIconOn} alt="check icon on" />
-                                                        }
-                                                        onChange={() =>
-                                                            setAccident({
-                                                                ...accident,
-                                                                "recvTypeCd001": accident.recvTypeCd001
-                                                                    ? ""
-                                                                    : "001",
-                                                            })
-                                                        }
+                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                        checked={!!accident.recvTypeCd001}
                                                     />
                                                 }
                                             />
                                             <FormControlLabel
-                                                value={accident.recvTypeCd002}
+                                                value={""}
                                                 label="끼임"
+                                                onChange={(e) => setAccident({ ...accident, "recvTypeCd002": accident.recvTypeCd002 ? "" : "002" })}
                                                 control={
                                                     <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={
-                                                            <img src={checkIconOn} alt="check icon on" />
-                                                        }
-                                                        onChange={() =>
-                                                            setAccident({
-                                                                ...accident,
-                                                                "recvTypeCd002": accident.recvTypeCd002
-                                                                    ? ""
-                                                                    : "002",
-                                                            })
-                                                        }
+                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                        checked={!!accident.recvTypeCd002}
                                                     />
                                                 }
                                             />
                                             <FormControlLabel
-                                                value={accident.recvTypeCd003}
+                                                value={""}
                                                 label="화재"
+                                                onChange={(e) => setAccident({ ...accident, "recvTypeCd003": accident.recvTypeCd003 ? "" : "003" })}
                                                 control={
                                                     <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={
-                                                            <img src={checkIconOn} alt="check icon on" />
-                                                        }
-                                                        onChange={() =>
-                                                            setAccident({
-                                                                ...accident,
-                                                                "recvTypeCd003": accident.recvTypeCd003
-                                                                    ? ""
-                                                                    : "003",
-                                                            })
-                                                        }
+                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                        checked={!!accident.recvTypeCd003}
                                                     />
                                                 }
                                             />
                                             <FormControlLabel
-                                                value={accident.recvTypeCd004}
+                                                value={""}
                                                 label="전기"
+                                                onChange={(e) => setAccident({ ...accident, "recvTypeCd004": accident.recvTypeCd004 ? "" : "004" })}
                                                 control={
                                                     <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={
-                                                            <img src={checkIconOn} alt="check icon on" />
-                                                        }
-                                                        onChange={() =>
-                                                            setAccident({
-                                                                ...accident,
-                                                                "recvTypeCd004": accident.recvTypeCd004
-                                                                    ? ""
-                                                                    : "004",
-                                                            })
-                                                        }
+                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                        checked={!!accident.recvTypeCd004}
                                                     />
                                                 }
                                             />
                                             <FormControlLabel
-                                                value={accident.recvTypeCd005}
+                                                value={""}
                                                 label="밀폐"
+                                                onChange={(e) => setAccident({ ...accident, "recvTypeCd005": accident.recvTypeCd005 ? "" : "005" })}
                                                 control={
                                                     <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={
-                                                            <img src={checkIconOn} alt="check icon on" />
-                                                        }
-                                                        onChange={() =>
-                                                            setAccident({
-                                                                ...accident,
-                                                                "recvTypeCd005": accident.recvTypeCd005
-                                                                    ? ""
-                                                                    : "005",
-                                                            })
-                                                        }
+                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                        checked={!!accident.recvTypeCd005}
                                                     />
                                                 }
                                             />
                                             <FormControlLabel
-                                                value={accident.recvTypeCd006}
+                                                value={""}
                                                 label="중량물"
+                                                onChange={(e) => setAccident({ ...accident, "recvTypeCd006": accident.recvTypeCd006 ? "" : "006" })}
                                                 control={
                                                     <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={
-                                                            <img src={checkIconOn} alt="check icon on" />
-                                                        }
-                                                        onChange={() =>
-                                                            setAccident({
-                                                                ...accident,
-                                                                "recvTypeCd006": accident.recvTypeCd006
-                                                                    ? ""
-                                                                    : "006",
-                                                            })
-                                                        }
+                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                        checked={!!accident.recvTypeCd006}
                                                     />
                                                 }
                                             />
@@ -583,10 +550,8 @@ const Registration = () => {
                                         id="outlined-multiline-static"
                                         multiline
                                         rows={4}
-                                        value={accident.accdntCn}
-                                        onChange={(event) =>
-                                            setAccident({ ...accident, "accdntCn": event.target.value })
-                                        }
+                                        onChange={(e) => setAccident({ ...accident, "accdntCn": e.target.value })}
+                                        value={accident && accident.accdntCn}
                                     />
                                 </div>
                             </div>
@@ -605,12 +570,9 @@ const Registration = () => {
                                         id="date"
                                         className={classes.selectMenu}
                                         type="date"
-                                        onChange={(event) =>
-                                            setAccident({
-                                                ...accident,
-                                                "occurDate": event.target.value,
-                                            })
-                                        }
+                                        onInput={(e) => setAccident({ ...accident, "occurDate": e.target.value })}
+                                        value={accident && accident.occurDate}
+                                        format={"YYYY-MM-DD"}
                                     />
                                 </div>
                                 <div className={classes.rowTitle}>사고유형</div>
@@ -618,122 +580,74 @@ const Registration = () => {
                                     <FormControl className={classes.searchRadio}>
                                         <RadioGroup row>
                                             <FormControlLabel
-                                                value={accident.accTypeCd001}
+                                                value={""}
                                                 label="추락"
+                                                onChange={(e) => setAccident({ ...accident, "accTypeCd001": accident.accTypeCd001 ? "" : "001" })}
                                                 control={
                                                     <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={
-                                                            <img src={checkIconOn} alt="check icon on" />
-                                                        }
-                                                        onChange={() =>
-                                                            setAccident({
-                                                                ...accident,
-                                                                "accTypeCd001": accident.accTypeCd001
-                                                                    ? ""
-                                                                    : "001",
-                                                            })
-                                                        }
+                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                        checked={!!accident.accTypeCd001}
                                                     />
                                                 }
                                             />
                                             <FormControlLabel
-                                                value={accident.accTypeCd002}
+                                                value={""}
                                                 label="끼임"
+                                                onChange={(e) => setAccident({ ...accident, "accTypeCd002": accident.accTypeCd002 ? "" : "002" })}
                                                 control={
                                                     <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={
-                                                            <img src={checkIconOn} alt="check icon on" />
-                                                        }
-                                                        onChange={() =>
-                                                            setAccident({
-                                                                ...accident,
-                                                                "accTypeCd002": accident.accTypeCd002
-                                                                    ? ""
-                                                                    : "002",
-                                                            })
-                                                        }
+                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                        checked={!!accident.accTypeCd002}
                                                     />
                                                 }
                                             />
                                             <FormControlLabel
-                                                value={accident.accTypeCd003}
+                                                value={""}
                                                 label="화재"
+                                                onChange={(e) => setAccident({ ...accident, "accTypeCd003": accident.accTypeCd003 ? "" : "003" })}
                                                 control={
                                                     <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={
-                                                            <img src={checkIconOn} alt="check icon on" />
-                                                        }
-                                                        onChange={() =>
-                                                            setAccident({
-                                                                ...accident,
-                                                                "accTypeCd003": accident.accTypeCd003
-                                                                    ? ""
-                                                                    : "003",
-                                                            })
-                                                        }
+                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                        checked={!!accident.accTypeCd003}
                                                     />
                                                 }
                                             />
                                             <FormControlLabel
-                                                value={accident.accTypeCd004}
+                                                value={""}
                                                 label="전기"
+                                                onChange={(e) => setAccident({ ...accident, "accTypeCd004": accident.accTypeCd004 ? "" : "004" })}
                                                 control={
                                                     <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={
-                                                            <img src={checkIconOn} alt="check icon on" />
-                                                        }
-                                                        onChange={() =>
-                                                            setAccident({
-                                                                ...accident,
-                                                                "accTypeCd004": accident.accTypeCd004
-                                                                    ? ""
-                                                                    : "004",
-                                                            })
-                                                        }
+                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                        checked={!!accident.accTypeCd004}
                                                     />
                                                 }
                                             />
                                             <FormControlLabel
-                                                value={accident.accTypeCd005}
+                                                value={""}
                                                 label="밀폐"
+                                                onChange={(e) => setAccident({ ...accident, "accTypeCd005": accident.accTypeCd005 ? "" : "005" })}
                                                 control={
                                                     <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={
-                                                            <img src={checkIconOn} alt="check icon on" />
-                                                        }
-                                                        onChange={() =>
-                                                            setAccident({
-                                                                ...accident,
-                                                                "accTypeCd005": accident.accTypeCd005
-                                                                    ? ""
-                                                                    : "005",
-                                                            })
-                                                        }
+                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                        checked={!!accident.accTypeCd005}
                                                     />
                                                 }
                                             />
                                             <FormControlLabel
-                                                value={accident.accTypeCd006}
+                                                value={""}
                                                 label="중량물"
+                                                onChange={(e) => setAccident({ ...accident, "accTypeCd006": accident.accTypeCd006 ? "" : "006" })}
                                                 control={
                                                     <Checkbox
                                                         icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={
-                                                            <img src={checkIconOn} alt="check icon on" />
-                                                        }
-                                                        onChange={() =>
-                                                            setAccident({
-                                                                ...accident,
-                                                                "accTypeCd006": accident.accTypeCd006
-                                                                    ? ""
-                                                                    : "006",
-                                                            })
-                                                        }
+                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                        checked={!!accident.accTypeCd006}
                                                     />
                                                 }
                                             />
@@ -745,13 +659,8 @@ const Registration = () => {
                                     <Select
                                         sx={{ width: 100 }}
                                         className={classes.selectMenu}
-                                        value={accident.accLevelCd}
-                                        onChange={(event) =>
-                                            setAccident({
-                                                ...accident,
-                                                "accLevelCd": event.target.value,
-                                            })
-                                        }
+                                        value={accident && accident.accLevelCd}
+                                        onChange={(e) => setAccident({ ...accident, "accLevelCd": e.target.value })}
                                         displayEmpty
                                     >
                                         <MenuItem value="001">1급</MenuItem>
@@ -766,14 +675,9 @@ const Registration = () => {
                                     <TextField
                                         id="standard-basic"
                                         variant="outlined"
-                                        value={accident.occurPlace}
+                                        value={accident && accident.occurPlace}
                                         className={classes.selectMenu}
-                                        onChange={(event) =>
-                                            setAccident({
-                                                ...accident,
-                                                "occurPlace": event.target.value,
-                                            })
-                                        }
+                                        onChange={(e) => setAccident({ ...accident, "occurPlace": e.target.value })}
                                     />
                                 </div>
                             </div>
@@ -785,15 +689,10 @@ const Registration = () => {
                                     <TextField
                                         id="standard-basic"
                                         variant="outlined"
-                                        value={accident.managerName}
+                                        value={accident && accident.managerName}
+                                        onChange={(e) => setAccident({ ...accident, "managerName": e.target.value })}
                                         sx={{ width: 140 }}
                                         className={classes.selectMenu}
-                                        onChange={(event) =>
-                                            setAccident({
-                                                ...accident,
-                                                "managerName": event.target.value,
-                                            })
-                                        }
                                     />
                                 </div>
                                 <div className={classes.rowTitle}>사고구분</div>
@@ -801,18 +700,16 @@ const Registration = () => {
                                     <Select
                                         sx={{ width: 100 }}
                                         className={classes.selectMenu}
-                                        value={accident.accidentTypeCd}
-                                        onChange={(event) =>
-                                            setAccident({
-                                                ...accident,
-                                                "accidentTypeCd": event.target.value,
-                                            })
-                                        }
+                                        value={accident && accident.accidentTypeCd}
+                                        onChange={(e) => setAccident({ ...accident, "accidentTypeCd": e.target.value })}
                                         displayEmpty
                                     >
-                                        <MenuItem value="001">지사</MenuItem>
-                                        <MenuItem value="002">도급</MenuItem>
-                                        <MenuItem value="003">기타</MenuItem>
+                                        <MenuItem value="001">추락</MenuItem>
+                                        <MenuItem value="002">끼임</MenuItem>
+                                        <MenuItem value="003">화재</MenuItem>
+                                        <MenuItem value="004">전기</MenuItem>
+                                        <MenuItem value="005">밀폐</MenuItem>
+                                        <MenuItem value="006">중량물</MenuItem>
                                     </Select>
                                 </div>
                                 <div className={classes.rowTitle}>사고분류</div>
@@ -821,49 +718,30 @@ const Registration = () => {
                                     <TextField
                                         id="standard-basic"
                                         variant="outlined"
-                                        value={accident.deathToll ? accident.deathToll : ""}
+                                        value={accident && accident.deathToll}
+                                        onChange={(e) => setAccident({ ...accident, "deathToll": e.target.value })}
                                         sx={{ width: 80 }}
                                         className={classes.selectMenu}
-                                        onChange={(event) =>
-                                            setAccident({
-                                                ...accident,
-                                                "deathToll": event.target.value,
-                                            })
-                                        }
                                     />
-                                    명&ensp;&ensp; 동일사고유형&nbsp;
+                                    명&ensp;&ensp;
+                                    동일사고유형&nbsp;
                                     <TextField
                                         id="standard-basic"
                                         variant="outlined"
-                                        value={
-                                            accident.sameAccidentInjury
-                                                ? accident.sameAccidentInjury
-                                                : ""
-                                        }
+                                        value={accident && accident.jobDeseaseToll}
+                                        onChange={(e) => setAccident({ ...accident, "jobDeseaseToll": e.target.value })}
                                         sx={{ width: 80 }}
                                         className={classes.selectMenu}
-                                        onChange={(event) =>
-                                            setAccident({
-                                                ...accident,
-                                                "sameAccidentInjury": event.target.value,
-                                            })
-                                        }
                                     />
-                                    명&ensp;&ensp; 직업성질환&nbsp;
+                                    명&ensp;&ensp;
+                                    직업성질환&nbsp;
                                     <TextField
                                         id="standard-basic"
                                         variant="outlined"
-                                        value={
-                                            accident.jobDeseaseToll ? accident.jobDeseaseToll : ""
-                                        }
+                                        value={accident && accident.sameAccidentInjury}
+                                        onChange={(e) => setAccident({ ...accident, "sameAccidentInjury": e.target.value })}
                                         sx={{ width: 80 }}
                                         className={classes.selectMenu}
-                                        onChange={(event) =>
-                                            setAccident({
-                                                ...accident,
-                                                "jobDeseaseToll": event.target.value,
-                                            })
-                                        }
                                     />
                                     명
                                 </div>
@@ -878,19 +756,12 @@ const Registration = () => {
                                         id="outlined-multiline-static"
                                         multiline
                                         rows={4}
-                                        value={accident.occurReason}
-                                        onChange={(event) =>
-                                            setAccident({
-                                                ...accident,
-                                                "occurReason": event.target.value,
-                                            })
-                                        }
+                                        value={accident && accident.occurReason}
+                                        onChange={(e) => setAccident({ ...accident, "occurReason": e.target.value })}
                                     />
                                 </div>
                                 <div className={classes.rowInfo}>
-                                    <AccidentReportButton sx={{ marginRight: "10px" }}>
-                                        초기사고 보고서
-                                    </AccidentReportButton>
+                                    <AccidentReportButton sx={{ marginRight: '10px' }}>초기사고 보고서</AccidentReportButton>
                                     <AccidentReportButton>최종사고 보고서</AccidentReportButton>
                                 </div>
                             </div>
@@ -907,13 +778,8 @@ const Registration = () => {
                                         id="outlined-multiline-static"
                                         multiline
                                         rows={4}
-                                        value={accident.preventCn}
-                                        onChange={(event) =>
-                                            setAccident({
-                                                ...accident,
-                                                "preventCn": event.target.value,
-                                            })
-                                        }
+                                        value={accident && accident.preventCn}
+                                        onChange={(e) => setAccident({ ...accident, "preventCn": e.target.value })}
                                     />
                                 </div>
                             </div>
@@ -960,15 +826,15 @@ const Registration = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
-                    {/* <BlueButton className={"button-correction"}>수정</BlueButton> */}
-                    <BlueButton className={"button-registration"} onClick={handleAccidentInsert}>등록</BlueButton>
-                    <WhiteButton className={"button-cancellation"}>취소</WhiteButton>
-                    <WhiteButton className={"button-delete"}>삭제</WhiteButton>
-                    <WhiteButton className={"button-list"}>목록</WhiteButton>
+                    <BlueButton className={'button-correction'} onClick={handleUpdate}>수정</BlueButton>
+                    <BlueButton className={'button-registration'}>등록</BlueButton>
+                    <WhiteButton className={'button-cancellation'}>취소</WhiteButton>
+                    <WhiteButton className={'button-list'}>목록</WhiteButton>
                 </Grid>
             </Grid>
         </DefaultLayout>
-    );
-};
 
-export default Registration;
+    )
+}
+
+export default Update

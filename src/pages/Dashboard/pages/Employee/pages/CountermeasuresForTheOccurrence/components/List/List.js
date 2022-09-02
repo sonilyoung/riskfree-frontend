@@ -65,8 +65,24 @@ const useStyles = makeStyles(() => ({
             }
         },
         '& >div:first-of-type [class*=searchRadio]': {
-            width: '640px',
-        }
+            width: '610px',
+        },
+        '& >div:first-of-type [class*=searchInfo] >div': {
+            '&:nth-of-type(2) >div +div, &:nth-of-type(4) >div +div': {
+                border: '1px solid rgba(0, 0, 0, 0.23)',
+                borderRadius: '6px',
+            },
+            '&:nth-of-type(4)': {
+                marginLeft: '74px',
+                width: '437px',
+            },
+        },
+        '& >div:last-of-type [class*=searchInfo] >div': {
+            '&:nth-of-type(4) >div +div': {
+                border: '1px solid rgba(0, 0, 0, 0.23)',
+                borderRadius: '6px',
+            },
+        },
     },
     searchRadio: {
         '& [class*=body1]': {
@@ -87,9 +103,9 @@ const useStyles = makeStyles(() => ({
             display: 'flex',
             alignItems: 'center',
             '&:not(&:first-of-type)': {
-                marginLeft: '58px'
-            }
-        }
+                marginLeft: '30px'
+            },
+        },
     },
     infoTitle: {
         minWidth: '65px',
@@ -315,7 +331,6 @@ const List = () => {
     const [workplaceList, setWorkplaceList] = useState([])
     const [accidents, setAccidents] = useState([])
     const [occurPlacesList, setOccurPlacesList] = useState([])
-    const [accTypeAll, setAccTypeAll] = useState(false)
     const [accTypeFirst, setAccTypeFirst] = useState(false)
     const [accTypeSecond, setAccTypeSecond] = useState(false)
     const [accTypeThird, setAccTypeThird] = useState(false)
@@ -330,6 +345,9 @@ const List = () => {
     const [workplaceSelect, setWorkplaceSelect] = useState("")
     const [occurPlaceSelect, setOccurPlaceSelect] = useState("")
     const [page, setPage] = useState(1)
+    const [death, setDeath] = useState(false)
+    const [job, setJob] = useState(false)
+    const [same, setSame] = useState(false)
 
 
     const [isCheckAll, setIsCheckAll] = useState(false);
@@ -444,10 +462,13 @@ const List = () => {
             "accidentTypeCd": accTypeCd,
             "baselineId": 6,
             "countPerPage": 10,
+            "death": death ? "Y" : "",
             "endDate": finishDate,
+            "job": job ? "Y" : "",
             "managerName": managerName,
             "occurPlace": occurPlaceSelect,
             "pageNum": page,
+            "same": same ? "Y" : "",
             "startDate": startDate,
             "workplaceId": workplaceSelect
         })
@@ -548,28 +569,38 @@ const List = () => {
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>재해유형</div>
-                                <label>
-                                    <Checkbox
-                                        icon={<img src={checkIcon} alt="check icon" />}
-                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                        onChange={handleSelectAll}
-                                        checked={isCheckAll}
-                                    />
-                                    Select All
-                                </label>
-                                {list.map(({ id, label, value }) => (
-                                    <label>
-                                        <Checkbox
-                                            id={id}
-                                            icon={<img src={checkIcon} alt="check icon" />}
-                                            checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                            value={value}
-                                            checked={isCheck.includes(id)}
-                                            onClick={handleClick}
+                                <FormControl className={classes.searchRadio}>
+                                    <RadioGroup row>
+                                        <FormControlLabel
+                                            value="전체"
+                                            label="전체"
+                                            control={
+                                                <Checkbox
+                                                    icon={<img src={checkIcon} alt="check icon" />}
+                                                    checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                    onChange={handleSelectAll}
+                                                    checked={isCheckAll}
+                                                />
+                                            }
                                         />
-                                        {label}
-                                    </label>
-                                ))}
+                                        {list.map(({ id, label, value }) => (
+                                            <FormControlLabel
+                                                value={value}
+                                                label={label}
+                                                control={
+                                                    <Checkbox
+                                                        id={id}
+                                                        icon={<img src={checkIcon} alt="check icon" />}
+                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                        value={value}
+                                                        checked={isCheck.includes(id)}
+                                                        onClick={handleClick}
+                                                    />
+                                                }
+                                            />
+                                        ))}
+                                    </RadioGroup>
+                                </FormControl>
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>사고등급</div>
@@ -586,6 +617,46 @@ const List = () => {
                                     <MenuItem value="004">4급</MenuItem>
                                     <MenuItem value="005">5급</MenuItem>
                                 </Select>
+                            </div>
+                            <div>
+                                <div className={classes.infoTitle}>사고유형</div>
+                                <FormControl className={classes.searchRadio}>
+                                    <RadioGroup row>
+                                        <FormControlLabel
+                                            value="Y"
+                                            label="사망"
+                                            control={
+                                                <Checkbox
+                                                    icon={<img src={checkIcon} alt="check icon" />}
+                                                    checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                    onChange={() => setDeath(!death)}
+                                                />
+                                            }
+                                        />
+                                        <FormControlLabel
+                                            value="Y"
+                                            label="동일사고유형"
+                                            control={
+                                                <Checkbox
+                                                    icon={<img src={checkIcon} alt="check icon" />}
+                                                    checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                    onChange={() => setJob(!job)}
+                                                />
+                                            }
+                                        />
+                                        <FormControlLabel
+                                            value="Y"
+                                            label="직업성질환"
+                                            control={
+                                                <Checkbox
+                                                    icon={<img src={checkIcon} alt="check icon" />}
+                                                    checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                    onChange={() => setSame(!same)}
+                                                />
+                                            }
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
                             </div>
                         </div>
                     </div>

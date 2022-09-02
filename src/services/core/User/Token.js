@@ -18,7 +18,12 @@ export const getDecoded = () => {
 };
 
 export const isValid = () => {
-    return true;
-}
+    const token = getDecoded();
+    if (token && token.exp > Math.floor(Date.now() / 1000)) {
+        return true;
+    }
+
+    return false;
+};
 
 export const remove = () => localStorage.removeItem(TOKEN);

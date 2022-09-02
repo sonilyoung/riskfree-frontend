@@ -1,18 +1,17 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
-import { DefaultLayout } from '../../../../../../layouts/Default';
-
+import { Route, Routes, useParams } from "react-router-dom";
 import List from './components/List/List'
 import Registration from './components/Registration/Registration';
 
 
 const OrdersForImprovement = () => {
-    const { page } = useParams()
     return (
-        <DefaultLayout>
-            {page === 'list' && <List />}
-            {page === 'registration' && <Registration />}
-        </DefaultLayout>
+        <Routes>
+            <Route path="list" element={<List />} />
+            <Route path="registration" element={<Registration />} />
+            {/* <Route path="view/:id" element={<View />} /> */}
+            {/* <Route path="update/:updateid" element={<Update />} /> */}
+        </Routes>
     )
 }
 

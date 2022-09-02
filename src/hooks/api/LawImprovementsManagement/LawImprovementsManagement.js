@@ -40,9 +40,8 @@ export const lawImprovementsManagement = createApi({
         }),
         lawIssueReassonSelect: builder.mutation({
             query: (body) => ({
-                url: 'improvement/law/issueReason/select',
+                url: `improvement/law/issueReason/select?baselineId=${body}`,
                 method: 'POST',
-                body: body,
             })
         }),
         lawInsert: builder.mutation({
