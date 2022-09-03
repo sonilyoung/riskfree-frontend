@@ -361,7 +361,7 @@ function List() {
                     </div>
                     <div className={classes.searchButtons}>
                         <SearchButton onClick={handleSearch}>조회</SearchButton>
-                        <RegisterButton sx={{ marginLeft: '10px' }} onClick={() => handleRedirect()}>조회</RegisterButton>
+                        <RegisterButton sx={{ marginLeft: '10px' }} onClick={() => handleRedirect()}>등록</RegisterButton>
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.dataTable}>

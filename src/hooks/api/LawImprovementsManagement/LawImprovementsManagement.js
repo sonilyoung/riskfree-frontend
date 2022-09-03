@@ -19,9 +19,8 @@ export const lawImprovementsManagement = createApi({
     endpoints: (builder) => ({
         lawView: builder.mutation({
             query: (body) => ({
-                url: 'improvement/law/view',
+                url: `improvement/law/view?lawImproveId=${body}`,
                 method: 'POST',
-                body: body,
             }),
         }),
         lawUpdate: builder.mutation({
@@ -53,9 +52,8 @@ export const lawImprovementsManagement = createApi({
         }),
         lawDelete: builder.mutation({
             query: (body) => ({
-                url: 'improvement/law/delete',
+                url: `improvement/law/delete?lawImproveId=${body}`,
                 method: 'POST',
-                body: body,
             })
         }),
     }),

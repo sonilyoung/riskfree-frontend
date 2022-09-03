@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
@@ -23,7 +23,8 @@ import checkIcon from '../../../../../../../../assets/images/ic_chk3.png';
 import checkIconOn from '../../../../../../../../assets/images/ic_chk3_on.png';
 import imgPrev from '../../../../../../../../assets/images/prw_photo.jpg';
 import noImg from '../../../../../../../../assets/images/ic_no_image.png';
-import { useLawInsertMutation } from "../../../../../../../../hooks/api/LawImprovementsManagement/LawImprovementsManagement";
+import { useLawUpdateMutation } from "../../../../../../../../hooks/api/LawImprovementsManagement/LawImprovementsManagement";
+import { useLawViewMutation } from "../../../../../../../../hooks/api/LawImprovementsManagement/LawImprovementsManagement";
 import { useGetLoginInfoMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
 import { DefaultLayout } from "../../../../../../../../layouts/Default";
 import moment from "moment"
@@ -273,14 +274,15 @@ const WhiteButton = styled(ButtonUnstyled)`
 }
 `;
 
-const Registration = () => {
+const Update = () => {
     const classes = useStyles();
     const navigate = useNavigate();
-
-    const [lawInsert] = useLawInsertMutation();
-    const todaysDate = moment().format("YYYY-MM-DD")
+    const { updateid } = useParams()
+    const [lawView] = useLawViewMutation();
+    const [lawUpdate] = useLawUpdateMutation();
     const [getLoginInfo] = useGetLoginInfoMutation()
     const [loginInfo, setLoginInfo] = useState({})
+    const todaysDate = moment().format("YYYY-MM-DD")
 
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -315,14 +317,40 @@ const Registration = () => {
         );
     };
 
-    const handleLawInsert = () => {
-        lawInsert(law)
-            .then((res) => console.log(res))
-            .then(() => handleRedirect());
+    const handleLawView = async () => {
+        const response = await lawView(updateid)
+        setLaw(response.data.RET_DATA)
     };
 
+    const handleLawUpdate = async () => {
+        lawUpdate({
+            "cmmdOrgCd001": law.cmmdOrgCd001,
+            "cmmdOrgCd002": law.cmmdOrgCd002,
+            "cmmdOrgCd003": law.cmmdOrgCd003,
+            "cmmdOrgCd004": law.cmmdOrgCd004,
+            "countPerPage": 0,
+            "dueDate": law.dueDate,
+            "improveCn": law.improveCn,
+            "improveTypeCd": law.improveTypeCd,
+            "issueReason": law.issueReason,
+            "lawImproveId": updateid,
+            "occurPlace": law.occurPlace,
+            "orderDate": law.orderDate,
+            "pageNum": 0,
+            "performAfterId": law.performAfterId,
+            "performBeforeId": law.performBeforeId,
+            "preventCn": law.preventCn,
+            "recvCd": law.recvCd,
+            "recvDate": law.recvDate,
+            "recvUserName": law.recvUserName
+        })
+            .then(() => handleRedirect())
+    }
+
     useEffect(() => {
+        window.scrollTo(0, 0);
         handleLoginInfo()
+        handleLawView()
     }, [])
 
     return (
@@ -361,7 +389,7 @@ const Registration = () => {
                                             })
                                         }
                                     >
-                                        <RadioGroup row>
+                                        <RadioGroup row value={law && law.recvCd}>
                                             <FormControlLabel
                                                 value="001"
                                                 label="공문"
@@ -404,7 +432,7 @@ const Registration = () => {
                                 <div className={classes.rowTitle}>명령구분</div>
                                 <div className={classes.rowInfo}>
                                     <FormControl className={classes.searchRadio}>
-                                        <RadioGroup row>
+                                        <RadioGroup row value={law && law.cmmdOrgCd001 || law && law.cmmdOrgCd002 || law && law.cmmdOrgCd003 || law && law.cmmdOrgCd004 || law && law.cmmdOrgCd005 || law && law.cmmdOrgCd006}>
                                             <FormControlLabel
                                                 value={law.cmmdOrgCd001}
                                                 label="고용노동부"
@@ -420,6 +448,7 @@ const Registration = () => {
                                                                 cmmdOrgCd001: law.cmmdOrgCd001 ? "" : "001",
                                                             })
                                                         }
+                                                        checked={!!law.cmmdOrgCd001}
                                                     />
                                                 }
                                             />
@@ -438,6 +467,7 @@ const Registration = () => {
                                                                 cmmdOrgCd002: law.cmmdOrgCd002 ? "" : "002",
                                                             })
                                                         }
+                                                        checked={!!law.cmmdOrgCd002}
                                                     />
                                                 }
                                             />
@@ -456,6 +486,7 @@ const Registration = () => {
                                                                 cmmdOrgCd003: law.cmmdOrgCd003 ? "" : "003",
                                                             })
                                                         }
+                                                        checked={!!law.cmmdOrgCd003}
                                                     />
                                                 }
                                             />
@@ -473,6 +504,7 @@ const Registration = () => {
                                                             cmmdOrgCd004: law.cmmdOrgCd004 ? "" : "004",
                                                         })
                                                     }
+                                                    checked={!!law.cmmdOrgCd004}
                                                 />
                                                 }
                                             />
@@ -597,20 +629,12 @@ const Registration = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
-                    {/* <BlueButton className={"button-correction"}>수정</BlueButton> */}
-                    <BlueButton className={"button-registration"} onClick={handleLawInsert}>등록</BlueButton>
+                    <BlueButton className={"button-correction"} onClick={handleLawUpdate}>수정</BlueButton>
                     <WhiteButton
                         className={"button-cancellation"}
                         onClick={() => handleRedirect()}
                     >
                         취소
-                    </WhiteButton>
-                    <WhiteButton className={"button-delete"}>삭제</WhiteButton>
-                    <WhiteButton
-                        className={"button-list"}
-                        onClick={() => handleRedirect()}
-                    >
-                        목록
                     </WhiteButton>
                 </Grid>
             </Grid>
@@ -618,4 +642,4 @@ const Registration = () => {
     );
 };
 
-export default Registration;
+export default Update;

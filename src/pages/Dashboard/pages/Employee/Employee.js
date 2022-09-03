@@ -82,6 +82,8 @@ import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
+import { useGetLoginInfoMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+
 
 
 const useStyles = makeStyles(() => ({
@@ -257,7 +259,9 @@ const useStyles = makeStyles(() => ({
         top: '-20px',
         left: '-140px',
         display: 'flex',
-        display: 'none !important'
+    },
+    chartPopupClose: {
+        display: "none !important"
     },
     chartPopList: {
         display: 'flex',
@@ -1019,7 +1023,7 @@ const useStyles = makeStyles(() => ({
         }
     },
     headerPopup: {
-        display: 'none !important',
+        display: 'block',
         position: 'absolute',
         top: '0px',
         left: '0px',
@@ -1034,9 +1038,15 @@ const useStyles = makeStyles(() => ({
             left: '5px',
             height: '535px'
         },
+        '&.user_popupClose': {
+            display: "none"
+        },
         '&.settings_popup': {
             top: '65px',
             left: '-80px'
+        },
+        '&.settings_popupClose': {
+            display: "none"
         },
         '& [class*=popupAccord]': {
             background: 'transparent',
@@ -1704,6 +1714,16 @@ const Employee = () => {
     const navigate = useNavigate();
 
     const [num, setNum] = React.useState('');
+    const [userPopup, setUserPopup] = useState(false)
+    const [settingsPopup, setSettingsPopup] = useState(false)
+    const [chartPop, setChartPop] = useState(false)
+    const [getLoginInfo] = useGetLoginInfoMutation()
+    const [loginInfo, setLoginInfo] = useState({})
+
+    const handleLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfo(response.data.RET_DATA)
+    }
 
     const handleLogOut = () => {
         remove();
@@ -1720,16 +1740,17 @@ const Employee = () => {
 
     const handleFetchList = async () => {
         const response = await noticesSelect({
-            "col": null,
+            "col": "",
             "countPerPage": null,
             "pageNum": null,
-            "param": null
+            "param": ""
         })
         setNoticesList(response)
     }
 
     useEffect(() => {
         handleFetchList()
+        handleLoginInfo()
     }, [])
 
     return (
@@ -1744,11 +1765,11 @@ const Employee = () => {
                         </Grid>
                         <Grid className={classes.mainMenu} item xs={6.3}>
                             <div className={classes.leftMenu}>
-                                <UserButton className={classes.mainMenuButton}></UserButton>
-                                <div className={classes.headerPopup + ' user_popup'}>
+                                <UserButton className={classes.mainMenuButton} onClick={() => setUserPopup(true)}></UserButton>
+                                <div className={userPopup ? (classes.headerPopup + ' user_popup') : (classes.headerPopup + ' user_popupClose')}>
                                     <div className={classes.popHeader}>
                                         최초 사용자 설정
-                                        <ButtonClosePop></ButtonClosePop>
+                                        <ButtonClosePop onClick={() => setUserPopup(!userPopup)}></ButtonClosePop>
                                     </div>
                                     <div className={classes.headerPopList}>
                                         <div className={classes.userTab}>
@@ -1831,7 +1852,7 @@ const Employee = () => {
                             </div>
                             <div className={classes.rightMenu}>
                                 <div className={classes.userInformation}>
-                                    <div>admin1 / <span>홍길동 안전보건팀장</span></div>
+                                    <div>{loginInfo.loginId} / <span>{loginInfo.roleName}</span></div>
                                     <div>계약기간 : 22.07.01 ~ 23.06.31</div>
                                 </div>
                                 <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
@@ -1839,7 +1860,7 @@ const Employee = () => {
                                 <div className={classes.headerPopup + ' settings_popup'}>
                                     <div className={classes.popHeader}>
                                         중대재해 자체점검 등록 차수 설정
-                                        <ButtonClosePop></ButtonClosePop>
+                                        <ButtonClosePop onClick={() => setSettingsPopup(false)}></ButtonClosePop>
                                     </div>
                                     <div className={classes.headerPopList}>
                                         <Accordion className={classes.popupAccord}>
@@ -1952,12 +1973,12 @@ const Employee = () => {
                         </div>
                     </Grid>
                     <Grid className={classes.headerNavigation} item xs={5.8}>
-                        <ChartButton></ChartButton>
-                        <div className={classes.chartPopup}>
+                        <ChartButton onClick={() => setChartPop(true)}></ChartButton>
+                        <div className={chartPop ? classes.chartPopup : classes.chartPopupClose}>
                             <div className={classes.chartPopList}>
                                 <div className={classes.popHeader}>
                                     중대재해 대응수준 Report
-                                    <ButtonClosePop></ButtonClosePop>
+                                    <ButtonClosePop onClick={() => setChartPop(false)}></ButtonClosePop>
                                 </div>
                                 <div className={classes.popList}>
                                     <div className={classes.PopListItem + ' active'}>차수별 대응수준 현황 (통합)</div>
@@ -2472,7 +2493,7 @@ const Employee = () => {
                                 </div>
                             </Grid>
                             <Grid className={classes.footBox + ' boxUp'} item xs={5}>
-                                <Link className={classes.footLink} to={"#none"} underline="none">산업재해 누적 집계</Link>
+                                <Link className={classes.footLink} to="/dashboard/employee/accident-countermeasures-implementation/list" underline="none">산업재해 누적 집계</Link>
                                 <div className={classes.bottomBox}>
                                     <div>
                                         <div>사망</div>
@@ -2542,7 +2563,7 @@ const Employee = () => {
                                         <div>
                                             <div>{notice.insertDate}</div>
                                             {notice.importCd === "001" && <span className={classes.slideLabelHot}>HOT</span>}
-                                            <Link to={`/dashboard/employee/notifications/list/${notice.noticeId}`} className={classes.linkBtn}>{notice.title}</Link>
+                                            <Link to={`/dashboard/employee/notifications/view/${notice.noticeId}`} className={classes.linkBtn}>{notice.title}</Link>
                                         </div>
                                     ))}
                                 </Slider>

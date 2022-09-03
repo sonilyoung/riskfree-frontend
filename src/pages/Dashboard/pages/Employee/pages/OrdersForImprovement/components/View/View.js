@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
@@ -23,10 +23,9 @@ import checkIcon from '../../../../../../../../assets/images/ic_chk3.png';
 import checkIconOn from '../../../../../../../../assets/images/ic_chk3_on.png';
 import imgPrev from '../../../../../../../../assets/images/prw_photo.jpg';
 import noImg from '../../../../../../../../assets/images/ic_no_image.png';
-import { useLawInsertMutation } from "../../../../../../../../hooks/api/LawImprovementsManagement/LawImprovementsManagement";
-import { useGetLoginInfoMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
+import { useLawViewMutation } from "../../../../../../../../hooks/api/LawImprovementsManagement/LawImprovementsManagement";
+import { useLawDeleteMutation } from "../../../../../../../../hooks/api/LawImprovementsManagement/LawImprovementsManagement";
 import { DefaultLayout } from "../../../../../../../../layouts/Default";
-import moment from "moment"
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -273,41 +272,13 @@ const WhiteButton = styled(ButtonUnstyled)`
 }
 `;
 
-const Registration = () => {
+const View = () => {
     const classes = useStyles();
     const navigate = useNavigate();
-
-    const [lawInsert] = useLawInsertMutation();
-    const todaysDate = moment().format("YYYY-MM-DD")
-    const [getLoginInfo] = useGetLoginInfoMutation()
-    const [loginInfo, setLoginInfo] = useState({})
-
-    const handleLoginInfo = async () => {
-        const response = await getLoginInfo()
-        setLoginInfo(response.data.RET_DATA)
-    }
-
-    const [law, setLaw] = useState({
-        recvDate: todaysDate,
-        recvUserName: loginInfo.name,
-        recvCd: "",
-        cmmdOrgCd001: "",
-        cmmdOrgCd002: "",
-        cmmdOrgCd003: "",
-        cmmdOrgCd004: "",
-        improveCn: "",
-        improveTypeCd: "",
-        orderDate: "",
-        dueDate: "",
-        issueReason: "",
-        preventCn: "",
-        performBeforeId: 2,
-        performAfterId: 1,
-        countPerPage: 0,
-        lawImproveId: 1,
-        occurPlace: "1층작업실",
-        pageNum: 0,
-    });
+    const [lawView] = useLawViewMutation();
+    const [lawDelete] = useLawDeleteMutation();
+    const { id } = useParams()
+    const [law, setLaw] = useState({})
 
     const handleRedirect = () => {
         navigate(
@@ -315,14 +286,20 @@ const Registration = () => {
         );
     };
 
-    const handleLawInsert = () => {
-        lawInsert(law)
-            .then((res) => console.log(res))
-            .then(() => handleRedirect());
+    const handleLawView = async () => {
+        const response = await lawView(id)
+        setLaw(response.data.RET_DATA)
+        console.log(response)
     };
 
+    const handleLawDelete = () => {
+        lawDelete(id)
+            .then(() => handleRedirect())
+    }
+
+
     useEffect(() => {
-        handleLoginInfo()
+        handleLawView()
     }, [])
 
     return (
@@ -347,137 +324,16 @@ const Registration = () => {
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>접수일자</div>
                             <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>{todaysDate}</div>
+                                <div className={classes.rowInfo}>{law.recvDate}</div>
                                 <div className={classes.rowTitle}>접수자</div>
-                                <div className={classes.rowInfo}>{loginInfo.name}</div>
+                                <div className={classes.rowInfo}>{law.recvUserName}</div>
                                 <div className={classes.rowTitle}>접수형태</div>
                                 <div className={classes.rowInfo}>
-                                    <FormControl
-                                        className={classes.searchRadio}
-                                        onChange={(event) =>
-                                            setLaw({
-                                                ...law,
-                                                recvCd: event.target.value,
-                                            })
-                                        }
-                                    >
-                                        <RadioGroup row>
-                                            <FormControlLabel
-                                                value="001"
-                                                label="공문"
-                                                control={
-                                                    <Radio
-                                                        icon={<img src={radioIcon} alt="radio icon" />}
-                                                        checkedIcon={
-                                                            <img src={radioIconOn} alt="radio icon on" />
-                                                        }
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value="002"
-                                                label="현장점검"
-                                                control={
-                                                    <Radio
-                                                        icon={<img src={radioIcon} alt="radio icon" />}
-                                                        checkedIcon={
-                                                            <img src={radioIconOn} alt="radio icon on" />
-                                                        }
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value="003"
-                                                label="신고"
-                                                control={
-                                                    <Radio
-                                                        icon={<img src={radioIcon} alt="radio icon" />}
-                                                        checkedIcon={
-                                                            <img src={radioIconOn} alt="radio icon on" />
-                                                        }
-                                                    />
-                                                }
-                                            />
-                                        </RadioGroup>
-                                    </FormControl>
+                                    {law && law.recvName}
                                 </div>
                                 <div className={classes.rowTitle}>명령구분</div>
                                 <div className={classes.rowInfo}>
-                                    <FormControl className={classes.searchRadio}>
-                                        <RadioGroup row>
-                                            <FormControlLabel
-                                                value={law.cmmdOrgCd001}
-                                                label="고용노동부"
-                                                control={
-                                                    <Checkbox
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={
-                                                            <img src={checkIconOn} alt="check icon on" />
-                                                        }
-                                                        onChange={() =>
-                                                            setLaw({
-                                                                ...law,
-                                                                cmmdOrgCd001: law.cmmdOrgCd001 ? "" : "001",
-                                                            })
-                                                        }
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value={law.cmmdOrgCd002}
-                                                label="소방청(소)"
-                                                control={
-                                                    <Checkbox
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={
-                                                            <img src={checkIconOn} alt="check icon on" />
-                                                        }
-                                                        onChange={() =>
-                                                            setLaw({
-                                                                ...law,
-                                                                cmmdOrgCd002: law.cmmdOrgCd002 ? "" : "002",
-                                                            })
-                                                        }
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value={law.cmmdOrgCd003}
-                                                label="환경부(청)"
-                                                control={
-                                                    <Checkbox
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={
-                                                            <img src={checkIconOn} alt="check icon on" />
-                                                        }
-                                                        onChange={() =>
-                                                            setLaw({
-                                                                ...law,
-                                                                cmmdOrgCd003: law.cmmdOrgCd003 ? "" : "003",
-                                                            })
-                                                        }
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value={law.cmmdOrgCd004}
-                                                label="자체점검"
-                                                control={<Checkbox
-                                                    icon={<img src={checkIcon} alt="check icon" />}
-                                                    checkedIcon={
-                                                        <img src={checkIconOn} alt="check icon on" />
-                                                    }
-                                                    onChange={() =>
-                                                        setLaw({
-                                                            ...law,
-                                                            cmmdOrgCd004: law.cmmdOrgCd004 ? "" : "004",
-                                                        })
-                                                    }
-                                                />
-                                                }
-                                            />
-                                        </RadioGroup>
-                                    </FormControl>
+                                    {(law && law.cmmdOrgName001) || (law && law.cmmdOrgName002) || (law && law.cmmdOrgName003) || (law && law.cmmdOrgName004) || (law && law.cmmdOrgName005) || (law && law.cmmdOrgName006)}
                                 </div>
                             </div>
                         </div>
@@ -488,19 +344,7 @@ const Registration = () => {
                             </div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    <TextField
-                                        className={classes.textArea}
-                                        id="outlined-multiline-static"
-                                        multiline
-                                        rows={4}
-                                        value={law.improveCn}
-                                        onChange={(event) =>
-                                            setLaw({
-                                                ...law,
-                                                improveCn: event.target.value,
-                                            })
-                                        }
-                                    />
+                                    {law && law.improveCn}
                                 </div>
                             </div>
                         </div>
@@ -516,19 +360,7 @@ const Registration = () => {
                             <div className={classes.rowTitle}>지적원인</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    <TextField
-                                        className={classes.textArea}
-                                        id="outlined-multiline-static"
-                                        multiline
-                                        rows={4}
-                                        value={law.issueReason}
-                                        onChange={(event) =>
-                                            setLaw({
-                                                ...law,
-                                                issueReason: event.target.value,
-                                            })
-                                        }
-                                    />
+                                    {law && law.issueReason}
                                 </div>
                             </div>
                         </div>
@@ -539,19 +371,7 @@ const Registration = () => {
                             </div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    <TextField
-                                        className={classes.textArea}
-                                        id="outlined-multiline-static"
-                                        multiline
-                                        rows={4}
-                                        value={law.preventCn}
-                                        onChange={(event) =>
-                                            setLaw({
-                                                ...law,
-                                                preventCn: event.target.value,
-                                            })
-                                        }
-                                    />
+                                    {law && law.preventCn}
                                 </div>
                             </div>
                         </div>
@@ -597,15 +417,8 @@ const Registration = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
-                    {/* <BlueButton className={"button-correction"}>수정</BlueButton> */}
-                    <BlueButton className={"button-registration"} onClick={handleLawInsert}>등록</BlueButton>
-                    <WhiteButton
-                        className={"button-cancellation"}
-                        onClick={() => handleRedirect()}
-                    >
-                        취소
-                    </WhiteButton>
-                    <WhiteButton className={"button-delete"}>삭제</WhiteButton>
+                    <BlueButton className={"button-correction"} onClick={() => navigate(`/dashboard/employee/order-for-improvement-and-correction-under-related-law/update/${law.lawImproveId}`)}>수정</BlueButton>
+                    <WhiteButton className={"button-delete"} onClick={handleLawDelete}>삭제</WhiteButton>
                     <WhiteButton
                         className={"button-list"}
                         onClick={() => handleRedirect()}
@@ -618,4 +431,4 @@ const Registration = () => {
     );
 };
 
-export default Registration;
+export default View;

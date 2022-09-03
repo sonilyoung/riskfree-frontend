@@ -74,6 +74,8 @@ import Slider from 'react-slick';
 
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
+import { useGetLoginInfoMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+
 
 
 const useStyles = makeStyles(() => ({
@@ -231,6 +233,8 @@ const useStyles = makeStyles(() => ({
         top: '-20px',
         left: '-140px',
         display: 'flex',
+    },
+    chartPopupClose: {
         display: 'none !important'
     },
     chartPopList: {
@@ -811,7 +815,7 @@ const useStyles = makeStyles(() => ({
         }
     },
     headerPopup: {
-        display: 'none !important',
+        display: 'block',
         position: 'absolute',
         top: '0px',
         left: '0px',
@@ -822,12 +826,20 @@ const useStyles = makeStyles(() => ({
         background: '#eeeff7',
         overflow: 'hidden',
         '&.user_popup': {
+            display: "block",
             top: '60px',
             left: '5px',
         },
+        '&.user_popupClose': {
+            display: "none"
+        },
         '&.settings_popup': {
+            display: "block",
             top: '65px',
             left: '-80px'
+        },
+        '&.settings_popupClose': {
+            display: "none"
         },
         '& [class*=popupAccord]': {
             background: 'transparent',
@@ -1250,7 +1262,11 @@ const Director = () => {
 
     const [noticesSelect] = useNoticesSelectMutation()
     const [noticesList, setNoticesList] = useState()
-
+    const [userPopup, setUserPopup] = useState(false)
+    const [settingsPopup, setSettingsPopup] = useState(false)
+    const [chartPop, setChartPop] = useState(false)
+    const [getLoginInfo] = useGetLoginInfoMutation()
+    const [loginInfo, setLoginInfo] = useState({})
     const [num, setNum] = React.useState('');
 
     const handleLogOut = () => {
@@ -1258,22 +1274,30 @@ const Director = () => {
         navigate('/');
     }
 
+
+    const handleLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfo(response.data.RET_DATA)
+    }
+
+
     const handleChange = (event) => {
         setNum(event.target.value);
     };
 
     const handleFetchList = async () => {
         const response = await noticesSelect({
-            "col": null,
+            "col": "",
             "countPerPage": null,
             "pageNum": null,
-            "param": null
+            "param": ""
         })
         setNoticesList(response)
     }
 
     useEffect(() => {
         handleFetchList()
+        handleLoginInfo()
     }, [])
 
     return (
@@ -1288,11 +1312,11 @@ const Director = () => {
                         </Grid>
                         <Grid className={classes.mainMenu} item xs={6.3}>
                             <div className={classes.leftMenu}>
-                                <UserButton className={classes.mainMenuButton}></UserButton>
-                                <div className={classes.headerPopup + ' user_popup'}>
+                                <UserButton className={classes.mainMenuButton} onClick={() => setUserPopup(true)}></UserButton>
+                                <div className={userPopup ? (classes.headerPopup + ' user_popup') : (classes.headerPopup + ' user_popupClose')}>
                                     <div className={classes.popHeader}>
                                         최초 사용자 설정
-                                        <ButtonClosePop></ButtonClosePop>
+                                        <ButtonClosePop onClick={() => setUserPopup(!userPopup)}></ButtonClosePop>
                                     </div>
                                     <div className={classes.headerPopList}>
                                         <TextField
@@ -1414,15 +1438,15 @@ const Director = () => {
                             </div>
                             <div className={classes.rightMenu}>
                                 <div className={classes.userInformation}>
-                                    <div>admin1 / <span>홍길동 안전보건팀장</span></div>
+                                    <div>{loginInfo.loginId} / <span>{loginInfo.roleName}</span></div>
                                     <div>계약기간 : 22.07.01 ~ 23.06.31</div>
                                 </div>
                                 <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
-                                <SettingsButton className={classes.mainMenuButton}></SettingsButton>
-                                <div className={classes.headerPopup + ' settings_popup'}>
+                                <SettingsButton className={classes.mainMenuButton} onClick={() => setSettingsPopup(true)}></SettingsButton>
+                                <div className={settingsPopup ? (classes.headerPopup + ' settings_popup') : (classes.headerPopup + ' settings_popupClose')}>
                                     <div className={classes.popHeader}>
                                         중대재해 자체점검 등록 차수 설정
-                                        <ButtonClosePop></ButtonClosePop>
+                                        <ButtonClosePop onClick={() => setSettingsPopup(false)}></ButtonClosePop>
                                     </div>
                                     <div className={classes.headerPopList}>
                                         <Accordion className={classes.popupAccord}>
@@ -1535,12 +1559,12 @@ const Director = () => {
                         </div>
                     </Grid>
                     <Grid className={classes.headerNavigation} item xs={5.8}>
-                        <ChartButton></ChartButton>
-                        <div className={classes.chartPopup}>
+                        <ChartButton onClick={() => setChartPop(true)}></ChartButton>
+                        <div className={chartPop ? classes.chartPopup : classes.chartPopupClose}>
                             <div className={classes.chartPopList}>
                                 <div className={classes.popHeader}>
                                     중대재해 대응수준 Report
-                                    <ButtonClosePop></ButtonClosePop>
+                                    <ButtonClosePop onClick={() => setChartPop(false)}></ButtonClosePop>
                                 </div>
                                 <div className={classes.popList}>
                                     <div className={classes.PopListItem + ' active'}>차수별 대응수준 현황 (통합)</div>
@@ -1801,7 +1825,7 @@ const Director = () => {
                                 </div>
                             </Grid>
                             <Grid className={classes.footBox + ' boxUp'} item xs={5}>
-                                <Link className={classes.footLink} to="#" underline="none">산업재해 누적 집계</Link>
+                                <Link className={classes.footLink} to="/dashboard/employee/accident-countermeasures-implementation/list" underline="none">산업재해 누적 집계</Link>
                                 <div className={classes.bottomBox + ' rightBox'}>
                                     <div>
                                         <div>사망</div>
@@ -1906,7 +1930,7 @@ const Director = () => {
 
             </Grid>
 
-        </WideLayout>
+        </WideLayout >
     );
 };
 

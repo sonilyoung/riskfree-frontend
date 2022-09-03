@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -26,7 +26,9 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { DefaultLayout } from '../../../../../../../../layouts/Default';
 import { useAccidentInsertMutation } from "../../../../../../../../hooks/api/AccidentManagement/AccidentManagement";
+import { useGetLoginInfoMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
 import { useNavigate } from "react-router-dom";
+import moment from "moment"
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -318,9 +320,17 @@ const WhiteButton = styled(ButtonUnstyled)`
 
 const Registration = () => {
     const classes = useStyles();
+    const todayDate = moment().format("YYYY-MM-DD")
 
     const [accidentInsert] = useAccidentInsertMutation();
     const navigate = useNavigate();
+    const [getLoginInfo] = useGetLoginInfoMutation()
+    const [loginInfo, setLoginInfo] = useState({})
+
+    const handleLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfo(response.data.RET_DATA)
+    }
 
     const [accident, setAccident] = useState({
         accLevelCd: "",
@@ -344,7 +354,7 @@ const Registration = () => {
         performAfterId: 4,
         performBeforeId: 3,
         preventCn: "",
-        recvDate: "2022-08-25",
+        recvDate: todayDate,
         recvFormCd: "",
         recvTypeCd001: "",
         recvTypeCd002: "",
@@ -352,7 +362,7 @@ const Registration = () => {
         recvTypeCd004: "",
         recvTypeCd005: "",
         recvTypeCd006: "",
-        recvUserName: "김한영",
+        recvUserName: loginInfo.name,
         sameAccidentInjury: null,
     });
     const handleRedirect = () => {
@@ -366,6 +376,10 @@ const Registration = () => {
             .then((res) => console.log(res))
             .then(() => handleRedirect());
     };
+
+    useEffect(() => {
+        handleLoginInfo()
+    }, [])
 
     return (
         <DefaultLayout>
@@ -386,10 +400,10 @@ const Registration = () => {
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>접수일자</div>
                             <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>2022.06.01</div>
+                                <div className={classes.rowInfo}>{todayDate}</div>
                                 <div className={classes.rowTitle}>접수자</div>
                                 <div className={classes.rowInfo}>
-                                    [홍xx] / 방제센터 사고접수부
+                                    {loginInfo.name}
                                 </div>
                                 <div className={classes.rowTitle}>접수형태</div>
                                 <div className={classes.rowInfo}>

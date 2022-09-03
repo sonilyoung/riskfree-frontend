@@ -754,7 +754,7 @@ const List = () => {
                                 className={classes.tableBody}
                                 onDoubleClick={() =>
                                     navigate(
-                                        `/dashboard/employee/accident-countermeasures-implementation/view/${lawItem.lawImproveId}`
+                                        `/dashboard/employee/order-for-improvement-and-correction-under-related-law/view/${lawItem.lawImproveId}`
                                     )
                                 }
                             >

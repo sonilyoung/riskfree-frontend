@@ -30,6 +30,7 @@ import noImg from '../../../../../../../../assets/images/ic_no_image.png';
 
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import moment from "moment"
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -313,6 +314,7 @@ const Update = () => {
     const { updateid } = useParams()
     const [accidentView] = useAccidentViewMutation()
     const [accidentUpdate] = useAccidentUpdateMutation()
+    const todayDate = moment().format("YYYY-MM-DD")
     const [accident, setAccident] = useState({
         "accLevelCd": "",
         "accTypeCd001": "",
@@ -414,7 +416,7 @@ const Update = () => {
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>접수일자</div>
                             <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>2022.06.01</div>
+                                <div className={classes.rowInfo}>{todayDate}</div>
                                 <div className={classes.rowTitle}>접수자</div>
                                 <div className={classes.rowInfo}>[홍xx] / 방제센터 사고접수부</div>
                                 <div className={classes.rowTitle}>접수형태</div>
@@ -827,9 +829,7 @@ const Update = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
                     <BlueButton className={'button-correction'} onClick={handleUpdate}>수정</BlueButton>
-                    <BlueButton className={'button-registration'}>등록</BlueButton>
-                    <WhiteButton className={'button-cancellation'}>취소</WhiteButton>
-                    <WhiteButton className={'button-list'}>목록</WhiteButton>
+                    <WhiteButton className={'button-cancellation'} onClick={handleRedirect}>취소</WhiteButton>
                 </Grid>
             </Grid>
         </DefaultLayout>

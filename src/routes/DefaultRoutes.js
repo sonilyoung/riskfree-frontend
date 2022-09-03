@@ -88,6 +88,7 @@ const DefaultRoutes = () => (
         {/* EMPLOYEE  */}
         <Route element={<PrivateRoute allowedRoles={'002'} />}>
             <Route path="/dashboard/employee" element={<DashboardEmployeePage />} />
+            <Route path="/dashboard/employee/notifications/*" element={<NotificationsPage />} />
             <Route path="/dashboard/employee/improvement-measures/*" element={<ImprovementMeasuresPage />} />
             <Route path="/dashboard/employee/accident-countermeasures-implementation/*" element={<CountermeasuresForTheOccurrencePage />} />
             <Route path="/dashboard/employee/order-for-improvement-and-correction-under-related-law/*" element={<OrdersForImprovementPage />} />
