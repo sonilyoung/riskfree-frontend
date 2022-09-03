@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { WideLayout } from '../../../../layouts/Wide';
 import { makeStyles } from '@mui/styles';
 import Grid from '@mui/material/Grid';
@@ -73,6 +73,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
+import { remove } from '../../../../services/core/User/Token';
 
 
 const useStyles = makeStyles(() => ({
@@ -1245,10 +1246,17 @@ const footerSlider = {
 
 const Director = () => {
     const classes = useStyles();
+    const navigate = useNavigate();
+
     const [noticesSelect] = useNoticesSelectMutation()
     const [noticesList, setNoticesList] = useState()
 
     const [num, setNum] = React.useState('');
+
+    const handleLogOut = () => {
+        remove();
+        navigate('/');
+    }
 
     const handleChange = (event) => {
         setNum(event.target.value);
@@ -1409,7 +1417,7 @@ const Director = () => {
                                     <div>admin1 / <span>홍길동 안전보건팀장</span></div>
                                     <div>계약기간 : 22.07.01 ~ 23.06.31</div>
                                 </div>
-                                <LogButton className={classes.mainMenuButton}></LogButton>
+                                <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
                                 <SettingsButton className={classes.mainMenuButton}></SettingsButton>
                                 <div className={classes.headerPopup + ' settings_popup'}>
                                     <div className={classes.popHeader}>

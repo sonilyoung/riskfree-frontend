@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router-dom';
 import { WideLayout } from '../../../../layouts/Wide';
 import { makeStyles } from '@mui/styles';
 
@@ -25,13 +25,14 @@ const useStyles = makeStyles(() => ({
 
 const ForgottenPassword = () => {
     const classes = useStyles();
-    const { step } = useParams()
 
     return (
         <WideLayout>
             <div className={classes.pageWrap}>
-                {step === "step-1" && <StepOne />}
-                {step === "step-2" && <StepTwo />}
+                <Routes>
+                    <Route path="step-1" element={<StepOne />} />
+                    <Route path="step-2/:userId" element={<StepTwo />} />
+                </Routes>
             </div>
         </WideLayout>
     );

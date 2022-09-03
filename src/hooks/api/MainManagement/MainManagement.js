@@ -23,9 +23,16 @@ export const mainManagement = createApi({
                 method: 'POST',
                 body: body,
             }),
+        }),
+        getLoginInfo: builder.mutation({
+            query: (body) => ({
+                url: 'main/getLoginInfo',
+                method: 'POST',
+                body: body,
+            }),
         })
 
     }),
 });
 
-export const { useGetWorkplaceListMutation } = mainManagement;
+export const { useGetWorkplaceListMutation, useGetLoginInfoMutation } = mainManagement;

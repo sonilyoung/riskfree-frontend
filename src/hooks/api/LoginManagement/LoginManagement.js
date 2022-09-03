@@ -18,7 +18,7 @@ export const loginManagement = createApi({
         }),
         passwordConfirm: builder.mutation({
             query: (body) => ({
-                url: 'login/passwd/confirm',
+                url: 'login/passwd/change',
                 method: 'POST',
                 body: body
             })

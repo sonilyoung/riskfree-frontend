@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { WideLayout } from '../../../../layouts/Wide';
 import { makeStyles } from '@mui/styles';
 import Grid from '@mui/material/Grid';
@@ -81,6 +81,7 @@ import radioIcon from '../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
+import { remove } from '../../../../services/core/User/Token';
 
 
 const useStyles = makeStyles(() => ({
@@ -1155,7 +1156,7 @@ const useStyles = makeStyles(() => ({
     popupAccord: {
         width: '350px',
         '& .MuiAccordionDetails-root': {
-            
+
         },
     },
     popupLink: {
@@ -1700,7 +1701,14 @@ const footerSlider = {
 const Employee = () => {
     const classes = useStyles();
 
+    const navigate = useNavigate();
+
     const [num, setNum] = React.useState('');
+
+    const handleLogOut = () => {
+        remove();
+        navigate('/');
+    }
 
     const handleChange = (event) => {
         setNum(event.target.value);
@@ -1826,7 +1834,7 @@ const Employee = () => {
                                     <div>admin1 / <span>홍길동 안전보건팀장</span></div>
                                     <div>계약기간 : 22.07.01 ~ 23.06.31</div>
                                 </div>
-                                <LogButton className={classes.mainMenuButton}></LogButton>
+                                <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
                                 <SettingsButton className={classes.mainMenuButton}></SettingsButton>
                                 <div className={classes.headerPopup + ' settings_popup'}>
                                     <div className={classes.popHeader}>

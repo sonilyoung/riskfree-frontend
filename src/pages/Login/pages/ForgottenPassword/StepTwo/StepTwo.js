@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@mui/styles';
 
 import TextField from '@mui/material/TextField';
@@ -10,6 +10,8 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import alertIcon from '../../../../../assets/images/ic_refer.png';
+import { useNavigate, useParams } from 'react-router-dom';
+import { usePasswordConfirmMutation } from '../../../../../hooks/api/LoginManagement/LoginManagement';
 
 
 
@@ -49,6 +51,45 @@ const useStyles = makeStyles(() => ({
 const StepTwo = () => {
     const classes = useStyles();
 
+    const { userId } = useParams();
+    const navigate = useNavigate();
+
+    const [passwordConfirm] = usePasswordConfirmMutation();
+
+    const [values, setValues] = useState({
+        changePwd: {
+            value: '',
+            error: ''
+        },
+        confirmPwd: {
+            value: '',
+            error: ''
+        },
+    });
+
+    const handleChange = (prop) => (event) => {
+        setValues({
+            ...values,
+            [prop]: { ...values[prop], value: event.target.value }
+        });
+    };
+
+
+    const handleLogin = async () => {
+        const response = await passwordConfirm({
+            changePwd: values.changePwd.value,
+            confirmPwd: values.confirmPwd.value,
+            userId: userId
+        });
+
+        if (response.data.RET_CODE === '0000') {
+            navigate('/');
+        } else {
+            //TODO: This message has to be replaced with dialog.
+            alert('Credentials are wrong. Please try again.');
+        }
+    }
+
     return (
         <div className={classes.stepWrap + ' step2'}>
             <Typography sx={{ textAlign: 'center' }} variant="headline1" component="div" gutterBottom>
@@ -73,13 +114,13 @@ const StepTwo = () => {
                     <Typography variant="body1" gutterBottom>비밀번호</Typography>
                 </Grid>
                 <Grid item xs={9}>
-                    <TextField id="standard-basic" placeholder="비밀번호를 입력해 주세요" variant="outlined" />
+                    <TextField id="standard-basic" onChange={handleChange("changePwd")} placeholder="비밀번호를 입력해 주세요" variant="outlined" />
                 </Grid>
                 <Grid className={classes.preInputText} item xs={3}>
                     <Typography variant="body1" gutterBottom>비밀번호 확인</Typography>
                 </Grid>
                 <Grid item xs={9}>
-                    <TextField id="standard-basic" placeholder="비밀번호를 재입력해 주세요." variant="outlined" />
+                    <TextField id="standard-basic" onChange={handleChange("confirmPwd")} placeholder="비밀번호를 재입력해 주세요." variant="outlined" />
                 </Grid>
                 <Grid item xs={3}></Grid>
                 <Grid item xs={9}>
@@ -91,7 +132,7 @@ const StepTwo = () => {
                 </Grid>
                 <Grid item xs={3}></Grid>
                 <Grid item xs={9}>
-                    <Button sx={{ width: '100%', mt: 4 }} variant="contained">비밀번호 재설정</Button>
+                    <Button sx={{ width: '100%', mt: 4 }} variant="contained" onClick={handleLogin}>비밀번호 재설정</Button>
                 </Grid>
             </Grid>
         </div>

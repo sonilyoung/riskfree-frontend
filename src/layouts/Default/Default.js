@@ -22,6 +22,7 @@ import Select from '@mui/material/Select';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
+import { remove } from '../../services/core/User/Token';
 
 const useStyles = makeStyles(() => ({
     bodyWrap: {
@@ -196,6 +197,11 @@ const Default = ({ children }) => {
 
     const [num, setNum] = React.useState('');
 
+    const handleLogOut = () => {
+        remove();
+        navigate('/');
+    }
+
     const handleChange = (event) => {
         setNum(event.target.value);
     };
@@ -248,7 +254,7 @@ const Default = ({ children }) => {
                                     <div>admin1 / <span>홍길동 안전보건팀장</span></div>
                                     <div>계약기간 : 22.07.01 ~ 23.06.31</div>
                                 </div>
-                                <LogButton className={classes.mainMenuButton}></LogButton>
+                                <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
                                 <SettingsButton className={classes.mainMenuButton}></SettingsButton>
                             </div>
                         </Grid>

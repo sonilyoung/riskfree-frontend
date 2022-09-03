@@ -20,6 +20,7 @@ import popupClose2 from '../../assets/images/btn_popClose2.png';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
+import { useGetLoginInfoMutation } from '../../hooks/api/MainManagement/MainManagement';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -89,7 +90,7 @@ const ClosePopupButton2 = styled(ButtonUnstyled)`
     border: none;
     cursor: pointer;
     transition: background .2s; 
-`;
+    `;
 
 const Login = () => {
     const classes = useStyles();
@@ -105,8 +106,11 @@ const Login = () => {
         },
     });
     const navigate = useNavigate();
+    const user = useSelector(selectUser);
+
 
     const [login] = useLoginMutation();
+    const [getLoginInfo] = useGetLoginInfoMutation();
 
     const handleChange = (prop) => (event) => {
         setValues({
@@ -115,29 +119,44 @@ const Login = () => {
         });
     };
 
+    const handleLoginDashboard = (prop) => {
+        if (prop === "000") {
+            return 'admin';
+        } else if (prop === "001") {
+            return 'director';
+        } else {
+            return 'employee';
+        }
+    }
+
     const handleLogin = async () => {
+
         const userLoginResponse = await login({
             loginId: values.id.value,
             loginPw: values.password.value
         });
+
         if (userLoginResponse.data.RET_CODE === '0000') {
             const jwtToken = userLoginResponse.data.RET_DATA.accessToken;
-            console.log(userLoginResponse)
             UserTokenService.setItem(jwtToken);
+
+            const loginInfoResponse = await getLoginInfo();
+            let roleName = handleLoginDashboard(loginInfoResponse.data.RET_DATA.roleCd);
+
             dispatch(setUser({
-                id: 1,
-                fistName: 'Milivoje',
-                lastName: 'Vujadinovic'
+                roleCd: loginInfoResponse.data.RET_DATA.roleCd,
+                roleName: roleName,
             }));
-            navigate('/dashboard/director');
+
+            localStorage.setItem('ROLE_NAME', roleName);
+            navigate(`/dashboard/${roleName}`);
+
         } else {
             //TODO: This message has to be replaced with dialog.
             alert('Credentials are wrong. Please try again.');
         }
     }
 
-    //const user = useSelector(selectUser);
-    //console.log(user);
 
     return (
         <WideLayout>
