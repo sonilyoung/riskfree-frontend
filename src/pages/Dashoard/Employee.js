@@ -144,7 +144,7 @@ const useStyles = makeStyles(() => ({
         },
         '& div:first-of-type span': {
             color: '#00adef',
-            letterSpacing: '-2.08px'
+            letterSpacing: '-1.08px'
         },
         '& div:last-of-type': {
             fontSize: '15px',
@@ -159,7 +159,7 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'flex-end',
         alignItems: 'center',
         color: '#d5d5d8',
-        letterSpacing: '-2.08px'
+        letterSpacing: '-1.08px'
     },
     weatherSection: {
         display: 'flex',
@@ -179,7 +179,7 @@ const useStyles = makeStyles(() => ({
             fontWeight: '400'
         },
         '& :last-of-type': {
-            letterSpacing: '-2.08px'
+            letterSpacing: '-1.08px'
         }
     },
     headerWorkplace: {
@@ -234,7 +234,7 @@ const useStyles = makeStyles(() => ({
         fontWeight: '500',
         fontSize: '28px',
         color: '#fff',
-        letterSpacing: '-2.08px'
+        letterSpacing: '-1.08px'
     },
     headerNavigation: {
         position: 'relative',
@@ -1265,7 +1265,7 @@ const MainNavButton = styled(ButtonUnstyled)`
     font-weight: 200;
     color: #fff;
     font-size: 20px;
-    letter-spacing: -2.08px;
+    letter-spacing: -1.08px;
     border-radius: 6px;
     background: #3a5298;
     border: none;
@@ -1442,7 +1442,7 @@ const UnknownButton1 = styled(ButtonUnstyled)`
     height: 46px;
     color: #fff;
     font-size: 20px;
-    letter-spacing: -2.08px;
+    letter-spacing: -1.08px;
     border-radius: 46px;
     background: #00adef;
     border: none;
@@ -1458,7 +1458,7 @@ const UnknownButton2 = styled(ButtonUnstyled)`
     height: 46px;
     color: #000;
     font-size: 20px;
-    letter-spacing: -2.08px;
+    letter-spacing: -1.08px;
     border-radius: 46px;
     background: #eff2f9;
     border: 2px solid #00adef;
@@ -1474,7 +1474,7 @@ const SearchButton = styled(ButtonUnstyled)`
     height: 46px;
     color: #fff;
     font-size: 20px;
-    letter-spacing: -2.08px;
+    letter-spacing: -1.08px;
     border-radius: 50%;
     background: #00adef url(${searchIcon}) no-repeat 50% 50%;
     border: none;

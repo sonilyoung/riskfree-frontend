@@ -517,7 +517,7 @@ const UnknownButton1 = styled(ButtonUnstyled)`
     height: 46px;
     color: #fff;
     font-size: 20px;
-    letter-spacing: -2.08px;
+    letter-spacing: -1.08px;
     border-radius: 46px;
     background: #00adef;
     border: none;
@@ -533,7 +533,7 @@ const UnknownButton2 = styled(ButtonUnstyled)`
     height: 46px;
     color: #000;
     font-size: 20px;
-    letter-spacing: -2.08px;
+    letter-spacing: -1.08px;
     border-radius: 46px;
     background: #eff2f9;
     border: 2px solid #00adef;

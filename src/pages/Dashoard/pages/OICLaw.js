@@ -67,6 +67,34 @@ const useStyles = makeStyles(() => ({
         '& >div:first-of-type [class*=searchInfo] >div:last-of-type, & >div:last-of-type [class*=searchInfo] >div:last-of-type': {
             marginLeft: '30px'
         },
+        '& >div:first-of-type [class*=searchInfo] >div': {
+            '&:nth-of-type(2) >div +div, &:nth-of-type(3) >div +div': {
+                border: '1px solid rgba(0, 0, 0, 0.23)',
+                borderRadius: '6px',
+                paddingLeft: '10px',
+            },
+            '&:nth-of-type(2)': {
+                width: 'fit-content',
+                '& >div +div': {
+                    marginLeft: '20px',
+                }
+            },
+            '&:nth-of-type(3)': {
+                marginLeft: '50px',
+            },
+        },
+        '& >div:last-of-type [class*=searchInfo] >div': {
+            '&:nth-of-type(3) >div +div': {
+                border: '1px solid rgba(0, 0, 0, 0.23)',
+                borderRadius: '6px',
+                paddingLeft: '10px',
+            },
+            '&:nth-of-type(2)': {
+                '& >div:first-of-type': {
+                    marginRight: '53px',
+                }
+            },
+        },
     },
     searchRadio: {
         '& [class*=body1]': {

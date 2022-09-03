@@ -61,7 +61,7 @@ const main = createTheme({
             styleOverrides: {
                 root: {
                     borderRadius: 6,
-                    fontSize: 20
+                    fontSize: 17,
                 },
                 input: {
                     '&::placeholder': {
@@ -188,7 +188,28 @@ const main = createTheme({
                     height: 18
                 }
             }
-        }
+        },
+        MuiList: {
+            styleOverrides: {
+                root: {
+                    padding: '0px'
+                }
+            }
+        },
+        MuiMenuItem: {
+            styleOverrides: {
+                root: {
+                    fontSize: '17px'
+                }
+            }
+        },
+        MuiSvgIcon: {
+            styleOverrides: {
+                root: {
+                    top: '2px'
+                }
+            }
+        },
     },
 });
 

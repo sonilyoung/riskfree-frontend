@@ -25,11 +25,15 @@ import { styled } from '@mui/system';
 import { useGetLoginInfoMutation } from '../../hooks/api/MainManagement/MainManagement';
 import { remove } from '../../services/core/User/Token';
 
+import '../../assets/fonts/Pretendard-Regular.otf';
+import proba from '../../assets/fonts/Pretendard-Regular.otf';
+
 const useStyles = makeStyles(() => ({
     bodyWrap: {
         backgroundColor: '#33374f',
         minWidth: '1900px !important',
         height: '100%',
+        fontFamily: proba,
     },
     headerWrap: {
         backgroundColor: '#33374f',
@@ -85,7 +89,7 @@ const useStyles = makeStyles(() => ({
         },
         '& div:first-of-type span': {
             color: '#00adef',
-            letterSpacing: '-2.08px'
+            letterSpacing: '-1.08px'
         },
         '& div:last-of-type': {
             fontSize: '15px',
@@ -100,7 +104,7 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'flex-end',
         alignItems: 'center',
         color: '#d5d5d8',
-        letterSpacing: '-2.08px'
+        letterSpacing: '-1.08px'
     },
     weatherSection: {
         display: 'flex',
@@ -120,7 +124,7 @@ const useStyles = makeStyles(() => ({
             fontWeight: '400'
         },
         '& :last-of-type': {
-            letterSpacing: '-2.08px'
+            letterSpacing: '-1.08px'
         }
     },
     circleButton: {
@@ -173,12 +177,12 @@ const SettingsButton = styled(ButtonUnstyled)`
     }
 `;
 
-const AdminButton = styled(ButtonUnstyled)`
-    background: transparent url(${adminIcon});
-    &:hover {
-        background-image: url(${adminIconHover});
-    }
-`;
+// const AdminButton = styled(ButtonUnstyled)`
+//     background: transparent url(${adminIcon});
+//     &:hover {
+//         background-image: url(${adminIconHover});
+//     }
+// `;
 
 const BackButton = styled(ButtonUnstyled)`
     position: absolute;
@@ -271,7 +275,7 @@ const Default = ({ children }) => {
                             </div>
                         </Grid>
                         <Grid className={classes.mainAsside} item xs={3}>
-                            <AdminButton className={classes.mainMenuButton}></AdminButton>
+                            {/* <AdminButton className={classes.mainMenuButton}></AdminButton> */}
                             <div className={classes.weatherSection}>
                                 <span>
                                     <img src={weatherIcon} alt="weather icon" />

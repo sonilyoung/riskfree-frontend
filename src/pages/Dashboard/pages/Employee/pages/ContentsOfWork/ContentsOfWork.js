@@ -268,19 +268,19 @@ const SecurityWorkContent = () => {
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
                 <Grid item xs={12} className={classes.listTitle}>
                     <Typography variant="headline2" component="div" gutterBottom>
-                        List of contents of work on the approval of security work
+                        보안 업무 승인 업무 내용 목록
                     </Typography>
                 </Grid>
                 <Grid item xs={12} className={classes.headerButtons}>
-                    <MenuButton className={'button-search'}>Search</MenuButton>
-                    <MenuButton className={'button-upload'}>Upload</MenuButton>
-                    <MenuButton className={'button-delete'}>Delete</MenuButton>
-                    <MenuButton className={'button-download'}>Download</MenuButton>
+                    <MenuButton className={'button-search'}>검색</MenuButton>
+                    <MenuButton className={'button-upload'}>업로드</MenuButton>
+                    <MenuButton className={'button-delete'}>삭제</MenuButton>
+                    <MenuButton className={'button-download'}>다운로드</MenuButton>
                 </Grid>
                 <Grid item xs={12} className={classes.menuBox}>
                     <div className={classes.menuInfo}>
                         <div>
-                            <div className={classes.menuTitle}>Factory</div>
+                            <div className={classes.menuTitle}>공장</div>
                             <Select
                                 className={classes.selectMenu}
                                 sx={{ width: 200 }}
@@ -292,7 +292,7 @@ const SecurityWorkContent = () => {
                             </Select>
                         </div>
                         <div>
-                            <div className={classes.menuTitle}>Registration Date</div>
+                            <div className={classes.menuTitle}>등록 날짜</div>
                             <TextField
                                 sx={{ width: 200 }}
                                 id="date"
@@ -301,7 +301,7 @@ const SecurityWorkContent = () => {
                             />
                         </div>
                         <div>
-                            <div className={classes.menuTitle}>Registrant</div>
+                            <div className={classes.menuTitle}>등록자</div>
                             <TextField
                                 id="standard-basic"
                                 placeholder=""
@@ -318,10 +318,10 @@ const SecurityWorkContent = () => {
                             <div className={classes.tableRow}>
                                 <div className={classes.tableData}></div>
                                 <div className={classes.tableData}>No.</div>
-                                <div className={classes.tableData}>Factory</div>
-                                <div className={classes.tableData}>Registration Date</div>
-                                <div className={classes.tableData}>Registrant</div>
-                                <div className={classes.tableData}>Registration Info</div>
+                                <div className={classes.tableData}>공장</div>
+                                <div className={classes.tableData}>등록 날짜</div>
+                                <div className={classes.tableData}>등록자</div>
+                                <div className={classes.tableData}>등록 정보</div>
                             </div>
                         </div>
                         <div className={classes.tableBody}>
@@ -337,10 +337,10 @@ const SecurityWorkContent = () => {
                                     />
                                 </div>
                                 <div className={classes.tableData}>2</div>
-                                <div className={classes.tableData}>Data</div>
+                                <div className={classes.tableData}>데이터</div>
                                 <div className={classes.tableData}>2022-01-03 14:00</div>
-                                <div className={classes.tableData}>Data</div>
-                                <div className={classes.tableData}>Data</div>
+                                <div className={classes.tableData}>데이터</div>
+                                <div className={classes.tableData}>데이터</div>
                             </div>
                             <div className={classes.tableRow}>
                                 <div className={classes.tableData}>
@@ -354,46 +354,46 @@ const SecurityWorkContent = () => {
                                     />
                                 </div>
                                 <div className={classes.tableData}>1</div>
-                                <div className={classes.tableData}>Data</div>
+                                <div className={classes.tableData}>데이터</div>
                                 <div className={classes.tableData}>2022-01-02 14:00</div>
-                                <div className={classes.tableData}>Data</div>
-                                <div className={classes.tableData}>Data</div>
+                                <div className={classes.tableData}>데이터</div>
+                                <div className={classes.tableData}>데이터</div>
                             </div>
                         </div>
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.menuBox + ' ' + classes.uploadBox}>
                     <div className={classes.fileUpload}>
-                        <div className={classes.uploadTitle}>Excel File Upload</div>
+                        <div className={classes.uploadTitle}>엑셀 파일 업로드</div>
                         <div className={classes.uploadBody}>
                             <div>
-                                <MenuButton className={'button-add'}>Add</MenuButton>
+                                <MenuButton className={'button-add'}>추가하다</MenuButton>
                             </div>
                             <div className={classes.uploadTable}>
                                 <div className={classes.tableHead}>
                                     <div className={classes.tableRow}>
-                                        <div className={classes.tableData}>File Name</div>
-                                        <div className={classes.tableData}>Details</div>
-                                        <div className={classes.tableData}>Size</div>
+                                        <div className={classes.tableData}>파일 이름</div>
+                                        <div className={classes.tableData}>세부</div>
+                                        <div className={classes.tableData}>크기</div>
                                     </div>
                                 </div>
                                 <div className={classes.tableBody}>
                                     <div className={classes.tableRow}>
                                         <div className={classes.tableData}><img src={fileIcon} alt="file icon" className={classes.fileIcon} />file_name.ext</div>
-                                        <div className={classes.tableData}>Data</div>
+                                        <div className={classes.tableData}>데이터</div>
                                         <div className={classes.tableData}>999.99KB</div>
                                     </div>
                                     <div className={classes.tableRow}>
                                         <div className={classes.tableData}><img src={fileIcon} alt="file icon" className={classes.fileIcon} />file_name.ext</div>
-                                        <div className={classes.tableData}>Data</div>
+                                        <div className={classes.tableData}>데이터</div>
                                         <div className={classes.tableData}>999.99KB</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div className={classes.uploadButtons}>
-                            <MenuButton className={'button-save'}>Save</MenuButton>
-                            <MenuButton className={'button-cancel'}>Cancel</MenuButton>
+                            <MenuButton className={'button-save'}>구하다</MenuButton>
+                            <MenuButton className={'button-cancel'}>취소</MenuButton>
                         </div>
                     </div>
                 </Grid>

@@ -131,7 +131,7 @@ const useStyles = makeStyles(() => ({
         },
         '& div:first-of-type span': {
             color: '#00adef',
-            letterSpacing: '-2.08px'
+            letterSpacing: '-1.08px'
         },
         '& div:last-of-type': {
             fontSize: '15px',
@@ -146,7 +146,7 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'flex-end',
         alignItems: 'center',
         color: '#d5d5d8',
-        letterSpacing: '-2.08px'
+        letterSpacing: '-1.08px'
     },
     weatherSection: {
         display: 'flex',
@@ -166,7 +166,7 @@ const useStyles = makeStyles(() => ({
             fontWeight: '400'
         },
         '& :last-of-type': {
-            letterSpacing: '-2.08px'
+            letterSpacing: '-1.08px'
         }
     },
     headerWorkplace: {
@@ -221,7 +221,7 @@ const useStyles = makeStyles(() => ({
         fontWeight: '500',
         fontSize: '28px',
         color: '#fff',
-        letterSpacing: '-2.08px'
+        letterSpacing: '-1.08px'
     },
     headerNavigation: {
         position: 'relative',
@@ -471,7 +471,7 @@ const useStyles = makeStyles(() => ({
             fontSize: '22px',
             fontWeight: '400',
             color: '#202231',
-            letterSpacing: '-2.08px',
+            letterSpacing: '-1.08px',
             textAlign: 'center'
         },
         textDecoration: "none"
@@ -1073,12 +1073,12 @@ const SettingsButton = styled(ButtonUnstyled)`
     }
 `;
 
-const AdminButton = styled(ButtonUnstyled)`
-    background: transparent url(${adminIcon});
-    &:hover {
-        background-image: url(${adminIconHover});
-    }
-`;
+// const AdminButton = styled(ButtonUnstyled)`
+//     background: transparent url(${adminIcon});
+//     &:hover {
+//         background-image: url(${adminIconHover});
+//     }
+// `;
 
 const ChartButton = styled(ButtonUnstyled)`
     background: transparent url(${chartIcon});
@@ -1102,7 +1102,7 @@ const MainNavButton = styled(ButtonUnstyled)`
     font-weight: 200;
     color: #fff;
     font-size: 20px;
-    letter-spacing: -2.08px;
+    letter-spacing: -1.08px;
     border-radius: 6px;
     background: #3a5298;
     border: none;
@@ -1409,7 +1409,7 @@ const Director = () => {
                                         <PopupFootButton>저장하기</PopupFootButton>
                                     </div>
                                 </div>
-                                <FormControl sx={{ width: 180 }}>
+                                <FormControl sx={{ width: 180 }} className={classes.dropMenu}>
                                     <Select
                                         className={classes.selectMenu}
                                         value={num}
@@ -1422,7 +1422,7 @@ const Director = () => {
                                         <MenuItem value={3}>500~1000인 이하</MenuItem>
                                     </Select>
                                 </FormControl>
-                                <FormControl sx={{ width: 150, marginLeft: '8px' }}>
+                                <FormControl sx={{ width: 150, marginLeft: '8px' }} className={classes.dropMenu}>
                                     <Select
                                         className={classes.selectMenu}
                                         value={num}
@@ -1534,7 +1534,7 @@ const Director = () => {
                             </div>
                         </Grid>
                         <Grid className={classes.mainAsside} item xs={3}>
-                            <AdminButton className={classes.mainMenuButton}></AdminButton>
+                            {/* <AdminButton className={classes.mainMenuButton}></AdminButton> */}
                             <div className={classes.weatherSection}>
                                 <span>
                                     <img src={weatherIcon} alt="weather icon" />
