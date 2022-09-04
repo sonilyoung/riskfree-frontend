@@ -1852,7 +1852,7 @@ const Employee = () => {
                             </div>
                             <div className={classes.rightMenu}>
                                 <div className={classes.userInformation}>
-                                    <div>{loginInfo.loginId} / <span>{loginInfo.roleName}</span></div>
+                                    <div>{loginInfo?.loginId} / <span>{loginInfo?.roleName}</span></div>
                                     <div>계약기간 : 22.07.01 ~ 23.06.31</div>
                                 </div>
                                 <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>

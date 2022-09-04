@@ -394,7 +394,7 @@ function List() {
                     </>
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
-                    <div>총 게시글 <strong>{noticesList && (noticesList?.data.RET_DATA.length > 0 ? noticesList?.data.RET_DATA[0].totalCount : 0)}</strong> 건</div>
+                    <div>총 게시글 <strong>{noticesList && noticesList?.data.RET_DATA[0].totalCount}</strong> 건</div>
                     <Stack spacing={2}>
                         <Pagination count={(Math.ceil(noticesForCount?.data.RET_DATA[0].totalCount / 10))} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
                     </Stack>

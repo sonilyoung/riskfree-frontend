@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { makeStyles } from '@mui/styles';
@@ -22,6 +22,7 @@ import Select from '@mui/material/Select';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
+import { useGetLoginInfoMutation } from '../../hooks/api/MainManagement/MainManagement';
 import { remove } from '../../services/core/User/Token';
 
 const useStyles = makeStyles(() => ({
@@ -194,6 +195,13 @@ const Default = ({ children }) => {
     const classes = useStyles();
     const location = useLocation()
     const navigate = useNavigate()
+    const [getLoginInfo] = useGetLoginInfoMutation()
+    const [loginInfo, setLoginInfo] = useState({})
+
+    const handleLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfo(response.data.RET_DATA)
+    }
 
     const [num, setNum] = React.useState('');
 
@@ -209,6 +217,10 @@ const Default = ({ children }) => {
     const handleRedirect = () => {
         String(location.pathname).includes("director") ? (navigate("/dashboard/director")) : (navigate("/dashboard/employee"))
     }
+
+    useEffect(() => {
+        handleLoginInfo()
+    }, [])
 
     return (
         <div className={classes.bodyWrap}>
@@ -251,7 +263,7 @@ const Default = ({ children }) => {
                             </div>
                             <div className={classes.rightMenu}>
                                 <div className={classes.userInformation}>
-                                    <div>admin1 / <span>홍길동 안전보건팀장</span></div>
+                                    <div>{loginInfo?.loginId} / <span>{loginInfo?.roleName}</span></div>
                                     <div>계약기간 : 22.07.01 ~ 23.06.31</div>
                                 </div>
                                 <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
