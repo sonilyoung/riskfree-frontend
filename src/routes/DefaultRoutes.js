@@ -53,11 +53,9 @@ const PublicRoute = () => {
 const DefaultRoutes = () => (
 
     <Routes>
-        {/* ADMIN */}
         <Route element={<PrivateRoute allowedRoles={'000'} />}>
             <Route path="/dashboard/admin" element={<MembersManagementPage />} />
         </Route>
-        {/* CEO */}
         <Route element={<PrivateRoute allowedRoles={'001'} />}>
             <Route path="/dashboard/director" element={<DashboardDirectorPage />} />
             <Route path="/dashboard/director" element={<DashboardDirectorPage />} />
@@ -82,15 +80,7 @@ const DefaultRoutes = () => (
             <Route path="/dashboard/director/order-for-improvement-and-correction-under-related-law/*" element={<OrdersForImprovementPage />} />
             <Route path="/dashboard/director/measure-to-manage-performance-od-duties-law/:page" element={<MeasureToManageThePerformancePage />} />
             <Route path="/dashboard/director/security-work-content" element={<ContentsOfWorkPage />} />
-            <Route path="/dashboard/employee" element={<DashboardEmployeePage />} />
-            <Route path="/dashboard/employee/notifications/*" element={<NotificationsPage />} />
-            <Route path="/dashboard/employee/improvement-measures/*" element={<ImprovementMeasuresPage />} />
-            <Route path="/dashboard/employee/accident-countermeasures-implementation/*" element={<CountermeasuresForTheOccurrencePage />} />
-            <Route path="/dashboard/employee/order-for-improvement-and-correction-under-related-law/*" element={<OrdersForImprovementPage />} />
-            <Route path="/dashboard/employee/measure-to-manage-performance-od-duties-law/:page" element={<MeasureToManageThePerformancePage />} />
-            <Route path="/dashboard/employee/security-work-content" element={<ContentsOfWorkPage />} />
         </Route>
-        {/* EMPLOYEE  */}
         <Route element={<PrivateRoute allowedRoles={'002'} />}>
             <Route path="/dashboard/employee" element={<DashboardEmployeePage />} />
             <Route path="/dashboard/employee/notifications/*" element={<NotificationsPage />} />
@@ -99,10 +89,7 @@ const DefaultRoutes = () => (
             <Route path="/dashboard/employee/order-for-improvement-and-correction-under-related-law/*" element={<OrdersForImprovementPage />} />
             <Route path="/dashboard/employee/measure-to-manage-performance-od-duties-law/:page" element={<MeasureToManageThePerformancePage />} />
             <Route path="/dashboard/employee/security-work-content" element={<ContentsOfWorkPage />} />
-
         </Route>
-
-
         <Route element={<PublicRoute />}>
             <Route exact path="/" element={<LoginPage />} />
             <Route path="/registration" element={<RegistrationPage />} />

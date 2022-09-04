@@ -374,7 +374,7 @@ function List() {
                         <div className={classes.tableRow}>조회수</div>
                     </div>
                     <>
-                        {noticesList?.data.RET_DATA.map((notice, index) =>
+                        {noticesList && noticesList?.data.RET_DATA.map((notice, index) =>
                         (
                             <div className={classes.tableBody} onDoubleClick={() => navigate(`/dashboard/director/notifications/view/${notice.noticeId}`)}>
                                 <div className={classes.tableRow}>{index + 1}</div>
@@ -394,7 +394,7 @@ function List() {
                     </>
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
-                    <div>총 게시글 <strong>{noticesList?.data.RET_DATA.length > 0 ? noticesList?.data.RET_DATA[0].totalCount : 0}</strong> 건</div>
+                    <div>총 게시글 <strong>{noticesList && (noticesList?.data.RET_DATA.length > 0 ? noticesList?.data.RET_DATA[0].totalCount : 0)}</strong> 건</div>
                     <Stack spacing={2}>
                         <Pagination count={(Math.ceil(noticesForCount?.data.RET_DATA[0].totalCount / 10))} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
                     </Stack>
