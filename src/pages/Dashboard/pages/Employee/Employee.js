@@ -1856,8 +1856,8 @@ const Employee = () => {
                                     <div>계약기간 : 22.07.01 ~ 23.06.31</div>
                                 </div>
                                 <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
-                                <SettingsButton className={classes.mainMenuButton}></SettingsButton>
-                                <div className={classes.headerPopup + ' settings_popup'}>
+                                <SettingsButton className={classes.mainMenuButton} onClick={() => setSettingsPopup(true)}></SettingsButton>
+                                <div className={settingsPopup ? (classes.headerPopup + ' settings_popup') : (classes.headerPopup + ' settings_popupClose')}>
                                     <div className={classes.popHeader}>
                                         중대재해 자체점검 등록 차수 설정
                                         <ButtonClosePop onClick={() => setSettingsPopup(false)}></ButtonClosePop>
