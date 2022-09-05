@@ -976,9 +976,9 @@ const Registration = () => {
                 <Grid item xs={12} className={classes.footerButtons}>
                     {/* <BlueButton className={"button-correction"}>수정</BlueButton> */}
                     <BlueButton className={"button-registration"} onClick={handleAccidentInsert}>등록</BlueButton>
-                    <WhiteButton className={"button-cancellation"}>취소</WhiteButton>
-                    <WhiteButton className={"button-delete"}>삭제</WhiteButton>
-                    <WhiteButton className={"button-list"}>목록</WhiteButton>
+                    {/* <WhiteButton className={"button-cancellation"}>취소</WhiteButton> */}
+                    {/* <WhiteButton className={"button-delete"}>삭제</WhiteButton> */}
+                    <WhiteButton className={"button-list"} onClick={handleRedirect}>목록</WhiteButton>
                 </Grid>
             </Grid>
         </DefaultLayout>

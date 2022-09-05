@@ -321,7 +321,6 @@ const List = () => {
 
     const navigate = useNavigate();
 
-    // to store data for select
     const [page, setPage] = useState(1);
     const [workplaceList, setWorkplaceList] = useState([]);
     const [issueReasson, setIssueReasson] = useState([]);
@@ -337,7 +336,7 @@ const List = () => {
         endDate: "",
         improveTypeCd: "",
         issueReason: "",
-        pageNum: 1,
+        pageNum: page,
         startDate: "",
         statusCd: "",
         workplaceId: "",
@@ -345,17 +344,12 @@ const List = () => {
 
     const [lawList, setLawList] = useState([]);
 
-    // all checked
     const [checked, setChecked] = useState(false);
-    const [checkedRadio, setCheckedRadio] = useState(false);
 
     const handleRedirect = () => {
-        navigate(
-            "/dashboard/employee/order-for-improvement-and-correction-under-related-law/registration"
-        );
+        navigate("/dashboard/employee/order-for-improvement-and-correction-under-related-law/registration");
     };
 
-    // handleChange make it for everthing
     const handleChange = (prop) => (event) => {
         if (prop.includes("cmmdOrgCd00")) {
             setLawImprovements({
@@ -405,19 +399,14 @@ const List = () => {
     const fetchLawList = async () => {
         const response = await lawSelect(lawImprovements);
         setLawList(response.data.RET_DATA);
-        console.log(response);
     };
 
     useEffect(() => {
         fetchWorkplaceList();
         fetchIssueReasson();
         fetchLawList();
-    }, []);
 
-    // console.log(issueReasson, workplaceList);
-    // console.log(lawImprovements);
-    // console.log(lawList);
-    // console.log(checked);
+    }, []);
 
     return (
         <DefaultLayout>

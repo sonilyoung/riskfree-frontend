@@ -82,7 +82,7 @@ import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
-import { useGetLoginInfoMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetDayInfoMutation, useGetNoticeListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetBaselineListMutation, useGetBaselineMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 
 
@@ -1756,6 +1756,20 @@ const Employee = () => {
     const [baselineList, setBaselineList] = useState([])
     const [baseline, setBaseline] = useState(7)
     const [baselineData, setBaselineData] = useState({})
+    const [improvmentList, setImprovmentList] = useState([]);
+    const [leaderImprovementList, setLeaderImprovementList] = useState([]);
+    const [safeWorkHistoryList, setSafeWorkHistoryList] = useState({});
+    const [accidentTotal, setAccidentTotal] = useState({});
+    const [noticesList, setNoticesList] = useState([]);
+    const [dayInfo, setDayInfo] = useState();
+
+
+    const [getSafeWorkHistoryList] = useGetSafeWorkHistoryListMutation();
+    const [getAccidentTotal] = useGetAccidentTotalMutation();
+    const [getImprovementList] = useGetImprovementListMutation();
+    const [getLeaderImprovementList] = useGetLeaderImprovementListMutation();
+    const [getDayInfo] = useGetDayInfoMutation();
+    const [getNoticeList] = useGetNoticeListMutation();
 
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -1769,20 +1783,29 @@ const Employee = () => {
 
     const handleChange = (event) => {
         setNum(event.target.value);
-    };
+    }
 
-    const [noticesSelect] = useNoticesSelectMutation()
-    const [noticesList, setNoticesList] = useState()
+    const handleNoticeList = async () => {
+        const response = await getNoticeList({});
+        setNoticesList(response.data.RET_DATA);
+    }
 
+    const handleFetchImprovementList = async () => {
+        const response = await getImprovementList({
+            "baselineId": 6,
+            "instruction": 1,
+            "workplaceId": 1
+        });
+        setImprovmentList(response.data.RET_DATA[0]);
+    }
 
-    const handleFetchList = async () => {
-        const response = await noticesSelect({
-            "col": "",
-            "countPerPage": null,
-            "pageNum": null,
-            "param": ""
-        })
-        setNoticesList(response)
+    const handleFetchLeaderImprovementList = async () => {
+        const response = await getLeaderImprovementList({
+            "baselineId": 6,
+            "instruction": 1,
+            "workplaceId": 1
+        });
+        setLeaderImprovementList(response.data.RET_DATA[0]);
     }
 
     const fetchBaselineList = async () => {
@@ -1810,10 +1833,33 @@ const Employee = () => {
         { title: "도급용역 위탁시 평가기준 및 절차 점검", percent: "97%", status: "normal" }
     ]
 
+    const handleFetchAccidentTotalList = async () => {
+        const response = await getAccidentTotal({
+            "baselineId": 6,
+            "caughtCnt": 0,
+            "companyId": 1,
+            "workplaceId": 1
+        });
+        setAccidentTotal(response.data.RET_DATA);
+    }
+
+    const handleFetchSafeWorkHistoryList = async () => {
+        const response = await getSafeWorkHistoryList({
+            "baselineId": 1,
+            "workplaceId": 1
+        });
+        setSafeWorkHistoryList(response.data.RET_DATA);
+    }
+
+
     useEffect(() => {
         fetchBaseline()
-        handleFetchList()
-        handleLoginInfo()
+        handleNoticeList();
+        handleLoginInfo();
+        handleFetchImprovementList();
+        handleFetchLeaderImprovementList();
+        handleFetchAccidentTotalList();
+        handleFetchSafeWorkHistoryList();
         fetchBaselineList()
     }, [])
 
@@ -2491,15 +2537,15 @@ const Employee = () => {
                                         <div className={classes.bottomBox}>
                                             <div>
                                                 <div>지시</div>
-                                                <div><strong>3</strong>건</div>
+                                                <div><strong>{improvmentList?.instruction}</strong>건</div>
                                             </div>
                                             <div>
                                                 <div>진행</div>
-                                                <div><strong>1</strong>건</div>
+                                                <div><strong>{improvmentList?.progress}</strong>건</div>
                                             </div>
                                             <div>
                                                 <div>완료</div>
-                                                <div><strong>12</strong>건</div>
+                                                <div><strong>{improvmentList?.complete}</strong>건</div>
                                             </div>
                                         </div>
                                     </div>
@@ -2508,15 +2554,15 @@ const Employee = () => {
                                         <div className={classes.bottomBox}>
                                             <div>
                                                 <div>지시</div>
-                                                <div><strong>3</strong>건</div>
+                                                <div><strong>{leaderImprovementList?.instruction}</strong>건</div>
                                             </div>
                                             <div>
                                                 <div>진행</div>
-                                                <div><strong>1</strong>건</div>
+                                                <div><strong>{leaderImprovementList?.progress}</strong>건</div>
                                             </div>
                                             <div>
                                                 <div>완료</div>
-                                                <div><strong>12</strong>건</div>
+                                                <div><strong>{leaderImprovementList?.complete}</strong>건</div>
                                             </div>
                                         </div>
                                     </div>
@@ -2526,60 +2572,68 @@ const Employee = () => {
                                     <div className={classes.bottomBox}>
                                         <div>
                                             <div>사망</div>
-                                            <div><strong>0</strong>건</div>
+                                            <div><strong>{accidentTotal?.deathTollCnt}</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>동일사고</div>
+                                            <div><strong>{accidentTotal?.sameAccidentInjuryCnt}</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>직업질환</div>
+                                            <div><strong>{accidentTotal?.jobDeseaseTollCnt}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>추락</div>
-                                            <div><strong>1</strong>건</div>
-                                        </div>
-                                        <div>
-                                            <div>화재</div>
-                                            <div><strong>4</strong>건</div>
-                                        </div>
-                                        <div>
-                                            <div>충돌</div>
-                                            <div><strong>2</strong>건</div>
-                                        </div>
-                                        <div>
-                                            <div>전기</div>
-                                            <div><strong>3</strong>건</div>
-                                        </div>
-                                        <div>
-                                            <div>고소</div>
-                                            <div><strong>4</strong>건</div>
-                                        </div>
-                                        <div>
-                                            <div>급성독성</div>
-                                            <div><strong>6</strong>건</div>
+                                            <div><strong>{accidentTotal?.caughtCnt}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>끼임</div>
-                                            <div><strong>12</strong>건</div>
+                                            <div><strong>{accidentTotal?.fireCnt}</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>화재</div>
+                                            <div><strong>{accidentTotal?.fallCnt}</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>전기</div>
+                                            <div><strong>{accidentTotal?.electCnt}</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>밀폐</div>
+                                            <div><strong>{accidentTotal?.confinedCnt}</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>중량물</div>
+                                            <div><strong>{accidentTotal?.heavyCnt}</strong>건</div>
                                         </div>
                                     </div>
                                 </Grid>
                                 <Grid className={classes.footBox + ' boxUp'} item xs={3}>
-                                    <Link className={classes.footLink} to={"/dashboard/employee/security-work-content"} underline="none">11/27(화) - 안전작업허가 공사내역</Link>
+                                    <Link className={classes.footLink} to={"/dashboard/employee/security-work-content"} underline="none">{safeWorkHistoryList?.nowDate}({safeWorkHistoryList?.nowDay}) - 안전작업허가 공사내역</Link>
                                     <div className={classes.bottomBox}>
                                         <div>
-                                            <div>고소</div>
-                                            <div><strong>4</strong>건</div>
-                                        </div>
-                                        <div>
-                                            <div>화학물</div>
-                                            <div><strong>1</strong>건</div>
+                                            <div>화기</div>
+                                            <div><strong>{safeWorkHistoryList?.fire}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>밀폐</div>
-                                            <div><strong>2</strong>건</div>
+                                            <div><strong>{safeWorkHistoryList?.closeness}</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>정전</div>
+                                            <div><strong>{safeWorkHistoryList?.blackout}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>굴착</div>
-                                            <div><strong>3</strong>건</div>
+                                            <div><strong>{safeWorkHistoryList?.excavation}</strong>건</div>
                                         </div>
                                         <div>
-                                            <div>기타</div>
-                                            <div><strong>4</strong>건</div>
+                                            <div>방사선</div>
+                                            <div><strong>{safeWorkHistoryList?.radiation}</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>고소</div>
+                                            <div><strong>{safeWorkHistoryList?.sue}</strong>건</div>
                                         </div>
                                     </div>
                                 </Grid>
@@ -2588,7 +2642,7 @@ const Employee = () => {
                             <Grid container item xs={12} sx={{ marginBottom: '3px' }}>
                                 <Grid className={classes.footBox + ' boxDown'} item xs={8.75}>
                                     <Slider className={classes.footSlider} {...footerSlider}>
-                                        {noticesList && noticesList?.data.RET_DATA.map((notice) => (
+                                        {noticesList?.map((notice) => (
                                             <div>
                                                 <div>{notice.insertDate}</div>
                                                 {notice.importCd === "001" && <span className={classes.slideLabelHot}>HOT</span>}
@@ -2626,8 +2680,6 @@ const Employee = () => {
                     </Grid>
 
                 </Grid>
-
-            </Grid>
 
         </WideLayout >
     );

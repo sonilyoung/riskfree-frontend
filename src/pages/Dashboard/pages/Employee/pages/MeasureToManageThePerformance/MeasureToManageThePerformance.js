@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom'
+import { Route, Routes, useParams } from 'react-router-dom'
 import { DefaultLayout } from '../../../../../../layouts/Default';
 import List from './components/List/List'
 import ListTwo from './components/ListTwo/ListTwo'
@@ -10,11 +10,11 @@ const MPDLawFirst = () => {
     const { page } = useParams()
 
     return (
-        <DefaultLayout>
-            {page === "list" && <List />}
-            {page === "list-two" && <ListTwo />}
-            {page === "registration" && <Registration />}
-        </DefaultLayout>
+        <Routes>
+            <Route path="list" element={<List />} />
+            <Route path="list-two" element={<ListTwo />} />
+            <Route path="registration" element={<Registration />} />
+        </Routes>
     );
 };
 

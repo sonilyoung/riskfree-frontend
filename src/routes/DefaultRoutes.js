@@ -87,7 +87,7 @@ const DefaultRoutes = () => (
             <Route path="/dashboard/employee/improvement-measures/*" element={<ImprovementMeasuresPage />} />
             <Route path="/dashboard/employee/accident-countermeasures-implementation/*" element={<CountermeasuresForTheOccurrencePage />} />
             <Route path="/dashboard/employee/order-for-improvement-and-correction-under-related-law/*" element={<OrdersForImprovementPage />} />
-            <Route path="/dashboard/employee/measure-to-manage-performance-od-duties-law/:page" element={<MeasureToManageThePerformancePage />} />
+            <Route path="/dashboard/employee/measure-to-manage-performance-od-duties-law/*" element={<MeasureToManageThePerformancePage />} />
             <Route path="/dashboard/employee/security-work-content" element={<ContentsOfWorkPage />} />
         </Route>
         <Route element={<PublicRoute />}>

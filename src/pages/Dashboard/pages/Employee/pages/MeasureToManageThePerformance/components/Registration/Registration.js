@@ -17,6 +17,7 @@ import iconTabOn from '../../../../../../../../assets/images/ic_tab_on.png';
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
 import TextField from '@mui/material/TextField';
+import { DefaultLayout } from '../../../../../../../../layouts/Default';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -46,7 +47,7 @@ const useStyles = makeStyles(() => ({
         alignItems: 'center',
         alignContent: 'center',
         height: '68px',
-        width: '100%',
+        // width: '100%',
         marginLeft: '10px !important',
         background: '#3a5298',
         borderRadius: '5px',
@@ -249,7 +250,7 @@ const MPDLawThird = () => {
     const classes = useStyles();
 
     return (
-        <>
+        <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
                 <Grid item xs={12} className={classes.listTitle}>
                     <Typography variant="headline2" component="div" gutterBottom>
@@ -277,21 +278,6 @@ const MPDLawThird = () => {
                         <span>화학물 </span>
                         <span>안전 관리법</span>
                     </Link>
-                    <Link href="#none" className={classes.buttonLink}>
-                        <span>추가 탭 발생시</span>
-                    </Link>
-                    <Link href="#none" className={classes.buttonLink}>
-                        <span>추가 탭 발생시</span>
-                    </Link>
-                    <Link href="#none" className={classes.buttonLink}>
-                        <span>추가 탭 발생시</span>
-                    </Link>
-                    <Link href="#none" className={classes.buttonLink}>
-                        <span>추가 탭 발생시</span>
-                    </Link>
-                    <Link href="#none" className={classes.buttonLink}>
-                        <span>추가 탭 발생시</span>
-                    </Link>
                 </Grid>
                 <Grid item xs={12} className={classes.stepBox}>
                     <Stepper sx={{ mb: 4, mt: 4 }} nonLinear activeStep={2} className={classes.activeStep}>
@@ -299,21 +285,21 @@ const MPDLawThird = () => {
                             <StepLabel
                                 icon={<img src={iconTab} alt="inactive step" />}
                             >
-                                <Link href="#none">표준상태보기</Link>
+                                <Link href="/dashboard/employee/measure-to-manage-performance-od-duties-law/list">표준상태보기</Link>
                             </StepLabel>
                         </Step>
                         <Step>
                             <StepLabel
                                 icon={<img src={iconTab} alt="inactive step" />}
                             >
-                                <Link href="#none">처벌 및 과태료보기</Link>
+                                <Link href="/dashboard/employee/measure-to-manage-performance-od-duties-law/list-two">처벌 및 과태료보기</Link>
                             </StepLabel>
                         </Step>
                         <Step>
                             <StepLabel
                                 icon={<img src={iconTabOn} alt="active step" />}
                             >
-                                <Link href="#none">관리상의 조치내역 보기/등록</Link>
+                                <Link href="/dashboard/employee/measure-to-manage-performance-od-duties-law/registration">관리상의 조치내역 보기/등록</Link>
                             </StepLabel>
                         </Step>
                     </Stepper>
@@ -421,7 +407,7 @@ const MPDLawThird = () => {
                 <BlueButton className={'button-registration'}>등록</BlueButton>
                 <WhiteButton className={'button-cancelation'}>취소</WhiteButton>
             </Grid>
-        </>
+        </DefaultLayout>
     );
 };
 

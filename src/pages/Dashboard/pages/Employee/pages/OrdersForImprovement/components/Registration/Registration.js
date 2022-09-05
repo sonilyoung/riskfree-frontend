@@ -599,19 +599,9 @@ const Registration = () => {
                 <Grid item xs={12} className={classes.footerButtons}>
                     {/* <BlueButton className={"button-correction"}>수정</BlueButton> */}
                     <BlueButton className={"button-registration"} onClick={handleLawInsert}>등록</BlueButton>
-                    <WhiteButton
-                        className={"button-cancellation"}
-                        onClick={() => handleRedirect()}
-                    >
-                        취소
-                    </WhiteButton>
-                    <WhiteButton className={"button-delete"}>삭제</WhiteButton>
-                    <WhiteButton
-                        className={"button-list"}
-                        onClick={() => handleRedirect()}
-                    >
-                        목록
-                    </WhiteButton>
+                    {/* <WhiteButton className={"button-cancellation"}>취소</WhiteButton> */}
+                    {/* <WhiteButton className={"button-delete"}>삭제</WhiteButton> */}
+                    <WhiteButton className={"button-list"} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
             </Grid>
         </DefaultLayout>

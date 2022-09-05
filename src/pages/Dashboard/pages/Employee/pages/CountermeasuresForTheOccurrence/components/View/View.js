@@ -519,7 +519,7 @@ const View = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
-                    <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/director/accident-countermeasures-implementation/update/${accident.accidentId}`)}>수정</BlueButton>
+                    <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/employee/accident-countermeasures-implementation/update/${accident.accidentId}`)}>수정</BlueButton>
                     <WhiteButton className={'button-delete'} onClick={handleDelete}>삭제</WhiteButton>
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
