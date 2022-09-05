@@ -150,10 +150,15 @@ const useStyles = makeStyles(() => ({
             color: '#ddd',
             fontSize: '17px',
             '& svg': {
-                color: '#ddd'
-            }
+                color: '#ddd',
+                display: 'none'
+            },
+        },
+        '& .Mui-disabled': {
+            color: '#ddd !important',
+            '-webkit-text-fill-color': 'unset !important',
         }
-    }
+    },
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -245,10 +250,9 @@ const Default = ({ children }) => {
                                         onChange={handleChange}
                                         displayEmpty
                                         inputProps={{ 'aria-label': 'Without label' }}
+                                        disabled
                                     >
-                                        <MenuItem value="">550~300인 이하</MenuItem>
-                                        <MenuItem value={2}>300~500인 이하</MenuItem>
-                                        <MenuItem value={3}>500~1000인 이하</MenuItem>
+                                        <MenuItem value="">55~300인 이하</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl sx={{ width: 150, marginLeft: '8px' }} className={classes.dropMenu}>
@@ -258,10 +262,9 @@ const Default = ({ children }) => {
                                         onChange={handleChange}
                                         displayEmpty
                                         inputProps={{ 'aria-label': 'Without label' }}
+                                        disabled
                                     >
                                         <MenuItem value="">건설업</MenuItem>
-                                        <MenuItem value={2}>제조업</MenuItem>
-                                        <MenuItem value={3}>IT</MenuItem>
                                     </Select>
                                 </FormControl>
                             </div>

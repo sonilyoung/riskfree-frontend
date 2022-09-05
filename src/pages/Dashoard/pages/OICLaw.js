@@ -266,6 +266,9 @@ const useStyles = makeStyles(() => ({
         overflow: 'hidden',
         '& div': {
             height: 'inherit',
+        },
+        '& input[type=date]': {
+            
         }
     },
 }));
@@ -472,7 +475,7 @@ const OICLaw = () => {
                                         sx={{width: 140}}
                                         id="date"
                                         className={classes.selectMenu}
-                                        type="date"
+                                        type="date"  
                                     />
                                     &nbsp;~&nbsp;
                                     <TextField

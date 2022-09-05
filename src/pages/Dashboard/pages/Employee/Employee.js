@@ -749,11 +749,10 @@ const useStyles = makeStyles(() => ({
     },
     lowerDashboard: {
         position: 'relative',
-        top: '39px',
+        bottom: '-40px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        padding: '8px 0px 25px 0px',
         background: 'linear-gradient(#097ef5, #266aa9)',
         zIndex: '1',
         '&:hover': {
@@ -764,7 +763,7 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         justifyContent: 'center',
         width: '90%',
-        margin: '-39px auto',
+        margin: '-31px auto',
     },
     gageArrow: {
         position: 'relative',
@@ -1263,8 +1262,19 @@ const useStyles = makeStyles(() => ({
             color: '#ddd',
             fontSize: '17px',
             '& svg': {
-                color: '#ddd'
-            }
+                color: '#ddd',
+                display: 'none'
+            },
+        },
+        '& .Mui-disabled': {
+            color: '#ddd !important',
+            '-webkit-text-fill-color': 'unset !important',
+        },
+        '&.page_drop_menu': {
+            '& svg': {
+                color: '#ddd',
+                display: 'block !important'
+            },  
         }
     },
     userTab: {
@@ -1387,7 +1397,17 @@ const useStyles = makeStyles(() => ({
         '&:first-of-type': {
             width: '150%'
         }
-    }
+    },
+    hoverWrap: {
+        padding: '0',
+        maxHeight: '0',
+        overflow: 'hidden',
+        '&.wrap_hover': {
+            padding: '8px 0 25px 0',
+            maxHeight: 'unset',
+            overflow: 'visible',
+        },
+    },
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -1830,10 +1850,9 @@ const Employee = () => {
                                         onChange={handleChange}
                                         displayEmpty
                                         inputProps={{ 'aria-label': 'Without label' }}
+                                        disabled
                                     >
-                                        <MenuItem value="">550~300인 이하</MenuItem>
-                                        <MenuItem value={2}>300~500인 이하</MenuItem>
-                                        <MenuItem value={3}>500~1000인 이하</MenuItem>
+                                        <MenuItem value="">55~300인 이하</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl sx={{ width: 150, marginLeft: '8px' }} className={classes.dropMenu}>
@@ -1843,10 +1862,9 @@ const Employee = () => {
                                         onChange={handleChange}
                                         displayEmpty
                                         inputProps={{ 'aria-label': 'Without label' }}
+                                        disabled
                                     >
                                         <MenuItem value="">건설업</MenuItem>
-                                        <MenuItem value={2}>제조업</MenuItem>
-                                        <MenuItem value={3}>IT</MenuItem>
                                     </Select>
                                 </FormControl>
                             </div>
@@ -2197,7 +2215,7 @@ const Employee = () => {
                         관리차수<strong>11</strong>차 :<strong>22.01.01 ~ 22.04.30</strong>
                     </div>
                     <div className={classes.managementSide}>
-                        <FormControl sx={{ width: 130 }}>
+                        <FormControl sx={{ width: 130 }} className={classes.dropMenu + ' page_drop_menu'}>
                             <Select
                                 className={classes.selectMenu}
                                 value={num}
@@ -2438,7 +2456,7 @@ const Employee = () => {
                     <div className={classes.dashTrigger}>
                         <DashTrigButton></DashTrigButton>
                     </div>
-
+                    <Grid container item xs={12} className={classes.hoverWrap}>                      
                     <Grid className={classes.gageWrap} item xs={2}>
                         <div className={classes.gageArrow}>
                             <div className={classes.needleImg} style={{ transform: 'rotate(25deg)' }}></div>
@@ -2593,6 +2611,8 @@ const Employee = () => {
                         </Grid>
 
                     </Grid>
+
+                    </Grid>  
 
                 </Grid>
 
