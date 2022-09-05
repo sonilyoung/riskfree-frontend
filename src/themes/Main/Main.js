@@ -62,12 +62,39 @@ const main = createTheme({
                 root: {
                     borderRadius: 6,
                     fontSize: 17,
+                    '& input[type=date]': {
+                        display: 'flex',
+                        alignItems: 'center'
+                    },
+                    '& input[type=date]::-webkit-datetime-edit': {
+                        color: 'transparent',
+                        position: 'relative',
+                    },
+                    '& input[type=date]::-webkit-datetime-edit-year-field': {
+                        position: 'absolute !important',
+                        color: '#000',
+                        padding: '2px',
+                        left: '0px',
+                    },
+                    '& input[type=date]::-webkit-datetime-edit-month-field': {
+                        position: 'absolute !important',
+                        color: '#000',
+                        padding: '2px',
+                        left: '40px',
+                    },
+                    '& input[type=date]::-webkit-datetime-edit-day-field': {
+                        position: 'absolute !important',
+                        color: '#000',
+                        padding: '2px',
+                        right: '0px',
+                    },
                 },
                 input: {
                     '&::placeholder': {
-                        opacity: 1
+                        opacity: 1,
                       },
-                }
+                },
+                
             }
         },
         MuiLink: {
