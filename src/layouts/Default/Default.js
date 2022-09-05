@@ -27,6 +27,7 @@ import { remove } from '../../services/core/User/Token';
 
 import '../../assets/fonts/Pretendard-Regular.otf';
 import proba from '../../assets/fonts/Pretendard-Regular.otf';
+import popupClose from '../../assets/images/btn_popClose.png';
 
 const useStyles = makeStyles(() => ({
     bodyWrap: {
@@ -200,12 +201,22 @@ const BackButton = styled(ButtonUnstyled)`
     cursor: pointer;
 `;
 
+const ButtonClosePop = styled(ButtonUnstyled)`
+    width: 24px;
+    height: 24px;
+    background: url(${popupClose}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+`;
+
 const Default = ({ children }) => {
     const classes = useStyles();
     const location = useLocation()
     const navigate = useNavigate()
     const [getLoginInfo] = useGetLoginInfoMutation()
     const [loginInfo, setLoginInfo] = useState({})
+    const [userPopup, setUserPopup] = useState(false)
+    const [settingsPopup, setSettingsPopup] = useState(false)
 
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -296,7 +307,7 @@ const Default = ({ children }) => {
             <div className={classes.sectionWrap}>
                 {children}
             </div>
-        </div>
+        </div >
     );
 };
 

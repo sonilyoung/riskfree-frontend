@@ -1296,12 +1296,10 @@ const Director = () => {
         navigate('/');
     }
 
-
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
         setLoginInfo(response.data.RET_DATA)
     }
-
 
     const handleChange = (event) => {
         setNum(event.target.value);
@@ -1360,8 +1358,11 @@ const Director = () => {
         setSafeWorkHistoryList(response.data.RET_DATA)
     }
 
-    const now = moment()
-
+    const refreshClock = () => {
+        const now = moment()
+        setHours(now.format("hh"))
+        setMinutes(now.format("mm"))
+    }
 
     useEffect(() => {
         handleFetchList()
@@ -1372,11 +1373,11 @@ const Director = () => {
     }, [])
 
     useEffect(() => {
-        setInterval(() => {
-            setHours(now.format("hh"))
-            setMinutes(now.format("mm"))
-        }, 1000)
-    }, [hours, minutes])
+        const timerId = setInterval(refreshClock, 1000);
+        return function cleanup() {
+            clearInterval(timerId);
+        };
+    }, [])
 
     return (
         <WideLayout>
@@ -1881,7 +1882,7 @@ const Director = () => {
 
                         <Grid container item xs={12}>
                             <Grid className={classes.footBox + ' boxUp'} item xs={3.7}>
-                                <Link className={classes.footLink} to="/dashboard/director/improvement-measures/list" underline="none">대표이사 개선조치</Link>
+                                <Link className={classes.footLink} to="/dashboard/employee/improvement-measures/list" underline="none">대표이사 개선조치</Link>
                                 <div className={classes.bottomBox + ' leftBox'}>
                                     <div>
                                         <div>지시</div>
@@ -1908,32 +1909,36 @@ const Director = () => {
                                         <div><strong>{accidentTotal?.deathTollCnt}</strong>건</div>
                                     </div>
                                     <div>
-                                        <div>추락</div>
+                                        <div>동일사고</div>
                                         <div><strong>{accidentTotal?.sameAccidentInjuryCnt}</strong>건</div>
                                     </div>
                                     <div>
-                                        <div>화재</div>
+                                        <div>직업질환</div>
                                         <div><strong>{accidentTotal?.jobDeseaseTollCnt}</strong>건</div>
                                     </div>
                                     <div>
-                                        <div>충돌</div>
+                                        <div>추락</div>
                                         <div><strong>{accidentTotal?.caughtCnt}</strong>건</div>
                                     </div>
                                     <div>
-                                        <div>전기</div>
+                                        <div>끼임</div>
                                         <div><strong>{accidentTotal?.fireCnt}</strong>건</div>
                                     </div>
                                     <div>
-                                        <div>고소</div>
+                                        <div>화재</div>
                                         <div><strong>{accidentTotal?.fallCnt}</strong>건</div>
                                     </div>
                                     <div>
-                                        <div>급성독성</div>
+                                        <div>전기</div>
                                         <div><strong>{accidentTotal?.electCnt}</strong>건</div>
                                     </div>
                                     <div>
-                                        <div>끼임</div>
+                                        <div>밀폐</div>
                                         <div><strong>{accidentTotal?.confinedCnt}</strong>건</div>
+                                    </div>
+                                    <div>
+                                        <div>중량물</div>
+                                        <div><strong>{accidentTotal?.heavyCnt}</strong>건</div>
                                     </div>
                                 </div>
                             </Grid>
@@ -1941,15 +1946,15 @@ const Director = () => {
                                 <Link className={classes.footLink} to="/dashboard/director/security-work-content" underline="none">{safeWorkHistoyList?.nowDate}({safeWorkHistoyList?.nowDay}) - 안전작업허가 공사내역</Link>
                                 <div className={classes.bottomBox + ' rightBox'}>
                                     <div>
-                                        <div>고소</div>
+                                        <div>화기</div>
                                         <div><strong>{safeWorkHistoyList?.fire}</strong>건</div>
                                     </div>
                                     <div>
-                                        <div>화학물</div>
+                                        <div>밀폐</div>
                                         <div><strong>{safeWorkHistoyList?.closeness}</strong>건</div>
                                     </div>
                                     <div>
-                                        <div>밀폐</div>
+                                        <div>정전</div>
                                         <div><strong>{safeWorkHistoyList?.blackout}</strong>건</div>
                                     </div>
                                     <div>
@@ -1957,8 +1962,12 @@ const Director = () => {
                                         <div><strong>{safeWorkHistoyList?.excavation}</strong>건</div>
                                     </div>
                                     <div>
-                                        <div>기타</div>
+                                        <div>방사선</div>
                                         <div><strong>{safeWorkHistoyList?.radiation}</strong>건</div>
+                                    </div>
+                                    <div>
+                                        <div>고소</div>
+                                        <div><strong>{safeWorkHistoyList?.sue}</strong>건</div>
                                     </div>
                                 </div>
                             </Grid>

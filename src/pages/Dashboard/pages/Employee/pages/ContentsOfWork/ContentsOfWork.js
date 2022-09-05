@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DefaultLayout } from '../../../../../../layouts/Default';
 
 import Grid from '@mui/material/Grid';
@@ -140,8 +140,14 @@ const useStyles = makeStyles(() => ({
         }
     },
     uploadBox: {
-        maxWidth: '50% !important',
+        position: "absolute",
+        bottom: "30%",
+        width: '50% !important',
         border: '1px solid #bdcbe9',
+        zIndex: "999999999"
+    },
+    uploadBoxClose: {
+        display: "none"
     },
     uploadTable: {
         borderRadius: '6px',
@@ -200,7 +206,9 @@ const useStyles = makeStyles(() => ({
     },
     uploadInfo: {
         display: 'flex',
-        position: 'relative',
+        position: 'absolute',
+        bottom: "10%",
+        width: "70% !important",
         '& >div': {
             display: 'flex',
             alignItems: 'center',
@@ -218,6 +226,9 @@ const useStyles = makeStyles(() => ({
             position: 'absolute',
             right: '30px'
         }
+    },
+    uploadInfoClose: {
+        display: "none"
     },
     fileIcon: {
 
@@ -256,6 +267,7 @@ const CloseButton = styled(ButtonUnstyled)`
 
 const SecurityWorkContent = () => {
     const classes = useStyles();
+    const [uploadPop, setUploadPop] = useState(false)
 
     const [num, setNum] = React.useState('');
 
@@ -273,7 +285,7 @@ const SecurityWorkContent = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.headerButtons}>
                     <MenuButton className={'button-search'}>검색</MenuButton>
-                    <MenuButton className={'button-upload'}>업로드</MenuButton>
+                    <MenuButton className={'button-upload'} onClick={() => setUploadPop(true)}>업로드</MenuButton>
                     <MenuButton className={'button-delete'}>삭제</MenuButton>
                     <MenuButton className={'button-download'}>다운로드</MenuButton>
                 </Grid>
@@ -362,7 +374,7 @@ const SecurityWorkContent = () => {
                         </div>
                     </div>
                 </Grid>
-                <Grid item xs={12} className={classes.menuBox + ' ' + classes.uploadBox}>
+                <Grid item xs={12} className={uploadPop ? (classes.menuBox + ' ' + classes.uploadBox) : (classes.menuBox + ' ' + classes.uploadBoxClose)}>
                     <div className={classes.fileUpload}>
                         <div className={classes.uploadTitle}>엑셀 파일 업로드</div>
                         <div className={classes.uploadBody}>
@@ -393,11 +405,11 @@ const SecurityWorkContent = () => {
                         </div>
                         <div className={classes.uploadButtons}>
                             <MenuButton className={'button-save'}>구하다</MenuButton>
-                            <MenuButton className={'button-cancel'}>취소</MenuButton>
+                            <MenuButton className={'button-cancel'} onClick={() => setUploadPop(false)}>취소</MenuButton>
                         </div>
                     </div>
                 </Grid>
-                <Grid item xs={12} className={classes.menuBox + ' ' + classes.uploadInfo}>
+                <Grid item xs={12} className={uploadPop ? (classes.menuBox + ' ' + classes.uploadInfo) : (classes.menuBox + ' ' + classes.uploadInfoClose)}>
                     <div className={classes.finishedUpload}><img src={fileIcon} alt="file icon" className={classes.fileIcon} />file_name.ext<img src={icoUploaded} alt="file uploaded" className={classes.uploadStatus} /></div>
                     <div className={classes.activeUpload}><img src={fileIcon} alt="file icon" className={classes.fileIcon} />file_name.ext<img src={icoUploaded} alt="file uploaded" className={classes.uploadStatus} /></div>
                     <CloseButton>x</CloseButton>

@@ -83,6 +83,7 @@ import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
 import { useGetLoginInfoMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetBaselineListMutation, useGetBaselineMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 
 
 
@@ -738,6 +739,14 @@ const useStyles = makeStyles(() => ({
         color: '#fff',
         textDecoration: "none"
     },
+    listLinkClicked: {
+        display: 'flex',
+        alignItems: 'center',
+        color: '#fff',
+        textDecoration: "none",
+        backgroundColor: "grey"
+    },
+
     gageWrap: {
         display: 'flex',
         justifyContent: 'center',
@@ -748,8 +757,8 @@ const useStyles = makeStyles(() => ({
         backgroundPosition: 'center',
     },
     lowerDashboard: {
-        position: 'relative',
-        bottom: '-40px',
+        position: 'absolute',
+        bottom: '0px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-start',
@@ -1274,7 +1283,7 @@ const useStyles = makeStyles(() => ({
             '& svg': {
                 color: '#ddd',
                 display: 'block !important'
-            },  
+            },
         }
     },
     userTab: {
@@ -1402,12 +1411,13 @@ const useStyles = makeStyles(() => ({
         padding: '0',
         maxHeight: '0',
         overflow: 'hidden',
-        '&.wrap_hover': {
-            padding: '8px 0 25px 0',
-            maxHeight: 'unset',
-            overflow: 'visible',
-        },
+
     },
+    'wrap_hover': {
+        padding: '8px 0 25px 0',
+        maxHeight: 'unset',
+        overflow: 'visible',
+    }
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -1739,6 +1749,13 @@ const Employee = () => {
     const [chartPop, setChartPop] = useState(false)
     const [getLoginInfo] = useGetLoginInfoMutation()
     const [loginInfo, setLoginInfo] = useState({})
+    const [hoverContainer, setHoverContainer] = useState(false)
+    const [clicked, setClicked] = useState(null)
+    const [getBaselineList] = useGetBaselineListMutation()
+    const [getBaseline] = useGetBaselineMutation()
+    const [baselineList, setBaselineList] = useState([])
+    const [baseline, setBaseline] = useState(7)
+    const [baselineData, setBaselineData] = useState({})
 
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -1768,9 +1785,36 @@ const Employee = () => {
         setNoticesList(response)
     }
 
+    const fetchBaselineList = async () => {
+        const response = await getBaselineList({})
+        setBaselineList(response.data.RET_DATA)
+    }
+
+    const fetchBaseline = async () => {
+        const response = await getBaseline({
+            "baselineId": baseline
+        })
+        setBaselineData(response.data.RET_DATA)
+    }
+    console.log(baselineData)
+
+    const listLinks = [
+        { title: "안전보건 목표 및 경영방침 설정", percent: "100%", status: "normal" },
+        { title: "유해.위험 요인 개선 업무절차 마련 및 점검", percent: "87%", status: "caution" },
+        { title: "안전보건업무 총괄관리 전담조직 구축", percent: "32%", status: "warning" },
+        { title: "안전보건관리책임자 권한 부여 및 집행 점검", percent: "60%", status: "risk" },
+        { title: "안전.보건관련 필요예산 편성 및 집행", percent: "32%", status: "risk" },
+        { title: "안전보건 전문인력 배치 및 업무시간 보장", percent: "87%", status: "caution" },
+        { title: "종사자 의견수렴 및 개선방안 이행점검", percent: "32%", status: "warning" },
+        { title: "중대재해발생 비상대응 매뉴얼 마련 & 점검", percent: "87%", status: "caution" },
+        { title: "도급용역 위탁시 평가기준 및 절차 점검", percent: "97%", status: "normal" }
+    ]
+
     useEffect(() => {
+        fetchBaseline()
         handleFetchList()
         handleLoginInfo()
+        fetchBaselineList()
     }, [])
 
     return (
@@ -2212,23 +2256,22 @@ const Employee = () => {
                         <SubmitButton>Submit</SubmitButton>
                     </div>
                     <div className={classes.managementOrder}>
-                        관리차수<strong>11</strong>차 :<strong>22.01.01 ~ 22.04.30</strong>
+                        {/* 관리차수<strong>11</strong> 차 :<strong>22.01.01 ~ 22.04.30</strong> */}
+                        {baselineData?.baselineName}  차 :<strong>{baselineData?.baselineStart} ~ {baselineData?.baselineEnd}</strong>
                     </div>
                     <div className={classes.managementSide}>
-                        <FormControl sx={{ width: 130 }} className={classes.dropMenu + ' page_drop_menu'}>
+                        <FormControl sx={{ width: 130 }}>
                             <Select
                                 className={classes.selectMenu}
-                                value={num}
-                                onChange={handleChange}
-                                displayEmpty
-                                inputProps={{ 'aria-label': 'Without label' }}
-                            >
-                                <MenuItem value="">차수선택</MenuItem>
-                                <MenuItem value={2}>88차</MenuItem>
-                                <MenuItem value={3}>87차</MenuItem>
+                                value={baseline}
+                                onChange={(e) => setBaseline(e.target.value)}
+                                inputProps={{ 'aria-label': 'Without label' }}>
+                                {baselineList?.map((baseline) => (
+                                    <MenuItem MenuItem value={baseline.baselineId} >{baseline.baselineName}</MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
-                        <div><PageSideButton>이동</PageSideButton></div>
+                        <div><PageSideButton onClick={fetchBaseline}>이동</PageSideButton></div>
                     </div>
                 </Grid>
 
@@ -2241,42 +2284,10 @@ const Employee = () => {
                                     <p className={classes.listLink + ' parentLink'} to={"#none"} underline="none">안전보건관리체계의 구축 및 이행</p>
                                     <span className={'normal'}>93%</span>
                                     <ul className={classes.menuList + ' nestedList'}>
-                                        <li>
-                                            <Link className={classes.listLink} to={"#none"} underline="none">안전보건 목표 및 경영방침 설정</Link>
-                                            <span className={'normal'}>100%</span>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink + ' activeLink'} to={"#none"} underline="none">유해.위험 요인 개선 업무절차 마련 및 점검</Link>
-                                            <span className={'caution'}>87%</span>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} to={"#none"} underline="none">안전보건업무 총괄관리 전담조직 구축</Link>
-                                            <span className={'warning'}>32%</span>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} to={"#none"} underline="none">안전보건관리책임자 권한 부여 및 집행 점검</Link>
-                                            <span className={'risk'}>60%</span>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} to={"#none"} underline="none">안전.보건관련 필요예산 편성 및 집행</Link>
-                                            <span className={'risk'}>32%</span>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} to={"#none"} underline="none">안전보건 전문인력 배치 및 업무시간 보장</Link>
-                                            <span className={'caution'}>87%</span>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} to={"#none"} underline="none">종사자 의견수렴 및 개선방안 이행점검</Link>
-                                            <span className={'warning'}>32%</span>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} to={"#none"} underline="none">중대재해발생 비상대응 매뉴얼 마련&점검</Link>
-                                            <span className={'caution'}>87%</span>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} to={"#none"} underline="none">도급용역 위탁시 평가기준 및 절차 점검</Link>
-                                            <span className={'normal'}>97%</span>
-                                        </li>
+                                        {listLinks.map((link, index) => (<li>
+                                            <Link className={clicked === index ? classes.listLinkClicked : classes.listLink} onClick={() => setClicked(index)} to={"#none"} underline="none">{link.title}</Link>
+                                            <span className={link.status}>{link.percent}</span>
+                                        </li>))}
                                     </ul>
                                 </li>
                                 <li>
@@ -2453,172 +2464,172 @@ const Employee = () => {
                 </Grid>
 
                 <Grid className={classes.lowerDashboard} container item xs={12}>
-                    <div className={classes.dashTrigger}>
-                        <DashTrigButton></DashTrigButton>
+                    <div className={classes.dashTrigger} >
+                        <DashTrigButton onMouseOver={() => setHoverContainer(!hoverContainer)}></DashTrigButton>
                     </div>
-                    <Grid container item xs={12} className={classes.hoverWrap}>                      
-                    <Grid className={classes.gageWrap} item xs={2}>
-                        <div className={classes.gageArrow}>
-                            <div className={classes.needleImg} style={{ transform: 'rotate(25deg)' }}></div>
-                            <div className={classes.gageState}></div>
-                        </div>
-                    </Grid>
+                    <Grid container item xs={12} className={hoverContainer ? classes.wrap_hover : classes.hoverWrap} onMouseLeave={() => setHoverContainer(false)}>
+                        <Grid className={classes.gageWrap} item xs={2}>
+                            <div className={classes.gageArrow}>
+                                <div className={classes.needleImg} style={{ transform: 'rotate(25deg)' }}></div>
+                                <div className={classes.gageState}></div>
+                            </div>
+                        </Grid>
 
-                    <Grid className={classes.boxWrap} item xs={10}>
+                        <Grid className={classes.boxWrap} item xs={10}>
 
-                        <Grid container item xs={12}>
-                            <Grid className={classes.footBox + ' boxUp multiBox'} item xs={3.7}>
-                                <div className={classes.tiltBox}>
-                                    <span>개</span>
-                                    <span>선</span>
-                                    <span>/</span>
-                                    <span>조</span>
-                                    <span>치</span>
-                                </div>
-                                <div>
-                                    <Link className={classes.footLink} to={"/dashboard/employee/improvement-measures/list"} underline="none">대표이사</Link>
+                            <Grid container item xs={12}>
+                                <Grid className={classes.footBox + ' boxUp multiBox'} item xs={3.7}>
+                                    <div className={classes.tiltBox}>
+                                        <span>개</span>
+                                        <span>선</span>
+                                        <span>/</span>
+                                        <span>조</span>
+                                        <span>치</span>
+                                    </div>
+                                    <div>
+                                        <Link className={classes.footLink} to={"/dashboard/employee/improvement-measures/list"} underline="none">대표이사</Link>
+                                        <div className={classes.bottomBox}>
+                                            <div>
+                                                <div>지시</div>
+                                                <div><strong>3</strong>건</div>
+                                            </div>
+                                            <div>
+                                                <div>진행</div>
+                                                <div><strong>1</strong>건</div>
+                                            </div>
+                                            <div>
+                                                <div>완료</div>
+                                                <div><strong>12</strong>건</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <Link className={classes.footLink} to={"#none"} underline="none">안전보건팀장</Link>
+                                        <div className={classes.bottomBox}>
+                                            <div>
+                                                <div>지시</div>
+                                                <div><strong>3</strong>건</div>
+                                            </div>
+                                            <div>
+                                                <div>진행</div>
+                                                <div><strong>1</strong>건</div>
+                                            </div>
+                                            <div>
+                                                <div>완료</div>
+                                                <div><strong>12</strong>건</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Grid>
+                                <Grid className={classes.footBox + ' boxUp'} item xs={5}>
+                                    <Link className={classes.footLink} to="/dashboard/employee/accident-countermeasures-implementation/list" underline="none">산업재해 누적 집계</Link>
                                     <div className={classes.bottomBox}>
                                         <div>
-                                            <div>지시</div>
-                                            <div><strong>3</strong>건</div>
+                                            <div>사망</div>
+                                            <div><strong>0</strong>건</div>
                                         </div>
                                         <div>
-                                            <div>진행</div>
+                                            <div>추락</div>
                                             <div><strong>1</strong>건</div>
                                         </div>
                                         <div>
-                                            <div>완료</div>
-                                            <div><strong>12</strong>건</div>
+                                            <div>화재</div>
+                                            <div><strong>4</strong>건</div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <Link className={classes.footLink} to={"#none"} underline="none">안전보건팀장</Link>
-                                    <div className={classes.bottomBox}>
                                         <div>
-                                            <div>지시</div>
+                                            <div>충돌</div>
+                                            <div><strong>2</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>전기</div>
                                             <div><strong>3</strong>건</div>
                                         </div>
                                         <div>
-                                            <div>진행</div>
-                                            <div><strong>1</strong>건</div>
+                                            <div>고소</div>
+                                            <div><strong>4</strong>건</div>
                                         </div>
                                         <div>
-                                            <div>완료</div>
+                                            <div>급성독성</div>
+                                            <div><strong>6</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>끼임</div>
                                             <div><strong>12</strong>건</div>
                                         </div>
                                     </div>
-                                </div>
-                            </Grid>
-                            <Grid className={classes.footBox + ' boxUp'} item xs={5}>
-                                <Link className={classes.footLink} to="/dashboard/employee/accident-countermeasures-implementation/list" underline="none">산업재해 누적 집계</Link>
-                                <div className={classes.bottomBox}>
-                                    <div>
-                                        <div>사망</div>
-                                        <div><strong>0</strong>건</div>
-                                    </div>
-                                    <div>
-                                        <div>추락</div>
-                                        <div><strong>1</strong>건</div>
-                                    </div>
-                                    <div>
-                                        <div>화재</div>
-                                        <div><strong>4</strong>건</div>
-                                    </div>
-                                    <div>
-                                        <div>충돌</div>
-                                        <div><strong>2</strong>건</div>
-                                    </div>
-                                    <div>
-                                        <div>전기</div>
-                                        <div><strong>3</strong>건</div>
-                                    </div>
-                                    <div>
-                                        <div>고소</div>
-                                        <div><strong>4</strong>건</div>
-                                    </div>
-                                    <div>
-                                        <div>급성독성</div>
-                                        <div><strong>6</strong>건</div>
-                                    </div>
-                                    <div>
-                                        <div>끼임</div>
-                                        <div><strong>12</strong>건</div>
-                                    </div>
-                                </div>
-                            </Grid>
-                            <Grid className={classes.footBox + ' boxUp'} item xs={3}>
-                                <Link className={classes.footLink} to={"/dashboard/employee/security-work-content"} underline="none">11/27(화) - 안전작업허가 공사내역</Link>
-                                <div className={classes.bottomBox}>
-                                    <div>
-                                        <div>고소</div>
-                                        <div><strong>4</strong>건</div>
-                                    </div>
-                                    <div>
-                                        <div>화학물</div>
-                                        <div><strong>1</strong>건</div>
-                                    </div>
-                                    <div>
-                                        <div>밀폐</div>
-                                        <div><strong>2</strong>건</div>
-                                    </div>
-                                    <div>
-                                        <div>굴착</div>
-                                        <div><strong>3</strong>건</div>
-                                    </div>
-                                    <div>
-                                        <div>기타</div>
-                                        <div><strong>4</strong>건</div>
-                                    </div>
-                                </div>
-                            </Grid>
-                        </Grid>
-
-                        <Grid container item xs={12} sx={{ marginBottom: '3px' }}>
-                            <Grid className={classes.footBox + ' boxDown'} item xs={8.75}>
-                                <Slider className={classes.footSlider} {...footerSlider}>
-                                    {noticesList?.data.RET_DATA.map((notice) => (
+                                </Grid>
+                                <Grid className={classes.footBox + ' boxUp'} item xs={3}>
+                                    <Link className={classes.footLink} to={"/dashboard/employee/security-work-content"} underline="none">11/27(화) - 안전작업허가 공사내역</Link>
+                                    <div className={classes.bottomBox}>
                                         <div>
-                                            <div>{notice.insertDate}</div>
-                                            {notice.importCd === "001" && <span className={classes.slideLabelHot}>HOT</span>}
-                                            <Link to={`/dashboard/employee/notifications/view/${notice.noticeId}`} className={classes.linkBtn}>{notice.title}</Link>
+                                            <div>고소</div>
+                                            <div><strong>4</strong>건</div>
                                         </div>
-                                    ))}
-                                </Slider>
-                                <Link className={classes.sliderLink} to={"/dashboard/employee/notifications/list"} underline="none"></Link>
-                            </Grid>
-                            <Grid className={classes.footBox + ' boxDown ' + classes.footDate} item xs={3}>
-                                <div className={classes.footDay + ' dateBox'}>
-                                    <div>DAY</div>
-                                    <div className={classes.dayNums}>
-                                        <div><img src={numThree} alt="number three" /></div>
-                                        <div><img src={numTwo} alt="number two" /></div>
-                                        <div><img src={numFour} alt="number four" /></div>
-                                        <div><img src={numFive} alt="number five" /></div>
+                                        <div>
+                                            <div>화학물</div>
+                                            <div><strong>1</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>밀폐</div>
+                                            <div><strong>2</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>굴착</div>
+                                            <div><strong>3</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>기타</div>
+                                            <div><strong>4</strong>건</div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className={classes.footTime + ' dateBox'}>
-                                    <div>TIME</div>
-                                    <div className={classes.timeNums}>
-                                        <div><img src={numTwo} alt="number two" /></div>
-                                        <div><img src={numOne} alt="number one" /></div>
-                                        <span>:</span>
-                                        <div><img src={numThree} alt="number three" /></div>
-                                        <div><img src={numNine} alt="number nine" /></div>
-                                    </div>
-                                </div>
+                                </Grid>
                             </Grid>
+
+                            <Grid container item xs={12} sx={{ marginBottom: '3px' }}>
+                                <Grid className={classes.footBox + ' boxDown'} item xs={8.75}>
+                                    <Slider className={classes.footSlider} {...footerSlider}>
+                                        {noticesList && noticesList?.data.RET_DATA.map((notice) => (
+                                            <div>
+                                                <div>{notice.insertDate}</div>
+                                                {notice.importCd === "001" && <span className={classes.slideLabelHot}>HOT</span>}
+                                                <Link to={`/dashboard/employee/notifications/view/${notice.noticeId}`} className={classes.linkBtn}>{notice.title}</Link>
+                                            </div>
+                                        ))}
+                                    </Slider>
+                                    <Link className={classes.sliderLink} to={"/dashboard/employee/notifications/list"} underline="none"></Link>
+                                </Grid>
+                                <Grid className={classes.footBox + ' boxDown ' + classes.footDate} item xs={3}>
+                                    <div className={classes.footDay + ' dateBox'}>
+                                        <div>DAY</div>
+                                        <div className={classes.dayNums}>
+                                            <div><img src={numThree} alt="number three" /></div>
+                                            <div><img src={numTwo} alt="number two" /></div>
+                                            <div><img src={numFour} alt="number four" /></div>
+                                            <div><img src={numFive} alt="number five" /></div>
+                                        </div>
+                                    </div>
+                                    <div className={classes.footTime + ' dateBox'}>
+                                        <div>TIME</div>
+                                        <div className={classes.timeNums}>
+                                            <div><img src={numTwo} alt="number two" /></div>
+                                            <div><img src={numOne} alt="number one" /></div>
+                                            <span>:</span>
+                                            <div><img src={numThree} alt="number three" /></div>
+                                            <div><img src={numNine} alt="number nine" /></div>
+                                        </div>
+                                    </div>
+                                </Grid>
+                            </Grid>
+
                         </Grid>
 
                     </Grid>
-
-                    </Grid>  
 
                 </Grid>
 
             </Grid>
 
-        </WideLayout>
+        </WideLayout >
     );
 };
 
