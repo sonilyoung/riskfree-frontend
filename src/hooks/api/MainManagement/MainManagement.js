@@ -30,9 +30,30 @@ export const mainManagement = createApi({
                 method: 'POST',
                 body: body,
             }),
-        })
+        }),
+        getLeaderImprovementList: builder.mutation({
+            query: (body) => ({
+                url: 'main/getLeaderImprovementList',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        getAccidentTotal: builder.mutation({
+            query: (body) => ({
+                url: 'main/getAccidentTotal',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        getSafeWorkHistoryList: builder.mutation({
+            query: (body) => ({
+                url: 'main/getSafeWorkHistoryList',
+                method: 'POST',
+                body: body,
+            }),
+        }),
 
     }),
 });
 
-export const { useGetWorkplaceListMutation, useGetLoginInfoMutation } = mainManagement;
+export const { useGetWorkplaceListMutation, useGetLoginInfoMutation, useGetLeaderImprovementListMutation, useGetAccidentTotalMutation, useGetSafeWorkHistoryListMutation } = mainManagement;

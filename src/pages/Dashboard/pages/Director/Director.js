@@ -75,7 +75,10 @@ import Slider from 'react-slick';
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
 import { useGetLoginInfoMutation } from '../../../../hooks/api/MainManagement/MainManagement';
-
+import { useGetLeaderImprovementListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentTotalMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetSafeWorkHistoryListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import moment from 'moment'
 
 
 const useStyles = makeStyles(() => ({
@@ -1279,6 +1282,14 @@ const Director = () => {
     const [getLoginInfo] = useGetLoginInfoMutation()
     const [loginInfo, setLoginInfo] = useState({})
     const [num, setNum] = React.useState('');
+    const [getLeaderImprovementList] = useGetLeaderImprovementListMutation()
+    const [leadersImproveList, setLeadersImproveList] = useState([])
+    const [getAccidentTotal] = useGetAccidentTotalMutation()
+    const [accidentTotal, setAccidentTotal] = useState({})
+    const [getSafeWorkHistoryList] = useGetSafeWorkHistoryListMutation()
+    const [safeWorkHistoyList, setSafeWorkHistoryList] = useState([])
+    const [hours, setHours] = useState("")
+    const [minutes, setMinutes] = useState("")
 
     const handleLogOut = () => {
         remove();
@@ -1306,10 +1317,66 @@ const Director = () => {
         setNoticesList(response)
     }
 
+    const fetchLeadersImproveList = async () => {
+        const response = await getLeaderImprovementList({
+            "baselineEnd": 1,
+            "baselineId": 6,
+            "baselineStart": 1,
+            "companyId": 1,
+            "complete": 1,
+            "instruction": 1,
+            "progress": 1,
+            "role": 1,
+            "workplaceId": 1
+        })
+        setLeadersImproveList(response.data.RET_DATA)
+    }
+
+    const fetchAccidentTotal = async () => {
+        const response = await getAccidentTotal({
+            "baselineId": 6,
+            "caughtCnt": 0,
+            "companyId": 1,
+            "workplaceId": 1
+        })
+        setAccidentTotal(response.data.RET_DATA)
+    }
+
+    const fetchSafeWorkHistoryList = async () => {
+        const response = await getSafeWorkHistoryList({
+            "baselineId": 6,
+            "blackout": 1,
+            "closeness": 1,
+            "companyId": 1,
+            "excavation": 1,
+            "fileId": 1,
+            "fire": 1,
+            "noticeId": 1,
+            "radiation": 1,
+            "sue": 0,
+            "userId": 1,
+            "workplaceId": 1
+        })
+        setSafeWorkHistoryList(response.data.RET_DATA)
+    }
+
+    const now = moment()
+
+
     useEffect(() => {
         handleFetchList()
         handleLoginInfo()
+        fetchLeadersImproveList()
+        fetchAccidentTotal()
+        fetchSafeWorkHistoryList()
     }, [])
+
+    useEffect(() => {
+        setInterval(() => {
+            setHours(now.format("hh"))
+            setMinutes(now.format("mm"))
+        }, 1000)
+    }, [hours, minutes])
 
     return (
         <WideLayout>
@@ -1818,17 +1885,17 @@ const Director = () => {
                                 <div className={classes.bottomBox + ' leftBox'}>
                                     <div>
                                         <div>지시</div>
-                                        <strong>3</strong>
+                                        <strong>{leadersImproveList[0]?.instruction}</strong>
                                         <div>건</div>
                                     </div>
                                     <div>
                                         <div>진행</div>
-                                        <strong>1</strong>
+                                        <strong>{leadersImproveList[0]?.progress}</strong>
                                         <div>건</div>
                                     </div>
                                     <div>
                                         <div>완료</div>
-                                        <strong>12</strong>
+                                        <strong>{leadersImproveList[0]?.complete}</strong>
                                         <div>건</div>
                                     </div>
                                 </div>
@@ -1838,60 +1905,60 @@ const Director = () => {
                                 <div className={classes.bottomBox + ' rightBox'}>
                                     <div>
                                         <div>사망</div>
-                                        <div><strong>0</strong>건</div>
+                                        <div><strong>{accidentTotal?.deathTollCnt}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>추락</div>
-                                        <div><strong>1</strong>건</div>
+                                        <div><strong>{accidentTotal?.sameAccidentInjuryCnt}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>화재</div>
-                                        <div><strong>4</strong>건</div>
+                                        <div><strong>{accidentTotal?.jobDeseaseTollCnt}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>충돌</div>
-                                        <div><strong>2</strong>건</div>
+                                        <div><strong>{accidentTotal?.caughtCnt}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>전기</div>
-                                        <div><strong>3</strong>건</div>
+                                        <div><strong>{accidentTotal?.fireCnt}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>고소</div>
-                                        <div><strong>4</strong>건</div>
+                                        <div><strong>{accidentTotal?.fallCnt}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>급성독성</div>
-                                        <div><strong>6</strong>건</div>
+                                        <div><strong>{accidentTotal?.electCnt}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>끼임</div>
-                                        <div><strong>12</strong>건</div>
+                                        <div><strong>{accidentTotal?.confinedCnt}</strong>건</div>
                                     </div>
                                 </div>
                             </Grid>
                             <Grid className={classes.footBox + ' boxUp'} item xs={3}>
-                                <Link className={classes.footLink} to="/dashboard/director/security-work-content" underline="none">11/27(화) - 안전작업허가 공사내역</Link>
+                                <Link className={classes.footLink} to="/dashboard/director/security-work-content" underline="none">{safeWorkHistoyList?.nowDate}({safeWorkHistoyList?.nowDay}) - 안전작업허가 공사내역</Link>
                                 <div className={classes.bottomBox + ' rightBox'}>
                                     <div>
                                         <div>고소</div>
-                                        <div><strong>4</strong>건</div>
+                                        <div><strong>{safeWorkHistoyList?.fire}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>화학물</div>
-                                        <div><strong>1</strong>건</div>
+                                        <div><strong>{safeWorkHistoyList?.closeness}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>밀폐</div>
-                                        <div><strong>2</strong>건</div>
+                                        <div><strong>{safeWorkHistoyList?.blackout}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>굴착</div>
-                                        <div><strong>3</strong>건</div>
+                                        <div><strong>{safeWorkHistoyList?.excavation}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>기타</div>
-                                        <div><strong>4</strong>건</div>
+                                        <div><strong>{safeWorkHistoyList?.radiation}</strong>건</div>
                                     </div>
                                 </div>
                             </Grid>
@@ -1923,11 +1990,11 @@ const Director = () => {
                                 <div className={classes.footTime + ' dateBox'}>
                                     <div>TIME</div>
                                     <div className={classes.timeNums}>
-                                        <div><img src={numTwo} alt="number two" /></div>
-                                        <div><img src={numOne} alt="number one" /></div>
+                                        <div>{hours}</div>
+                                        {/* <div><img src={numOne} alt="number one" /></div> */}
                                         <span>:</span>
-                                        <div><img src={numThree} alt="number three" /></div>
-                                        <div><img src={numNine} alt="number nine" /></div>
+                                        <div>{minutes}</div>
+                                        {/* <div><img src={numNine} alt="number nine" /></div> */}
                                     </div>
                                 </div>
                             </Grid>
