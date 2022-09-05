@@ -859,7 +859,8 @@ const useStyles = makeStyles(() => ({
         '&:visited': {
             color: "#ffffff"
         },
-        textDecoration: "none"
+        textDecoration: "none",
+        color: "white"
     },
     bottomBox: {
         display: 'flex',
@@ -1887,14 +1888,14 @@ const Employee = () => {
                                                 <img />
                                             </div>
                                             <div className={classes.userName}>
-                                                Lorem ipsum
+                                                삼성전자 주식회사
                                             </div>
                                             <div className={classes.userInfo}>
-                                                Lorem ipsum dolor sit amet
+                                                아래의 기업정보를 등록하신 후 이용하시기 바랍니다
                                             </div>
                                         </div>
                                         <span>
-                                            <span>Lorem ipsum</span>
+                                            <span>기업정보 등록</span>
                                         </span>
                                         <TextField
                                             id="standard-basic"

@@ -621,7 +621,8 @@ const useStyles = makeStyles(() => ({
         '&:visited': {
             color: "#fff"
         },
-        textDecoration: "none"
+        textDecoration: "none",
+        color: "white"
     },
     bottomBox: {
         display: 'flex',
@@ -1720,73 +1721,73 @@ const Director = () => {
                     <Slider className={classes.dashSlider} {...dashboardSlider}>
                         <div className={classes.dashboardSlide}>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>93</strong>%</div>
                                     <div>안전보건 목표 및<br /> 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' yellow'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>89</strong>%</div>
                                     <div>안전보건 총괄관리<br /> 전담조직</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' orange'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>74</strong>%</div>
                                     <div>유해요인개선<br /> 업무절차</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>54</strong>%</div>
                                     <div>예산편성 및<br /> 집행관리</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>업무수행 권한<br /> 및 책임</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' yellow'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>83</strong>%</div>
                                     <div>안전보건 전문인력<br /> 배치</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>96</strong>%</div>
                                     <div>종사자 개선<br /> 의견수렴</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>94</strong>%</div>
                                     <div>비상대응<br /> 절차마련</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' orange'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>70</strong>%</div>
                                     <div>도급/용역 위탁 시<br /> 안전보건 확보</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>53</strong>%</div>
                                     <div>재발방지<br /> 대책</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' orange'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>72</strong>%</div>
                                     <div>개선/시정<br /> 명령</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' yellow'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>72</strong>%</div>
                                     <div>관계법령에 따른<br /> 의무이행</div>
                                 </Link>
@@ -1795,73 +1796,73 @@ const Director = () => {
 
                         <div className={classes.dashboardSlide}>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>32</strong>%</div>
                                     <div>안전보건 목표 및<br /> 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' yellow'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>88</strong>%</div>
                                     <div>안전보건 총괄관리<br /> 전담조직</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' orange'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>73</strong>%</div>
                                     <div>유해요인개선<br /> 업무절차</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' red'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>52</strong>%</div>
                                     <div>예산편성 및<br /> 집행관리</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>100</strong>%</div>
                                     <div>업무수행 권한<br /> 및 책임</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' yellow'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>81</strong>%</div>
                                     <div>안전보건 전문인력<br /> 배치</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' yellow'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>86</strong>%</div>
                                     <div>종사자 개선<br /> 의견수렴</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>92</strong>%</div>
                                     <div>비상대응<br /> 절차마련</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' orange'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>74</strong>%</div>
                                     <div>도급/용역 위탁 시<br /> 안전보건 확보</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' green'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>98</strong>%</div>
                                     <div>재발방지<br /> 대책</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' orange'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>74</strong>%</div>
                                     <div>개선/시정<br /> 명령</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + ' yellow'}>
-                                <Link className={classes.slickLink} underline="none">
+                                <Link to="#" className={classes.slickLink} underline="none">
                                     <div><strong>70</strong>%</div>
                                     <div>관계법령에 따른<br /> 의무이행</div>
                                 </Link>

@@ -43,7 +43,7 @@ const useStyles = makeStyles(() => ({
         alignItems: 'center',
         alignContent: 'center',
         height: '68px',
-        width: '100%',
+        // width: '100%',
         marginLeft: '10px !important',
         background: '#3a5298',
         borderRadius: '5px',

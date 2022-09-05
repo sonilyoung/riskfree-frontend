@@ -7,7 +7,6 @@ import Registration from './components/Registration/Registration';
 
 
 const MPDLawFirst = () => {
-    const { page } = useParams()
 
     return (
         <Routes>
