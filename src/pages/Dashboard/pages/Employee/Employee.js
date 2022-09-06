@@ -1407,19 +1407,19 @@ const useStyles = makeStyles(() => ({
         }
     },
     hoverWrap: {
-        padding: '2px 0 0 0',
+        paddingTop: '2px',
         height: '0px',
         maxHeight: '0px',
         overflow: 'hidden',
-        transition: '.3s'
+        transition: '.2s'
 
     },
     'wrap_hover': {
-        padding: '8px 0 25px 0',
-        height: '213px',
-        maxHeight: '213px',
+        paddingTop: '12px',
+        height: '200px',
+        maxHeight: '200px',
         overflow: 'visible',
-        transition: '.3s',
+        transition: '.2s',
     }
 }));
 
@@ -2323,8 +2323,6 @@ const Employee = () => {
                     </div>
                 </Grid>
 
-                <Grid item container xs={12} style={{maxHeight: '650px'}}>
-
                 <Grid className={classes.pageContent} item container rowSpacing={0} columnSpacing={1} xs={12}>
                     <Grid item xs={2.7}>
                         <div className={classes.contentList}>
@@ -2683,7 +2681,6 @@ const Employee = () => {
 
                     </Grid>
 
-                </Grid>
                 </Grid>
             </Grid>
         </WideLayout >
