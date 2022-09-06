@@ -270,28 +270,6 @@ const useStyles = makeStyles(() => ({
         '& input[type=date]': {
 
         },
-        // '& input[type=date]::-webkit-datetime-edit, input[type=date]::-webkit-inner-spin-button, input[type=date]::-webkit-clear-button': {
-        //     color: '#fff',
-        //     position: 'relative',
-        // },
-        // '& input[type=date]::-webkit-datetime-edit-year-field': {
-        //     position: 'absolute !important',
-        //     padding: '2px',
-        //     color: '#000',
-        //     left: '0px',
-        // },
-        // '& input[type=date]::-webkit-datetime-edit-month-field': {
-        //     position: 'absolute !important',
-        //     padding: '2px',
-        //     color: '#000',
-        //     left: '40px',
-        // },
-        // '& input[type=date]::-webkit-datetime-edit-day-field': {
-        //     position: 'absolute !important',
-        //     color: '#000',
-        //     padding: '2px',
-        //     right: '0px',
-        // },
     },
 }));
 
@@ -497,7 +475,7 @@ const OICLaw = () => {
                                         sx={{width: 140}}
                                         id="date"
                                         className={classes.selectMenu}
-                                        type="date"  
+                                        type="date"
                                     />
                                     &nbsp;~&nbsp;
                                     <TextField
