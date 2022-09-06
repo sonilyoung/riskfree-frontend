@@ -426,7 +426,7 @@ const useStyles = makeStyles(() => ({
             padding: '7px'
         },
         '& .slick-disabled': {
-            // display: 'none !important'
+            display: 'none !important'
         },
         '& .slick-arrow': {
             width: '23px',
