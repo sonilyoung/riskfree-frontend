@@ -2306,7 +2306,7 @@ const Employee = () => {
                         {baselineData?.baselineName}  차 :<strong>{baselineData?.baselineStart} ~ {baselineData?.baselineEnd}</strong>
                     </div>
                     <div className={classes.managementSide}>
-                        <FormControl sx={{ width: 130 }}>
+                        <FormControl sx={{ width: 130 }} className={classes.dropMenu + ' page_drop_menu'}>
                             <Select
                                 className={classes.selectMenu}
                                 value={baseline}
