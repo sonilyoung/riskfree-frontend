@@ -119,13 +119,12 @@ const Login = () => {
         });
     };
 
-    const handleLoginDashboard = (prop) => {
-        if (prop === "000") {
-            return 'admin';
-        } else if (prop === "001") {
-            return 'director';
-        } else {
-            return 'employee';
+    const getRoleName = (prop) => {
+        for (const key in object) {
+            if (Object.hasOwnProperty.call(object, key)) {
+                const element = object[key];
+
+            }
         }
     }
 
@@ -141,15 +140,26 @@ const Login = () => {
             UserTokenService.setItem(jwtToken);
 
             const loginInfoResponse = await getLoginInfo();
-            let roleName = handleLoginDashboard(loginInfoResponse.data.RET_DATA.roleCd);
+            console.log(loginInfoResponse.data.RET_DATA);
 
             dispatch(setUser({
+                companyId: loginInfoResponse.data.RET_DATA.companyId,
+                companyName: loginInfoResponse.data.RET_DATA.companyName,
+                email: loginInfoResponse.data.RET_DATA.email,
+                loginDt: loginInfoResponse.data.RET_DATA.loginDt,
+                loginId: loginInfoResponse.data.RET_DATA.loginId,
+                loginIp: loginInfoResponse.data.RET_DATA.loginIp,
+                loginPw: loginInfoResponse.data.RET_DATA.loginPw,
+                name: loginInfoResponse.data.RET_DATA.name,
                 roleCd: loginInfoResponse.data.RET_DATA.roleCd,
-                roleName: roleName,
+                roleName: loginInfoResponse.data.RET_DATA.roleName,
+                userId: loginInfoResponse.data.RET_DATA.userId,
+                workplaceId: loginInfoResponse.data.RET_DATA.workplaceId,
+                workplaceName: loginInfoResponse.data.RET_DATA.workplaceName,
+                redirectPath: getRoleName(loginInfoResponse.data.RET_DATA.roleCd)
             }));
 
-            localStorage.setItem('ROLE_NAME', roleName);
-            navigate(`/dashboard/${roleName}`);
+            navigate(`/dashboard/director`);
 
         } else {
             //TODO: This message has to be replaced with dialog.

@@ -17,46 +17,23 @@ import { getDecoded, getItem, isValid } from "../services/core/User/Token";
 import { useSelector } from 'react-redux';
 import { selectUser } from '../slices/User';
 
+const PrivateRoute = () => {
 
-const ForbiddenPage = () => {
-    const navigate = useNavigate();
-
-    return (
-        <div>
-            <h1>Forbidden Page</h1>
-            <button onClick={() => navigate(-1)}>Go back</button>
-        </div>
-    )
-}
-
-const PrivateRoute = ({ allowedRoles }) => {
-    const roleName = localStorage.getItem('ROLE_NAME');
-
-    let auth = false;
-    if (allowedRoles === '000' && roleName.includes('admin')) {
-        auth = true;
-    } else if ((allowedRoles === '001' || allowedRoles === '002') && roleName.includes('director')) {
-        auth = true;
-    } else if (allowedRoles === '002' && roleName.includes('employee')) {
-        auth = true;
-    }
-
-    return auth ? <Outlet /> : isValid() && !auth ? <ForbiddenPage /> : <Navigate to="/" />;
+    return isValid() ? <Outlet /> : <Navigate to="/" />;
 };
 
 const PublicRoute = () => {
-    const roleName = localStorage.getItem('ROLE_NAME');
 
-    return !isValid() ? <Outlet /> : <Navigate to={`/dashboard/${roleName}`} />;
+    return !isValid() ? <Outlet /> : <Navigate to={`/dashboard/director`} />;
 };
 
 const DefaultRoutes = () => (
 
     <Routes>
-        <Route element={<PrivateRoute allowedRoles={'000'} />}>
+        <Route element={<PrivateRoute />}>
             <Route path="/dashboard/admin" element={<MembersManagementPage />} />
         </Route>
-        <Route element={<PrivateRoute allowedRoles={'001'} />}>
+        <Route element={<PrivateRoute />}>
             <Route path="/dashboard/director" element={<DashboardDirectorPage />} />
             <Route path="/dashboard/director" element={<DashboardDirectorPage />} />
             <Route path="/dashboard/director/improvement-measure-status" element={<IMStatusPage />} />
@@ -81,7 +58,7 @@ const DefaultRoutes = () => (
             <Route path="/dashboard/director/measure-to-manage-performance-od-duties-law/:page" element={<MeasureToManageThePerformancePage />} />
             <Route path="/dashboard/director/security-work-content" element={<ContentsOfWorkPage />} />
         </Route>
-        <Route element={<PrivateRoute allowedRoles={'002'} />}>
+        <Route element={<PrivateRoute />}>
             <Route path="/dashboard/employee" element={<DashboardEmployeePage />} />
             <Route path="/dashboard/employee/notifications/*" element={<NotificationsPage />} />
             <Route path="/dashboard/employee/improvement-measures/*" element={<ImprovementMeasuresPage />} />
