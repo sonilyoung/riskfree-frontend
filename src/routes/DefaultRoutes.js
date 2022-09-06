@@ -23,8 +23,9 @@ const PrivateRoute = () => {
 };
 
 const PublicRoute = () => {
+    const user = useSelector(selectUser);
 
-    return !isValid() ? <Outlet /> : <Navigate to={`/dashboard/director`} />;
+    return !isValid() ? <Outlet /> : <Navigate to={user.redirectPath} />;
 };
 
 const DefaultRoutes = () => (

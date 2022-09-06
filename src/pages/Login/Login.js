@@ -21,6 +21,7 @@ import popupClose2 from '../../assets/images/btn_popClose2.png';
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
 import { useGetLoginInfoMutation } from '../../hooks/api/MainManagement/MainManagement';
+import { UrlService } from '../../services/core/User/index';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -119,15 +120,6 @@ const Login = () => {
         });
     };
 
-    const getRoleName = (prop) => {
-        for (const key in object) {
-            if (Object.hasOwnProperty.call(object, key)) {
-                const element = object[key];
-
-            }
-        }
-    }
-
     const handleLogin = async () => {
 
         const userLoginResponse = await login({
@@ -140,7 +132,6 @@ const Login = () => {
             UserTokenService.setItem(jwtToken);
 
             const loginInfoResponse = await getLoginInfo();
-            console.log(loginInfoResponse.data.RET_DATA);
 
             dispatch(setUser({
                 companyId: loginInfoResponse.data.RET_DATA.companyId,
@@ -156,10 +147,10 @@ const Login = () => {
                 userId: loginInfoResponse.data.RET_DATA.userId,
                 workplaceId: loginInfoResponse.data.RET_DATA.workplaceId,
                 workplaceName: loginInfoResponse.data.RET_DATA.workplaceName,
-                redirectPath: getRoleName(loginInfoResponse.data.RET_DATA.roleCd)
+                redirectPath: UrlService.getHomePagePath(loginInfoResponse.data.RET_DATA.roleCd)
             }));
 
-            navigate(`/dashboard/director`);
+            navigate(user.redirectPath);
 
         } else {
             //TODO: This message has to be replaced with dialog.

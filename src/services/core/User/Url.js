@@ -8,14 +8,13 @@ export const getHomePagePath = (roleCode) => {
     switch (roleCode) {
         case RoleService.ROLE_CODE_ADMIN:
             return HOME_PAGE_ADMIN_PATH;
-            break;
+
         case RoleService.ROLE_CODE_DIRECTOR:
             return HOME_PAGE_DIRECTOR_PATH;
-            break;
+
         case RoleService.ROLE_CODE_EMPLOYEE:
             return HOME_PAGE_EMPLOYEE_PATH;
-            break;
-    }    
+    }
 
     return false;
 };
