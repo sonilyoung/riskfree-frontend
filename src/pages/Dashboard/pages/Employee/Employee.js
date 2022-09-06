@@ -764,9 +764,7 @@ const useStyles = makeStyles(() => ({
         alignItems: 'flex-start',
         background: 'linear-gradient(#097ef5, #266aa9)',
         zIndex: '1',
-        '&:hover': {
-
-        }
+        minWidth: '1920px',
     },
     dashTrigger: {
         display: 'flex',
@@ -2325,6 +2323,8 @@ const Employee = () => {
                     </div>
                 </Grid>
 
+                <Grid item container xs={12} style={{maxHeight: '650px'}}>
+
                 <Grid className={classes.pageContent} item container rowSpacing={0} columnSpacing={1} xs={12}>
                     <Grid item xs={2.7}>
                         <div className={classes.contentList}>
@@ -2683,6 +2683,7 @@ const Employee = () => {
 
                     </Grid>
 
+                </Grid>
                 </Grid>
             </Grid>
         </WideLayout >
