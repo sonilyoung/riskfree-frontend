@@ -1806,7 +1806,7 @@ const Employee = () => {
             "instruction": 1,
             "workplaceId": 1
         });
-        setLeaderImprovementList(response.data.RET_DATA[0]);
+        setLeaderImprovementList(response.data?.RET_DATA[0]);
     }
 
     const fetchBaselineList = async () => {
@@ -1846,12 +1846,11 @@ const Employee = () => {
 
     const handleFetchSafeWorkHistoryList = async () => {
         const response = await getSafeWorkHistoryList({
-            "baselineId": 1,
+            "baselineId": 6,
             "workplaceId": 1
         });
         setSafeWorkHistoryList(response.data.RET_DATA);
     }
-
 
     useEffect(() => {
         fetchBaseline()
@@ -2538,15 +2537,15 @@ const Employee = () => {
                                         <div className={classes.bottomBox}>
                                             <div>
                                                 <div>지시</div>
-                                                <div><strong>{improvmentList?.instruction}</strong>건</div>
+                                                <div><strong>{improvmentList && improvmentList?.instruction}</strong>건</div>
                                             </div>
                                             <div>
                                                 <div>진행</div>
-                                                <div><strong>{improvmentList?.progress}</strong>건</div>
+                                                <div><strong>{improvmentList && improvmentList?.progress}</strong>건</div>
                                             </div>
                                             <div>
                                                 <div>완료</div>
-                                                <div><strong>{improvmentList?.complete}</strong>건</div>
+                                                <div><strong>{improvmentList && improvmentList?.complete}</strong>건</div>
                                             </div>
                                         </div>
                                     </div>
@@ -2555,15 +2554,15 @@ const Employee = () => {
                                         <div className={classes.bottomBox}>
                                             <div>
                                                 <div>지시</div>
-                                                <div><strong>{leaderImprovementList?.instruction}</strong>건</div>
+                                                <div><strong>{leaderImprovementList && leaderImprovementList?.instruction}</strong>건</div>
                                             </div>
                                             <div>
                                                 <div>진행</div>
-                                                <div><strong>{leaderImprovementList?.progress}</strong>건</div>
+                                                <div><strong>{leaderImprovementList && leaderImprovementList?.progress}</strong>건</div>
                                             </div>
                                             <div>
                                                 <div>완료</div>
-                                                <div><strong>{leaderImprovementList?.complete}</strong>건</div>
+                                                <div><strong>{leaderImprovementList && leaderImprovementList?.complete}</strong>건</div>
                                             </div>
                                         </div>
                                     </div>
@@ -2573,39 +2572,39 @@ const Employee = () => {
                                     <div className={classes.bottomBox}>
                                         <div>
                                             <div>사망</div>
-                                            <div><strong>{accidentTotal?.deathTollCnt}</strong>건</div>
+                                            <div><strong>{accidentTotal && accidentTotal?.deathTollCnt}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>동일사고</div>
-                                            <div><strong>{accidentTotal?.sameAccidentInjuryCnt}</strong>건</div>
+                                            <div><strong>{accidentTotal && accidentTotal?.sameAccidentInjuryCnt}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>직업질환</div>
-                                            <div><strong>{accidentTotal?.jobDeseaseTollCnt}</strong>건</div>
+                                            <div><strong>{accidentTotal && accidentTotal?.jobDeseaseTollCnt}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>추락</div>
-                                            <div><strong>{accidentTotal?.caughtCnt}</strong>건</div>
+                                            <div><strong>{accidentTotal && accidentTotal?.caughtCnt}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>끼임</div>
-                                            <div><strong>{accidentTotal?.fireCnt}</strong>건</div>
+                                            <div><strong>{accidentTotal && accidentTotal?.fireCnt}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>화재</div>
-                                            <div><strong>{accidentTotal?.fallCnt}</strong>건</div>
+                                            <div><strong>{accidentTotal && accidentTotal?.fallCnt}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>전기</div>
-                                            <div><strong>{accidentTotal?.electCnt}</strong>건</div>
+                                            <div><strong>{accidentTotal && accidentTotal?.electCnt}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>밀폐</div>
-                                            <div><strong>{accidentTotal?.confinedCnt}</strong>건</div>
+                                            <div><strong>{accidentTotal && accidentTotal?.confinedCnt}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>중량물</div>
-                                            <div><strong>{accidentTotal?.heavyCnt}</strong>건</div>
+                                            <div><strong>{accidentTotal && accidentTotal?.heavyCnt}</strong>건</div>
                                         </div>
                                     </div>
                                 </Grid>
@@ -2614,27 +2613,27 @@ const Employee = () => {
                                     <div className={classes.bottomBox}>
                                         <div>
                                             <div>화기</div>
-                                            <div><strong>{safeWorkHistoryList?.fire}</strong>건</div>
+                                            <div><strong>{safeWorkHistoryList && safeWorkHistoryList?.fire}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>밀폐</div>
-                                            <div><strong>{safeWorkHistoryList?.closeness}</strong>건</div>
+                                            <div><strong>{safeWorkHistoryList && safeWorkHistoryList?.closeness}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>정전</div>
-                                            <div><strong>{safeWorkHistoryList?.blackout}</strong>건</div>
+                                            <div><strong>{safeWorkHistoryList && safeWorkHistoryList?.blackout}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>굴착</div>
-                                            <div><strong>{safeWorkHistoryList?.excavation}</strong>건</div>
+                                            <div><strong>{safeWorkHistoryList && safeWorkHistoryList?.excavation}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>방사선</div>
-                                            <div><strong>{safeWorkHistoryList?.radiation}</strong>건</div>
+                                            <div><strong>{safeWorkHistoryList && safeWorkHistoryList?.radiation}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>고소</div>
-                                            <div><strong>{safeWorkHistoryList?.sue}</strong>건</div>
+                                            <div><strong>{safeWorkHistoryList && safeWorkHistoryList?.sue}</strong>건</div>
                                         </div>
                                     </div>
                                 </Grid>
