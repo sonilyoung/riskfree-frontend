@@ -85,8 +85,26 @@ const useStyles = makeStyles(() => ({
     dashboardWrap: {
         backgroundColor: '#33374f',
         justifyContent: 'center',
-        minWidth: '1900px !important',
-        height: '100vh',
+        minWidth: '1920px !important',
+        minHeight: '100vh',
+        overflowY: 'scroll',
+        '&::-webkit-scrollbar': {
+            width: '6px',
+            height: '6px',
+            border: '6px solid #1e2132'
+        },
+        '&::-webkit-scrollbar-track': {
+            background: '#1e2132',
+            borderRadius: '0px',
+            boxShadow: 'inset 0 0 4px rgb(0 0 0 / 20%)'
+        },
+        '&::-webkit-scrollbar-thumb': {
+            height: '50px',
+            width: '6px',
+            background: '#3f4d72',
+            borderRadius: '8px',
+            boxShadow: 'inset 0px 10px 0px 0px #1e2132, inset 0px -10px 0px 0px #1e2132'
+        },
     },
     pageHeader: {
         display: 'flex',
@@ -1882,7 +1900,7 @@ const Director = () => {
                     <Grid className={classes.boxWrap} item xs={10}>
 
                         <Grid container item xs={12}>
-                            <Grid className={classes.footBox + ' boxUp'} item xs={3.7}>
+                            <Grid className={classes.footBox + ' boxUp'} item xs={3}>
                                 <Link className={classes.footLink} to="/dashboard/employee/improvement-measures/list" underline="none">대표이사 개선조치</Link>
                                 <div className={classes.bottomBox + ' leftBox'}>
                                     <div>
@@ -1902,7 +1920,7 @@ const Director = () => {
                                     </div>
                                 </div>
                             </Grid>
-                            <Grid className={classes.footBox + ' boxUp'} item xs={5}>
+                            <Grid className={classes.footBox + ' boxUp'} item xs={5.7}>
                                 <Link className={classes.footLink} to="/dashboard/employee/accident-countermeasures-implementation/list" underline="none">산업재해 누적 집계</Link>
                                 <div className={classes.bottomBox + ' rightBox'}>
                                     <div>

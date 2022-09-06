@@ -26,7 +26,9 @@ import { UrlService } from '../../services/core/User/index';
 const useStyles = makeStyles(() => ({
     pageWrap: {
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        background: '#fff',
+        height: '100vh',
     },
     loginWrap: {
         display: 'flex',

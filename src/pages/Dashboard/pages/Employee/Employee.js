@@ -91,8 +91,8 @@ const useStyles = makeStyles(() => ({
     dashboardWrap: {
         backgroundColor: '#33374f',
         justifyContent: 'center',
-        minWidth: '1900px !important',
-        height: '100vh',
+        minWidth: '1920px !important',
+        minHeight: '100vh',
         overflowY: 'scroll',
         '&::-webkit-scrollbar': {
             width: '6px',
@@ -101,7 +101,7 @@ const useStyles = makeStyles(() => ({
         },
         '&::-webkit-scrollbar-track': {
             background: '#1e2132',
-            borderRadius: '10px',
+            borderRadius: '0px',
             boxShadow: 'inset 0 0 4px rgb(0 0 0 / 20%)'
         },
         '&::-webkit-scrollbar-thumb': {
@@ -109,7 +109,7 @@ const useStyles = makeStyles(() => ({
             width: '6px',
             background: '#3f4d72',
             borderRadius: '8px',
-            boxShadow: 'inset 0 0 4px rgb(0 0 0 / 10%)'
+            boxShadow: 'inset 0px 10px 0px 0px #1e2132, inset 0px -10px 0px 0px #1e2132'
         },
     },
     pageHeader: {
@@ -433,7 +433,7 @@ const useStyles = makeStyles(() => ({
             padding: '7px'
         },
         '& .slick-disabled': {
-            // display: 'none !important'
+            display: 'none !important'
         },
         '& .slick-arrow': {
             width: '23px',
@@ -486,7 +486,7 @@ const useStyles = makeStyles(() => ({
     pageContent: {
         display: 'flex',
         height: 'calc(100vh - 333px)',
-        padding: '10px 20px 5px 10px',
+        padding: '0px 20px 30px 10px',
         '& >.MuiGrid-root': {
             height: '100%'
         }
@@ -722,7 +722,7 @@ const useStyles = makeStyles(() => ({
         },
         '&::-webkit-scrollbar-track': {
             background: '#1e2132',
-            borderRadius: '10px',
+            borderRadius: '0px',
             boxShadow: 'inset 0 0 4px rgb(0 0 0 / 20%)'
         },
         '&::-webkit-scrollbar-thumb': {
@@ -1409,15 +1409,19 @@ const useStyles = makeStyles(() => ({
         }
     },
     hoverWrap: {
-        padding: '0',
-        maxHeight: '0',
+        padding: '2px 0 0 0',
+        height: '0px',
+        maxHeight: '0px',
         overflow: 'hidden',
+        transition: '.3s'
 
     },
     'wrap_hover': {
         padding: '8px 0 25px 0',
-        maxHeight: 'unset',
+        height: '213px',
+        maxHeight: '213px',
         overflow: 'visible',
+        transition: '.3s',
     }
 }));
 

@@ -19,7 +19,6 @@ const useStyles = makeStyles(() => ({
     pageWrap: {
         display: 'flex',
         justifyContent: 'center',
-        minWidth: '1900px !important',
     },
     stepWrap: {
         display: 'flex',
