@@ -320,7 +320,7 @@ const useStyles = makeStyles(() => ({
         }
     },
     headerPopup: {
-        // display: 'none !important',
+        display: 'none !important',
         position: 'absolute',
         top: '50%',
         left: '50%',
@@ -345,13 +345,15 @@ const useStyles = makeStyles(() => ({
             position: 'absolute',
             right: '0px',
             marginRight: '20px'
-        }
+        },
+        display: "none !important"
     },
     popupBody: {
         padding: '20px',
         '& button': {
             float: 'right'
-        }
+        },
+        display: "none !important"
     },
     popTop: {
         display: 'flex',
@@ -366,7 +368,8 @@ const useStyles = makeStyles(() => ({
                     width: '80px'
                 }
             }
-        }
+        },
+        display: "none !important"
     },
     uploadPopup: {
         position: 'absolute',
@@ -383,7 +386,7 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexWrap: 'wrap',
         boxShadow: '0 0 12px rgb(0 0 0 / 10%)',
-        // display: 'none !important',
+        display: 'none !important',
         '& >span': {
             width: '30%',
             height: '20px',
@@ -568,7 +571,7 @@ const WorkHistoryList = () => {
                                 <div className={classes.infoTitle}>사업장</div>
                                 <Select
                                     className={classes.selectMenu}
-                                    sx={{width: 210}}
+                                    sx={{ width: 210 }}
                                     value={num}
                                     onChange={handleChange}
                                     displayEmpty
@@ -579,7 +582,7 @@ const WorkHistoryList = () => {
                             <div>
                                 <div className={classes.infoTitle}>등록일</div>
                                 <TextField
-                                    sx={{width: 180}}
+                                    sx={{ width: 180 }}
                                     id="date"
                                     className={classes.selectMenu}
                                     type="date"
@@ -587,17 +590,17 @@ const WorkHistoryList = () => {
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>등록자</div>
-                                <TextField 
-                                    variant="outlined" 
+                                <TextField
+                                    variant="outlined"
                                     placeholder="홍길동"
-                                    sx={{width: 200}}
+                                    sx={{ width: 200 }}
                                     className={classes.selectMenu}
                                 />
                             </div>
                         </div>
                         <div className={classes.searchButtons}>
                             <SearchButton>조회</SearchButton>
-                            <RegisterButton sx={{marginLeft: '10px'}}>등록</RegisterButton>
+                            <RegisterButton sx={{ marginLeft: '10px' }}>등록</RegisterButton>
                         </div>
                     </div>
                 </Grid>
@@ -775,7 +778,7 @@ const WorkHistoryList = () => {
                     <div className={classes.headerPopup}>
                         <div className={classes.popHeader}>
                             안전작업허가 공사내역 관리
-                        <ButtonClosePop></ButtonClosePop>
+                            <ButtonClosePop></ButtonClosePop>
                         </div>
                         <div className={classes.popupBody}>
                             <div className={classes.popTop}>

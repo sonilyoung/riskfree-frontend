@@ -38,7 +38,7 @@ const DefaultRoutes = () => (
 
     <Routes>
         <Route element={<PrivateRoute />}>
-            <Route path="/dashboard/system-administrator" element={<MembersManagementPage />} />
+            <Route path="/dashboard/system-administrator" element={<SystemAdministratorPage />} />
         </Route>
         <Route element={<PrivateRoute />}>
             <Route path="/dashboard/director" element={<DashboardDirectorPage />} />

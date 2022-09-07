@@ -584,7 +584,7 @@ const Default = ({ children }) => {
                         </Grid>
                         <Grid className={classes.mainMenu} item xs={6.3}>
                             <div className={classes.leftMenu}>
-                                <UserButton className={classes.mainMenuButton}></UserButton>
+                                <UserButton className={classes.mainMenuButton} onClick={() => setUserPopup(true)}></UserButton>
                                 <div className={userPopup ? (classes.headerPopup + ' user_popup') : (classes.headerPopup + ' user_popupClose')}>
                                     <div className={classes.popHeader}>
                                         최초 사용자 설정
@@ -673,7 +673,7 @@ const Default = ({ children }) => {
                                     <div>계약기간 : 22.07.01 ~ 23.06.31</div>
                                 </div>
                                 <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
-                                <SettingsButton className={classes.mainMenuButton}></SettingsButton>
+                                <SettingsButton className={classes.mainMenuButton} onClick={() => setSettingsPopup(true)}></SettingsButton>
                                 <div className={settingsPopup ? (classes.headerPopup + ' settings_popup') : (classes.headerPopup + ' settings_popupClose')}>
                                     <div className={classes.popHeader}>
                                         중대재해 자체점검 등록 차수 설정
