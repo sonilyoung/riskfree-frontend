@@ -359,6 +359,67 @@ const useStyles = makeStyles(() => ({
         background: '#fff',
         boxShadow: '0 0 10px rgb(0 0 0 / 30%)'
     },
+    graphImageNone: {
+        display: "none !important"
+    },
+    boxTable: {
+        borderRadius: '6px',
+        overflow: 'hidden',
+        boxShadow: '0 0 12px rgb(189 203 203 / 50%)',
+        background: '#fff',
+        padding: '34px',
+        '& *': {
+            boxSizing: 'border-box',
+            letterSpacing: '-1.08px',
+            wordBreak: 'keep-all'
+        }
+    },
+    boxTableNone: {
+        display: "none !important"
+    },
+    tableHead: {
+        background: '#bdcbe9',
+        '& [class*=tableData]': {
+            borderRight: '1px solid #fff',
+            '&:last-of-type': {
+                borderRight: 'none',
+            },
+        }
+    },
+    tableBody: {
+        width: '100%',
+        '& [class*=tableData]': {
+            borderRight: '1px solid #bdcbe9',
+            borderBottom: '1px solid #bdcbe9',
+            '&:first-of-type': {
+                background: '#EFF2F7'
+            }
+        },
+        '& [class*=tableRow]': {
+            transition: 'background .2s',
+            '&:hover': {
+                '& [class*=tableData]': {
+                    background: '#e1e8f7'
+                }
+            }
+        }
+    },
+    tableRow: {
+        display: 'flex',
+    },
+    tableData: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '15px 10px',
+        width: '100%',
+        '&:last-of-type': {
+            borderRight: 'none',
+        },
+        '&:first-of-type': {
+            width: '150%'
+        }
+    },
     graphLabel: {
         display: 'flex',
         marginTop: '30px',
@@ -1309,6 +1370,7 @@ const Director = () => {
     const [safeWorkHistoyList, setSafeWorkHistoryList] = useState([])
     const [hours, setHours] = useState("")
     const [minutes, setMinutes] = useState("")
+    const [toggleGrid, setToggleGrid] = useState(false)
 
     const handleLogOut = () => {
         remove();
@@ -1675,7 +1737,7 @@ const Director = () => {
                             <div className={classes.chartPopGraph}>
                                 <div className={classes.graphHeader}>
                                     <div>
-                                        <ButtonGrid>Grid</ButtonGrid>
+                                        <ButtonGrid onClick={() => setToggleGrid(!toggleGrid)}>{toggleGrid ? "Graph" : "Grid"}</ButtonGrid>
                                     </div>
                                     <div>
                                         <ButtonGraphPrev></ButtonGraphPrev>
@@ -1686,7 +1748,7 @@ const Director = () => {
                                         <ButtonGraphNext></ButtonGraphNext>
                                     </div>
                                 </div>
-                                <div className={classes.graphImage}>
+                                <div className={toggleGrid ? classes.graphImageNone : classes.graphImage}>
                                     <img src={imageGraph} alt="graph" />
                                     <div className={classes.graphLabel}>
                                         <div className={classes.labelItem}>
@@ -1715,6 +1777,89 @@ const Director = () => {
                                         </div>
                                     </div>
                                 </div>
+                                <Grid item xs={12} className={toggleGrid ? classes.boxTable : classes.boxTableNone}>
+                                    <div className={classes.tableHead}>
+                                        <div className={classes.tableRow}>
+                                            <div className={classes.tableData}>구분</div>
+                                            <div className={classes.tableData}>인천사업장</div>
+                                            <div className={classes.tableData}>여수사업장</div>
+                                            <div className={classes.tableData}>울산사업장</div>
+                                            <div className={classes.tableData}>세종사업장</div>
+                                        </div>
+                                    </div>
+                                    <div className={classes.tableBody}>
+                                        <div className={classes.tableRow}>
+                                            <div className={classes.tableData}>안전보건 목표 및 경영방침</div>
+                                            <div className={classes.tableData}>98</div>
+                                            <div className={classes.tableData}>98</div>
+                                            <div className={classes.tableData}>98</div>
+                                            <div className={classes.tableData}>98</div>
+                                        </div>
+                                        <div className={classes.tableRow}>
+                                            <div className={classes.tableData}>안전보건업무 종괄관리</div>
+                                            <div className={classes.tableData}>96</div>
+                                            <div className={classes.tableData}>96</div>
+                                            <div className={classes.tableData}>96</div>
+                                            <div className={classes.tableData}>96</div>
+                                        </div>
+                                        <div className={classes.tableRow}>
+                                            <div className={classes.tableData}>유해.위혐요인 개선절차</div>
+                                            <div className={classes.tableData}>80</div>
+                                            <div className={classes.tableData}>80</div>
+                                            <div className={classes.tableData}>80</div>
+                                            <div className={classes.tableData}>80</div>
+                                        </div>
+                                        <div className={classes.tableRow}>
+                                            <div className={classes.tableData}>유해.위험요인 개선절차</div>
+                                            <div className={classes.tableData}>82</div>
+                                            <div className={classes.tableData}>82</div>
+                                            <div className={classes.tableData}>82</div>
+                                            <div className={classes.tableData}>82</div>
+                                        </div>
+                                        <div className={classes.tableRow}>
+                                            <div className={classes.tableData}>안전보건관리책임자권한</div>
+                                            <div className={classes.tableData}>76</div>
+                                            <div className={classes.tableData}>76</div>
+                                            <div className={classes.tableData}>76</div>
+                                            <div className={classes.tableData}>76</div>
+                                        </div>
+                                        <div className={classes.tableRow}>
+                                            <div className={classes.tableData}>안전|보건관련 필요예산편성</div>
+                                            <div className={classes.tableData}>90</div>
+                                            <div className={classes.tableData}>90</div>
+                                            <div className={classes.tableData}>90</div>
+                                            <div className={classes.tableData}>90</div>
+                                        </div>
+                                        <div className={classes.tableRow}>
+                                            <div className={classes.tableData}>안전보건 전문인력 배치</div>
+                                            <div className={classes.tableData}>89</div>
+                                            <div className={classes.tableData}>89</div>
+                                            <div className={classes.tableData}>89</div>
+                                            <div className={classes.tableData}>89</div>
+                                        </div>
+                                        <div className={classes.tableRow}>
+                                            <div className={classes.tableData}>종사자의견수렴</div>
+                                            <div className={classes.tableData}>87</div>
+                                            <div className={classes.tableData}>87</div>
+                                            <div className={classes.tableData}>87</div>
+                                            <div className={classes.tableData}>87</div>
+                                        </div>
+                                        <div className={classes.tableRow}>
+                                            <div className={classes.tableData}>중대재해발생 비상대응 매뉴얼</div>
+                                            <div className={classes.tableData}>96</div>
+                                            <div className={classes.tableData}>96</div>
+                                            <div className={classes.tableData}>96</div>
+                                            <div className={classes.tableData}>96</div>
+                                        </div>
+                                        <div className={classes.tableRow}>
+                                            <div className={classes.tableData}>도급용역위탁시 평가기준</div>
+                                            <div className={classes.tableData}>100</div>
+                                            <div className={classes.tableData}>100</div>
+                                            <div className={classes.tableData}>100</div>
+                                            <div className={classes.tableData}>100</div>
+                                        </div>
+                                    </div>
+                                </Grid>
                             </div>
                         </div>
                         <div className={classes.navSlider}>
@@ -2018,11 +2163,11 @@ const Director = () => {
                                 <div className={classes.footTime + ' dateBox'}>
                                     <div>TIME</div>
                                     <div className={classes.timeNums}>
-                                        <div>{hours}</div>
-                                        {/* <div><img src={numOne} alt="number one" /></div> */}
+                                        {hours?.split("").map((e) => (<div>{e}</div>
+                                        ))}
                                         <span>:</span>
-                                        <div>{minutes}</div>
-                                        {/* <div><img src={numNine} alt="number nine" /></div> */}
+                                        {minutes?.split("").map((e) => (<div>{e}</div>
+                                        ))}
                                     </div>
                                 </div>
                             </Grid>

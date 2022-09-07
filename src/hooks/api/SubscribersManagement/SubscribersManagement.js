@@ -19,9 +19,8 @@ export const subscribersManagement = createApi({
     endpoints: (builder) => ({
         subscribersView: builder.mutation({
             query: (body) => ({
-                url: 'subscribers/viwe',
+                url: `subscribers/view?workplaceId=${body}`,
                 method: 'POST',
-                body: body,
             }),
         }),
         subscribersUpdate: builder.mutation({

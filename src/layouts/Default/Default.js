@@ -566,7 +566,7 @@ const Default = ({ children }) => {
     };
 
     const handleRedirect = () => {
-        String(location.pathname).includes("director") ? (navigate("/dashboard/director")) : (navigate("/dashboard/employee"))
+        navigate(-1)
     }
 
     useEffect(() => {

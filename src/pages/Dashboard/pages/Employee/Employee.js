@@ -364,7 +364,10 @@ const useStyles = makeStyles(() => ({
         borderRadius: '8px',
         background: '#fff',
         boxShadow: '0 0 10px rgb(0 0 0 / 30%)',
-        display: 'none !important',
+        display: 'block',
+    },
+    graphImageNone: {
+        display: "none !important"
     },
     graphLabel: {
         display: 'flex',
@@ -1363,6 +1366,9 @@ const useStyles = makeStyles(() => ({
             wordBreak: 'keep-all'
         }
     },
+    boxTableNone: {
+        display: "none !important"
+    },
     tableHead: {
         background: '#bdcbe9',
         '& [class*=tableData]': {
@@ -1765,6 +1771,7 @@ const Employee = () => {
     const [accidentTotal, setAccidentTotal] = useState({});
     const [noticesList, setNoticesList] = useState([]);
     const [dayInfo, setDayInfo] = useState();
+    const [toggleGrid, setToggleGrid] = useState(false)
 
 
     const [getSafeWorkHistoryList] = useGetSafeWorkHistoryListMutation();
@@ -1848,11 +1855,12 @@ const Employee = () => {
 
     const handleFetchSafeWorkHistoryList = async () => {
         const response = await getSafeWorkHistoryList({
-            "baselineId": 6,
+            "baselineId": 7,
             "workplaceId": 1
         });
         setSafeWorkHistoryList(response.data.RET_DATA);
     }
+
 
     useEffect(() => {
         fetchBaseline()
@@ -2103,7 +2111,7 @@ const Employee = () => {
                             <div className={classes.chartPopGraph}>
                                 <div className={classes.graphHeader}>
                                     <div>
-                                        <ButtonGrid>Grid</ButtonGrid>
+                                        <ButtonGrid onClick={() => setToggleGrid(!toggleGrid)}>{toggleGrid ? "Graph" : "Grid"}</ButtonGrid>
                                     </div>
                                     <div>
                                         <ButtonGraphPrev></ButtonGraphPrev>
@@ -2114,7 +2122,7 @@ const Employee = () => {
                                         <ButtonGraphNext></ButtonGraphNext>
                                     </div>
                                 </div>
-                                <div className={classes.graphImage}>
+                                <div className={toggleGrid ? classes.graphImageNone : classes.graphImage}>
                                     <img src={imageGraph} alt="graph" />
                                     <div className={classes.graphLabel}>
                                         <div className={classes.labelItem}>
@@ -2143,7 +2151,7 @@ const Employee = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <Grid item xs={12} className={classes.boxTable}>
+                                <Grid item xs={12} className={toggleGrid ? classes.boxTable : classes.boxTableNone}>
                                     <div className={classes.tableHead}>
                                         <div className={classes.tableRow}>
                                             <div className={classes.tableData}>구분</div>
@@ -2646,9 +2654,9 @@ const Employee = () => {
                                     <Slider className={classes.footSlider} {...footerSlider}>
                                         {noticesList?.map((notice) => (
                                             <div>
-                                                <div>{notice.insertDate}</div>
-                                                {notice.importCd === "001" && <span className={classes.slideLabelHot}>HOT</span>}
-                                                <Link to={`/dashboard/employee/notifications/view/${notice.noticeId}`} className={classes.linkBtn}>{notice.title}</Link>
+                                                <div>{notice?.insertDate}</div>
+                                                {notice?.importCd === "001" && <span className={classes.slideLabelHot}>HOT</span>}
+                                                <Link to={`/dashboard/employee/notifications/view/${notice?.noticeId}`} className={classes.linkBtn}>{notice?.title}</Link>
                                             </div>
                                         ))}
                                     </Slider>

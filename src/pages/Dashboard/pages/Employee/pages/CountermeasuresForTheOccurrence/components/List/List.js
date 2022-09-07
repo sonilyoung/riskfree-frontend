@@ -766,7 +766,7 @@ const List = () => {
                         <div className={classes.tableRow}>이행실적</div>
                     </div>
                     <>
-                        {accidents && accidents.map((accident) => (<div className={classes.tableBody} onDoubleClick={() => navigate(`/dashboard/employee/accident-countermeasures-implementation/view/${accident.accidentId}`)}>
+                        {accidents && accidents?.map((accident) => (<div className={classes.tableBody} onDoubleClick={() => navigate(`/dashboard/employee/accident-countermeasures-implementation/view/${accident.accidentId}`)}>
                             <div className={classes.tableRow}>{accident.occurYear}</div>
                             <div className={classes.tableRow}>{accident.workplaceName}</div>
                             <div className={classes.tableRow}>{accident.occurDate}</div>
