@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import { selectUser, setUser } from '../../slices/User';
 import { useLoginMutation } from '../../hooks/api/LoginManagement/LoginManagement';
 import { UserTokenService } from '../../services/core/User';
+import { useUserStatus } from '../../hooks/core/UserStatus';
 
 import { makeStyles } from '@mui/styles';
 import logoLogin from '../../assets/images/logo_login.png';
@@ -160,6 +161,8 @@ const Login = () => {
         }
     }
 
+    const isLoggerIn = useUserStatus();
+    console.log(isLoggerIn);
 
     return (
         <WideLayout>
