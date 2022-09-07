@@ -941,7 +941,7 @@ const Registration = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value="20220607사고등록 전 사진.jpg"
+                                            value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             disabled

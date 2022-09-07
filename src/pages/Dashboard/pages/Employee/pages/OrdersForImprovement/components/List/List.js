@@ -751,7 +751,7 @@ const List = () => {
                                 <div className={classes.tableRow}>{lawItem.workplaceName}</div>
                                 <div className={classes.tableRow}>{lawItem.status}</div>
                                 <div className={classes.tableRow}>
-                                    {lawItem.issueDate}Not in Object
+                                    {lawItem.orderDate}
                                 </div>
                                 <div className={classes.tableRow}>
                                     {lawItem.cmmdOrgName001 && lawItem.cmmdOrgName001}&nbsp;
@@ -761,7 +761,7 @@ const List = () => {
                                 </div>
                                 <div className={classes.tableRow}>{lawItem.occurPlace}</div>
                                 <div className={classes.tableRow}>{lawItem.issueReason}</div>
-                                <div className={classes.tableRow}>{lawItem.preventCn} null</div>
+                                <div className={classes.tableRow}>{lawItem.preventCn}</div>
                             </div>
                         ))}
                 </Grid>

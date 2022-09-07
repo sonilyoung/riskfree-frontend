@@ -343,7 +343,7 @@ const Registration = () => {
                                     className={classes.textArea}
                                     id="outlined-basic"
                                     placeholder="파일을 등록하세요. (파일용량 00kb 제한)"
-                                    value="개선조치 관련 내부 점검 파일_수정20220701.hwp"
+                                    //value="개선조치 관련 내부 점검 파일_수정20220701.hwp"
                                     disabled
                                 />
                                 <UploadButton>찾아보기</UploadButton>
