@@ -11,28 +11,33 @@ import { MeasureToManageThePerformancePage } from '../pages/Dashboard/pages/Empl
 import { ContentsOfWorkPage } from '../pages/Dashboard/pages/Employee/pages/ContentsOfWork';
 import { IMStatusPage, IMRegistrationPage, NoticeListPage, NoticeDetailsPage, NoticeRegistrationPage, ACIStatusPage, ACIRegistrationPage, OICLawPage, OICRegistrationPage, MPDLawFirstPage, MPDLawSecondPage, MPDLawThirdPage, SecurityWorkContentPage, MembersManagementPage, WorkHistoryListPage } from '../pages/Dashoard/pages';
 import { ForgottenPasswordPage } from '../pages/Login/pages/ForgottenPassword';
-import { UserTokenService } from '../services/core/User';
 
-import { getDecoded, getItem, isValid } from "../services/core/User/Token";
-import { useSelector } from 'react-redux';
-import { selectUser } from '../slices/User';
+import { useUserStatus } from '../hooks/core/UserStatus';
+import { useUserToken } from '../hooks/core/UserToken';
+import useUserURLRedirect from '../hooks/core/UserURLRedirect/UserURLRedirect';
 
 const PrivateRoute = () => {
+    const isLoggedIn = useUserStatus();
 
-    return isValid() ? <Outlet /> : <Navigate to="/" />;
+    return isLoggedIn ? <Outlet /> : <Navigate to="/" />;
 };
 
 const PublicRoute = () => {
-    const user = useSelector(selectUser);
+    const isLoggedIn = useUserStatus();
+    const [userToken] = useUserToken();
+    const getPath = useUserURLRedirect();
 
-    return !isValid() ? <Outlet /> : <Navigate to={user.redirectPath} />;
+    const userLoggedInRoleCd = isLoggedIn && userToken.getUserRoleCd();
+    const redirectPath = isLoggedIn && getPath(userLoggedInRoleCd);
+
+    return isLoggedIn ? <Navigate to={redirectPath} /> : <Outlet />;
 };
 
 const DefaultRoutes = () => (
 
     <Routes>
         <Route element={<PrivateRoute />}>
-            <Route path="/dashboard/admin" element={<MembersManagementPage />} />
+            <Route path="/dashboard/system-administrator" element={<MembersManagementPage />} />
         </Route>
         <Route element={<PrivateRoute />}>
             <Route path="/dashboard/director" element={<DashboardDirectorPage />} />

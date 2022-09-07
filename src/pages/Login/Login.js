@@ -9,8 +9,6 @@ import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import { selectUser, setUser } from '../../slices/User';
 import { useLoginMutation } from '../../hooks/api/LoginManagement/LoginManagement';
-import { UserTokenService } from '../../services/core/User';
-import { useUserStatus } from '../../hooks/core/UserStatus';
 
 import { makeStyles } from '@mui/styles';
 import logoLogin from '../../assets/images/logo_login.png';
@@ -21,8 +19,8 @@ import popupClose2 from '../../assets/images/btn_popClose2.png';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
-import { useGetLoginInfoMutation } from '../../hooks/api/MainManagement/MainManagement';
-import { UrlService } from '../../services/core/User/index';
+import useUserURLRedirect from '../../hooks/core/UserURLRedirect/UserURLRedirect';
+import { useUserToken } from '../../hooks/core/UserToken';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -98,7 +96,6 @@ const ClosePopupButton2 = styled(ButtonUnstyled)`
 
 const Login = () => {
     const classes = useStyles();
-    const dispatch = useDispatch();
     const [values, setValues] = useState({
         id: {
             value: '',
@@ -110,11 +107,10 @@ const Login = () => {
         },
     });
     const navigate = useNavigate();
-    const user = useSelector(selectUser);
 
-
+    const [userToken] = useUserToken();
     const [login] = useLoginMutation();
-    const [getLoginInfo] = useGetLoginInfoMutation();
+    const getPath = useUserURLRedirect();
 
     const handleChange = (prop) => (event) => {
         setValues({
@@ -132,37 +128,18 @@ const Login = () => {
 
         if (userLoginResponse.data.RET_CODE === '0000') {
             const jwtToken = userLoginResponse.data.RET_DATA.accessToken;
-            UserTokenService.setItem(jwtToken);
+            userToken.setItem(jwtToken);
 
-            const loginInfoResponse = await getLoginInfo();
+            const userLoggedInRoleCd = userToken.getUserRoleCd();
+            const redirectPath = getPath(userLoggedInRoleCd);
 
-            dispatch(setUser({
-                companyId: loginInfoResponse.data.RET_DATA.companyId,
-                companyName: loginInfoResponse.data.RET_DATA.companyName,
-                email: loginInfoResponse.data.RET_DATA.email,
-                loginDt: loginInfoResponse.data.RET_DATA.loginDt,
-                loginId: loginInfoResponse.data.RET_DATA.loginId,
-                loginIp: loginInfoResponse.data.RET_DATA.loginIp,
-                loginPw: loginInfoResponse.data.RET_DATA.loginPw,
-                name: loginInfoResponse.data.RET_DATA.name,
-                roleCd: loginInfoResponse.data.RET_DATA.roleCd,
-                roleName: loginInfoResponse.data.RET_DATA.roleName,
-                userId: loginInfoResponse.data.RET_DATA.userId,
-                workplaceId: loginInfoResponse.data.RET_DATA.workplaceId,
-                workplaceName: loginInfoResponse.data.RET_DATA.workplaceName,
-                redirectPath: UrlService.getHomePagePath(loginInfoResponse.data.RET_DATA.roleCd)
-            }));
-
-            navigate(user.redirectPath);
+            navigate(redirectPath);
 
         } else {
             //TODO: This message has to be replaced with dialog.
             alert('Credentials are wrong. Please try again.');
         }
     }
-
-    const isLoggerIn = useUserStatus();
-    console.log(isLoggerIn);
 
     return (
         <WideLayout>

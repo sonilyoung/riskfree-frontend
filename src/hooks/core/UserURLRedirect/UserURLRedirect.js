@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useUserRole } from '../UserRole';
 
-function useUserURLRedirect(props)
-{
+function useUserURLRedirect(props) {
     const [userRoleCodes] = useUserRole();
 
-    const getPath = (roleCode) => 
-    {
+    const getPath = (roleCode) => {
         switch (roleCode) {
             case userRoleCodes.admin:
                 return '/dashboard/system-administrator';
-    
+
             case userRoleCodes.director:
                 return '/dashboard/director';
-    
+
             case userRoleCodes.employee:
                 return '/dashboard/employee';
         }
-    
+
         return false;
     };
 
