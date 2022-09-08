@@ -11,6 +11,7 @@ import { mainManagement } from '../hooks/api/MainManagement/MainManagement';
 import { subscribersManagement } from '../hooks/api/SubscribersManagement/SubscribersManagement';
 import { commCodeManagement } from '../hooks/api/CommCodeManagement/CommCodeManagement';
 import { lawImprovementsManagement } from '../hooks/api/LawImprovementsManagement/LawImprovementsManagement';
+import { relatedLawManagement } from '../hooks/api/RelatedLawManagement/RelatedLawManagement';
 
 export const store = configureStore({
     reducer: {
@@ -25,6 +26,7 @@ export const store = configureStore({
         [subscribersManagement.reducerPath]: subscribersManagement.reducer,
         [commCodeManagement.reducerPath]: commCodeManagement.reducer,
         [lawImprovementsManagement.reducerPath]: lawImprovementsManagement.reducer,
+        [relatedLawManagement.reducerPath]: relatedLawManagement.reducer,
         devTools: process.env.NODE_ENV === 'development',
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()
@@ -38,6 +40,7 @@ export const store = configureStore({
         .concat(subscribersManagement.middleware)
         .concat(commCodeManagement.middleware)
         .concat(lawImprovementsManagement.middleware)
+        .concat(relatedLawManagement.middleware)
 
 });
 
