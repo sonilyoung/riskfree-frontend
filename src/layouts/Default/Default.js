@@ -40,6 +40,12 @@ import Typography from '@mui/material/Typography';
 
 import arrowDown from '../../assets/images/ic_down.png';
 
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import 'dayjs/locale/ko';
+
+
 const useStyles = makeStyles(() => ({
     bodyWrap: {
         backgroundColor: '#33374f',
@@ -432,6 +438,22 @@ const useStyles = makeStyles(() => ({
         textDecoration: "none",
         backgroundColor: "grey"
     },
+    selectMenuDate: {
+        height: '40px',
+        '& div': {
+            height: 'inherit',
+            background: '#fff',
+        },
+        '& input': {
+            paddingLeft: '10px',
+        },
+        '& legend': {
+            width: '0'
+        },
+        '& button': {
+            paddingLeft: '0',
+        }
+    },
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -573,6 +595,10 @@ const Default = ({ children }) => {
         handleLoginInfo()
     }, [])
 
+    const [date, setDate] = React.useState(null);
+
+    const [locale] = React.useState('ko');
+
     return (
         <div className={classes.bodyWrap}>
             <Grid className={classes.headerWrap} container rowSpacing={0} columnSpacing={0}>
@@ -696,12 +722,16 @@ const Default = ({ children }) => {
                                                     sx={{ width: 115 }}
                                                     className={classes.popupTextField}
                                                 />
-                                                <TextField
-                                                    sx={{ width: 220 }}
-                                                    id="date"
-                                                    className={classes.popupTextField}
-                                                    type="date"
-                                                />
+                                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                                    <DesktopDatePicker
+                                                        className={classes.selectMenuDate}
+                                                        label=" "
+                                                        inputFormat="YYYY-MM-DD"
+                                                        value={date}
+                                                        onChange={setDate}
+                                                        renderInput={(params) => <TextField {...params} sx={{width: 220}} />}
+                                                    />
+                                                </LocalizationProvider>
                                             </AccordionDetails>
                                         </Accordion>
                                         <Accordion className={classes.popupAccord}>

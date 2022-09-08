@@ -38,6 +38,11 @@ import popupClose from '../../../assets/images/btn_popClose.png';
 import Alert from '@mui/material/Alert';
 import alertIcon from '../../../assets/images/ic_refer.png';
 
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import 'dayjs/locale/ko';
+
 const useStyles = makeStyles(() => ({
     pageWrap: {
         // minHeight: 'calc(100vh - 94px)',
@@ -447,6 +452,22 @@ const useStyles = makeStyles(() => ({
             boxSizing: 'border-box',
         }
     },
+    selectMenuDate: {
+        height: '40px',
+        '& div': {
+            height: 'inherit',
+            background: '#fff',
+        },
+        '& input': {
+            paddingLeft: '10px',
+        },
+        '& legend': {
+            width: '0'
+        },
+        '& button': {
+            paddingLeft: '0',
+        }
+    },
 }));
 
 const SearchButton = styled(ButtonUnstyled)`
@@ -556,6 +577,10 @@ const WorkHistoryList = () => {
         setNum(event.target.value);
     };
 
+    const [date, setDate] = React.useState(null);
+
+    const [locale] = React.useState('ko');
+
     return (
         <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
@@ -581,12 +606,16 @@ const WorkHistoryList = () => {
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>등록일</div>
-                                <TextField
-                                    sx={{ width: 180 }}
-                                    id="date"
-                                    className={classes.selectMenu}
-                                    type="date"
-                                />
+                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                    <DesktopDatePicker
+                                        className={classes.selectMenuDate}
+                                        label=" "
+                                        inputFormat="YYYY-MM-DD"
+                                        value={date}
+                                        onChange={setDate}
+                                        renderInput={(params) => <TextField {...params} sx={{width: 180}} />}
+                                    />
+                                </LocalizationProvider>
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>등록자</div>

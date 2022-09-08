@@ -29,6 +29,12 @@ import pageLast from '../../../assets/images/btn_last.png';
 import pageNext from '../../../assets/images/btn_nxt.png';
 import pagePrev from '../../../assets/images/btn_pre.png';
 
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import 'dayjs/locale/ko';
+
+
 const useStyles = makeStyles(() => ({
     pageWrap: {
         // minHeight: 'calc(100vh - 94px)',
@@ -45,9 +51,19 @@ const useStyles = makeStyles(() => ({
         borderRadius: '8px',
         boxShadow: '0 0 12px rgb(189 203 203 / 10%)',
         marginBottom: '28px !important',
-        background: '#fff'
+        background: '#fff',
+        '& [class*=searchInfo] >div': {
+            '&:last-of-type >div +div': {
+                border: '1px solid rgba(0, 0, 0, 0.23)',
+                borderRadius: '6px',
+                paddingLeft: '10px',
+            },
+        },
     },
     searchRadio: {
+        height: '40px',
+        justifyContent: 'center',
+        boxSizing: 'border-box',
         '& [class*=body1]': {
             fontSize: '16px'
         },
@@ -206,6 +222,22 @@ const useStyles = makeStyles(() => ({
             height: 'inherit',
         }
     },
+    selectMenuDate: {
+        height: '40px',
+        '& div': {
+            height: 'inherit',
+            background: '#fff',
+        },
+        '& input': {
+            paddingLeft: '10px',
+        },
+        '& legend': {
+            width: '0'
+        },
+        '& button': {
+            paddingLeft: '0',
+        }
+    },
 }));
 
 const SearchButton = styled(ButtonUnstyled)`
@@ -281,6 +313,12 @@ const IMStatus = () => {
         setNum(event.target.value);
     };
 
+    const [date1, setDate1] = React.useState(null),
+          [date2, setDate2] = React.useState(null);
+
+    const [locale] = React.useState('ko');
+
+
     return (
         <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
@@ -305,19 +343,27 @@ const IMStatus = () => {
                         </div>
                         <div>
                             <div className={classes.infoTitle}>요청일자</div>
-                                <TextField
-                                    sx={{width: 140}}
-                                    id="date"
-                                    className={classes.selectMenu}
-                                    type="date"
+                            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                <DesktopDatePicker
+                                    className={classes.selectMenuDate}
+                                    label=" "
+                                    inputFormat="YYYY-MM-DD"
+                                    value={date1}
+                                    onChange={setDate1}
+                                    renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
                                 />
-                                &nbsp;~&nbsp;
-                                <TextField
-                                    sx={{width: 140}}
-                                    id="date"
-                                    className={classes.selectMenu}
-                                    type="date"
+                            </LocalizationProvider>
+                            &nbsp;~&nbsp;
+                            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                <DesktopDatePicker
+                                    className={classes.selectMenuDate}
+                                    label=" "
+                                    inputFormat="YYYY-MM-DD"
+                                    value={date2}
+                                    onChange={setDate2}
+                                    renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
                                 />
+                            </LocalizationProvider>
                         </div>
                         <div>
                             <div className={classes.infoTitle}>요청자</div>

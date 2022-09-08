@@ -556,6 +556,10 @@ const WorkHistoryList = () => {
         setNum(event.target.value);
     };
 
+    const [date, setDate] = React.useState(null);
+
+    const [locale] = React.useState('ko');
+
     return (
         <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
@@ -602,6 +606,20 @@ const WorkHistoryList = () => {
                             <SearchButton>조회</SearchButton>
                             <RegisterButton sx={{ marginLeft: '10px' }}>등록</RegisterButton>
                         </div>
+                    <div className={classes.tableBody}>
+                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}>5</div>
+                        <div className={classes.tableRow}>울산</div>
+                        <div className={classes.tableRow}>2022-01-03 14:00</div>
+                        <div className={classes.tableRow}>홍길동</div>
+                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}>2건</div>
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.dataTable}>

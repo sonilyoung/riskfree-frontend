@@ -85,7 +85,10 @@ import { remove } from '../../../../services/core/User/Token';
 import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetDayInfoMutation, useGetNoticeListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetBaselineListMutation, useGetBaselineMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 
-
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import 'dayjs/locale/ko';
 
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
@@ -1426,7 +1429,23 @@ const useStyles = makeStyles(() => ({
         maxHeight: '200px',
         overflow: 'visible',
         transition: '.2s',
-    }
+    },
+    selectMenuDate: {
+        height: '40px',
+        '& div': {
+            height: 'inherit',
+            background: '#fff',
+        },
+        '& input': {
+            paddingLeft: '10px',
+        },
+        '& legend': {
+            width: '0'
+        },
+        '& button': {
+            paddingLeft: '0',
+        }
+    },
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -1873,6 +1892,10 @@ const Employee = () => {
         fetchBaselineList()
     }, [])
 
+    const [date, setDate] = React.useState(null);
+
+    const [locale] = React.useState('ko');
+
     return (
         <WideLayout>
 
@@ -1997,12 +2020,16 @@ const Employee = () => {
                                                     sx={{ width: 115 }}
                                                     className={classes.popupTextField}
                                                 />
-                                                <TextField
-                                                    sx={{ width: 220 }}
-                                                    id="date"
-                                                    className={classes.popupTextField}
-                                                    type="date"
-                                                />
+                                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                                    <DesktopDatePicker
+                                                        className={classes.selectMenuDate}
+                                                        label=" "
+                                                        inputFormat="YYYY-MM-DD"
+                                                        value={date}
+                                                        onChange={setDate}
+                                                        renderInput={(params) => <TextField {...params} sx={{width: 220}} />}
+                                                    />
+                                                </LocalizationProvider>
                                             </AccordionDetails>
                                         </Accordion>
                                         <Accordion className={classes.popupAccord}>
