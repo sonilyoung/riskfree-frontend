@@ -87,8 +87,114 @@ export const mainManagement = createApi({
                 body: body,
             }),
         }),
+        getNoticeHotList: builder.mutation({
+            query: (body) => ({
+                url: 'main/getNoticeHotList',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        getEssentialRate: builder.mutation({
+            query: (body) => ({
+                url: 'main/getEssentialRate',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        getAccidentsPrevention: builder.mutation({
+            query: (body) => ({
+                url: 'main/getAccidentsPrevention',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        getImprovementLawOrder: builder.mutation({
+            query: (body) => ({
+                url: 'main/getImprovemetLawOrder',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        getRelatedRawRate: builder.mutation({
+            query: (body) => ({
+                url: 'main/getRelatedRawRate',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        getDutyDetailList: builder.mutation({
+            query: (body) => ({
+                url: 'main/getDutyDetailList',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        getInspectiondocs: builder.mutation({
+            query: (body) => ({
+                url: 'main/getInspectiondocs',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        getDutyCycle: builder.mutation({
+            query: (body) => ({
+                url: 'main/getDutyCyle',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        getDutyAssigned: builder.mutation({
+            query: (body) => ({
+                url: 'main/getDutyAssigned',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        getRelatedArticle: builder.mutation({
+            query: (body) => ({
+                url: 'main/getRelatedArticle',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        updateRelatedArticle: builder.mutation({
+            query: (body) => ({
+                url: 'main/updateRelatedArticle',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        getGuideLine: builder.mutation({
+            query: (body) => ({
+                url: 'main/getGuideLine',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        getCompanyInfo: builder.mutation({
+            query: (body) => ({
+                url: 'main/getCompanyInfo',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        getTitleReport: builder.mutation({
+            query: (body) => ({
+                url: 'main/getTitleReport',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        getBaseLineReport: builder.mutation({
+            query: (body) => ({
+                url: 'main/getBaseLineReport',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+
 
     }),
 });
 
-export const { useGetWorkplaceListMutation, useGetLoginInfoMutation, useGetAccidentTotalMutation, useGetImprovementListMutation, useGetSafeWorkHistoryListMutation, useGetLeaderImprovementListMutation, useGetDayInfoMutation, useGetNoticeListMutation, useGetBaselineMutation, useGetBaselineListMutation } = mainManagement;
+export const { useGetWorkplaceListMutation, useGetLoginInfoMutation, useGetAccidentTotalMutation, useGetImprovementListMutation, useGetSafeWorkHistoryListMutation, useGetLeaderImprovementListMutation, useGetDayInfoMutation, useGetNoticeListMutation, useGetBaselineMutation, useGetBaselineListMutation, useGetNoticeHotListMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetRelatedRawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useUpdateRelatedArticleMutation, useGetGuideLineMutation, useGetTitleReportMutation, useGetCompanyInfoMutation, useGetBaseLineReportMutation } = mainManagement;
