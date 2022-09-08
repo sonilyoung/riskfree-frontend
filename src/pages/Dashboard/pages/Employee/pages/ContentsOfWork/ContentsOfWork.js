@@ -38,6 +38,11 @@ import popupClose from '../../../../../../assets/images/btn_popClose.png';
 import Alert from '@mui/material/Alert';
 import alertIcon from '../../../../../../assets/images/ic_refer.png';
 
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import 'dayjs/locale/ko';
+
 const useStyles = makeStyles(() => ({
     pageWrap: {
         // minHeight: 'calc(100vh - 94px)',
@@ -447,6 +452,22 @@ const useStyles = makeStyles(() => ({
             boxSizing: 'border-box',
         }
     },
+    selectMenuDate: {
+        height: '40px',
+        '& div': {
+            height: 'inherit',
+            background: '#fff',
+        },
+        '& input': {
+            paddingLeft: '10px',
+        },
+        '& legend': {
+            width: '0'
+        },
+        '& button': {
+            paddingLeft: '0',
+        }
+    },
 }));
 
 const SearchButton = styled(ButtonUnstyled)`
@@ -557,7 +578,7 @@ const WorkHistoryList = () => {
     };
 
     const [date, setDate] = React.useState(null);
-
+          
     const [locale] = React.useState('ko');
 
     return (
@@ -585,12 +606,16 @@ const WorkHistoryList = () => {
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>등록일</div>
-                                <TextField
-                                    sx={{ width: 180 }}
-                                    id="date"
-                                    className={classes.selectMenu}
-                                    type="date"
-                                />
+                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                    <DesktopDatePicker
+                                        className={classes.selectMenuDate}
+                                        label=" "
+                                        inputFormat="YYYY-MM-DD"
+                                        value={date}
+                                        onChange={setDate}
+                                        renderInput={(params) => <TextField {...params} sx={{width: 180}} />}
+                                    />
+                                </LocalizationProvider>
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>등록자</div>
@@ -606,20 +631,6 @@ const WorkHistoryList = () => {
                             <SearchButton>조회</SearchButton>
                             <RegisterButton sx={{ marginLeft: '10px' }}>등록</RegisterButton>
                         </div>
-                    <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>5</div>
-                        <div className={classes.tableRow}>울산</div>
-                        <div className={classes.tableRow}>2022-01-03 14:00</div>
-                        <div className={classes.tableRow}>홍길동</div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>2건</div>
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.dataTable}>

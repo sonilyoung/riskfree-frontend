@@ -28,6 +28,10 @@ import imgPrev2 from '../../../../../../../../assets/images/prw_photo2.jpg';
 import { useGetWorkplaceListMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
 import { useImprovementViewMutation, useImprovementUpdateMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement';
 
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import 'dayjs/locale/ko';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -224,8 +228,23 @@ const useStyles = makeStyles(() => ({
         '& img': {
             padding: '20px 20px 10px 20px',
         }
-    }
-
+    },
+    selectMenuDate: {
+        height: '40px',
+        '& div': {
+            height: 'inherit',
+            background: '#fff',
+        },
+        '& input': {
+            paddingLeft: '10px',
+        },
+        '& legend': {
+            width: '0'
+        },
+        '& button': {
+            paddingLeft: '0',
+        }
+    },
 }));
 
 const UploadButton = styled(ButtonUnstyled)`
@@ -355,6 +374,11 @@ const Registration = () => {
             .then(() => handleRedirect())
     }
 
+    const [date1, setDate1] = React.useState(null),
+          [date2, setDate2] = React.useState(null);
+
+    const [locale] = React.useState('ko');
+
     useEffect(() => {
         fetchComapanyWorkplace()
         fetchImprovementView()
@@ -424,15 +448,16 @@ const Registration = () => {
                             <div className={classes.rowTitle}>요청일자</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    <TextField
-                                        sx={{ width: 200 }}
-                                        id="date"
-                                        className={classes.selectMenu}
-                                        type="date"
-                                        format={"YYYY-MM-DD"}
-                                        value={improvement && improvement.reqDate}
-                                        onInput={(event) => setImprovement({ ...improvement, "reqDate": event.target.value })}
-                                    />
+                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                        <DesktopDatePicker
+                                            className={classes.selectMenuDate}
+                                            label=" "
+                                            inputFormat="YYYY-MM-DD"
+                                            value={date1}
+                                            onChange={setDate1}
+                                            renderInput={(params) => <TextField {...params} sx={{width: 200}} />}
+                                        />
+                                    </LocalizationProvider>
                                 </div>
                                 <div className={classes.rowTitle}>요청자</div>
                                 <div className={classes.rowInfo}>
@@ -450,15 +475,16 @@ const Registration = () => {
                                 </div>
                                 <div className={classes.rowTitle}>완료요청일</div>
                                 <div className={classes.rowInfo}>
-                                    <TextField
-                                        sx={{ width: 200 }}
-                                        id="date"
-                                        className={classes.selectMenu}
-                                        type="date"
-                                        format={"YYYY-MM-DD"}
-                                        value={improvement && improvement.finDate}
-                                        onInput={(event) => setImprovement({ ...improvement, "finDate": event.target.value })}
-                                    />
+                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                        <DesktopDatePicker
+                                            className={classes.selectMenuDate}
+                                            label=" "
+                                            inputFormat="YYYY-MM-DD"
+                                            value={date2}
+                                            onChange={setDate2}
+                                            renderInput={(params) => <TextField {...params} sx={{width: 200}} />}
+                                        />
+                                    </LocalizationProvider>
                                 </div>
                                 <div className={classes.rowTitle}>첨부파일</div>
                                 <div className={classes.rowInfo}>

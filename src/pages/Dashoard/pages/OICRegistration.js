@@ -62,7 +62,7 @@ const useStyles = makeStyles(() => ({
         '& [class*=boxRow]:last-of-type [class*=rowInfo]': {
             width: 'auto',
             '&:first-of-type': {
-                width: '672px'
+                width: '672px',
             }
         },
         '& [class*=boxContent] [class*=boxRow]:first-of-type': {

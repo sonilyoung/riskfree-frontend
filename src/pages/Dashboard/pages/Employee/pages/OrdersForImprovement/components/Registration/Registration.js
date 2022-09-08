@@ -28,6 +28,14 @@ import { useGetLoginInfoMutation } from '../../../../../../../../hooks/api/MainM
 import { DefaultLayout } from "../../../../../../../../layouts/Default";
 import moment from "moment"
 
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import 'dayjs/locale/ko';
+
 const useStyles = makeStyles(() => ({
     pageWrap: {
         '& >div[class*=box]': {
@@ -46,7 +54,6 @@ const useStyles = makeStyles(() => ({
     boxReception: {
         display: 'flex',
         marginBottom: '16px !important',
-        height: '160px',
         '& [class*=boxRow]:first-of-type [class*=rowInfo]:first-of-type': {
             width: '160px',
         },
@@ -57,10 +64,19 @@ const useStyles = makeStyles(() => ({
             width: 'auto'
         },
         '& [class*=boxRow]:last-of-type [class*=rowInfo]': {
-            width: '100%',
+            width: 'auto',
+            '&:first-of-type': {
+                width: '672px',
+            }
         },
-        '& [class*=boxContent] [class*=boxRow]:first-of-type]': {
+        '& [class*=boxContent] [class*=boxRow]:first-of-type': {
             height: '60px'
+        },
+        '& [class*=boxContent] [class*=boxRow]:nth-of-type(2) [class*=rowTitle]': {
+            borderTop: 'none'
+        },
+        '& [class*=boxContent] [class*=boxRow]:nth-of-type(2) [class*=rowTitle]:first-of-type': {
+            borderTop: '1px solid #fff'
         }
     },
     boxTitle: {
@@ -216,8 +232,23 @@ const useStyles = makeStyles(() => ({
         '& img': {
             padding: '20px 20px 10px 20px',
         }
-    }
-
+    },
+    selectMenuDate: {
+        height: '40px',
+        '& div': {
+            height: 'inherit',
+            background: '#fff',
+        },
+        '& input': {
+            paddingLeft: '10px',
+        },
+        '& legend': {
+            width: '0'
+        },
+        '& button': {
+            paddingLeft: '0',
+        }
+    },
 }));
 
 const UploadButton = styled(ButtonUnstyled)`
@@ -287,6 +318,12 @@ const Registration = () => {
         setLoginInfo(response.data.RET_DATA)
     }
 
+    const [num, setNum] = React.useState('');
+
+    const handleChange = (event) => {
+        setNum(event.target.value);
+    };
+
     const [law, setLaw] = useState({
         recvDate: todaysDate,
         recvUserName: loginInfo.name,
@@ -320,6 +357,11 @@ const Registration = () => {
             .then((res) => console.log(res))
             .then(() => handleRedirect());
     };
+
+    const [date1, setDate1] = React.useState(null),
+          [date2, setDate2] = React.useState(null);
+
+    const [locale] = React.useState('ko');
 
     useEffect(() => {
         handleLoginInfo()
@@ -493,14 +535,46 @@ const Registration = () => {
                                         id="outlined-multiline-static"
                                         multiline
                                         rows={4}
-                                        value={law.improveCn}
-                                        onChange={(event) =>
-                                            setLaw({
-                                                ...law,
-                                                improveCn: event.target.value,
-                                            })
-                                        }
-                                    />
+                                        defaultValue="작업 감독자 미배치로 인한 지적"
+                                    />                   
+                                </div>
+                                <div className={classes.rowTitle}>구분</div>
+                                <div className={classes.rowInfo}>
+                                    <Select
+                                        sx={{width: 180}}
+                                        className={classes.selectMenu}
+                                        value={num}
+                                        onChange={handleChange}
+                                        displayEmpty
+                                    >
+                                        <MenuItem value="">개선</MenuItem>
+                                    </Select>                  
+                                </div>
+                                <div className={classes.rowTitle}>지적일자</div>
+                                <div className={classes.rowInfo}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                        <DesktopDatePicker
+                                            className={classes.selectMenuDate}
+                                            label=" "
+                                            inputFormat="YYYY-MM-DD"
+                                            value={date1}
+                                            onChange={setDate1}
+                                            renderInput={(params) => <TextField {...params} sx={{width: 180}} />}
+                                        />
+                                    </LocalizationProvider>                 
+                                </div>
+                                <div className={classes.rowTitle}>완료요청일</div>
+                                <div className={classes.rowInfo}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                        <DesktopDatePicker
+                                            className={classes.selectMenuDate}
+                                            label=" "
+                                            inputFormat="YYYY-MM-DD"
+                                            value={date2}
+                                            onChange={setDate2}
+                                            renderInput={(params) => <TextField {...params} sx={{width: 180}} />}
+                                        />
+                                    </LocalizationProvider>                 
                                 </div>
                             </div>
                         </div>

@@ -39,6 +39,11 @@ import {
 } from "../../../../../../../../hooks/api/LawImprovementsManagement/LawImprovementsManagement";
 import { DefaultLayout } from "../../../../../../../../layouts/Default";
 
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import 'dayjs/locale/ko';
+
 const useStyles = makeStyles(() => ({
     pageWrap: {
         // minHeight: 'calc(100vh - 94px)',
@@ -73,8 +78,35 @@ const useStyles = makeStyles(() => ({
         '& >div:first-of-type [class*=searchInfo] >div:last-of-type, & >div:last-of-type [class*=searchInfo] >div:last-of-type': {
             marginLeft: '30px'
         },
+        '& >div:first-of-type [class*=searchInfo] >div': {
+            '&:nth-of-type(2) >div +div, &:nth-of-type(3) >div +div': {
+                border: '1px solid rgba(0, 0, 0, 0.23)',
+                borderRadius: '6px',
+                paddingLeft: '10px',
+            },
+            '&:nth-of-type(2)': {
+                '& >div:first-of-type': {
+                    marginRight: '53px',
+                }
+            },
+        },
+        '& >div:last-of-type [class*=searchInfo] >div': {
+            '&:nth-of-type(3) >div +div': {
+                border: '1px solid rgba(0, 0, 0, 0.23)',
+                borderRadius: '6px',
+                paddingLeft: '10px',
+            },
+            '&:nth-of-type(2)': {
+                '& >div:first-of-type': {
+                    marginRight: '70px',
+                }
+            },
+        },
     },
     searchRadio: {
+        height: '40px',
+        justifyContent: 'center',
+        boxSizing: 'border-box',
         '& [class*=body1]': {
             fontSize: '16px'
         },
@@ -218,7 +250,7 @@ const useStyles = makeStyles(() => ({
             },
             '&[aria-label$=page]': {
                 '& svg': {
-                    display: 'none'
+                    display: 'none',
                 }
             },
             '&[class*=MuiPaginationItem-firstLast][aria-label*=first]': {
@@ -244,6 +276,22 @@ const useStyles = makeStyles(() => ({
         overflow: 'hidden',
         '& div': {
             height: 'inherit',
+        }
+    },
+    selectMenuDate: {
+        height: '40px',
+        '& div': {
+            height: 'inherit',
+            background: '#fff',
+        },
+        '& input': {
+            paddingLeft: '10px',
+        },
+        '& legend': {
+            width: '0'
+        },
+        '& button': {
+            paddingLeft: '0',
         }
     },
 }));
@@ -400,6 +448,11 @@ const List = () => {
         const response = await lawSelect(lawImprovements);
         setLawList(response.data.RET_DATA);
     };
+
+    const [date1, setDate1] = React.useState(null),
+          [date2, setDate2] = React.useState(null);
+          
+    const [locale] = React.useState('ko');
 
     useEffect(() => {
         fetchWorkplaceList();
@@ -630,35 +683,27 @@ const List = () => {
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>발행일자</div>
-                                <TextField
-                                    sx={{ width: 140 }}
-                                    id="date"
-                                    className={classes.selectMenu}
-                                    type="date"
-                                    value={lawImprovements.startDate}
-                                    onChange={handleChange("startDate")}
-                                // onChange={(event) =>
-                                //   setLawImprovements({
-                                //     ...lawImprovements,
-                                //     startDate: event.target.value,
-                                //   })
-                                // }
-                                />
+                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                    <DesktopDatePicker
+                                        className={classes.selectMenuDate}
+                                        label=" "
+                                        inputFormat="YYYY-MM-DD"
+                                        value={date1}
+                                        onChange={setDate1}
+                                        renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
+                                    />
+                                </LocalizationProvider>
                                 &nbsp;~&nbsp;
-                                <TextField
-                                    sx={{ width: 140 }}
-                                    id="date"
-                                    className={classes.selectMenu}
-                                    type="date"
-                                    value={lawImprovements.endDate}
-                                    onChange={handleChange("endDate")}
-                                // onChange={(event) =>
-                                //   setLawImprovements({
-                                //     ...lawImprovements,
-                                //     endDate: event.target.value,
-                                //   })
-                                // }
-                                />
+                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                    <DesktopDatePicker
+                                        className={classes.selectMenuDate}
+                                        label=" "
+                                        inputFormat="YYYY-MM-DD"
+                                        value={date2}
+                                        onChange={setDate2}
+                                        renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
+                                    />
+                                </LocalizationProvider>
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>조치상태</div>

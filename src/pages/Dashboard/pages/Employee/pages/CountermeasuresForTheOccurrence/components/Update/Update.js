@@ -32,6 +32,11 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import moment from "moment"
 
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import 'dayjs/locale/ko';
+
 const useStyles = makeStyles(() => ({
     pageWrap: {
         '& >div[class*=box]': {
@@ -237,8 +242,23 @@ const useStyles = makeStyles(() => ({
         '& img': {
             padding: '20px 20px 10px 20px',
         }
-    }
-
+    },
+    selectMenuDate: {
+        height: '40px',
+        '& div': {
+            height: 'inherit',
+            background: '#fff',
+        },
+        '& input': {
+            paddingLeft: '10px',
+        },
+        '& legend': {
+            width: '0'
+        },
+        '& button': {
+            paddingLeft: '0',
+        }
+    },
 }));
 
 const AccidentReportButton = styled(ButtonUnstyled)`
@@ -396,6 +416,10 @@ const Update = () => {
         )
             .then(() => navigate("/dashboard/employee/accident-countermeasures-implementation/list"))
     }
+
+    const [date, setDate] = React.useState(null);
+
+    const [locale] = React.useState('ko');
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -567,15 +591,16 @@ const Update = () => {
                             <div className={classes.rowTitle}>발생일자</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    <TextField
-                                        sx={{ width: 140 }}
-                                        id="date"
-                                        className={classes.selectMenu}
-                                        type="date"
-                                        onInput={(e) => setAccident({ ...accident, "occurDate": e.target.value })}
-                                        value={accident && accident.occurDate}
-                                        format={"YYYY-MM-DD"}
-                                    />
+                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                        <DesktopDatePicker
+                                            className={classes.selectMenuDate}
+                                            label=" "
+                                            inputFormat="YYYY-MM-DD"
+                                            value={date}
+                                            onChange={setDate}
+                                            renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
+                                        />
+                                    </LocalizationProvider>
                                 </div>
                                 <div className={classes.rowTitle}>사고유형</div>
                                 <div className={classes.rowInfo}>

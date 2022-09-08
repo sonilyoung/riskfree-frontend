@@ -37,6 +37,11 @@ import checkIconOn from '../../../../../../../../assets/images/ic_chk3_on.png';
 import { useAccidentSelectMutation, useAccidentOccurPlaceSelectMutation } from '../../../../../../../../hooks/api/AccidentManagement/AccidentManagement';
 import { useGetWorkplaceListMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
 
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import 'dayjs/locale/ko';
+
 
 
 const useStyles = makeStyles(() => ({
@@ -73,7 +78,7 @@ const useStyles = makeStyles(() => ({
                 borderRadius: '6px',
             },
             '&:nth-of-type(4)': {
-                marginLeft: '74px',
+                marginLeft: '90px',
                 width: '437px',
             },
         },
@@ -85,6 +90,9 @@ const useStyles = makeStyles(() => ({
         },
     },
     searchRadio: {
+        height: '40px',
+        justifyContent: 'center',
+        boxSizing: 'border-box',
         '& [class*=body1]': {
             fontSize: '16px'
         },
@@ -185,7 +193,7 @@ const useStyles = makeStyles(() => ({
             minWidth: '240px'
         },
         '&:nth-of-type(7)': {
-            minWidth: '110px'
+            minWidth: '122px'
         },
     },
     pagingBox: {
@@ -254,6 +262,22 @@ const useStyles = makeStyles(() => ({
         overflow: 'hidden',
         '& div': {
             height: 'inherit',
+        }
+    },
+    selectMenuDate: {
+        height: '40px',
+        '& div': {
+            height: 'inherit',
+            background: '#fff',
+        },
+        '& input': {
+            paddingLeft: '10px',
+        },
+        '& legend': {
+            width: '0'
+        },
+        '& button': {
+            paddingLeft: '0',
         }
     },
 }));
@@ -538,6 +562,11 @@ const List = () => {
     //     setAccTypeFirst(accTypeFirst ? "" : "001")
     // }
 
+    const [date1, setDate1] = React.useState(null),
+          [date2, setDate2] = React.useState(null);
+
+    const [locale] = React.useState('ko');
+
     useEffect(() => {
         fetchAccidentsList()
         fetchWorkplaceList()
@@ -676,25 +705,27 @@ const List = () => {
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>발행일자</div>
-                                <TextField
-                                    sx={{ width: 140 }}
-                                    id="date"
-                                    className={classes.selectMenu}
-                                    type="date"
-                                    format={"YYY-MM-DD"}
-                                    value={startDate}
-                                    onInput={handleStartDate}
-                                />
+                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                    <DesktopDatePicker
+                                        className={classes.selectMenuDate}
+                                        label=" "
+                                        inputFormat="YYYY-MM-DD"
+                                        value={date1}
+                                        onChange={setDate1}
+                                        renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
+                                    />
+                                </LocalizationProvider>
                                 &nbsp;~&nbsp;
-                                <TextField
-                                    sx={{ width: 140 }}
-                                    id="date"
-                                    className={classes.selectMenu}
-                                    type="date"
-                                    ormat={"YYY-MM-DD"}
-                                    value={finishDate}
-                                    onInput={handleFinishDate}
-                                />
+                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                    <DesktopDatePicker
+                                        className={classes.selectMenuDate}
+                                        label=" "
+                                        inputFormat="YYYY-MM-DD"
+                                        value={date2}
+                                        onChange={setDate2}
+                                        renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
+                                    />
+                                </LocalizationProvider>
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>현장 책임자</div>
@@ -702,7 +733,7 @@ const List = () => {
                                     id="standard-basic"
                                     // placeholder="이름입력"
                                     variant="outlined"
-                                    sx={{ width: 185 }}
+                                    sx={{ width: 195 }}
                                     className={classes.selectMenu}
                                     value={managerName}
                                     onChange={(e) => setManagerName(e.target.value)}

@@ -34,7 +34,10 @@ import { useGetWorkplaceListMutation } from '../../../../../../../../hooks/api/M
 import { useImprovementSelectMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement'
 import moment from "moment";
 
-
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import 'dayjs/locale/ko';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -52,9 +55,19 @@ const useStyles = makeStyles(() => ({
         borderRadius: '8px',
         boxShadow: '0 0 12px rgb(189 203 203 / 10%)',
         marginBottom: '28px !important',
-        background: '#fff'
+        background: '#fff',
+        '& [class*=searchInfo] >div': {
+            '&:last-of-type >div +div': {
+                border: '1px solid rgba(0, 0, 0, 0.23)',
+                borderRadius: '6px',
+                paddingLeft: '10px',
+            },
+        },
     },
     searchRadio: {
+        height: '40px',
+        justifyContent: 'center',
+        boxSizing: 'border-box',
         '& [class*=body1]': {
             fontSize: '16px'
         },
@@ -213,6 +226,22 @@ const useStyles = makeStyles(() => ({
             height: 'inherit',
         }
     },
+    selectMenuDate: {
+        height: '40px',
+        '& div': {
+            height: 'inherit',
+            background: '#fff',
+        },
+        '& input': {
+            paddingLeft: '10px',
+        },
+        '& legend': {
+            width: '0'
+        },
+        '& button': {
+            paddingLeft: '0',
+        }
+    },
 }));
 
 const SearchButton = styled(ButtonUnstyled)`
@@ -343,6 +372,11 @@ function List() {
         setImprovements(response.data.RET_DATA)
     }
 
+    const [date1, setDate1] = React.useState(null),
+          [date2, setDate2] = React.useState(null);
+
+    const [locale] = React.useState('ko');
+
     useEffect(() => {
         handleComapanyWorkplace()
         handleFetchList()
@@ -383,25 +417,27 @@ function List() {
                         </div>
                         <div>
                             <div className={classes.infoTitle}>요청일자</div>
-                            <TextField
-                                sx={{ width: 140 }}
-                                id="date"
-                                className={classes.selectMenu}
-                                type="date"
-                                format={"YYYY-MM-DD"}
-                                max={todaysDate}
-                                onInput={handleStartDate}
-                            />
+                            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                <DesktopDatePicker
+                                    className={classes.selectMenuDate}
+                                    label=" "
+                                    inputFormat="YYYY-MM-DD"
+                                    value={date1}
+                                    onChange={setDate1}
+                                    renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
+                                />
+                            </LocalizationProvider>
                             &nbsp;~&nbsp;
-                            <TextField
-                                sx={{ width: 140 }}
-                                id="date"
-                                className={classes.selectMenu}
-                                type="date"
-                                format={"YYYY-MM-DD"}
-                                max={todaysDate}
-                                onInput={handleEndDate}
-                            />
+                            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                <DesktopDatePicker
+                                    className={classes.selectMenuDate}
+                                    label=" "
+                                    inputFormat="YYYY-MM-DD"
+                                    value={date2}
+                                    onChange={setDate2}
+                                    renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
+                                />
+                            </LocalizationProvider>
                         </div>
                         <div>
                             <div className={classes.infoTitle}>요청자</div>
