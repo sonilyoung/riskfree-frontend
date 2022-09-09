@@ -22,8 +22,9 @@ import Select from '@mui/material/Select';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
-import { useGetLoginInfoMutation } from '../../hooks/api/MainManagement/MainManagement';
+import { useGetLoginInfoMutation, useGetCompanyInfoMutation } from '../../hooks/api/MainManagement/MainManagement';
 import { remove } from '../../services/core/User/Token';
+import { useUserToken } from '../../hooks/core/UserToken';
 
 import '../../assets/fonts/Pretendard-Regular.otf';
 import proba from '../../assets/fonts/Pretendard-Regular.otf';
@@ -570,6 +571,11 @@ const Default = ({ children }) => {
     const [loginInfo, setLoginInfo] = useState({})
     const [userPopup, setUserPopup] = useState(false)
     const [settingsPopup, setSettingsPopup] = useState(false)
+    const [userToken] = useUserToken()
+    const [companyInfo, setCompanyInfo] = useState({})
+    const companyId = userToken.getUserCompanyId()
+    const [getCompanyInfo] = useGetCompanyInfoMutation()
+
 
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -591,8 +597,16 @@ const Default = ({ children }) => {
         navigate(-1)
     }
 
+    const fetchCompanyInfo = async () => {
+        const response = await getCompanyInfo({
+            "companyId": companyId
+        })
+        setCompanyInfo(response.data.RET_DATA)
+    }
+
     useEffect(() => {
         handleLoginInfo()
+        fetchCompanyInfo()
     }, [])
 
     const [date, setDate] = React.useState(null);
@@ -696,7 +710,7 @@ const Default = ({ children }) => {
                             <div className={classes.rightMenu}>
                                 <div className={classes.userInformation}>
                                     <div>{loginInfo?.loginId} / <span>{loginInfo?.roleName}</span></div>
-                                    <div>계약기간 : 22.07.01 ~ 23.06.31</div>
+                                    <div>계약기간 : {companyInfo?.contractStartDate} ~ {companyInfo?.contractEndDate}</div>
                                 </div>
                                 <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
                                 <SettingsButton className={classes.mainMenuButton} onClick={() => setSettingsPopup(true)}></SettingsButton>

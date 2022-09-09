@@ -47,9 +47,14 @@ function useUserToken(props) {
         return decodedTokenPayload[1];
     };
 
+    const getUserCompanyId = () => {
+        const decodedTokenPayload = getDecodedTokenPayload();
+        return decodedTokenPayload[9];
+    }
 
 
-    return [{ setItem, getItem, getDecoded, isValid, getUserRoleCd, getUserLoginId }];
+
+    return [{ setItem, getItem, getDecoded, isValid, getUserRoleCd, getUserLoginId, getUserCompanyId }];
 }
 
 export default useUserToken;

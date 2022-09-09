@@ -1221,7 +1221,7 @@ const SystemAdministrator = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
                     <Stack spacing={2}>
-                        <Pagination count={10} boundaryCount={10} shape="rounded" showFirstButton showLastButton />
+                        {/* <Pagination count={10} boundaryCount={10} shape="rounded" showFirstButton showLastButton /> */}
                     </Stack>
                 </Grid>
             </Grid>

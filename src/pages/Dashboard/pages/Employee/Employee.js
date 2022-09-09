@@ -82,8 +82,9 @@ import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetDayInfoMutation, useGetNoticeListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
-import { useGetBaselineListMutation, useGetBaselineMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useUserToken } from '../../../../hooks/core/UserToken';
+import moment from 'moment'
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -1786,19 +1787,25 @@ const Employee = () => {
     const [baselineData, setBaselineData] = useState({})
     const [improvmentList, setImprovmentList] = useState([]);
     const [leaderImprovementList, setLeaderImprovementList] = useState([]);
-    const [safeWorkHistoryList, setSafeWorkHistoryList] = useState({});
+    const [safeWorkHistoryList, setSafeWorkHistoryList] = useState([]);
     const [accidentTotal, setAccidentTotal] = useState({});
     const [noticesList, setNoticesList] = useState([]);
     const [dayInfo, setDayInfo] = useState();
     const [toggleGrid, setToggleGrid] = useState(false)
 
-
+    const [userToken] = useUserToken()
     const [getSafeWorkHistoryList] = useGetSafeWorkHistoryListMutation();
     const [getAccidentTotal] = useGetAccidentTotalMutation();
     const [getImprovementList] = useGetImprovementListMutation();
     const [getLeaderImprovementList] = useGetLeaderImprovementListMutation();
     const [getDayInfo] = useGetDayInfoMutation();
     const [getNoticeList] = useGetNoticeListMutation();
+    const [getCompanyInfo] = useGetCompanyInfoMutation()
+    const [companyInfo, setCompanyInfo] = useState({})
+    const companyId = userToken.getUserCompanyId()
+    const [hours, setHours] = useState("")
+    const [minutes, setMinutes] = useState("")
+    const [getEssentialRate] = useGetEssentialRateMutation()
 
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -1848,7 +1855,13 @@ const Employee = () => {
         })
         setBaselineData(response.data.RET_DATA)
     }
-    console.log(baselineData)
+
+    const fetchCompanyInfo = async () => {
+        const response = await getCompanyInfo({
+            "companyId": companyId
+        })
+        setCompanyInfo(response.data.RET_DATA)
+    }
 
     const listLinks = [
         { title: "안전보건 목표 및 경영방침 설정", percent: "100%", status: "normal" },
@@ -1866,7 +1879,7 @@ const Employee = () => {
         const response = await getAccidentTotal({
             "baselineId": 6,
             "caughtCnt": 0,
-            "companyId": 1,
+            "companyId": companyId,
             "workplaceId": 1
         });
         setAccidentTotal(response.data.RET_DATA);
@@ -1880,6 +1893,21 @@ const Employee = () => {
         setSafeWorkHistoryList(response.data.RET_DATA);
     }
 
+    const fetchDayInfo = async () => {
+        const response = await getDayInfo()
+    }
+
+    const refreshClock = () => {
+        const now = moment()
+        setHours(now.format("hh"))
+        setMinutes(now.format("mm"))
+    }
+
+    const fetchEssentialRate = async () => {
+        const response = await getEssentialRate({
+            "baselineId": baseline
+        })
+    }
 
     useEffect(() => {
         fetchBaseline()
@@ -1890,6 +1918,14 @@ const Employee = () => {
         handleFetchAccidentTotalList();
         handleFetchSafeWorkHistoryList();
         fetchBaselineList()
+        fetchCompanyInfo()
+    }, [])
+
+    useEffect(() => {
+        const timerId = setInterval(refreshClock, 1000);
+        return function cleanup() {
+            clearInterval(timerId);
+        };
     }, [])
 
     const [date, setDate] = React.useState(null);
@@ -1994,7 +2030,7 @@ const Employee = () => {
                             <div className={classes.rightMenu}>
                                 <div className={classes.userInformation}>
                                     <div>{loginInfo?.loginId} / <span>{loginInfo?.roleName}</span></div>
-                                    <div>계약기간 : 22.07.01 ~ 23.06.31</div>
+                                    <div>계약기간 : {companyInfo?.contractStartDate} ~ {companyInfo?.contractEndDate}</div>
                                 </div>
                                 <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
                                 <SettingsButton className={classes.mainMenuButton} onClick={() => setSettingsPopup(true)}></SettingsButton>
@@ -2107,14 +2143,14 @@ const Employee = () => {
                     <Grid className={classes.headerWorkplace} item xs={12} sx={{ marginTop: '-45px' }}>
                         <div className={classes.adminField + ' ' + classes.adminFieldLeft}>
                             <div className={classes.adminFieldText}>안전보건목표</div>
-                            <div className={classes.adminFieldText}>안전사고 무재해 2배수 달성!</div>
+                            <div className={classes.adminFieldText}>{companyInfo?.shGoal}</div>
                         </div>
                         <div className={classes.adminLogo}>
                             <img src={adminLogo} alt="admin logo" />
                         </div>
                         <div className={classes.adminField + ' ' + classes.adminFieldRight}>
                             <div className={classes.adminFieldText}>경영방침</div>
-                            <div className={classes.adminFieldText}>신뢰받는 세계 NO1. 사업장 구축</div>
+                            <div className={classes.adminFieldText}>{companyInfo?.missionStatements}</div>
                         </div>
                     </Grid>
                     <Grid className={classes.headerNavigation} item xs={5.8}>
@@ -2350,7 +2386,7 @@ const Employee = () => {
                                 onChange={(e) => setBaseline(e.target.value)}
                                 inputProps={{ 'aria-label': 'Without label' }}>
                                 {baselineList?.map((baseline) => (
-                                    <MenuItem MenuItem value={baseline.baselineId} >{baseline.baselineName}</MenuItem>
+                                    <MenuItem MenuItem value={baseline.baselineId} onClick={() => setBaseline(baseline.baselineId)}>{baseline.baselineName}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
@@ -2702,11 +2738,11 @@ const Employee = () => {
                                     <div className={classes.footTime + ' dateBox'}>
                                         <div>TIME</div>
                                         <div className={classes.timeNums}>
-                                            <div><img src={numTwo} alt="number two" /></div>
-                                            <div><img src={numOne} alt="number one" /></div>
+                                            {hours?.split("").map((e) => (<div>{e}</div>
+                                            ))}
                                             <span>:</span>
-                                            <div><img src={numThree} alt="number three" /></div>
-                                            <div><img src={numNine} alt="number nine" /></div>
+                                            {minutes?.split("").map((e) => (<div>{e}</div>
+                                            ))}
                                         </div>
                                     </div>
                                 </Grid>
