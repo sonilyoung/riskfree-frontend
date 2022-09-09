@@ -74,7 +74,7 @@ import Slider from 'react-slick';
 
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
-import { useGetLoginInfoMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetCompanyInfoMutation, useGetLoginInfoMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetLeaderImprovementListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetAccidentTotalMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetSafeWorkHistoryListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
@@ -1374,6 +1374,8 @@ const Director = () => {
     const classes = useStyles();
     const navigate = useNavigate();
 
+    const [getCompanyInfo] = useGetCompanyInfoMutation();
+
     const [noticesSelect] = useNoticesSelectMutation()
     const [noticesList, setNoticesList] = useState()
     const [userPopup, setUserPopup] = useState(false)
@@ -1391,6 +1393,7 @@ const Director = () => {
     const [hours, setHours] = useState("")
     const [minutes, setMinutes] = useState("")
     const [toggleGrid, setToggleGrid] = useState(false)
+    const [companyInfo, setCompanyInfo] = useState({});
 
     const handleLogOut = () => {
         remove();
@@ -1414,6 +1417,12 @@ const Director = () => {
             "param": ""
         })
         setNoticesList(response)
+    }
+
+    const fetchCompanyInfo = async () => {
+        const response = await getCompanyInfo({});
+        setCompanyInfo(response);
+        console.log(response);
     }
 
     const fetchLeadersImproveList = async () => {
@@ -1471,6 +1480,7 @@ const Director = () => {
         fetchLeadersImproveList()
         fetchAccidentTotal()
         fetchSafeWorkHistoryList()
+        fetchCompanyInfo();
     }, [])
 
     useEffect(() => {
@@ -1602,7 +1612,7 @@ const Director = () => {
                                         inputProps={{ 'aria-label': 'Without label' }}
                                         disabled
                                     >
-                                        <MenuItem value="">55~300인 이하</MenuItem>
+                                        <MenuItem value=""> {companyInfo.data?.RET_DATA?.scale} 이하</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl sx={{ width: 150, marginLeft: '8px' }} className={classes.dropMenu}>
@@ -1614,14 +1624,14 @@ const Director = () => {
                                         inputProps={{ 'aria-label': 'Without label' }}
                                         disabled
                                     >
-                                        <MenuItem value="">건설업</MenuItem>
+                                        <MenuItem value=""> {companyInfo.data?.RET_DATA?.sector}</MenuItem>
                                     </Select>
                                 </FormControl>
                             </div>
                             <div className={classes.rightMenu}>
                                 <div className={classes.userInformation}>
                                     <div>{loginInfo?.loginId} / <span>{loginInfo?.roleName}</span></div>
-                                    <div>계약기간 : 22.07.01 ~ 23.06.31</div>
+                                    <div>계약기간 : {companyInfo.data?.RET_DATA?.contractStartDate} ~  {companyInfo.data?.RET_DATA?.contractEndDate}</div>
                                 </div>
                                 <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
                                 <SettingsButton className={classes.mainMenuButton} onClick={() => setSettingsPopup(true)}></SettingsButton>
@@ -1734,14 +1744,14 @@ const Director = () => {
                     <Grid className={classes.headerWorkplace} item xs={12} sx={{ marginTop: '-45px' }}>
                         <div className={classes.adminField + ' ' + classes.adminFieldLeft}>
                             <div className={classes.adminFieldText}>안전보건목표</div>
-                            <div className={classes.adminFieldText}>안전사고 무재해 2배수 달성!</div>
+                            <div className={classes.adminFieldText}> {companyInfo.data?.RET_DATA?.shGoal}</div>
                         </div>
                         <div className={classes.adminLogo}>
                             <img src={adminLogo} alt="admin logo" />
                         </div>
                         <div className={classes.adminField + ' ' + classes.adminFieldRight}>
                             <div className={classes.adminFieldText}>경영방침</div>
-                            <div className={classes.adminFieldText}>신뢰받는 세계 NO1. 사업장 구축</div>
+                            <div className={classes.adminFieldText}>{companyInfo.data?.RET_DATA?.missionStatements}</div>
                         </div>
                     </Grid>
                     <Grid className={classes.headerNavigation} item xs={5.8}>
