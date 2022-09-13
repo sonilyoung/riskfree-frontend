@@ -136,11 +136,13 @@ const Login = () => {
 
             const userLoggedInRoleCd = userToken.getUserRoleCd();
             const redirectPath = getPath(userLoggedInRoleCd);
+            console.log(userLoggedInRoleCd)
 
-            const defaultBaselineResponse = await getBaseline({});
-            const defaultBaselineId = defaultBaselineResponse.data.RET_DATA.baselineId;
-            
-            dispatch(setBaselineId(defaultBaselineId));
+            if (userLoggedInRoleCd != "000") {
+                const defaultBaselineResponse = await getBaseline({});
+                const defaultBaselineId = defaultBaselineResponse.data.RET_DATA.baselineId;
+                dispatch(setBaselineId(defaultBaselineId));
+            }
             navigate(redirectPath);
 
         } else {
@@ -152,7 +154,7 @@ const Login = () => {
     //TODO:  Here is the usage of the main selector. Must be deleted soon.
     const currentBaseline = useSelector(selectBaselineId);
     const currentWorkplaceId = useSelector(selectWorkplaceId);
-    
+
     console.log(currentBaseline);
     console.log(currentWorkplaceId);
 

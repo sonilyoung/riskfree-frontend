@@ -1541,7 +1541,7 @@ const Director = () => {
 
     const fetchSafeWorkHistoryList = async () => {
         const response = await getSafeWorkHistoryList({
-            "baselineId": 12,
+            "baselineId": 6,
             "companyId": userCompanyId,
             "workplaceId": userWorkplaceId
         })

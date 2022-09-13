@@ -1984,6 +1984,15 @@ const Employee = () => {
         setDutyDetailList(response.data.RET_DATA)
     }
 
+    const handleEssentailRateMeasure = () => {
+        const essentialRateMeasureScore = essentialRates?.topScore;
+
+        if (essentialRateMeasureScore === 'danger') return 75;
+        else if (essentialRateMeasureScore === 'warning') return 25;
+        else if (essentialRateMeasureScore === 'caution') return -25;
+        else if (essentialRateMeasureScore === 'normal') return -75;
+    }
+
     console.log(relatedLawRatePercentage)
     useEffect(() => {
         fetchBaseline()
@@ -2682,7 +2691,7 @@ const Employee = () => {
                     <Grid container item xs={12} className={hoverContainer ? classes.wrap_hover : classes.hoverWrap} onMouseLeave={() => setHoverContainer(false)}>
                         <Grid className={classes.gageWrap} item xs={2}>
                             <div className={classes.gageArrow}>
-                                <div className={classes.needleImg} style={{ transform: 'rotate(-75deg)' }}></div>
+                                <div className={classes.needleImg} style={{ transform: `rotate(${handleEssentailRateMeasure()}deg)` }}></div>
                                 <div className={classes.gageState}></div>
                             </div>
                         </Grid>

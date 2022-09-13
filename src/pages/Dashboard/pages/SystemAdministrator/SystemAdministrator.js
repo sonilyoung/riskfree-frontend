@@ -336,7 +336,7 @@ const useStyles = makeStyles(() => ({
             display: "none"
         },
         '&.infoMember': {
-            top: '180px',
+            top: '109px',
             left: '560px',
             '& [class*=headNest] [class*=dataNest]': {
                 background: '#c8ddf2'
