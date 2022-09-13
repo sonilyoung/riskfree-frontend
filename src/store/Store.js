@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { userSlice } from '../slices/User';
+import { mainSelectionSlice } from '../slices/selections/MainSelection';
 import { loginManagement } from '../hooks/api/LoginManagement/LoginManagement';
 import { userManagement } from '../hooks/api/UserManagement/UserManagement';
 import { noticesManagement } from '../hooks/api/NoticesManagement/NoticesManagement';
@@ -16,6 +17,7 @@ import { relatedLawManagement } from '../hooks/api/RelatedLawManagement/RelatedL
 export const store = configureStore({
     reducer: {
         [userSlice.name]: userSlice.reducer,
+        [mainSelectionSlice.name]: mainSelectionSlice.reducer,
         [loginManagement.reducerPath]: loginManagement.reducer,
         [userManagement.reducerPath]: userManagement.reducer,
         [noticesManagement.reducerPath]: noticesManagement.reducer,

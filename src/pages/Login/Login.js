@@ -8,6 +8,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import { selectUser, setUser } from '../../slices/User';
+import { selectBaselineId, selectWorkplaceId } from '../../slices/selections/MainSelection';
 import { useLoginMutation } from '../../hooks/api/LoginManagement/LoginManagement';
 
 import { makeStyles } from '@mui/styles';
@@ -96,6 +97,7 @@ const ClosePopupButton2 = styled(ButtonUnstyled)`
 
 const Login = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
     const [values, setValues] = useState({
         id: {
             value: '',
@@ -140,6 +142,13 @@ const Login = () => {
             alert('Credentials are wrong. Please try again.');
         }
     }
+
+    //TODO:  Here is the usage of the main selector. Must be deleted soon.
+    const currentBaseline = useSelector(selectBaselineId);
+    const currentWorkplaceId = useSelector(selectWorkplaceId);
+    
+    console.log(currentBaseline);
+    console.log(currentWorkplaceId);
 
     return (
         <WideLayout>

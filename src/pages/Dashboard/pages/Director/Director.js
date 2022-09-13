@@ -84,6 +84,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 import useUserToken from '../../../../hooks/core/UserToken/UserToken';
+import { setWorkplaceId } from '../../../../slices/selections/MainSelection';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
@@ -1367,6 +1369,7 @@ const footerSlider = {
 const Director = () => {
     const classes = useStyles();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [userToken] = useUserToken();
     const [getDayInfo] = useGetDayInfoMutation();
@@ -1608,6 +1611,10 @@ const Director = () => {
         );
     }
 
+    function handleFactoryChange(props) {
+        setUserInfo(props);
+        dispatch(setWorkplaceId(props.userWorkplaceId));
+    }
 
     useEffect(() => {
         fetchBaseline();
@@ -2045,9 +2052,13 @@ const Director = () => {
                         <div className={classes.navSlider}>
                             {/* WORKPLACE LIST */}
                             <Slider {...headerSlider}>
-                                <div><MainNavButton onClick={() => setUserInfo({ ...userInfo, userWorkplaceId: null })}>전체사업장</MainNavButton></div>
+                                <div>
+                                    <MainNavButton onClick={
+                                        () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })                                        
+                                    }>전체사업장</MainNavButton>
+                                </div>
                                 {workplaceList.length != 0 && workplaceList?.RET_DATA?.map(workplaceItem =>
-                                    <div><MainNavButton onClick={() => setUserInfo({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}>{workplaceItem.workplaceName}</MainNavButton></div>
+                                    <div><MainNavButton onClick={() => handleFactoryChange({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}>{workplaceItem.workplaceName}</MainNavButton></div>
                                 )}
                             </Slider>
                         </div>
