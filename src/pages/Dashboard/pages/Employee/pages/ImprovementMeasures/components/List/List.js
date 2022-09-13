@@ -4,6 +4,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import { useSelector, useDispatch } from 'react-redux';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 
@@ -31,7 +32,8 @@ import pageNext from '../../../../../../../../assets/images/btn_nxt.png';
 import pagePrev from '../../../../../../../../assets/images/btn_pre.png';
 
 import { useGetWorkplaceListMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
-import { useImprovementSelectMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement'
+import { useImprovementSelectMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement';
+import { selectBaselineId, selectWorkplaceId } from '../../../../../../../../slices/selections/MainSelection';
 import moment from "moment";
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -347,10 +349,14 @@ function List() {
     const handlePageChange = (event, value) => {
         setPage(value)
     }
+
+    const currentBaseline = useSelector(selectBaselineId);
+    const currentWorkplaceId = useSelector(selectWorkplaceId);
+
     const handleFetchList = async () => {
         const response = await improvementSelect(
             {
-                "baselineId": 6,
+                "baselineId": currentBaseline,
                 "companyId": null,
                 "countPerPage": 10,
                 "endDate": endDate,
@@ -358,7 +364,7 @@ function List() {
                 "reqUserCd": reqUser,
                 "startDate": startDate,
                 "statusCd": statusCd,
-                "workplaceId": workplaceSelect
+                "workplaceId": currentWorkplaceId
             }
         )
         setImprovements(response.data.RET_DATA)
@@ -370,8 +376,6 @@ function List() {
         handleComapanyWorkplace()
         handleFetchList()
     }, [page])
-
-    console.log(startDate)
 
     return (
         <DefaultLayout>
