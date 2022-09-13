@@ -50,11 +50,16 @@ function useUserToken(props) {
     const getUserCompanyId = () => {
         const decodedTokenPayload = getDecodedTokenPayload();
         return decodedTokenPayload[9];
+    };
+
+    const getUserWorkplaceId = () => {
+        const decodedTokenPayload = getDecodedTokenPayload();
+        return decodedTokenPayload[11];
     }
 
 
 
-    return [{ setItem, getItem, getDecoded, isValid, getUserRoleCd, getUserLoginId, getUserCompanyId }];
+    return [{ setItem, getItem, getDecoded, isValid, getUserRoleCd, getUserLoginId, getUserCompanyId, getUserWorkplaceId }];
 }
 
 export default useUserToken;

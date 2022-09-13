@@ -72,9 +72,8 @@ import 'slick-carousel/slick/slick-theme.css';
 
 import Slider from 'react-slick';
 
-import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
-import { useGetCompanyInfoMutation, useGetLoginInfoMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentsPreventionMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetLoginInfoMutation, useGetNoticeListMutation, useGetRelatedRawRateMutation, useGetWorkplaceListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetLeaderImprovementListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetAccidentTotalMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetSafeWorkHistoryListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
@@ -84,6 +83,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
+import useUserToken from '../../../../hooks/core/UserToken/UserToken';
 
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
@@ -548,8 +548,9 @@ const useStyles = makeStyles(() => ({
         width: '100%',
         height: '100%',
         display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
+        // flexWrap: 'wrap',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
         alignItems: 'center',
         padding: '10%',
         boxSizing: 'border-box',
@@ -1340,19 +1341,12 @@ const PromptButtonWhite = styled(ButtonUnstyled)`
     } 
 `;
 
+
 const headerSlider = {
     dots: false,
     infinite: false,
     speed: 300,
     slidesToShow: 5,
-    slidesToScroll: 1
-}
-
-const dashboardSlider = {
-    dots: false,
-    infinite: true,
-    speed: 1000,
-    slidesToShow: 1,
     slidesToScroll: 1
 }
 
@@ -1374,10 +1368,19 @@ const Director = () => {
     const classes = useStyles();
     const navigate = useNavigate();
 
+    const [userToken] = useUserToken();
+    const [getDayInfo] = useGetDayInfoMutation();
+    const [getNoticeList] = useGetNoticeListMutation();
+    const [getEssentialRate] = useGetEssentialRateMutation();
+    const [getAccidentsPrevention] = useGetAccidentsPreventionMutation();
+    const [getImprovementLawOrder] = useGetImprovementLawOrderMutation();
+    const [getRelatedRawRate] = useGetRelatedRawRateMutation();
     const [getCompanyInfo] = useGetCompanyInfoMutation();
+    const [getWorkplaceList] = useGetWorkplaceListMutation();
+    const [getBaseline] = useGetBaselineMutation();
+    const [getBaselineList] = useGetBaselineListMutation();
 
-    const [noticesSelect] = useNoticesSelectMutation()
-    const [noticesList, setNoticesList] = useState()
+    const [noticesList, setNoticesList] = useState([]);
     const [userPopup, setUserPopup] = useState(false)
     const [settingsPopup, setSettingsPopup] = useState(false)
     const [chartPop, setChartPop] = useState(false)
@@ -1389,11 +1392,29 @@ const Director = () => {
     const [getAccidentTotal] = useGetAccidentTotalMutation()
     const [accidentTotal, setAccidentTotal] = useState({})
     const [getSafeWorkHistoryList] = useGetSafeWorkHistoryListMutation()
-    const [safeWorkHistoyList, setSafeWorkHistoryList] = useState([])
+    const [safeWorkHistoryList, setSafeWorkHistoryList] = useState({})
     const [hours, setHours] = useState("")
     const [minutes, setMinutes] = useState("")
     const [toggleGrid, setToggleGrid] = useState(false)
     const [companyInfo, setCompanyInfo] = useState({});
+    const [workplaceList, setWorkplaceList] = useState([]);
+    const [essentialRateList, setEssentialRateList] = useState([]);
+    const [accidentsPrevention, setAccidentsPrevention] = useState({});
+    const [improvementLawOrderRate, setImprovementLawOrderRate] = useState({});
+    const [relatedRawRate, setRelatedRawRate] = useState({});
+    const [baselineData, setBaselineData] = useState({});
+    const [baselineList, setBaselineList] = useState([]);
+    const [baselineId, setBaselineId] = useState(12);
+    const [baselineStart, setBaselineStart] = useState("2022-09-08");
+    const [dayInfo, setDayInfo] = useState({});
+
+    // izmeniti ovo
+    const [userInfo, setUserInfo] = useState({
+        userCompanyId: userToken.getUserCompanyId(),
+        userWorkplaceId: userToken.getUserWorkplaceId(),
+    });
+
+    const { userCompanyId, userWorkplaceId } = userInfo;
 
     const handleLogOut = () => {
         remove();
@@ -1409,63 +1430,127 @@ const Director = () => {
         setNum(event.target.value);
     };
 
-    const handleFetchList = async () => {
-        const response = await noticesSelect({
-            "col": "",
-            "countPerPage": null,
-            "pageNum": null,
-            "param": ""
+    const handleSlickCircleColor = (percentage) => {
+        if (!percentage && percentage != '%') {
+            return ' red';
+        } else {
+            const percentageNumber = percentage && parseFloat(percentage?.split('%')[0])
+
+            if (percentageNumber < 70) return ' red';
+            else if (percentageNumber >= 70 && percentageNumber <= 79) return ' orange';
+            else if (percentageNumber >= 80 && percentageNumber < 90) return ' yellow';
+            else if (percentageNumber >= 90) return ' green';
+        }
+    }
+
+    const handleEssentailRateMeasure = () => {
+        const essentialRateMeasureScore = essentialRateList?.RET_DATA?.topScore;
+
+        if (essentialRateMeasureScore === 'danger') return 75;
+        else if (essentialRateMeasureScore === 'warning') return 25;
+        else if (essentialRateMeasureScore === 'caution') return -25;
+        else if (essentialRateMeasureScore === 'normal') return -75;
+    }
+
+
+    const fetchBaselineList = async () => {
+        const response = await getBaselineList({});
+        setBaselineList(response.data.RET_DATA);
+        console.log(response);
+    }
+
+    const fetchBaseline = async () => {
+        const response = await getBaseline({
+            "baselineId": baselineId
         })
-        setNoticesList(response)
+        setBaselineData(response.data.RET_DATA);
+    }
+
+    const fetchNoticeList = async () => {
+        const response = await getNoticeList({});
+        setNoticesList(response.data.RET_DATA);
     }
 
     const fetchCompanyInfo = async () => {
-        const response = await getCompanyInfo({});
+        const response = await getCompanyInfo({
+            "companyId": userCompanyId,
+            "workplaceId": userWorkplaceId
+        });
         setCompanyInfo(response);
-        console.log(response);
+    }
+
+    const fetchWorkplaceList = async () => {
+        const response = await getWorkplaceList();
+        setWorkplaceList(response.data);
+    }
+
+    const fetchEssentialRateList = async () => {
+        const response = await getEssentialRate({
+            "baselineId": baselineId,
+            "workplaceId": userWorkplaceId
+        });
+        setEssentialRateList(response.data);
+    }
+
+    const fetchAccidentsPrevention = async () => {
+        const response = await getAccidentsPrevention({
+            "baselineId": baselineId,
+            "workplaceId": userWorkplaceId
+        });
+        setAccidentsPrevention(response.data);
+    }
+
+    const fetchImprovementLawOrderRate = async () => {
+        const response = await getImprovementLawOrder({
+            "baselineId": baselineId,
+            "workplaceId": userWorkplaceId
+        });
+        setImprovementLawOrderRate(response.data);
+    }
+
+    const fetchRelatedRawRate = async () => {
+        const response = await getRelatedRawRate({
+            "baselineId": baselineId,
+            "workplaceId": userWorkplaceId
+        });
+        setRelatedRawRate(response.data);
     }
 
     const fetchLeadersImproveList = async () => {
         const response = await getLeaderImprovementList({
-            "baselineEnd": 1,
-            "baselineId": 6,
-            "baselineStart": 1,
-            "companyId": 1,
-            "complete": 1,
+            "baselineId": baselineId,
+            "companyId": userCompanyId,
             "instruction": 1,
-            "progress": 1,
-            "role": 1,
-            "workplaceId": 1
-        })
-        setLeadersImproveList(response.data.RET_DATA)
+            "workplaceId": userWorkplaceId
+        });
+        setLeadersImproveList(response.data.RET_DATA);
     }
 
     const fetchAccidentTotal = async () => {
         const response = await getAccidentTotal({
-            "baselineId": 6,
+            "baselineId": baselineId,
             "caughtCnt": 0,
-            "companyId": 1,
-            "workplaceId": 1
+            "companyId": userCompanyId,
+            "workplaceId": userWorkplaceId
         })
-        setAccidentTotal(response.data.RET_DATA)
+        setAccidentTotal(response.data.RET_DATA);
     }
 
     const fetchSafeWorkHistoryList = async () => {
         const response = await getSafeWorkHistoryList({
-            "baselineId": 6,
-            "blackout": 1,
-            "closeness": 1,
-            "companyId": 1,
-            "excavation": 1,
-            "fileId": 1,
-            "fire": 1,
-            "noticeId": 1,
-            "radiation": 1,
-            "sue": 0,
-            "userId": 1,
-            "workplaceId": 1
+            "baselineId": 12,
+            "companyId": userCompanyId,
+            "workplaceId": userWorkplaceId
         })
-        setSafeWorkHistoryList(response.data.RET_DATA)
+        setSafeWorkHistoryList(response.data.RET_DATA);
+    }
+
+    const fetchDayInfo = async () => {
+        const response = await getDayInfo({
+            "baselineStart": baselineStart
+        })
+        setDayInfo(response.data.RET_DATA);
+
     }
 
     const refreshClock = () => {
@@ -1474,25 +1559,82 @@ const Director = () => {
         setMinutes(now.format("mm"))
     }
 
-    useEffect(() => {
-        handleFetchList()
-        handleLoginInfo()
-        fetchLeadersImproveList()
-        fetchAccidentTotal()
-        fetchSafeWorkHistoryList()
-        fetchCompanyInfo();
-    }, [])
+    const [date, setDate] = React.useState(null);
+
+    const [locale] = React.useState('ko');
+
+    const dashboardSlider = {
+        dots: false,
+        infinite: true,
+        speed: 1000,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        nextArrow: <SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />
+    }
+
+    function SampleNextArrow(props) {
+        const { className, style, onClick } = props;
+        return (
+            <div
+                className={className}
+                style={{ ...style, display: "block" }}
+                onClick={() => {
+                    let baselineIdIndex = baselineId && baselineList.length ? baselineList.findIndex(baselineItem => baselineItem.baselineId === baselineId) + 1 : 0;
+                    if (baselineIdIndex >= baselineList.length) {
+                        baselineIdIndex = 0;
+                    }
+                    setBaselineStart(baselineList.at(baselineIdIndex).baselineStart);
+                    setBaselineId(baselineList.at(baselineIdIndex).baselineId);
+                    onClick();
+                }}
+            />
+        );
+    }
+
+    function SamplePrevArrow(props) {
+        const { className, style, onClick } = props;
+        return (
+            <div
+                className={className}
+                style={{ ...style, display: "block" }}
+                onClick={() => {
+                    const baselineIdIndex = baselineId && baselineList.length ? baselineList.findIndex(baselineItem => baselineItem.baselineId === baselineId) - 1 : 0;
+                    setBaselineStart(baselineList.at(baselineIdIndex).baselineStart);
+                    setBaselineId(baselineList.at(baselineIdIndex).baselineId);
+                    onClick();
+                }}
+            />
+        );
+    }
+
 
     useEffect(() => {
+        fetchBaseline();
+        fetchCompanyInfo();
+        fetchEssentialRateList();
+        fetchImprovementLawOrderRate();
+        fetchRelatedRawRate();
+        fetchLeadersImproveList();
+        fetchAccidentTotal();
+        fetchSafeWorkHistoryList();
+        // fetchAccidentsPrevention();
+        fetchDayInfo();
+
+    }, [baselineId, userWorkplaceId]);
+
+    useEffect(() => {
+        fetchBaselineList();
+        handleLoginInfo();
+        fetchWorkplaceList();
+        fetchNoticeList();
+
         const timerId = setInterval(refreshClock, 1000);
         return function cleanup() {
             clearInterval(timerId);
         };
-    }, [])
+    }, []);
 
-    const [date, setDate] = React.useState(null);
-
-    const [locale] = React.useState('ko');
 
     return (
         <WideLayout>
@@ -1664,7 +1806,7 @@ const Director = () => {
                                                         inputFormat="YYYY-MM-DD"
                                                         value={date}
                                                         onChange={setDate}
-                                                        renderInput={(params) => <TextField {...params} sx={{width: 220}} />}
+                                                        renderInput={(params) => <TextField {...params} sx={{ width: 220 }} />}
                                                     />
                                                 </LocalizationProvider>
                                             </AccordionDetails>
@@ -1901,15 +2043,12 @@ const Director = () => {
                             </div>
                         </div>
                         <div className={classes.navSlider}>
+                            {/* WORKPLACE LIST */}
                             <Slider {...headerSlider}>
-                                <div><MainNavButton>전체사업장</MainNavButton></div>
-                                <div><MainNavButton>여수사업장</MainNavButton></div>
-                                <div><MainNavButton>울산사업장</MainNavButton></div>
-                                <div><MainNavButton>서산사업장</MainNavButton></div>
-                                <div><MainNavButton>인천사업장</MainNavButton></div>
-                                <div><MainNavButton>광주사업장</MainNavButton></div>
-                                <div><MainNavButton>인천사업장</MainNavButton></div>
-                                <div><MainNavButton>대전사업장</MainNavButton></div>
+                                <div><MainNavButton onClick={() => setUserInfo({ ...userInfo, userWorkplaceId: null })}>전체사업장</MainNavButton></div>
+                                {workplaceList.length != 0 && workplaceList?.RET_DATA?.map(workplaceItem =>
+                                    <div><MainNavButton onClick={() => setUserInfo({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}>{workplaceItem.workplaceName}</MainNavButton></div>
+                                )}
                             </Slider>
                         </div>
                     </Grid>
@@ -1917,154 +2056,154 @@ const Director = () => {
                 </Grid>
                 <Grid className={classes.pageBody} item xs={10.7}>
                     <div className={classes.managementOrder}>
-                        관리차수<strong>12</strong>차 :<strong>22.01.01 ~ 22.04.30</strong>
+                        {baselineData && <>{baselineData?.baselineName} 차 :<strong>{baselineData?.baselineStart} ~ {baselineData?.baselineEnd}</strong></>}
                     </div>
-                    <Slider className={classes.dashSlider} {...dashboardSlider}>
+                    <Slider className={classes.dashSlider} {...dashboardSlider} >
                         <div className={classes.dashboardSlide}>
-                            <div className={classes.slickCircle + ' green'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate1?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>93</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate1?.score}</strong></div>
                                     <div>안전보건 목표 및<br /> 경영방침</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' yellow'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate2?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>89</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate2?.score}</strong></div>
                                     <div>안전보건 총괄관리<br /> 전담조직</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' orange'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate3?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>74</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate3?.score}</strong></div>
                                     <div>유해요인개선<br /> 업무절차</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' red'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate4?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>54</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate4?.score}</strong></div>
                                     <div>예산편성 및<br /> 집행관리</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' green'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate5?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>100</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate5?.score}</strong></div>
                                     <div>업무수행 권한<br /> 및 책임</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' yellow'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate6?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>83</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate6?.score}</strong></div>
                                     <div>안전보건 전문인력<br /> 배치</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' green'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate7?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>96</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate7?.score}</strong></div>
                                     <div>종사자 개선<br /> 의견수렴</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' green'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate8?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>94</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate8?.score}</strong></div>
                                     <div>비상대응<br /> 절차마련</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' orange'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate9?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>70</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate9?.score}</strong></div>
                                     <div>도급/용역 위탁 시<br /> 안전보건 확보</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' red'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor('100%')}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>53</strong>%</div>
+                                    <div><strong>{accidentsPrevention?.RET_DATA?.enforceRate}10</strong>%</div>
                                     <div>재발방지<br /> 대책</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' orange'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(improvementLawOrderRate?.RET_DATA?.improvemetRate)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>72</strong>%</div>
+                                    <div><strong>{improvementLawOrderRate?.RET_DATA?.improvemetRate}</strong></div>
                                     <div>개선/시정<br /> 명령</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' yellow'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor('0%')}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>72</strong>%</div>
+                                    <div><strong>{relatedRawRate?.RET_DATA?.relatedLawRate}</strong></div>
                                     <div>관계법령에 따른<br /> 의무이행</div>
                                 </Link>
                             </div>
                         </div>
 
                         <div className={classes.dashboardSlide}>
-                            <div className={classes.slickCircle + ' red'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate1?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>32</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate1?.score}</strong></div>
                                     <div>안전보건 목표 및<br /> 경영방침</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' yellow'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate2?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>88</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate2?.score}</strong></div>
                                     <div>안전보건 총괄관리<br /> 전담조직</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' orange'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate3?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>73</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate3?.score}</strong></div>
                                     <div>유해요인개선<br /> 업무절차</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' red'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate4?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>52</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate4?.score}</strong></div>
                                     <div>예산편성 및<br /> 집행관리</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' green'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate5?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>100</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate5?.score}</strong></div>
                                     <div>업무수행 권한<br /> 및 책임</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' yellow'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate6?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>81</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate6?.score}</strong></div>
                                     <div>안전보건 전문인력<br /> 배치</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' yellow'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate7?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>86</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate7?.score}</strong></div>
                                     <div>종사자 개선<br /> 의견수렴</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' green'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate8?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>92</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate8?.score}</strong></div>
                                     <div>비상대응<br /> 절차마련</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' orange'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate9?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>74</strong>%</div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate9?.score}</strong></div>
                                     <div>도급/용역 위탁 시<br /> 안전보건 확보</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' green'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor('100%')}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>98</strong>%</div>
+                                    <div><strong>{accidentsPrevention?.RET_DATA?.enforceRate}10</strong>%</div>
                                     <div>재발방지<br /> 대책</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' orange'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(improvementLawOrderRate?.RET_DATA?.improvemetRate)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>74</strong>%</div>
+                                    <div><strong>{improvementLawOrderRate?.RET_DATA?.improvemetRate}</strong></div>
                                     <div>개선/시정<br /> 명령</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + ' yellow'}>
+                            <div className={classes.slickCircle + handleSlickCircleColor('0%')}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>70</strong>%</div>
+                                    <div><strong>{relatedRawRate?.RET_DATA?.relatedLawRate}</strong></div>
                                     <div>관계법령에 따른<br /> 의무이행</div>
                                 </Link>
                             </div>
@@ -2075,7 +2214,7 @@ const Director = () => {
 
                     <Grid className={classes.gageWrap} item xs={2}>
                         <div className={classes.gageArrow}>
-                            <div className={classes.needleImg} style={{ transform: 'rotate(25deg)' }}></div>
+                            <div className={classes.needleImg} style={{ transform: `rotate(${handleEssentailRateMeasure()}deg)` }}></div>
                             <div className={classes.gageState}></div>
                         </div>
                     </Grid>
@@ -2088,17 +2227,17 @@ const Director = () => {
                                 <div className={classes.bottomBox + ' leftBox'}>
                                     <div>
                                         <div>지시</div>
-                                        <strong>{leadersImproveList[0]?.instruction}</strong>
+                                        <strong>{leadersImproveList && leadersImproveList[0] ? leadersImproveList[0]?.instruction : 0}</strong>
                                         <div>건</div>
                                     </div>
                                     <div>
                                         <div>진행</div>
-                                        <strong>{leadersImproveList[0]?.progress}</strong>
+                                        <strong>{leadersImproveList && leadersImproveList[0] ? leadersImproveList[0]?.progress : 0}</strong>
                                         <div>건</div>
                                     </div>
                                     <div>
                                         <div>완료</div>
-                                        <strong>{leadersImproveList[0]?.complete}</strong>
+                                        <strong>{leadersImproveList && leadersImproveList[0] ? leadersImproveList[0]?.complete : 0}</strong>
                                         <div>건</div>
                                     </div>
                                 </div>
@@ -2108,68 +2247,68 @@ const Director = () => {
                                 <div className={classes.bottomBox + ' rightBox'}>
                                     <div>
                                         <div>사망</div>
-                                        <div><strong>{accidentTotal?.deathTollCnt}</strong>건</div>
+                                        <div><strong>{accidentTotal ? accidentTotal?.deathTollCnt : 0}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>동일사고</div>
-                                        <div><strong>{accidentTotal?.sameAccidentInjuryCnt}</strong>건</div>
+                                        <div><strong>{accidentTotal ? accidentTotal?.sameAccidentInjuryCnt : 0}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>직업질환</div>
-                                        <div><strong>{accidentTotal?.jobDeseaseTollCnt}</strong>건</div>
+                                        <div><strong>{accidentTotal ? accidentTotal?.jobDeseaseTollCnt : 0}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>추락</div>
-                                        <div><strong>{accidentTotal?.caughtCnt}</strong>건</div>
+                                        <div><strong>{accidentTotal ? accidentTotal?.caughtCnt : 0}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>끼임</div>
-                                        <div><strong>{accidentTotal?.fireCnt}</strong>건</div>
+                                        <div><strong>{accidentTotal ? accidentTotal?.fireCnt : 0}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>화재</div>
-                                        <div><strong>{accidentTotal?.fallCnt}</strong>건</div>
+                                        <div><strong>{accidentTotal ? accidentTotal?.fallCnt : 0}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>전기</div>
-                                        <div><strong>{accidentTotal?.electCnt}</strong>건</div>
+                                        <div><strong>{accidentTotal ? accidentTotal?.electCnt : 0}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>밀폐</div>
-                                        <div><strong>{accidentTotal?.confinedCnt}</strong>건</div>
+                                        <div><strong>{accidentTotal ? accidentTotal?.confinedCnt : 0}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>중량물</div>
-                                        <div><strong>{accidentTotal?.heavyCnt}</strong>건</div>
+                                        <div><strong>{accidentTotal ? accidentTotal?.heavyCnt : 0}</strong>건</div>
                                     </div>
                                 </div>
                             </Grid>
                             <Grid className={classes.footBox + ' boxUp'} item xs={3}>
-                                <Link className={classes.footLink} to="/dashboard/director/security-work-content" underline="none">{safeWorkHistoyList?.nowDate}({safeWorkHistoyList?.nowDay}) - 안전작업허가 공사내역</Link>
+                                <Link className={classes.footLink} to="/dashboard/director/security-work-content" underline="none">{safeWorkHistoryList && safeWorkHistoryList?.nowDate}({safeWorkHistoryList && safeWorkHistoryList?.nowDay}) - 안전작업허가 공사내역</Link>
                                 <div className={classes.bottomBox + ' rightBox'}>
                                     <div>
                                         <div>화기</div>
-                                        <div><strong>{safeWorkHistoyList?.fire}</strong>건</div>
+                                        <div><strong>{safeWorkHistoryList ? safeWorkHistoryList?.fire : 0}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>밀폐</div>
-                                        <div><strong>{safeWorkHistoyList?.closeness}</strong>건</div>
+                                        <div><strong>{safeWorkHistoryList ? safeWorkHistoryList?.closeness : 0}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>정전</div>
-                                        <div><strong>{safeWorkHistoyList?.blackout}</strong>건</div>
+                                        <div><strong>{safeWorkHistoryList ? safeWorkHistoryList?.blackout : 0}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>굴착</div>
-                                        <div><strong>{safeWorkHistoyList?.excavation}</strong>건</div>
+                                        <div><strong>{safeWorkHistoryList ? safeWorkHistoryList?.excavation : 0}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>방사선</div>
-                                        <div><strong>{safeWorkHistoyList?.radiation}</strong>건</div>
+                                        <div><strong>{safeWorkHistoryList ? safeWorkHistoryList?.radiation : 0}</strong>건</div>
                                     </div>
                                     <div>
                                         <div>고소</div>
-                                        <div><strong>{safeWorkHistoyList?.sue}</strong>건</div>
+                                        <div><strong>{safeWorkHistoryList ? safeWorkHistoryList?.sue : 0}</strong>건</div>
                                     </div>
                                 </div>
                             </Grid>
@@ -2178,13 +2317,13 @@ const Director = () => {
                         <Grid container item xs={12} sx={{ marginBottom: '3px' }}>
                             <Grid className={classes.footBox + ' boxDown'} item xs={8.75}>
                                 <Slider className={classes.footSlider} {...footerSlider}>
-                                    {noticesList?.data.RET_DATA.map((notice) => (
-                                        <div>
-                                            <div>{notice.insertDate}</div>
-                                            {notice.importCd === "001" && <span className={classes.slideLabelHot}>HOT</span>}
-                                            <Link to={`/dashboard/director/notifications/view/${notice.noticeId}`} className={classes.linkBtn}>{notice.title}</Link>
-                                        </div>
-                                    ))}
+                                    {noticesList.length && noticesList.map((notice) =>
+                                    (<div>
+                                        <div>{notice.insertDate}</div>
+                                        {notice.importCd === "001" && <span className={classes.slideLabelHot}>HOT</span>}
+                                        <Link to={`/dashboard/director/notifications/view/${notice.noticeId}`} className={classes.linkBtn}>{notice.title}</Link>
+                                    </div>)
+                                    )}
                                 </Slider>
                                 <Link className={classes.sliderLink} to="/dashboard/director/notifications/list" underline="none"></Link>
                             </Grid>
@@ -2192,10 +2331,11 @@ const Director = () => {
                                 <div className={classes.footDay + ' dateBox'}>
                                     <div>DAY</div>
                                     <div className={classes.dayNums}>
-                                        <div><img src={numThree} alt="number three" /></div>
+                                        {dayInfo?.day}
+                                        {/* <div><img src={numThree} alt="number three" /></div>
                                         <div><img src={numTwo} alt="number two" /></div>
                                         <div><img src={numFour} alt="number four" /></div>
-                                        <div><img src={numFive} alt="number five" /></div>
+                                        <div><img src={numFive} alt="number five" /></div> */}
                                     </div>
                                 </div>
                                 <div className={classes.footTime + ' dateBox'}>
