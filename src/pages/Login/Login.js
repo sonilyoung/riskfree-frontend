@@ -7,9 +7,10 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
-import { selectUser, setUser } from '../../slices/User';
-import { selectBaselineId, selectWorkplaceId } from '../../slices/selections/MainSelection';
+//import { selectUser, setUser } from '../../slices/User';
+import { selectBaselineId, selectWorkplaceId, setBaselineId } from '../../slices/selections/MainSelection';
 import { useLoginMutation } from '../../hooks/api/LoginManagement/LoginManagement';
+import { useGetBaselineMutation } from '../../hooks/api/MainManagement/MainManagement';
 
 import { makeStyles } from '@mui/styles';
 import logoLogin from '../../assets/images/logo_login.png';
@@ -108,6 +109,7 @@ const Login = () => {
             error: ''
         },
     });
+    const [getBaseline] = useGetBaselineMutation();
     const navigate = useNavigate();
 
     const [userToken] = useUserToken();
@@ -135,6 +137,10 @@ const Login = () => {
             const userLoggedInRoleCd = userToken.getUserRoleCd();
             const redirectPath = getPath(userLoggedInRoleCd);
 
+            const defaultBaselineResponse = await getBaseline({});
+            const defaultBaselineId = defaultBaselineResponse.data.RET_DATA.baselineId;
+            
+            dispatch(setBaselineId(defaultBaselineId));
             navigate(redirectPath);
 
         } else {

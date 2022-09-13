@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     baselineId: 0,
-    workplaceId: 0,
+    workplaceId: null,
 }
 
 export const mainSelectionSlice = createSlice({
