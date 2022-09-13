@@ -1,7 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { useLocalStorage } from '../../hooks/misc/LocalStorage';
+
+//const localStorage = useLocalStorage();
 
 const initialState = {
-    baselineId: 0,
+    baselineId: null,
     workplaceId: null,
 }
 

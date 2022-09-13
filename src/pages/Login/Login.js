@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 //import { selectUser, setUser } from '../../slices/User';
 import { selectBaselineId, selectWorkplaceId, setBaselineId } from '../../slices/selections/MainSelection';
 import { useLoginMutation } from '../../hooks/api/LoginManagement/LoginManagement';
+import { useLocalStorage } from '../../hooks/misc/LocalStorage';
 import { useGetBaselineMutation } from '../../hooks/api/MainManagement/MainManagement';
 
 import { makeStyles } from '@mui/styles';
@@ -113,6 +114,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     const [userToken] = useUserToken();
+    const localStorage = useLocalStorage();
     const [login] = useLoginMutation();
     const getPath = useUserURLRedirect();
 
@@ -142,6 +144,7 @@ const Login = () => {
                 const defaultBaselineResponse = await getBaseline({});
                 const defaultBaselineId = defaultBaselineResponse.data.RET_DATA.baselineId;
                 dispatch(setBaselineId(defaultBaselineId));
+                localStorage.setDefaultBaselineId(defaultBaselineId);
             }
             navigate(redirectPath);
 
@@ -152,11 +155,11 @@ const Login = () => {
     }
 
     //TODO:  Here is the usage of the main selector. Must be deleted soon.
-    const currentBaseline = useSelector(selectBaselineId);
-    const currentWorkplaceId = useSelector(selectWorkplaceId);
-
-    console.log(currentBaseline);
-    console.log(currentWorkplaceId);
+    //const currentBaseline = useSelector(selectBaselineId);
+    //const currentWorkplaceId = useSelector(selectWorkplaceId);
+    
+    //console.log(currentBaseline);
+    //console.log(currentWorkplaceId);
 
     return (
         <WideLayout>
