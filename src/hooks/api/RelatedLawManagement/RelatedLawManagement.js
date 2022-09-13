@@ -19,28 +19,28 @@ export const relatedLawManagement = createApi({
     endpoints: (builder) => ({
         getRelatedRawButton: builder.mutation({
             query: (body) => ({
-                url: 'relatedLaw/getRelatedRawButton',
+                url: 'relatedlaw/getRelatedRawButton',
                 method: 'POST',
                 body: body,
             })
         }),
         insertDutyButton: builder.mutation({
             query: (body) => ({
-                url: 'relatedLaw/insertDutyButton',
+                url: 'relatedlaw/insertDutyButton',
                 method: 'POST',
                 body: body,
             })
         }),
         getRelatedRaw: builder.mutation({
             query: (body) => ({
-                url: 'relatedLaw/getRelatedRaw',
+                url: 'relatedlaw/getRelatedRaw',
                 method: 'POST',
                 body: body,
             })
         }),
         updateRelatedRaw: builder.mutation({
             query: (body) => ({
-                url: 'relatedLaw/updateRelatedRaw',
+                url: 'relatedlaw/updateRelatedRaw',
                 method: 'POST',
                 body: body,
             })

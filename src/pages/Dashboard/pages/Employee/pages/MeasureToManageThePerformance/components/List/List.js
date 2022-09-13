@@ -1,20 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-import { makeStyles } from '@mui/styles';
+import { makeStyles, styled } from '@mui/styles';
 
 import Link from '@mui/material/Link';
 
+import TextField from '@mui/material/TextField';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
+import ButtonUnstyled from '@mui/base/ButtonUnstyled';
+
+import alertIcon from '../../../../../../../../assets/images/ic_refer.png';
 
 import iconTab from '../../../../../../../../assets/images/ic_tab.png';
 import iconTabOn from '../../../../../../../../assets/images/ic_tab_on.png';
+import popupClose2 from '../../../../../../../../assets/images/btn_popClose2.png';
+import searchIcon from '../../../../../../../../assets/images/ic_search.png';
 import { DefaultLayout } from '../../../../../../../../layouts/Default';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useGetRelatedRawButtonMutation, useGetRelatedRawMutation, useInsertDutyButtonMutation } from '../../../../../../../../hooks/api/RelatedLawManagement/RelatedLawManagement';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -22,6 +29,7 @@ const useStyles = makeStyles(() => ({
     },
     headerButtons: {
         display: 'flex',
+        alignItems: 'center',
         marginTop: '10px !important',
     },
     stepBox: {
@@ -44,7 +52,7 @@ const useStyles = makeStyles(() => ({
         alignItems: 'center',
         alignContent: 'center',
         height: '68px',
-        // width: '50%',
+        // width: '100%',
         marginLeft: '10px !important',
         background: '#3a5298',
         borderRadius: '5px',
@@ -61,6 +69,20 @@ const useStyles = makeStyles(() => ({
             fontSize: '20px',
             fontWeight: '500',
             color: '#fff',
+            padding: '0 20px'
+        },
+    },
+    buttonPlus: {
+        color: '#fff',
+        fontSize: '30px',
+        padding: '5px 10px',
+        marginLeft: '10px !important',
+        background: '#3a5298',
+        borderRadius: '5px',
+        border: '1px solid #3a5298',
+        '&:hover': {
+            backgroundImage: 'linear-gradient(#04b9fb, #017dfa)',
+            border: 'none',
         },
     },
     boxTable: {
@@ -189,13 +211,150 @@ const useStyles = makeStyles(() => ({
         '&:nth-of-type(8)': {
             width: '135px',
         },
-    }
+    },
+    uploadPopup: {
+        position: 'absolute',
+        zIndex: '1000',
+        top: '0px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '400px',
+        height: '400px',
+        background: '#fff',
+        borderRadius: '30px',
+        padding: '40px',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexWrap: 'wrap',
+        // display: 'none !important',
+        '& >span': {
+            width: '20%',
+            height: '20px',
+            borderBottom: '1px solid #bdcbe9',
+            transform: 'translateY(-5px)',
+            '&:nth-of-type(2)': {
+                width: '60%',
+                border: 'none',
+                padding: '0 10px',
+                boxSizing: 'border-box',
+                textAlign: 'center',
+                transform: 'unset',
+            }
+        },
+        '& >button': {
+            position: 'absolute',
+            top: '0px',
+            right: '-65px'
+        }
+    },
+    uploadSearch: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        '& button:first-of-type': {
+            marginLeft: '10px'
+        }
+    },
 
 
 }));
 
+const ClosePopupButton2 = styled(ButtonUnstyled)`
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: url(${popupClose2}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s; 
+`;
+
+const UnknownButton1 = styled(ButtonUnstyled)`
+    width: 150px;
+    height: 46px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: -1.08px;
+    border-radius: 46px;
+    background: #00adef;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #3a5298;
+    }   
+`;
+
+const UnknownButton2 = styled(ButtonUnstyled)`
+    width: 200px;
+    height: 46px;
+    color: #000;
+    font-size: 20px;
+    letter-spacing: -1.08px;
+    border-radius: 46px;
+    background: #eff2f9;
+    border: 2px solid #00adef;
+    cursor: pointer;
+    transition: border-color .2s;
+    &:hover {
+        border-color: #3a5298;
+    }  
+`;
+
+const SearchButton = styled(ButtonUnstyled)`
+    width: 46px;
+    height: 46px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: -1.08px;
+    border-radius: 50%;
+    background: #00adef url(${searchIcon}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #3a5298 url(${searchIcon}) no-repeat 50% 50%;
+    }   
+`;
+
+
 const List = () => {
     const classes = useStyles();
+
+    const [relatedRawList, setRelatedRawList] = useState([]);
+    const [relatedRawButtonList, setRelatedRawButtonList] = useState([]);
+
+
+    const [getRelatedRaw] = useGetRelatedRawMutation();
+    const [insertDutyButton] = useInsertDutyButtonMutation();
+    const [getRelatedRawButton] = useGetRelatedRawButtonMutation();
+
+    const fetchRelatedRawList = async () => {
+        const response = await getRelatedRaw({
+            "lawId": 1,
+            "baselineId": 6
+        });
+        setRelatedRawList(response.data.RET_DATA);
+        console.log(response.data.RET_DATA);
+    }
+
+
+    const fetchRelatedRawButtonList = async () => {
+        const response = await getRelatedRawButton({});
+        setRelatedRawButtonList(response.data.RET_DATA);
+    }
+
+
+    const fetchInsertDutyButton = async () => {
+        const response = await insertDutyButton();
+    }
+
+
+    useEffect(() => {
+        fetchRelatedRawList();
+        fetchRelatedRawButtonList();
+    }, []);
+
 
     return (
         <DefaultLayout>
@@ -205,27 +364,41 @@ const List = () => {
                         관계법령에 의무이행의 관리상의 조치
                     </Typography>
                 </Grid>
+
+                {/* <div className={classes.uploadPopup}>
+                    <ClosePopupButton2></ClosePopupButton2>
+                    <div className={classes.uploadInfo}>
+                        <img src={alertIcon} alt="alert icon" />
+                        <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
+                        <UnknownButton2>전체사업장</UnknownButton2>
+                    </div>
+                    <span></span>
+                    <span>의무조치별 상세 점검</span>
+                    <span></span>
+                    <div className={classes.uploadSearch}>
+                        <TextField
+                            id="standard-basic"
+                            placeholder="여수공장 시정조치요청 파일.hwp"
+                            variant="outlined"
+                            sx={{ width: 250 }}
+                            className={classes.popupTextField}
+                        />
+                        <SearchButton></SearchButton>
+                        <UnknownButton1>전체사업장</UnknownButton1>
+                    </div>
+                </div> */}
+
+
+
                 <Grid item xs={12} className={classes.headerButtons}>
-                    <Link href="#none" className={classes.buttonLink + ' current'}>
-                        <span>화평물질 등록 및 </span>
-                        <span>평가에 관한</span>
-                    </Link>
-                    <Link href="#none" className={classes.buttonLink}>
-                        <span>화학물질 </span>
-                        <span>관리법</span>
-                    </Link>
-                    <Link href="#none" className={classes.buttonLink}>
-                        <span>위험물 </span>
-                        <span>안전 관리법</span>
-                    </Link>
-                    <Link href="#none" className={classes.buttonLink}>
-                        <span>고압가스 </span>
-                        <span>안전 관리법</span>
-                    </Link>
-                    <Link href="#none" className={classes.buttonLink}>
-                        <span>화학물 </span>
-                        <span>안전 관리법</span>
-                    </Link>
+
+                    {relatedRawButtonList.length && relatedRawButtonList.map(relatedRawButtonItem =>
+                    (<Link href="#none" className={classes.buttonLink}>
+                        <span>{relatedRawButtonItem?.lawName}</span>
+                    </Link>)
+                    )}
+                    <button className={classes.buttonPlus}>+</button>
+
                 </Grid>
                 <Grid item xs={12} className={classes.stepBox}>
                     <Stepper sx={{ mb: 4, mt: 4 }} nonLinear activeStep={0} className={classes.activeStep}>
@@ -271,60 +444,24 @@ const List = () => {
                         </div>
                     </div>
                     <div className={classes.tableBody}>
-                        <div className={classes.tableRow}>
-                            <div className={classes.tableData}>제4조제1항제4호</div>
-                            <div className={classes.tableData}>안전ㆍ보건 관계 법령에 따른 <span>의무이행에 필요한 관리상의 조치</span></div>
-                            <div className={classes.tableData}>제5조제2항제1호 <span>의무이행 점검</span></div>
-                            <div className={classes.tableData}>제5조제1항</div>
-                            <div className={classes.tableData}>3. 제5조제1항 전단에 따른 등록을 하지 아니하고 용기등을 제조한 자</div>
-                            <div className={classes.tableData}>제5조(용기ㆍ냉동기 및 특정설비의 제조등록 등) 용기ㆍ냉동기 또는 특정설비(이하 "용기등"이라 한다)를 제조하려는 자는 시장ㆍ군수 또는 구청장에게 등록하여야 한다. </div>
-                            <div className={classes.tableData}>&nbsp;</div>
-                            <div className={classes.tableData}>법 제39조 제3호</div>
-                        </div>
-                        <div className={classes.tableRow}>
-                            <div className={classes.tableData}>제4조제1항제4호</div>
-                            <div className={classes.tableData}>안전ㆍ보건 관계 법령에 따른 <span>의무이행에 필요한 관리상의 조치</span></div>
-                            <div className={classes.tableData}>제5조제2항제1호 <span>의무이행 점검</span></div>
-                            <div className={classes.tableData}>제5조제1항</div>
-                            <div className={classes.tableData}>3. 제5조제1항 전단에 따른 등록을 하지 아니하고 용기등을 제조한 자</div>
-                            <div className={classes.tableData}>제5조(용기ㆍ냉동기 및 특정설비의 제조등록 등) 용기ㆍ냉동기 또는 특정설비(이하 "용기등"이라 한다)를 제조하려는 자는 시장ㆍ군수 또는 구청장에게 등록하여야 한다. </div>
-                            <div className={classes.tableData}>&nbsp;</div>
-                            <div className={classes.tableData}>법 제39조 제3호</div>
-                        </div>
-                        <div className={classes.tableRow}>
-                            <div className={classes.tableData}>제4조제1항제4호</div>
-                            <div className={classes.tableData}>안전ㆍ보건 관계 법령에 따른 <span>의무이행에 필요한 관리상의 조치</span></div>
-                            <div className={classes.tableData}>제5조제2항제1호 <span>의무이행 점검</span></div>
-                            <div className={classes.tableData}>제5조제1항</div>
-                            <div className={classes.tableData}>3. 제5조제1항 전단에 따른 등록을 하지 아니하고 용기등을 제조한 자</div>
-                            <div className={classes.tableData}>제5조(용기ㆍ냉동기 및 특정설비의 제조등록 등) 용기ㆍ냉동기 또는 특정설비(이하 "용기등"이라 한다)를 제조하려는 자는 시장ㆍ군수 또는 구청장에게 등록하여야 한다. </div>
-                            <div className={classes.tableData}>&nbsp;</div>
-                            <div className={classes.tableData}>법 제39조 제3호</div>
-                        </div>
-                        <div className={classes.tableRow}>
-                            <div className={classes.tableData}>제4조제1항제4호</div>
-                            <div className={classes.tableData}>안전ㆍ보건 관계 법령에 따른 <span>의무이행에 필요한 관리상의 조치</span></div>
-                            <div className={classes.tableData}>제5조제2항제1호 <span>의무이행 점검</span></div>
-                            <div className={classes.tableData}>제5조제1항</div>
-                            <div className={classes.tableData}>3. 제5조제1항 전단에 따른 등록을 하지 아니하고 용기등을 제조한 자</div>
-                            <div className={classes.tableData}>제23조의3(고압가스배관 매설상황 확인) 굴착공사를 하려는 자는 굴착공사를 하기 전에 해당 토지의 지하에 고압가스배관이 묻혀 있는지를 확인하여 줄 것을 산업통상자원부령으로 정하는 바에 따라 정보지원센터에 요청하여야 한다. 다만, 고압가스배관에 위험을 발생시킬 우려가 없다고 인정되는 굴착공사로서 대통령령으로 정하는 굴착공사의 경우에는 그러하지 아니하다.</div>
-                            <div className={classes.tableData}>&nbsp;</div>
-                            <div className={classes.tableData}>법 제39조 제3호</div>
-                        </div>
-                        <div className={classes.tableRow}>
-                            <div className={classes.tableData}>제4조제1항제4호</div>
-                            <div className={classes.tableData}>안전ㆍ보건 관계 법령에 따른 <span>의무이행에 필요한 관리상의 조치</span></div>
-                            <div className={classes.tableData}>제5조제2항제1호 <span>의무이행 점검</span></div>
-                            <div className={classes.tableData}>제5조제1항</div>
-                            <div className={classes.tableData}>3. 제5조제1항 전단에 따른 등록을 하지 아니하고 용기등을 제조한 자</div>
-                            <div className={classes.tableData}>제5조(용기ㆍ냉동기 및 특정설비의 제조등록 등) 용기ㆍ냉동기 또는 특정설비(이하 "용기등"이라 한다)를 제조하려는 자는 시장ㆍ군수 또는 구청장에게 등록하여야 한다. </div>
-                            <div className={classes.tableData}>&nbsp;</div>
-                            <div className={classes.tableData}>법 제39조 제3호</div>
-                        </div>
+
+                        {
+                            relatedRawList?.length && relatedRawList.map(relatedRawItem =>
+                            (<div className={classes.tableRow}>
+                                <div className={classes.tableData}>{relatedRawItem.relatedArticle}</div>
+                                <div className={classes.tableData}>{relatedRawItem.articleItem}<span></span></div>
+                                <div className={classes.tableData}>{relatedRawItem.seriousAccdntDecree} <span></span></div>
+                                <div className={classes.tableData}>{relatedRawItem.violatedArticle}</div>
+                                <div className={classes.tableData}>{relatedRawItem.violatedActivity}</div>
+                                <div className={classes.tableData}>{relatedRawItem.violationDetail1}</div>
+                                <div className={classes.tableData}>{relatedRawItem.violationDetail2}</div>
+                                <div className={classes.tableData}>{relatedRawItem.baseArticle}</div>
+                            </div>))
+                        }
                     </div>
                 </Grid>
             </Grid>
-        </DefaultLayout>
+        </DefaultLayout >
     );
 };
 
