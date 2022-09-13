@@ -493,7 +493,7 @@ const View = () => {
                                         />
                                         <UploadButton>찾아보기</UploadButton>
                                         <div className={classes.imgPreview}>
-                                            <img src={imgPrev} alt="uploaded image" />
+                                            {/* <img src={imgPrev} alt="uploaded image" /> */}
                                         </div>
                                     </div>
                                 </div>
@@ -510,7 +510,7 @@ const View = () => {
                                         />
                                         <UploadButton>찾아보기</UploadButton>
                                         <div className={classes.imgPreview}>
-                                            <img src={noImg} alt="no image" />
+                                            {/* <img src={noImg} alt="no image" /> */}
                                         </div>
                                     </div>
                                 </div>

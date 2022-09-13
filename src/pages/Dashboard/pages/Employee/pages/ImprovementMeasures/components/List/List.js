@@ -318,8 +318,8 @@ function List() {
     const [reqUser, setReqUser] = useState("")
     const [statusCd, setStatusCd] = useState("")
     const [improvements, setImprovements] = useState([])
-    const [startDate, setStartDate] = useState("")
-    const [endDate, setEndDate] = useState("")
+    const [startDate, setStartDate] = useState(null)
+    const [endDate, setEndDate] = useState(null)
     const [page, setPage] = useState(1)
     const todaysDate = moment().utcOffset("+09:00").format("YYYY-MM-DD");
 
@@ -344,14 +344,6 @@ function List() {
         setWorkplaces(response.data.RET_DATA)
     }
 
-    const handleStartDate = (event) => {
-        setStartDate(event.target.value)
-    }
-
-    const handleEndDate = (event) => {
-        setEndDate(event.target.value)
-    }
-
     const handlePageChange = (event, value) => {
         setPage(value)
     }
@@ -372,9 +364,6 @@ function List() {
         setImprovements(response.data.RET_DATA)
     }
 
-    const [date1, setDate1] = React.useState(null),
-          [date2, setDate2] = React.useState(null);
-
     const [locale] = React.useState('ko');
 
     useEffect(() => {
@@ -382,17 +371,8 @@ function List() {
         handleFetchList()
     }, [page])
 
-    // useEffect(() => {
-    //     handleFetchList()
-    // }, [page])
+    console.log(startDate)
 
-    // console.log(reqUser)
-    // console.log(statusCd)
-    // console.log(improvements)
-    // console.log(startDate)
-    // console.log(todaysDate)
-    // console.log(endDate)
-    // console.log(workplaces)
     return (
         <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
@@ -422,9 +402,12 @@ function List() {
                                     className={classes.selectMenuDate}
                                     label=" "
                                     inputFormat="YYYY-MM-DD"
-                                    value={date1}
-                                    onChange={setDate1}
-                                    renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
+                                    value={startDate}
+                                    onChange={(newDate) => {
+                                        const date = new Date(newDate.$d)
+                                        setStartDate(moment(date).format("YYYY-MM-DD"))
+                                    }}
+                                    renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                 />
                             </LocalizationProvider>
                             &nbsp;~&nbsp;
@@ -433,9 +416,12 @@ function List() {
                                     className={classes.selectMenuDate}
                                     label=" "
                                     inputFormat="YYYY-MM-DD"
-                                    value={date2}
-                                    onChange={setDate2}
-                                    renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
+                                    value={endDate}
+                                    onChange={(newDate) => {
+                                        const date = new Date(newDate.$d)
+                                        setEndDate(moment(date).format("YYYY-MM-DD"))
+                                    }}
+                                    renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                 />
                             </LocalizationProvider>
                         </div>

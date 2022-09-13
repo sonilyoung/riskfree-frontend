@@ -346,11 +346,8 @@ const Registration = () => {
     const navigate = useNavigate();
     const [getLoginInfo] = useGetLoginInfoMutation()
     const [loginInfo, setLoginInfo] = useState({})
-
-    const handleLoginInfo = async () => {
-        const response = await getLoginInfo()
-        setLoginInfo(response.data.RET_DATA)
-    }
+    const [occurDate, setOccurDate] = useState(null)
+    const [recvName, setRecvName] = useState("")
 
     const [accident, setAccident] = useState({
         accLevelCd: "",
@@ -364,15 +361,15 @@ const Registration = () => {
         accidentId: 1,
         accidentTypeCd: "",
         deathToll: null,
-        finalReportId: 2,
-        initReportId: 1,
+        finalReportId: null,
+        initReportId: null,
         jobDeseaseToll: null,
         managerName: "",
         occurDate: "",
         occurPlace: "",
         occurReason: "",
-        performAfterId: 4,
-        performBeforeId: 3,
+        performAfterId: null,
+        performBeforeId: null,
         preventCn: "",
         recvDate: todayDate,
         recvFormCd: "",
@@ -382,9 +379,17 @@ const Registration = () => {
         recvTypeCd004: "",
         recvTypeCd005: "",
         recvTypeCd006: "",
-        recvUserName: loginInfo.name,
+        recvUserName: recvName,
         sameAccidentInjury: null,
     });
+
+    const handleLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfo(response.data.RET_DATA)
+        setAccident({ ...accident, "recvUserName": response.data.RET_DATA.name })
+    }
+
+
     const handleRedirect = () => {
         navigate(
             "/dashboard/employee/accident-countermeasures-implementation/list"
@@ -404,7 +409,7 @@ const Registration = () => {
     useEffect(() => {
         handleLoginInfo()
     }, [])
-
+    console.log(accident)
     return (
         <DefaultLayout>
             <Grid
@@ -643,9 +648,12 @@ const Registration = () => {
                                             className={classes.selectMenuDate}
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
-                                            value={date}
-                                            onChange={setDate}
-                                            renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
+                                            value={accident && accident.occurDate}
+                                            onChange={(newDate) => {
+                                                const date = new Date(newDate.$d)
+                                                setAccident({ ...accident, "occurDate": moment(date).format("YYYY-MM-DD") })
+                                            }}
+                                            renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                         />
                                     </LocalizationProvider>
                                 </div>

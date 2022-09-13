@@ -32,6 +32,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
+import moment from "moment"
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -308,18 +309,20 @@ const Registration = () => {
     const [workplaces, setWorkplaces] = useState([])
     const [workplaceSelect, setWorkplaceSelect] = useState("")
     const [reqUserCd, setReqUserCd] = useState("")
+    const [reqDate, setReqDate] = useState(null)
+    const [finDate, setFinDate] = useState(null)
     const [improvement, setImprovement] = useState(
         {
             "actionAfterId": null,
             "actionBeforeId": null,
             "actionCn": "",
             "companyId": 1,
-            "finDate": "",
+            "finDate": finDate,
             "improveCn": "",
             "improveId": null,
             "improveNo": "",
             "insertId": null,
-            "reqDate": "",
+            "reqDate": reqDate,
             "reqFileId": 1,
             "reqUserCd": reqUserCd,
             "statusCd": "",
@@ -327,12 +330,6 @@ const Registration = () => {
             "workplaceId": workplaceSelect
         }
     )
-
-    // const [num, setNum] = React.useState('');
-
-    // const handleChange = (event) => {
-    //     setNum(event.target.value);
-    // };
 
     const handleRedirect = () => {
         navigate("/dashboard/employee/improvement-measures/list")
@@ -350,7 +347,7 @@ const Registration = () => {
     }
 
     const [date1, setDate1] = React.useState(null),
-          [date2, setDate2] = React.useState(null);
+        [date2, setDate2] = React.useState(null);
 
     const [locale] = React.useState('ko');
 
@@ -426,9 +423,12 @@ const Registration = () => {
                                             className={classes.selectMenuDate}
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
-                                            value={date1}
-                                            onChange={setDate1}
-                                            renderInput={(params) => <TextField {...params} sx={{width: 200}} />}
+                                            value={reqDate}
+                                            onChange={(newDate) => {
+                                                const date = new Date(newDate.$d)
+                                                setReqDate(moment(date).format("YYYY-MM-DD"))
+                                            }}
+                                            renderInput={(params) => <TextField {...params} sx={{ width: 200 }} />}
                                         />
                                     </LocalizationProvider>
                                 </div>
@@ -453,9 +453,12 @@ const Registration = () => {
                                             className={classes.selectMenuDate}
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
-                                            value={date2}
-                                            onChange={setDate2}
-                                            renderInput={(params) => <TextField {...params} sx={{width: 200}} />}
+                                            value={finDate}
+                                            onChange={(newDate) => {
+                                                const date = new Date(newDate.$d)
+                                                setFinDate(moment(date).format("YYYY-MM-DD"))
+                                            }}
+                                            renderInput={(params) => <TextField {...params} sx={{ width: 200 }} />}
                                         />
                                     </LocalizationProvider>
                                 </div>

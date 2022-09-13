@@ -4,9 +4,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
 import { makeStyles } from '@mui/styles';
-
-import Link from '@mui/material/Link';
-
+import { Link } from "react-router-dom"
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
@@ -44,6 +42,7 @@ const useStyles = makeStyles(() => ({
         alignItems: 'center',
         alignContent: 'center',
         height: '68px',
+        textDecoration: "none",
         // width: '100%',
         marginLeft: '10px !important',
         background: '#3a5298',
@@ -205,6 +204,13 @@ const useStyles = makeStyles(() => ({
         '&:nth-of-type(9)': {
             width: '152px',
         },
+    },
+    linkBtn: {
+        textDecoration: "none",
+        color: "#adb0b2",
+        '&:visited': {
+            color: '#adb0b2'
+        }
     }
 
 }));
@@ -268,21 +274,21 @@ const ListTwo = () => {
                             <StepLabel
                                 icon={<img src={iconTab} alt="inactive step" />}
                             >
-                                <Link href="/dashboard/employee/measure-to-manage-performance-od-duties-law/list">표준상태보기</Link>
+                                <Link className={classes.linkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/list">표준상태보기</Link>
                             </StepLabel>
                         </Step>
                         <Step>
                             <StepLabel
                                 icon={<img src={iconTabOn} alt="active step" />}
                             >
-                                <Link href="/dashboard/employee/measure-to-manage-performance-od-duties-law/list-two">처벌 및 과태료보기</Link>
+                                <Link className={classes.linkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/list-two">처벌 및 과태료보기</Link>
                             </StepLabel>
                         </Step>
                         <Step>
                             <StepLabel
                                 icon={<img src={iconTab} alt="inactive step" />}
                             >
-                                <Link href="/dashboard/employee/measure-to-manage-performance-od-duties-law/registration">관리상의 조치내역 보기/등록</Link>
+                                <Link className={classes.linkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/registration">관리상의 조치내역 보기/등록</Link>
                             </StepLabel>
                         </Step>
                     </Stepper>

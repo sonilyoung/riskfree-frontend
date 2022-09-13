@@ -406,21 +406,21 @@ const List = () => {
                             <StepLabel
                                 icon={<img src={iconTabOn} alt="active step" />}
                             >
-                                <Link href="/dashboard/employee/measure-to-manage-performance-od-duties-law/list">표준상태보기</Link>
+                                <Link className={classes.linkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/list">표준상태보기</Link>
                             </StepLabel>
                         </Step>
                         <Step >
                             <StepLabel
                                 icon={<img src={iconTab} alt="inactive step" />}
                             >
-                                <Link href="/dashboard/employee/measure-to-manage-performance-od-duties-law/list-two">처벌 및 과태료보기</Link>
+                                <Link className={classes.linkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/list-two">처벌 및 과태료보기</Link>
                             </StepLabel>
                         </Step>
                         <Step>
                             <StepLabel
                                 icon={<img src={iconTab} alt="inactive step" />}
                             >
-                                <Link href="/dashboard/employee/measure-to-manage-performance-od-duties-law/registration" >관리상의 조치내역 보기/등록</Link>
+                                <Link className={classes.linkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/registration" >관리상의 조치내역 보기/등록</Link>
                             </StepLabel>
                         </Step>
                     </Stepper>

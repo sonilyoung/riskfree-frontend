@@ -73,7 +73,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentsPreventionMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetLoginInfoMutation, useGetNoticeListMutation, useGetRelatedRawRateMutation, useGetWorkplaceListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentsPreventionMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetLoginInfoMutation, useGetNoticeListMutation, useGetRelatedLawRateMutation, useGetWorkplaceListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetLeaderImprovementListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetAccidentTotalMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetSafeWorkHistoryListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
@@ -1377,7 +1377,7 @@ const Director = () => {
     const [getEssentialRate] = useGetEssentialRateMutation();
     const [getAccidentsPrevention] = useGetAccidentsPreventionMutation();
     const [getImprovementLawOrder] = useGetImprovementLawOrderMutation();
-    const [getRelatedRawRate] = useGetRelatedRawRateMutation();
+    const [getRelatedLawRate] = useGetRelatedLawRateMutation();
     const [getCompanyInfo] = useGetCompanyInfoMutation();
     const [getWorkplaceList] = useGetWorkplaceListMutation();
     const [getBaseline] = useGetBaselineMutation();
@@ -1404,10 +1404,10 @@ const Director = () => {
     const [essentialRateList, setEssentialRateList] = useState([]);
     const [accidentsPrevention, setAccidentsPrevention] = useState({});
     const [improvementLawOrderRate, setImprovementLawOrderRate] = useState({});
-    const [relatedRawRate, setRelatedRawRate] = useState({});
+    const [relatedLawRate, setRelatedLawRate] = useState({});
     const [baselineData, setBaselineData] = useState({});
     const [baselineList, setBaselineList] = useState([]);
-    const [baselineId, setBaselineId] = useState(12);
+    const [baselineId, setBaselineId] = useState(6);
     const [baselineStart, setBaselineStart] = useState("2022-09-08");
     const [dayInfo, setDayInfo] = useState({});
 
@@ -1511,12 +1511,12 @@ const Director = () => {
         setImprovementLawOrderRate(response.data);
     }
 
-    const fetchRelatedRawRate = async () => {
-        const response = await getRelatedRawRate({
+    const fetchRelatedLawRate = async () => {
+        const response = await getRelatedLawRate({
             "baselineId": baselineId,
             "workplaceId": userWorkplaceId
         });
-        setRelatedRawRate(response.data);
+        setRelatedLawRate(response.data);
     }
 
     const fetchLeadersImproveList = async () => {
@@ -1590,6 +1590,7 @@ const Director = () => {
                     setBaselineStart(baselineList.at(baselineIdIndex).baselineStart);
                     setBaselineId(baselineList.at(baselineIdIndex).baselineId);
                     onClick();
+                    console.log(baselineList.at(baselineIdIndex).baselineId)
                 }}
             />
         );
@@ -1621,7 +1622,7 @@ const Director = () => {
         fetchCompanyInfo();
         fetchEssentialRateList();
         fetchImprovementLawOrderRate();
-        fetchRelatedRawRate();
+        fetchRelatedLawRate();
         fetchLeadersImproveList();
         fetchAccidentTotal();
         fetchSafeWorkHistoryList();
@@ -2054,7 +2055,7 @@ const Director = () => {
                             <Slider {...headerSlider}>
                                 <div>
                                     <MainNavButton onClick={
-                                        () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })                                        
+                                        () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })
                                     }>전체사업장</MainNavButton>
                                 </div>
                                 {workplaceList.length != 0 && workplaceList?.RET_DATA?.map(workplaceItem =>
@@ -2139,7 +2140,7 @@ const Director = () => {
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor('0%')}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{relatedRawRate?.RET_DATA?.relatedLawRate}</strong></div>
+                                    <div><strong>{relatedLawRate?.RET_DATA?.relatedLawRate}</strong></div>
                                     <div>관계법령에 따른<br /> 의무이행</div>
                                 </Link>
                             </div>
@@ -2214,7 +2215,7 @@ const Director = () => {
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor('0%')}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{relatedRawRate?.RET_DATA?.relatedLawRate}</strong></div>
+                                    <div><strong>{relatedLawRate?.RET_DATA?.relatedLawRate}</strong></div>
                                     <div>관계법령에 따른<br /> 의무이행</div>
                                 </Link>
                             </div>

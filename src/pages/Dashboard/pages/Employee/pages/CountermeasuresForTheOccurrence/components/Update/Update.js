@@ -351,7 +351,7 @@ const Update = () => {
         "initReportId": null,
         "jobDeseaseToll": null,
         "managerName": "",
-        "occurDate": "",
+        "occurDate": null,
         "occurPlace": "",
         "occurReason": "",
         "performAfterId": null,
@@ -368,6 +368,8 @@ const Update = () => {
         "recvUserName": "",
         "sameAccidentInjury": null
     })
+    const [locale] = React.useState('ko');
+
 
     const handleRedirect = () => {
         navigate("/dashboard/employee/accident-countermeasures-implementation/list")
@@ -417,10 +419,6 @@ const Update = () => {
             .then(() => navigate("/dashboard/employee/accident-countermeasures-implementation/list"))
     }
 
-    const [date, setDate] = React.useState(null);
-
-    const [locale] = React.useState('ko');
-
     useEffect(() => {
         window.scrollTo(0, 0);
         fetchAccidentView()
@@ -440,9 +438,9 @@ const Update = () => {
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>접수일자</div>
                             <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>{todayDate}</div>
+                                <div className={classes.rowInfo}>{accident && accident.recvDate}</div>
                                 <div className={classes.rowTitle}>접수자</div>
-                                <div className={classes.rowInfo}>[홍xx] / 방제센터 사고접수부</div>
+                                <div className={classes.rowInfo}>{accident && accident.recvUserName}</div>
                                 <div className={classes.rowTitle}>접수형태</div>
                                 <div className={classes.rowInfo}>
                                     <FormControl className={classes.searchRadio} onChange={(e) => setAccident({ ...accident, "recvFormCd": e.target.value })}>
@@ -596,9 +594,12 @@ const Update = () => {
                                             className={classes.selectMenuDate}
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
-                                            value={date}
-                                            onChange={setDate}
-                                            renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
+                                            value={accident && accident.occurDate}
+                                            onChange={(newDate) => {
+                                                const date = new Date(newDate.$d)
+                                                setAccident({ ...accident, "occurDate": moment(date).format("YYYY-MM-DD") })
+                                            }}
+                                            renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                         />
                                     </LocalizationProvider>
                                 </div>

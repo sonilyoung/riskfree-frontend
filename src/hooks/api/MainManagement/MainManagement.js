@@ -115,9 +115,9 @@ export const mainManagement = createApi({
                 body: body,
             }),
         }),
-        getRelatedRawRate: builder.mutation({
+        getRelatedLawRate: builder.mutation({
             query: (body) => ({
-                url: 'main/getRelatedRawRate',
+                url: 'main/getRelatedLawRate',
                 method: 'POST',
                 body: body,
             }),
@@ -218,4 +218,4 @@ export const mainManagement = createApi({
     }),
 });
 
-export const { useGetWorkplaceListMutation, useGetLoginInfoMutation, useGetAccidentTotalMutation, useGetImprovementListMutation, useGetSafeWorkHistoryListMutation, useGetLeaderImprovementListMutation, useGetDayInfoMutation, useGetNoticeListMutation, useGetBaselineMutation, useGetBaselineListMutation, useGetNoticeHotListMutation, useGetAccidentsPreventionMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetRelatedRawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useUpdateRelatedArticleMutation, useGetGuideLineMutation, useGetTitleReportMutation, useGetCompanyInfoMutation, useGetBaseLineReportMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaselineMutation } = mainManagement;
+export const { useGetWorkplaceListMutation, useGetLoginInfoMutation, useGetAccidentTotalMutation, useGetImprovementListMutation, useGetSafeWorkHistoryListMutation, useGetLeaderImprovementListMutation, useGetDayInfoMutation, useGetNoticeListMutation, useGetBaselineMutation, useGetBaselineListMutation, useGetNoticeHotListMutation, useGetAccidentsPreventionMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useUpdateRelatedArticleMutation, useGetGuideLineMutation, useGetTitleReportMutation, useGetCompanyInfoMutation, useGetBaseLineReportMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaselineMutation } = mainManagement;

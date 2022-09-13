@@ -43,6 +43,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
+import moment from "moment"
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -366,13 +367,12 @@ const List = () => {
     const [lawSelect] = useLawSelectMutation();
     const [getWorkplaceList] = useGetWorkplaceListMutation();
     const [lawIssueReassonSelect] = useLawIssueReassonSelectMutation();
-
     const navigate = useNavigate();
-
     const [page, setPage] = useState(1);
     const [workplaceList, setWorkplaceList] = useState([]);
     const [issueReasson, setIssueReasson] = useState([]);
-
+    const [startDate, setStartDate] = useState(null)
+    const [endDate, setEndDate] = useState(null)
     const [lawImprovements, setLawImprovements] = useState({
         baselineId: 6,
         cmmdOrgCd001: "",
@@ -381,17 +381,15 @@ const List = () => {
         cmmdOrgCd004: "",
         countPerPage: 10,
         dueDate: "",
-        endDate: "",
+        endDate: endDate,
         improveTypeCd: "",
         issueReason: "",
         pageNum: page,
-        startDate: "",
+        startDate: startDate,
         statusCd: "",
         workplaceId: "",
     });
-
     const [lawList, setLawList] = useState([]);
-
     const [checked, setChecked] = useState(false);
 
     const handleRedirect = () => {
@@ -449,16 +447,12 @@ const List = () => {
         setLawList(response.data.RET_DATA);
     };
 
-    const [date1, setDate1] = React.useState(null),
-          [date2, setDate2] = React.useState(null);
-          
     const [locale] = React.useState('ko');
 
     useEffect(() => {
         fetchWorkplaceList();
         fetchIssueReasson();
         fetchLawList();
-
     }, []);
 
     return (
@@ -688,9 +682,12 @@ const List = () => {
                                         className={classes.selectMenuDate}
                                         label=" "
                                         inputFormat="YYYY-MM-DD"
-                                        value={date1}
-                                        onChange={setDate1}
-                                        renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
+                                        value={startDate}
+                                        onChange={(newDate) => {
+                                            const date = new Date(newDate.$d)
+                                            setStartDate(moment(date).format("YYYY-MM-DD"))
+                                        }}
+                                        renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                     />
                                 </LocalizationProvider>
                                 &nbsp;~&nbsp;
@@ -699,9 +696,12 @@ const List = () => {
                                         className={classes.selectMenuDate}
                                         label=" "
                                         inputFormat="YYYY-MM-DD"
-                                        value={date2}
-                                        onChange={setDate2}
-                                        renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
+                                        value={endDate}
+                                        onChange={(newDate) => {
+                                            const date = new Date(newDate.$d)
+                                            setEndDate(moment(date).format("YYYY-MM-DD"))
+                                        }}
+                                        renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                     />
                                 </LocalizationProvider>
                             </div>

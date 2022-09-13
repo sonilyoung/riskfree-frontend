@@ -82,7 +82,7 @@ import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useUserToken } from '../../../../hooks/core/UserToken';
 import moment from 'moment'
 
@@ -621,10 +621,10 @@ const useStyles = makeStyles(() => ({
                     color: '#f6db28'
                 },
                 '&.warning': {
-                    color: '#fc4b07'
+                    color: '#fe9c05'
                 },
                 '&.risk': {
-                    color: '#fe9c05'
+                    color: '#fc4b07'
                 },
             },
             '& li .parentLink': {
@@ -1772,7 +1772,7 @@ const Employee = () => {
 
     const navigate = useNavigate();
 
-    const [num, setNum] = React.useState('');
+    const [num, setNum] = React.useState("");
     const [userPopup, setUserPopup] = useState(false)
     const [settingsPopup, setSettingsPopup] = useState(false)
     const [chartPop, setChartPop] = useState(false)
@@ -1783,14 +1783,14 @@ const Employee = () => {
     const [getBaselineList] = useGetBaselineListMutation()
     const [getBaseline] = useGetBaselineMutation()
     const [baselineList, setBaselineList] = useState([])
-    const [baseline, setBaseline] = useState(7)
+    const [baseline, setBaseline] = useState(6)
     const [baselineData, setBaselineData] = useState({})
     const [improvmentList, setImprovmentList] = useState([]);
     const [leaderImprovementList, setLeaderImprovementList] = useState([]);
     const [safeWorkHistoryList, setSafeWorkHistoryList] = useState([]);
     const [accidentTotal, setAccidentTotal] = useState({});
     const [noticesList, setNoticesList] = useState([]);
-    const [dayInfo, setDayInfo] = useState();
+    const [dayInfo, setDayInfo] = useState(null);
     const [toggleGrid, setToggleGrid] = useState(false)
 
     const [userToken] = useUserToken()
@@ -1806,12 +1806,20 @@ const Employee = () => {
     const [hours, setHours] = useState("")
     const [minutes, setMinutes] = useState("")
     const [getEssentialRate] = useGetEssentialRateMutation()
+    const [essentialRates, setEssentialRates] = useState([])
+    const [getAccidentsPrevention] = useGetAccidentsPreventionMutation()
+    const [accidentsPreventionPercentage, setAccidentsPreventionPercentage] = useState({})/// this is APi with bug to be fixed on Backend
+    const [getImprovementLawOrder] = useGetImprovementLawOrderMutation()
+    const [lawOrderPercentage, setLawOrderPercentage] = useState({})
+    const [getRelatedLawRate] = useGetRelatedLawRateMutation()
+    const [relatedLawRatePercentage, setRelatedLawRatePercentage] = useState({})
+    const [getDutyDetailList] = useGetDutyDetailListMutation()
+    const [dutyDetailList, setDutyDetailList] = useState([])
 
-    const handleLoginInfo = async () => {
+    const fetchLoginInfo = async () => {
         const response = await getLoginInfo()
         setLoginInfo(response.data.RET_DATA)
     }
-
     const handleLogOut = () => {
         remove();
         navigate('/');
@@ -1821,12 +1829,12 @@ const Employee = () => {
         setNum(event.target.value);
     }
 
-    const handleNoticeList = async () => {
+    const fetchNoticeList = async () => {
         const response = await getNoticeList({});
         setNoticesList(response.data.RET_DATA);
     }
 
-    const handleFetchImprovementList = async () => {
+    const fetchImprovementList = async () => {
         const response = await getImprovementList({
             "baselineId": 6,
             "instruction": 1,
@@ -1835,7 +1843,7 @@ const Employee = () => {
         setImprovmentList(response.data.RET_DATA[0]);
     }
 
-    const handleFetchLeaderImprovementList = async () => {
+    const fetchLeaderImprovementList = async () => {
         const response = await getLeaderImprovementList({
             "baselineId": 6,
             "instruction": 1,
@@ -1875,7 +1883,7 @@ const Employee = () => {
         { title: "도급용역 위탁시 평가기준 및 절차 점검", percent: "97%", status: "normal" }
     ]
 
-    const handleFetchAccidentTotalList = async () => {
+    const fetchAccidentTotalList = async () => {
         const response = await getAccidentTotal({
             "baselineId": 6,
             "caughtCnt": 0,
@@ -1885,16 +1893,19 @@ const Employee = () => {
         setAccidentTotal(response.data.RET_DATA);
     }
 
-    const handleFetchSafeWorkHistoryList = async () => {
+    const fetchSafeWorkHistoryList = async () => {
         const response = await getSafeWorkHistoryList({
-            "baselineId": 7,
+            "baselineId": 6,
             "workplaceId": 1
         });
         setSafeWorkHistoryList(response.data.RET_DATA);
     }
 
     const fetchDayInfo = async () => {
-        const response = await getDayInfo()
+        const response = await getDayInfo({
+            "baselineStart": baselineData.baselineStart
+        })
+        setDayInfo(response.data.RET_DATA)
     }
 
     const refreshClock = () => {
@@ -1903,23 +1914,97 @@ const Employee = () => {
         setMinutes(now.format("mm"))
     }
 
-    const fetchEssentialRate = async () => {
+    const fetchEssentialRates = async () => {
         const response = await getEssentialRate({
             "baselineId": baseline
         })
+        setEssentialRates(response.data.RET_DATA)
     }
 
+    const [date, setDate] = React.useState(null);
+
+    const [locale] = React.useState('ko');
+
+    const handleSlickCircleColor = (percentage) => {
+        if (!percentage && percentage != '%') {
+            return ' risk';
+        } else {
+            const percentageNumber = percentage && parseFloat(percentage?.split('%')[0])
+
+            if (percentageNumber < 70) return ' risk';
+            else if (percentageNumber >= 70 && percentageNumber <= 79) return ' warning';
+            else if (percentageNumber >= 80 && percentageNumber < 90) return ' caution';
+            else if (percentageNumber >= 90) return ' normal';
+        }
+    }
+
+    // let sum = 0;            //// Loops for Average Percentage calcualtion
+    // let average = 0;
+    // let averageDivider = 0;
+    // if (essentialRates) {
+    //     for (const property in essentialRates) {
+    //         if (property.includes("rate")) {
+    //             sum += (parseFloat(essentialRates["rate1"].score.split("%")[0]))
+    //             averageDivider++
+
+    //         }
+    //     }
+    //     average = sum / averageDivider
+    // }
+
+    const fetchAccidentsPreventionPercentage = async () => {   /// this Request still need to be fixed on Backend
+        const response = await getAccidentsPrevention({
+            "baselineId": 6,
+            "workplaceId": 1
+        })
+        setAccidentsPreventionPercentage(response.data.RET_DATA)
+    }
+    const fetchImprovementLawOrderPercentage = async () => {
+        const response = await getImprovementLawOrder({
+            "baselineId": 6,
+            "workplaceId": 1
+        })
+        setLawOrderPercentage(response.data.RET_DATA)
+    }
+
+    const fetchRelatedLawRatePercentage = async () => {
+        const response = await getRelatedLawRate({
+            "baselineId": 6,
+            "workplaceId": 1
+        })
+        setRelatedLawRatePercentage(response.data.RET_DATA)
+    }
+
+    const fetchDutyDetailList = async () => {
+        const response = await getDutyDetailList({
+            "baselineId": 6,
+            "groupId": 2,
+            "workplaceId": 1
+        })
+        setDutyDetailList(response.data.RET_DATA)
+    }
+
+    console.log(relatedLawRatePercentage)
     useEffect(() => {
         fetchBaseline()
-        handleNoticeList();
-        handleLoginInfo();
-        handleFetchImprovementList();
-        handleFetchLeaderImprovementList();
-        handleFetchAccidentTotalList();
-        handleFetchSafeWorkHistoryList();
+        fetchNoticeList();
+        fetchLoginInfo();
+        fetchImprovementList();
+        fetchLeaderImprovementList();
+        fetchAccidentTotalList();
+        fetchSafeWorkHistoryList();
         fetchBaselineList()
         fetchCompanyInfo()
+        fetchDayInfo()
+        fetchEssentialRates()
+        fetchImprovementLawOrderPercentage()
+        fetchRelatedLawRatePercentage()
+        fetchDutyDetailList()
     }, [])
+
+    useEffect(() => {
+        fetchDayInfo()
+    }, [baselineData])
 
     useEffect(() => {
         const timerId = setInterval(refreshClock, 1000);
@@ -1927,10 +2012,6 @@ const Employee = () => {
             clearInterval(timerId);
         };
     }, [])
-
-    const [date, setDate] = React.useState(null);
-
-    const [locale] = React.useState('ko');
 
     return (
         <WideLayout>
@@ -2011,7 +2092,7 @@ const Employee = () => {
                                         inputProps={{ 'aria-label': 'Without label' }}
                                         disabled
                                     >
-                                        <MenuItem value="">55~300인 이하</MenuItem>
+                                        <MenuItem value="">{companyInfo?.scale}</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl sx={{ width: 150, marginLeft: '8px' }} className={classes.dropMenu}>
@@ -2023,7 +2104,7 @@ const Employee = () => {
                                         inputProps={{ 'aria-label': 'Without label' }}
                                         disabled
                                     >
-                                        <MenuItem value="">건설업</MenuItem>
+                                        <MenuItem value="">{companyInfo?.sector}</MenuItem>
                                     </Select>
                                 </FormControl>
                             </div>
@@ -2063,7 +2144,7 @@ const Employee = () => {
                                                         inputFormat="YYYY-MM-DD"
                                                         value={date}
                                                         onChange={setDate}
-                                                        renderInput={(params) => <TextField {...params} sx={{width: 220}} />}
+                                                        renderInput={(params) => <TextField {...params} sx={{ width: 220 }} />}
                                                     />
                                                 </LocalizationProvider>
                                             </AccordionDetails>
@@ -2376,7 +2457,7 @@ const Employee = () => {
                     </div>
                     <div className={classes.managementOrder}>
                         {/* 관리차수<strong>11</strong> 차 :<strong>22.01.01 ~ 22.04.30</strong> */}
-                        {baselineData?.baselineName}  차 :<strong>{baselineData?.baselineStart} ~ {baselineData?.baselineEnd}</strong>
+                        {baselineData?.baselineName} :<strong>{baselineData?.baselineStart} ~ {baselineData?.baselineEnd}</strong>
                     </div>
                     <div className={classes.managementSide}>
                         <FormControl sx={{ width: 130 }} className={classes.dropMenu + ' page_drop_menu'}>
@@ -2386,7 +2467,7 @@ const Employee = () => {
                                 onChange={(e) => setBaseline(e.target.value)}
                                 inputProps={{ 'aria-label': 'Without label' }}>
                                 {baselineList?.map((baseline) => (
-                                    <MenuItem MenuItem value={baseline.baselineId} onClick={() => setBaseline(baseline.baselineId)}>{baseline.baselineName}</MenuItem>
+                                    <MenuItem MenuItem value={baseline.baselineId}>{baseline.baselineName}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
@@ -2401,60 +2482,72 @@ const Employee = () => {
                             <ul className={classes.menuList + ' parentList'}>
                                 <li>
                                     <p className={classes.listLink + ' parentLink'} to={"#none"} underline="none">안전보건관리체계의 구축 및 이행</p>
-                                    <span className={'normal'}>93%</span>
+                                    <span className={'normal'}>
+                                        {essentialRates && essentialRates?.topRate}
+                                    </span>
                                     <ul className={classes.menuList + ' nestedList'}>
-                                        {listLinks.map((link, index) => (<li>
-                                            <Link className={clicked === index ? classes.listLinkClicked : classes.listLink} onClick={() => setClicked(index)} to={"#none"} underline="none">{link.title}</Link>
-                                            <span className={link.status}>{link.percent}</span>
-                                        </li>))}
+                                        <li>
+                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate1?.title}</Link>
+                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate1?.score)}>{essentialRates && essentialRates?.rate1?.score}</span>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate2?.title}</Link>
+                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate2?.score)}>{essentialRates && essentialRates?.rate2?.score}</span>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate3?.title}</Link>
+                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate3?.score)}>{essentialRates && essentialRates?.rate3?.score}</span>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate4?.title}</Link>
+                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate4?.score)}>{essentialRates && essentialRates?.rate4?.score}</span>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate5?.title}</Link>
+                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate5?.score)}>{essentialRates && essentialRates?.rate5?.score}</span>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate6?.title}</Link>
+                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate6?.score)}>{essentialRates && essentialRates?.rate6?.score}</span>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate7?.title}</Link>
+                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate7?.score)}>{essentialRates && essentialRates?.rate7?.score}</span>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate8?.title}</Link>
+                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate8?.score)}>{essentialRates && essentialRates?.rate8?.score}</span>
+                                        </li>
+                                        <li>
+                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate9?.title}</Link>
+                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate9?.score)}>{essentialRates && essentialRates?.rate9?.score}</span>
+                                        </li>
                                     </ul>
                                 </li>
                                 <li>
                                     <Link className={classes.listLink + ' parentLink'} to={"/dashboard/employee/accident-countermeasures-implementation/list"} underline="none">재해발생 방지대책 및 이행현황</Link>
-                                    <span className={'caution'}>86%</span>
+                                    <span className={'caution'}>{0}%</span>
                                 </li>
                                 <li>
                                     <Link className={classes.listLink + ' parentLink'} to={"/dashboard/employee/order-for-improvement-and-correction-under-related-law/list"} underline="none">관계법령에 따른 개선.시정명령 조치</Link>
-                                    <span className={'warning'}>32%</span>
+                                    <span className={'warning'}>{lawOrderPercentage?.improvemetRate}</span>
                                 </li>
                                 <li>
                                     <Link className={classes.listLink + ' parentLink'} to={"/dashboard/employee/measure-to-manage-performance-od-duties-law/list"} underline="none">관계법령에 의무이행의 관리의 조치</Link>
-                                    <span className={'risk'}>76%</span>
+                                    <span className={'risk'}>{relatedLawRatePercentage?.relatedLawRate}</span>
                                 </li>
                             </ul>
                         </div>
                     </Grid>
                     <Grid item xs={2.7}>
                         <div className={classes.contentList}>
-                            <div className={classes.listTitle}>의무조치별 상세 점검 항목  <span>총 <strong>40</strong> 건</span></div>
+                            <div className={classes.listTitle}>의무조치별 상세 점검 항목  <span>총 <strong>{0}</strong> 건</span></div>
                             <ul className={classes.menuList + ' secondList'}>
-                                <li>
-                                    <Link className={classes.listLink} to={"#none"} underline="none">재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지·증진하기 위한 책임과 책무를 다하여야 한다.</Link>
-                                </li>
-                                <li>
-                                    <Link className={classes.listLink + ' activeLink'} to={"#none"} underline="none">안전보건방침과 이에 따른 목표가 수립되고 이들이 조직의 전략적 방향과 조화되도록 하여야 한다.</Link>
-                                </li>
-                                <li>
-                                    <Link className={classes.listLink} to={"#none"} underline="none">안전보건경영시스템의 구축, 실행, 유지, 개선에 필요한 자원(물적, 인적)을 제공하고 안전보건경영시스템의 효과성에 기여하도록 인원을 지휘하여야 한다. </Link>
-                                </li>
-                                <li>
-                                    <Link className={classes.listLink} to={"#none"} underline="none">효과적인 안전보건경영의 중요성과 안전보건경영시스템 요구사항 이행의 중요성에 대한 의사소통이 되도록 하여야 한다.</Link>
-                                </li>
-                                <li>
-                                    <Link className={classes.listLink} to={"#none"} underline="none">안전보건경영시스템이 의도된 결과를 달성할 수 있도록 하여야 한다.</Link>
-                                </li>
-                                <li>
-                                    <Link className={classes.listLink} to={"#none"} underline="none">지속적인 개선을 보장하고 촉진하여야 한다.</Link>
-                                </li>
-                                <li>
-                                    <Link className={classes.listLink} to={"#none"} underline="none">안전보건경영시스템의 의도된 결과를 지원하는 조직 문화의 개발, 실행 및 촉진하여야 한다.</Link>
-                                </li>
-                                <li>
-                                    <Link className={classes.listLink} to={"#none"} underline="none">안전보건경영시스템의 구축, 실행, 유지, 개선에 필요한 자원(물적, 인적)을 제공하고 안전보건경영시스템의 효과성에 기여하도록 인원을 지휘하여야 한다.</Link>
-                                </li>
-                                <li>
-                                    <Link className={classes.listLink} to={"#none"} underline="none">효과적인 안전보건경영의 중요성과 안전보건경영시스템</Link>
-                                </li>
+                                {dutyDetailList?.map((element) => {
+                                    return (<li>
+                                        <Link className={classes.listLink} to={"#none"} underline="none">{element.detailedItems}</Link>
+                                    </li>)
+                                })}
                             </ul>
                         </div>
                     </Grid>
@@ -2589,7 +2682,7 @@ const Employee = () => {
                     <Grid container item xs={12} className={hoverContainer ? classes.wrap_hover : classes.hoverWrap} onMouseLeave={() => setHoverContainer(false)}>
                         <Grid className={classes.gageWrap} item xs={2}>
                             <div className={classes.gageArrow}>
-                                <div className={classes.needleImg} style={{ transform: 'rotate(25deg)' }}></div>
+                                <div className={classes.needleImg} style={{ transform: 'rotate(-75deg)' }}></div>
                                 <div className={classes.gageState}></div>
                             </div>
                         </Grid>
@@ -2729,10 +2822,11 @@ const Employee = () => {
                                     <div className={classes.footDay + ' dateBox'}>
                                         <div>DAY</div>
                                         <div className={classes.dayNums}>
-                                            <div><img src={numThree} alt="number three" /></div>
+                                            {dayInfo?.day}
+                                            {/* <div><img src={numThree} alt="number three" /></div>
                                             <div><img src={numTwo} alt="number two" /></div>
                                             <div><img src={numFour} alt="number four" /></div>
-                                            <div><img src={numFive} alt="number five" /></div>
+                                            <div><img src={numFive} alt="number five" /></div> */}
                                         </div>
                                     </div>
                                     <div className={classes.footTime + ' dateBox'}>

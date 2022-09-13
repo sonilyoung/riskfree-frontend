@@ -41,6 +41,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
+import moment from "moment"
 
 
 
@@ -364,14 +365,15 @@ const List = () => {
     const [accLevelCd, setAccLeveCd] = useState("")
     const [accTypeCd, setAccTypeCd] = useState("")
     const [managerName, setManagerName] = useState("")
-    const [startDate, setStartDate] = useState("")
-    const [finishDate, setFinishDate] = useState("")
+    const [startDate, setStartDate] = useState(null)
+    const [finishDate, setFinishDate] = useState(null)
     const [workplaceSelect, setWorkplaceSelect] = useState("")
     const [occurPlaceSelect, setOccurPlaceSelect] = useState("")
     const [page, setPage] = useState(1)
     const [death, setDeath] = useState(false)
     const [job, setJob] = useState(false)
     const [same, setSame] = useState(false)
+    const [locale] = React.useState('ko');
 
 
     const [isCheckAll, setIsCheckAll] = useState(false);
@@ -473,7 +475,6 @@ const List = () => {
     const handleRedirect = () => {
         navigate("/dashboard/employee/accident-countermeasures-implementation/registration")
     }
-
     const fetchAccidentsList = async () => {
         const response = await accidentSelect({
             "accLevelCd": accLevelCd,
@@ -514,58 +515,10 @@ const List = () => {
         setAccTypeCd(e.target.value)
     }
 
-
-    const handleStartDate = (e) => {
-        setStartDate(e.target.value)
-    }
-
-    const handleFinishDate = (e) => {
-        setFinishDate(e.target.value)
-    }
-
     const handlePageChange = (event, value) => {
         setPage(value)
     }
 
-    // const accTypeCdAll = () => {
-    //     setAccTypeAll(!accTypeAll)
-    //     if (accTypeAll) {
-    //         setAccTypeFirst("001")
-    //         setAccTypeSecond("002")
-    //         setAccTypeThird("003")
-    //         setAccTypeFourth("004")
-    //         setAccTypeFifth("005")
-    //         setAccTypeSixth("006")
-    //     } else {
-    //         setAccTypeFirst("")
-    //         setAccTypeSecond("")
-    //         setAccTypeThird("")
-    //         setAccTypeFourth("")
-    //         setAccTypeFifth("")
-    //         setAccTypeSixth("")
-    //     }
-    //     console.log(accTypeAll, accTypeFirst, accTypeSecond, accTypeThird, accTypeFourth, accTypeFifth, accTypeSixth)
-    // }
-    // const accTypeCdFirst = () => {
-    //     setAccTypeSecond(accTypeSecond ? "" : "002")
-    // }
-    // const accTypeCdFirst = () => {
-    //     setAccTypeFirst(accTypeFirst ? "" : "001")
-    // }
-    // const accTypeCdFirst = () => {
-    //     setAccTypeFirst(accTypeFirst ? "" : "001")
-    // }
-    // const accTypeCdFirst = () => {
-    //     setAccTypeFirst(accTypeFirst ? "" : "001")
-    // }
-    // const accTypeCdFirst = () => {
-    //     setAccTypeFirst(accTypeFirst ? "" : "001")
-    // }
-
-    const [date1, setDate1] = React.useState(null),
-          [date2, setDate2] = React.useState(null);
-
-    const [locale] = React.useState('ko');
 
     useEffect(() => {
         fetchAccidentsList()
@@ -710,9 +663,12 @@ const List = () => {
                                         className={classes.selectMenuDate}
                                         label=" "
                                         inputFormat="YYYY-MM-DD"
-                                        value={date1}
-                                        onChange={setDate1}
-                                        renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
+                                        value={startDate}
+                                        onChange={(newDate) => {
+                                            const date = new Date(newDate.$d)
+                                            setStartDate(moment(date).format("YYYY-MM-DD"))
+                                        }}
+                                        renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                     />
                                 </LocalizationProvider>
                                 &nbsp;~&nbsp;
@@ -721,9 +677,12 @@ const List = () => {
                                         className={classes.selectMenuDate}
                                         label=" "
                                         inputFormat="YYYY-MM-DD"
-                                        value={date2}
-                                        onChange={setDate2}
-                                        renderInput={(params) => <TextField {...params} sx={{width: 140}} />}
+                                        value={finishDate}
+                                        onChange={(newDate) => {
+                                            const date = new Date(newDate.$d)
+                                            setFinishDate(moment(date).format("YYYY-MM-DD"))
+                                        }}
+                                        renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                     />
                                 </LocalizationProvider>
                             </div>
@@ -812,9 +771,9 @@ const List = () => {
                     </>
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
-                    <div>총 게시글 <strong>{accidents[0]?.totalCount}</strong> 건</div>
+                    <div>총 게시글 <strong>{accidents && accidents[0]?.totalCount}</strong> 건</div>
                     <Stack spacing={2}>
-                        <Pagination count={(Math.ceil(accidents[0]?.totalCount / 10))} boundaryCount={10} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
+                        <Pagination count={accidents.length && (Math.ceil(accidents[0]?.totalCount / 10))} boundaryCount={10} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
                     </Stack>
                     <div>
                         <ExcelButton>엑셀 다운로드</ExcelButton>

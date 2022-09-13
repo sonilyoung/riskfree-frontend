@@ -359,10 +359,10 @@ const Registration = () => {
     };
 
     const [date1, setDate1] = React.useState(null),
-          [date2, setDate2] = React.useState(null);
+        [date2, setDate2] = React.useState(null);
 
     const [locale] = React.useState('ko');
-
+    console.log(law)
     useEffect(() => {
         handleLoginInfo()
     }, [])
@@ -535,20 +535,22 @@ const Registration = () => {
                                         id="outlined-multiline-static"
                                         multiline
                                         rows={4}
-                                        defaultValue="작업 감독자 미배치로 인한 지적"
-                                    />                   
+                                        value={law.improveCn}
+                                        onChange={(e) => setLaw({ ...law, "improveCn": e.target.value })}
+                                    />
                                 </div>
                                 <div className={classes.rowTitle}>구분</div>
                                 <div className={classes.rowInfo}>
                                     <Select
-                                        sx={{width: 180}}
+                                        sx={{ width: 180 }}
                                         className={classes.selectMenu}
-                                        value={num}
-                                        onChange={handleChange}
+                                        value={law.improveTypeCd}
+                                        onChange={(e) => setLaw({ ...law, "improveTypeCd": e.target.value })}
                                         displayEmpty
                                     >
-                                        <MenuItem value="">개선</MenuItem>
-                                    </Select>                  
+                                        <MenuItem value="001">개선</MenuItem>
+                                        <MenuItem value="002">조치</MenuItem>
+                                    </Select>
                                 </div>
                                 <div className={classes.rowTitle}>지적일자</div>
                                 <div className={classes.rowInfo}>
@@ -557,11 +559,14 @@ const Registration = () => {
                                             className={classes.selectMenuDate}
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
-                                            value={date1}
-                                            onChange={setDate1}
-                                            renderInput={(params) => <TextField {...params} sx={{width: 180}} />}
+                                            value={law.orderDate}
+                                            onChange={(newDate) => {
+                                                const date = new Date(newDate.$d)
+                                                setLaw({ ...law, "orderDate": moment(date).format("YYYY-MM-DD") })
+                                            }}
+                                            renderInput={(params) => <TextField {...params} sx={{ width: 180 }} />}
                                         />
-                                    </LocalizationProvider>                 
+                                    </LocalizationProvider>
                                 </div>
                                 <div className={classes.rowTitle}>완료요청일</div>
                                 <div className={classes.rowInfo}>
@@ -570,11 +575,14 @@ const Registration = () => {
                                             className={classes.selectMenuDate}
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
-                                            value={date2}
-                                            onChange={setDate2}
-                                            renderInput={(params) => <TextField {...params} sx={{width: 180}} />}
+                                            value={law.dueDate}
+                                            onChange={(newDate) => {
+                                                const date = new Date(newDate.$d)
+                                                setLaw({ ...law, "dueDate": moment(date).format("YYYY-MM-DD") })
+                                            }}
+                                            renderInput={(params) => <TextField {...params} sx={{ width: 180 }} />}
                                         />
-                                    </LocalizationProvider>                 
+                                    </LocalizationProvider>
                                 </div>
                             </div>
                         </div>
