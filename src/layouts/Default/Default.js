@@ -46,6 +46,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { selectBaselineId, setBaselineId } from '../../slices/selections/MainSelection';
+import { useLocalStorage } from '../../hooks/misc/LocalStorage';
+
 
 const useStyles = makeStyles(() => ({
     bodyWrap: {
@@ -576,6 +580,10 @@ const Default = ({ children }) => {
     const companyId = userToken.getUserCompanyId()
     const [getCompanyInfo] = useGetCompanyInfoMutation()
 
+    const dispatch = useDispatch();
+    const localStorage = useLocalStorage();
+    const currentBaseline = useSelector(selectBaselineId);
+
 
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -605,6 +613,9 @@ const Default = ({ children }) => {
     }
 
     useEffect(() => {
+        if (currentBaseline === null) {
+            dispatch(setBaselineId(localStorage.getDefaultBaselineId()));
+        }
         handleLoginInfo()
         fetchCompanyInfo()
     }, [])
@@ -743,7 +754,7 @@ const Default = ({ children }) => {
                                                         inputFormat="YYYY-MM-DD"
                                                         value={date}
                                                         onChange={setDate}
-                                                        renderInput={(params) => <TextField {...params} sx={{width: 220}} />}
+                                                        renderInput={(params) => <TextField {...params} sx={{ width: 220 }} />}
                                                     />
                                                 </LocalizationProvider>
                                             </AccordionDetails>

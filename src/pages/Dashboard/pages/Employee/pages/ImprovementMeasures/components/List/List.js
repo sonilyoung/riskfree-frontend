@@ -33,13 +33,14 @@ import pagePrev from '../../../../../../../../assets/images/btn_pre.png';
 
 import { useGetWorkplaceListMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
 import { useImprovementSelectMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement';
-import { selectBaselineId, selectWorkplaceId } from '../../../../../../../../slices/selections/MainSelection';
+import { selectBaselineId, selectWorkplaceId, setBaselineId } from '../../../../../../../../slices/selections/MainSelection';
 import moment from "moment";
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
+
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
