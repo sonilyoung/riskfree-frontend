@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 
 import { makeStyles, styled } from '@mui/styles';
 
-import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom'
 
 import TextField from '@mui/material/TextField';
 import Stepper from '@mui/material/Stepper';
@@ -52,6 +52,7 @@ const useStyles = makeStyles(() => ({
         alignItems: 'center',
         alignContent: 'center',
         height: '68px',
+        textDecoration: "none",
         // width: '100%',
         marginLeft: '10px !important',
         background: '#3a5298',
@@ -255,8 +256,20 @@ const useStyles = makeStyles(() => ({
             marginLeft: '10px'
         }
     },
-
-
+    linkBtn: {
+        textDecoration: "none",
+        color: "#adb0b2",
+        '&:visited': {
+            color: '#adb0b2'
+        },
+    },
+    linkBtnActive: {
+        textDecoration: "none",
+        color: "#018de7",
+        '&:visited': {
+            color: '#018de7'
+        },
+    }
 }));
 
 const ClosePopupButton2 = styled(ButtonUnstyled)`
@@ -393,7 +406,7 @@ const List = () => {
                 <Grid item xs={12} className={classes.headerButtons}>
 
                     {relatedRawButtonList.length > 0 && relatedRawButtonList.map(relatedRawButtonItem =>
-                    (<Link href="#none" className={classes.buttonLink}>
+                    (<Link to="#none" className={classes.buttonLink}>
                         <span>{relatedRawButtonItem?.lawName}</span>
                     </Link>)
                     )}
@@ -406,7 +419,7 @@ const List = () => {
                             <StepLabel
                                 icon={<img src={iconTabOn} alt="active step" />}
                             >
-                                <Link className={classes.linkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/list">표준상태보기</Link>
+                                <Link className={classes.linkBtnActive} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/list">표준상태보기</Link>
                             </StepLabel>
                         </Step>
                         <Step >

@@ -82,7 +82,7 @@ import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useUserToken } from '../../../../hooks/core/UserToken';
 import moment from 'moment'
 
@@ -1815,6 +1815,8 @@ const Employee = () => {
     const [relatedLawRatePercentage, setRelatedLawRatePercentage] = useState({})
     const [getDutyDetailList] = useGetDutyDetailListMutation()
     const [dutyDetailList, setDutyDetailList] = useState([])
+    const [getInspectionsDocs] = useGetInspectiondocsMutation()
+    const [inspectionsDocs, setInspectionsDocs] = useState([])
 
     const fetchLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -1993,7 +1995,17 @@ const Employee = () => {
         else if (essentialRateMeasureScore === 'normal') return -75;
     }
 
-    console.log(relatedLawRatePercentage)
+    const fetchInspectionDocs = async () => {
+        const response = await getInspectionsDocs({
+            "articleNo": 3857
+        })
+        setInspectionsDocs(response.data.RET_DATA)
+    }
+
+    useEffect(() => {
+        fetchDayInfo()
+    }, [baselineData])
+
     useEffect(() => {
         fetchBaseline()
         fetchNoticeList();
@@ -2009,11 +2021,9 @@ const Employee = () => {
         fetchImprovementLawOrderPercentage()
         fetchRelatedLawRatePercentage()
         fetchDutyDetailList()
+        fetchAccidentsPreventionPercentage()
+        fetchInspectionDocs()
     }, [])
-
-    useEffect(() => {
-        fetchDayInfo()
-    }, [baselineData])
 
     useEffect(() => {
         const timerId = setInterval(refreshClock, 1000);
@@ -2535,7 +2545,7 @@ const Employee = () => {
                                 </li>
                                 <li>
                                     <Link className={classes.listLink + ' parentLink'} to={"/dashboard/employee/accident-countermeasures-implementation/list"} underline="none">재해발생 방지대책 및 이행현황</Link>
-                                    <span className={'caution'}>{0}%</span>
+                                    <span className={'caution'}>{accidentsPreventionPercentage?.improvemetRate}%</span>
                                 </li>
                                 <li>
                                     <Link className={classes.listLink + ' parentLink'} to={"/dashboard/employee/order-for-improvement-and-correction-under-related-law/list"} underline="none">관계법령에 따른 개선.시정명령 조치</Link>
@@ -2550,7 +2560,7 @@ const Employee = () => {
                     </Grid>
                     <Grid item xs={2.7}>
                         <div className={classes.contentList}>
-                            <div className={classes.listTitle}>의무조치별 상세 점검 항목  <span>총 <strong>{0}</strong> 건</span></div>
+                            <div className={classes.listTitle}>의무조치별 상세 점검 항목  <span>총 <strong>{dutyDetailList.length > 0 && dutyDetailList[0].totalCount}</strong> 건</span></div>
                             <ul className={classes.menuList + ' secondList'}>
                                 {dutyDetailList?.map((element) => {
                                     return (<li>
@@ -2566,28 +2576,15 @@ const Employee = () => {
                                 <div>
                                     <div className={classes.listTitle}>점검서류 등 목록</div>
                                     <ul className={classes.menuList}>
-                                        <li>
-                                            <Link className={classes.listLink} to={"#none"} underline="none">안전보건이사회 발표자료</Link>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} to={"#none"} underline="none">경영목표 및 방침 내역 및 실행내역서</Link>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} to={"#none"} underline="none">산업안전보건위원회 회의록</Link>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} to={"#none"} underline="none">사내 협력사 회의록</Link>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} to={"#none"} underline="none">교육계획서 및 교육결과서</Link>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} to={"#none"} underline="none">사내.외 경영방침 게시내역</Link>
-                                        </li>
+                                        {inspectionsDocs?.map((inspection) => (
+                                            <li>
+                                                <Link className={classes.listLink} to={"#none"} underline="none">{inspection.shGoal}</Link>
+                                            </li>
+                                        ))}
                                     </ul>
                                 </div>
                                 <div>
-                                    <div className={classes.listTitle}><strong>3</strong>건 / 6건</div>
+                                    <div className={classes.listTitle}><strong>{inspectionsDocs.length > 0 && inspectionsDocs[0].fileCount}</strong>건 /{inspectionsDocs.length > 0 && inspectionsDocs[0].totalCount}건</div>
                                     <ul className={classes.menuList + ' buttonList'}>
                                         <li>
                                             <FileButtonNone></FileButtonNone>
