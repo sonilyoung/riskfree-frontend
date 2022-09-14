@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { DefaultLayout } from '../../../../../../layouts/Default';
 
 import Checkbox from '@mui/material/Checkbox';
@@ -42,6 +42,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
+import { useGetWorkplaceListMutation } from '../../../../../../hooks/api/MainManagement/MainManagement';
+import moment from 'moment';
+import { useGetSafeWorkFileMutation, useGetSafeWorkFileTopInfoMutation, useGetSafeWorkMutation } from '../../../../../../hooks/api/SafeWorkManagement/SafeWorkManagement';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -325,8 +328,8 @@ const useStyles = makeStyles(() => ({
         }
     },
     headerPopup: {
-        display: 'none !important',
         position: 'absolute',
+        zIndex: '5',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%,-50%)',
@@ -351,14 +354,12 @@ const useStyles = makeStyles(() => ({
             right: '0px',
             marginRight: '20px'
         },
-        display: "none !important"
     },
     popupBody: {
         padding: '20px',
         '& button': {
             float: 'right'
         },
-        display: "none !important"
     },
     popTop: {
         display: 'flex',
@@ -374,7 +375,6 @@ const useStyles = makeStyles(() => ({
                 }
             }
         },
-        display: "none !important"
     },
     uploadPopup: {
         position: 'absolute',
@@ -468,6 +468,9 @@ const useStyles = makeStyles(() => ({
             paddingLeft: '0',
         }
     },
+    popupHide: {
+        display: "none !important",
+    }
 }));
 
 const SearchButton = styled(ButtonUnstyled)`
@@ -571,15 +574,59 @@ const UnknownButton2 = styled(ButtonUnstyled)`
 const WorkHistoryList = () => {
     const classes = useStyles();
 
-    const [num, setNum] = React.useState('');
+    const [getWorkplaceList] = useGetWorkplaceListMutation();
+    const [getSafeWork] = useGetSafeWorkMutation();
+    const [getSafeWorkFileTopInfo] = useGetSafeWorkFileTopInfoMutation();
+    const [getSafeWorkFile] = useGetSafeWorkFileMutation();
 
-    const handleChange = (event) => {
-        setNum(event.target.value);
-    };
-
-    const [date, setDate] = React.useState(null);
-          
     const [locale] = React.useState('ko');
+    const [hide, setHide] = useState(true);
+    const [workplaceList, setWorkplaceList] = useState([]);
+    const [safeWorkList, setSafeWorkList] = useState([]);
+    const [safeWorkFileList, setSafeWorkFileList] = useState([]);
+    const [safeWorkFileTopinfo, setSafeWorkFileTopinfo] = useState({});
+
+    const [workplaceId, setWorkplaceId] = useState("");
+    const [insertDate, setInsertDate] = useState(null);
+    const [username, setUsername] = useState("");
+
+    const fetchWorkplaceList = async () => {
+        const response = await getWorkplaceList();
+        setWorkplaceList(response.data.RET_DATA);
+    }
+
+    const fetchSafeWorkList = async () => {
+        const response = await getSafeWork({
+            "workplaceId": workplaceId,
+            "insertDate": insertDate,
+            "userName": username
+        });
+        setSafeWorkList(response.data.RET_DATA);
+    }
+
+    const fetchSafeWorkFileTopInfo = async () => {
+        const response = await getSafeWorkFileTopInfo({
+            "noticeId": 2
+        });
+        setSafeWorkFileTopinfo(response.data.RET_DATA);
+        console.log(response.data.RET_DATA);
+    }
+
+    const fetchSafeWorkFileList = async () => {
+        const response = await getSafeWorkFile({
+            "workplaceId": workplaceId
+        });
+        setSafeWorkFileList(response.data.RET_DATA);
+        console.log(response.data.RET_DATA);
+    }
+
+    useEffect(() => {
+        fetchWorkplaceList();
+        fetchSafeWorkList();
+        fetchSafeWorkFileTopInfo();
+    }, []);
+
+    console.log(hide);
 
     return (
         <DefaultLayout>
@@ -597,11 +644,12 @@ const WorkHistoryList = () => {
                                 <Select
                                     className={classes.selectMenu}
                                     sx={{ width: 210 }}
-                                    value={num}
-                                    onChange={handleChange}
+                                    value={workplaceId}
+                                    onChange={(e) => setWorkplaceId(e.target.value)}
                                     displayEmpty
                                 >
-                                    <MenuItem value="">전체</MenuItem>
+                                    {workplaceList?.length > 0 && workplaceList?.map(workplace =>
+                                        <MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>)}
                                 </Select>
                             </div>
                             <div>
@@ -611,9 +659,12 @@ const WorkHistoryList = () => {
                                         className={classes.selectMenuDate}
                                         label=" "
                                         inputFormat="YYYY-MM-DD"
-                                        value={date}
-                                        onChange={setDate}
-                                        renderInput={(params) => <TextField {...params} sx={{width: 180}} />}
+                                        value={insertDate}
+                                        onChange={(newDate) => {
+                                            const date = new Date(newDate.$d);
+                                            setInsertDate(moment(date).format("YYYY-MM-DD"))
+                                        }}
+                                        renderInput={(params) => <TextField {...params} sx={{ width: 180 }} />}
                                     />
                                 </LocalizationProvider>
                             </div>
@@ -621,14 +672,15 @@ const WorkHistoryList = () => {
                                 <div className={classes.infoTitle}>등록자</div>
                                 <TextField
                                     variant="outlined"
-                                    placeholder="홍길동"
+                                    placeholder=""
                                     sx={{ width: 200 }}
                                     className={classes.selectMenu}
+                                    onChange={(e) => setUsername(e.target.value)}
                                 />
                             </div>
                         </div>
                         <div className={classes.searchButtons}>
-                            <SearchButton>조회</SearchButton>
+                            <SearchButton onClick={fetchSafeWorkList}>조회</SearchButton>
                             <RegisterButton sx={{ marginLeft: '10px' }}>등록</RegisterButton>
                         </div>
                     </div>
@@ -654,177 +706,44 @@ const WorkHistoryList = () => {
                             </div>
                         </div>
                     </div>
-                    <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>1</div>
-                        <div className={classes.tableRow}>울산</div>
-                        <div className={classes.tableRow}>2022-01-03 14:00</div>
-                        <div className={classes.tableRow}>홍길동</div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>2건</div>
-                    </div>
-                    <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>2</div>
-                        <div className={classes.tableRow}>울산</div>
-                        <div className={classes.tableRow}>2022-01-03 14:00</div>
-                        <div className={classes.tableRow}>홍길동</div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>2건</div>
-                    </div>
-                    <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>3</div>
-                        <div className={classes.tableRow}>울산</div>
-                        <div className={classes.tableRow}>2022-01-03 14:00</div>
-                        <div className={classes.tableRow}>홍길동</div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>2건</div>
-                    </div>
-                    <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>4</div>
-                        <div className={classes.tableRow}>울산</div>
-                        <div className={classes.tableRow}>2022-01-03 14:00</div>
-                        <div className={classes.tableRow}>홍길동</div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>2건</div>
-                    </div>
-                    <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>5</div>
-                        <div className={classes.tableRow}>울산</div>
-                        <div className={classes.tableRow}>2022-01-03 14:00</div>
-                        <div className={classes.tableRow}>홍길동</div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>2건</div>
-                    </div>
-                    <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>6</div>
-                        <div className={classes.tableRow}>울산</div>
-                        <div className={classes.tableRow}>2022-01-03 14:00</div>
-                        <div className={classes.tableRow}>홍길동</div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>2건</div>
-                    </div>
-                    <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>7</div>
-                        <div className={classes.tableRow}>울산</div>
-                        <div className={classes.tableRow}>2022-01-03 14:00</div>
-                        <div className={classes.tableRow}>홍길동</div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>2건</div>
-                    </div>
-                    <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>8</div>
-                        <div className={classes.tableRow}>울산</div>
-                        <div className={classes.tableRow}>2022-01-03 14:00</div>
-                        <div className={classes.tableRow}>홍길동</div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>2건</div>
-                    </div>
-                    <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>9</div>
-                        <div className={classes.tableRow}>울산</div>
-                        <div className={classes.tableRow}>2022-01-03 14:00</div>
-                        <div className={classes.tableRow}>홍길동</div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>2건</div>
-                    </div>
-                    <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>10</div>
-                        <div className={classes.tableRow}>울산</div>
-                        <div className={classes.tableRow}>2022-01-03 14:00</div>
-                        <div className={classes.tableRow}>홍길동</div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}></div>
-                        <div className={classes.tableRow}>2건</div>
-                    </div>
-                    <div className={classes.headerPopup}>
+                    {safeWorkList?.length > 0 && safeWorkList.map((safeWorkItem, index) =>
+                    (<div className={classes.tableBody} onClick={() => setHide(false)}>
+                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}>{index + 1}</div>
+                        <div className={classes.tableRow}>{safeWorkItem.workplaceName}</div>
+                        <div className={classes.tableRow}>{safeWorkItem.insertDate}</div>
+                        <div className={classes.tableRow}>{safeWorkItem.userName}</div>
+                        <div className={classes.tableRow}>{safeWorkItem.fire}</div>
+                        <div className={classes.tableRow}>{safeWorkItem.closeness}</div>
+                        <div className={classes.tableRow}>{safeWorkItem.blackout}</div>
+                        <div className={classes.tableRow}>{safeWorkItem.excavation}</div>
+                        <div className={classes.tableRow}>{safeWorkItem.radiation}</div>
+                        <div className={classes.tableRow}>{safeWorkItem.sue}</div>
+                        <div className={classes.tableRow}>{safeWorkItem.heavy}</div>
+                        <div className={classes.tableRow}>{safeWorkItem.totalCount}건</div>
+                    </div>)
+                    )}
+                    <div className={hide ? classes.popupHide : classes.headerPopup}>
                         <div className={classes.popHeader}>
                             안전작업허가 공사내역 관리
-                            <ButtonClosePop></ButtonClosePop>
+                            <ButtonClosePop onClick={() => setHide(true)}></ButtonClosePop>
                         </div>
-                        <div className={classes.popupBody}>
-                            <div className={classes.popTop}>
+                        <div className={hide ? classes.popupHide : classes.popupBody}>
+                            <div className={hide ? classes.popupHide : classes.popTop}>
                                 <div>
                                     <div>사업장</div>
-                                    <div><strong>여수</strong></div>
+                                    <div><strong>{safeWorkFileTopinfo && safeWorkFileTopinfo?.workplaceName}</strong></div>
                                 </div>
                                 <div>
                                     <div>자이그브</div>
-                                    <div><strong>구차</strong></div>
+                                    <div><strong>{safeWorkFileTopinfo && safeWorkFileTopinfo?.constructionName}</strong></div>
                                 </div>
                                 <div>
                                     <div>등록일</div>
-                                    <div><strong>2022-04-01</strong></div>
+                                    <div><strong>{safeWorkFileTopinfo && safeWorkFileTopinfo?.insertDate}</strong></div>
                                 </div>
                             </div>
-                            <Grid item xs={12} className={classes.dataTable + ' popup_table'}>
+                            <Grid item xs={12} className={hide ? classes.popupHide : classes.dataTable + ' popup_table'}>
                                 <div className={classes.tableHead}>
                                     <div className={classes.tableRow}>No</div>
                                     <div className={classes.tableRow}>파일명</div>

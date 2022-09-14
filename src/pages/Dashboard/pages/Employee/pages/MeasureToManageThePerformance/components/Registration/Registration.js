@@ -325,7 +325,7 @@ const MPDLawThird = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.headerButtons}>
 
-                    {relatedRawButtonList.length && relatedRawButtonList.map(relatedRawButtonItem =>
+                    {relatedRawButtonList.length > 0 && relatedRawButtonList.map(relatedRawButtonItem =>
                     (<Link href="#none" className={classes.buttonLink}>
                         <span>{relatedRawButtonItem?.lawName}</span>
                     </Link>)
@@ -377,7 +377,7 @@ const MPDLawThird = () => {
                         </div>
                         <div className={classes.tableBody}>
 
-                            {relatedRawList?.length && relatedRawList.map(relatedRawItem =>
+                            {relatedRawList?.length > 0 && relatedRawList.map(relatedRawItem =>
                             (<div className={classes.tableRow}>
                                 <div className={classes.tableData}>{relatedRawItem.relatedArticle}</div>
                                 <div className={classes.tableData}>{relatedRawItem.articleItem}<span></span></div>
