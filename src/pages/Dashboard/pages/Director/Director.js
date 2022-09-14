@@ -517,7 +517,7 @@ const Director = () => {
         fetchLeadersImproveList();
         fetchAccidentTotal();
         fetchSafeWorkHistoryList();
-        // fetchAccidentsPrevention();
+        fetchAccidentsPrevention()
         fetchDayInfo();
 
     }, [baselineId, userWorkplaceId]);
@@ -1024,9 +1024,9 @@ const Director = () => {
                                     <div>도급/용역 위탁 시<br /> 안전보건 확보</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + handleSlickCircleColor('100%')}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(accidentsPrevention?.RET_DATA?.enforceRate)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{accidentsPrevention?.RET_DATA?.enforceRate}10</strong>%</div>
+                                    <div><strong>{accidentsPrevention?.RET_DATA?.enforceRate}</strong></div>
                                     <div>재발방지<br /> 대책</div>
                                 </Link>
                             </div>
@@ -1099,9 +1099,9 @@ const Director = () => {
                                     <div>도급/용역 위탁 시<br /> 안전보건 확보</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + handleSlickCircleColor('100%')}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(accidentsPrevention?.RET_DATA?.enforceRate)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{accidentsPrevention?.RET_DATA?.enforceRate}10</strong>%</div>
+                                    <div><strong>{accidentsPrevention?.RET_DATA?.enforceRate}</strong></div>
                                     <div>재발방지<br /> 대책</div>
                                 </Link>
                             </div>
