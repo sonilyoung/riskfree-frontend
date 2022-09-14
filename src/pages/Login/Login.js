@@ -7,13 +7,11 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
-//import { selectUser, setUser } from '../../slices/User';
 import { selectBaselineId, selectWorkplaceId, setBaselineId } from '../../slices/selections/MainSelection';
 import { useLoginMutation } from '../../hooks/api/LoginManagement/LoginManagement';
 import { useLocalStorage } from '../../hooks/misc/LocalStorage';
 import { useGetBaselineMutation } from '../../hooks/api/MainManagement/MainManagement';
 
-import { makeStyles } from '@mui/styles';
 import logoLogin from '../../assets/images/logo_login.png';
 import checkIcon from '../../assets/images/ic_chk2.png';
 import checkIconOn from '../../assets/images/ic_chk2_on.png';
@@ -24,68 +22,7 @@ import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
 import useUserURLRedirect from '../../hooks/core/UserURLRedirect/UserURLRedirect';
 import { useUserToken } from '../../hooks/core/UserToken';
-
-const useStyles = makeStyles(() => ({
-    pageWrap: {
-        display: 'flex',
-        justifyContent: 'center',
-        background: '#fff',
-        height: '100vh',
-    },
-    loginWrap: {
-        display: 'flex',
-        flexDirection: 'column',
-        marginTop: '140px',
-        width: '460px',
-        height: '470px',
-    },
-    loginLogo: {
-        display: 'flex',
-        justifyContent: 'center',
-        paddingBottom: '46px'
-    },
-    loginInput: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        height: '140px'
-    },
-    loginOptions: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        margin: '10px 0 20px 0'
-    },
-    linkBtn: {
-        textDecoration: "none",
-        color: "black",
-        '&:visited': {
-            color: '#0000'
-        },
-        '&:hover': {
-            textDecoration: "underline"
-        }
-    },
-    welcomePopup: {
-        position: 'absolute',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100vw',
-        height: '100vh',
-        background: 'rgba(0, 0, 0, 0.7)',
-        zIndex: '1000',
-        display: 'none !important',
-        '& >div': {
-            position: 'relative',
-            '& button': {
-                position: 'absolute',
-                top: '-80px',
-                right: '0'
-            }
-        }
-    }
-}));
+import { useStyles } from './useStyles';
 
 const ClosePopupButton2 = styled(ButtonUnstyled)`
     width: 60px;
@@ -153,13 +90,6 @@ const Login = () => {
             alert('Credentials are wrong. Please try again.');
         }
     }
-
-    //TODO:  Here is the usage of the main selector. Must be deleted soon.
-    //const currentBaseline = useSelector(selectBaselineId);
-    //const currentWorkplaceId = useSelector(selectWorkplaceId);
-    
-    //console.log(currentBaseline);
-    //console.log(currentWorkplaceId);
 
     return (
         <WideLayout>
