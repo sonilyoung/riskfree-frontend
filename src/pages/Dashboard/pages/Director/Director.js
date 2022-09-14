@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom'
 import { WideLayout } from '../../../../layouts/Wide';
 import Grid from '@mui/material/Grid';
@@ -55,8 +56,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 import useUserToken from '../../../../hooks/core/UserToken/UserToken';
-import { setWorkplaceId } from '../../../../slices/selections/MainSelection';
-import { useDispatch } from 'react-redux';
+import { setWorkplaceId, selectWorkplaceId } from '../../../../slices/selections/MainSelection';
 import { useStyles } from './useStyles';
 
 const UserButton = styled(ButtonUnstyled)`
@@ -300,6 +300,7 @@ const Director = () => {
     const [baselineId, setBaselineId] = useState(6);
     const [baselineStart, setBaselineStart] = useState("2022-09-08");
     const [dayInfo, setDayInfo] = useState({});
+    const currentWorkplaceId = useSelector(selectWorkplaceId);
 
     // izmeniti ovo
     const [userInfo, setUserInfo] = useState({
@@ -944,12 +945,19 @@ const Director = () => {
                             {/* WORKPLACE LIST */}
                             <Slider {...headerSlider}>
                                 <div>
-                                    <MainNavButton onClick={
+                                    <MainNavButton className={currentWorkplaceId === null ? "active" : ""} onClick={
                                         () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })
                                     }>전체사업장</MainNavButton>
                                 </div>
                                 {workplaceList.length != 0 && workplaceList?.RET_DATA?.map(workplaceItem =>
-                                    <div><MainNavButton onClick={() => handleFactoryChange({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}>{workplaceItem.workplaceName}</MainNavButton></div>
+                                    <div>
+                                        <MainNavButton 
+                                            className={currentWorkplaceId === workplaceItem.workplaceId ? "active" : ""} 
+                                            onClick={() => handleFactoryChange({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}
+                                        >
+                                            {workplaceItem.workplaceName}
+                                        </MainNavButton>
+                                    </div>
                                 )}
                             </Slider>
                         </div>

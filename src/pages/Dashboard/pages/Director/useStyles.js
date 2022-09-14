@@ -414,7 +414,7 @@ const useStyles = makeStyles(() => ({
             margin: '0 auto'
         },
         '& .slick-track': {
-            '& .slick-slide:first-of-type button': {
+            '& .slick-slide button.active': {
                 background: 'linear-gradient(#04b9fb, #017dfa)'
             },
         },
