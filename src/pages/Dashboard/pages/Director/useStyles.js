@@ -315,7 +315,7 @@ const useStyles = makeStyles(() => ({
     },
     tableHead: {
         background: '#bdcbe9',
-        '& [class*=tableData]': {
+        '& $tableData': {
             borderRight: '1px solid #fff',
             '&:last-of-type': {
                 borderRight: 'none',
@@ -324,17 +324,17 @@ const useStyles = makeStyles(() => ({
     },
     tableBody: {
         width: '100%',
-        '& [class*=tableData]': {
+        '& $tableData': {
             borderRight: '1px solid #bdcbe9',
             borderBottom: '1px solid #bdcbe9',
             '&:first-of-type': {
                 background: '#EFF2F7'
             }
         },
-        '& [class*=tableRow]': {
+        '& $tableRow': {
             transition: 'background .2s',
             '&:hover': {
-                '& [class*=tableData]': {
+                '& $tableData': {
                     background: '#e1e8f7'
                 }
             }
@@ -520,14 +520,6 @@ const useStyles = makeStyles(() => ({
         }
     },
     dashSlider: {
-        // '& .slick-slide [class*=slickCircle]': {
-        //     transition: '.5s',
-        //     transform: 'scale(0.5)'
-        // },
-        // '& .slick-active [class*=slickCircle]': {
-        //     transition: '.5s',
-        //     transform: 'scale(1)'
-        // },
         '& .slick-list': {
             padding: '1px 0 20px 0',
             marginTop: '8px',
@@ -867,7 +859,7 @@ const useStyles = makeStyles(() => ({
         '&.settings_popupClose': {
             display: "none"
         },
-        '& [class*=popupAccord]': {
+        '& $popupAccord': {
             background: 'transparent',
             boxShadow: 'none',
             '& .MuiButtonBase-root': {
@@ -884,7 +876,7 @@ const useStyles = makeStyles(() => ({
                     alignItems: 'center',
                     color: '#018de7'
                 },
-                '& [class*=popupTextField]': {
+                '& $popupTextField': {
                     marginBottom: '0 !important'
                 }
 
@@ -897,7 +889,7 @@ const useStyles = makeStyles(() => ({
                 padding: '0'
             }
         },
-        '& [class*=popupLink]': {
+        '& $popupLink': {
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'space-between',

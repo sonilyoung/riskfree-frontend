@@ -29,7 +29,7 @@ import { DefaultLayout } from "../../../../../../../../layouts/Default";
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
-        '& >div[class*=box]': {
+        '& >div:not($listTitle, $footerButtons)': {
             display: 'flex',
             borderRadius: '6px',
             background: '#fff',
@@ -46,19 +46,19 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         marginBottom: '16px !important',
         height: '160px',
-        '& [class*=boxRow]:first-of-type [class*=rowInfo]:first-of-type': {
+        '& $boxRow:first-of-type $rowInfo:first-of-type': {
             width: '160px',
         },
-        '& [class*=boxRow]:first-of-type [class*=rowInfo]': {
+        '& $boxRow:first-of-type $rowInfo': {
             width: '306px'
         },
-        '& [class*=boxRow]:first-of-type [class*=rowInfo]:last-of-type': {
+        '& $boxRow:first-of-type $rowInfo:last-of-type': {
             width: 'auto'
         },
-        '& [class*=boxRow]:last-of-type [class*=rowInfo]': {
+        '& $boxRow:last-of-type $rowInfo': {
             width: '100%',
         },
-        '& [class*=boxContent] [class*=boxRow]:first-of-type]': {
+        '& $boxContent $boxRow:first-of-type]': {
             height: '60px'
         }
     },
@@ -82,11 +82,11 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexWrap: 'wrap',
         width: 'calc(100% - 100px)',
-        '& [class*=boxRow]:first-of-type': {
-            '& [class*=rowContent]': {
+        '& $boxRow:first-of-type': {
+            '& $rowContent': {
                 borderTop: 'none'
             },
-            '& [class*=rowTitle]': {
+            '& $rowTitle': {
                 borderTop: 'none'
             }
         },
@@ -94,7 +94,7 @@ const useStyles = makeStyles(() => ({
     boxRow: {
         display: 'flex',
         width: '100%',
-        '& [class*=rowTitle]': {
+        '& $rowTitle': {
             borderBottom: 'none'
         }
     },
@@ -130,16 +130,16 @@ const useStyles = makeStyles(() => ({
         boxSizing: 'border-box',
     },
     boxRegistration: {
-        '& [class*=boxRow]': {
+        '& $boxRow': {
             height: '100px',
             '&:last-of-type': {
                 height: 'auto'
             },
         },
-        '& [class*=boxRow] [class*=rowContent] [class*=rowInfo]': {
+        '& $boxRow $rowContent $rowInfo': {
             width: '100%'
         },
-        '& [class*=boxRow]:last-of-type [class*=rowContent]': {
+        '& $boxRow:last-of-type $rowContent': {
             display: 'flex',
             '& >div': {
                 width: '50%',

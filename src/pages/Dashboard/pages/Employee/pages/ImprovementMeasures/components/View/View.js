@@ -30,7 +30,7 @@ import { useImprovementViewMutation, useImprovementDeleteMutation } from '../../
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
-        '& >div[class*=box]': {
+        '& >div:not($listTitle, $footerButtons)': {
             display: 'flex',
             borderRadius: '6px',
             background: '#fff',
@@ -46,16 +46,16 @@ const useStyles = makeStyles(() => ({
     boxFirst: {
         display: 'flex',
         marginBottom: '16px !important',
-        '& [class*=boxRow]:first-of-type [class*=rowInfo]:first-of-type': {
+        '& $boxRow:first-of-type $rowInfo:first-of-type': {
             width: '580px',
         },
-        '& [class*=boxRow]:first-of-type [class*=rowContent] [class*=rowTitle]': {
+        '& $boxRow:first-of-type $rowContent $rowTitle': {
             width: '110px',
         },
-        '& [class*=boxRow]:nth-of-type(2) [class*=rowInfo]': {
+        '& $boxRow:nth-of-type(2) $rowInfo': {
             width: '100%'
         },
-        '& [class*=boxRow]:last-of-type [class*=rowInfo]': {
+        '& $boxRow:last-of-type $rowInfo': {
             width: '240px',
             '&:last-of-type': {
                 width: '560px',
@@ -87,16 +87,16 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexWrap: 'wrap',
         width: 'calc(100% - 100px)',
-        '& [class*=boxRow]:first-of-type': {
-            '& [class*=rowContent]': {
+        '& $boxRow:first-of-type': {
+            '& $rowContent': {
                 borderTop: 'none'
             },
-            '& [class*=rowTitle]': {
+            '& $rowTitle': {
                 borderTop: 'none'
             }
         },
-        '& [class*=boxRow]:last-of-type': {
-            '& [class*=rowTitle]:not(:first-of-type)': {
+        '& $boxRow:last-of-type': {
+            '& $rowTitle:not(:first-of-type)': {
                 borderTop: 'none'
             }
         },
@@ -105,7 +105,7 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         width: '100%',
         minHeight: '60px',
-        '& [class*=rowTitle]': {
+        '& $rowTitle': {
             borderBottom: 'none'
         }
     },
@@ -141,13 +141,13 @@ const useStyles = makeStyles(() => ({
         boxSizing: 'border-box',
     },
     boxSecond: {
-        '& [class*=boxRow]:last-of-type': {
+        '& $boxRow:last-of-type': {
             height: 'auto'
         },
-        '& [class*=boxRow] [class*=rowContent] [class*=rowInfo]': {
+        '& $boxRow $rowContent $rowInfo': {
             width: '100%'
         },
-        '& [class*=boxRow]:last-of-type [class*=rowContent]': {
+        '& $boxRow:last-of-type $rowContent': {
             display: 'flex',
             '& >div': {
                 width: '50%',

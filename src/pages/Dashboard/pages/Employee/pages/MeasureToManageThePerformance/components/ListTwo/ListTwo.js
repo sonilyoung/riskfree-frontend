@@ -77,7 +77,7 @@ const useStyles = makeStyles(() => ({
     tableHead: {
         width: '100%',
         background: '#bdcbe9',
-        '& [class*=tableData]': {
+        '& $tableData': {
             height: '100px',
             borderRight: '1px solid #fff',
             justifyContent: 'center',
@@ -146,7 +146,7 @@ const useStyles = makeStyles(() => ({
     },
     tableBody: {
         width: '100%',
-        '& [class*=tableData]': {
+        '& $tableData': {
             borderRight: '1px solid #bdcbe9',
             borderBottom: '1px solid #bdcbe9',
             '&:last-of-type': {
@@ -159,7 +159,7 @@ const useStyles = makeStyles(() => ({
                 width: '175px'
             },
         },
-        '& [class*=tableRow]': {
+        '& $tableRow': {
             transition: 'background .2s',
             '&:hover': {
                 background: '#eff2f9'
@@ -169,7 +169,7 @@ const useStyles = makeStyles(() => ({
     tableRow: {
         display: 'flex',
         '&:last-of-type': {
-            '& [class*=tableData]': {
+            '& $tableData': {
                 borderBottom: 'none'
             },
         },

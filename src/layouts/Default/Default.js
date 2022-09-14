@@ -210,7 +210,7 @@ const useStyles = makeStyles(() => ({
         '&.settings_popupClose': {
             display: "none"
         },
-        '& [class*=popupAccord]': {
+        '& $popupAccord': {
             background: 'transparent',
             boxShadow: 'none',
             '& .MuiButtonBase-root': {
@@ -227,7 +227,7 @@ const useStyles = makeStyles(() => ({
                     alignItems: 'center',
                     color: '#018de7'
                 },
-                '& [class*=popupTextField]': {
+                '& $popupTextField': {
                     marginBottom: '0 !important'
                 }
 
@@ -240,7 +240,7 @@ const useStyles = makeStyles(() => ({
                 padding: '0'
             }
         },
-        '& [class*=popupLink]': {
+        '& $popupLink': {
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'space-between',
