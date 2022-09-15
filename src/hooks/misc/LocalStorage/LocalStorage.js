@@ -1,5 +1,3 @@
-import React from 'react';
-
 const DEFAULT_BASELINE_ID = 'defaultBaselineId';
 
 function useLocalStorage(props) {
