@@ -75,7 +75,6 @@ const Login = () => {
 
             const userLoggedInRoleCd = userToken.getUserRoleCd();
             const redirectPath = getPath(userLoggedInRoleCd);
-            console.log(userLoggedInRoleCd)
 
             if (userLoggedInRoleCd != "000") {
                 const defaultBaselineResponse = await getBaseline({});

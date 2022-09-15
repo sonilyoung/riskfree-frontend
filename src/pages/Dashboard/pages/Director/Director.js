@@ -432,7 +432,7 @@ const Director = () => {
 
     const fetchSafeWorkHistoryList = async () => {
         const response = await getSafeWorkHistoryList({
-            "baselineId": 6,
+            "baselineId": baselineId,
             "companyId": userCompanyId,
             "workplaceId": userWorkplaceId
         })
@@ -951,8 +951,8 @@ const Director = () => {
                                 </div>
                                 {workplaceList.length != 0 && workplaceList?.RET_DATA?.map(workplaceItem =>
                                     <div>
-                                        <MainNavButton 
-                                            className={currentWorkplaceId === workplaceItem.workplaceId ? "active" : ""} 
+                                        <MainNavButton
+                                            className={currentWorkplaceId === workplaceItem.workplaceId ? "active" : ""}
                                             onClick={() => handleFactoryChange({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}
                                         >
                                             {workplaceItem.workplaceName}

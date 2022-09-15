@@ -91,8 +91,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 
-import { setWorkplaceId } from '../../../../slices/selections/MainSelection';
-import { useDispatch } from 'react-redux';
+import { setWorkplaceId, selectWorkplaceId } from '../../../../slices/selections/MainSelection';
+import { useDispatch, useSelector } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
@@ -434,7 +434,7 @@ const useStyles = makeStyles(() => ({
             margin: '0 auto'
         },
         '& .slick-track': {
-            '& .slick-slide:first-of-type button': {
+            '& .slick-slide button.active': {
                 background: 'linear-gradient(#04b9fb, #017dfa)'
             },
         },
@@ -1786,7 +1786,8 @@ const Employee = () => {
     const [getBaselineList] = useGetBaselineListMutation()
     const [getBaseline] = useGetBaselineMutation()
     const [baselineList, setBaselineList] = useState([])
-    const [baseline, setBaseline] = useState(6)
+    const [baselineId, setBaselineId] = useState(6)
+    const [baselineIdForSelect, setBaselineIdForSelect] = useState(6)
     const [baselineData, setBaselineData] = useState({})
     const [improvmentList, setImprovmentList] = useState([]);
     const [leaderImprovementList, setLeaderImprovementList] = useState([]);
@@ -1830,13 +1831,15 @@ const Employee = () => {
     const [guideLine, setGuideLine] = useState([])
     const [getWorkplaceList] = useGetWorkplaceListMutation()
     const [workplaceList, setWorkplaceList] = useState([])
+    const currentWorkplaceId = useSelector(selectWorkplaceId);
+
 
     const dispatch = useDispatch();
 
 
     const [userInfo, setUserInfo] = useState({
         userCompanyId: userToken.getUserCompanyId(),
-        userWorkplaceId: userToken.getUserWorkplaceId(),
+        userWorkplaceId: userToken.getUserWorkplaceId()
     });
 
     const { userCompanyId, userWorkplaceId } = userInfo;
@@ -1861,7 +1864,7 @@ const Employee = () => {
 
     const fetchImprovementList = async () => {
         const response = await getImprovementList({
-            "baselineId": 6,
+            "baselineId": baselineId,
             "instruction": 1,
             "workplaceId": userWorkplaceId
         });
@@ -1870,7 +1873,7 @@ const Employee = () => {
 
     const fetchLeaderImprovementList = async () => {
         const response = await getLeaderImprovementList({
-            "baselineId": 6,
+            "baselineId": baselineId,
             "instruction": 1,
             "workplaceId": userWorkplaceId
         });
@@ -1883,15 +1886,17 @@ const Employee = () => {
     }
 
     const fetchBaseline = async () => {
+        setBaselineId(baselineIdForSelect)
         const response = await getBaseline({
-            "baselineId": baseline
+            "baselineId": baselineId
         })
         setBaselineData(response.data.RET_DATA)
     }
 
     const fetchCompanyInfo = async () => {
         const response = await getCompanyInfo({
-            "companyId": companyId
+            "companyId": userCompanyId,
+            "workplaceId": userWorkplaceId
         })
         setCompanyInfo(response.data.RET_DATA)
     }
@@ -1910,7 +1915,7 @@ const Employee = () => {
 
     const fetchAccidentTotalList = async () => {
         const response = await getAccidentTotal({
-            "baselineId": 6,
+            "baselineId": baselineId,
             "caughtCnt": 0,
             "companyId": companyId,
             "workplaceId": userWorkplaceId
@@ -1920,7 +1925,7 @@ const Employee = () => {
 
     const fetchSafeWorkHistoryList = async () => {
         const response = await getSafeWorkHistoryList({
-            "baselineId": 6,
+            "baselineId": baselineId,
             "workplaceId": userWorkplaceId
         });
         setSafeWorkHistoryList(response.data.RET_DATA);
@@ -1941,10 +1946,9 @@ const Employee = () => {
 
     const fetchEssentialRates = async () => {
         const response = await getEssentialRate({
-            "baselineId": 6,
+            "baselineId": baselineId,
             "workplaceId": userWorkplaceId
         })
-        console.log(response)
         setEssentialRates(response.data.RET_DATA)
     }
 
@@ -1981,14 +1985,14 @@ const Employee = () => {
 
     const fetchAccidentsPreventionPercentage = async () => {   /// this Request still need to be fixed on Backend
         const response = await getAccidentsPrevention({
-            "baselineId": 6,
+            "baselineId": baselineId,
             "workplaceId": userWorkplaceId
         })
         setAccidentsPreventionPercentage(response.data.RET_DATA)
     }
     const fetchImprovementLawOrderPercentage = async () => {
         const response = await getImprovementLawOrder({
-            "baselineId": 6,
+            "baselineId": baselineId,
             "workplaceId": userWorkplaceId
         })
         setLawOrderPercentage(response.data.RET_DATA)
@@ -1996,7 +2000,7 @@ const Employee = () => {
 
     const fetchRelatedLawRatePercentage = async () => {
         const response = await getRelatedLawRate({
-            "baselineId": 6,
+            "baselineId": baselineId,
             "workplaceId": userWorkplaceId
         })
         setRelatedLawRatePercentage(response.data.RET_DATA)
@@ -2004,7 +2008,7 @@ const Employee = () => {
 
     const fetchDutyDetailList = async () => {
         const response = await getDutyDetailList({
-            "baselineId": 6,
+            "baselineId": baselineId,
             "groupId": 2,
             "workplaceId": userWorkplaceId
         })
@@ -2066,10 +2070,6 @@ const Employee = () => {
     }
 
     useEffect(() => {
-        fetchDayInfo()
-    }, [baselineData])
-
-    useEffect(() => {
         fetchBaseline()
         fetchNoticeList();
         fetchLoginInfo();
@@ -2091,7 +2091,7 @@ const Employee = () => {
         fetchRelatedArticle()
         fetchGuideLine()
         fetchWorkplaceList()
-    }, [])
+    }, [baselineId, userWorkplaceId])
 
     useEffect(() => {
         const timerId = setInterval(refreshClock, 1000);
@@ -2469,11 +2469,12 @@ const Employee = () => {
                         </div>
                         <div className={classes.navSlider}>
                             <Slider {...headerSlider}>
-                                <MainNavButton onClick={
+                                <MainNavButton className={currentWorkplaceId === null ? "active" : ""} onClick={
                                     () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })
                                 }>전체사업장</MainNavButton>
-                                {workplaceList.length != 0 && workplaceList.map((workplaceItem) => (
-                                    <MainNavButton onClick={() => handleFactoryChange({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}>{workplaceItem.workplaceName}</MainNavButton>
+                                {!!workplaceList.length && workplaceList.map((workplaceItem) => (
+                                    <MainNavButton className={currentWorkplaceId === workplaceItem.workplaceId ? "active" : ""}
+                                        onClick={() => handleFactoryChange({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}>{workplaceItem.workplaceName}</MainNavButton>
                                 ))}
                             </Slider>
                         </div>
@@ -2548,8 +2549,8 @@ const Employee = () => {
                         <FormControl sx={{ width: 130 }} className={classes.dropMenu + ' page_drop_menu'}>
                             <Select
                                 className={classes.selectMenu}
-                                value={baseline}
-                                onChange={(e) => setBaseline(e.target.value)}
+                                value={baselineIdForSelect}
+                                onChange={(e) => setBaselineIdForSelect(e.target.value)}
                                 inputProps={{ 'aria-label': 'Without label' }}>
                                 {baselineList?.map((baseline) => (
                                     <MenuItem MenuItem value={baseline.baselineId}>{baseline.baselineName}</MenuItem>
@@ -2626,7 +2627,7 @@ const Employee = () => {
                     </Grid>
                     <Grid item xs={2.7}>
                         <div className={classes.contentList}>
-                            <div className={classes.listTitle}>의무조치별 상세 점검 항목  <span>총 <strong>{dutyDetailList.length > 0 && dutyDetailList[0].totalCount}</strong> 건</span></div>
+                            <div className={classes.listTitle}>의무조치별 상세 점검 항목  <span>총 <strong>{!!dutyDetailList.length && dutyDetailList[0].totalCount}</strong> 건</span></div>
                             <ul className={classes.menuList + ' secondList'}>
                                 {dutyDetailList?.map((element) => {
                                     return (<li>
@@ -2650,7 +2651,7 @@ const Employee = () => {
                                     </ul>
                                 </div>
                                 <div>
-                                    <div className={classes.listTitle}><strong>{inspectionsDocs.length > 0 && inspectionsDocs[0].fileCount}</strong>건 /{inspectionsDocs.length > 0 && inspectionsDocs[0].totalCount}건</div>
+                                    <div className={classes.listTitle}><strong>{!!inspectionsDocs.length && inspectionsDocs[0].fileCount}</strong>건 /{!!inspectionsDocs.length && inspectionsDocs[0].totalCount}건</div>
                                     <ul className={classes.menuList + ' buttonList'}>
                                         {inspectionsDocs?.map((inspection) => (<><li>
                                             {inspection.fileId === null ? <FileButtonNone></FileButtonNone> : <FileButtonExis><span className={'orange'}>중</span></FileButtonExis>}
