@@ -21,6 +21,8 @@ import { DefaultLayout } from '../../../../../../../../layouts/Default';
 import { useGetRelatedRawButtonMutation, useGetRelatedRawMutation, useInsertDutyButtonMutation } from '../../../../../../../../hooks/api/RelatedLawManagement/RelatedLawManagement';
 import { useUpdateRelatedArticleMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
 import { useNavigate } from 'react-router-dom';
+import { selectBaselineId } from '../../../../../../../../slices/selections/MainSelection';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -28,6 +30,7 @@ const useStyles = makeStyles(() => ({
     },
     headerButtons: {
         display: 'flex',
+        alignItems: 'center',
         marginTop: '10px !important',
     },
     stepBox: {
@@ -69,6 +72,19 @@ const useStyles = makeStyles(() => ({
             fontWeight: '500',
             color: '#fff',
             padding: '0 20px',
+        },
+    },
+    buttonPlus: {
+        color: '#fff',
+        fontSize: '30px',
+        padding: '5px 10px',
+        marginLeft: '10px !important',
+        background: '#3a5298',
+        borderRadius: '5px',
+        border: '1px solid #3a5298',
+        '&:hover': {
+            backgroundImage: 'linear-gradient(#04b9fb, #017dfa)',
+            border: 'none',
         },
     },
     boxTable: {
@@ -215,6 +231,10 @@ const useStyles = makeStyles(() => ({
         '&:visited': {
             color: '#adb0b2'
         }
+    },
+    activeLinkBtn: {
+        textDecoration: "none",
+        color: '#018de7'
     }
 
 }));
@@ -265,11 +285,12 @@ const MPDLawThird = () => {
     const [relatedRawList, setRelatedRawList] = useState([]);
     const [relatedRawButtonList, setRelatedRawButtonList] = useState([]);
 
-
     const [getRelatedRaw] = useGetRelatedRawMutation();
     const [insertDutyButton] = useInsertDutyButtonMutation();
     const [getRelatedRawButton] = useGetRelatedRawButtonMutation();
     const [updateRelatedRaw] = useUpdateRelatedArticleMutation();
+
+    const currentBaseline = useSelector(selectBaselineId);
 
     const handleRedirect = () => {
         navigate('/dashboard/employee/measure-to-manage-performance-od-duties-law/list');
@@ -278,7 +299,7 @@ const MPDLawThird = () => {
     const fetchRelatedRawList = async () => {
         const response = await getRelatedRaw({
             "lawId": 1,
-            "baselineId": 6
+            "baselineId": currentBaseline
         });
         setRelatedRawList(response.data.RET_DATA);
     }
@@ -287,7 +308,6 @@ const MPDLawThird = () => {
         const response = await getRelatedRawButton({});
         setRelatedRawButtonList(response.data.RET_DATA);
     }
-
 
     const fetchInsertDutyButton = async () => {
         const response = await insertDutyButton({});
@@ -324,13 +344,12 @@ const MPDLawThird = () => {
                     </Typography>
                 </Grid>
                 <Grid item xs={12} className={classes.headerButtons}>
-
                     {relatedRawButtonList.length > 0 && relatedRawButtonList.map(relatedRawButtonItem =>
-                    (<Link href="#none" className={classes.buttonLink}>
+                    (<Link to="#" className={classes.buttonLink}>
                         <span>{relatedRawButtonItem?.lawName}</span>
                     </Link>)
                     )}
-
+                    <button className={classes.buttonPlus}>+</button>
                 </Grid>
                 <Grid item xs={12} className={classes.stepBox}>
                     <Stepper sx={{ mb: 4, mt: 4 }} nonLinear activeStep={2} className={classes.activeStep}>
@@ -352,7 +371,7 @@ const MPDLawThird = () => {
                             <StepLabel
                                 icon={<img src={iconTabOn} alt="active step" />}
                             >
-                                <Link className={classes.linkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/registration">관리상의 조치내역 보기/등록</Link>
+                                <Link className={classes.activeLinkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/registration">관리상의 조치내역 보기/등록</Link>
                             </StepLabel>
                         </Step>
                     </Stepper>
@@ -376,7 +395,6 @@ const MPDLawThird = () => {
                             </div>
                         </div>
                         <div className={classes.tableBody}>
-
                             {relatedRawList?.length > 0 && relatedRawList.map(relatedRawItem =>
                             (<div className={classes.tableRow}>
                                 <div className={classes.tableData}>{relatedRawItem.relatedArticle}</div>

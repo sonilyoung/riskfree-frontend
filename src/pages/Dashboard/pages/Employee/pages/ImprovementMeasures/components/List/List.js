@@ -317,6 +317,7 @@ function List() {
     const [getWorkplaceList] = useGetWorkplaceListMutation()
     const [improvementSelect] = useImprovementSelectMutation()
     const [workplaces, setWorkplaces] = useState([])
+    // da li je filter za workplace statican? Kada je statican a kada je Dropdown
     const [workplaceSelect, setWorkplaceSelect] = useState("")
     const [reqUser, setReqUser] = useState("")
     const [statusCd, setStatusCd] = useState("")

@@ -42,6 +42,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 import moment from "moment"
+import { selectBaselineId, selectWorkplaceId } from '../../../../../../../../slices/selections/MainSelection';
+import { useSelector } from 'react-redux';
 
 
 
@@ -367,6 +369,7 @@ const List = () => {
     const [managerName, setManagerName] = useState("")
     const [startDate, setStartDate] = useState(null)
     const [finishDate, setFinishDate] = useState(null)
+    // da li je filter za workplace statican? Kada je statican a kada je Dropdown
     const [workplaceSelect, setWorkplaceSelect] = useState("")
     const [occurPlaceSelect, setOccurPlaceSelect] = useState("")
     const [page, setPage] = useState(1)
@@ -375,6 +378,8 @@ const List = () => {
     const [same, setSame] = useState(false)
     const [locale] = React.useState('ko');
 
+    const currentBaseline = useSelector(selectBaselineId);
+    const currentWorkplaceId = useSelector(selectWorkplaceId);
 
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [isCheck, setIsCheck] = useState([]);
@@ -485,7 +490,7 @@ const List = () => {
             "accTypeCd005": accTypeFifth ? "005" : "",
             "accTypeCd006": accTypeSixth ? "006" : "",
             "accidentTypeCd": accTypeCd,
-            "baselineId": 6,
+            "baselineId": currentBaseline,
             "countPerPage": 10,
             "death": death ? "Y" : "",
             "endDate": finishDate,
@@ -495,7 +500,7 @@ const List = () => {
             "pageNum": page,
             "same": same ? "Y" : "",
             "startDate": startDate,
-            "workplaceId": workplaceSelect
+            "workplaceId": currentWorkplaceId
         })
         setAccidents(response.data.RET_DATA)
         console.log(response);

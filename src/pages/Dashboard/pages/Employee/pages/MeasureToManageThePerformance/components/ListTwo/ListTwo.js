@@ -13,6 +13,8 @@ import iconTab from '../../../../../../../../assets/images/ic_tab.png';
 import iconTabOn from '../../../../../../../../assets/images/ic_tab_on.png';
 import { DefaultLayout } from '../../../../../../../../layouts/Default';
 import { useGetRelatedRawButtonMutation, useGetRelatedRawMutation, useInsertDutyButtonMutation } from '../../../../../../../../hooks/api/RelatedLawManagement/RelatedLawManagement';
+import { useSelector } from 'react-redux';
+import { selectBaselineId } from '../../../../../../../../slices/selections/MainSelection';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -20,6 +22,7 @@ const useStyles = makeStyles(() => ({
     },
     headerButtons: {
         display: 'flex',
+        alignItems: 'center',
         marginTop: '10px !important',
     },
     stepBox: {
@@ -61,6 +64,19 @@ const useStyles = makeStyles(() => ({
             fontWeight: '500',
             color: '#fff',
             padding: '0 20px'
+        },
+    },
+    buttonPlus: {
+        color: '#fff',
+        fontSize: '30px',
+        padding: '5px 10px',
+        marginLeft: '10px !important',
+        background: '#3a5298',
+        borderRadius: '5px',
+        border: '1px solid #3a5298',
+        '&:hover': {
+            backgroundImage: 'linear-gradient(#04b9fb, #017dfa)',
+            border: 'none',
         },
     },
     boxTable: {
@@ -211,6 +227,10 @@ const useStyles = makeStyles(() => ({
         '&:visited': {
             color: '#adb0b2'
         }
+    },
+    activeLinkBtn: {
+        textDecoration: "none",
+        color: '#018de7'
     }
 
 }));
@@ -226,25 +246,24 @@ const ListTwo = () => {
     const [insertDutyButton] = useInsertDutyButtonMutation();
     const [getRelatedRawButton] = useGetRelatedRawButtonMutation();
 
+    const currentBaseline = useSelector(selectBaselineId);
+
     const fetchRelatedRawList = async () => {
         const response = await getRelatedRaw({
             "lawId": 1,
-            "baselineId": 6
+            "baselineId": currentBaseline
         });
         setRelatedRawList(response.data.RET_DATA);
     }
-
 
     const fetchRelatedRawButtonList = async () => {
         const response = await getRelatedRawButton({});
         setRelatedRawButtonList(response.data.RET_DATA);
     }
 
-
     const fetchInsertDutyButton = async () => {
         const response = await insertDutyButton();
     }
-
 
     useEffect(() => {
         fetchRelatedRawList();
@@ -260,13 +279,12 @@ const ListTwo = () => {
                     </Typography>
                 </Grid>
                 <Grid item xs={12} className={classes.headerButtons}>
-
                     {relatedRawButtonList.length > 0 && relatedRawButtonList.map(relatedRawButtonItem =>
-                    (<Link href="#none" className={classes.buttonLink}>
+                    (<Link to="#" className={classes.buttonLink}>
                         <span>{relatedRawButtonItem?.lawName}</span>
                     </Link>)
                     )}
-
+                    <button className={classes.buttonPlus}>+</button>
                 </Grid>
                 <Grid item xs={12} className={classes.stepBox}>
                     <Stepper sx={{ mb: 4, mt: 4 }} nonLinear activeStep={1} className={classes.activeStep}>
@@ -281,7 +299,7 @@ const ListTwo = () => {
                             <StepLabel
                                 icon={<img src={iconTabOn} alt="active step" />}
                             >
-                                <Link className={classes.linkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/list-two">처벌 및 과태료보기</Link>
+                                <Link className={classes.activeLinkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/list-two">처벌 및 과태료보기</Link>
                             </StepLabel>
                         </Step>
                         <Step>
@@ -318,20 +336,18 @@ const ListTwo = () => {
                         </div>
                     </div>
                     <div className={classes.tableBody}>
-                        {
-                            relatedRawList?.length > 0 && relatedRawList.map(relatedRawItem =>
-                            (<div className={classes.tableRow}>
-                                <div className={classes.tableData}>{relatedRawItem.relatedArticle}</div>
-                                <div className={classes.tableData}>{relatedRawItem.articleItem}<span></span></div>
-                                <div className={classes.tableData}>{relatedRawItem.seriousAccdntDecree} <span></span></div>
-                                <div className={classes.tableData}>{relatedRawItem.violatedArticle}</div>
-                                <div className={classes.tableData}>{relatedRawItem.violatedActivity}</div>
-                                <div className={classes.tableData}>{relatedRawItem.violationDetail1}</div>
-                                <div className={classes.tableData}>{relatedRawItem.stPenalty1}</div>
-                                <div className={classes.tableData}>{relatedRawItem.stPenalty2}</div>
-                                <div className={classes.tableData}>{relatedRawItem.stPenalty3}</div>
-                            </div>))
-                        }
+                        {relatedRawList?.length > 0 && relatedRawList.map(relatedRawItem =>
+                        (<div className={classes.tableRow}>
+                            <div className={classes.tableData}>{relatedRawItem.relatedArticle}</div>
+                            <div className={classes.tableData}>{relatedRawItem.articleItem}<span></span></div>
+                            <div className={classes.tableData}>{relatedRawItem.seriousAccdntDecree} <span></span></div>
+                            <div className={classes.tableData}>{relatedRawItem.violatedArticle}</div>
+                            <div className={classes.tableData}>{relatedRawItem.violatedActivity}</div>
+                            <div className={classes.tableData}>{relatedRawItem.violationDetail1}</div>
+                            <div className={classes.tableData}>{relatedRawItem.stPenalty1}</div>
+                            <div className={classes.tableData}>{relatedRawItem.stPenalty2}</div>
+                            <div className={classes.tableData}>{relatedRawItem.stPenalty3}</div>
+                        </div>))}
                     </div>
                 </Grid>
             </Grid>

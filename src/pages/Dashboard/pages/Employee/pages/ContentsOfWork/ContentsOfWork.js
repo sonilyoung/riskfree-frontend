@@ -45,6 +45,8 @@ import 'dayjs/locale/ko';
 import { useGetWorkplaceListMutation } from '../../../../../../hooks/api/MainManagement/MainManagement';
 import moment from 'moment';
 import { useGetSafeWorkFileMutation, useGetSafeWorkFileTopInfoMutation, useGetSafeWorkMutation } from '../../../../../../hooks/api/SafeWorkManagement/SafeWorkManagement';
+import { useSelector } from 'react-redux';
+import { selectWorkplaceId } from '../../../../../../slices/selections/MainSelection';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -586,9 +588,13 @@ const WorkHistoryList = () => {
     const [safeWorkFileList, setSafeWorkFileList] = useState([]);
     const [safeWorkFileTopinfo, setSafeWorkFileTopinfo] = useState({});
 
+    // da li je filter za workplace statican? Kada je statican a kada je Dropdown
     const [workplaceId, setWorkplaceId] = useState("");
     const [insertDate, setInsertDate] = useState(null);
     const [username, setUsername] = useState("");
+    const [noticeId, setNoticeId] = useState(null);
+
+    const currentWorkplaceId = useSelector(selectWorkplaceId);
 
     const fetchWorkplaceList = async () => {
         const response = await getWorkplaceList();
@@ -597,7 +603,7 @@ const WorkHistoryList = () => {
 
     const fetchSafeWorkList = async () => {
         const response = await getSafeWork({
-            "workplaceId": workplaceId,
+            "workplaceId": currentWorkplaceId,
             "insertDate": insertDate,
             "userName": username
         });
@@ -606,15 +612,14 @@ const WorkHistoryList = () => {
 
     const fetchSafeWorkFileTopInfo = async () => {
         const response = await getSafeWorkFileTopInfo({
-            "noticeId": 2
+            "noticeId": noticeId
         });
         setSafeWorkFileTopinfo(response.data.RET_DATA);
-        console.log(response.data.RET_DATA);
     }
 
     const fetchSafeWorkFileList = async () => {
         const response = await getSafeWorkFile({
-            "workplaceId": workplaceId
+            "workplaceId": currentWorkplaceId
         });
         setSafeWorkFileList(response.data.RET_DATA);
         console.log(response.data.RET_DATA);
@@ -625,8 +630,6 @@ const WorkHistoryList = () => {
         fetchSafeWorkList();
         fetchSafeWorkFileTopInfo();
     }, []);
-
-    console.log(hide);
 
     return (
         <DefaultLayout>
@@ -707,7 +710,7 @@ const WorkHistoryList = () => {
                         </div>
                     </div>
                     {safeWorkList?.length > 0 && safeWorkList.map((safeWorkItem, index) =>
-                    (<div className={classes.tableBody} onClick={() => setHide(false)}>
+                    (<div className={classes.tableBody} onClick={() => { setNoticeId(safeWorkItem.noticeId); setHide(false); }}>
                         <div className={classes.tableRow}></div>
                         <div className={classes.tableRow}>{index + 1}</div>
                         <div className={classes.tableRow}>{safeWorkItem.workplaceName}</div>
@@ -791,7 +794,7 @@ const WorkHistoryList = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
                     <Stack spacing={2}>
-                        <Pagination count={10} boundaryCount={10} shape="rounded" showFirstButton showLastButton />
+                        <Pagination count={safeWorkList?.length > 0 && Math.ceil(safeWorkList[0]?.totalCount / 10)} boundaryCount={10} shape="rounded" showFirstButton showLastButton />
                     </Stack>
                 </Grid>
             </Grid>

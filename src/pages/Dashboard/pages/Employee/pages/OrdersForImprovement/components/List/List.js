@@ -44,6 +44,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 import moment from "moment"
+import { useSelector } from "react-redux";
+import { selectWorkplaceId } from "../../../../../../../../slices/selections/MainSelection";
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -364,6 +366,8 @@ const ExcelButton = styled(ButtonUnstyled)`
 const List = () => {
     const classes = useStyles();
 
+    const currentWorkplaceId = useSelector(selectWorkplaceId);
+
     const [lawSelect] = useLawSelectMutation();
     const [getWorkplaceList] = useGetWorkplaceListMutation();
     const [lawIssueReassonSelect] = useLawIssueReassonSelectMutation();
@@ -373,6 +377,7 @@ const List = () => {
     const [issueReasson, setIssueReasson] = useState([]);
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null)
+    // da li je filter za workplace statican? Kada je statican a kada je Dropdown
     const [lawImprovements, setLawImprovements] = useState({
         baselineId: 6,
         cmmdOrgCd001: "",
@@ -387,7 +392,7 @@ const List = () => {
         pageNum: page,
         startDate: startDate,
         statusCd: "",
-        workplaceId: "",
+        workplaceId: currentWorkplaceId,
     });
     const [lawList, setLawList] = useState([]);
     const [checked, setChecked] = useState(false);
