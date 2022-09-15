@@ -91,7 +91,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 
-import { setWorkplaceId, selectWorkplaceId } from '../../../../slices/selections/MainSelection';
+import { setWorkplaceId, selectWorkplaceId, selectBaselineId } from '../../../../slices/selections/MainSelection';
 import { useDispatch, useSelector } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
@@ -645,7 +645,7 @@ const useStyles = makeStyles(() => ({
             padding: '0'
         },
         '&.secondList': {
-            padding: '0 10px 0 0',
+            padding: '0px',
             boxSizing: 'border-box',
             '& li': {
                 marginRight: '10px',
@@ -754,7 +754,7 @@ const useStyles = makeStyles(() => ({
         alignItems: 'center',
         color: '#fff',
         textDecoration: "none",
-        backgroundColor: "grey"
+        backgroundColor: "#2e3b65"
     },
 
     gageWrap: {
@@ -1782,7 +1782,8 @@ const Employee = () => {
     const [getLoginInfo] = useGetLoginInfoMutation()
     const [loginInfo, setLoginInfo] = useState({})
     const [hoverContainer, setHoverContainer] = useState(false)
-    const [clicked, setClicked] = useState(null)
+    const [clickedEssentialRate, setClickedEssentialRate] = useState(1)
+    const [clickedDuty, setClickedDuty] = useState(3578)
     const [getBaselineList] = useGetBaselineListMutation()
     const [getBaseline] = useGetBaselineMutation()
     const [baselineList, setBaselineList] = useState([])
@@ -1832,7 +1833,7 @@ const Employee = () => {
     const [getWorkplaceList] = useGetWorkplaceListMutation()
     const [workplaceList, setWorkplaceList] = useState([])
     const currentWorkplaceId = useSelector(selectWorkplaceId);
-
+    const currentBaselineId = useSelector(selectBaselineId)
 
     const dispatch = useDispatch();
 
@@ -1865,7 +1866,6 @@ const Employee = () => {
     const fetchImprovementList = async () => {
         const response = await getImprovementList({
             "baselineId": baselineId,
-            "instruction": 1,
             "workplaceId": userWorkplaceId
         });
         setImprovmentList(response.data.RET_DATA[0]);
@@ -1874,7 +1874,6 @@ const Employee = () => {
     const fetchLeaderImprovementList = async () => {
         const response = await getLeaderImprovementList({
             "baselineId": baselineId,
-            "instruction": 1,
             "workplaceId": userWorkplaceId
         });
         setLeaderImprovementList(response.data?.RET_DATA[0]);
@@ -1928,7 +1927,7 @@ const Employee = () => {
             "baselineId": baselineId,
             "workplaceId": userWorkplaceId
         });
-        setSafeWorkHistoryList(response.data.RET_DATA);
+        setSafeWorkHistoryList(response?.data?.RET_DATA);
     }
 
     const fetchDayInfo = async () => {
@@ -2009,10 +2008,11 @@ const Employee = () => {
     const fetchDutyDetailList = async () => {
         const response = await getDutyDetailList({
             "baselineId": baselineId,
-            "groupId": 2,
+            "groupId": clickedEssentialRate,
             "workplaceId": userWorkplaceId
         })
         setDutyDetailList(response.data.RET_DATA)
+        setClickedDuty(response?.data?.RET_DATA[0]?.articleNo)
     }
 
     const handleEssentailRateMeasure = () => {
@@ -2026,35 +2026,35 @@ const Employee = () => {
 
     const fetchInspectionDocs = async () => {
         const response = await getInspectionsDocs({
-            "articleNo": 3857
+            "articleNo": clickedDuty
         })
         setInspectionsDocs(response.data.RET_DATA)
     }
 
     const fetchDutyCycle = async () => {
         const response = await getDutyCycle({
-            'articleNo': 3857
+            'articleNo': clickedDuty
         })
         setDutyCycle(response.data.RET_DATA)
     }
 
     const fetchDutyAssigned = async () => {
         const response = await getDutyAssigned({
-            'articleNo': 3857
+            'articleNo': clickedDuty
         })
         setDutyAssigned(response.data.RET_DATA)
     }
 
     const fetchRelatedArticle = async () => {
         const response = await getRelatedArticle({
-            'articleNo': 3857
+            'articleNo': clickedDuty
         })
         setRelatedArticle(response.data.RET_DATA)
     }
 
     const fetchGuideLine = async () => {
         const response = await getGuideLine({
-            'articleNo': 3857
+            'articleNo': clickedDuty
         })
         setGuideLine(response.data.RET_DATA)
     }
@@ -2068,6 +2068,20 @@ const Employee = () => {
         setUserInfo(props);
         dispatch(setWorkplaceId(props.userWorkplaceId));
     }
+
+
+
+    useEffect(() => {
+        fetchDutyDetailList()
+    }, [clickedEssentialRate])
+
+    useEffect(() => {
+        fetchInspectionDocs()
+        fetchDutyCycle()
+        fetchDutyAssigned()
+        fetchRelatedArticle()
+        fetchGuideLine()
+    }, [clickedDuty])
 
     useEffect(() => {
         fetchBaseline()
@@ -2472,7 +2486,7 @@ const Employee = () => {
                                 <MainNavButton className={currentWorkplaceId === null ? "active" : ""} onClick={
                                     () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })
                                 }>전체사업장</MainNavButton>
-                                {!!workplaceList.length && workplaceList.map((workplaceItem) => (
+                                {workplaceList.length != 0 && workplaceList.map((workplaceItem) => (
                                     <MainNavButton className={currentWorkplaceId === workplaceItem.workplaceId ? "active" : ""}
                                         onClick={() => handleFactoryChange({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}>{workplaceItem.workplaceName}</MainNavButton>
                                 ))}
@@ -2572,42 +2586,16 @@ const Employee = () => {
                                         {essentialRates && essentialRates?.topRate}
                                     </span>
                                     <ul className={classes.menuList + ' nestedList'}>
-                                        <li>
-                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate1?.title}</Link>
-                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate1?.score)}>{essentialRates && essentialRates?.rate1?.score}</span>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate2?.title}</Link>
-                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate2?.score)}>{essentialRates && essentialRates?.rate2?.score}</span>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate3?.title}</Link>
-                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate3?.score)}>{essentialRates && essentialRates?.rate3?.score}</span>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate4?.title}</Link>
-                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate4?.score)}>{essentialRates && essentialRates?.rate4?.score}</span>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate5?.title}</Link>
-                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate5?.score)}>{essentialRates && essentialRates?.rate5?.score}</span>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate6?.title}</Link>
-                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate6?.score)}>{essentialRates && essentialRates?.rate6?.score}</span>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate7?.title}</Link>
-                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate7?.score)}>{essentialRates && essentialRates?.rate7?.score}</span>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate8?.title}</Link>
-                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate8?.score)}>{essentialRates && essentialRates?.rate8?.score}</span>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink} onClick={() => setClicked()} to={"#none"} underline="none">{essentialRates && essentialRates?.rate9?.title}</Link>
-                                            <span className={handleSlickCircleColor(essentialRates && essentialRates?.rate9?.score)}>{essentialRates && essentialRates?.rate9?.score}</span>
-                                        </li>
+                                        {!!essentialRates.rate1 && Object.keys(essentialRates)?.map(function (property) {
+                                            if (property.includes("rate")) {
+                                                return (
+                                                    <><li>
+                                                        <Link className={(clickedEssentialRate === essentialRates[property].groupId ? classes.listLinkClicked : classes.listLink)} onClick={() => setClickedEssentialRate(!!essentialRates[property].groupId && essentialRates[property].groupId)} to={"#none"} underline="none">{!!essentialRates[property].title && essentialRates[property].title}</Link>
+                                                        <span className={handleSlickCircleColor(!!essentialRates[property].score && essentialRates[property].score)}>{!!essentialRates[property].score && essentialRates[property].score}</span>
+                                                    </li></>
+                                                )
+                                            }
+                                        })}
                                     </ul>
                                 </li>
                                 <li>
@@ -2627,11 +2615,11 @@ const Employee = () => {
                     </Grid>
                     <Grid item xs={2.7}>
                         <div className={classes.contentList}>
-                            <div className={classes.listTitle}>의무조치별 상세 점검 항목  <span>총 <strong>{!!dutyDetailList.length && dutyDetailList[0].totalCount}</strong> 건</span></div>
+                            <div className={classes.listTitle}>의무조치별 상세 점검 항목  <span>총 <strong>{dutyDetailList.length != 0 && dutyDetailList[0].totalCount}</strong> 건</span></div>
                             <ul className={classes.menuList + ' secondList'}>
                                 {dutyDetailList?.map((element) => {
                                     return (<li>
-                                        <Link className={classes.listLink} to={"#none"} underline="none">{element.detailedItems}</Link>
+                                        <Link className={clickedDuty !== element.articleNo ? classes.listLink : classes.listLinkClicked} to={"#none"} underline="none" onClick={() => setClickedDuty(element.articleNo)}>{element.detailedItems}</Link>
                                     </li>)
                                 })}
                             </ul>
@@ -2651,7 +2639,7 @@ const Employee = () => {
                                     </ul>
                                 </div>
                                 <div>
-                                    <div className={classes.listTitle}><strong>{!!inspectionsDocs.length && inspectionsDocs[0].fileCount}</strong>건 /{!!inspectionsDocs.length && inspectionsDocs[0].totalCount}건</div>
+                                    <div className={classes.listTitle}><strong>{inspectionsDocs.length != 0 && inspectionsDocs[0].fileCount}</strong>건 /{inspectionsDocs.length != 0 && inspectionsDocs[0].totalCount}건</div>
                                     <ul className={classes.menuList + ' buttonList'}>
                                         {inspectionsDocs?.map((inspection) => (<><li>
                                             {inspection.fileId === null ? <FileButtonNone></FileButtonNone> : <FileButtonExis><span className={'orange'}>중</span></FileButtonExis>}
@@ -2702,11 +2690,11 @@ const Employee = () => {
                                 <div>
                                     <div className={classes.listTitle}>Check</div>
                                     <ul className={classes.menuList + ' checkList'}>
-                                        {relatedArticle?.map((checkBtn) => (<>
+                                        {relatedArticle?.map((checkBtn) => (
                                             <li>{(checkBtn.managerChecked === 1 || checkBtn.managerChecked === 0) &&
                                                 <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>}
                                             </li>
-                                        </>))}
+                                        ))}
                                     </ul>
                                 </div>
                             </div>
