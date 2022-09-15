@@ -116,7 +116,7 @@ const useStyles = makeStyles(() => ({
             minWidth: 'unset',
             marginTop: '20px',
             marginBottom: '20px !important',
-            '& [class*=tableRow]': {
+            '& $tableRow': {
                 width: '100% !important',
                 height: '50px',
                 '&:first-of-type': {
@@ -129,13 +129,13 @@ const useStyles = makeStyles(() => ({
                     width: '180px !important'
                 },
             },
-            '& [class*=tableHead]': {
-                '& [class*=tableRow]': {
+            '& $tableHead': {
+                '& $tableRow': {
 
                 }
             },
-            '& [class*=tableBody]': {
-                '& [class*=tableRow]': {
+            '& $tableBody': {
+                '& $tableRow': {
 
                 }
             },
@@ -147,7 +147,7 @@ const useStyles = makeStyles(() => ({
         flexWrap: 'nowrap',
         width: '100%',
         letterSpacing: '-1.08px',
-        '& [class*=tableRow]': {
+        '& $tableRow': {
             background: '#bdcbe9',
             borderRight: '1px solid #fff',
             fontSize: '17px',
@@ -206,7 +206,7 @@ const useStyles = makeStyles(() => ({
                 width: '160px'
             },
             '&:nth-of-type(6)': {
-                width: '963px'
+                width: '971px'
             },
         }
     },
@@ -217,7 +217,7 @@ const useStyles = makeStyles(() => ({
         height: '50px',
         transition: 'background .2s',
         letterSpacing: '-1.08px',
-        '& [class*=tableRow]': {
+        '& $tableRow': {
             background: 'transparent',
             borderRight: '1px solid #bdcbe9',
             borderBottom: '1px solid #bdcbe9',
@@ -246,7 +246,7 @@ const useStyles = makeStyles(() => ({
                 width: '120px'
             },
         },
-        '&:last-of-type [class*=tableRow]': {
+        '&:last-of-type $tableRow': {
             borderBottom: '0'
         },
         '&:hover': {

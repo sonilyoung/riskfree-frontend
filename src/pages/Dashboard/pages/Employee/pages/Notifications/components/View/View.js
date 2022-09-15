@@ -33,7 +33,7 @@ const useStyles = makeStyles(() => ({
                 width: '100%'
             }
         },
-        '&:nth-of-type(2) [class*=rowInfo]': {
+        '&:nth-of-type(2) $rowInfo': {
             padding: '0',
             width: 'calc(100% - 200px)'
         },

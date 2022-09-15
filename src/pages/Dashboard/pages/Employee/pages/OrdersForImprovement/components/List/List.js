@@ -75,13 +75,13 @@ const useStyles = makeStyles(() => ({
                 marginTop: '12px'
             }
         },
-        '& >div:first-of-type [class*=searchInfo] >div:nth-of-type(2), & >div:last-of-type [class*=searchInfo] >div:nth-of-type(2)': {
+        '& >div:first-of-type $searchInfo >div:nth-of-type(2), & >div:last-of-type $searchInfo >div:nth-of-type(2)': {
             width: '700px',
         },
-        '& >div:first-of-type [class*=searchInfo] >div:last-of-type, & >div:last-of-type [class*=searchInfo] >div:last-of-type': {
+        '& >div:first-of-type $searchInfo >div:last-of-type, & >div:last-of-type $searchInfo >div:last-of-type': {
             marginLeft: '30px'
         },
-        '& >div:first-of-type [class*=searchInfo] >div': {
+        '& >div:first-of-type $searchInfo >div': {
             '&:nth-of-type(2) >div +div, &:nth-of-type(3) >div +div': {
                 border: '1px solid rgba(0, 0, 0, 0.23)',
                 borderRadius: '6px',
@@ -93,7 +93,7 @@ const useStyles = makeStyles(() => ({
                 }
             },
         },
-        '& >div:last-of-type [class*=searchInfo] >div': {
+        '& >div:last-of-type $searchInfo >div': {
             '&:nth-of-type(3) >div +div': {
                 border: '1px solid rgba(0, 0, 0, 0.23)',
                 borderRadius: '6px',
@@ -154,7 +154,7 @@ const useStyles = makeStyles(() => ({
         width: '100%',
         height: '50px',
         letterSpacing: '-1.08px',
-        '& [class*=tableRow]': {
+        '& $tableRow': {
             background: '#bdcbe9',
             borderRight: '1px solid #fff',
             fontSize: '17px',
@@ -171,7 +171,7 @@ const useStyles = makeStyles(() => ({
         height: '50px',
         transition: 'background .2s',
         letterSpacing: '-1.08px',
-        '& [class*=tableRow]': {
+        '& $tableRow': {
             background: 'transparent',
             borderRight: '1px solid #bdcbe9',
             borderBottom: '1px solid #bdcbe9',
@@ -182,7 +182,7 @@ const useStyles = makeStyles(() => ({
                 justifyContent: 'flex-start',
             },
         },
-        '&:last-of-type [class*=tableRow]': {
+        '&:last-of-type $tableRow': {
             borderBottom: '0'
         },
         '&:hover': {

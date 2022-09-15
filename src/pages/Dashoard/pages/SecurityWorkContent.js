@@ -41,20 +41,20 @@ const useStyles = makeStyles(() => ({
     tableHead: {
         width: '100%',
         background: '#bdcbe9',
-        '& [class*=tableData]': {
+        '& $tableData': {
             borderRight: '1px solid #fff',
         }
     },
     tableBody: {
         width: '100%',
-        '& [class*=tableData]': {
+        '& $tableData': {
             borderRight: '1px solid #bdcbe9',
             borderBottom: '1px solid #bdcbe9',
         },
-        '& [class*=tableData]:nth-of-type(-n + 2)': {
+        '& $tableData:nth-of-type(-n + 2)': {
             justifyContent: 'center'
         },
-        '& [class*=tableRow]': {
+        '& $tableRow': {
             transition: 'background .2s',
             '&:hover': {
                 background: '#eff2f9'
@@ -64,7 +64,7 @@ const useStyles = makeStyles(() => ({
     tableRow: {
         display: 'flex',
         '&:last-of-type': {
-            '& [class*=tableData]': {
+            '& $tableData': {
                 borderBottom: 'none'
             },
         },
@@ -149,7 +149,7 @@ const useStyles = makeStyles(() => ({
         boxShadow: '0 0 12px rgb(189 203 203 / 50%)',
         border: '1px solid #bdcbe9',
         marginTop: '20px',
-        '& [class*=tableData]': {
+        '& $tableData': {
             boxSizing: 'border-box',
             justifyContent: 'flex-start !important',
             '&:first-of-type': {
@@ -162,7 +162,7 @@ const useStyles = makeStyles(() => ({
                 width: '15%',
                 borderRight: 'none' 
             },
-            '& [class*=fileIcon]': {
+            '& $fileIcon': {
                 marginRight: '10px'
             }
         }
@@ -208,10 +208,10 @@ const useStyles = makeStyles(() => ({
             marginRight: '10px',
             borderRight: '1px solid #bdcbe9'
         },
-        '& [class*=fileIcon]': {
+        '& $fileIcon': {
             marginRight: '10px'
         },
-        '& [class*=uploadStatus]': {
+        '& $uploadStatus': {
             marginLeft: '10px'
         },
         '& button': {

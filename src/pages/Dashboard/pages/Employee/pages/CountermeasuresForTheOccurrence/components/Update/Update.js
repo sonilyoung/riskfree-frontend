@@ -39,7 +39,7 @@ import 'dayjs/locale/ko';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
-        '& >div[class*=box]': {
+        '& >div:not($listTitle, $footerButtons)': {
             display: 'flex',
             borderRadius: '6px',
             background: '#fff',
@@ -56,16 +56,16 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         marginBottom: '16px !important',
         height: '160px',
-        '& [class*=boxRow]:first-of-type [class*=rowInfo]:first-of-type': {
+        '& $boxRow:first-of-type $rowInfo:first-of-type': {
             width: '160px',
         },
-        '& [class*=boxRow]:first-of-type [class*=rowInfo]': {
+        '& $boxRow:first-of-type $rowInfo': {
             width: '306px'
         },
-        '& [class*=boxRow]:first-of-type [class*=rowInfo]:last-of-type': {
+        '& $boxRow:first-of-type $rowInfo:last-of-type': {
             width: 'auto'
         },
-        '& [class*=boxRow]:last-of-type [class*=rowInfo]': {
+        '& $boxRow:last-of-type $rowInfo': {
             width: '100%',
         },
     },
@@ -89,12 +89,12 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexWrap: 'wrap',
         width: 'calc(100% - 100px)',
-        '& [class*=boxRow]:first-of-type': {
+        '& $boxRow:first-of-type': {
             height: '60px',
-            '& [class*=rowContent]': {
+            '& $rowContent': {
                 borderTop: 'none'
             },
-            '& [class*=rowTitle]': {
+            '& $rowTitle': {
                 borderTop: 'none'
             }
         },
@@ -103,7 +103,7 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         width: '100%',
         minHeight: '60px',
-        '& [class*=rowTitle]': {
+        '& $rowTitle': {
             borderBottom: 'none'
         }
     },
@@ -139,7 +139,7 @@ const useStyles = makeStyles(() => ({
         boxSizing: 'border-box',
     },
     boxRegistration: {
-        '& [class*=boxRow]': {
+        '& $boxRow': {
             height: '100px',
             '&:nth-of-type(2)': {
                 height: '60px'
@@ -148,25 +148,25 @@ const useStyles = makeStyles(() => ({
                 height: 'auto'
             },
         },
-        '& [class*=boxRow]:first-of-type [class*=rowInfo]:first-of-type': {
+        '& $boxRow:first-of-type $rowInfo:first-of-type': {
             width: '160px',
         },
-        '& [class*=boxRow]:first-of-type [class*=rowInfo]': {
+        '& $boxRow:first-of-type $rowInfo': {
             width: '306px'
         },
-        '& [class*=boxRow]:first-of-type [class*=rowContent] [class*=rowInfo]:nth-of-type(3)': {
+        '& $boxRow:first-of-type $rowContent $rowInfo:nth-of-type(3)': {
             width: '520px'
         },
-        '& [class*=boxRow]:nth-of-type(3) [class*=rowContent] [class*=rowInfo]:first-of-type': {
+        '& $boxRow:nth-of-type(3) $rowContent $rowInfo:first-of-type': {
             width: '100%'
         },
-        '& [class*=boxRow]:nth-of-type(3) [class*=rowContent] [class*=rowInfo]:last-of-type': {
+        '& $boxRow:nth-of-type(3) $rowContent $rowInfo:last-of-type': {
             paddingLeft: '0px'
         },
-        '& [class*=boxRow]:nth-of-type(4) [class*=rowContent] [class*=rowInfo]': {
+        '& $boxRow:nth-of-type(4) $rowContent $rowInfo': {
             width: '100%'
         },
-        '& [class*=boxRow]:last-of-type [class*=rowContent]': {
+        '& $boxRow:last-of-type $rowContent': {
             display: 'flex',
             '& >div': {
                 width: '50%',

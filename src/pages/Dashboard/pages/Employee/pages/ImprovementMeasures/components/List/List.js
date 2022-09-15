@@ -59,7 +59,7 @@ const useStyles = makeStyles(() => ({
         boxShadow: '0 0 12px rgb(189 203 203 / 10%)',
         marginBottom: '28px !important',
         background: '#fff',
-        '& [class*=searchInfo] >div': {
+        '& $searchInfo >div': {
             '&:last-of-type >div +div': {
                 border: '1px solid rgba(0, 0, 0, 0.23)',
                 borderRadius: '6px',
@@ -112,7 +112,7 @@ const useStyles = makeStyles(() => ({
         flexWrap: 'nowrap',
         width: '100%',
         height: '50px',
-        '& [class*=tableRow]': {
+        '& $tableRow': {
             background: '#bdcbe9',
             borderRight: '1px solid #fff',
             fontSize: '17px',
@@ -128,7 +128,7 @@ const useStyles = makeStyles(() => ({
         width: '100%',
         height: '50px',
         transition: 'background .2s',
-        '& [class*=tableRow]': {
+        '& $tableRow': {
             background: 'transparent',
             borderRight: '1px solid #bdcbe9',
             borderBottom: '1px solid #bdcbe9',
@@ -139,7 +139,7 @@ const useStyles = makeStyles(() => ({
                 justifyContent: 'flex-start',
             },
         },
-        '&:last-of-type [class*=tableRow]': {
+        '&:last-of-type $tableRow': {
             borderBottom: '0'
         },
         '&:hover': {

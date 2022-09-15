@@ -75,7 +75,7 @@ const useStyles = makeStyles(() => ({
         flexWrap: 'nowrap',
         width: '100%',
         height: '50px',
-        '& [class*=tableRow]': {
+        '& $tableRow': {
             background: '#bdcbe9',
             borderRight: '1px solid #fff',
             fontSize: '17px',
@@ -91,7 +91,7 @@ const useStyles = makeStyles(() => ({
         width: '100%',
         height: '50px',
         transition: 'background .2s',
-        '& [class*=tableRow]': {
+        '& $tableRow': {
             background: 'transparent',
             borderRight: '1px solid #bdcbe9',
             borderBottom: '1px solid #bdcbe9',
@@ -99,7 +99,7 @@ const useStyles = makeStyles(() => ({
                 borderRight: '0',
             },
         },
-        '&:last-of-type [class*=tableRow]': {
+        '&:last-of-type $tableRow': {
             borderBottom: '0'
         },
         '&:hover': {

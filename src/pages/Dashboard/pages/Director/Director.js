@@ -432,7 +432,7 @@ const Director = () => {
 
     const fetchSafeWorkHistoryList = async () => {
         const response = await getSafeWorkHistoryList({
-            "baselineId": 6,
+            "baselineId": baselineId,
             "companyId": userCompanyId,
             "workplaceId": userWorkplaceId
         })
@@ -517,7 +517,7 @@ const Director = () => {
         fetchLeadersImproveList();
         fetchAccidentTotal();
         fetchSafeWorkHistoryList();
-        // fetchAccidentsPrevention();
+        fetchAccidentsPrevention()
         fetchDayInfo();
 
     }, [baselineId, userWorkplaceId]);
@@ -951,8 +951,8 @@ const Director = () => {
                                 </div>
                                 {workplaceList.length != 0 && workplaceList?.RET_DATA?.map(workplaceItem =>
                                     <div>
-                                        <MainNavButton 
-                                            className={currentWorkplaceId === workplaceItem.workplaceId ? "active" : ""} 
+                                        <MainNavButton
+                                            className={currentWorkplaceId === workplaceItem.workplaceId ? "active" : ""}
                                             onClick={() => handleFactoryChange({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}
                                         >
                                             {workplaceItem.workplaceName}
@@ -1024,9 +1024,9 @@ const Director = () => {
                                     <div>도급/용역 위탁 시<br /> 안전보건 확보</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + handleSlickCircleColor('100%')}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(accidentsPrevention?.RET_DATA?.enforceRate)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{accidentsPrevention?.RET_DATA?.enforceRate}10</strong>%</div>
+                                    <div><strong>{accidentsPrevention?.RET_DATA?.enforceRate}</strong></div>
                                     <div>재발방지<br /> 대책</div>
                                 </Link>
                             </div>
@@ -1099,9 +1099,9 @@ const Director = () => {
                                     <div>도급/용역 위탁 시<br /> 안전보건 확보</div>
                                 </Link>
                             </div>
-                            <div className={classes.slickCircle + handleSlickCircleColor('100%')}>
+                            <div className={classes.slickCircle + handleSlickCircleColor(accidentsPrevention?.RET_DATA?.enforceRate)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{accidentsPrevention?.RET_DATA?.enforceRate}10</strong>%</div>
+                                    <div><strong>{accidentsPrevention?.RET_DATA?.enforceRate}</strong></div>
                                     <div>재발방지<br /> 대책</div>
                                 </Link>
                             </div>

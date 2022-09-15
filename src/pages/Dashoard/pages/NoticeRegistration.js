@@ -43,7 +43,7 @@ const useStyles = makeStyles(() => ({
                 width: '100%'
             }
         },
-        '&:nth-of-type(2) [class*=rowInfo]': {
+        '&:nth-of-type(2) $rowInfo': {
             padding: '0',
             width: 'calc(100% - 200px)'
         },
@@ -52,10 +52,10 @@ const useStyles = makeStyles(() => ({
         },
         '&:last-of-type': {
             height: 'auto',
-            '& [class*=rowInfo]': {
+            '& $rowInfo': {
                 padding: '10px'
             },
-            '& [class*=textArea] input': {
+            '& $textArea input': {
                 '-webkit-text-fill-color': '#333',
             }
         }

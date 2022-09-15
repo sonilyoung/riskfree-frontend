@@ -482,14 +482,6 @@ const useStyles = makeStyles(() => ({
         }
     },
     dashSlider: {
-        // '& .slick-slide [class*=slickCircle]': {
-        //     transition: '.5s',
-        //     transform: 'scale(0.5)'
-        // },
-        // '& .slick-active [class*=slickCircle]': {
-        //     transition: '.5s',
-        //     transform: 'scale(1)'
-        // },
         '& .slick-list': {
             padding: '1px 0 20px 0',
             marginTop: '8px',
@@ -791,7 +783,7 @@ const useStyles = makeStyles(() => ({
             top: '65px',
             left: '-80px'
         },
-        '& [class*=popupAccord]': {
+        '& $popupAccord': {
             background: 'transparent',
             boxShadow: 'none',
             '& .MuiButtonBase-root': {
@@ -808,7 +800,7 @@ const useStyles = makeStyles(() => ({
                     alignItems: 'center',
                     color: '#018de7'
                 },
-                '& [class*=popupTextField]': {
+                '& $popupTextField': {
                     marginBottom: '0 !important'
                 }
 
@@ -821,7 +813,7 @@ const useStyles = makeStyles(() => ({
                 padding: '0'
             }
         },
-        '& [class*=popupLink]': {
+        '& $popupLink': {
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'space-between',

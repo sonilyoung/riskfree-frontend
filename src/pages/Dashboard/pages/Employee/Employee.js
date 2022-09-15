@@ -82,7 +82,7 @@ import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useUserToken } from '../../../../hooks/core/UserToken';
 import moment from 'moment'
 
@@ -90,6 +90,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
+
+import { setWorkplaceId, selectWorkplaceId } from '../../../../slices/selections/MainSelection';
+import { useDispatch, useSelector } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
@@ -431,7 +434,7 @@ const useStyles = makeStyles(() => ({
             margin: '0 auto'
         },
         '& .slick-track': {
-            '& .slick-slide:first-of-type button': {
+            '& .slick-slide button.active': {
                 background: 'linear-gradient(#04b9fb, #017dfa)'
             },
         },
@@ -505,11 +508,11 @@ const useStyles = makeStyles(() => ({
         overflow: 'hidden',
         '&.moreContent': {
             display: 'flex',
-            '& [class*=listTitle]': {
+            '& $listTitle': {
                 justifyContent: 'flex-start',
                 borderRight: '1px solid #17191c'
             },
-            '& :last-of-type [class*=listTitle]': {
+            '& :last-of-type $listTitle': {
                 borderRight: 'none'
             },
             '& >div:first-of-type': {
@@ -537,7 +540,7 @@ const useStyles = makeStyles(() => ({
                     boxSizing: 'border-box'
                 }
             },
-            '& [class*=menuList]': {
+            '& $menuList': {
                 borderRight: '1px solid #4d5867',
                 '& li, a': {
                     height: '40px',
@@ -553,7 +556,7 @@ const useStyles = makeStyles(() => ({
                     justifyContent: 'center',
                     alignItems: 'center',
                 },
-                '& [class*=listLink]': {
+                '& $listLink': {
                     justifyContent: 'center',
                     padding: '0',
                     '&.check': {
@@ -823,12 +826,12 @@ const useStyles = makeStyles(() => ({
             height: '50px',
             borderRadius: '8px'
         },
-        '&:nth-of-type(2) div[class*=bottomBox] div:first-of-type div:last-of-type': {
+        '&:nth-of-type(2) $bottomBox div:first-of-type div:last-of-type': {
             color: '#fdcb05'
         },
         '&.multiBox': {
             flexDirection: 'column',
-            '& >div:not([class*=tiltBox])': {
+            '& >div:not($tiltBox)': {
                 display: 'flex',
                 flexWrap: 'wrap',
                 width: 'calc(50% - 20px)',
@@ -836,10 +839,10 @@ const useStyles = makeStyles(() => ({
                     borderLeft: '1px solid #1e2132'
                 }
             },
-            '& div[class*=bottomBox] div:first-of-type div strong': {
+            '& $bottomBox div:first-of-type div strong': {
                 color: '#fdcb05'
             },
-            '& div[class*=bottomBox] div:last-of-type div strong': {
+            '& $bottomBox div:last-of-type div strong': {
                 color: '#00adef'
             }
         },
@@ -1062,7 +1065,7 @@ const useStyles = makeStyles(() => ({
         '&.settings_popupClose': {
             display: "none"
         },
-        '& [class*=popupAccord]': {
+        '& $popupAccord': {
             background: 'transparent',
             boxShadow: 'none',
             '& .MuiButtonBase-root': {
@@ -1079,7 +1082,7 @@ const useStyles = makeStyles(() => ({
                     alignItems: 'center',
                     color: '#018de7'
                 },
-                '& [class*=popupTextField]': {
+                '& $popupTextField': {
                     marginBottom: '0 !important'
                 }
 
@@ -1092,7 +1095,7 @@ const useStyles = makeStyles(() => ({
                 padding: '0'
             }
         },
-        '& [class*=popupLink]': {
+        '& $popupLink': {
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'space-between',
@@ -1375,7 +1378,7 @@ const useStyles = makeStyles(() => ({
     },
     tableHead: {
         background: '#bdcbe9',
-        '& [class*=tableData]': {
+        '& $tableData': {
             borderRight: '1px solid #fff',
             '&:last-of-type': {
                 borderRight: 'none',
@@ -1384,17 +1387,17 @@ const useStyles = makeStyles(() => ({
     },
     tableBody: {
         width: '100%',
-        '& [class*=tableData]': {
+        '& $tableData': {
             borderRight: '1px solid #bdcbe9',
             borderBottom: '1px solid #bdcbe9',
             '&:first-of-type': {
                 background: '#EFF2F7'
             }
         },
-        '& [class*=tableRow]': {
+        '& $tableRow': {
             transition: 'background .2s',
             '&:hover': {
-                '& [class*=tableData]': {
+                '& $tableData': {
                     background: '#e1e8f7'
                 }
             }
@@ -1783,7 +1786,8 @@ const Employee = () => {
     const [getBaselineList] = useGetBaselineListMutation()
     const [getBaseline] = useGetBaselineMutation()
     const [baselineList, setBaselineList] = useState([])
-    const [baseline, setBaseline] = useState(6)
+    const [baselineId, setBaselineId] = useState(6)
+    const [baselineIdForSelect, setBaselineIdForSelect] = useState(6)
     const [baselineData, setBaselineData] = useState({})
     const [improvmentList, setImprovmentList] = useState([]);
     const [leaderImprovementList, setLeaderImprovementList] = useState([]);
@@ -1817,6 +1821,28 @@ const Employee = () => {
     const [dutyDetailList, setDutyDetailList] = useState([])
     const [getInspectionsDocs] = useGetInspectiondocsMutation()
     const [inspectionsDocs, setInspectionsDocs] = useState([])
+    const [getDutyCycle] = useGetDutyCycleMutation()
+    const [dutyCycle, setDutyCycle] = useState([])
+    const [getDutyAssigned] = useGetDutyAssignedMutation()
+    const [dutyAssigned, setDutyAssigned] = useState([])
+    const [getRelatedArticle] = useGetRelatedArticleMutation()
+    const [relatedArticle, setRelatedArticle] = useState([])
+    const [getGuideLine] = useGetGuideLineMutation()
+    const [guideLine, setGuideLine] = useState([])
+    const [getWorkplaceList] = useGetWorkplaceListMutation()
+    const [workplaceList, setWorkplaceList] = useState([])
+    const currentWorkplaceId = useSelector(selectWorkplaceId);
+
+
+    const dispatch = useDispatch();
+
+
+    const [userInfo, setUserInfo] = useState({
+        userCompanyId: userToken.getUserCompanyId(),
+        userWorkplaceId: userToken.getUserWorkplaceId()
+    });
+
+    const { userCompanyId, userWorkplaceId } = userInfo;
 
     const fetchLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -1838,18 +1864,18 @@ const Employee = () => {
 
     const fetchImprovementList = async () => {
         const response = await getImprovementList({
-            "baselineId": 6,
+            "baselineId": baselineId,
             "instruction": 1,
-            "workplaceId": 1
+            "workplaceId": userWorkplaceId
         });
         setImprovmentList(response.data.RET_DATA[0]);
     }
 
     const fetchLeaderImprovementList = async () => {
         const response = await getLeaderImprovementList({
-            "baselineId": 6,
+            "baselineId": baselineId,
             "instruction": 1,
-            "workplaceId": 1
+            "workplaceId": userWorkplaceId
         });
         setLeaderImprovementList(response.data?.RET_DATA[0]);
     }
@@ -1860,15 +1886,17 @@ const Employee = () => {
     }
 
     const fetchBaseline = async () => {
+        setBaselineId(baselineIdForSelect)
         const response = await getBaseline({
-            "baselineId": baseline
+            "baselineId": baselineId
         })
         setBaselineData(response.data.RET_DATA)
     }
 
     const fetchCompanyInfo = async () => {
         const response = await getCompanyInfo({
-            "companyId": companyId
+            "companyId": userCompanyId,
+            "workplaceId": userWorkplaceId
         })
         setCompanyInfo(response.data.RET_DATA)
     }
@@ -1887,18 +1915,18 @@ const Employee = () => {
 
     const fetchAccidentTotalList = async () => {
         const response = await getAccidentTotal({
-            "baselineId": 6,
+            "baselineId": baselineId,
             "caughtCnt": 0,
             "companyId": companyId,
-            "workplaceId": 1
+            "workplaceId": userWorkplaceId
         });
         setAccidentTotal(response.data.RET_DATA);
     }
 
     const fetchSafeWorkHistoryList = async () => {
         const response = await getSafeWorkHistoryList({
-            "baselineId": 6,
-            "workplaceId": 1
+            "baselineId": baselineId,
+            "workplaceId": userWorkplaceId
         });
         setSafeWorkHistoryList(response.data.RET_DATA);
     }
@@ -1918,7 +1946,8 @@ const Employee = () => {
 
     const fetchEssentialRates = async () => {
         const response = await getEssentialRate({
-            "baselineId": baseline
+            "baselineId": baselineId,
+            "workplaceId": userWorkplaceId
         })
         setEssentialRates(response.data.RET_DATA)
     }
@@ -1956,32 +1985,32 @@ const Employee = () => {
 
     const fetchAccidentsPreventionPercentage = async () => {   /// this Request still need to be fixed on Backend
         const response = await getAccidentsPrevention({
-            "baselineId": 6,
-            "workplaceId": 1
+            "baselineId": baselineId,
+            "workplaceId": userWorkplaceId
         })
         setAccidentsPreventionPercentage(response.data.RET_DATA)
     }
     const fetchImprovementLawOrderPercentage = async () => {
         const response = await getImprovementLawOrder({
-            "baselineId": 6,
-            "workplaceId": 1
+            "baselineId": baselineId,
+            "workplaceId": userWorkplaceId
         })
         setLawOrderPercentage(response.data.RET_DATA)
     }
 
     const fetchRelatedLawRatePercentage = async () => {
         const response = await getRelatedLawRate({
-            "baselineId": 6,
-            "workplaceId": 1
+            "baselineId": baselineId,
+            "workplaceId": userWorkplaceId
         })
         setRelatedLawRatePercentage(response.data.RET_DATA)
     }
 
     const fetchDutyDetailList = async () => {
         const response = await getDutyDetailList({
-            "baselineId": 6,
+            "baselineId": baselineId,
             "groupId": 2,
-            "workplaceId": 1
+            "workplaceId": userWorkplaceId
         })
         setDutyDetailList(response.data.RET_DATA)
     }
@@ -2002,9 +2031,43 @@ const Employee = () => {
         setInspectionsDocs(response.data.RET_DATA)
     }
 
-    useEffect(() => {
-        fetchDayInfo()
-    }, [baselineData])
+    const fetchDutyCycle = async () => {
+        const response = await getDutyCycle({
+            'articleNo': 3857
+        })
+        setDutyCycle(response.data.RET_DATA)
+    }
+
+    const fetchDutyAssigned = async () => {
+        const response = await getDutyAssigned({
+            'articleNo': 3857
+        })
+        setDutyAssigned(response.data.RET_DATA)
+    }
+
+    const fetchRelatedArticle = async () => {
+        const response = await getRelatedArticle({
+            'articleNo': 3857
+        })
+        setRelatedArticle(response.data.RET_DATA)
+    }
+
+    const fetchGuideLine = async () => {
+        const response = await getGuideLine({
+            'articleNo': 3857
+        })
+        setGuideLine(response.data.RET_DATA)
+    }
+
+    const fetchWorkplaceList = async () => {
+        const response = await getWorkplaceList()
+        setWorkplaceList(response.data.RET_DATA)
+    }
+
+    function handleFactoryChange(props) {
+        setUserInfo(props);
+        dispatch(setWorkplaceId(props.userWorkplaceId));
+    }
 
     useEffect(() => {
         fetchBaseline()
@@ -2023,7 +2086,12 @@ const Employee = () => {
         fetchDutyDetailList()
         fetchAccidentsPreventionPercentage()
         fetchInspectionDocs()
-    }, [])
+        fetchDutyCycle()
+        fetchDutyAssigned()
+        fetchRelatedArticle()
+        fetchGuideLine()
+        fetchWorkplaceList()
+    }, [baselineId, userWorkplaceId])
 
     useEffect(() => {
         const timerId = setInterval(refreshClock, 1000);
@@ -2401,14 +2469,13 @@ const Employee = () => {
                         </div>
                         <div className={classes.navSlider}>
                             <Slider {...headerSlider}>
-                                <div><MainNavButton>전체사업장</MainNavButton></div>
-                                <div><MainNavButton>여수사업장</MainNavButton></div>
-                                <div><MainNavButton>울산사업장</MainNavButton></div>
-                                <div><MainNavButton>서산사업장</MainNavButton></div>
-                                <div><MainNavButton>인천사업장</MainNavButton></div>
-                                <div><MainNavButton>광주사업장</MainNavButton></div>
-                                <div><MainNavButton>인천사업장</MainNavButton></div>
-                                <div><MainNavButton>대전사업장</MainNavButton></div>
+                                <MainNavButton className={currentWorkplaceId === null ? "active" : ""} onClick={
+                                    () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })
+                                }>전체사업장</MainNavButton>
+                                {!!workplaceList.length && workplaceList.map((workplaceItem) => (
+                                    <MainNavButton className={currentWorkplaceId === workplaceItem.workplaceId ? "active" : ""}
+                                        onClick={() => handleFactoryChange({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}>{workplaceItem.workplaceName}</MainNavButton>
+                                ))}
                             </Slider>
                         </div>
                     </Grid>
@@ -2482,8 +2549,8 @@ const Employee = () => {
                         <FormControl sx={{ width: 130 }} className={classes.dropMenu + ' page_drop_menu'}>
                             <Select
                                 className={classes.selectMenu}
-                                value={baseline}
-                                onChange={(e) => setBaseline(e.target.value)}
+                                value={baselineIdForSelect}
+                                onChange={(e) => setBaselineIdForSelect(e.target.value)}
                                 inputProps={{ 'aria-label': 'Without label' }}>
                                 {baselineList?.map((baseline) => (
                                     <MenuItem MenuItem value={baseline.baselineId}>{baseline.baselineName}</MenuItem>
@@ -2545,7 +2612,7 @@ const Employee = () => {
                                 </li>
                                 <li>
                                     <Link className={classes.listLink + ' parentLink'} to={"/dashboard/employee/accident-countermeasures-implementation/list"} underline="none">재해발생 방지대책 및 이행현황</Link>
-                                    <span className={'caution'}>{accidentsPreventionPercentage?.improvemetRate}%</span>
+                                    <span className={'caution'}>{accidentsPreventionPercentage?.enforceRate}</span>
                                 </li>
                                 <li>
                                     <Link className={classes.listLink + ' parentLink'} to={"/dashboard/employee/order-for-improvement-and-correction-under-related-law/list"} underline="none">관계법령에 따른 개선.시정명령 조치</Link>
@@ -2560,7 +2627,7 @@ const Employee = () => {
                     </Grid>
                     <Grid item xs={2.7}>
                         <div className={classes.contentList}>
-                            <div className={classes.listTitle}>의무조치별 상세 점검 항목  <span>총 <strong>{dutyDetailList.length > 0 && dutyDetailList[0].totalCount}</strong> 건</span></div>
+                            <div className={classes.listTitle}>의무조치별 상세 점검 항목  <span>총 <strong>{!!dutyDetailList.length && dutyDetailList[0].totalCount}</strong> 건</span></div>
                             <ul className={classes.menuList + ' secondList'}>
                                 {dutyDetailList?.map((element) => {
                                     return (<li>
@@ -2584,70 +2651,62 @@ const Employee = () => {
                                     </ul>
                                 </div>
                                 <div>
-                                    <div className={classes.listTitle}><strong>{inspectionsDocs.length > 0 && inspectionsDocs[0].fileCount}</strong>건 /{inspectionsDocs.length > 0 && inspectionsDocs[0].totalCount}건</div>
+                                    <div className={classes.listTitle}><strong>{!!inspectionsDocs.length && inspectionsDocs[0].fileCount}</strong>건 /{!!inspectionsDocs.length && inspectionsDocs[0].totalCount}건</div>
                                     <ul className={classes.menuList + ' buttonList'}>
-                                        <li>
-                                            <FileButtonNone></FileButtonNone>
+                                        {inspectionsDocs?.map((inspection) => (<><li>
+                                            {inspection.fileId === null ? <FileButtonNone></FileButtonNone> : <FileButtonExis><span className={'orange'}>중</span></FileButtonExis>}
                                         </li>
-                                        <li>
-                                            <FileButtonExis><span className={'orange'}>중</span></FileButtonExis>
+                                            {/* <li>
+                                                <FileButtonExis><span className={'orange'}>중</span></FileButtonExis>
 
-                                        </li>
-                                        <li>
-                                            <FileButtonExis><span className={'green'}>상</span></FileButtonExis>
-                                        </li>
-                                        <li>
-                                            <FileButtonNone></FileButtonNone>
-                                        </li>
-                                        <li>
-                                            <FileButtonExis><span className={'red'}>하</span></FileButtonExis>
-                                        </li>
-                                        <li>
-                                            <FileButtonNone></FileButtonNone>
-                                        </li>
+                                            </li>
+                                            <li>
+                                                <FileButtonExis><span className={'green'}>상</span></FileButtonExis>
+                                            </li>
+                                            <li>
+                                                <FileButtonNone></FileButtonNone>
+                                            </li>
+                                            <li>
+                                                <FileButtonExis><span className={'red'}>하</span></FileButtonExis>
+                                            </li>
+                                            <li>
+                                                <FileButtonNone></FileButtonNone>
+                                            </li> */}
+                                        </>))}
                                     </ul>
                                 </div>
                                 <div>
                                     <div className={classes.listTitle}>이행주기</div>
                                     <ul className={classes.menuList}>
-                                        <li className={'bulletList'}>반기 1회</li>
+                                        {dutyCycle?.map((cycle) => (
+                                            <li className={'bulletList'}>{cycle.dutyCycle}</li>
+                                        ))}
                                     </ul>
                                 </div>
                                 <div>
                                     <div className={classes.listTitle}>준수대상</div>
                                     <ul className={classes.menuList}>
-                                        <li className={'bulletList'}>경영책임자</li>
-                                        <li className={'bulletList'}>안전보건관리책임자</li>
+                                        {dutyAssigned?.map((duty) => (
+                                            <li className={'bulletList'}>{duty.dutyAssigned}</li>
+                                        ))}
                                     </ul>
                                 </div>
                                 <div>
                                     <div className={classes.listTitle}>관계법령</div>
                                     <ul className={classes.menuList}>
-                                        <li className={'bulletList'}>산업안전보건법 제4조</li>
-                                        <li className={'bulletList'}>산업안전보건밥 시행령 제3조 2항1호</li>
+                                        {relatedArticle?.map(article => (
+                                            <li className={'bulletList'}>{article.relatedArticle}</li>
+                                        ))}
                                     </ul>
                                 </div>
                                 <div>
                                     <div className={classes.listTitle}>Check</div>
                                     <ul className={classes.menuList + ' checkList'}>
-                                        <li>
-                                            <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>
-                                        </li>
-                                        <li>
-                                            <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>
-                                        </li>
+                                        {relatedArticle?.map((checkBtn) => (<>
+                                            <li>{(checkBtn.managerChecked === 1 || checkBtn.managerChecked === 0) &&
+                                                <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>}
+                                            </li>
+                                        </>))}
                                     </ul>
                                 </div>
                             </div>
@@ -2656,25 +2715,18 @@ const Employee = () => {
                             <div className={classes.contentList}>
                                 <div className={classes.listTitle}>현장 작동성 평가 작성 지침서</div>
                                 <ul className={classes.menuList + ' fourthList'}>
-                                    <li>
-                                        <div className={'bulletList'}>안전보건관리규정] 작성 가이드</div>
-                                        <ol>
-                                            <li>(1) 최고경영자는 공표한 안전보건방침, 목표를 달성할 수 있도록 모든 부서에서 안전보건경영시스템이 이 기준의 요구사항에 적합하게 실행 및 운영되고 있는가에 대하여 주기적으로 확인하여야 한다.</li>
-                                            <li>(2) 최고경영자는 안전보건경영시스템의 의도한 결과를 달성할 수 있도록 모든 계층별, 부서별로 안전보건활동에 대한 책임과 권한을 부여하고 문서화하여 공유되도록 하여야 한다.</li>
-                                        </ol>
-                                    </li>
-                                    <li>
+                                    {guideLine?.map((guideline) => (
+                                        <li>
+                                            {guideline.guideline}
+                                        </li>
+                                    ))}
+
+                                    {/* <li>
                                         <div className={'bulletList'}>이행 참고사항</div>
                                         <ol>
                                             <li>① 사업장 안전보건 확보를 위한 충분한 인력이 있는지 확인하고, 부족한 경우 추가 확보</li>
                                         </ol>
-                                    </li>
-                                    <li>
-                                        <div className={'bulletList'}>안전보건관리규정] 작성 가이드</div>
-                                        <ol>
-                                            <li>최고경영자는 공표한 안전보건방침, 목표를 달성할 수 있도록 모든 부서에서 안전보건경영시스템이 이 기준의 요구사항에 적합하게 실행 및 운영되고 있는가에 대하여 주기적으로 확인하여야 한다.</li>
-                                        </ol>
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </div>
                         </Grid>
@@ -2853,7 +2905,7 @@ const Employee = () => {
                     </Grid>
 
                 </Grid>
-            </Grid>
+            </Grid >
         </WideLayout >
     );
 };

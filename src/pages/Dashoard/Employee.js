@@ -481,11 +481,11 @@ const useStyles = makeStyles(() => ({
         overflow: 'hidden',
         '&.moreContent': {
             display: 'flex',
-            '& [class*=listTitle]': {
+            '& $listTitle': {
                 justifyContent: 'flex-start',
                 borderRight: '1px solid #17191c'
             },
-            '& :last-of-type [class*=listTitle]': {
+            '& :last-of-type $listTitle': {
                 borderRight: 'none'
             },
             '& >div:first-of-type': {
@@ -513,7 +513,7 @@ const useStyles = makeStyles(() => ({
                     boxSizing: 'border-box'
                 }
             },
-            '& [class*=menuList]': {
+            '& $menuList': {
                 borderRight: '1px solid #4d5867',
                 '& li, a': {
                     height: '40px',
@@ -529,7 +529,7 @@ const useStyles = makeStyles(() => ({
                     justifyContent: 'center',
                     alignItems: 'center',
                 },
-                '& [class*=listLink]': {
+                '& $listLink': {
                     justifyContent: 'center',
                     padding: '0',
                     '&.check': {
@@ -796,12 +796,12 @@ const useStyles = makeStyles(() => ({
             height: '50px',
             borderRadius: '8px'
         },
-        '&:nth-of-type(2) div[class*=bottomBox] div:first-of-type div:last-of-type': {
+        '&:nth-of-type(2) $bottomBox div:first-of-type div:last-of-type': {
             color: '#fdcb05'
         },
         '&.multiBox': {
             flexDirection: 'column',
-            '& >div:not([class*=tiltBox])': {
+            '& >div:not($tiltBox)': {
                 display: 'flex',
                 flexWrap: 'wrap',
                 width: 'calc(50% - 20px)',
@@ -809,10 +809,10 @@ const useStyles = makeStyles(() => ({
                     borderLeft: '1px solid #1e2132'
                 }
             },
-            '& div[class*=bottomBox] div:first-of-type div strong': {
+            '& $bottomBox div:first-of-type div strong': {
                 color: '#fdcb05'
             },
-            '& div[class*=bottomBox] div:last-of-type div strong': {
+            '& $bottomBox div:last-of-type div strong': {
                 color: '#00adef'
             }
         },
@@ -1004,7 +1004,7 @@ const useStyles = makeStyles(() => ({
             top: '65px',
             left: '-80px'
         },
-        '& [class*=popupAccord]': {
+        '& $popupAccord': {
             background: 'transparent',
             boxShadow: 'none',
             '& .MuiButtonBase-root': {
@@ -1021,7 +1021,7 @@ const useStyles = makeStyles(() => ({
                     alignItems: 'center',
                     color: '#018de7'
                 },
-                '& [class*=popupTextField]': {
+                '& $popupTextField': {
                     marginBottom: '0 !important'
                 }
 
@@ -1034,7 +1034,7 @@ const useStyles = makeStyles(() => ({
                 padding: '0'
             }
         },
-        '& [class*=popupLink]': {
+        '& $popupLink': {
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'space-between',

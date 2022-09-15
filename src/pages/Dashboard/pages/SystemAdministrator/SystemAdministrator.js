@@ -99,7 +99,7 @@ const useStyles = makeStyles(() => ({
     },
     tableHead: {
         background: '#bdcbe9',
-        '& [class*=tableData]': {
+        '& $tableData': {
             height: '80px',
             borderRight: '1px solid #fff',
             '&:last-of-type': {
@@ -157,14 +157,14 @@ const useStyles = makeStyles(() => ({
         }
     },
     tableBody: {
-        '& [class*=tableData]': {
+        '& $tableData': {
             borderRight: '1px solid #bdcbe9',
             borderBottom: '1px solid #bdcbe9',
             '&:last-of-type': {
                 borderRight: 'none',
             },
         },
-        '& [class*=tableRow]': {
+        '& $tableRow': {
             transition: 'background .2s',
             '&:hover': {
                 background: '#eff2f9'
@@ -174,7 +174,7 @@ const useStyles = makeStyles(() => ({
     tableRow: {
         display: 'flex',
         '&:last-of-type': {
-            '& [class*=tableData]': {
+            '& $tableData': {
                 borderBottom: 'none'
             },
         },
@@ -338,7 +338,7 @@ const useStyles = makeStyles(() => ({
         '&.infoMember': {
             top: '109px',
             left: '560px',
-            '& [class*=headNest] [class*=dataNest]': {
+            '& $headNest $dataNest': {
                 background: '#c8ddf2'
             }
         },
@@ -391,13 +391,13 @@ const useStyles = makeStyles(() => ({
     },
     popupRow: {
         display: 'flex',
-        '&:first-of-type [class*=popupData]': {
+        '&:first-of-type $popupData': {
             borderTop: '1px solid #bdcbe9',
             '&.data_head': {
                 borderTop: '1px solid #c8ddf2',
             },
         },
-        '&:last-of-type [class*=popupData]': {
+        '&:last-of-type $popupData': {
             borderBottom: '1px solid #bdcbe9',
             '&.data_head': {
                 borderBottom: '1px solid #c8ddf2',
@@ -460,7 +460,7 @@ const useStyles = makeStyles(() => ({
         },
         '&:last-of-type': {
             width: '60%',
-            '& [class*=dataNest]': {
+            '& $dataNest': {
                 background: '#bdcbe9',
                 borderBottom: '1px solid #fff',
                 '&:last-of-type': {
@@ -468,7 +468,7 @@ const useStyles = makeStyles(() => ({
                 }
             },
         },
-        '& [class*=dataNest]': {
+        '& $dataNest': {
             justifyContent: 'center'
         }
     },
