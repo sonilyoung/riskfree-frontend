@@ -817,11 +817,11 @@ const List = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
                     <div>
-                        총 게시글 <strong>{lawList[0]?.totalCount}</strong> 건
+                        총 게시글 <strong>{!!lawList && lawList[0]?.totalCount}</strong> 건
                     </div>
                     <Stack spacing={2}>
                         <Pagination
-                            count={Math.ceil(lawList[0]?.totalCount / 10)}
+                            count={Math.ceil(!!lawList && (lawList[0]?.totalCount / 10))}
                             boundaryCount={10}
                             shape="rounded"
                             onChange={(event) => setPage(event.target.value)}

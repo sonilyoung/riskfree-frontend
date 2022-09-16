@@ -393,7 +393,7 @@ const List = () => {
                     </div>
                 </div> */}
                 <Grid item xs={12} className={classes.headerButtons}>
-                    {relatedRawButtonList.length > 0 && relatedRawButtonList.map(relatedRawButtonItem =>
+                    {!!relatedRawButtonList && relatedRawButtonList.length > 0 && relatedRawButtonList.map(relatedRawButtonItem =>
                     (<Link to="#" className={classes.buttonLink}>
                         <span>{relatedRawButtonItem?.lawName}</span>
                     </Link>)
@@ -444,7 +444,7 @@ const List = () => {
                         </div>
                     </div>
                     <div className={classes.tableBody}>
-                        {relatedRawList?.length > 0 && relatedRawList.map(relatedRawItem =>
+                        {!!relatedRawList && relatedRawList?.length > 0 && relatedRawList.map(relatedRawItem =>
                         (<div className={classes.tableRow}>
                             <div className={classes.tableData}>{relatedRawItem.relatedArticle}</div>
                             <div className={classes.tableData}>{relatedRawItem.articleItem}<span></span></div>

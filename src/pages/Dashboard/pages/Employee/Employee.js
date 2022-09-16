@@ -1832,7 +1832,7 @@ const Employee = () => {
     const [guideLine, setGuideLine] = useState([])
     const [getWorkplaceList] = useGetWorkplaceListMutation()
     const [workplaceList, setWorkplaceList] = useState([])
-    const currentWorkplaceId = useSelector(selectWorkplaceId);
+    // const currentWorkplaceId = useSelector(selectWorkplaceId);
     const currentBaselineId = useSelector(selectBaselineId)
     const [baselineIdForSelect, setBaselineIdForSelect] = useState(currentBaselineId)
 
@@ -1870,7 +1870,7 @@ const Employee = () => {
             "baselineId": currentBaselineId,
             "workplaceId": userWorkplaceId
         });
-        setImprovmentList(!!(response.data.RET_DATA) && response?.data?.RET_DATA[0]);
+        setImprovmentList(!!(response.data.RET_DATA) && !!(response.data.RET_DATA) && response?.data?.RET_DATA[0]);
     }
 
     const fetchLeaderImprovementList = async () => {
@@ -1878,7 +1878,7 @@ const Employee = () => {
             "baselineId": currentBaselineId,
             "workplaceId": userWorkplaceId
         });
-        setLeaderImprovementList(response?.data?.RET_DATA[0]);
+        setLeaderImprovementList(!!(response.data.RET_DATA) && response?.data?.RET_DATA[0]);
     }
 
     const fetchBaselineList = async () => {
@@ -1887,13 +1887,11 @@ const Employee = () => {
     }
 
     const fetchBaseline = async () => {
-        // console.log("1--------------", currentBaselineId)
+        console.log("1-----------", currentBaselineId)
         dispatch(setBaselineId(baselineIdForSelect))
-        // console.log("2--------------", currentBaselineId)
         const response = await getBaseline({
-            "baselineId": currentBaselineId
+            "baselineId": baselineIdForSelect
         })
-        console.log("--------")
         setBaselineData(!!response.data.RET_DATA && response.data.RET_DATA)
     }
 
@@ -1925,7 +1923,7 @@ const Employee = () => {
 
     const fetchDayInfo = async () => {
         const response = await getDayInfo({
-            "baselineStart": baselineData.baselineStart
+            "baselineStart": baselineData?.baselineStart
         })
         setDayInfo(response.data.RET_DATA)
     }
@@ -1991,7 +1989,7 @@ const Employee = () => {
             "workplaceId": userWorkplaceId
         })
         setDutyDetailList(response.data.RET_DATA)
-        setClickedDuty(!!(response.data.RET_DATA) && response?.data?.RET_DATA[0]?.articleNo)
+        setClickedDuty(!!(response.data.RET_DATA) && !!(response.data.RET_DATA) && response?.data?.RET_DATA[0]?.articleNo)
     }
 
     const handleEssentailRateMeasure = () => {
@@ -2048,12 +2046,12 @@ const Employee = () => {
         dispatch(setWorkplaceId(props.userWorkplaceId));
     }
 
-
+    useEffect(() => {
+        fetchBaseline()
+    }, [])
 
     useEffect(() => {
         fetchLoginInfo();
-        fetchBaseline()
-        fetchDayInfo()
         fetchCompanyInfo()
         fetchWorkplaceList();
         fetchBaselineList()
@@ -2072,7 +2070,8 @@ const Employee = () => {
         fetchDutyAssigned()
         fetchRelatedArticle()
         fetchGuideLine()
-    }, [currentBaselineId, userWorkplaceId])
+        fetchDayInfo()
+    }, [baselineIdForSelect])
 
     useEffect(() => {
         fetchDutyDetailList()
@@ -2462,7 +2461,7 @@ const Employee = () => {
                         </div>
                         <div className={classes.navSlider}>
                             <Slider {...headerSlider}>
-                                {/* <MainNavButton className={currentWorkplaceId === null ? "active" : ""} onClick={
+                                {/* {/* <MainNavButton className={currentWorkplaceId === null ? "active" : ""} onClick={
                                     () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })
                                 }>전체사업장</MainNavButton> */}
                                 {!!(workplaceList) && workplaceList?.map((workplaceItem, index) => (
@@ -2536,7 +2535,7 @@ const Employee = () => {
                     </div>
                     <div className={classes.managementOrder}>
                         {/* 관리차수<strong>11</strong> 차 :<strong>22.01.01 ~ 22.04.30</strong> */}
-                        {baselineData && <>{baselineData?.baselineName} :<strong>{baselineData?.baselineStart} ~ {baselineData?.baselineEnd}</strong></>}
+                        {baselineData && <>{baselineData && <>{baselineData?.baselineName} :<strong>{baselineData?.baselineStart} ~ {baselineData?.baselineEnd}</strong></>}</>}
                     </div>
                     <div className={classes.managementSide}>
                         <FormControl sx={{ width: 130 }} className={classes.dropMenu + ' page_drop_menu'}>
@@ -2545,7 +2544,7 @@ const Employee = () => {
                                 value={baselineIdForSelect}
                                 onChange={(e) => setBaselineIdForSelect(e.target.value)}
                                 inputProps={{ 'aria-label': 'Without label' }}>
-                                {!!(baselineList) && !!(baselineList.length) && baselineList?.map((baseline, index) => (
+                                {!!baselineList && !!baselineList.length && baselineList?.map((baseline, index) => (
                                     <MenuItem key={index} value={baseline.baselineId}>{baseline.baselineName}</MenuItem>
                                 ))}
                             </Select>
@@ -2850,7 +2849,7 @@ const Employee = () => {
                                     <div className={classes.footDay + ' dateBox'}>
                                         <div>DAY</div>
                                         <div className={classes.dayNums}>
-                                            {dayInfo?.day}
+                                            {!!dayInfo && dayInfo.day}
                                             {/* <div><img src={numThree} alt="number three" /></div>
                                             <div><img src={numTwo} alt="number two" /></div>
                                             <div><img src={numFour} alt="number four" /></div>
