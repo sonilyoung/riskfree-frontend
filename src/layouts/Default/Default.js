@@ -631,7 +631,9 @@ const Default = ({ children }) => {
 
                     <Grid className={classes.mainHeader} item xs={12}>
                         <Grid className={classes.mainLogo} item xs={3}>
-                            <img src={logo} alt="logo" />
+                            <Link to={(loginInfo?.roleCd === "001" && "/dashboard/director") || (loginInfo?.roleCd === "002" ? "/dashboard/employee" : "#none")}>
+                                <img src={logo} alt="logo" />
+                            </Link>
                         </Grid>
                         <Grid className={classes.mainMenu} item xs={6.3}>
                             <div className={classes.leftMenu}>
@@ -702,7 +704,7 @@ const Default = ({ children }) => {
                                         inputProps={{ 'aria-label': 'Without label' }}
                                         disabled
                                     >
-                                        <MenuItem value="">55~300인 이하</MenuItem>
+                                        <MenuItem value="">{companyInfo?.scale}</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl sx={{ width: 150, marginLeft: '8px' }} className={classes.dropMenu}>
@@ -714,7 +716,7 @@ const Default = ({ children }) => {
                                         inputProps={{ 'aria-label': 'Without label' }}
                                         disabled
                                     >
-                                        <MenuItem value="">건설업</MenuItem>
+                                        <MenuItem value="">{companyInfo?.sector}</MenuItem>
                                     </Select>
                                 </FormControl>
                             </div>

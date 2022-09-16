@@ -324,7 +324,7 @@ const View = () => {
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>접수일자</div>
                             <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>{law.recvDate}</div>
+                                <div className={classes.rowInfo}>{law?.recvDate}</div>
                                 <div className={classes.rowTitle}>접수자</div>
                                 <div className={classes.rowInfo}>{law.recvUserName}</div>
                                 <div className={classes.rowTitle}>접수형태</div>

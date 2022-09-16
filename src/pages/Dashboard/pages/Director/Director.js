@@ -56,7 +56,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 import useUserToken from '../../../../hooks/core/UserToken/UserToken';
-import { setWorkplaceId, selectWorkplaceId, setBaselineId, selectBaselineId } from '../../../../slices/selections/MainSelection';
+import { setWorkplaceId, selectWorkplaceId } from '../../../../slices/selections/MainSelection';
 import { useStyles } from './useStyles';
 
 const UserButton = styled(ButtonUnstyled)`
@@ -79,6 +79,13 @@ const SettingsButton = styled(ButtonUnstyled)`
         background-image: url(${setIconHover});
     }
 `;
+
+// const AdminButton = styled(ButtonUnstyled)`
+//     background: transparent url(${adminIcon});
+//     &:hover {
+//         background-image: url(${adminIconHover});
+//     }
+// `;
 
 const ChartButton = styled(ButtonUnstyled)`
     background: transparent url(${chartIcon});
@@ -290,14 +297,15 @@ const Director = () => {
     const [relatedLawRate, setRelatedLawRate] = useState({});
     const [baselineData, setBaselineData] = useState({});
     const [baselineList, setBaselineList] = useState([]);
+    const [baselineId, setBaselineId] = useState(6);
     const [baselineStart, setBaselineStart] = useState("2022-09-08");
     const [dayInfo, setDayInfo] = useState({});
     const currentWorkplaceId = useSelector(selectWorkplaceId);
-    const currentBaselineId = useSelector(selectBaselineId);
 
+    // izmeniti ovo
     const [userInfo, setUserInfo] = useState({
         userCompanyId: userToken.getUserCompanyId(),
-        userWorkplaceId: currentWorkplaceId,
+        userWorkplaceId: userToken.getUserWorkplaceId(),
     });
 
     const { userCompanyId, userWorkplaceId } = userInfo;
@@ -342,11 +350,12 @@ const Director = () => {
     const fetchBaselineList = async () => {
         const response = await getBaselineList({});
         setBaselineList(response.data.RET_DATA);
+        console.log(response);
     }
 
     const fetchBaseline = async () => {
         const response = await getBaseline({
-            "baselineId": currentBaselineId
+            "baselineId": baselineId
         })
         setBaselineData(response.data.RET_DATA);
     }
@@ -359,7 +368,7 @@ const Director = () => {
     const fetchCompanyInfo = async () => {
         const response = await getCompanyInfo({
             "companyId": userCompanyId,
-            "workplaceId": currentWorkplaceId
+            "workplaceId": userWorkplaceId
         });
         setCompanyInfo(response);
     }
@@ -371,61 +380,61 @@ const Director = () => {
 
     const fetchEssentialRateList = async () => {
         const response = await getEssentialRate({
-            "baselineId": currentBaselineId,
-            "workplaceId": currentWorkplaceId
+            "baselineId": baselineId,
+            "workplaceId": userWorkplaceId
         });
         setEssentialRateList(response.data);
     }
 
     const fetchAccidentsPrevention = async () => {
         const response = await getAccidentsPrevention({
-            "baselineId": currentBaselineId,
-            "workplaceId": currentWorkplaceId
+            "baselineId": baselineId,
+            "workplaceId": userWorkplaceId
         });
         setAccidentsPrevention(response.data);
     }
 
     const fetchImprovementLawOrderRate = async () => {
         const response = await getImprovementLawOrder({
-            "baselineId": currentBaselineId,
-            "workplaceId": currentWorkplaceId
+            "baselineId": baselineId,
+            "workplaceId": userWorkplaceId
         });
         setImprovementLawOrderRate(response.data);
     }
 
     const fetchRelatedLawRate = async () => {
         const response = await getRelatedLawRate({
-            "baselineId": currentBaselineId,
-            "workplaceId": currentWorkplaceId
+            "baselineId": baselineId,
+            "workplaceId": userWorkplaceId
         });
         setRelatedLawRate(response.data);
     }
 
     const fetchLeadersImproveList = async () => {
         const response = await getLeaderImprovementList({
-            "baselineId": currentBaselineId,
+            "baselineId": baselineId,
             "companyId": userCompanyId,
             "instruction": 1,
-            "workplaceId": currentWorkplaceId
+            "workplaceId": userWorkplaceId
         });
         setLeadersImproveList(response.data.RET_DATA);
     }
 
     const fetchAccidentTotal = async () => {
         const response = await getAccidentTotal({
-            "baselineId": currentBaselineId,
+            "baselineId": baselineId,
             "caughtCnt": 0,
             "companyId": userCompanyId,
-            "workplaceId": currentWorkplaceId
+            "workplaceId": userWorkplaceId
         })
         setAccidentTotal(response.data.RET_DATA);
     }
 
     const fetchSafeWorkHistoryList = async () => {
         const response = await getSafeWorkHistoryList({
-            "baselineId": currentBaselineId,
+            "baselineId": baselineId,
             "companyId": userCompanyId,
-            "workplaceId": currentWorkplaceId
+            "workplaceId": userWorkplaceId
         })
         setSafeWorkHistoryList(response.data.RET_DATA);
     }
@@ -465,15 +474,14 @@ const Director = () => {
                 className={className}
                 style={{ ...style, display: "block" }}
                 onClick={() => {
-                    let baselineIdIndex = currentBaselineId && baselineList.length ? baselineList.findIndex(baselineItem => baselineItem.baselineId === currentBaselineId) + 1 : 0;
+                    let baselineIdIndex = baselineId && baselineList.length ? baselineList.findIndex(baselineItem => baselineItem.baselineId === baselineId) + 1 : 0;
                     if (baselineIdIndex >= baselineList.length) {
                         baselineIdIndex = 0;
                     }
                     setBaselineStart(baselineList.at(baselineIdIndex).baselineStart);
-                    dispatch(
-                        setBaselineId(baselineList.at(baselineIdIndex).baselineId)
-                    );
+                    setBaselineId(baselineList.at(baselineIdIndex).baselineId);
                     onClick();
+                    console.log(baselineList.at(baselineIdIndex).baselineId)
                 }}
             />
         );
@@ -486,11 +494,9 @@ const Director = () => {
                 className={className}
                 style={{ ...style, display: "block" }}
                 onClick={() => {
-                    const baselineIdIndex = currentBaselineId && baselineList.length ? baselineList.findIndex(baselineItem => baselineItem.baselineId === currentBaselineId) - 1 : 0;
+                    const baselineIdIndex = baselineId && baselineList.length ? baselineList.findIndex(baselineItem => baselineItem.baselineId === baselineId) - 1 : 0;
                     setBaselineStart(baselineList.at(baselineIdIndex).baselineStart);
-                    dispatch(
-                        setBaselineId(baselineList.at(baselineIdIndex).baselineId)
-                    );
+                    setBaselineId(baselineList.at(baselineIdIndex).baselineId);
                     onClick();
                 }}
             />
@@ -513,8 +519,7 @@ const Director = () => {
         fetchSafeWorkHistoryList();
         fetchAccidentsPrevention()
         fetchDayInfo();
-
-    }, [currentBaselineId, currentWorkplaceId]);
+    }, [baselineId, userWorkplaceId]);
 
     useEffect(() => {
         fetchBaselineList();
@@ -943,8 +948,8 @@ const Director = () => {
                                         () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })
                                     }>전체사업장</MainNavButton>
                                 </div>
-                                {workplaceList.length != 0 && workplaceList?.RET_DATA?.map((workplaceItem, index) =>
-                                    <div key={index}>
+                                {workplaceList.length != 0 && workplaceList?.RET_DATA?.map(workplaceItem =>
+                                    <div>
                                         <MainNavButton
                                             className={currentWorkplaceId === workplaceItem.workplaceId ? "active" : ""}
                                             onClick={() => handleFactoryChange({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}
@@ -960,7 +965,7 @@ const Director = () => {
                 </Grid>
                 <Grid className={classes.pageBody} item xs={10.7}>
                     <div className={classes.managementOrder}>
-                        {baselineData && <>{baselineData?.baselineName} 차 :<strong>{baselineData?.baselineStart} ~ {baselineData?.baselineEnd}</strong></>}
+                        {baselineData && <>{baselineData?.baselineName} :<strong>{baselineData?.baselineStart} ~ {baselineData?.baselineEnd}</strong></>}
                     </div>
                     <Slider className={classes.dashSlider} {...dashboardSlider} >
                         <div className={classes.dashboardSlide}>
@@ -1221,8 +1226,8 @@ const Director = () => {
                         <Grid container item xs={12} sx={{ marginBottom: '3px' }}>
                             <Grid className={classes.footBox + ' boxDown'} item xs={8.75}>
                                 <Slider className={classes.footSlider} {...footerSlider}>
-                                    {noticesList.length && noticesList.map((notice, index) =>
-                                    (<div key={index}>
+                                    {noticesList.length && noticesList.map((notice) =>
+                                    (<div>
                                         <div>{notice.insertDate}</div>
                                         {notice.importCd === "001" && <span className={classes.slideLabelHot}>HOT</span>}
                                         <Link to={`/dashboard/director/notifications/view/${notice.noticeId}`} className={classes.linkBtn}>{notice.title}</Link>
@@ -1244,13 +1249,13 @@ const Director = () => {
                                 </div>
                                 <div className={classes.footTime + ' dateBox'}>
                                     <div>TIME</div>
-                                    {<div className={classes.timeNums}>
-                                        {hours?.split("").map((e, i) => (<div key={i}>{e}</div>
+                                    <div className={classes.timeNums}>
+                                        {hours?.split("").map((e) => (<div>{e}</div>
                                         ))}
                                         <span>:</span>
-                                        {minutes?.split("").map((e, i) => (<div key={i}>{e}</div>
+                                        {minutes?.split("").map((e) => (<div>{e}</div>
                                         ))}
-                                    </div>}
+                                    </div>
                                 </div>
                             </Grid>
                         </Grid>
