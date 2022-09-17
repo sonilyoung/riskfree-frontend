@@ -787,7 +787,7 @@ const Director = () => {
                             <div className={classes.adminFieldText}> {companyInfo.data?.RET_DATA?.shGoal}</div>
                         </div>
                         <div className={classes.adminLogo}>
-                            <img src={adminLogo} alt="admin logo" />
+                            {companyInfo.data && !!(companyInfo.data.RET_DATA) && !!companyInfo.data.RET_DATA.logoImg && <img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${companyInfo?.data?.RET_DATA?.logoImg}`} alt="logo" />}
                         </div>
                         <div className={classes.adminField + ' ' + classes.adminFieldRight}>
                             <div className={classes.adminFieldText}>경영방침</div>

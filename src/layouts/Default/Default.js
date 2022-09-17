@@ -22,7 +22,7 @@ import Select from '@mui/material/Select';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
-import { useGetLoginInfoMutation, useGetCompanyInfoMutation } from '../../hooks/api/MainManagement/MainManagement';
+import { useGetLoginInfoMutation, useGetCompanyInfoMutation, useGetWeatherMutation } from '../../hooks/api/MainManagement/MainManagement';
 import { remove } from '../../services/core/User/Token';
 import { useUserToken } from '../../hooks/core/UserToken';
 
@@ -584,6 +584,11 @@ const Default = ({ children }) => {
     const localStorage = useLocalStorage();
     const currentBaseline = useSelector(selectBaselineId);
 
+    const [latitude, setLatitude] = useState("")
+    const [longitude, setLongitude] = useState("")
+    const [getWeather] = useGetWeatherMutation()
+    const [weatherData, setWeatherData] = useState({})
+
 
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -612,6 +617,14 @@ const Default = ({ children }) => {
         setCompanyInfo(response.data.RET_DATA)
     }
 
+    const fetchWeather = async () => {
+        const response = await getWeather({
+            "latitude": latitude,
+            "longitude": longitude,
+        })
+        setWeatherData(response.data.RET_DATA)
+    }
+
     useEffect(() => {
         if (currentBaseline === null) {
             dispatch(setBaselineId(localStorage.getDefaultBaselineId()));
@@ -623,6 +636,17 @@ const Default = ({ children }) => {
     const [date, setDate] = React.useState(null);
 
     const [locale] = React.useState('ko');
+
+    useEffect(() => {
+        fetchWeather()
+    }, [loginInfo])
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(position => {
+            setLatitude(position.coords.latitude)
+            setLongitude(position.coords.longitude)
+        })
+    }, [])
 
     return (
         <div className={classes.bodyWrap}>
@@ -825,10 +849,10 @@ const Default = ({ children }) => {
                             {/* <AdminButton className={classes.mainMenuButton}></AdminButton> */}
                             <div className={classes.weatherSection}>
                                 <span>
-                                    <img src={weatherIcon} alt="weather icon" />
+                                    <img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${weatherData?.weatherImgUrl}`} alt="weather icon" />
                                 </span>
-                                <span>18.0</span>
-                                <span>서울시 구로구 구로동</span>
+                                <span>{weatherData?.temperature} °C</span>
+                                <span>{weatherData?.address}</span>
                             </div>
                         </Grid>
                     </Grid>

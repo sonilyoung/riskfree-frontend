@@ -82,7 +82,7 @@ import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useUserToken } from '../../../../hooks/core/UserToken';
 import moment from 'moment'
 
@@ -93,6 +93,7 @@ import 'dayjs/locale/ko';
 
 import { setWorkplaceId, selectWorkplaceId, selectBaselineId, setBaselineId } from '../../../../slices/selections/MainSelection';
 import { useDispatch, useSelector } from 'react-redux';
+import useGeolocation from "react-hook-geolocation";
 
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
@@ -611,7 +612,7 @@ const useStyles = makeStyles(() => ({
         '&.parentList': {
             '& span': {
                 width: '90px',
-                height: '40px',
+                height: '41px',
                 lineHeight: '40px',
                 fontSize: '16px',
                 fontWeight: '500',
@@ -631,11 +632,12 @@ const useStyles = makeStyles(() => ({
                 },
             },
             '& li .parentLink': {
-                height: '40px',
+                height: '43.5px',
                 background: '#333542',
                 color: '#00adef',
-                borderBottom: '1px solid #1e2132',
+                borderBottom: '0px solid #1e2132',
                 '& +span': {
+                    padding: "1.5px 0",
                     background: 'linear-gradient(#275dc6, #263781)',
                     fontSize: '20px',
                 }
@@ -1833,12 +1835,14 @@ const Employee = () => {
     const [getWorkplaceList] = useGetWorkplaceListMutation()
     const [workplaceList, setWorkplaceList] = useState([])
     // const currentWorkplaceId = useSelector(selectWorkplaceId);
+    const [baselineStart, setBaselineStart] = useState("")
     const currentBaselineId = useSelector(selectBaselineId)
     const [baselineIdForSelect, setBaselineIdForSelect] = useState(currentBaselineId)
-
-
+    const [latitude, setLatitude] = useState("")
+    const [longitude, setLongitude] = useState("")
+    const [getWeather] = useGetWeatherMutation()
+    const [weatherData, setWeatherData] = useState({})
     const dispatch = useDispatch();
-
 
     const [userInfo, setUserInfo] = useState({
         userCompanyId: userToken.getUserCompanyId(),
@@ -1884,10 +1888,10 @@ const Employee = () => {
     const fetchBaselineList = async () => {
         const response = await getBaselineList({})
         setBaselineList(response.data.RET_DATA)
+        setBaselineStart(!!response.data.RET_DATA && response.data.RET_DATA.baselineStart)
     }
 
     const fetchBaseline = async () => {
-        console.log("1-----------", currentBaselineId)
         dispatch(setBaselineId(baselineIdForSelect))
         const response = await getBaseline({
             "baselineId": baselineIdForSelect
@@ -1923,9 +1927,9 @@ const Employee = () => {
 
     const fetchDayInfo = async () => {
         const response = await getDayInfo({
-            "baselineStart": baselineData?.baselineStart
+            "baselineStart": baselineData.baselineStart
         })
-        setDayInfo(response.data.RET_DATA)
+        setDayInfo(!!response.data.RET_DATA && response?.data?.RET_DATA)
     }
 
     const refreshClock = () => {
@@ -2046,9 +2050,22 @@ const Employee = () => {
         dispatch(setWorkplaceId(props.userWorkplaceId));
     }
 
+    const fetchWeather = async () => {
+        const response = await getWeather({
+            "latitude": latitude,
+            "longitude": longitude,
+        })
+        setWeatherData(response.data.RET_DATA)
+    }
+
     useEffect(() => {
         fetchBaseline()
-    }, [])
+    }, [currentBaselineId])
+
+    useEffect(() => {
+        fetchDayInfo()
+        fetchWeather()
+    }, [baselineData])
 
     useEffect(() => {
         fetchLoginInfo();
@@ -2070,7 +2087,6 @@ const Employee = () => {
         fetchDutyAssigned()
         fetchRelatedArticle()
         fetchGuideLine()
-        fetchDayInfo()
     }, [baselineIdForSelect])
 
     useEffect(() => {
@@ -2090,6 +2106,13 @@ const Employee = () => {
         return function cleanup() {
             clearInterval(timerId);
         };
+    }, [])
+
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(position => {
+            setLatitude(position.coords.latitude)
+            setLongitude(position.coords.longitude)
+        })
     }, [])
 
     return (
@@ -2292,10 +2315,10 @@ const Employee = () => {
                             {/* <AdminButton className={classes.mainMenuButton}></AdminButton> */}
                             <div className={classes.weatherSection}>
                                 <span>
-                                    <img src={weatherIcon} alt="weather icon" />
+                                    <img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${weatherData?.weatherImgUrl}`} alt="weather icon" />
                                 </span>
-                                <span>18.0</span>
-                                <span>서울시 구로구 구로동</span>
+                                <span>{weatherData?.temperature} °C</span>
+                                <span>{weatherData?.address}</span>
                             </div>
                         </Grid>
                     </Grid>
