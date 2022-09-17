@@ -46,9 +46,8 @@ export const subscribersManagement = createApi({
         }),
         subscribersWorkplaceSelect: builder.mutation({
             query: (body) => ({
-                url: 'subscribers/workplace/select',
-                method: 'POST',
-                body: body,
+                url: `subscribers/workplace/select?companyId=${body}`,
+                method: 'POST'
             })
         }),
     }),

@@ -794,7 +794,7 @@ const WorkHistoryList = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
                     <Stack spacing={2}>
-                        <Pagination count={safeWorkList?.length > 0 && Math.ceil(safeWorkList[0]?.totalCount / 10)} boundaryCount={10} shape="rounded" showFirstButton showLastButton />
+                        <Pagination count={safeWorkList?.length && Math.ceil(safeWorkList[0]?.totalCount / 10)} boundaryCount={10} shape="rounded" showFirstButton showLastButton />
                     </Stack>
                 </Grid>
             </Grid>

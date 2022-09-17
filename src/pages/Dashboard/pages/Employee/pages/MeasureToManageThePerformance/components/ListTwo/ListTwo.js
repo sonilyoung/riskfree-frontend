@@ -3,11 +3,21 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-import { makeStyles } from '@mui/styles';
+import { makeStyles, styled } from '@mui/styles';
 import { Link } from "react-router-dom"
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
+import ButtonUnstyled from '@mui/base/ButtonUnstyled';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
+import pageFirst from '../../../../../../../../assets/images/btn_first.png';
+import pageLast from '../../../../../../../../assets/images/btn_last.png';
+import pageNext from '../../../../../../../../assets/images/btn_nxt.png';
+import pagePrev from '../../../../../../../../assets/images/btn_pre.png';
+
+import excelIcon from '../../../../../../../../assets/images/ic_excel.png';
 
 import iconTab from '../../../../../../../../assets/images/ic_tab.png';
 import iconTabOn from '../../../../../../../../assets/images/ic_tab_on.png';
@@ -231,16 +241,101 @@ const useStyles = makeStyles(() => ({
     activeLinkBtn: {
         textDecoration: "none",
         color: '#018de7'
-    }
+    },
+    pagingBox: {
+        position: 'relative',
+        top: '20px',
+        height: '40px',
+        '& .MuiPagination-root': {
+            display: 'flex',
+            justifyContent: 'center'
+        },
+        '& >div:first-of-type': {
+            position: 'absolute',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            top: '0',
+            left: '0',
+            '& strong': {
+                color: '#018de7'
+            }
+        },
+        '& >div:last-of-type': {
+            position: 'absolute',
+            top: '0',
+            right: '0'
+        },
+        '& .MuiPagination-ul button': {
+            width: '40px',
+            height: '40px',
+            margin: '0',
+            borderRadius: '0',
+            fontSize: '14px',
+            color: '#666',
+            '&:hover': {
+                background: 'transparent'
+            },
+            '&.Mui-selected': {
+                background: '#6e7884',
+                color: '#fff',
+                cursor: 'default',
+            },
+            '&[aria-label$=page]': {
+                '& svg': {
+                    display: 'none'
+                }
+            },
+            '&[class*=MuiPaginationItem-firstLast][aria-label*=first]': {
+                background: 'url(' + pageFirst + ')',
+                marginRight: '-1px'
+            },
+            '&[class*=MuiPaginationItem-firstLast][aria-label*=last]': {
+                background: 'url(' + pageLast + ')',
+                marginLeft: '-1px'
+            },
+            '&[class*=MuiPaginationItem-previousNext][aria-label*=next]': {
+                background: 'url(' + pageNext + ')',
+                marginLeft: '8px'
+            },
+            '&[class*=MuiPaginationItem-previousNext][aria-label*=previous]': {
+                background: 'url(' + pagePrev + ')',
+                marginRight: '8px'
+            }
+        }
+    },
 
 }));
+
+const ExcelButton = styled(ButtonUnstyled)`
+    width: 152px;
+    height: 40px;
+    border: 1px solid #6e7884;
+    border-radius: 5px;
+    color: #333 ! important;
+    background: #fff;
+    transition: background .2s;
+    cursor: pointer;
+    &:before {
+        content: "";
+        display: inline-block;
+        width: 17px;
+        height: 15px;
+        vertical-align: middle;
+        margin-right: 4px;
+        background: url(${excelIcon}) no-repeat 0 0;
+    }
+    &:hover {
+        background: #d2dcf3;
+    }
+`
 
 const ListTwo = () => {
     const classes = useStyles();
 
     const [relatedRawList, setRelatedRawList] = useState([]);
     const [relatedRawButtonList, setRelatedRawButtonList] = useState([]);
-
+    const [page, setPage] = useState(1);
 
     const [getRelatedRaw] = useGetRelatedRawMutation();
     const [insertDutyButton] = useInsertDutyButtonMutation();
@@ -248,10 +343,16 @@ const ListTwo = () => {
 
     const currentBaseline = useSelector(selectBaselineId);
 
+    const handlePageChange = (event, value) => {
+        setPage(value)
+    }
+
     const fetchRelatedRawList = async () => {
         const response = await getRelatedRaw({
             "lawId": 1,
-            "baselineId": currentBaseline
+            "baselineId": currentBaseline,
+            "countPerPage": 10,
+            "pageNum": page
         });
         setRelatedRawList(response.data.RET_DATA);
     }
@@ -268,7 +369,7 @@ const ListTwo = () => {
     useEffect(() => {
         fetchRelatedRawList();
         fetchRelatedRawButtonList();
-    }, []);
+    }, [page]);
 
     return (
         <DefaultLayout>
@@ -348,6 +449,15 @@ const ListTwo = () => {
                             <div className={classes.tableData}>{relatedRawItem.stPenalty2}</div>
                             <div className={classes.tableData}>{relatedRawItem.stPenalty3}</div>
                         </div>))}
+                    </div>
+                </Grid>
+                <Grid item xs={12} className={classes.pagingBox}>
+                    <div>총 게시글 <strong>{relatedRawList?.length > 0 && relatedRawList[0]?.totalCount}</strong> 건</div>
+                    <Stack spacing={2}>
+                        <Pagination count={relatedRawList?.length && Math.ceil(relatedRawList[0]?.totalCount / 10)} boundaryCount={10} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
+                    </Stack>
+                    <div>
+                        {/* <ExcelButton>엑셀 다운로드</ExcelButton> */}
                     </div>
                 </Grid>
             </Grid>

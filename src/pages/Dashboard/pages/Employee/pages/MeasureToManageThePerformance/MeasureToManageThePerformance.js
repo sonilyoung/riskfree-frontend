@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes, useParams } from 'react-router-dom'
 import { DefaultLayout } from '../../../../../../layouts/Default';
 import List from './components/List/List'
-import ListTwo from './components/ListTwo/ListTwo'
+import ListTwo from './components/ListTwo/ListTwo';
 import Registration from './components/Registration/Registration';
 
 

@@ -778,7 +778,7 @@ const List = () => {
                 <Grid item xs={12} className={classes.pagingBox}>
                     <div>총 게시글 <strong>{accidents && accidents[0]?.totalCount}</strong> 건</div>
                     <Stack spacing={2}>
-                        <Pagination count={accidents.length && (Math.ceil(accidents[0]?.totalCount / 10))} boundaryCount={10} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
+                        <Pagination count={accidents?.length && (Math.ceil(accidents[0]?.totalCount / 10))} boundaryCount={10} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
                     </Stack>
                     <div>
                         <ExcelButton>엑셀 다운로드</ExcelButton>

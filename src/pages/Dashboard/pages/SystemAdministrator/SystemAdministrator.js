@@ -15,6 +15,11 @@ import StepLabel from '@mui/material/StepLabel';
 import iconTab from '../../../../assets/images/ic_tab.png';
 import iconTabOn from '../../../../assets/images/ic_tab_on.png';
 
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import 'dayjs/locale/ko';
+
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
@@ -35,8 +40,9 @@ import alertIcon from '../../../../assets/images/ic_refer.png';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
-import { useSubscribersSelectMutation, useSubscribersInsertMutation, useSubscribersViewMutation, useSubscribersUpdateMutation } from '../../../../hooks/api/SubscribersManagement/SubscribersManagement';
+import { useSubscribersSelectMutation, useSubscribersInsertMutation, useSubscribersViewMutation, useSubscribersUpdateMutation, useSubscribersWorkplaceSelectMutation } from '../../../../hooks/api/SubscribersManagement/SubscribersManagement';
 import { useGetCommCodeListMutation } from '../../../../hooks/api/CommCodeManagement/CommCodeManagement';
+import moment from 'moment';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -248,6 +254,8 @@ const useStyles = makeStyles(() => ({
         width: '100%',
         height: '33px',
         margin: '0 6px !important',
+        backgroundColor: '#fff',
+        borderRadius: '5px',
         '& div': {
             height: 'inherit',
         },
@@ -517,6 +525,23 @@ const useStyles = makeStyles(() => ({
         alignItems: 'center',
         color: '#53699A',
     },
+    selectMenuDate: {
+        height: '33px',
+        margin: '0 6px !important',
+        '& div': {
+            height: 'inherit',
+            background: '#fff',
+        },
+        '& input': {
+            paddingLeft: '10px',
+        },
+        '& legend': {
+            width: '0'
+        },
+        '& button': {
+            paddingLeft: '0',
+        }
+    },
 
 }));
 
@@ -643,26 +668,29 @@ const SearchUserButton = styled(ButtonUnstyled)`
 
 const SystemAdministrator = () => {
     const classes = useStyles();
+    const [locale] = React.useState('ko');
     const [regMemberPop, setRegMemberPop] = useState(false)
     const [userInfoPop, setUserInfoPop] = useState(false)
     const [col, setCol] = useState("")
     const [param, setParam] = useState("")
     const [subscribersSelect] = useSubscribersSelectMutation()
     const [subscribersInsert] = useSubscribersInsertMutation()
+    const [subscribersUpdate] = useSubscribersUpdateMutation();
+    const [subscribersWorkplaceSelect] = useSubscribersWorkplaceSelectMutation();
     const [subscribersList, setSubscribersList] = useState([])
     const [getCommCodeList] = useGetCommCodeListMutation()
     const [subscribersView] = useSubscribersViewMutation()
+    const [subscribersWorkplaceSelectList, setSubscribersWorkplaceSelectList] = useState([]);
     const [subscriberInsertEmailBeforeSign, setSubscriberInsertEmailBeforeSign] = useState("")
     const [subscriberInsertEmailAfterSign, setSubscriberInsertEmailAfterSign] = useState("")
     const [subscriberInsert, setSubscriberInsert] = useState({
-        "companyId": "",
         "companyName": "",
         "contractAmount": "",
-        "contractEndDate": "",
+        "contractEndDate": null,
         "contractFileId": "",
-        "contractStartDate": "",
+        "contractStartDate": null,
         "loginId": "",
-        "managerEmail": subscriberInsertEmailBeforeSign + subscriberInsertEmailAfterSign,
+        "managerEmail": subscriberInsertEmailBeforeSign + '@' + subscriberInsertEmailAfterSign,
         "managerName": "",
         "managerRoleCd": "",
         "managerTel": "",
@@ -670,30 +698,49 @@ const SystemAdministrator = () => {
         "scaleCd": "",
         "sectorCd": "",
         "statusCd": "",
-        "userId": "",
-        "workplaceId": "",
         "workplaceName": ""
     })
-    const [codeGroup1, setCodeGroup1] = useState([])
-    const [codeGroup2, setCodeGroup2] = useState([])
-    const [codeGroup3, setCodeGroup3] = useState([])
-    const [workplaceIdView, setWorkplaceIdView] = useState(null)
-    const [subscriberForView, setSubscriberForView] = useState({})
-
-    const [num, setNum] = React.useState('');
-
-    const handleChange = (event) => {
-        setNum(event.target.value);
-    };
+    const [managerEmail, setManagerEmail] = useState({
+        firstInput: '',
+        secondeInput: ''
+    });
+    const [managerTel, setManagerTel] = useState({
+        firstInput: '',
+        secondeInput: '',
+        thirdInput: ''
+    });
+    const [contractStartDate, setContractStartDate] = useState(null);
+    const [contractEndDate, setContractEndDate] = useState(null);
+    const [subscriberView, setSubscriberView] = useState({
+        "companyName": "",
+        "contractAmount": "",
+        "contractEndDate": null,
+        "contractFileId": "",
+        "contractStartDate": null,
+        "loginId": "",
+        "managerEmail": "",
+        "managerName": "",
+        "managerRoleCd": "",
+        "managerTel": "",
+        "registNo": "",
+        "scaleCd": "",
+        "sectorCd": "",
+        "statusCd": "",
+        "workplaceName": ""
+    });
+    const [codeGroup1, setCodeGroup1] = useState([]);
+    const [codeGroup2, setCodeGroup2] = useState([]);
+    const [codeGroup3, setCodeGroup3] = useState([]);
+    const [page, setPage] = useState(1);
 
     const fetchSubscribersList = async () => {
         const response = await subscribersSelect({
             "col": col,
             "countPerPage": 10,
-            "pageNum": 1,
+            "pageNum": page,
             "param": param
         })
-        setSubscribersList(response.data.RET_DATA)
+        setSubscribersList(response.data.RET_DATA);
     }
 
     const fetchCommCodeListGroup1 = async () => {
@@ -716,20 +763,87 @@ const SystemAdministrator = () => {
         })
         setCodeGroup3(responseGroup3.data.RET_DATA.list)
     }
-    const fetchSubscriberView = async () => {
-        const response = await subscribersView(workplaceIdView)
-        setSubscriberForView(response.data.RET_DATA)
+
+    const fetchSubscribersWorkplaceSelectList = async (companyId) => {
+        const response = await subscribersWorkplaceSelect(companyId);
+        setSubscribersWorkplaceSelectList(!!(response.data.RET_DATA) && response.data.RET_DATA)
     }
 
-    const handleSubscribersInsert = async () => {
-        subscribersInsert(subscriberInsert)
+    const fetchSubscriberView = async (workplaceId, userId) => {
+        const response = await subscribersView(`${workplaceId}&userId=${userId}`);
+        const managerTelWithOutHyphen = !!(response.data.RET_DATA) && response.data.RET_DATA?.managerTel?.split("-").join("");
+        setManagerTel({
+            firstInput: managerTelWithOutHyphen.slice(0, 3),
+            secondeInput: managerTelWithOutHyphen.slice(3, 7),
+            thirdInput: managerTelWithOutHyphen.slice(7),
+        });
+        setManagerEmail({
+            firstInput: response.data.RET_DATA?.managerEmail.split('@')[0],
+            secondeInput: response.data.RET_DATA?.managerEmail.split('@')[1],
+        });
+        setContractStartDate(response.data.RET_DATA?.contractStartDate);
+        setContractEndDate(response.data.RET_DATA?.contractEndDate);
+        setSubscriberView(!!(response.data.RET_DATA) && response?.data?.RET_DATA);
     }
+
+    const handlePageChange = (event, value) => {
+        setPage(value)
+    }
+    const handleSubscribersInsert = async () => {
+        await subscribersInsert({
+            "companyName": subscriberInsert.companyName,
+            "contractAmount": subscriberInsert.contractAmount,
+            "contractEndDate": subscriberInsert.contractEndDate,
+            "contractFileId": subscriberInsert.contractFileId,
+            "contractStartDate": subscriberInsert.contractStartDate,
+            "loginId": subscriberInsert.loginId,
+            "managerEmail": subscriberInsertEmailBeforeSign + '@' + subscriberInsertEmailAfterSign,
+            "managerName": subscriberInsert.managerName,
+            "managerRoleCd": subscriberInsert.managerRoleCd,
+            "managerTel": subscriberInsert.managerTel,
+            "registNo": subscriberInsert.registNo,
+            "scaleCd": subscriberInsert.scaleCd,
+            "sectorCd": subscriberInsert.sectorCd,
+            "statusCd": subscriberInsert.statusCd,
+            "workplaceName": subscriberInsert.workplaceName
+        });
+        fetchSubscribersList();
+        setRegMemberPop(false);
+        setSubscriberInsert({});
+    }
+
+    const handleSubscribersUpdate = async () => {
+        await subscribersUpdate({
+            "companyId": subscriberView.companyId,
+            "companyName": subscriberView.companyName,
+            "contractAmount": subscriberView.contractAmount,
+            "contractEndDate": contractEndDate,
+            "contractFileId": subscriberView.contractFileId,
+            "contractStartDate": contractStartDate,
+            "loginId": subscriberView.loginId,
+            "managerEmail": managerEmail.firstInput + '@' + managerEmail.secondeInput,
+            "managerName": subscriberView.managerName,
+            "managerRoleCd": subscriberView.managerRoleCd,
+            "managerTel": managerTel.firstInput + '-' + managerTel.secondeInput + '-' + managerTel.thirdInput,
+            "registNo": subscriberView.registNo,
+            "scaleCd": subscriberView.scaleCd,
+            "sectorCd": subscriberView.sectorCd,
+            "statusCd": subscriberView.statusCd,
+            "userId": subscriberView.userId,
+            "workplaceId": subscriberView.workplaceId,
+            "workplaceName": subscriberView.workplaceName
+        });
+        fetchSubscribersList();
+        setUserInfoPop(false);
+    }
+
     useEffect(() => {
-        fetchSubscribersList()
-        fetchCommCodeListGroup1()
-        fetchCommCodeListGroup2()
-        fetchCommCodeListGroup3()
-    }, [])
+        fetchSubscribersList();
+        fetchCommCodeListGroup1();
+        fetchCommCodeListGroup2();
+        fetchCommCodeListGroup3();
+    }, [page]);
+
     return (
         <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
@@ -793,9 +907,8 @@ const SystemAdministrator = () => {
                     <div className={classes.tableBody}>
                         {subscribersList?.map((subscriber, index) => (
                             <div className={classes.tableRow} onDoubleClick={() => {
-                                setUserInfoPop(true)
-                                setWorkplaceIdView(subscriber.workplaceId)
-                                // fetchSubscriberView()
+                                setUserInfoPop(true);
+                                fetchSubscriberView(subscriber.workplaceId, subscriber.userId);
                             }}>
                                 <div className={classes.tableData}>{index + 1}</div>
                                 <div className={classes.tableData}>{subscriber.companyName}</div>
@@ -804,17 +917,17 @@ const SystemAdministrator = () => {
                                 <div className={classes.tableData}>{subscriber.sector}</div>
                                 <div className={classes.tableData}>{subscriber.scale}</div>
                                 <div className={classes.tableData}>{subscriber.loginId}</div>
-                                <div className={classes.tableData}>{subscriber.role}</div>
+                                <div className={classes.tableData}>{subscriber.managerRole}</div>
                                 <div className={classes.tableData}>{subscriber.managerName}</div>
                                 <div className={classes.tableData}>{subscriber.managerTel}</div>
                                 <div className={classes.tableData}>{subscriber.contractAmount}</div>
                                 <div className={classes.tableData}>{subscriber.contractDate}</div>
                                 <div className={classes.tableData}>{subscriber.status}</div>
-                                <div className={classes.tableData}>{subscriber.contractField}</div>
+                                <div className={classes.tableData}>{subscriber.contractFileld}</div>
                                 <div className={classes.tableData}>X</div>
-                            </div>))}
+                            </div>
+                        ))}
                     </div>
-
                     <div className={regMemberPop ? (classes.adminPopup + ' regMember') : (classes.adminPopup + ' regMemberClose')}>
                         <div className={classes.popHeader}>
                             가입자 등록
@@ -851,8 +964,6 @@ const SystemAdministrator = () => {
                                             value={subscriberInsert.workplaceName}
                                             className={classes.tableTextField}
                                             onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "workplaceName": e.target.value })}
-
-
                                         />
                                     </div>
                                     <div className={classes.dataNest}>
@@ -894,8 +1005,8 @@ const SystemAdministrator = () => {
                                         <div>
                                             <Select
                                                 className={classes.tableTextField}
-                                                value={subscriberInsert.roleCd}
-                                                onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "roleCd": e.target.value })}
+                                                value={subscriberInsert.managerRoleCd}
+                                                onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "managerRoleCd": e.target.value })}
                                             >
                                                 {codeGroup3?.map((code) => (<MenuItem value={code.codeId}>{code.codeNameKor}</MenuItem>))}
                                             </Select>
@@ -955,21 +1066,33 @@ const SystemAdministrator = () => {
                             <div className={classes.popupRow}>
                                 <div className={classes.popupData + ' data_head'}>계약기간</div>
                                 <div className={classes.popupData}>
-                                    <TextField
-                                        type="date"
-                                        value={subscriberInsert.contractStartDate}
-                                        className={classes.tableTextField}
-                                        onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "contractStartDate": e.target.value })}
-                                        sx={{ width: 180 }}
-                                    />
-                                    &nbsp;‒&nbsp;
-                                    <TextField
-                                        type="date"
-                                        value={subscriberInsert.contractEndDate}
-                                        className={classes.tableTextField}
-                                        onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "contractEndDate": e.target.value })}
-                                        sx={{ width: 180 }}
-                                    />
+                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                        <DesktopDatePicker
+                                            className={classes.selectMenuDate}
+                                            label=" "
+                                            inputFormat="YYYY-MM-DD"
+                                            value={subscriberInsert.contractStartDate}
+                                            onChange={(newDate) => {
+                                                const date = new Date(newDate.$d)
+                                                setSubscriberInsert({ ...subscriberInsert, "contractStartDate": moment(date).format("YYYY-MM-DD") })
+                                            }}
+                                            renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
+                                        />
+                                    </LocalizationProvider>
+                                    &nbsp;~&nbsp;
+                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                        <DesktopDatePicker
+                                            className={classes.selectMenuDate}
+                                            label=" "
+                                            inputFormat="YYYY-MM-DD"
+                                            value={subscriberInsert.contractEndDate}
+                                            onChange={(newDate) => {
+                                                const date = new Date(newDate.$d)
+                                                setSubscriberInsert({ ...subscriberInsert, "contractEndDate": moment(date).format("YYYY-MM-DD") })
+                                            }}
+                                            renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
+                                        />
+                                    </LocalizationProvider>
                                 </div>
                             </div>
                             <div className={classes.popupRow}>
@@ -1000,7 +1123,7 @@ const SystemAdministrator = () => {
                             </div>
                         </div>
                         <div className={classes.popButtons}>
-                            <YesButton>수정</YesButton>
+                            <YesButton onClick={() => handleSubscribersInsert()}>등록</YesButton>
                             <NoButton onClick={() => setRegMemberPop(false)}>취소</NoButton>
                         </div>
                     </div>
@@ -1014,8 +1137,9 @@ const SystemAdministrator = () => {
                                 <div className={classes.popupData}>
                                     <TextField
                                         variant="outlined"
-                                        value=""
+                                        value={subscriberView.companyName}
                                         className={classes.tableTextField}
+                                        onChange={(event) => setSubscriberView({ ...subscriberView, "companyName": event.target.value })}
                                     />
                                 </div>
                             </div>
@@ -1038,95 +1162,101 @@ const SystemAdministrator = () => {
                                     <div className={classes.dataNest}>
                                         <TextField
                                             variant="outlined"
-                                            value=""
+                                            value={subscriberView.workplaceName}
                                             className={classes.tableTextField}
+                                            onChange={(event) => setSubscriberView({ ...subscriberView, "workplaceName": event.target.value })}
                                         />
                                     </div>
                                     <div className={classes.dataNest}>
                                         <TextField
                                             variant="outlined"
-                                            value=""
+                                            value={subscriberView.registNo}
                                             className={classes.tableTextField}
-                                        />
-                                    </div>
-                                    <div className={classes.dataNest}>
-                                        <Select
-                                            className={classes.tableTextField}
-                                            value={num}
-                                            onChange={handleChange}
-                                            displayEmpty
-                                        >
-                                            <MenuItem value=""></MenuItem>
-                                        </Select>
-                                    </div>
-                                    <div className={classes.dataNest}>
-                                        <Select
-                                            className={classes.tableTextField}
-                                            value={num}
-                                            onChange={handleChange}
-                                            displayEmpty
-                                        >
-                                            <MenuItem value=""></MenuItem>
-                                        </Select>
-                                    </div>
-                                    <div className={classes.dataNest}>
-                                        <TextField
-                                            variant="outlined"
-                                            value=""
-                                            className={classes.tableTextField}
+                                            onChange={(event) => setSubscriberView({ ...subscriberView, "registNo": event.target.value })}
                                         />
                                     </div>
                                     <div className={classes.dataNest}>
                                         <Select
                                             className={classes.tableTextField}
-                                            value={num}
-                                            onChange={handleChange}
-                                            displayEmpty
+                                            value={subscriberView.sectorCd}
+                                            onChange={(event) => setSubscriberView({ ...subscriberView, "sectorCd": event.target.value })}
                                         >
-                                            <MenuItem value=""></MenuItem>
+                                            {codeGroup2?.map((code) => (<MenuItem value={code.codeId}>{code.codeNameKor}</MenuItem>))}
+                                        </Select>
+                                    </div>
+                                    <div className={classes.dataNest}>
+                                        <Select
+                                            className={classes.tableTextField}
+                                            value={subscriberView.scaleCd}
+                                            onChange={(e) => setSubscriberView({ ...subscriberView, "scaleCd": e.target.value })}
+                                        >
+                                            {codeGroup1?.map((code) => (<MenuItem value={code.codeId}>{code.codeNameKor}</MenuItem>))}
                                         </Select>
                                     </div>
                                     <div className={classes.dataNest}>
                                         <TextField
                                             variant="outlined"
-                                            value=""
                                             className={classes.tableTextField}
+                                            value={subscriberView.loginId}
+                                            onChange={(event) => setSubscriberView({ ...subscriberView, "loginId": event.target.value })}
+                                        />
+                                    </div>
+                                    <div className={classes.dataNest}>
+                                        <Select
+                                            className={classes.tableTextField}
+                                            value={subscriberView.managerRoleCd}
+                                            onChange={(event) => setSubscriberView({ ...subscriberView, "managerRoleCd": event.target.value })}
+                                        >
+                                            {codeGroup3?.map((code) => (<MenuItem value={code.codeId}>{code.codeNameKor}</MenuItem>))}
+                                        </Select>
+                                    </div>
+                                    <div className={classes.dataNest}>
+                                        <TextField
+                                            variant="outlined"
+                                            className={classes.tableTextField}
+                                            value={subscriberView.managerName}
+                                            onChange={(event) => setSubscriberView({ ...subscriberView, "managerName": event.target.value })}
                                         />
                                     </div>
                                     <div className={classes.dataNest}>
                                         <TextField
                                             variant="outlined"
-                                            value=""
                                             className={classes.tableTextField}
+                                            value={managerTel.firstInput}
+                                            onChange={(event) => setManagerTel({ ...managerTel, firstInput: event.target.value })}
                                             sx={{ width: 70 }}
                                         />
                                         &nbsp;‒&nbsp;
                                         <TextField
                                             variant="outlined"
-                                            value=""
                                             className={classes.tableTextField}
+                                            value={managerTel.secondeInput}
+                                            onChange={(event) => setManagerTel({ ...managerTel, secondeInput: event.target.value })}
                                             sx={{ width: 70 }}
                                         />
                                         &nbsp;‒&nbsp;
                                         <TextField
                                             variant="outlined"
-                                            value=""
                                             className={classes.tableTextField}
+                                            value={managerTel.thirdInput}
+                                            onChange={(event) => setManagerTel({ ...managerTel, thirdInput: event.target.value })}
                                             sx={{ width: 70 }}
                                         />
                                     </div>
                                     <div className={classes.dataNest}>
                                         <TextField
                                             variant="outlined"
-                                            value=""
                                             className={classes.tableTextField}
+                                            value={managerEmail.firstInput}
+                                            onChange={(event) => setManagerEmail({ ...managerEmail, firstInput: event.target.value })}
                                             sx={{ width: 189 }}
                                         />
                                         &nbsp;@&nbsp;
                                         <TextField
                                             variant="outlined"
-                                            value=""
                                             className={classes.tableTextField}
+                                            value={managerEmail.secondeInput}
+                                            onChange={(event) => setManagerEmail({ ...managerEmail, secondeInput: event.target.value })}
                                             sx={{ width: 189 }}
                                         />
                                     </div>
@@ -1137,8 +1267,9 @@ const SystemAdministrator = () => {
                                 <div className={classes.popupData}>
                                     <TextField
                                         variant="outlined"
-                                        value=""
                                         className={classes.tableTextField}
+                                        value={subscriberView.contractAmount}
+                                        onChange={(event) => setSubscriberView({ ...subscriberView, "contractAmount": event.target.value })}
                                         sx={{ width: 190 }}
                                     />
                                     &nbsp;록
@@ -1147,19 +1278,33 @@ const SystemAdministrator = () => {
                             <div className={classes.popupRow}>
                                 <div className={classes.popupData + ' data_head'}>계약기간</div>
                                 <div className={classes.popupData}>
-                                    <TextField
-                                        variant="outlined"
-                                        value=""
-                                        className={classes.tableTextField}
-                                        sx={{ width: 190 }}
-                                    />
+                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                        <DesktopDatePicker
+                                            className={classes.selectMenuDate}
+                                            label=" "
+                                            inputFormat="YYYY-MM-DD"
+                                            value={contractStartDate}
+                                            onChange={(newDate) => {
+                                                const date = new Date(newDate.$d)
+                                                setContractStartDate(moment(date).format("YYYY-MM-DD"))
+                                            }}
+                                            renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
+                                        />
+                                    </LocalizationProvider>
                                     &nbsp;~&nbsp;
-                                    <TextField
-                                        variant="outlined"
-                                        value=""
-                                        className={classes.tableTextField}
-                                        sx={{ width: 190 }}
-                                    />
+                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                        <DesktopDatePicker
+                                            className={classes.selectMenuDate}
+                                            label=" "
+                                            inputFormat="YYYY-MM-DD"
+                                            value={contractEndDate}
+                                            onChange={(newDate) => {
+                                                const date = new Date(newDate.$d)
+                                                setContractEndDate(moment(date).format("YYYY-MM-DD"))
+                                            }}
+                                            renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
+                                        />
+                                    </LocalizationProvider>
                                 </div>
                             </div>
                             <div className={classes.popupRow}>
@@ -1167,12 +1312,12 @@ const SystemAdministrator = () => {
                                 <div className={classes.popupData}>
                                     <Select
                                         className={classes.tableTextField}
-                                        value={num}
-                                        onChange={handleChange}
-                                        displayEmpty
+                                        value={!!(subscriberView.companyName) ? subscriberView.statusCd : ""}
+                                        onChange={(event) => setSubscriberView({ ...subscriberView, "statusCd": event.target.value })}
                                         sx={{ width: 250 }}
                                     >
-                                        <MenuItem value=""></MenuItem>
+                                        <MenuItem value="1">사용</MenuItem>
+                                        <MenuItem value="0">사용중지</MenuItem>
                                     </Select>
                                 </div>
                             </div>
@@ -1181,18 +1326,17 @@ const SystemAdministrator = () => {
                                 <div className={classes.popupData}>
                                     <Select
                                         className={classes.tableTextField}
-                                        value={num}
-                                        onChange={handleChange}
-                                        displayEmpty
+                                        value={!!(subscriberView.contractFileId) ? subscriberView.contractFileId : ""}
+                                        onChange={(event) => setSubscriberView({ ...subscriberView, "contractFileId": event.target.value })}
                                         sx={{ width: 250 }}
                                     >
-                                        <MenuItem value=""></MenuItem>
+                                        <MenuItem value={subscriberView.contractFileId}>{subscriberView.contractFileId}</MenuItem>
                                     </Select>
                                 </div>
                             </div>
                         </div>
                         <div className={classes.popButtons}>
-                            <YesButton>수정</YesButton>
+                            <YesButton onClick={() => handleSubscribersUpdate()}>수정</YesButton>
                             <NoButton onClick={() => setUserInfoPop(false)}>취소</NoButton>
                         </div>
                     </div>
@@ -1220,8 +1364,9 @@ const SystemAdministrator = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
+                    <div>총 게시글 <strong>{!!(subscribersList) && !!(subscribersList.length) && subscribersList[0]?.totalCount}</strong> 건</div>
                     <Stack spacing={2}>
-                        {/* <Pagination count={10} boundaryCount={10} shape="rounded" showFirstButton showLastButton /> */}
+                        <Pagination count={subscribersList?.length && Math.ceil(subscribersList[0]?.totalCount / 10)} boundaryCount={10} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
                     </Stack>
                 </Grid>
             </Grid>
