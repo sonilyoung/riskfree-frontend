@@ -2087,7 +2087,7 @@ const Employee = () => {
         fetchDutyAssigned()
         fetchRelatedArticle()
         fetchGuideLine()
-    }, [baselineIdForSelect])
+    }, [baselineIdForSelect, baselineData])
 
     useEffect(() => {
         fetchDutyDetailList()
