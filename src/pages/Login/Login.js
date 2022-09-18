@@ -95,7 +95,7 @@ const Login = () => {
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (event.keyCode === 13) {
-                event.preventDefault()
+                // event.preventDefault()
                 handleLogin()
             }
         }
@@ -103,7 +103,7 @@ const Login = () => {
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [])
+    }, [values])
 
     return (
         <WideLayout>
