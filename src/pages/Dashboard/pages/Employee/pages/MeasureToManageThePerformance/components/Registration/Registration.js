@@ -748,7 +748,7 @@ const Registration = ({ handleToggleList }) => {
                     <Pagination count={!!relatedRawButtonList && relatedRawList?.length && Math.ceil(relatedRawList && (relatedRawList[0]?.totalCount / 10))} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
                 </Stack>
                 <div>
-                    <ExcelButton>엑셀 다운로드</ExcelButton>
+                    {/* <ExcelButton>엑셀 다운로드</ExcelButton> */}
                 </div>
             </Grid>
             <Grid item xs={12} className={classes.footerButtons}>

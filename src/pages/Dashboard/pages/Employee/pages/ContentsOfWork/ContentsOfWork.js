@@ -45,8 +45,7 @@ import 'dayjs/locale/ko';
 import { useGetWorkplaceListMutation } from '../../../../../../hooks/api/MainManagement/MainManagement';
 import moment from 'moment';
 import { useGetSafeWorkFileMutation, useGetSafeWorkFileTopInfoMutation, useGetSafeWorkMutation } from '../../../../../../hooks/api/SafeWorkManagement/SafeWorkManagement';
-import { useSelector } from 'react-redux';
-import { selectWorkplaceId } from '../../../../../../slices/selections/MainSelection';
+import useUserInitialWorkplaceId from '../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -385,15 +384,14 @@ const useStyles = makeStyles(() => ({
         left: '50%',
         transform: 'translate(-50%,-50%)',
         width: '400px',
-        height: '400px',
+        height: '200px',
         background: '#fff',
         borderRadius: '30px',
-        padding: '40px',
+        padding: '20px',
         boxSizing: 'border-box',
         display: 'flex',
         flexWrap: 'wrap',
         boxShadow: '0 0 12px rgb(0 0 0 / 10%)',
-        display: 'none !important',
         '& >span': {
             width: '30%',
             height: '20px',
@@ -413,6 +411,9 @@ const useStyles = makeStyles(() => ({
             top: '0px',
             right: '-65px'
         }
+    },
+    uploadPopupHide: {
+        display: 'none !important',
     },
     uploadInfo: {
         display: 'flex',
@@ -444,6 +445,10 @@ const useStyles = makeStyles(() => ({
         marginBottom: '10px !important',
         overflow: 'hidden',
         height: '40px',
+        borderRadius: ' 46px',
+        '& .MuiOutlinedInput-notchedOutline': {
+            border: 'none'
+        },
         '& >div': {
             background: '#fff',
             fontSize: '16px',
@@ -452,7 +457,8 @@ const useStyles = makeStyles(() => ({
             fontSize: '16px',
             height: '40px',
             boxSizing: 'border-box',
-        }
+            background: '#eff2f9',
+        },
     },
     selectMenuDate: {
         height: '40px',
@@ -474,7 +480,21 @@ const useStyles = makeStyles(() => ({
         display: "none !important",
     }
 }));
-
+const SearchPopupButton = styled(ButtonUnstyled)`
+    width: 46px;
+    height: 46px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: -1.08px;
+    border-radius: 50%;
+    background: #00adef url(${searchIcon}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #3a5298 url(${searchIcon}) no-repeat 50% 50%;
+    }   
+`;
 const SearchButton = styled(ButtonUnstyled)`
     width: 100px;
     height: 40px;
@@ -580,6 +600,7 @@ const WorkHistoryList = () => {
     const [getSafeWork] = useGetSafeWorkMutation();
     const [getSafeWorkFileTopInfo] = useGetSafeWorkFileTopInfoMutation();
     const [getSafeWorkFile] = useGetSafeWorkFileMutation();
+    const getInitialWorkplaceId = useUserInitialWorkplaceId();
 
     const [locale] = React.useState('ko');
     const [hide, setHide] = useState(true);
@@ -588,13 +609,11 @@ const WorkHistoryList = () => {
     const [safeWorkFileList, setSafeWorkFileList] = useState([]);
     const [safeWorkFileTopinfo, setSafeWorkFileTopinfo] = useState({});
 
-    // da li je filter za workplace statican? Kada je statican a kada je Dropdown
-    const [workplaceId, setWorkplaceId] = useState("");
     const [insertDate, setInsertDate] = useState(null);
     const [username, setUsername] = useState("");
     const [noticeId, setNoticeId] = useState(null);
-
-    const currentWorkplaceId = useSelector(selectWorkplaceId);
+    const [popupShow, setPopupShow] = useState(false);
+    const [workplaceId, setWorkplaceId] = useState(getInitialWorkplaceId());
 
     const fetchWorkplaceList = async () => {
         const response = await getWorkplaceList();
@@ -603,11 +622,13 @@ const WorkHistoryList = () => {
 
     const fetchSafeWorkList = async () => {
         const response = await getSafeWork({
-            "workplaceId": currentWorkplaceId,
+            "workplaceId": workplaceId,
             "insertDate": insertDate,
             "userName": username
         });
         setSafeWorkList(response.data.RET_DATA);
+        console.log(response);
+        console.log(workplaceId, insertDate, username);
     }
 
     const fetchSafeWorkFileTopInfo = async () => {
@@ -619,17 +640,22 @@ const WorkHistoryList = () => {
 
     const fetchSafeWorkFileList = async () => {
         const response = await getSafeWorkFile({
-            "workplaceId": currentWorkplaceId
+            "workplaceId": workplaceId
         });
         setSafeWorkFileList(response.data.RET_DATA);
+        console.log(workplaceId);
         console.log(response.data.RET_DATA);
     }
 
     useEffect(() => {
         fetchWorkplaceList();
         fetchSafeWorkList();
-        fetchSafeWorkFileTopInfo();
     }, []);
+
+    useEffect(() => {
+        fetchSafeWorkFileTopInfo();
+        // fetchSafeWorkFileList();
+    }, [noticeId]);
 
     return (
         <DefaultLayout>
@@ -683,8 +709,8 @@ const WorkHistoryList = () => {
                             </div>
                         </div>
                         <div className={classes.searchButtons}>
-                            <SearchButton onClick={fetchSafeWorkList}>조회</SearchButton>
-                            <RegisterButton sx={{ marginLeft: '10px' }}>등록</RegisterButton>
+                            <SearchButton onClick={() => fetchSafeWorkList()}>조회</SearchButton>
+                            <RegisterButton sx={{ marginLeft: '10px' }} onClick={() => setPopupShow(true)}>등록</RegisterButton>
                         </div>
                     </div>
                 </Grid>
@@ -735,15 +761,15 @@ const WorkHistoryList = () => {
                             <div className={hide ? classes.popupHide : classes.popTop}>
                                 <div>
                                     <div>사업장</div>
-                                    <div><strong>{safeWorkFileTopinfo && safeWorkFileTopinfo?.workplaceName}</strong></div>
+                                    <div><strong>{!!safeWorkFileTopinfo && !!safeWorkFileTopinfo?.workplaceName && safeWorkFileTopinfo?.workplaceName}</strong></div>
                                 </div>
                                 <div>
                                     <div>자이그브</div>
-                                    <div><strong>{safeWorkFileTopinfo && safeWorkFileTopinfo?.constructionName}</strong></div>
+                                    <div><strong>{!!safeWorkFileTopinfo && !!safeWorkFileTopinfo?.constructionName && safeWorkFileTopinfo?.constructionName}</strong></div>
                                 </div>
                                 <div>
                                     <div>등록일</div>
-                                    <div><strong>{safeWorkFileTopinfo && safeWorkFileTopinfo?.insertDate}</strong></div>
+                                    <div><strong>{!!safeWorkFileTopinfo && !!safeWorkFileTopinfo?.insertDate && safeWorkFileTopinfo?.insertDate}</strong></div>
                                 </div>
                             </div>
                             <Grid item xs={12} className={hide ? classes.popupHide : classes.dataTable + ' popup_table'}>
@@ -771,12 +797,7 @@ const WorkHistoryList = () => {
                             <NoButton>취소</NoButton>
                         </div>
                     </div>
-                    <div className={classes.uploadPopup}>
-                        <div className={classes.uploadInfo}>
-                            <img src={alertIcon} alt="alert icon" />
-                            <span>업로드 양식을 다운로드하신 후 임의로 수정하시면 | 업로드가 안되니 수정하시 마시기 바랍니다.</span>
-                            <UnknownButton2>업로드 양식 다운로드</UnknownButton2>
-                        </div>
+                    <div className={popupShow ? classes.uploadPopup : classes.uploadPopupHide}>
                         <span></span>
                         <span>작성파일 업로드</span>
                         <span></span>
@@ -788,7 +809,8 @@ const WorkHistoryList = () => {
                                 sx={{ width: 250 }}
                                 className={classes.popupTextField}
                             />
-                            <UnknownButton1>파일 업로드</UnknownButton1>
+                            <SearchPopupButton></SearchPopupButton>
+                            <UnknownButton1 onClick={() => setPopupShow(false)}>파일 업로드</UnknownButton1>
                         </div>
                     </div>
                 </Grid>

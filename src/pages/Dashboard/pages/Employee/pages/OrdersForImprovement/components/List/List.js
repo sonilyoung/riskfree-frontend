@@ -45,7 +45,8 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 import moment from "moment"
 import { useSelector } from "react-redux";
-import { selectWorkplaceId } from "../../../../../../../../slices/selections/MainSelection";
+import { selectBaselineId, selectWorkplaceId } from "../../../../../../../../slices/selections/MainSelection";
+import useUserInitialWorkplaceId from "../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId";
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -366,20 +367,21 @@ const ExcelButton = styled(ButtonUnstyled)`
 const List = () => {
     const classes = useStyles();
 
-    const currentWorkplaceId = useSelector(selectWorkplaceId);
+    const currentBaselineId = useSelector(selectBaselineId);
 
+    const getInitialWorkplaceId = useUserInitialWorkplaceId();
     const [lawSelect] = useLawSelectMutation();
     const [getWorkplaceList] = useGetWorkplaceListMutation();
     const [lawIssueReassonSelect] = useLawIssueReassonSelectMutation();
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
+    const [workplaceId, setWorkplaceId] = useState(getInitialWorkplaceId);
     const [workplaceList, setWorkplaceList] = useState([]);
     const [issueReasson, setIssueReasson] = useState([]);
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null)
-    // da li je filter za workplace statican? Kada je statican a kada je Dropdown
     const [lawImprovements, setLawImprovements] = useState({
-        baselineId: 6,
+        baselineId: currentBaselineId,
         cmmdOrgCd001: "",
         cmmdOrgCd002: "",
         cmmdOrgCd003: "",
@@ -392,7 +394,7 @@ const List = () => {
         pageNum: page,
         startDate: startDate,
         statusCd: "",
-        workplaceId: currentWorkplaceId,
+        workplaceId: workplaceId
     });
     const [lawList, setLawList] = useState([]);
     const [checked, setChecked] = useState(false);
@@ -443,7 +445,7 @@ const List = () => {
     };
 
     const fetchIssueReasson = async () => {
-        const response = await lawIssueReassonSelect(6);
+        const response = await lawIssueReassonSelect(currentBaselineId);
         setIssueReasson(response.data.RET_DATA);
     };
 

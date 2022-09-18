@@ -362,7 +362,7 @@ const Registration = () => {
         [date2, setDate2] = React.useState(null);
 
     const [locale] = React.useState('ko');
-    console.log(law)
+
     useEffect(() => {
         handleLoginInfo()
     }, [])

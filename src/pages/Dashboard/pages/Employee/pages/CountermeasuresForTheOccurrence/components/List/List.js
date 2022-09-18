@@ -44,6 +44,7 @@ import 'dayjs/locale/ko';
 import moment from "moment"
 import { selectBaselineId, selectWorkplaceId } from '../../../../../../../../slices/selections/MainSelection';
 import { useSelector } from 'react-redux';
+import useUserInitialWorkplaceId from '../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
 
 
 
@@ -351,7 +352,8 @@ const ExcelButton = styled(ButtonUnstyled)`
 
 const List = () => {
     const classes = useStyles();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const getInitialWorkplaceId = useUserInitialWorkplaceId();
     const [accidentSelect] = useAccidentSelectMutation()
     const [accidentOccurPlaceSelect] = useAccidentOccurPlaceSelectMutation()
     const [getWorkplaceList] = useGetWorkplaceListMutation()
@@ -369,8 +371,7 @@ const List = () => {
     const [managerName, setManagerName] = useState("")
     const [startDate, setStartDate] = useState(null)
     const [finishDate, setFinishDate] = useState(null)
-    // da li je filter za workplace statican? Kada je statican a kada je Dropdown
-    const [workplaceSelect, setWorkplaceSelect] = useState("")
+    const [workplaceSelect, setWorkplaceSelect] = useState(getInitialWorkplaceId())
     const [occurPlaceSelect, setOccurPlaceSelect] = useState("")
     const [page, setPage] = useState(1)
     const [death, setDeath] = useState(false)
@@ -379,7 +380,6 @@ const List = () => {
     const [locale] = React.useState('ko');
 
     const currentBaseline = useSelector(selectBaselineId);
-    const currentWorkplaceId = useSelector(selectWorkplaceId);
 
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [isCheck, setIsCheck] = useState([]);
@@ -500,7 +500,7 @@ const List = () => {
             "pageNum": page,
             "same": same ? "Y" : "",
             "startDate": startDate,
-            "workplaceId": currentWorkplaceId
+            "workplaceId": workplaceSelect
         })
         setAccidents(response.data.RET_DATA)
         console.log(response);
@@ -512,7 +512,7 @@ const List = () => {
     }
 
     const fetchAccidentOccurPlacesList = async () => {
-        const response = await accidentOccurPlaceSelect(6)
+        const response = await accidentOccurPlaceSelect(currentBaseline)
         setOccurPlacesList(response.data.RET_DATA)
     }
 

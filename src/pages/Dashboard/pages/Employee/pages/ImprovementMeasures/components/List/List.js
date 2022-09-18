@@ -40,6 +40,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
+import useUserInitialWorkplaceId from '../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
 
 
 const useStyles = makeStyles(() => ({
@@ -314,11 +315,11 @@ const ExcelButton = styled(ButtonUnstyled)`
 function List() {
     const classes = useStyles();
     const navigate = useNavigate()
+    const getInitialWorkplaceId = useUserInitialWorkplaceId();
     const [getWorkplaceList] = useGetWorkplaceListMutation()
     const [improvementSelect] = useImprovementSelectMutation()
     const [workplaces, setWorkplaces] = useState([])
-    // da li je filter za workplace statican? Kada je statican a kada je Dropdown
-    const [workplaceSelect, setWorkplaceSelect] = useState("")
+    const [workplaceSelect, setWorkplaceSelect] = useState(getInitialWorkplaceId())
     const [reqUser, setReqUser] = useState("")
     const [statusCd, setStatusCd] = useState("")
     const [improvements, setImprovements] = useState([])
@@ -366,7 +367,7 @@ function List() {
                 "reqUserCd": reqUser,
                 "startDate": startDate,
                 "statusCd": statusCd,
-                "workplaceId": currentWorkplaceId
+                "workplaceId": workplaceSelect
             }
         )
         setImprovements(response.data.RET_DATA)

@@ -497,9 +497,9 @@ const useStyles = makeStyles(() => ({
         overflow: 'hidden',
         height: '40px',
         borderRadius: ' 46px',
-        '& .Mui-focused': {
-            border: '2px solid #00adef',
-        },
+        // '& .Mui-focused': {
+        //     border: '2px solid #00adef',
+        // },
         '& .MuiOutlinedInput-notchedOutline': {
             border: 'none'
         },
@@ -786,7 +786,7 @@ const List = ({ handleToggleList, toggleList }) => {
                         <Pagination count={relatedRawList?.length && Math.ceil(relatedRawList[0]?.totalCount / 10)} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
                     </Stack>
                     <div>
-                        <ExcelButton>엑셀 다운로드</ExcelButton>
+                        {/* <ExcelButton>엑셀 다운로드</ExcelButton> */}
                     </div>
                 </Grid>
             </Grid>

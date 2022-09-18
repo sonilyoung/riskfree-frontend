@@ -33,6 +33,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 import moment from "moment"
+import useUserInitialWorkplaceId from '../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -305,11 +306,12 @@ const Registration = () => {
     const classes = useStyles();
     const navigate = useNavigate()
     const { updateid } = useParams()
+    const getInitialWorkplaceId = useUserInitialWorkplaceId();
     const [getWorkplaceList] = useGetWorkplaceListMutation()
     const [improvementUpdate] = useImprovementUpdateMutation()
     const [improvementView] = useImprovementViewMutation()
     const [workplaces, setWorkplaces] = useState([])
-    const [workplaceSelect, setWorkplaceSelect] = useState("")
+    const [workplaceSelect, setWorkplaceSelect] = useState(getInitialWorkplaceId())
     const [reqUserCd, setReqUserCd] = useState("")
     const [improvement, setImprovement] = useState(
         {
