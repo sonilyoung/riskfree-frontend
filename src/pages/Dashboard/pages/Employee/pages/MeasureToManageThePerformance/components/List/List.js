@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-import { makeStyles, styled } from '@mui/styles';
+import ButtonUnstyled from '@mui/base/ButtonUnstyled';
+import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/system';
 
 import { Link } from 'react-router-dom';
 
@@ -11,7 +13,6 @@ import TextField from '@mui/material/TextField';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
@@ -112,7 +113,7 @@ const useStyles = makeStyles(() => ({
     tableHead: {
         width: '100%',
         background: '#bdcbe9',
-        '& $tableData': {
+        '& $tableDataOne': {
             height: '100px',
             borderRight: '1px solid #fff',
             textAlign: 'center',
@@ -167,9 +168,79 @@ const useStyles = makeStyles(() => ({
             },
         },
     },
+    tableHeadTwo: {
+        width: '100%',
+        background: '#bdcbe9',
+        '& $tableDataTwo': {
+            height: '100px',
+            borderRight: '1px solid #fff',
+            justifyContent: 'center',
+            textAlign: 'center',
+            '&:first-of-type >div': {
+                '&:last-of-type span': {
+                    '&:first-of-type': {
+                        width: '135px',
+                        borderRight: '1px solid #fff'
+                    },
+                    '&:last-of-type': {
+                        width: '175px'
+                    }
+                }
+            },
+            '&:last-of-type >div': {
+                '&:last-of-type span': {
+                    width: '100%',
+                    borderRight: '1px solid #fff',
+                    '&:last-of-type': {
+                        borderRight: 'none'
+                    }
+                }
+            },
+            '& >div': {
+                width: '100%',
+                height: '50%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                '&:first-of-type': {
+                    borderBottom: '1px solid #fff'
+                },
+                '&:last-of-type span': {
+                    height: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }
+
+            },
+            '&:last-of-type': {
+                borderRight: 'none',
+                padding: '0'
+            },
+            '&:first-of-type': {
+                width: '310px',
+                padding: '0'
+            },
+            '&:nth-of-type(2)': {
+                width: '240px',
+            },
+            '&:nth-of-type(3)': {
+                width: '135px',
+            },
+            '&:nth-of-type(4)': {
+                width: '322px',
+            },
+            '&:nth-of-type(5)': {
+                width: '322px',
+            },
+            '&:nth-of-type(6)': {
+                width: '456px',
+            },
+        }
+    },
     tableBody: {
         width: '100%',
-        '& $tableData': {
+        '& $tableDataOne,$tableDataTwo': {
             borderRight: '1px solid #bdcbe9',
             borderBottom: '1px solid #bdcbe9',
             '&:last-of-type': {
@@ -192,12 +263,12 @@ const useStyles = makeStyles(() => ({
     tableRow: {
         display: 'flex',
         '&:last-of-type': {
-            '& $tableData': {
+            '&  $tableDataOne,$tableDataTwo': {
                 borderBottom: 'none'
             },
         },
     },
-    tableData: {
+    tableDataOne: {
         display: 'flex',
         alignItems: 'center',
         alignContent: 'center',
@@ -224,14 +295,42 @@ const useStyles = makeStyles(() => ({
         '&:nth-of-type(8)': {
             width: '135px',
         },
-        '&.tableDataLastRow': {
-            background: 'red'
-        }
+    },
+    tableDataTwo: {
+        display: 'flex',
+        alignItems: 'center',
+        alignContent: 'center',
+        flexWrap: 'wrap',
+        padding: '13px 12px',
+        '& >span': {
+            color: '#fc4b07'
+        },
+        '&:nth-of-type(3)': {
+            width: '240px',
+        },
+        '&:nth-of-type(4)': {
+            width: '135px',
+        },
+        '&:nth-of-type(5)': {
+            width: '322px',
+        },
+        '&:nth-of-type(6)': {
+            width: '322px',
+        },
+        '&:nth-of-type(7)': {
+            width: '152px',
+        },
+        '&:nth-of-type(8)': {
+            width: '152px',
+        },
+        '&:nth-of-type(9)': {
+            width: '152px',
+        },
     },
     uploadPopup: {
         position: 'absolute',
         zIndex: '1000',
-        top: '0px',
+        top: '0',
         left: '50%',
         transform: 'translateX(-50%)',
         width: '400px',
@@ -242,7 +341,7 @@ const useStyles = makeStyles(() => ({
         boxSizing: 'border-box',
         display: 'flex',
         flexWrap: 'wrap',
-        // display: 'none !important',
+        boxShadow: '0px 0px 10px 10000px rgba(0,0,0,0.4)',
         '& >span': {
             width: '20%',
             height: '20px',
@@ -261,6 +360,51 @@ const useStyles = makeStyles(() => ({
             position: 'absolute',
             top: '0px',
             right: '-65px'
+        }
+    },
+    uploadPlusPopup: {
+        position: 'absolute',
+        zIndex: '1000',
+        top: '0',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '300px',
+        // height: '250px',
+        background: '#fff',
+        borderRadius: '30px',
+        padding: '40px',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        boxShadow: '0px 0px 10px 10000px rgba(0,0,0,0.4)',
+        '& > h3': {
+            margin: '0 0 10px',
+        },
+        '& >button': {
+            position: 'absolute',
+            top: '0px',
+            right: '-65px'
+        }
+    },
+    uploadPopupHide: {
+        display: 'none !important',
+    },
+    uploadInfo: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        height: '50%',
+        '& >*': {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        '& img': {
+            width: '30px',
+            height: '30px',
         }
     },
     uploadSearch: {
@@ -341,6 +485,35 @@ const useStyles = makeStyles(() => ({
             }
         }
     },
+    pageBody: {
+        position: 'relative',
+        display: 'flex',
+        backgroundImage: 'linear-gradient(#424762, #33374f)',
+        borderRadius: '32px 32px 0 0',
+        width: '1720px'
+    },
+    popupTextField: {
+        marginBottom: '10px !important',
+        overflow: 'hidden',
+        height: '40px',
+        borderRadius: ' 46px',
+        '& .Mui-focused': {
+            border: '2px solid #00adef',
+        },
+        '& .MuiOutlinedInput-notchedOutline': {
+            border: 'none'
+        },
+        '& >div': {
+            background: '#fff',
+            fontSize: '16px',
+        },
+        '& input': {
+            fontSize: '16px',
+            height: '40px',
+            boxSizing: 'border-box',
+            background: '#eff2f9',
+        }
+    },
 
 }));
 
@@ -348,7 +521,7 @@ const ClosePopupButton2 = styled(ButtonUnstyled)`
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: url(${popupClose2}) no-repeat 50% 50%;
+    background:url(${popupClose2}) no-repeat 50% 50%;
     border: none;
     cursor: pointer;
     transition: background .2s; 
@@ -425,48 +598,53 @@ const ExcelButton = styled(ButtonUnstyled)`
     }
 `
 
-const List = () => {
+const List = ({ handleToggleList, toggleList }) => {
     const classes = useStyles();
 
     const [relatedRawList, setRelatedRawList] = useState([]);
     const [relatedRawButtonList, setRelatedRawButtonList] = useState([]);
+    const [lawName, setLawName] = useState("");
+    const [lawId, setLawId] = useState(1);
+    const [popupButton, setPopupButton] = useState(false);
+    const [popupPlusButton, setPopupPlusButton] = useState(false);
     const [page, setPage] = useState(1);
-    const [toggleList, setToggleList] = useState(false);
 
     const [getRelatedRaw] = useGetRelatedRawMutation();
     const [insertDutyButton] = useInsertDutyButtonMutation();
     const [getRelatedRawButton] = useGetRelatedRawButtonMutation();
 
     const currentBaseline = useSelector(selectBaselineId);
-    console.log(currentBaseline);
+    // console.log(currentBaseline);
 
     const handlePageChange = (event, value) => {
         setPage(value)
     }
 
-    const fetchRelatedRawList = async () => {
+    const fetchRelatedRawList = async (lawId) => {
         const response = await getRelatedRaw({
-            "lawId": 1,
+            "lawId": lawId,
             "baselineId": currentBaseline,
             "countPerPage": 10,
             "pageNum": page
         });
         setRelatedRawList(response.data.RET_DATA);
-        console.log(response);
     }
 
     const fetchRelatedRawButtonList = async () => {
         const response = await getRelatedRawButton({});
         setRelatedRawButtonList(response.data.RET_DATA);
-        console.log(response);
     }
 
     const fetchInsertDutyButton = async () => {
-        const response = await insertDutyButton();
+        await insertDutyButton({
+            "lawName": lawName
+        });
+        setPopupPlusButton(false);
+        fetchRelatedRawButtonList();
     }
 
     useEffect(() => {
-        fetchRelatedRawList();
+        fetchRelatedRawList(lawId);
         fetchRelatedRawButtonList();
     }, [page]);
 
@@ -478,35 +656,52 @@ const List = () => {
                         관계법령에 의무이행의 관리상의 조치
                     </Typography>
                 </Grid>
-                {/* <div className={classes.uploadPopup}>
-                    <ClosePopupButton2></ClosePopupButton2>
-                    <div className={classes.uploadInfo}>
-                        <img src={alertIcon} alt="alert icon" />
-                        <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
-                        <UnknownButton2>전체사업장</UnknownButton2>
-                    </div>
-                    <span></span>
-                    <span>의무조치별 상세 점검</span>
-                    <span></span>
-                    <div className={classes.uploadSearch}>
-                        <TextField
-                            id="standard-basic"
-                            placeholder="여수공장 시정조치요청 파일.hwp"
-                            variant="outlined"
-                            sx={{ width: 250 }}
-                            className={classes.popupTextField}
-                        />
-                        <SearchButton></SearchButton>
-                        <UnknownButton1>전체사업장</UnknownButton1>
-                    </div>
-                </div> */}
                 <Grid item xs={12} className={classes.headerButtons}>
                     {!!relatedRawButtonList && relatedRawButtonList.length > 0 && relatedRawButtonList.map(relatedRawButtonItem =>
-                    (<Link to="#" className={classes.buttonLink}>
+                    (<Link to="#" className={classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)} onDoubleClick={() => setPopupButton(true)}>
                         <span>{relatedRawButtonItem?.lawName}</span>
                     </Link>)
                     )}
-                    <button className={classes.buttonPlus}>+</button>
+                    <button className={classes.buttonPlus} onClick={() => setPopupPlusButton(true)}>+</button>
+                </Grid>
+                <Grid className={classes.pageBody} item xs={10.7}>
+                    <div className={popupButton ? classes.uploadPopup : classes.uploadPopupHide} >
+                        <ClosePopupButton2 onClick={() => setPopupButton(false)}></ClosePopupButton2>
+                        <div className={classes.uploadInfo}>
+                            <img src={alertIcon} alt="alert icon" />
+                            <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
+                            <UnknownButton2>전체사업장</UnknownButton2>
+                        </div>
+                        <span></span>
+                        <span>의무조치별 상세 점검</span>
+                        <span></span>
+                        <div className={classes.uploadSearch}>
+                            <TextField
+                                id="standard-basic"
+                                placeholder="여수공장 시정조치요청 파일.hwp"
+                                variant="outlined"
+                                sx={{ width: 250 }}
+                                className={classes.popupTextField}
+                            />
+                            <SearchButton></SearchButton>
+                            <UnknownButton1>전체사업장</UnknownButton1>
+                        </div>
+                    </div>
+                    <div className={popupPlusButton ? classes.uploadPlusPopup : classes.uploadPopupHide} >
+                        <ClosePopupButton2 onClick={() => setPopupPlusButton(false)}></ClosePopupButton2>
+                        <h3>의무조치별 상세 점검</h3>
+                        <div className={classes.uploadSearch}>
+                            <TextField
+                                id="standard-basic"
+                                value={lawName}
+                                variant="outlined"
+                                sx={{ width: 250 }}
+                                className={classes.popupTextField}
+                                onChange={(event) => setLawName(event.target.value)}
+                            />
+                            <UnknownButton1 onClick={() => fetchInsertDutyButton()}>전체사업장</UnknownButton1>
+                        </div>
+                    </div>
                 </Grid>
                 <Grid item xs={12} className={classes.stepBox}>
                     <Stepper sx={{ mb: 4, mt: 4 }} nonLinear activeStep={0} className={classes.activeStep}>
@@ -514,14 +709,14 @@ const List = () => {
                             <StepLabel
                                 icon={<img src={!toggleList ? iconTabOn : iconTab} alt={!toggleList ? "inactive step" : "active step"} />}
                             >
-                                <Link className={!toggleList ? classes.activeLinkBtn : classes.linkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/list" onClick={() => setToggleList(false)} >표준상태보기</Link>
+                                <Link className={!toggleList ? classes.activeLinkBtn : classes.linkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/list" onClick={() => handleToggleList(false)} >표준상태보기</Link>
                             </StepLabel>
                         </Step>
                         <Step >
                             <StepLabel
                                 icon={<img src={toggleList ? iconTabOn : iconTab} alt={toggleList ? "active step" : "inactive step"} />}
                             >
-                                <Link className={toggleList ? classes.activeLinkBtn : classes.linkBtn} to="#" onClick={() => setToggleList(true)}>처벌 및 과태료보기</Link>
+                                <Link className={toggleList ? classes.activeLinkBtn : classes.linkBtn} to="#" onClick={() => handleToggleList(true)}>처벌 및 과태료보기</Link>
                             </StepLabel>
                         </Step>
                         <Step>
@@ -534,25 +729,25 @@ const List = () => {
                     </Stepper>
                 </Grid>
                 <Grid item xs={12} className={classes.boxTable}>
-                    <div className={classes.tableHead}>
+                    <div className={toggleList ? classes.tableHeadTwo : classes.tableHead}>
                         <div className={classes.tableRow}>
-                            <div className={classes.tableData}>
+                            <div className={toggleList ? classes.tableDataTwo : classes.tableDataOne}>
                                 <div>중대재해처벌법</div>
                                 <div>
                                     <span>관련법령</span>
                                     <span>항목</span>
                                 </div>
                             </div>
-                            <div className={classes.tableData}>중대재해처벌법 <br />시행령</div>
-                            <div className={classes.tableData}>위반법조항</div>
-                            <div className={classes.tableData}>위반행위</div>
-                            <div className={classes.tableData}>세부내용 -1</div>
+                            <div className={toggleList ? classes.tableDataTwo : classes.tableDataOne}>중대재해처벌법 <br />시행령</div>
+                            <div className={toggleList ? classes.tableDataTwo : classes.tableDataOne}>위반법조항</div>
+                            <div className={toggleList ? classes.tableDataTwo : classes.tableDataOne}>위반행위</div>
+                            <div className={toggleList ? classes.tableDataTwo : classes.tableDataOne}>세부내용 -1</div>
                             {!toggleList
                                 ? <>
-                                    <div className={classes.tableData}>세부내용 -2</div>
-                                    <div className={classes.tableData}>근거법조문</div>
+                                    <div className={classes.tableDataOne}>세부내용 -2</div>
+                                    <div className={classes.tableDataOne}>근거법조문</div>
                                 </>
-                                : <div className={classes.tableData}>
+                                : <div className={classes.tableDataTwo}>
                                     <div>처벌사항 및 과태료 금액 (만원)</div>
                                     <div>
                                         <span>1차 위반</span>
@@ -566,23 +761,21 @@ const List = () => {
                     <div className={classes.tableBody}>
                         {!!relatedRawList && relatedRawList?.length > 0 && relatedRawList.map(relatedRawItem =>
                         (<div className={classes.tableRow}>
-                            <div className={classes.tableData}>{relatedRawItem.relatedArticle}</div>
-                            <div className={classes.tableData}>{relatedRawItem.articleItem}<span></span></div>
-                            <div className={classes.tableData}>{relatedRawItem.seriousAccdntDecree} <span></span></div>
-                            <div className={classes.tableData}>{relatedRawItem.violatedArticle}</div>
-                            <div className={classes.tableData}>{relatedRawItem.violatedActivity}</div>
-                            <div className={classes.tableData}>{relatedRawItem.violationDetail1}</div>
-
+                            <div className={toggleList ? classes.tableDataTwo : classes.tableDataOne}>{relatedRawItem.relatedArticle}</div>
+                            <div className={toggleList ? classes.tableDataTwo : classes.tableDataOne}>{relatedRawItem.articleItem}<span></span></div>
+                            <div className={toggleList ? classes.tableDataTwo : classes.tableDataOne}>{relatedRawItem.seriousAccdntDecree} <span></span></div>
+                            <div className={toggleList ? classes.tableDataTwo : classes.tableDataOne}>{relatedRawItem.violatedArticle}</div>
+                            <div className={toggleList ? classes.tableDataTwo : classes.tableDataOne}>{relatedRawItem.violatedActivity}</div>
+                            <div className={toggleList ? classes.tableDataTwo : classes.tableDataOne}>{relatedRawItem.violationDetail1}</div>
                             {!toggleList
                                 ? <>
-                                    <div className={classes.tableData}>{relatedRawItem.violationDetail2}</div>
-                                    <div className={classes.tableData}>{relatedRawItem.baseArticle}</div>
+                                    <div className={classes.tableDataOne}>{relatedRawItem.violationDetail2}</div>
+                                    <div className={classes.tableDataOne}>{relatedRawItem.baseArticle}</div>
                                 </>
-                                :
-                                <>
-                                    <div className={classes.tableData}>{relatedRawItem.stPenalty1}</div>
-                                    <div className={classes.tableData}>{relatedRawItem.stPenalty2}</div>
-                                    <div className={classes.tableData}>{relatedRawItem.stPenalty3}</div>
+                                : <>
+                                    <div className={classes.tableDataTwo}>{relatedRawItem.stPenalty1}</div>
+                                    <div className={classes.tableDataTwo}>{relatedRawItem.stPenalty2}</div>
+                                    <div className={classes.tableDataTwo}>{relatedRawItem.stPenalty3}</div>
                                 </>}
                         </div>))}
                     </div>
@@ -593,7 +786,7 @@ const List = () => {
                         <Pagination count={relatedRawList?.length && Math.ceil(relatedRawList[0]?.totalCount / 10)} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
                     </Stack>
                     <div>
-                        {/* <ExcelButton>엑셀 다운로드</ExcelButton> */}
+                        <ExcelButton>엑셀 다운로드</ExcelButton>
                     </div>
                 </Grid>
             </Grid>

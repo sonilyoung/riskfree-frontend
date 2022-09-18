@@ -13,6 +13,7 @@ import StepLabel from '@mui/material/StepLabel';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
+import popupClose2 from '../../../../../../../../assets/images/btn_popClose2.png';
 import iconTab from '../../../../../../../../assets/images/ic_tab.png';
 import iconTabOn from '../../../../../../../../assets/images/ic_tab_on.png';
 
@@ -21,14 +22,15 @@ import pageLast from '../../../../../../../../assets/images/btn_last.png';
 import pageNext from '../../../../../../../../assets/images/btn_nxt.png';
 import pagePrev from '../../../../../../../../assets/images/btn_pre.png';
 
+import alertIcon from '../../../../../../../../assets/images/ic_refer.png';
 import excelIcon from '../../../../../../../../assets/images/ic_excel.png';
+import searchIcon from '../../../../../../../../assets/images/ic_search.png';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
 import TextField from '@mui/material/TextField';
 import { DefaultLayout } from '../../../../../../../../layouts/Default';
-import { useGetRelatedRawButtonMutation, useGetRelatedRawMutation, useInsertDutyButtonMutation } from '../../../../../../../../hooks/api/RelatedLawManagement/RelatedLawManagement';
-import { useUpdateRelatedArticleMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
+import { useGetRelatedRawButtonMutation, useGetRelatedRawMutation, useInsertDutyButtonMutation, useUpdateRelatedRawMutation } from '../../../../../../../../hooks/api/RelatedLawManagement/RelatedLawManagement';
 import { useNavigate } from 'react-router-dom';
 import { selectBaselineId } from '../../../../../../../../slices/selections/MainSelection';
 import { useSelector } from 'react-redux';
@@ -234,6 +236,94 @@ const useStyles = makeStyles(() => ({
             fontSize: '16px'
         }
     },
+    uploadPopup: {
+        position: 'absolute',
+        zIndex: '1000',
+        top: '0',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '400px',
+        height: '400px',
+        background: '#fff',
+        borderRadius: '30px',
+        padding: '40px',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexWrap: 'wrap',
+        boxShadow: '0px 0px 10px 10000px rgba(0,0,0,0.4)',
+        '& >span': {
+            width: '20%',
+            height: '20px',
+            borderBottom: '1px solid #bdcbe9',
+            transform: 'translateY(-5px)',
+            '&:nth-of-type(2)': {
+                width: '60%',
+                border: 'none',
+                padding: '0 10px',
+                boxSizing: 'border-box',
+                textAlign: 'center',
+                transform: 'unset',
+            }
+        },
+        '& >button': {
+            position: 'absolute',
+            top: '0px',
+            right: '-65px'
+        }
+    },
+    uploadPlusPopup: {
+        position: 'absolute',
+        zIndex: '1000',
+        top: '0',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '300px',
+        // height: '250px',
+        background: '#fff',
+        borderRadius: '30px',
+        padding: '40px',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        boxShadow: '0px 0px 10px 10000px rgba(0,0,0,0.4)',
+        '& > h3': {
+            margin: '0 0 10px',
+        },
+        '& >button': {
+            position: 'absolute',
+            top: '0px',
+            right: '-65px'
+        }
+    },
+    uploadPopupHide: {
+        display: 'none !important',
+    },
+    uploadInfo: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        height: '50%',
+        '& >*': {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        '& img': {
+            width: '30px',
+            height: '30px',
+        }
+    },
+    uploadSearch: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        '& button:first-of-type': {
+            marginLeft: '10px'
+        }
+    },
     linkBtn: {
         textDecoration: "none",
         color: "#adb0b2",
@@ -307,9 +397,116 @@ const useStyles = makeStyles(() => ({
             }
         }
     },
+    pageBody: {
+        position: 'relative',
+        display: 'flex',
+        backgroundImage: 'linear-gradient(#424762, #33374f)',
+        borderRadius: '32px 32px 0 0',
+        width: '1720px'
+    },
+    popupTextField: {
+        marginBottom: '10px !important',
+        overflow: 'hidden',
+        height: '40px',
+        borderRadius: ' 46px',
+        '& .MuiOutlinedInput-notchedOutline': {
+            border: 'none'
+        },
+        '& >div': {
+            background: '#fff',
+            fontSize: '16px',
+        },
+        '& input': {
+            fontSize: '16px',
+            height: '40px',
+            boxSizing: 'border-box',
+            background: '#eff2f9',
+        }
+    },
 
 }));
 
+
+const ClosePopupButton2 = styled(ButtonUnstyled)`
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background:url(${popupClose2}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s; 
+`;
+
+const UnknownButton1 = styled(ButtonUnstyled)`
+    width: 150px;
+    height: 46px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: -1.08px;
+    border-radius: 46px;
+    background: #00adef;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #3a5298;
+    }   
+`;
+
+const UnknownButton2 = styled(ButtonUnstyled)`
+    width: 200px;
+    height: 46px;
+    color: #000;
+    font-size: 20px;
+    letter-spacing: -1.08px;
+    border-radius: 46px;
+    background: #eff2f9;
+    border: 2px solid #00adef;
+    cursor: pointer;
+    transition: border-color .2s;
+    &:hover {
+        border-color: #3a5298;
+    }  
+`;
+
+const SearchButton = styled(ButtonUnstyled)`
+    width: 46px;
+    height: 46px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: -1.08px;
+    border-radius: 50%;
+    background: #00adef url(${searchIcon}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #3a5298 url(${searchIcon}) no-repeat 50% 50%;
+    }   
+`;
+
+const ExcelButton = styled(ButtonUnstyled)`
+    width: 152px;
+    height: 40px;
+    border: 1px solid #6e7884;
+    border-radius: 5px;
+    color: #333 ! important;
+    background: #fff;
+    transition: background .2s;
+    cursor: pointer;
+    &:before {
+        content: "";
+        display: inline-block;
+        width: 17px;
+        height: 15px;
+        vertical-align: middle;
+        margin-right: 4px;
+        background: url(${excelIcon}) no-repeat 0 0;
+    }
+    &:hover {
+        background: #d2dcf3;
+    }
+`
 const BlueButton = styled(ButtonUnstyled)`
     border: none;
     width: 140px;
@@ -349,44 +546,23 @@ const WhiteButton = styled(ButtonUnstyled)`
 }
 `;
 
-const ExcelButton = styled(ButtonUnstyled)`
-    width: 152px;
-    height: 40px;
-    border: 1px solid #6e7884;
-    border-radius: 5px;
-    color: #333 ! important;
-    background: #fff;
-    transition: background .2s;
-    cursor: pointer;
-    &:before {
-        content: "";
-        display: inline-block;
-        width: 17px;
-        height: 15px;
-        vertical-align: middle;
-        margin-right: 4px;
-        background: url(${excelIcon}) no-repeat 0 0;
-    }
-    &:hover {
-        background: #d2dcf3;
-    }
-`
-
-const MPDLawThird = () => {
+const Registration = ({ handleToggleList }) => {
     const classes = useStyles();
     const navigate = useNavigate();
 
     const [relatedRawList, setRelatedRawList] = useState([]);
     const [relatedRawButtonList, setRelatedRawButtonList] = useState([]);
+    const [updateList, setUpdateList] = useState([]);
+    const [lawName, setLawName] = useState("");
+    const [lawId, setLawId] = useState(1);
+    const [popupButton, setPopupButton] = useState(false);
+    const [popupPlusButton, setPopupPlusButton] = useState(false);
     const [page, setPage] = useState(1);
-    const [updateItem, setUpdateItem] = useState({});
-    const [updateList, setUpdateList] = useState([updateItem]);
-
 
     const [getRelatedRaw] = useGetRelatedRawMutation();
     const [insertDutyButton] = useInsertDutyButtonMutation();
     const [getRelatedRawButton] = useGetRelatedRawButtonMutation();
-    const [updateRelatedRaw] = useUpdateRelatedArticleMutation();
+    const [updateRelatedRaw] = useUpdateRelatedRawMutation();
 
     const currentBaseline = useSelector(selectBaselineId);
 
@@ -398,14 +574,21 @@ const MPDLawThird = () => {
         setPage(value)
     }
 
-    const fetchRelatedRawList = async () => {
+    const fetchRelatedRawList = async (lawId) => {
         const response = await getRelatedRaw({
-            "lawId": 1,
+            "lawId": lawId,
             "baselineId": currentBaseline,
             "countPerPage": 10,
             "pageNum": page
         });
         setRelatedRawList(response.data.RET_DATA);
+        const currentUpdateList = response.data?.RET_DATA?.map(relatedRawItem => {
+            return {
+                "dutyImproveId": relatedRawItem.dutyImproveId,
+                "acctionCn": relatedRawItem.acctionCn
+            }
+        });
+        setUpdateList(currentUpdateList);
     }
 
     const fetchRelatedRawButtonList = async () => {
@@ -414,32 +597,23 @@ const MPDLawThird = () => {
     }
 
     const fetchInsertDutyButton = async () => {
-        const response = await insertDutyButton({});
+        await insertDutyButton({
+            "lawName": lawName
+        });
+        setPopupPlusButton(false);
+        fetchRelatedRawButtonList();
     }
 
     const handleUpdateRelatedRawList = () => {
-        updateRelatedRaw({
-            "updateList": [
-                {
-                    "dutyImproveId": 1079,
-                    "acctionCn": "테스트1"
-                },
-                {
-                    "dutyImproveId": 1080,
-                    "acctionCn": "테스트"
-                }
-            ]
-        })
+        updateRelatedRaw({ "updateList": updateList })
             .then(res => console.log(res))
-            .then(() => handleRedirect());
+            .then(() => fetchRelatedRawList(lawId));
     }
 
     useEffect(() => {
-        fetchRelatedRawList();
+        fetchRelatedRawList(lawId);
         fetchRelatedRawButtonList();
     }, [page]);
-
-    console.log(updateList);
 
     return (
         <DefaultLayout>
@@ -450,12 +624,51 @@ const MPDLawThird = () => {
                     </Typography>
                 </Grid>
                 <Grid item xs={12} className={classes.headerButtons}>
-                    {!!relatedRawButtonList && relatedRawButtonList?.length > 0 && relatedRawButtonList.map(relatedRawButtonItem =>
-                    (<Link to="#" className={classes.buttonLink}>
+                    {!!relatedRawButtonList && relatedRawButtonList.length > 0 && relatedRawButtonList.map(relatedRawButtonItem =>
+                    (<Link to="#" className={classes.buttonLink} onDoubleClick={() => setPopupButton(true)} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)}>
                         <span>{relatedRawButtonItem?.lawName}</span>
                     </Link>)
                     )}
-                    <button className={classes.buttonPlus}>+</button>
+                    <button className={classes.buttonPlus} onClick={() => setPopupPlusButton(true)}>+</button>
+                </Grid>
+                <Grid className={classes.pageBody} item xs={10.7}>
+                    <div className={popupButton ? classes.uploadPopup : classes.uploadPopupHide} >
+                        <ClosePopupButton2 onClick={() => setPopupButton(false)}></ClosePopupButton2>
+                        <div className={classes.uploadInfo}>
+                            <img src={alertIcon} alt="alert icon" />
+                            <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
+                            <UnknownButton2>전체사업장</UnknownButton2>
+                        </div>
+                        <span></span>
+                        <span>의무조치별 상세 점검</span>
+                        <span></span>
+                        <div className={classes.uploadSearch}>
+                            <TextField
+                                id="standard-basic"
+                                placeholder="여수공장 시정조치요청 파일.hwp"
+                                variant="outlined"
+                                sx={{ width: 250 }}
+                                className={classes.popupTextField}
+                            />
+                            <SearchButton></SearchButton>
+                            <UnknownButton1>전체사업장</UnknownButton1>
+                        </div>
+                    </div>
+                    <div className={popupPlusButton ? classes.uploadPlusPopup : classes.uploadPopupHide} >
+                        <ClosePopupButton2 onClick={() => setPopupPlusButton(false)}></ClosePopupButton2>
+                        <h3>의무조치별 상세 점검</h3>
+                        <div className={classes.uploadSearch}>
+                            <TextField
+                                id="standard-basic"
+                                value={lawName}
+                                variant="outlined"
+                                sx={{ width: 250 }}
+                                className={classes.popupTextField}
+                                onChange={(event) => setLawName(event.target.value)}
+                            />
+                            <UnknownButton1 onClick={() => fetchInsertDutyButton()}>전체사업장</UnknownButton1>
+                        </div>
+                    </div>
                 </Grid>
                 <Grid item xs={12} className={classes.stepBox}>
                     <Stepper sx={{ mb: 4, mt: 4 }} nonLinear activeStep={2} className={classes.activeStep}>
@@ -463,14 +676,14 @@ const MPDLawThird = () => {
                             <StepLabel
                                 icon={<img src={iconTab} alt="inactive step" />}
                             >
-                                <Link className={classes.linkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/list">표준상태보기</Link>
+                                <Link className={classes.linkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/list" onClick={() => handleToggleList(false)}>표준상태보기</Link>
                             </StepLabel>
                         </Step>
                         <Step>
                             <StepLabel
                                 icon={<img src={iconTab} alt="inactive step" />}
                             >
-                                <Link className={classes.linkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/list">처벌 및 과태료보기</Link>
+                                <Link className={classes.linkBtn} to="/dashboard/employee/measure-to-manage-performance-od-duties-law/list" onClick={() => handleToggleList(true)}>처벌 및 과태료보기</Link>
                             </StepLabel>
                         </Step>
                         <Step>
@@ -501,7 +714,7 @@ const MPDLawThird = () => {
                             </div>
                         </div>
                         <div className={classes.tableBody}>
-                            {!!relatedRawList && relatedRawList?.length > 0 && relatedRawList.map(relatedRawItem =>
+                            {!!relatedRawList && relatedRawList?.length > 0 && relatedRawList.map((relatedRawItem, index) =>
                             (<div className={classes.tableRow}>
                                 <div className={classes.tableData}>{relatedRawItem.relatedArticle}</div>
                                 <div className={classes.tableData}>{relatedRawItem.articleItem}<span></span></div>
@@ -516,12 +729,11 @@ const MPDLawThird = () => {
                                             id="outlined-multiline-static"
                                             multiline
                                             rows={3}
-                                            // placeholder={relatedRawItem.acctionCn}
-                                            value={relatedRawItem.acctionCn}
-                                            onChange={(event) => setUpdateItem({
-                                                "dutyImproveId": relatedRawItem.dutyImproveId,
-                                                "acctionCn": event.target.value
-                                            })}
+                                            value={updateList[index]?.acctionCn}
+                                            onChange={(event) => {
+                                                const changedUpdateList = updateList.map((updateItem, i) => i === index ? { ...updateItem, "acctionCn": event.target.value } : updateItem);
+                                                setUpdateList(changedUpdateList);
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -536,7 +748,7 @@ const MPDLawThird = () => {
                     <Pagination count={!!relatedRawButtonList && relatedRawList?.length && Math.ceil(relatedRawList && (relatedRawList[0]?.totalCount / 10))} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
                 </Stack>
                 <div>
-                    {/* <ExcelButton>엑셀 다운로드</ExcelButton> */}
+                    <ExcelButton>엑셀 다운로드</ExcelButton>
                 </div>
             </Grid>
             <Grid item xs={12} className={classes.footerButtons}>
@@ -547,4 +759,4 @@ const MPDLawThird = () => {
     );
 };
 
-export default MPDLawThird;
+export default Registration;

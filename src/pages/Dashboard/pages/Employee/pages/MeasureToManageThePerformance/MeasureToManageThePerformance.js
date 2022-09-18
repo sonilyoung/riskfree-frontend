@@ -1,20 +1,22 @@
-import React from 'react';
-import { Route, Routes, useParams } from 'react-router-dom'
-import { DefaultLayout } from '../../../../../../layouts/Default';
+import React, { useState } from 'react';
+import { Route, Routes } from 'react-router-dom'
 import List from './components/List/List'
-import ListTwo from './components/ListTwo/ListTwo';
 import Registration from './components/Registration/Registration';
 
 
-const MPDLawFirst = () => {
+const MeasureToManageThePerformance = () => {
+    const [toggleList, setToggleList] = useState(false);
+
+    const handleToggleList = (value) => {
+        setToggleList(value);
+    }
 
     return (
         <Routes>
-            <Route path="list" element={<List />} />
-            <Route path="list-two" element={<ListTwo />} />
-            <Route path="registration" element={<Registration />} />
+            <Route path="list" element={<List handleToggleList={handleToggleList} toggleList={toggleList} />} />
+            <Route path="registration" element={<Registration handleToggleList={handleToggleList} />} />
         </Routes>
     );
 };
 
-export default MPDLawFirst;
+export default MeasureToManageThePerformance;
