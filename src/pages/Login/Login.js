@@ -88,7 +88,22 @@ const Login = () => {
             //TODO: This message has to be replaced with dialog.
             alert('Credentials are wrong. Please try again.');
         }
+
+
     }
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.keyCode === 13) {
+                event.preventDefault()
+                handleLogin()
+            }
+        }
+        document.addEventListener('keydown', handleKeyDown)
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [])
 
     return (
         <WideLayout>

@@ -312,10 +312,12 @@ const Registration = () => {
     const todaysDate = moment().format("YYYY-MM-DD")
     const [getLoginInfo] = useGetLoginInfoMutation()
     const [loginInfo, setLoginInfo] = useState({})
+    const [recvUserName, setRecvUserName] = useState("")
 
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
         setLoginInfo(response.data.RET_DATA)
+        setRecvUserName(response?.data?.RET_DATA.name)
     }
 
     const [num, setNum] = React.useState('');
@@ -325,9 +327,6 @@ const Registration = () => {
     };
 
     const [law, setLaw] = useState({
-        recvDate: todaysDate,
-        recvUserName: loginInfo.name,
-        recvCd: "",
         cmmdOrgCd001: "",
         cmmdOrgCd002: "",
         cmmdOrgCd003: "",
@@ -344,6 +343,9 @@ const Registration = () => {
         lawImproveId: 1,
         occurPlace: "1층작업실",
         pageNum: 0,
+        recvCd: "",
+        recvDate: todaysDate,
+        recvUserName: recvUserName,
     });
 
     const handleRedirect = () => {
@@ -366,6 +368,10 @@ const Registration = () => {
     useEffect(() => {
         handleLoginInfo()
     }, [])
+
+    useEffect(() => {
+        setLaw({ ...law, "recvUserName": loginInfo?.name })
+    }, [law])
 
     return (
         <DefaultLayout>
@@ -391,7 +397,7 @@ const Registration = () => {
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>{todaysDate}</div>
                                 <div className={classes.rowTitle}>접수자</div>
-                                <div className={classes.rowInfo}>{loginInfo.name}</div>
+                                <div className={classes.rowInfo}>{loginInfo?.name}</div>
                                 <div className={classes.rowTitle}>접수형태</div>
                                 <div className={classes.rowInfo}>
                                     <FormControl
@@ -399,7 +405,7 @@ const Registration = () => {
                                         onChange={(event) =>
                                             setLaw({
                                                 ...law,
-                                                recvCd: event.target.value,
+                                                "recvCd": event.target.value,
                                             })
                                         }
                                     >
@@ -459,7 +465,7 @@ const Registration = () => {
                                                         onChange={() =>
                                                             setLaw({
                                                                 ...law,
-                                                                cmmdOrgCd001: law.cmmdOrgCd001 ? "" : "001",
+                                                                "cmmdOrgCd001": law.cmmdOrgCd001 ? "" : "001",
                                                             })
                                                         }
                                                     />
@@ -477,7 +483,7 @@ const Registration = () => {
                                                         onChange={() =>
                                                             setLaw({
                                                                 ...law,
-                                                                cmmdOrgCd002: law.cmmdOrgCd002 ? "" : "002",
+                                                                "cmmdOrgCd002": law.cmmdOrgCd002 ? "" : "002",
                                                             })
                                                         }
                                                     />
@@ -495,7 +501,7 @@ const Registration = () => {
                                                         onChange={() =>
                                                             setLaw({
                                                                 ...law,
-                                                                cmmdOrgCd003: law.cmmdOrgCd003 ? "" : "003",
+                                                                "cmmdOrgCd003": law.cmmdOrgCd003 ? "" : "003",
                                                             })
                                                         }
                                                     />
@@ -512,7 +518,7 @@ const Registration = () => {
                                                     onChange={() =>
                                                         setLaw({
                                                             ...law,
-                                                            cmmdOrgCd004: law.cmmdOrgCd004 ? "" : "004",
+                                                            "cmmdOrgCd004": law.cmmdOrgCd004 ? "" : "004",
                                                         })
                                                     }
                                                 />
@@ -607,7 +613,7 @@ const Registration = () => {
                                         onChange={(event) =>
                                             setLaw({
                                                 ...law,
-                                                issueReason: event.target.value,
+                                                "issueReason": event.target.value,
                                             })
                                         }
                                     />
@@ -627,12 +633,13 @@ const Registration = () => {
                                         multiline
                                         rows={4}
                                         value={law.preventCn}
-                                        onChange={(event) =>
+                                        onChange={(event) => {
                                             setLaw({
                                                 ...law,
-                                                preventCn: event.target.value,
+                                                "preventCn": event.target.value,
                                             })
-                                        }
+                                            console.log(law)
+                                        }}
                                     />
                                 </div>
                             </div>

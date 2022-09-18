@@ -1229,7 +1229,7 @@ const useStyles = makeStyles(() => ({
         boxSizing: 'border-box',
         display: 'flex',
         flexWrap: 'wrap',
-        display: 'none !important',
+        // display: 'none !important',
         '& >span': {
             width: '20%',
             height: '20px',
@@ -1249,6 +1249,9 @@ const useStyles = makeStyles(() => ({
             top: '0px',
             right: '-65px'
         }
+    },
+    uploadPopupClose: {
+        display: 'none !important',
     },
     uploadInfo: {
         display: 'flex',
@@ -1842,6 +1845,7 @@ const Employee = () => {
     const [longitude, setLongitude] = useState("")
     const [getWeather] = useGetWeatherMutation()
     const [weatherData, setWeatherData] = useState({})
+    const [inspectionDocsPopup, setInspectionDocsPopup] = useState(false)
     const dispatch = useDispatch();
 
     const [userInfo, setUserInfo] = useState({
@@ -1910,11 +1914,9 @@ const Employee = () => {
     const fetchAccidentTotalList = async () => {
         const response = await getAccidentTotal({
             "baselineId": currentBaselineId,
-            "caughtCnt": 0,
-            "companyId": companyId,
             "workplaceId": userWorkplaceId
         });
-        setAccidentTotal(response.data.RET_DATA);
+        setAccidentTotal(response?.data?.RET_DATA);
     }
 
     const fetchSafeWorkHistoryList = async () => {
@@ -1943,7 +1945,7 @@ const Employee = () => {
             "baselineId": currentBaselineId,
             "workplaceId": userWorkplaceId
         })
-        setEssentialRates(response.data.RET_DATA)
+        setEssentialRates(response?.data?.RET_DATA)
     }
 
     const [date, setDate] = React.useState(null);
@@ -1968,14 +1970,14 @@ const Employee = () => {
             "baselineId": currentBaselineId,
             "workplaceId": userWorkplaceId
         })
-        setAccidentsPreventionPercentage(response.data.RET_DATA)
+        setAccidentsPreventionPercentage(response?.data?.RET_DATA)
     }
     const fetchImprovementLawOrderPercentage = async () => {
         const response = await getImprovementLawOrder({
             "baselineId": currentBaselineId,
             "workplaceId": userWorkplaceId
         })
-        setLawOrderPercentage(response.data.RET_DATA)
+        setLawOrderPercentage(response?.data?.RET_DATA)
     }
 
     const fetchRelatedLawRatePercentage = async () => {
@@ -1983,7 +1985,7 @@ const Employee = () => {
             "baselineId": currentBaselineId,
             "workplaceId": userWorkplaceId
         })
-        setRelatedLawRatePercentage(response.data.RET_DATA)
+        setRelatedLawRatePercentage(response?.data?.RET_DATA)
     }
 
     const fetchDutyDetailList = async () => {
@@ -1992,7 +1994,7 @@ const Employee = () => {
             "groupId": clickedEssentialRate,
             "workplaceId": userWorkplaceId
         })
-        setDutyDetailList(response.data.RET_DATA)
+        setDutyDetailList(response?.data?.RET_DATA)
         setClickedDuty(!!(response.data.RET_DATA) && !!(response.data.RET_DATA) && response?.data?.RET_DATA[0]?.articleNo)
     }
 
@@ -2009,40 +2011,40 @@ const Employee = () => {
         const response = await getInspectionsDocs({
             "articleNo": clickedDuty
         })
-        setInspectionsDocs(response.data.RET_DATA)
+        setInspectionsDocs(response?.data?.RET_DATA)
     }
 
     const fetchDutyCycle = async () => {
         const response = await getDutyCycle({
             'articleNo': clickedDuty
         })
-        setDutyCycle(response.data.RET_DATA)
+        setDutyCycle(response?.data?.RET_DATA)
     }
 
     const fetchDutyAssigned = async () => {
         const response = await getDutyAssigned({
             'articleNo': clickedDuty
         })
-        setDutyAssigned(response.data.RET_DATA)
+        setDutyAssigned(response?.data?.RET_DATA)
     }
 
     const fetchRelatedArticle = async () => {
         const response = await getRelatedArticle({
             'articleNo': clickedDuty
         })
-        setRelatedArticle(response.data.RET_DATA)
+        setRelatedArticle(response?.data?.RET_DATA)
     }
 
     const fetchGuideLine = async () => {
         const response = await getGuideLine({
             'articleNo': clickedDuty
         })
-        setGuideLine(response.data.RET_DATA)
+        setGuideLine(response?.data?.RET_DATA)
     }
 
     const fetchWorkplaceList = async () => {
         const response = await getWorkplaceList()
-        setWorkplaceList(response.data.RET_DATA)
+        setWorkplaceList(response?.data?.RET_DATA)
     }
 
     function handleFactoryChange(props) {
@@ -2055,7 +2057,7 @@ const Employee = () => {
             "latitude": latitude,
             "longitude": longitude,
         })
-        setWeatherData(response.data.RET_DATA)
+        setWeatherData(response?.data?.RET_DATA)
     }
 
     useEffect(() => {
@@ -2329,7 +2331,7 @@ const Employee = () => {
                             <div className={classes.adminFieldText}>{companyInfo?.shGoal}</div>
                         </div>
                         <div className={classes.adminLogo}>
-                            {!!(companyInfo) && !!companyInfo.logoImg && <img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />}
+                            {!!(companyInfo) && !!companyInfo.logoImg && (<img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
                         </div>
                         <div className={classes.adminField + ' ' + classes.adminFieldRight}>
                             <div className={classes.adminFieldText}>경영방침</div>
@@ -2497,8 +2499,8 @@ const Employee = () => {
 
                 </Grid>
                 <Grid className={classes.pageBody} item xs={10.7}>
-                    <div className={classes.uploadPopup}>
-                        <ClosePopupButton2></ClosePopupButton2>
+                    <div className={inspectionDocsPopup ? classes.uploadPopup : classes.uploadPopupClose}>
+                        <ClosePopupButton2 onClick={() => setInspectionDocsPopup(false)}></ClosePopupButton2>
                         <div className={classes.uploadInfo}>
                             <img src={alertIcon} alt="alert icon" />
                             <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
@@ -2558,7 +2560,7 @@ const Employee = () => {
                     </div>
                     <div className={classes.managementOrder}>
                         {/* 관리차수<strong>11</strong> 차 :<strong>22.01.01 ~ 22.04.30</strong> */}
-                        {baselineData && <>{baselineData && <>{baselineData?.baselineName} :<strong>{baselineData?.baselineStart} ~ {baselineData?.baselineEnd}</strong></>}</>}
+                        {baselineData && <>{baselineData?.baselineName} :<strong>{baselineData?.baselineStart} ~ {baselineData?.baselineEnd}</strong></>}
                     </div>
                     <div className={classes.managementSide}>
                         <FormControl sx={{ width: 130 }} className={classes.dropMenu + ' page_drop_menu'}>
@@ -2568,7 +2570,7 @@ const Employee = () => {
                                 onChange={(e) => setBaselineIdForSelect(e.target.value)}
                                 inputProps={{ 'aria-label': 'Without label' }}>
                                 {!!baselineList && !!baselineList.length && baselineList?.map((baseline, index) => (
-                                    <MenuItem key={index} value={baseline.baselineId}>{baseline.baselineName}</MenuItem>
+                                    <MenuItem key={index} value={baseline.baselineId || ""}>{baseline.baselineName}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
@@ -2646,7 +2648,7 @@ const Employee = () => {
                                     <div className={classes.listTitle}><strong>{!!(inspectionsDocs) && inspectionsDocs[0]?.fileCount}</strong>건 /{!!(inspectionsDocs) && !!(inspectionsDocs.length) && inspectionsDocs[0].totalCount}건</div>
                                     <ul className={classes.menuList + ' buttonList'}>
                                         {inspectionsDocs?.map((inspection) => (<><li>
-                                            {inspection.fileId === null ? <FileButtonNone></FileButtonNone> : <FileButtonExis><span className={'orange'}>중</span></FileButtonExis>}
+                                            {inspection.fileId === null ? <FileButtonNone onClick={() => setInspectionDocsPopup(true)}></FileButtonNone> : <FileButtonExis><span className={'orange'}>중</span></FileButtonExis>}
                                         </li>
                                             {/* <li>
                                                 <FileButtonExis><span className={'orange'}>중</span></FileButtonExis>

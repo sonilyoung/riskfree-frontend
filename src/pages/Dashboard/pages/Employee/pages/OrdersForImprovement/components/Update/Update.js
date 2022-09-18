@@ -427,7 +427,7 @@ const Update = () => {
                                         onChange={(event) =>
                                             setLaw({
                                                 ...law,
-                                                recvCd: event.target.value,
+                                                "recvCd": event.target.value,
                                             })
                                         }
                                     >
@@ -487,7 +487,7 @@ const Update = () => {
                                                         onChange={() =>
                                                             setLaw({
                                                                 ...law,
-                                                                cmmdOrgCd001: law.cmmdOrgCd001 ? "" : "001",
+                                                                "cmmdOrgCd001": law.cmmdOrgCd001 ? "" : "001",
                                                             })
                                                         }
                                                         checked={!!law.cmmdOrgCd001}
@@ -506,7 +506,7 @@ const Update = () => {
                                                         onChange={() =>
                                                             setLaw({
                                                                 ...law,
-                                                                cmmdOrgCd002: law.cmmdOrgCd002 ? "" : "002",
+                                                                "cmmdOrgCd002": law.cmmdOrgCd002 ? "" : "002",
                                                             })
                                                         }
                                                         checked={!!law.cmmdOrgCd002}
@@ -525,7 +525,7 @@ const Update = () => {
                                                         onChange={() =>
                                                             setLaw({
                                                                 ...law,
-                                                                cmmdOrgCd003: law.cmmdOrgCd003 ? "" : "003",
+                                                                "cmmdOrgCd003": law.cmmdOrgCd003 ? "" : "003",
                                                             })
                                                         }
                                                         checked={!!law.cmmdOrgCd003}
@@ -543,7 +543,7 @@ const Update = () => {
                                                     onChange={() =>
                                                         setLaw({
                                                             ...law,
-                                                            cmmdOrgCd004: law.cmmdOrgCd004 ? "" : "004",
+                                                            "cmmdOrgCd004": law.cmmdOrgCd004 ? "" : "004",
                                                         })
                                                     }
                                                     checked={!!law.cmmdOrgCd004}
@@ -637,7 +637,7 @@ const Update = () => {
                                         onChange={(event) =>
                                             setLaw({
                                                 ...law,
-                                                issueReason: event.target.value,
+                                                "issueReason": event.target.value,
                                             })
                                         }
                                     />
@@ -660,7 +660,7 @@ const Update = () => {
                                         onChange={(event) =>
                                             setLaw({
                                                 ...law,
-                                                preventCn: event.target.value,
+                                                "preventCn": event.target.value,
                                             })
                                         }
                                     />

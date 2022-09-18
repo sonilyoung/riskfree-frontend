@@ -849,7 +849,7 @@ const Default = ({ children }) => {
                             {/* <AdminButton className={classes.mainMenuButton}></AdminButton> */}
                             <div className={classes.weatherSection}>
                                 <span>
-                                    <img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${weatherData?.weatherImgUrl}`} alt="weather icon" />
+                                    {weatherData && <img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${weatherData?.weatherImgUrl}`} alt="weather icon" />}
                                 </span>
                                 <span>{weatherData?.temperature} °C</span>
                                 <span>{weatherData?.address}</span>
