@@ -92,7 +92,9 @@ function Upload({ open, onClose, onInputChange, onUpload }) {
                     type="file"
                     onChange={onInputChange}
                 />
-                <SearchButton></SearchButton>
+                <SearchButton component="label">
+                    <input hidden accept="image/*" multiple type="file" />
+                </SearchButton>
                 <UnknownButton1 onClick={ onUpload }>전체사업장</UnknownButton1>
             </div>
         </div>

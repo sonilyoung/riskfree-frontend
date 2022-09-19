@@ -854,7 +854,7 @@ const useStyles = makeStyles(() => ({
         '&.settings_popup': {
             display: "block",
             top: '65px',
-            left: '-80px'
+            left: '-30px'
         },
         '&.settings_popupClose': {
             display: "none"

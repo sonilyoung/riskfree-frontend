@@ -43,8 +43,8 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'center',
-        '& button:first-of-type': {
-            marginLeft: '10px'
+        '& label:first-of-type': {
+            marginLeft: '10px',
         }
     },
     uploadInfo: {
@@ -76,7 +76,10 @@ const useStyles = makeStyles(() => ({
             fontSize: '16px',
             height: '40px',
             boxSizing: 'border-box',
-        }
+            '&::-webkit-file-upload-button': {
+                display: 'none'
+            },
+        },
     },
 }))
 

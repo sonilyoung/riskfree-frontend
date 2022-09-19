@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DefaultLayout } from '../../../../layouts/Default';
+import { DefaultLightLayout } from '../../../../layouts/DefaultLight';
 
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -118,9 +118,10 @@ const useStyles = makeStyles(() => ({
                 width: '180px'
             },
             '&:nth-of-type(3)': {
-                width: '890px',
+                width: '910px',
                 padding: '0',
                 justifyContent: 'flex-start',
+                background: '#c8ddf2',
                 '& >div': {
                     display: 'flex',
                     justifyContent: 'center',
@@ -140,10 +141,10 @@ const useStyles = makeStyles(() => ({
                         width: '100px',
                     },
                     '&:nth-of-type(3)': {
-                        width: '119px',
+                        width: '130px',
                     },
                     '&:last-of-type': {
-                        width: '119px',
+                        width: '128px',
                         borderRight: 'none'
                     },
                 }
@@ -157,9 +158,12 @@ const useStyles = makeStyles(() => ({
             '&:nth-of-type(6)': {
                 width: '94px'
             },
-            '&:nth-of-type(7), &:nth-of-type(8)': {
+            '&:nth-of-type(7)': {
                 width: '80px'
             },
+            '&:nth-of-type(8)': {
+                width: '60px',
+            }
         }
     },
     tableBody: {
@@ -192,7 +196,7 @@ const useStyles = makeStyles(() => ({
         alignContent: 'center',
         flexWrap: 'wrap',
         padding: '13px 12px',
-        height: '40px',
+        minHeight: '40px',
         '&:first-of-type, &:nth-of-type(3)': {
             width: '100px'
         },
@@ -203,7 +207,7 @@ const useStyles = makeStyles(() => ({
             width: '110px'
         },
         '&:nth-of-type(4), &:nth-of-type(10)': {
-            width: '120px'
+            width: '130px'
         },
         '&:nth-of-type(12)': {
             width: '266px'
@@ -214,6 +218,9 @@ const useStyles = makeStyles(() => ({
         '&:nth-of-type(13)': {
             width: '94px'
         },
+        '&:last-of-type': {
+            width: '60px',
+        }
     },
     searchBox: {
         minWidth: '1800px',
@@ -845,7 +852,7 @@ const SystemAdministrator = () => {
     }, [page]);
 
     return (
-        <DefaultLayout>
+        <DefaultLightLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
                 <Grid item xs={12} className={classes.listTitle}>
                     <Typography variant="headline2" component="div" gutterBottom>
@@ -1370,7 +1377,7 @@ const SystemAdministrator = () => {
                     </Stack>
                 </Grid>
             </Grid>
-        </DefaultLayout >
+        </DefaultLightLayout >
     );
 };
 

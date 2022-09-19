@@ -1063,7 +1063,7 @@ const useStyles = makeStyles(() => ({
         },
         '&.settings_popup': {
             top: '65px',
-            left: '-80px'
+            left: '-30px'
         },
         '&.settings_popupClose': {
             display: "none"
@@ -1277,7 +1277,7 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center',
         '& button:first-of-type': {
             marginLeft: '10px'
-        }
+        },
     },
     dropMenu: {
         '& .MuiOutlinedInput-root': {
@@ -1489,12 +1489,12 @@ const SettingsButton = styled(ButtonUnstyled)`
     }
 `;
 
-// const AdminButton = styled(ButtonUnstyled)`
-//     background: transparent url(${adminIcon});
-//     &:hover {
-//         background-image: url(${adminIconHover});
-//     }
-// `;
+const AdminButton = styled(ButtonUnstyled)`
+    background: transparent url(${adminIcon});
+    &:hover {
+        background-image: url(${adminIconHover});
+    }
+`;
 
 const ChartButton = styled(ButtonUnstyled)`
     background: transparent url(${chartIcon});
@@ -2334,7 +2334,7 @@ const Employee = () => {
                             </div>
                         </Grid>
                         <Grid className={classes.mainAsside} item xs={3}>
-                            {/* <AdminButton className={classes.mainMenuButton}></AdminButton> */}
+                            <AdminButton className={classes.mainMenuButton} style={{ display: 'none' }}></AdminButton>
                             <div className={classes.weatherSection}>
                                 <span>
                                     <img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${weatherData?.weatherImgUrl}`} alt="weather icon" />
