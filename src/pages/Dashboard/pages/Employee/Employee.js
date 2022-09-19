@@ -94,6 +94,7 @@ import 'dayjs/locale/ko';
 import { setWorkplaceId, selectWorkplaceId, selectBaselineId, setBaselineId } from '../../../../slices/selections/MainSelection';
 import { useDispatch, useSelector } from 'react-redux';
 import useGeolocation from "react-hook-geolocation";
+import Dialog from '../../../../dialogs/Upload/Upload';
 
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
@@ -1347,7 +1348,7 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexWrap: 'wrap',
         alignContent: 'space-between',
-        display: 'none !important',
+        // display: 'none !important',
         '& button': {
             marginTop: '15px'
         }
@@ -2499,28 +2500,7 @@ const Employee = () => {
 
                 </Grid>
                 <Grid className={classes.pageBody} item xs={10.7}>
-                    <div className={inspectionDocsPopup ? classes.uploadPopup : classes.uploadPopupClose}>
-                        <ClosePopupButton2 onClick={() => setInspectionDocsPopup(false)}></ClosePopupButton2>
-                        <div className={classes.uploadInfo}>
-                            <img src={alertIcon} alt="alert icon" />
-                            <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
-                            <UnknownButton2>전체사업장</UnknownButton2>
-                        </div>
-                        <span></span>
-                        <span>의무조치별 상세 점검</span>
-                        <span></span>
-                        <div className={classes.uploadSearch}>
-                            <TextField
-                                id="standard-basic"
-                                placeholder="여수공장 시정조치요청 파일.hwp"
-                                variant="outlined"
-                                sx={{ width: 250 }}
-                                className={classes.popupTextField}
-                            />
-                            <SearchButton></SearchButton>
-                            <UnknownButton1>전체사업장</UnknownButton1>
-                        </div>
-                    </div>
+                    <Dialog open={true} />
                     <div className={classes.uploadedPopup}>
                         <FormControl className={classes.searchRadio}>
                             <RadioGroup row>

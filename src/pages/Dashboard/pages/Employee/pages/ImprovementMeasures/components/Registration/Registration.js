@@ -31,6 +31,7 @@ import moment from "moment"
 import useUserInitialWorkplaceId from '../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
 import { useStyles } from './useStyles';
 import { UploadButton, WhiteButton, BlueButton } from './buttons/Unstyled';
+import Dialog from '../../../../../../../../dialogs/Upload/Upload';
 
 const Registration = () => {
     const classes = useStyles();
@@ -331,6 +332,7 @@ const Registration = () => {
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
             </Grid>
+            <Dialog open={true} />
         </DefaultLayout>
     );
 };
