@@ -13,6 +13,7 @@ import setIcon from '../../assets/images/btn_set.png';
 import setIconHover from '../../assets/images/btn_set_ov.png';
 import adminIcon from '../../assets/images/btn_admin.png';
 import adminIconHover from '../../assets/images/btn_admin_ov.png';
+import logoutIcon from '../../assets/images/logout_icon.png';
 import weatherIcon from '../../assets/images/weather_icon.png';
 import backButton from '../../assets/images/btn_back.png';
 
@@ -49,6 +50,8 @@ import 'dayjs/locale/ko';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectBaselineId, setBaselineId } from '../../slices/selections/MainSelection';
 import { useLocalStorage } from '../../hooks/misc/LocalStorage';
+
+import LogoutIcon from '@mui/icons-material/Logout';
 
 
 const useStyles = makeStyles(() => ({
@@ -132,6 +135,9 @@ const useStyles = makeStyles(() => ({
         letterSpacing: '-1.08px',
         '& >button': {
             '&:first-of-type': {
+                marginRight: '20px',
+            },
+            '&:last-of-type': {
                 marginRight: '20px',
             }
         }
@@ -491,10 +497,7 @@ const AdminButton = styled(ButtonUnstyled)`
 `;
 
 const LogButton = styled(ButtonUnstyled)`
-    background: transparent url(${logIcon});
-    &:hover {
-        background-image: url(${logIconHover});
-    }
+    background: transparent;
 `;
 
 const SettingsButton = styled(ButtonUnstyled)`
@@ -693,7 +696,10 @@ const DefaultLight = ({ children }) => {
                             <div className={classes.userInformation}>
                                 <div>{loginInfo?.loginId} / <span>{loginInfo?.roleName}</span></div>
                             </div>
-                            <BackButton onClick={() => handleRedirect()}></BackButton>
+                            {/* <BackButton onClick={() => handleRedirect()}></BackButton> */}
+                            <LogButton className={classes.mainMenuButton} onClick={handleLogOut}>
+                                <LogoutIcon fontSize="large" sx={{ color: 'gray' }}></LogoutIcon>
+                            </LogButton>
                             <div className={settingsPopup ? (classes.headerPopup + ' settings_popup') : (classes.headerPopup + ' settings_popupClose')}>
                                 <div className={classes.popHeader}>
                                     중대재해 자체점검 등록 차수 설정

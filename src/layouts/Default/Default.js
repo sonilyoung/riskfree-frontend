@@ -71,7 +71,8 @@ const useStyles = makeStyles(() => ({
         boxSizing: 'border-box',
         padding: '37px 40px 40px',
         backgroundColor: '#eff2f9',
-        borderRadius: '24px 0 0 0'
+        borderRadius: '24px 0 0 0',
+        // width: '1874px',
     },
     pageHeader: {
         display: 'flex',
