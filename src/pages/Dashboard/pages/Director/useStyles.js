@@ -1089,6 +1089,16 @@ const useStyles = makeStyles(() => ({
             paddingLeft: '0',
         }
     },
+    pageOverlay: {
+        position: 'absolute',
+        top: '0px',
+        left: '0px',
+        width: '100vw',
+        height: '100vh',
+        background: 'rgba(0, 0, 0, .5)',
+        zIndex: '1',
+        display: 'none',
+    },
 }));
 
 export { useStyles };

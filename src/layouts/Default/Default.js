@@ -459,6 +459,16 @@ const useStyles = makeStyles(() => ({
             paddingLeft: '0',
         }
     },
+    pageOverlay: {
+        position: 'absolute',
+        top: '0px',
+        left: '0px',
+        width: '100vw',
+        height: '100vh',
+        background: 'rgba(0, 0, 0, .5)',
+        zIndex: '1',
+        display: 'none',
+    },
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -861,6 +871,7 @@ const Default = ({ children }) => {
 
             </Grid>
             <BackButton onClick={() => handleRedirect()}></BackButton>
+            <div className={classes.pageOverlay}></div>
             <div className={classes.sectionWrap}>
                 {children}
             </div>

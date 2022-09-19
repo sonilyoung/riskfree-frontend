@@ -811,6 +811,8 @@ const Director = () => {
                         </Grid>
                     </Grid>
 
+                    <div className={classes.pageOverlay}></div>
+
                     <Grid className={classes.headerWorkplace} item xs={12} sx={{ marginTop: '-45px' }}>
                         <div className={classes.adminField + ' ' + classes.adminFieldLeft}>
                             <div className={classes.adminFieldText}>안전보건목표</div>
