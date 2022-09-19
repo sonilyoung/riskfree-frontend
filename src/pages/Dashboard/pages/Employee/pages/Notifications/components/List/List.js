@@ -374,7 +374,7 @@ function List() {
                         <div className={classes.tableRow}>조회수</div>
                     </div>
                     <>
-                        {noticesList && noticesList?.data.RET_DATA.map((notice, index) =>
+                        {!!noticesList && !!noticesList?.length && noticesList?.data.RET_DATA.map((notice, index) =>
                         (
                             <div className={classes.tableBody} onDoubleClick={() => navigate(`/dashboard/director/notifications/view/${notice.noticeId}`)}>
                                 <div className={classes.tableRow}>{index + 1}</div>

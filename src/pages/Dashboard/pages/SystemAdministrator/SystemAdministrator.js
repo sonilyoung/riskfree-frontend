@@ -920,7 +920,7 @@ const SystemAdministrator = () => {
                                 <div className={classes.tableData}>{subscriber.managerRole}</div>
                                 <div className={classes.tableData}>{subscriber.managerName}</div>
                                 <div className={classes.tableData}>{subscriber.managerTel}</div>
-                                <div className={classes.tableData}>{subscriber.contractAmount}</div>
+                                <div className={classes.tableData}>{subscriber.contractAmount && parseFloat(subscriber.contractAmount).toLocaleString()}</div>
                                 <div className={classes.tableData}>{subscriber.contractDate}</div>
                                 <div className={classes.tableData}>{subscriber.status}</div>
                                 <div className={classes.tableData}>{subscriber.contractFileld}</div>

@@ -1856,7 +1856,15 @@ const Employee = () => {
     const [longitude, setLongitude] = useState("")
     const [getWeather] = useGetWeatherMutation()
     const [weatherData, setWeatherData] = useState({})
-    const [inspectionDocsPopup, setInspectionDocsPopup] = useState(false)
+    const [baselineInfo, setBaselineInfo] = useState({
+        "baselineName": "",
+        "baselineStart": null,
+        "baselineEnd": null
+    });
+    const [showUploadPopup, setShowUploadPopup] = useState(false);
+    const [safetyGoal, setSafetyGoal] = useState("");
+    const [missionStatements, setMissionStatements] = useState([]);
+    const [missionStatement, setMissionStatement] = useState("");
     const dispatch = useDispatch();
 
     const [userInfo, setUserInfo] = useState({
@@ -2163,16 +2171,17 @@ const Employee = () => {
                                         </span>
                                         <TextField
                                             id="standard-basic"
-                                            placeholder="안전보건 목표 등록 (띠어쓰기 포함 16자 이내)"
+                                            value={safetyGoal}
                                             variant="outlined"
                                             sx={{ width: 350 }}
                                             className={classes.popupTextField}
+                                            onChange={(event) => setSafetyGoal(event.target.value)}
                                         />
                                         <Select
                                             className={classes.popupTextField}
                                             sx={{ width: 350 }}
-                                            value={num}
-                                            onChange={handleChange}
+                                            value={missionStatement}
+                                            onChange={(event) => setMissionStatement(event.target.value)}
                                             displayEmpty
                                             inputProps={{ 'aria-label': 'Without label' }}
                                         >
@@ -2315,8 +2324,8 @@ const Employee = () => {
                                         </Accordion>
                                         <span></span>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setShowUploadPopup(true)}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
                                     </div>
                                     <div className={classes.headerPopFooter}>
                                         <PopupFootButton>저장하기</PopupFootButton>
@@ -2513,7 +2522,28 @@ const Employee = () => {
                 <div className={classes.pageOverlay}></div>
 
                 <Grid className={classes.pageBody} item xs={10.7}>
-                    <Dialog open={true} />
+                    <div className={classes.uploadPopup}>
+                        <ClosePopupButton2></ClosePopupButton2>
+                        <div className={classes.uploadInfo}>
+                            <img src={alertIcon} alt="alert icon" />
+                            <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
+                            <UnknownButton2>전체사업장</UnknownButton2>
+                        </div>
+                        <span></span>
+                        <span>의무조치별 상세 점검</span>
+                        <span></span>
+                        <div className={classes.uploadSearch}>
+                            <TextField
+                                id="standard-basic"
+                                placeholder="여수공장 시정조치요청 파일.hwp"
+                                variant="outlined"
+                                sx={{ width: 250 }}
+                                className={classes.popupTextField}
+                            />
+                            <SearchButton></SearchButton>
+                            <UnknownButton1>전체사업장</UnknownButton1>
+                        </div>
+                    </div>
                     <div className={classes.uploadedPopup}>
                         <FormControl className={classes.searchRadio}>
                             <RadioGroup row>

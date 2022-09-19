@@ -15,6 +15,8 @@ import adminIcon from '../../assets/images/btn_admin.png';
 import adminIconHover from '../../assets/images/btn_admin_ov.png';
 import weatherIcon from '../../assets/images/weather_icon.png';
 import backButton from '../../assets/images/btn_back.png';
+import searchIcon from '../../assets/images/ic_search.png';
+import popupClose2 from '../../assets/images/btn_popClose2.png';
 
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -22,7 +24,7 @@ import Select from '@mui/material/Select';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
-import { useGetLoginInfoMutation, useGetCompanyInfoMutation, useGetWeatherMutation } from '../../hooks/api/MainManagement/MainManagement';
+import { useGetLoginInfoMutation, useGetCompanyInfoMutation, useGetWeatherMutation, useInsertBaselineMutation, useInsertBaseLineDataCopyMutation, useGetBaselineListMutation, useCloseMutation } from '../../hooks/api/MainManagement/MainManagement';
 import { remove } from '../../services/core/User/Token';
 import { useUserToken } from '../../hooks/core/UserToken';
 
@@ -49,6 +51,7 @@ import 'dayjs/locale/ko';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectBaselineId, setBaselineId } from '../../slices/selections/MainSelection';
 import { useLocalStorage } from '../../hooks/misc/LocalStorage';
+import moment from 'moment';
 
 
 const useStyles = makeStyles(() => ({
@@ -336,6 +339,69 @@ const useStyles = makeStyles(() => ({
     userInfo: {
         width: '100%'
     },
+    uploadPopup: {
+        position: 'fixed',
+        zIndex: '1000',
+        top: '50%',
+        left: '40%',
+        transform: 'translate(-50%,-50%)',
+        width: '400px',
+        height: '400px',
+        background: '#fff',
+        borderRadius: '30px',
+        padding: '40px',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexWrap: 'wrap',
+        color: 'black',
+        '& >span': {
+            width: '20%',
+            height: '20px',
+            borderBottom: '1px solid #bdcbe9',
+            transform: 'translateY(-5px)',
+            '&:nth-of-type(2)': {
+                width: '60%',
+                border: 'none',
+                padding: '0 10px',
+                boxSizing: 'border-box',
+                textAlign: 'center',
+                transform: 'unset',
+            }
+        },
+        '& >button': {
+            position: 'absolute',
+            top: '0px',
+            right: '-65px'
+        }
+    },
+    uploadPopupHide: {
+        display: 'none',
+    },
+    uploadInfo: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        height: '50%',
+        '& >*': {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        '& img': {
+            width: '30px',
+            height: '30px',
+        }
+    },
+    uploadSearch: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        '& button:first-of-type': {
+            marginLeft: '10px'
+        }
+    },
     popHeader: {
         display: 'flex',
         alignItems: 'center',
@@ -577,18 +643,96 @@ const PromptButtonWhite = styled(ButtonUnstyled)`
     } 
 `;
 
+const UnknownButton1 = styled(ButtonUnstyled)`
+    width: 150px;
+    height: 46px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: -1.08px;
+    border-radius: 46px;
+    background: #00adef;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #3a5298;
+    }   
+`;
+
+const UnknownButton2 = styled(ButtonUnstyled)`
+    width: 200px;
+    height: 46px;
+    color: #000;
+    font-size: 20px;
+    letter-spacing: -1.08px;
+    border-radius: 46px;
+    background: #eff2f9;
+    border: 2px solid #00adef;
+    cursor: pointer;
+    transition: border-color .2s;
+    &:hover {
+        border-color: #3a5298;
+    }  
+`;
+
+const SearchButton = styled(ButtonUnstyled)`
+    width: 46px;
+    height: 46px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: -1.08px;
+    border-radius: 50%;
+    background: #00adef url(${searchIcon}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #3a5298 url(${searchIcon}) no-repeat 50% 50%;
+    }   
+`;
+
+const ClosePopupButton2 = styled(ButtonUnstyled)`
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: url(${popupClose2}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s; 
+`;
+
 const Default = ({ children }) => {
     const classes = useStyles();
     const location = useLocation()
     const navigate = useNavigate()
-    const [getLoginInfo] = useGetLoginInfoMutation()
+
+    const [userToken] = useUserToken()
+    const [getWeather] = useGetWeatherMutation()
+    const [getLoginInfo] = useGetLoginInfoMutation();
+    const [getCompanyInfo] = useGetCompanyInfoMutation()
+    const [insertBaseline] = useInsertBaselineMutation();
+    const [insertBaseLineDataCopy] = useInsertBaseLineDataCopyMutation();
+    const [getBaselineList] = useGetBaselineListMutation();
+    const [close] = useCloseMutation();
+    const [insertBaseLineDataUpdate] = useInsertBaseLineDataCopyMutation();
+
+    const [locale] = React.useState('ko');
+    const [date, setDate] = React.useState(null);
     const [loginInfo, setLoginInfo] = useState({})
     const [userPopup, setUserPopup] = useState(false)
     const [settingsPopup, setSettingsPopup] = useState(false)
-    const [userToken] = useUserToken()
     const [companyInfo, setCompanyInfo] = useState({})
-    const companyId = userToken.getUserCompanyId()
-    const [getCompanyInfo] = useGetCompanyInfoMutation()
+    const companyId = userToken.getUserCompanyId();
+    const [baselineInfo, setBaselineInfo] = useState({
+        "baselineName": "",
+        "baselineStart": null,
+        "baselineEnd": null
+    });
+    const [baselineList, setBaselineList] = useState([]);
+    const [showUploadPopup, setShowUploadPopup] = useState(false);
+    const [safetyGoal, setSafetyGoal] = useState("");
+    const [missionStatements, setMissionStatements] = useState([]);
+    const [missionStatement, setMissionStatement] = useState("");
 
     const dispatch = useDispatch();
     const localStorage = useLocalStorage();
@@ -596,9 +740,7 @@ const Default = ({ children }) => {
 
     const [latitude, setLatitude] = useState("")
     const [longitude, setLongitude] = useState("")
-    const [getWeather] = useGetWeatherMutation()
     const [weatherData, setWeatherData] = useState({})
-
 
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -620,6 +762,36 @@ const Default = ({ children }) => {
         navigate(-1)
     }
 
+    const handleClose = async () => {
+        const response = await insertBaseLineDataCopy({});
+        // console.log(response.data.RET_DESC);
+    }
+
+    const handleInsertBaseline = async () => {
+        const response = await insertBaseline(baselineInfo);
+        console.log(response.data.RET_DESC);
+    }
+
+    const handleInsertBaseLineDataCopy = async () => {
+        const response = await insertBaseLineDataCopy({
+            "targetBaselineId": "",
+            "baselineId": ""
+        });
+        console.log(response.data.RET_DESC);
+    }
+
+    const handleInsertBaseLineDataUpdate = async () => {
+        const response = await insertBaseLineDataUpdate({
+            // proveriti parametre
+        });
+        alert(response.data.RET_DESC);
+    }
+
+    const fetchBaselineList = async () => {
+        const response = await getBaselineList({})
+        setBaselineList(response.data.RET_DATA)
+    }
+
     const fetchCompanyInfo = async () => {
         const response = await getCompanyInfo({
             "companyId": companyId
@@ -639,24 +811,21 @@ const Default = ({ children }) => {
         if (currentBaseline === null) {
             dispatch(setBaselineId(localStorage.getDefaultBaselineId()));
         }
-        handleLoginInfo()
-        fetchCompanyInfo()
-    }, [])
-
-    const [date, setDate] = React.useState(null);
-
-    const [locale] = React.useState('ko');
+        handleLoginInfo();
+        fetchCompanyInfo();
+        fetchBaselineList();
+    }, []);
 
     useEffect(() => {
-        fetchWeather()
-    }, [loginInfo])
+        fetchWeather();
+    }, [loginInfo]);
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(position => {
             setLatitude(position.coords.latitude)
             setLongitude(position.coords.longitude)
-        })
-    }, [])
+        });
+    }, []);
 
     return (
         <div className={classes.bodyWrap}>
@@ -694,16 +863,17 @@ const Default = ({ children }) => {
                                         </span>
                                         <TextField
                                             id="standard-basic"
-                                            placeholder="안전보건 목표 등록 (띠어쓰기 포함 16자 이내)"
+                                            value={safetyGoal}
                                             variant="outlined"
                                             sx={{ width: 350 }}
                                             className={classes.popupTextField}
+                                            onChange={(event) => setSafetyGoal(event.target.value)}
                                         />
                                         <Select
                                             className={classes.popupTextField}
                                             sx={{ width: 350 }}
-                                            value={num}
-                                            onChange={handleChange}
+                                            value={missionStatement}
+                                            onChange={(event) => setMissionStatement(event.target.value)}
                                             displayEmpty
                                             inputProps={{ 'aria-label': 'Without label' }}
                                         >
@@ -778,18 +948,22 @@ const Default = ({ children }) => {
                                             <AccordionDetails>
                                                 <TextField
                                                     id="standard-basic"
-                                                    placeholder="관리차수"
+                                                    value={baselineInfo.baselineName}
                                                     variant="outlined"
                                                     sx={{ width: 115 }}
                                                     className={classes.popupTextField}
+                                                    onChange={(event) => setBaselineInfo({ ...baselineInfo, "baselineName": event.target.value })}
                                                 />
                                                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                                                     <DesktopDatePicker
                                                         className={classes.selectMenuDate}
                                                         label=" "
                                                         inputFormat="YYYY-MM-DD"
-                                                        value={date}
-                                                        onChange={setDate}
+                                                        value={baselineInfo.baselineEnd}
+                                                        onChange={(newDate) => {
+                                                            const date = new Date(newDate.$d)
+                                                            setBaselineId({ ...baselineInfo, "baselineEnd": moment(date).format("YYYY-MM-DD") })
+                                                        }}
                                                         renderInput={(params) => <TextField {...params} sx={{ width: 220 }} />}
                                                     />
                                                 </LocalizationProvider>
@@ -845,12 +1019,34 @@ const Default = ({ children }) => {
                                             </AccordionDetails>
                                         </Accordion>
                                         <span></span>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setShowUploadPopup(true)}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
                                     </div>
                                     <div className={classes.headerPopFooter}>
                                         <PopupFootButton>저장하기</PopupFootButton>
+                                    </div>
+                                </div>
+                                <div className={showUploadPopup ? classes.uploadPopup : classes.uploadPopupHide}>
+                                    <ClosePopupButton2 onClick={() => setShowUploadPopup(false)}></ClosePopupButton2>
+                                    <div className={classes.uploadInfo}>
+                                        <img src={alertIcon} alt="alert icon" />
+                                        <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
+                                        <UnknownButton2>전체사업장</UnknownButton2>
+                                    </div>
+                                    <span></span>
+                                    <span>의무조치별 상세 점검</span>
+                                    <span></span>
+                                    <div className={classes.uploadSearch}>
+                                        <TextField
+                                            id="standard-basic"
+                                            placeholder="여수공장 시정조치요청 파일.hwp"
+                                            variant="outlined"
+                                            sx={{ width: 250 }}
+                                            className={classes.popupTextField}
+                                        />
+                                        <SearchButton></SearchButton>
+                                        <UnknownButton1>전체사업장</UnknownButton1>
                                     </div>
                                 </div>
                             </div>
