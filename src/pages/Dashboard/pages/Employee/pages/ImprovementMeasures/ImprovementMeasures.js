@@ -6,8 +6,6 @@ import View from './components/View/View'
 import Registration from './components/Registration/Registration'
 import Update from './components/Update/Update'
 
-
-
 const ImprovementMeasures = () => {
 
     return (
