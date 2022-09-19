@@ -851,7 +851,7 @@ const Default = ({ children }) => {
                                 <span>
                                     {weatherData && <img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${weatherData?.weatherImgUrl}`} alt="weather icon" />}
                                 </span>
-                                <span>{weatherData?.temperature} °C</span>
+                                <span>{weatherData?.temperature} °</span>
                                 <span>{weatherData?.address}</span>
                             </div>
                         </Grid>

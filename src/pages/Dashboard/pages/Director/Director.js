@@ -45,7 +45,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentsPreventionMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetLoginInfoMutation, useGetNoticeListMutation, useGetRelatedLawRateMutation, useGetWorkplaceListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentsPreventionMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetLoginInfoMutation, useGetNoticeListMutation, useGetRelatedLawRateMutation, useGetWorkplaceListMutation, useGetWeatherMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetLeaderImprovementListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetAccidentTotalMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetSafeWorkHistoryListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
@@ -56,7 +56,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 import useUserToken from '../../../../hooks/core/UserToken/UserToken';
-import { setWorkplaceId, selectWorkplaceId } from '../../../../slices/selections/MainSelection';
+import { setWorkplaceId, selectWorkplaceId, selectBaselineId, setBaselineId } from '../../../../slices/selections/MainSelection';
 import { useStyles } from './useStyles';
 
 const UserButton = styled(ButtonUnstyled)`
@@ -297,10 +297,16 @@ const Director = () => {
     const [relatedLawRate, setRelatedLawRate] = useState({});
     const [baselineData, setBaselineData] = useState({});
     const [baselineList, setBaselineList] = useState([]);
-    const [baselineId, setBaselineId] = useState(6);
-    const [baselineStart, setBaselineStart] = useState("2022-09-08");
+    // const [baselineId, setBaselineId] = useState(6);
+    const [latitude, setLatitude] = useState("")
+    const [longitude, setLongitude] = useState("")
+    const [getWeather] = useGetWeatherMutation()
+    const [weatherData, setWeatherData] = useState({})
     const [dayInfo, setDayInfo] = useState({});
     const currentWorkplaceId = useSelector(selectWorkplaceId);
+    const currentBaselineId = useSelector(selectBaselineId)
+
+
 
     // izmeniti ovo
     const [userInfo, setUserInfo] = useState({
@@ -355,7 +361,7 @@ const Director = () => {
 
     const fetchBaseline = async () => {
         const response = await getBaseline({
-            "baselineId": baselineId
+            "baselineId": currentBaselineId
         })
         setBaselineData(response.data.RET_DATA);
     }
@@ -368,7 +374,7 @@ const Director = () => {
     const fetchCompanyInfo = async () => {
         const response = await getCompanyInfo({
             "companyId": userCompanyId,
-            "workplaceId": userWorkplaceId
+            "workplaceId": currentWorkplaceId
         });
         setCompanyInfo(response);
     }
@@ -380,68 +386,68 @@ const Director = () => {
 
     const fetchEssentialRateList = async () => {
         const response = await getEssentialRate({
-            "baselineId": baselineId,
-            "workplaceId": userWorkplaceId
+            "baselineId": currentBaselineId,
+            "workplaceId": currentWorkplaceId
         });
         setEssentialRateList(response.data);
     }
 
     const fetchAccidentsPrevention = async () => {
         const response = await getAccidentsPrevention({
-            "baselineId": baselineId,
-            "workplaceId": userWorkplaceId
+            "baselineId": currentBaselineId,
+            "workplaceId": currentWorkplaceId
         });
         setAccidentsPrevention(response.data);
     }
 
     const fetchImprovementLawOrderRate = async () => {
         const response = await getImprovementLawOrder({
-            "baselineId": baselineId,
-            "workplaceId": userWorkplaceId
+            "baselineId": currentBaselineId,
+            "workplaceId": currentWorkplaceId
         });
         setImprovementLawOrderRate(response.data);
     }
 
     const fetchRelatedLawRate = async () => {
         const response = await getRelatedLawRate({
-            "baselineId": baselineId,
-            "workplaceId": userWorkplaceId
+            "baselineId": currentBaselineId,
+            "workplaceId": currentWorkplaceId
         });
         setRelatedLawRate(response.data);
     }
 
     const fetchLeadersImproveList = async () => {
         const response = await getLeaderImprovementList({
-            "baselineId": baselineId,
+            "baselineId": currentBaselineId,
             "companyId": userCompanyId,
             "instruction": 1,
-            "workplaceId": userWorkplaceId
+            "workplaceId": currentWorkplaceId
         });
         setLeadersImproveList(response.data.RET_DATA);
     }
 
     const fetchAccidentTotal = async () => {
         const response = await getAccidentTotal({
-            "baselineId": baselineId,
+            "baselineId": currentBaselineId,
             "caughtCnt": 0,
             "companyId": userCompanyId,
-            "workplaceId": userWorkplaceId
+            "workplaceId": currentWorkplaceId
         })
         setAccidentTotal(response.data.RET_DATA);
     }
 
     const fetchSafeWorkHistoryList = async () => {
         const response = await getSafeWorkHistoryList({
-            "baselineId": baselineId,
+            "baselineId": currentBaselineId,
             "companyId": userCompanyId,
-            "workplaceId": userWorkplaceId
+            "workplaceId": currentWorkplaceId
         })
         setSafeWorkHistoryList(response.data.RET_DATA);
     }
 
     const fetchDayInfo = async () => {
         const response = await getDayInfo({
-            "baselineStart": baselineStart
+            "baselineStart": baselineData.baselineStart
         })
         setDayInfo(response.data.RET_DATA);
 
@@ -472,16 +478,17 @@ const Director = () => {
         return (
             <div
                 className={className}
-                style={{ ...style, display: "block" }}
+                style={{ ...style, display: parseInt(baselineData.nextBaseline) ? "block" : "none" }}
                 onClick={() => {
-                    let baselineIdIndex = baselineId && baselineList.length ? baselineList.findIndex(baselineItem => baselineItem.baselineId === baselineId) + 1 : 0;
-                    if (baselineIdIndex >= baselineList.length) {
-                        baselineIdIndex = 0;
+                    // let baselineIdIndex = currentBaselineId && baselineList.length ? baselineList.findIndex(baselineItem => baselineItem.baselineId === currentBaselineId) + 1 : 0;
+                    // if (baselineIdIndex >= baselineList.length) {
+                    //     baselineIdIndex = 0;
+                    // }
+                    // setBaselineStart(baselineList.at(baselineIdIndex).baselineStart);
+                    if (parseInt(baselineData.nextBaseline)) {
+                        dispatch(setBaselineId(parseInt(baselineData.nextBaseline)))
+                        onClick();
                     }
-                    setBaselineStart(baselineList.at(baselineIdIndex).baselineStart);
-                    setBaselineId(baselineList.at(baselineIdIndex).baselineId);
-                    onClick();
-                    console.log(baselineList.at(baselineIdIndex).baselineId)
                 }}
             />
         );
@@ -492,12 +499,12 @@ const Director = () => {
         return (
             <div
                 className={className}
-                style={{ ...style, display: "block" }}
+                style={{ ...style, display: parseInt(baselineData.prevBaseline) ? "block" : "none" }}
                 onClick={() => {
-                    const baselineIdIndex = baselineId && baselineList.length ? baselineList.findIndex(baselineItem => baselineItem.baselineId === baselineId) - 1 : 0;
-                    setBaselineStart(baselineList.at(baselineIdIndex).baselineStart);
-                    setBaselineId(baselineList.at(baselineIdIndex).baselineId);
-                    onClick();
+                    if (parseInt(baselineData.prevBaseline)) {
+                        dispatch(setBaselineId(parseInt(baselineData.prevBaseline)))
+                        onClick();
+                    }
                 }}
             />
         );
@@ -508,9 +515,22 @@ const Director = () => {
         dispatch(setWorkplaceId(props.userWorkplaceId));
     }
 
+    const fetchWeather = async () => {
+        const response = await getWeather({
+            "latitude": latitude,
+            "longitude": longitude,
+        })
+        setWeatherData(response?.data?.RET_DATA)
+    }
+
+    useEffect(() => {
+        fetchDayInfo()
+        fetchWeather()
+    }, [baselineData])
+
     useEffect(() => {
         fetchBaseline();
-        fetchCompanyInfo();
+        // fetchCompanyInfo();
         fetchEssentialRateList();
         fetchImprovementLawOrderRate();
         fetchRelatedLawRate();
@@ -518,8 +538,12 @@ const Director = () => {
         fetchAccidentTotal();
         fetchSafeWorkHistoryList();
         fetchAccidentsPrevention()
-        fetchDayInfo();
-    }, [baselineId, userWorkplaceId]);
+        // fetchDayInfo();
+    }, [currentBaselineId, userWorkplaceId]);
+
+    useEffect(() => {
+        fetchCompanyInfo();
+    }, [userWorkplaceId])
 
     useEffect(() => {
         fetchBaselineList();
@@ -533,6 +557,12 @@ const Director = () => {
         };
     }, []);
 
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(position => {
+            setLatitude(position.coords.latitude)
+            setLongitude(position.coords.longitude)
+        })
+    }, [])
 
     return (
         <WideLayout>
@@ -773,10 +803,10 @@ const Director = () => {
                             {/* <AdminButton className={classes.mainMenuButton}></AdminButton> */}
                             <div className={classes.weatherSection}>
                                 <span>
-                                    <img src={weatherIcon} alt="weather icon" />
+                                    <img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${weatherData?.weatherImgUrl}`} alt="weather icon" />
                                 </span>
-                                <span>18.0</span>
-                                <span>서울시 구로구 구로동</span>
+                                <span>{weatherData?.temperature} °</span>
+                                <span>{weatherData?.address}</span>
                             </div>
                         </Grid>
                     </Grid>
