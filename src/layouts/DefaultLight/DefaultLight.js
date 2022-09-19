@@ -64,11 +64,14 @@ const useStyles = makeStyles(() => ({
     },
     sectionWrap: {
         minHeight: 'calc(100vh - 94px)',
-        marginLeft: '40px',
+        margin: '0 auto',
+        // marginLeft: '20px',
+        // marginRight: '20px',
         boxSizing: 'border-box',
         padding: '37px 40px 40px',
         backgroundColor: '#eff2f9',
-        borderRadius: '24px 0 0 0'
+        borderRadius: '24px 24px 0 0',
+        width: '1875px',
     },
     pageHeader: {
         display: 'flex',
@@ -110,7 +113,7 @@ const useStyles = makeStyles(() => ({
         fontSize: '16px',
         fontWeight: '400',
         color: '#333',
-        marginRight: '40px',
+        marginRight: '20px',
         marginLeft: '10px',
         '& >div': {
             fontSize: '17px',
@@ -519,9 +522,10 @@ const UploadImageButton = styled(ButtonUnstyled)`
 `;
 
 const BackButton = styled(ButtonUnstyled)`
-    position: absolute;
-    top: 130px;
-    left: 6px;
+    // position: absolute;
+    // top: 130px;
+    // left: 6px;
+    margin-right: 40px;
     width: 28px;
     height: 28px;
     border: none;
@@ -680,93 +684,8 @@ const DefaultLight = ({ children }) => {
                         </Grid>
                         <Grid className={classes.mainMenu} item xs={6.3}>
                             <div className={classes.leftMenu}>
-                                {/* <UserButton className={classes.mainMenuButton} onClick={() => setUserPopup(true)}></UserButton> */}
-                                {/* <div className={userPopup ? (classes.headerPopup + ' user_popup') : (classes.headerPopup + ' user_popupClose')}>
-                                    <div className={classes.popHeader}>
-                                        최초 사용자 설정
-                                        <ButtonClosePop onClick={() => setUserPopup(!userPopup)}></ButtonClosePop>
-                                    </div>
-                                    <div className={classes.headerPopList}>
-                                        <div className={classes.userTab}>
-                                            <div className={classes.userImage}>
-                                                <img />
-                                            </div>
-                                            <div className={classes.userName}>
-                                                삼성전자 주식회사
-                                            </div>
-                                            <div className={classes.userInfo}>
-                                                아래의 기업정보를 등록하신 후 이용하시기 바랍니다
-                                            </div>
-                                        </div>
-                                        <span>
-                                            <span>기업정보 등록</span>
-                                        </span>
-                                        <TextField
-                                            id="standard-basic"
-                                            placeholder="안전보건 목표 등록 (띠어쓰기 포함 16자 이내)"
-                                            variant="outlined"
-                                            sx={{ width: 350 }}
-                                            className={classes.popupTextField}
-                                        />
-                                        <Select
-                                            className={classes.popupTextField}
-                                            sx={{ width: 350 }}
-                                            value={num}
-                                            onChange={handleChange}
-                                            displayEmpty
-                                            inputProps={{ 'aria-label': 'Without label' }}
-                                        >
-                                            <MenuItem value="">경영방침 등록 (띠어쓰기 포함 16자 이내)</MenuItem>
-                                        </Select>
-                                        <div className={classes.preFootPop}>
-                                            <div>
-                                                <span>로고등록</span>
-                                            </div>
-                                            <div>
-                                                <UploadImageButton>찾아보기</UploadImageButton>
-                                                <Alert
-                                                    icon={<img src={alertIcon} alt="alert icon" />}
-                                                    severity="error">
-                                                    사이즈 83px*67px
-                                                    <br />
-                                                    (   gif, jpg, png 파일허용)
-                                                </Alert>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={classes.headerPopFooter}>
-                                        <PopupFootButton>저장하기</PopupFootButton>
-                                    </div>
-                                </div> */}
-                                {/* <FormControl sx={{ width: 180 }} className={classes.dropMenu}>
-                                    <Select
-                                        className={classes.selectMenu}
-                                        value={num}
-                                        onChange={handleChange}
-                                        displayEmpty
-                                        inputProps={{ 'aria-label': 'Without label' }}
-                                        disabled
-                                    >
-                                        <MenuItem value="">{companyInfo?.scale}</MenuItem>
-                                    </Select>
-                                </FormControl> */}
-                                {/* <FormControl sx={{ width: 150, marginLeft: '8px' }} className={classes.dropMenu}>
-                                    <Select
-                                        className={classes.selectMenu}
-                                        value={num}
-                                        onChange={handleChange}
-                                        displayEmpty
-                                        inputProps={{ 'aria-label': 'Without label' }}
-                                        disabled
-                                    >
-                                        <MenuItem value="">{companyInfo?.sector}</MenuItem>
-                                    </Select>
-                                </FormControl> */}
                             </div>
-                            <div className={classes.rightMenu}>
-                                {/* <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton> */}
-                                {/* <SettingsButton className={classes.mainMenuButton} onClick={() => setSettingsPopup(true)}></SettingsButton> */}
-                            </div>
+                            <div className={classes.rightMenu}></div>
                         </Grid>
                         <Grid className={classes.mainAsside} item xs={3}>
                             <SettingsButton className={classes.mainMenuButton} onClick={() => setSettingsPopup(true)}></SettingsButton>
@@ -774,6 +693,7 @@ const DefaultLight = ({ children }) => {
                             <div className={classes.userInformation}>
                                 <div>{loginInfo?.loginId} / <span>{loginInfo?.roleName}</span></div>
                             </div>
+                            <BackButton onClick={() => handleRedirect()}></BackButton>
                             <div className={settingsPopup ? (classes.headerPopup + ' settings_popup') : (classes.headerPopup + ' settings_popupClose')}>
                                 <div className={classes.popHeader}>
                                     중대재해 자체점검 등록 차수 설정
@@ -872,7 +792,7 @@ const DefaultLight = ({ children }) => {
                 </Grid>
 
             </Grid>
-            <BackButton onClick={() => handleRedirect()}></BackButton>
+            {/* <BackButton onClick={() => handleRedirect()}></BackButton> */}
             <div className={classes.pageOverlay}></div>
             <div className={classes.sectionWrap}>
                 {children}

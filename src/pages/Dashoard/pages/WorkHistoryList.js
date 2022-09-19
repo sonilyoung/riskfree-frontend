@@ -107,6 +107,9 @@ const useStyles = makeStyles(() => ({
         background: '#fff',
         overflow: 'hidden',
         minWidth: '1783px',
+        '& $tableBody:nth-of-type(11) $tableRow': {
+            borderBottom: '0',
+        },
         '&.popup_table': {
             minWidth: 'unset',
             marginTop: '20px',
@@ -170,12 +173,12 @@ const useStyles = makeStyles(() => ({
                         display: 'flex',
                         borderBottom: '1px solid #bdcbe9',
                         boxSizing: 'border-box',
-                        width: '959px',
+                        width: '970px',
                         '& >div': {
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            width: '120px',
+                            width: '119px',
                             height: '100%',
                             borderRight: '1px solid #bdcbe9',
                             '&:last-of-type': {
@@ -240,9 +243,13 @@ const useStyles = makeStyles(() => ({
             '&:nth-of-type(n + 6)': {
                 width: '120px'
             },
+            '&:last-of-type': {
+                width: '130px !important',
+                borderRight: '0',
+            },
         },
         '&:last-of-type $tableRow': {
-            borderBottom: '0'
+            borderBottom: '0',
         },
         '&:hover': {
             background: '#eff2f9'
