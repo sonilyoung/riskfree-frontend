@@ -1464,8 +1464,10 @@ const useStyles = makeStyles(() => ({
         height: '100vh',
         background: 'rgba(0, 0, 0, .5)',
         zIndex: '1',
-        display: 'none',
     },
+    pageOverlayInactive: {
+        display: 'none',
+    }
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -1856,6 +1858,7 @@ const Employee = () => {
     const [longitude, setLongitude] = useState("")
     const [getWeather] = useGetWeatherMutation()
     const [weatherData, setWeatherData] = useState({})
+    const [inspectionDocsPopup, setInspectionDocsPopup] = useState(false);
     const [baselineInfo, setBaselineInfo] = useState({
         "baselineName": "",
         "baselineStart": null,
@@ -1869,10 +1872,11 @@ const Employee = () => {
 
     const [userInfo, setUserInfo] = useState({
         userCompanyId: userToken.getUserCompanyId(),
-        userWorkplaceId: userToken.getUserWorkplaceId()
+        userWorkplaceId: userToken.getUserWorkplaceId(),
+        userRoleCode: userToken.getUserRoleCd()
     });
 
-    const { userCompanyId, userWorkplaceId } = userInfo;
+    const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
 
     const fetchLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -2519,7 +2523,7 @@ const Employee = () => {
 
                 </Grid>
 
-                <div className={classes.pageOverlay}></div>
+                <div className={userRoleCode === '000' ? classes.pageOverlay : classes.pageOverlayInactive}></div>
 
                 <Grid className={classes.pageBody} item xs={10.7}>
                     <div className={classes.uploadPopup}>

@@ -1099,6 +1099,9 @@ const useStyles = makeStyles(() => ({
         zIndex: '1',
         display: 'none',
     },
+    pageOverlayInactive: {
+        display: 'none',
+    }
 }));
 
 export { useStyles };

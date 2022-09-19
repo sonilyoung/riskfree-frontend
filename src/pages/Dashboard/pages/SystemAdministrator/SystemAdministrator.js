@@ -34,6 +34,7 @@ import pagePrev from '../../../../assets/images/btn_pre.png';
 
 import Alert from '@mui/material/Alert';
 import alertIcon from '../../../../assets/images/ic_refer.png';
+import monitor from '../../../../assets/images/admin_monitor.png'
 
 // import popupClose from '../../../assets/images/btn_popClose.png';
 
@@ -43,6 +44,8 @@ import Stack from '@mui/material/Stack';
 import { useSubscribersSelectMutation, useSubscribersInsertMutation, useSubscribersViewMutation, useSubscribersUpdateMutation, useSubscribersWorkplaceSelectMutation } from '../../../../hooks/api/SubscribersManagement/SubscribersManagement';
 import { useGetCommCodeListMutation } from '../../../../hooks/api/CommCodeManagement/CommCodeManagement';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
+import useUserURLRedirect from '../../../../hooks/core/UserURLRedirect/UserURLRedirect';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -197,6 +200,9 @@ const useStyles = makeStyles(() => ({
         flexWrap: 'wrap',
         padding: '13px 12px',
         minHeight: '40px',
+        '& >img': {
+            height: '20px',
+        },
         '&:first-of-type, &:nth-of-type(3)': {
             width: '100px'
         },
@@ -675,6 +681,7 @@ const SearchUserButton = styled(ButtonUnstyled)`
 
 const SystemAdministrator = () => {
     const classes = useStyles();
+    const navigate = useNavigate();
     const [locale] = React.useState('ko');
     const [regMemberPop, setRegMemberPop] = useState(false)
     const [userInfoPop, setUserInfoPop] = useState(false)
@@ -739,6 +746,13 @@ const SystemAdministrator = () => {
     const [codeGroup2, setCodeGroup2] = useState([]);
     const [codeGroup3, setCodeGroup3] = useState([]);
     const [page, setPage] = useState(1);
+    const getPath = useUserURLRedirect();
+
+    const handleRedirect = async (workplaceId, userId) => {
+        const response = await subscribersView(`${workplaceId}&userId=${userId}`);
+        const redirectPath = getPath(response.data?.RET_DATA?.managerRoleCd);
+        navigate(redirectPath);
+    }
 
     const fetchSubscribersList = async () => {
         const response = await subscribersSelect({
@@ -931,7 +945,7 @@ const SystemAdministrator = () => {
                                 <div className={classes.tableData}>{subscriber.contractDate}</div>
                                 <div className={classes.tableData}>{subscriber.status}</div>
                                 <div className={classes.tableData}>{subscriber.contractFileld}</div>
-                                <div className={classes.tableData}>X</div>
+                                <div className={classes.tableData} onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}><img src={monitor} alt="monitor" /></div>
                             </div>
                         ))}
                     </div>

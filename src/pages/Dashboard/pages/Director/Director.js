@@ -315,9 +315,10 @@ const Director = () => {
     const [userInfo, setUserInfo] = useState({
         userCompanyId: userToken.getUserCompanyId(),
         userWorkplaceId: userToken.getUserWorkplaceId(),
+        userRoleCode: userToken.getUserRoleCd()
     });
 
-    const { userCompanyId, userWorkplaceId } = userInfo;
+    const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
 
     const handleLogOut = () => {
         remove();
@@ -814,7 +815,7 @@ const Director = () => {
                         </Grid>
                     </Grid>
 
-                    <div className={classes.pageOverlay}></div>
+                    <div className={userRoleCode === '000' ? classes.pageOverlay : classes.pageOverlayInactive}></div>
 
                     <Grid className={classes.headerWorkplace} item xs={12} sx={{ marginTop: '-45px' }}>
                         <div className={classes.adminField + ' ' + classes.adminFieldLeft}>
