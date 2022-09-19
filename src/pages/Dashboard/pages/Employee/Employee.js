@@ -1230,7 +1230,7 @@ const useStyles = makeStyles(() => ({
         boxSizing: 'border-box',
         display: 'flex',
         flexWrap: 'wrap',
-        // display: 'none !important',
+        display: 'none !important',
         '& >span': {
             width: '20%',
             height: '20px',
@@ -1348,7 +1348,7 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexWrap: 'wrap',
         alignContent: 'space-between',
-        // display: 'none !important',
+        display: 'none !important',
         '& button': {
             marginTop: '15px'
         }
@@ -1464,7 +1464,7 @@ const useStyles = makeStyles(() => ({
         height: '100vh',
         background: 'rgba(0, 0, 0, .5)',
         zIndex: '1',
-        // display: 'none',
+        display: 'none',
     },
 }));
 
@@ -2671,7 +2671,7 @@ const Employee = () => {
                                     <div className={classes.listTitle}><strong>{!!(inspectionsDocs) && inspectionsDocs[0]?.fileCount}</strong>건 /{!!(inspectionsDocs) && !!(inspectionsDocs.length) && inspectionsDocs[0].totalCount}건</div>
                                     <ul className={classes.menuList + ' buttonList'}>
                                         {inspectionsDocs?.map((inspection) => (<><li>
-                                            {inspection.fileId === null ? <FileButtonNone onClick={() => setInspectionDocsPopup(true)}></FileButtonNone> : <FileButtonExis><span className={'orange'}>중</span></FileButtonExis>}
+                                            {inspection.fileId === null ? <FileButtonNone></FileButtonNone> : <FileButtonExis><span className={'orange'}>중</span></FileButtonExis>}
                                         </li>
                                             {/* <li>
                                                 <FileButtonExis><span className={'orange'}>중</span></FileButtonExis>
