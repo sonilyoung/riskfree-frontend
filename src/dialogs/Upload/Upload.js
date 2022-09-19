@@ -68,12 +68,12 @@ const SearchButton = styled(ButtonUnstyled)`
     }   
 `;
 
-function Dialog({ handleClose, open }) {
+function Upload({ open, onClose, onInputChange, onUpload }) {
     const classes = useStyles();
 
     return (
         <div className={open ? classes.uploadPopup : classes.uploadPopupClose}>
-            <ClosePopupButton2 onClick={handleClose}></ClosePopupButton2>
+            <ClosePopupButton2 onClick={onClose}></ClosePopupButton2>
             <div className={classes.uploadInfo}>
                 <img src={alertIcon} alt="alert icon" />
                 <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
@@ -90,9 +90,10 @@ function Dialog({ handleClose, open }) {
                     sx={{ width: 250 }}
                     className={classes.popupTextField}
                     type="file"
+                    onChange={onInputChange}
                 />
                 <SearchButton></SearchButton>
-                <UnknownButton1>전체사업장</UnknownButton1>
+                <UnknownButton1 onClick={ onUpload }>전체사업장</UnknownButton1>
             </div>
         </div>
     );
@@ -100,4 +101,4 @@ function Dialog({ handleClose, open }) {
 
 }
 
-export default Dialog;
+export default Upload;

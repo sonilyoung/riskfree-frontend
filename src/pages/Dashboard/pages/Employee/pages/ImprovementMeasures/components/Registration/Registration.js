@@ -31,7 +31,7 @@ import moment from "moment"
 import useUserInitialWorkplaceId from '../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
 import { useStyles } from './useStyles';
 import { UploadButton, WhiteButton, BlueButton } from './buttons/Unstyled';
-import Dialog from '../../../../../../../../dialogs/Upload/Upload';
+import { UploadDialog }  from '../../../../../../../../dialogs/Upload';
 
 const Registration = () => {
     const classes = useStyles();
@@ -44,6 +44,7 @@ const Registration = () => {
     const [reqUserCd, setReqUserCd] = useState("")
     const [reqDate, setReqDate] = useState(null)
     const [finDate, setFinDate] = useState(null)
+    const [openDialog, setOpenDialog] = useState(false)
     const [improvement, setImprovement] = useState(
         {
             "actionAfterId": null,
@@ -63,6 +64,18 @@ const Registration = () => {
             "workplaceId": workplaceSelect
         }
     )
+
+    const handleDialogClose = () => {
+        setOpenDialog(false);
+    }
+
+    const handleDialogFileUpload = () => {
+        console.log('I am doping upload');
+    }
+
+    const handleDialogInputChange = () => {
+        console.log('I am doping input change');
+    }
 
     const handleRedirect = () => {
         navigate("/dashboard/employee/improvement-measures/list")
@@ -204,7 +217,7 @@ const Registration = () => {
                                         className={classes.selectMenu}
                                         disabled
                                     />
-                                    <UploadButton>찾아보기</UploadButton>
+                                    <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
                                 </div>
                             </div>
                         </div>
@@ -299,7 +312,7 @@ const Registration = () => {
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton>찾아보기</UploadButton>
+                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev} alt="uploaded image" />
                                         </div> */}
@@ -316,7 +329,7 @@ const Registration = () => {
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton>찾아보기</UploadButton>
+                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev2} alt="preview image" />
                                         </div> */}
@@ -332,7 +345,12 @@ const Registration = () => {
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
             </Grid>
-            <Dialog open={true} />
+            <UploadDialog
+                open={openDialog}
+                onClose={handleDialogClose}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+            />
         </DefaultLayout>
     );
 };
