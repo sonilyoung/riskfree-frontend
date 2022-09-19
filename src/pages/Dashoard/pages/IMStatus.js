@@ -548,7 +548,7 @@ const IMStatus = () => {
                         <Pagination count={10} boundaryCount={10} shape="rounded" showFirstButton showLastButton />
                     </Stack>
                     <div>
-                        <ExcelButton>엑셀 다운로드</ExcelButton>
+                        {/* <ExcelButton>엑셀 다운로드</ExcelButton> */}
                     </div>
                 </Grid>
             </Grid>

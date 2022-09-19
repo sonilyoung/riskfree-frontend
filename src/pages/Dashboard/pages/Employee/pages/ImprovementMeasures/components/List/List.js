@@ -535,7 +535,7 @@ function List() {
                         <Pagination count={improvements?.length && (Math.ceil(improvements[0]?.totalCount / 10))} boundaryCount={10} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
                     </Stack>
                     <div>
-                        <ExcelButton>엑셀 다운로드</ExcelButton>
+                        {/* <ExcelButton>엑셀 다운로드</ExcelButton> */}
                     </div>
                 </Grid>
             </Grid>

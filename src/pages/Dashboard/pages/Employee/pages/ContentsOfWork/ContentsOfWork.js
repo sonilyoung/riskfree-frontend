@@ -737,7 +737,16 @@ const WorkHistoryList = () => {
                     </div>
                     {safeWorkList?.length > 0 && safeWorkList.map((safeWorkItem, index) =>
                     (<div className={classes.tableBody} onClick={() => { setNoticeId(safeWorkItem.noticeId); setHide(false); }}>
-                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox 
+                                        icon={<img src={checkIcon} alt="check icon" />}
+                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                    />
+                                } 
+                            />
+                        </div>
                         <div className={classes.tableRow}>{index + 1}</div>
                         <div className={classes.tableRow}>{safeWorkItem.workplaceName}</div>
                         <div className={classes.tableRow}>{safeWorkItem.insertDate}</div>

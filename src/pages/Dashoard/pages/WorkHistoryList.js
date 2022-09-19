@@ -662,7 +662,16 @@ const WorkHistoryList = () => {
                         </div>
                     </div>
                     <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox 
+                                        icon={<img src={checkIcon} alt="check icon" />}
+                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                    />
+                                } 
+                            />
+                        </div>
                         <div className={classes.tableRow}>1</div>
                         <div className={classes.tableRow}>울산</div>
                         <div className={classes.tableRow}>2022-01-03 14:00</div>
@@ -677,7 +686,16 @@ const WorkHistoryList = () => {
                         <div className={classes.tableRow}>2건</div>
                     </div>
                     <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox 
+                                        icon={<img src={checkIcon} alt="check icon" />}
+                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                    />
+                                } 
+                            />
+                        </div>
                         <div className={classes.tableRow}>2</div>
                         <div className={classes.tableRow}>울산</div>
                         <div className={classes.tableRow}>2022-01-03 14:00</div>
@@ -692,7 +710,16 @@ const WorkHistoryList = () => {
                         <div className={classes.tableRow}>2건</div>
                     </div>
                     <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox 
+                                        icon={<img src={checkIcon} alt="check icon" />}
+                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                    />
+                                } 
+                            />
+                        </div>
                         <div className={classes.tableRow}>3</div>
                         <div className={classes.tableRow}>울산</div>
                         <div className={classes.tableRow}>2022-01-03 14:00</div>
@@ -707,7 +734,16 @@ const WorkHistoryList = () => {
                         <div className={classes.tableRow}>2건</div>
                     </div>
                     <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox 
+                                        icon={<img src={checkIcon} alt="check icon" />}
+                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                    />
+                                } 
+                            />
+                        </div>
                         <div className={classes.tableRow}>4</div>
                         <div className={classes.tableRow}>울산</div>
                         <div className={classes.tableRow}>2022-01-03 14:00</div>
@@ -722,7 +758,16 @@ const WorkHistoryList = () => {
                         <div className={classes.tableRow}>2건</div>
                     </div>
                     <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox 
+                                        icon={<img src={checkIcon} alt="check icon" />}
+                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                    />
+                                } 
+                            />
+                        </div>
                         <div className={classes.tableRow}>5</div>
                         <div className={classes.tableRow}>울산</div>
                         <div className={classes.tableRow}>2022-01-03 14:00</div>
@@ -737,7 +782,16 @@ const WorkHistoryList = () => {
                         <div className={classes.tableRow}>2건</div>
                     </div>
                     <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox 
+                                        icon={<img src={checkIcon} alt="check icon" />}
+                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                    />
+                                } 
+                            />
+                        </div>
                         <div className={classes.tableRow}>6</div>
                         <div className={classes.tableRow}>울산</div>
                         <div className={classes.tableRow}>2022-01-03 14:00</div>
@@ -752,7 +806,16 @@ const WorkHistoryList = () => {
                         <div className={classes.tableRow}>2건</div>
                     </div>
                     <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox 
+                                        icon={<img src={checkIcon} alt="check icon" />}
+                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                    />
+                                } 
+                            />
+                        </div>
                         <div className={classes.tableRow}>7</div>
                         <div className={classes.tableRow}>울산</div>
                         <div className={classes.tableRow}>2022-01-03 14:00</div>
@@ -767,7 +830,16 @@ const WorkHistoryList = () => {
                         <div className={classes.tableRow}>2건</div>
                     </div>
                     <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox 
+                                        icon={<img src={checkIcon} alt="check icon" />}
+                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                    />
+                                } 
+                            />
+                        </div>
                         <div className={classes.tableRow}>8</div>
                         <div className={classes.tableRow}>울산</div>
                         <div className={classes.tableRow}>2022-01-03 14:00</div>
@@ -782,7 +854,16 @@ const WorkHistoryList = () => {
                         <div className={classes.tableRow}>2건</div>
                     </div>
                     <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox 
+                                        icon={<img src={checkIcon} alt="check icon" />}
+                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                    />
+                                } 
+                            />
+                        </div>
                         <div className={classes.tableRow}>9</div>
                         <div className={classes.tableRow}>울산</div>
                         <div className={classes.tableRow}>2022-01-03 14:00</div>
@@ -797,7 +878,16 @@ const WorkHistoryList = () => {
                         <div className={classes.tableRow}>2건</div>
                     </div>
                     <div className={classes.tableBody}>
-                        <div className={classes.tableRow}></div>
+                        <div className={classes.tableRow}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox 
+                                        icon={<img src={checkIcon} alt="check icon" />}
+                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                    />
+                                } 
+                            />
+                        </div>
                         <div className={classes.tableRow}>10</div>
                         <div className={classes.tableRow}>울산</div>
                         <div className={classes.tableRow}>2022-01-03 14:00</div>

@@ -832,7 +832,7 @@ const List = () => {
                         />
                     </Stack>
                     <div>
-                        <ExcelButton>엑셀 다운로드</ExcelButton>
+                        {/* <ExcelButton>엑셀 다운로드</ExcelButton> */}
                     </div>
                 </Grid>
             </Grid>

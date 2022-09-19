@@ -1331,14 +1331,14 @@ const SystemAdministrator = () => {
                             <div className={classes.popupRow}>
                                 <div className={classes.popupData + ' data_head'}>계약서</div>
                                 <div className={classes.popupData}>
-                                    <Select
+                                    <TextField
+                                        variant="outlined"
+                                        value={subscriberInsert.contractFileId}
                                         className={classes.tableTextField}
-                                        value={!!(subscriberView.contractFileId) ? subscriberView.contractFileId : ""}
-                                        onChange={(event) => setSubscriberView({ ...subscriberView, "contractFileId": event.target.value })}
-                                        sx={{ width: 250 }}
-                                    >
-                                        <MenuItem value={subscriberView.contractFileId}>{subscriberView.contractFileId}</MenuItem>
-                                    </Select>
+                                        onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "contractFileId": e.target.value })}
+                                        sx={{ width: 300 }}
+                                    />
+                                    <SearchUserButton>찾아보기</SearchUserButton>
                                 </div>
                             </div>
                         </div>
