@@ -48,6 +48,9 @@ import moment from 'moment';
 import { useGetSafeWorkFileMutation, useGetSafeWorkFileTopInfoMutation, useGetSafeWorkMutation } from '../../../../../../hooks/api/SafeWorkManagement/SafeWorkManagement';
 import useUserInitialWorkplaceId from '../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
 
+import CloseIcon from '@mui/icons-material/Close';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+
 const useStyles = makeStyles(() => ({
     pageWrap: {
         // minHeight: 'calc(100vh - 94px)',
@@ -123,10 +126,18 @@ const useStyles = makeStyles(() => ({
                     width: '80px !important'
                 },
                 '&:nth-of-type(2)': {
-                    width: '400px !important'
+                    width: '500px !important'
                 },
                 '&:last-of-type': {
-                    width: '180px !important'
+                    width: '180px !important',
+                    '& button': {
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        '&:last-of-type': {
+                            marginLeft: '10px',
+                        }
+                    }
                 },
             },
             '& $tableHead': {
@@ -175,7 +186,7 @@ const useStyles = makeStyles(() => ({
                         display: 'flex',
                         borderBottom: '1px solid #bdcbe9',
                         boxSizing: 'border-box',
-                        width: '959px',
+                        width: '970px',
                         '& >div': {
                             display: 'flex',
                             justifyContent: 'center',
@@ -206,7 +217,7 @@ const useStyles = makeStyles(() => ({
                 width: '160px'
             },
             '&:nth-of-type(6)': {
-                width: '971px'
+                width: '970px'
             },
         }
     },
@@ -223,6 +234,7 @@ const useStyles = makeStyles(() => ({
             borderBottom: '1px solid #bdcbe9',
             '&:last-of-type': {
                 borderRight: '0',
+                width: '123px !important',
             },
             '&:nth-of-type(6), &:nth-of-type(7), &:nth-of-type(8)': {
                 justifyContent: 'flex-start',
@@ -243,7 +255,7 @@ const useStyles = makeStyles(() => ({
                 width: '160px'
             },
             '&:nth-of-type(n + 6)': {
-                width: '120px'
+                width: '121px'
             },
         },
         '&:last-of-type $tableRow': {
@@ -479,7 +491,59 @@ const useStyles = makeStyles(() => ({
     },
     popupHide: {
         display: "none !important",
-    }
+    },
+    promptPopup: {
+        display: 'block',
+        position: 'absolute',
+        top: '70%',
+        left: '70%',
+        width: '320px',
+        height: '220px',
+        borderRadius: '18px',
+        border: '2px solid #018de7',
+        background: 'white',
+        color: '#333',
+        overflow: 'hidden',
+        zIndex: '6',
+        '& >div': {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '60px',
+            '&:first-of-type': {
+                fontSize: '20px',
+                fontWeight: 'bold',
+                paddingTop: '10px',
+            },
+            '&:last-of-type': {
+                position: 'absolute',
+                bottom: '0px',
+                width: '100%',
+                '& button': {
+                    width: '50%',
+                    height: '100%',
+                    border: 'none',
+                    background: '#eeeff7',
+                    cursor: 'pointer',
+                    fontSize: '18px',
+                    transition: '.2s',
+                    '&:last-of-type': {
+                        borderLeft: '1px solid #fff',
+                        background: '#018de7',
+                        color: '#fff',
+                        '&:hover': {
+                            background: '#0355b0',
+                            color: '#fff'
+                        }
+                    },
+                    '&:hover': {
+                        background: '#bdcbe9',
+                        color: '#333',
+                    }
+                }
+            },
+        }
+    },
 }));
 const SearchPopupButton = styled(ButtonUnstyled)`
     width: 46px;
@@ -603,6 +667,23 @@ const ClosePopupButton2 = styled(ButtonUnstyled)`
     cursor: pointer;
     transition: background .2s; 
     
+`;
+
+const RowButton = styled(ButtonUnstyled)`
+    width: 35px;
+    height: 35px;
+    border: 1px solid gray;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    &:hover {
+        border: 0px solid gray;
+        box-shadow: 0 0 0 1px #333;
+    }
+    &:active {
+        border: 0px solid gray;
+        box-shadow: inset 0 0 0 1px darkgray;
+    }
 `;
 
 const WorkHistoryList = () => {
@@ -802,20 +883,49 @@ const WorkHistoryList = () => {
                                 <div className={classes.tableBody}>
                                     <div className={classes.tableRow}>1</div>
                                     <div className={classes.tableRow}>공사내역_광명기업_2022033101.xlsx</div>
-                                    <div className={classes.tableRow}></div>
+                                    <div className={classes.tableRow}>
+                                        <RowButton>
+                                            <FileDownloadIcon sx={{ color: '#333' }}></FileDownloadIcon>
+                                        </RowButton>
+                                        <RowButton>
+                                            <CloseIcon sx={{ color: '#333' }}></CloseIcon>
+                                        </RowButton>
+                                    </div>
                                 </div>
                                 <div className={classes.tableBody}>
                                     <div className={classes.tableRow}>2</div>
                                     <div className={classes.tableRow}>공사내역_광명기업_2022033101.xlsx</div>
-                                    <div className={classes.tableRow}></div>
+                                    <div className={classes.tableRow}>
+                                        <RowButton>
+                                            <FileDownloadIcon sx={{ color: '#333' }}></FileDownloadIcon>
+                                        </RowButton>
+                                        <RowButton>
+                                            <CloseIcon sx={{ color: '#333' }}></CloseIcon>
+                                        </RowButton>
+                                    </div>
                                 </div>
                                 <div className={classes.tableBody}>
                                     <div className={classes.tableRow}>3</div>
                                     <div className={classes.tableRow}>공사내역_광명기업_2022033101.xlsx</div>
-                                    <div className={classes.tableRow}></div>
+                                    <div className={classes.tableRow}>
+                                        <RowButton>
+                                            <FileDownloadIcon sx={{ color: '#333' }}></FileDownloadIcon>
+                                        </RowButton>
+                                        <RowButton>
+                                            <CloseIcon sx={{ color: '#333' }}></CloseIcon>
+                                        </RowButton>
+                                    </div>
                                 </div>
                             </Grid>
                             <NoButton>취소</NoButton>
+                        </div>
+                    </div>
+                    <div className={classes.promptPopup}>
+                        <div>알림</div>
+                        <div>삭제 하시겠습니까?</div>
+                        <div>
+                            <button>취소</button>
+                            <button>확인</button>
                         </div>
                     </div>
                     <div className={popupShow ? classes.uploadPopup : classes.uploadPopupHide}>

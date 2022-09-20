@@ -1476,7 +1476,7 @@ const useStyles = makeStyles(() => ({
         }
     },
     notificationPopup: {
-        display: 'block',
+        display: 'none',
         '--border_radius': '15px',
         position: 'absolute',
         top: '50%',
@@ -1484,7 +1484,7 @@ const useStyles = makeStyles(() => ({
         width: '850px',
         height: '400px',
         transform: 'translate(-50%, -50%)',
-        borderRadius: '15px',
+        borderRadius: 'var(--border_radius)',
         background: 'white',
         '& >button': {
             position: 'absolute',
