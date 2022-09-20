@@ -1141,7 +1141,7 @@ const SystemAdministrator = () => {
                                         onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "contractAmount": e.target.value })}
                                         sx={{ width: 180 }}
                                     />
-                                    &nbsp;세
+                                    &nbsp;원
                                 </div>
                             </div>
                             <div className={classes.popupRow}>
@@ -1353,7 +1353,7 @@ const SystemAdministrator = () => {
                                         onChange={(event) => setSubscriberView({ ...subscriberView, "contractAmount": event.target.value })}
                                         sx={{ width: 190 }}
                                     />
-                                    &nbsp;록
+                                    &nbsp;원
                                 </div>
                             </div>
                             <div className={classes.popupRow}>
