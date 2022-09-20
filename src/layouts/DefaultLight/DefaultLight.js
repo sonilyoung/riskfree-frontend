@@ -30,6 +30,8 @@ import { useUserToken } from '../../hooks/core/UserToken';
 import '../../assets/fonts/Pretendard-Regular.otf';
 import proba from '../../assets/fonts/Pretendard-Regular.otf';
 import popupClose from '../../assets/images/btn_popClose.png';
+import searchIcon from '../../assets/images/ic_search.png';
+import popupClose2 from '../../assets/images/btn_popClose2.png';
 
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
@@ -304,6 +306,10 @@ const useStyles = makeStyles(() => ({
         marginBottom: '10px !important',
         overflow: 'hidden',
         height: '40px',
+        borderRadius: ' 46px',
+        '& .MuiOutlinedInput-notchedOutline': {
+            border: 'none'
+        },
         '& >div': {
             background: '#fff',
             fontSize: '16px',
@@ -312,6 +318,7 @@ const useStyles = makeStyles(() => ({
             fontSize: '16px',
             height: '40px',
             boxSizing: 'border-box',
+            background: '#eff2f9',
         }
     },
     userTab: {
@@ -346,6 +353,69 @@ const useStyles = makeStyles(() => ({
     },
     userInfo: {
         width: '100%'
+    },
+    uploadPopup: {
+        position: 'fixed',
+        zIndex: '1000',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%,-50%)',
+        width: '400px',
+        height: '400px',
+        background: '#fff',
+        borderRadius: '30px',
+        padding: '40px',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexWrap: 'wrap',
+        color: 'black',
+        '& >span': {
+            width: '20%',
+            height: '20px',
+            borderBottom: '1px solid #bdcbe9',
+            transform: 'translateY(-5px)',
+            '&:nth-of-type(2)': {
+                width: '60%',
+                border: 'none',
+                padding: '0 10px',
+                boxSizing: 'border-box',
+                textAlign: 'center',
+                transform: 'unset',
+            }
+        },
+        '& >button': {
+            position: 'absolute',
+            top: '0px',
+            right: '-65px'
+        }
+    },
+    uploadPopupClose: {
+        display: 'none',
+    },
+    uploadInfo: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        height: '50%',
+        '& >*': {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        '& img': {
+            width: '30px',
+            height: '30px',
+        }
+    },
+    uploadSearch: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        '& button:first-of-type': {
+            marginLeft: '10px'
+        }
     },
     popHeader: {
         display: 'flex',
@@ -593,6 +663,64 @@ const PromptButtonWhite = styled(ButtonUnstyled)`
     } 
 `;
 
+const UnknownButton1 = styled(ButtonUnstyled)`
+    width: 150px;
+    height: 46px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: -1.08px;
+    border-radius: 46px;
+    background: #00adef;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #3a5298;
+    }   
+`;
+
+const UnknownButton2 = styled(ButtonUnstyled)`
+    width: 200px;
+    height: 46px;
+    color: #000;
+    font-size: 20px;
+    letter-spacing: -1.08px;
+    border-radius: 46px;
+    background: #eff2f9;
+    border: 2px solid #00adef;
+    cursor: pointer;
+    transition: border-color .2s;
+    &:hover {
+        border-color: #3a5298;
+    }  
+`;
+
+const SearchButton = styled(ButtonUnstyled)`
+    width: 46px;
+    height: 46px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: -1.08px;
+    border-radius: 50%;
+    background: #00adef url(${searchIcon}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #3a5298 url(${searchIcon}) no-repeat 50% 50%;
+    }   
+`;
+
+const ClosePopupButton2 = styled(ButtonUnstyled)`
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: url(${popupClose2}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s; 
+`;
+
 const DefaultLight = ({ children }) => {
     const classes = useStyles();
     const location = useLocation()
@@ -605,6 +733,7 @@ const DefaultLight = ({ children }) => {
     const [companyInfo, setCompanyInfo] = useState({})
     const companyId = userToken.getUserCompanyId()
     const [getCompanyInfo] = useGetCompanyInfoMutation()
+    const [uploadPopupShow, setUploadPopupShow] = useState(false);
 
     const dispatch = useDispatch();
     const localStorage = useLocalStorage();
@@ -691,7 +820,7 @@ const DefaultLight = ({ children }) => {
                             <div className={classes.rightMenu}></div>
                         </Grid>
                         <Grid className={classes.mainAsside} item xs={3}>
-                            <SettingsButton className={classes.mainMenuButton} onClick={() => setSettingsPopup(true)}></SettingsButton>
+                            <SettingsButton className={classes.mainMenuButton} onClick={() => setUploadPopupShow(true)}></SettingsButton>
                             <AdminButton className={classes.mainMenuButton}></AdminButton>
                             <div className={classes.userInformation}>
                                 <div>{loginInfo?.loginId} / <span>{loginInfo?.roleName}</span></div>
@@ -700,96 +829,26 @@ const DefaultLight = ({ children }) => {
                             <LogButton className={classes.mainMenuButton} onClick={handleLogOut}>
                                 <LogoutIcon fontSize="large" sx={{ color: 'gray' }}></LogoutIcon>
                             </LogButton>
-                            <div className={settingsPopup ? (classes.headerPopup + ' settings_popup') : (classes.headerPopup + ' settings_popupClose')}>
-                                <div className={classes.popHeader}>
-                                    중대재해 자체점검 등록 차수 설정
-                                    <ButtonClosePop onClick={() => setSettingsPopup(false)}></ButtonClosePop>
+                            <div className={uploadPopupShow ? classes.uploadPopup : classes.uploadPopupClose}>
+                                <ClosePopupButton2 onClick={() => setUploadPopupShow(false)}></ClosePopupButton2>
+                                <div className={classes.uploadInfo}>
+                                    <img src={alertIcon} alt="alert icon" />
+                                    <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
+                                    <UnknownButton2>전체사업장</UnknownButton2>
                                 </div>
-                                <div className={classes.headerPopList}>
-                                    <Accordion className={classes.popupAccord}>
-                                        <AccordionSummary
-                                            expandIcon={<img src={arrowDown} alt="arrow down" />}
-                                            aria-controls="panel1a-content"
-                                            id="panel1a-header"
-                                        >
-                                            <Typography>관리차수 신규등록</Typography>
-                                        </AccordionSummary>
-                                        <AccordionDetails>
-                                            <TextField
-                                                id="standard-basic"
-                                                placeholder="관리차수"
-                                                variant="outlined"
-                                                sx={{ width: 115 }}
-                                                className={classes.popupTextField}
-                                            />
-                                            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-                                                <DesktopDatePicker
-                                                    className={classes.selectMenuDate}
-                                                    label=" "
-                                                    inputFormat="YYYY-MM-DD"
-                                                    value={date}
-                                                    onChange={setDate}
-                                                    renderInput={(params) => <TextField {...params} sx={{ width: 220 }} />}
-                                                />
-                                            </LocalizationProvider>
-                                        </AccordionDetails>
-                                    </Accordion>
-                                    <Accordion className={classes.popupAccord}>
-                                        <AccordionSummary
-                                            expandIcon={<img src={arrowDown} alt="arrow down" />}
-                                            aria-controls="panel1a-content"
-                                            id="panel1a-header"
-                                        >
-                                            <Typography>관리차수 조회</Typography>
-                                        </AccordionSummary>
-                                        <AccordionDetails>
-                                            <TextField
-                                                id="standard-basic"
-                                                placeholder="관리차수 조회"
-                                                variant="outlined"
-                                                sx={{ width: 350 }}
-                                                className={classes.popupTextField}
-                                            />
-                                        </AccordionDetails>
-                                    </Accordion>
-                                    <Accordion className={classes.popupAccord}>
-                                        <AccordionSummary
-                                            expandIcon={<img src={arrowDown} alt="arrow down" />}
-                                            aria-controls="panel1a-content"
-                                            id="panel1a-header"
-                                        >
-                                            <Typography>관리차수 복사</Typography>
-                                        </AccordionSummary>
-                                        <AccordionDetails>
-                                            <Select
-                                                className={classes.popupTextField}
-                                                sx={{ width: 150, marginBottom: '25px !important' }}
-                                                value={num}
-                                                onChange={handleChange}
-                                                displayEmpty
-                                            >
-                                                <MenuItem value="">복사할 차수</MenuItem>
-                                            </Select>
-                                            <span>2022-07-01 ~ 2022-12-31</span>
-                                            <div className={classes.popupPrompt}>
-                                                <Alert
-                                                    icon={<img src={alertIcon} alt="alert icon" />}
-                                                    severity="error">
-                                                    <strong>2차 차수의 DATA</strong>
-                                                    를 현재 차수에 복사 하시겠습니까
-                                                </Alert>
-                                                <PromptButtonBlue>예</PromptButtonBlue>
-                                                <PromptButtonWhite>예</PromptButtonWhite>
-                                            </div>
-                                        </AccordionDetails>
-                                    </Accordion>
-                                    <span></span>
-                                    <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
-                                    <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
-                                    <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
-                                </div>
-                                <div className={classes.headerPopFooter}>
-                                    <PopupFootButton>저장하기</PopupFootButton>
+                                <span></span>
+                                <span>의무조치별 상세 점검</span>
+                                <span></span>
+                                <div className={classes.uploadSearch}>
+                                    <TextField
+                                        id="standard-basic"
+                                        placeholder="여수공장 시정조치요청 파일.hwp"
+                                        variant="outlined"
+                                        sx={{ width: 250 }}
+                                        className={classes.popupTextField}
+                                    />
+                                    <SearchButton></SearchButton>
+                                    <UnknownButton1>전체사업장</UnknownButton1>
                                 </div>
                             </div>
                         </Grid>
