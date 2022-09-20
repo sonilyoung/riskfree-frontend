@@ -64,9 +64,6 @@ import adminIconHover from '../../../../assets/images/btn_admin_ov.png';
 
 const UserButton = styled(ButtonUnstyled)`
     background: transparent url(${userIcon});
-    &:hover {
-        background-image: url(${userIconHover});
-    }
 `;
 
 const LogButton = styled(ButtonUnstyled)`
@@ -78,9 +75,6 @@ const LogButton = styled(ButtonUnstyled)`
 
 const SettingsButton = styled(ButtonUnstyled)`
     background: transparent url(${setIcon});
-    &:hover {
-        background-image: url(${setIconHover});
-    }
 `;
 
 const AdminButton = styled(ButtonUnstyled)`
@@ -527,6 +521,7 @@ const Director = () => {
             "longitude": longitude,
         })
         setWeatherData(response?.data?.RET_DATA)
+        console.log(response);
     }
 
     useEffect(() => {
@@ -582,103 +577,7 @@ const Director = () => {
                         </Grid>
                         <Grid className={classes.mainMenu} item xs={6.3}>
                             <div className={classes.leftMenu}>
-                                <UserButton className={classes.mainMenuButton} onClick={() => setUserPopup(true)}></UserButton>
-                                <div className={userPopup ? (classes.headerPopup + ' user_popup') : (classes.headerPopup + ' user_popupClose')}>
-                                    <div className={classes.popHeader}>
-                                        최초 사용자 설정
-                                        <ButtonClosePop onClick={() => setUserPopup(!userPopup)}></ButtonClosePop>
-                                    </div>
-                                    <div className={classes.headerPopList}>
-                                        <TextField
-                                            id="standard-basic"
-                                            placeholder="회사 상호명"
-                                            variant="outlined"
-                                            sx={{ width: 350 }}
-                                            className={classes.popupTextField}
-                                        />
-                                        <TextField
-                                            id="standard-basic"
-                                            placeholder="사업장 명칭"
-                                            variant="outlined"
-                                            sx={{ width: 350 }}
-                                            className={classes.popupTextField}
-                                        />
-                                        <Select
-                                            className={classes.popupTextField}
-                                            sx={{ width: 350 }}
-                                            value={num}
-                                            onChange={handleChange}
-                                            displayEmpty
-                                            inputProps={{ 'aria-label': 'Without label' }}
-                                        >
-                                            <MenuItem value="">업종선택</MenuItem>
-                                        </Select>
-                                        <Select
-                                            className={classes.popupTextField}
-                                            sx={{ width: 350 }}
-                                            value={num}
-                                            onChange={handleChange}
-                                            displayEmpty
-                                            inputProps={{ 'aria-label': 'Without label' }}
-                                        >
-                                            <MenuItem value="">규모선택</MenuItem>
-                                        </Select>
-                                        <span></span>
-                                        <TextField
-                                            id="standard-basic"
-                                            placeholder="사용자 성명"
-                                            variant="outlined"
-                                            sx={{ width: 350 }}
-                                            className={classes.popupTextField}
-                                        />
-                                        <Select
-                                            className={classes.popupTextField}
-                                            sx={{ width: 350 }}
-                                            value={num}
-                                            onChange={handleChange}
-                                            displayEmpty
-                                            inputProps={{ 'aria-label': 'Without label' }}
-                                        >
-                                            <MenuItem value="">직책 선택</MenuItem>
-                                        </Select>
-                                        <span></span>
-                                        <TextField
-                                            id="standard-basic"
-                                            placeholder="안전보건 목표 등록 (띠어쓰기 포함 16자 이내)"
-                                            variant="outlined"
-                                            sx={{ width: 350 }}
-                                            className={classes.popupTextField}
-                                        />
-                                        <Select
-                                            className={classes.popupTextField}
-                                            sx={{ width: 350 }}
-                                            value={num}
-                                            onChange={handleChange}
-                                            displayEmpty
-                                            inputProps={{ 'aria-label': 'Without label' }}
-                                        >
-                                            <MenuItem value="">경영방침 등록 (띠어쓰기 포함 16자 이내)</MenuItem>
-                                        </Select>
-                                        <div className={classes.preFootPop}>
-                                            <div>
-                                                <span>로고등록</span>
-                                            </div>
-                                            <div>
-                                                <UploadImageButton>찾아보기</UploadImageButton>
-                                                <Alert
-                                                    icon={<img src={alertIcon} alt="alert icon" />}
-                                                    severity="error">
-                                                    사이즈 83px*67px
-                                                    <br />
-                                                    (   gif, jpg, png 파일허용)
-                                                </Alert>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={classes.headerPopFooter}>
-                                        <PopupFootButton>저장하기</PopupFootButton>
-                                    </div>
-                                </div>
+                                <UserButton className={classes.mainMenuButton}></UserButton>
                                 <FormControl sx={{ width: 180 }} className={classes.dropMenu}>
                                     <Select
                                         className={classes.selectMenu}
@@ -711,101 +610,9 @@ const Director = () => {
                                 </div>
                                 <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
                                 <SettingsButton className={classes.mainMenuButton} onClick={() => {
-                                    setSettingsPopup(true)
                                     if (userRoleCode === "000") { navigate("/dashboard/system-administrator") }
                                 }}></SettingsButton>
-                                <div className={settingsPopup ? (classes.headerPopup + ' settings_popup') : (classes.headerPopup + ' settings_popupClose')}>
-                                    <div className={classes.popHeader}>
-                                        중대재해 자체점검 등록 차수 설정
-                                        <ButtonClosePop onClick={() => setSettingsPopup(false)}></ButtonClosePop>
-                                    </div>
-                                    <div className={classes.headerPopList}>
-                                        <Accordion className={classes.popupAccord}>
-                                            <AccordionSummary
-                                                expandIcon={<img src={arrowDown} alt="arrow down" />}
-                                                aria-controls="panel1a-content"
-                                                id="panel1a-header"
-                                            >
-                                                <Typography>관리차수 신규등록</Typography>
-                                            </AccordionSummary>
-                                            <AccordionDetails>
-                                                <TextField
-                                                    id="standard-basic"
-                                                    placeholder="관리차수"
-                                                    variant="outlined"
-                                                    sx={{ width: 115 }}
-                                                    className={classes.popupTextField}
-                                                />
-                                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-                                                    <DesktopDatePicker
-                                                        className={classes.selectMenuDate}
-                                                        label=" "
-                                                        inputFormat="YYYY-MM-DD"
-                                                        value={date}
-                                                        onChange={setDate}
-                                                        renderInput={(params) => <TextField {...params} sx={{ width: 220 }} />}
-                                                    />
-                                                </LocalizationProvider>
-                                            </AccordionDetails>
-                                        </Accordion>
-                                        <Accordion className={classes.popupAccord}>
-                                            <AccordionSummary
-                                                expandIcon={<img src={arrowDown} alt="arrow down" />}
-                                                aria-controls="panel1a-content"
-                                                id="panel1a-header"
-                                            >
-                                                <Typography>관리차수 조회</Typography>
-                                            </AccordionSummary>
-                                            <AccordionDetails>
-                                                <TextField
-                                                    id="standard-basic"
-                                                    placeholder="관리차수 조회"
-                                                    variant="outlined"
-                                                    sx={{ width: 350 }}
-                                                    className={classes.popupTextField}
-                                                />
-                                            </AccordionDetails>
-                                        </Accordion>
-                                        <Accordion className={classes.popupAccord}>
-                                            <AccordionSummary
-                                                expandIcon={<img src={arrowDown} alt="arrow down" />}
-                                                aria-controls="panel1a-content"
-                                                id="panel1a-header"
-                                            >
-                                                <Typography>관리차수 복사</Typography>
-                                            </AccordionSummary>
-                                            <AccordionDetails>
-                                                <Select
-                                                    className={classes.popupTextField}
-                                                    sx={{ width: 150, marginBottom: '25px !important' }}
-                                                    value={num}
-                                                    onChange={handleChange}
-                                                    displayEmpty
-                                                >
-                                                    <MenuItem value="">복사할 차수</MenuItem>
-                                                </Select>
-                                                <span>2022-07-01 ~ 2022-12-31</span>
-                                                <div className={classes.popupPrompt}>
-                                                    <Alert
-                                                        icon={<img src={alertIcon} alt="alert icon" />}
-                                                        severity="error">
-                                                        <strong>2차 차수의 DATA</strong>
-                                                        를 현재 차수에 복사 하시겠습니까
-                                                    </Alert>
-                                                    <PromptButtonBlue>예</PromptButtonBlue>
-                                                    <PromptButtonWhite>예</PromptButtonWhite>
-                                                </div>
-                                            </AccordionDetails>
-                                        </Accordion>
-                                        <span></span>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
-                                    </div>
-                                    <div className={classes.headerPopFooter}>
-                                        <PopupFootButton>저장하기</PopupFootButton>
-                                    </div>
-                                </div>
+
                             </div>
                         </Grid>
                         <Grid className={classes.mainAsside} item xs={3}>
@@ -1017,73 +824,73 @@ const Director = () => {
                         <div className={classes.dashboardSlide}>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate1?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate1?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate1?.score ? essentialRateList?.RET_DATA?.rate1?.score : "0%"}</strong></div>
                                     <div>안전보건 목표 및<br /> 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate2?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate2?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate2?.score ? essentialRateList?.RET_DATA?.rate2?.score : "0%"}</strong></div>
                                     <div>안전보건 총괄관리<br /> 전담조직</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate3?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate3?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate3?.score ? essentialRateList?.RET_DATA?.rate3?.score : "0%"}</strong></div>
                                     <div>유해요인개선<br /> 업무절차</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate4?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate4?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate4?.score ? essentialRateList?.RET_DATA?.rate4?.score : "0%"}</strong></div>
                                     <div>예산편성 및<br /> 집행관리</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate5?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate5?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate5?.score ? essentialRateList?.RET_DATA?.rate5?.score : "0%"}</strong></div>
                                     <div>업무수행 권한<br /> 및 책임</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate6?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate6?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate6?.score ? essentialRateList?.RET_DATA?.rate6?.score : "0%"}</strong></div>
                                     <div>안전보건 전문인력<br /> 배치</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate7?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate7?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate7?.score ? essentialRateList?.RET_DATA?.rate7?.score : "0%"}</strong></div>
                                     <div>종사자 개선<br /> 의견수렴</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate8?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate8?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate8?.score ? essentialRateList?.RET_DATA?.rate8?.score : "0%"}</strong></div>
                                     <div>비상대응<br /> 절차마련</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate9?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate9?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate9?.score ? essentialRateList?.RET_DATA?.rate9?.score : "0%"}</strong></div>
                                     <div>도급/용역 위탁 시<br /> 안전보건 확보</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(accidentsPrevention?.RET_DATA?.enforceRate)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{accidentsPrevention?.RET_DATA?.enforceRate}</strong></div>
+                                    <div><strong>{accidentsPrevention?.RET_DATA?.enforceRate ? accidentsPrevention?.RET_DATA?.enforceRate : "0%"}</strong></div>
                                     <div>재발방지<br /> 대책</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(improvementLawOrderRate?.RET_DATA?.improvemetRate)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{improvementLawOrderRate?.RET_DATA?.improvemetRate}</strong></div>
+                                    <div><strong>{improvementLawOrderRate?.RET_DATA?.improvemetRate ? improvementLawOrderRate?.RET_DATA?.improvemetRate : "0%"}</strong></div>
                                     <div>개선/시정<br /> 명령</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor('0%')}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{relatedLawRate?.RET_DATA?.relatedLawRate}</strong></div>
+                                    <div><strong>{relatedLawRate?.RET_DATA?.relatedLawRate ? relatedLawRate?.RET_DATA?.relatedLawRate : "0%"}</strong></div>
                                     <div>관계법령에 따른<br /> 의무이행</div>
                                 </Link>
                             </div>
@@ -1092,73 +899,73 @@ const Director = () => {
                         <div className={classes.dashboardSlide}>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate1?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate1?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate1?.score ? essentialRateList?.RET_DATA?.rate1?.score : "0%"}</strong></div>
                                     <div>안전보건 목표 및<br /> 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate2?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate2?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate2?.score ? essentialRateList?.RET_DATA?.rate2?.score : "0%"}</strong></div>
                                     <div>안전보건 총괄관리<br /> 전담조직</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate3?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate3?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate3?.score ? essentialRateList?.RET_DATA?.rate3?.score : "0%"}</strong></div>
                                     <div>유해요인개선<br /> 업무절차</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate4?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate4?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate4?.score ? essentialRateList?.RET_DATA?.rate4?.score : "0%"}</strong></div>
                                     <div>예산편성 및<br /> 집행관리</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate5?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate5?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate5?.score ? essentialRateList?.RET_DATA?.rate5?.score : "0%"}</strong></div>
                                     <div>업무수행 권한<br /> 및 책임</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate6?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate6?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate6?.score ? essentialRateList?.RET_DATA?.rate6?.score : "0%"}</strong></div>
                                     <div>안전보건 전문인력<br /> 배치</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate7?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate7?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate7?.score ? essentialRateList?.RET_DATA?.rate7?.score : "0%"}</strong></div>
                                     <div>종사자 개선<br /> 의견수렴</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate8?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate8?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate8?.score ? essentialRateList?.RET_DATA?.rate8?.score : "0%"}</strong></div>
                                     <div>비상대응<br /> 절차마련</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate9?.score)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{essentialRateList?.RET_DATA?.rate9?.score}</strong></div>
+                                    <div><strong>{essentialRateList?.RET_DATA?.rate9?.score ? essentialRateList?.RET_DATA?.rate9?.score : "0%"}</strong></div>
                                     <div>도급/용역 위탁 시<br /> 안전보건 확보</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(accidentsPrevention?.RET_DATA?.enforceRate)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{accidentsPrevention?.RET_DATA?.enforceRate}</strong></div>
+                                    <div><strong>{accidentsPrevention?.RET_DATA?.enforceRate ? accidentsPrevention?.RET_DATA?.enforceRate : "0%"}</strong></div>
                                     <div>재발방지<br /> 대책</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(improvementLawOrderRate?.RET_DATA?.improvemetRate)}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{improvementLawOrderRate?.RET_DATA?.improvemetRate}</strong></div>
+                                    <div><strong>{improvementLawOrderRate?.RET_DATA?.improvemetRate ? improvementLawOrderRate?.RET_DATA?.improvemetRate : "0%"}</strong></div>
                                     <div>개선/시정<br /> 명령</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor('0%')}>
                                 <Link to="#" className={classes.slickLink} underline="none">
-                                    <div><strong>{relatedLawRate?.RET_DATA?.relatedLawRate}</strong></div>
+                                    <div><strong>{relatedLawRate?.RET_DATA?.relatedLawRate ? relatedLawRate?.RET_DATA?.relatedLawRate : "0%"}</strong></div>
                                     <div>관계법령에 따른<br /> 의무이행</div>
                                 </Link>
                             </div>
