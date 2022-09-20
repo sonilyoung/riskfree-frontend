@@ -45,6 +45,7 @@ const Registration = () => {
     const [reqDate, setReqDate] = useState(null)
     const [finDate, setFinDate] = useState(null)
     const [openDialog, setOpenDialog] = useState(false)
+    const [selectedFile, setSelectedFile] = useState(null)
     const [improvement, setImprovement] = useState(
         {
             "actionAfterId": null,
@@ -70,11 +71,13 @@ const Registration = () => {
     }
 
     const handleDialogFileUpload = () => {
-        console.log('I am doping upload');
+        console.log(selectedFile);
+        //TODO: await fileUpload....
     }
 
-    const handleDialogInputChange = () => {
-        console.log('I am doping input change');
+    const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
     }
 
     const handleRedirect = () => {
