@@ -408,6 +408,19 @@ const useStyles = makeStyles(() => ({
         cursor: 'pointer',
         transition: 'background .3s'
     },
+    mainMenuButtonSettings: {
+        display: 'block',
+        position: "relative",
+        top: "0px",
+        rigth: "0px",
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '60px',
+        height: '60px',
+        border: 'none',
+        cursor: 'pointer',
+        transition: 'background .3s'
+    },
     navSlider: {
         '& .slick-list': {
             width: '98%',
@@ -1095,9 +1108,9 @@ const useStyles = makeStyles(() => ({
         left: '0px',
         width: '100vw',
         height: '100vh',
-        background: 'rgba(0, 0, 0, .5)',
-        zIndex: '1',
-        display: 'none',
+        background: 'rgba(0, 0, 0, .1)',
+        zIndex: '9999',
+        // display: 'none',
     },
     pageOverlayInactive: {
         display: 'none',

@@ -320,6 +320,8 @@ const Director = () => {
 
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
 
+    console.log(userRoleCode)
+
     const handleLogOut = () => {
         remove();
         navigate('/');
@@ -708,7 +710,10 @@ const Director = () => {
                                     <div>계약기간 : {companyInfo.data?.RET_DATA?.contractStartDate} ~  {companyInfo.data?.RET_DATA?.contractEndDate}</div>
                                 </div>
                                 <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
-                                <SettingsButton className={classes.mainMenuButton} onClick={() => setSettingsPopup(true)}></SettingsButton>
+                                <SettingsButton className={classes.mainMenuButton} onClick={() => {
+                                    setSettingsPopup(true)
+                                    if (userRoleCode === "000") { navigate("/dashboard/system-administrator") }
+                                }}></SettingsButton>
                                 <div className={settingsPopup ? (classes.headerPopup + ' settings_popup') : (classes.headerPopup + ' settings_popupClose')}>
                                     <div className={classes.popHeader}>
                                         중대재해 자체점검 등록 차수 설정
@@ -815,7 +820,12 @@ const Director = () => {
                         </Grid>
                     </Grid>
 
-                    <div className={userRoleCode === '000' ? classes.pageOverlay : classes.pageOverlayInactive}></div>
+                    <div className={userRoleCode === '000' ? classes.pageOverlay : classes.pageOverlayInactive}>
+                        {/* <SettingsButton className={classes.mainMenuButtonSettings} onClick={() => {
+                            setSettingsPopup(true)
+                            if (userRoleCode === "000") { navigate("/dashboard/system-administrator") }
+                        }}></SettingsButton> */}
+                    </div>
 
                     <Grid className={classes.headerWorkplace} item xs={12} sx={{ marginTop: '-45px' }}>
                         <div className={classes.adminField + ' ' + classes.adminFieldLeft}>

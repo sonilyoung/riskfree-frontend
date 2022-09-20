@@ -76,7 +76,7 @@ const Login = () => {
             const userLoggedInRoleCd = userToken.getUserRoleCd();
             const redirectPath = getPath(userLoggedInRoleCd);
 
-            if (userLoggedInRoleCd !== "000") {
+            if (userLoggedInRoleCd) {
                 const defaultBaselineResponse = await getBaseline({});
                 const defaultBaselineId = defaultBaselineResponse.data.RET_DATA.baselineId;
                 dispatch(setBaselineId(defaultBaselineId));
