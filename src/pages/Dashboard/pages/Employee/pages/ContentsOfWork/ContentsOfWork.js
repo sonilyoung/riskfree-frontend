@@ -34,6 +34,7 @@ import checkIcon from '../../../../../../assets/images/ic_chk3.png';
 import checkIconOn from '../../../../../../assets/images/ic_chk3_on.png';
 
 import popupClose from '../../../../../../assets/images/btn_popClose.png';
+import popupClose2 from '../../../../../../assets/images/btn_popClose2.png';
 
 import Alert from '@mui/material/Alert';
 import alertIcon from '../../../../../../assets/images/ic_refer.png';
@@ -380,7 +381,7 @@ const useStyles = makeStyles(() => ({
     uploadPopup: {
         position: 'absolute',
         zIndex: '1000',
-        top: '50%',
+        top: '45%',
         left: '50%',
         transform: 'translate(-50%,-50%)',
         width: '400px',
@@ -593,6 +594,17 @@ const UnknownButton2 = styled(ButtonUnstyled)`
     }  
 `;
 
+const ClosePopupButton2 = styled(ButtonUnstyled)`
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background:url(${popupClose2}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s; 
+    
+`;
+
 const WorkHistoryList = () => {
     const classes = useStyles();
 
@@ -740,11 +752,11 @@ const WorkHistoryList = () => {
                         <div className={classes.tableRow}>
                             <FormControlLabel
                                 control={
-                                    <Checkbox 
+                                    <Checkbox
                                         icon={<img src={checkIcon} alt="check icon" />}
                                         checkedIcon={<img src={checkIconOn} alt="check icon on" />}
                                     />
-                                } 
+                                }
                             />
                         </div>
                         <div className={classes.tableRow}>{index + 1}</div>
@@ -807,6 +819,7 @@ const WorkHistoryList = () => {
                         </div>
                     </div>
                     <div className={popupShow ? classes.uploadPopup : classes.uploadPopupHide}>
+                        <ClosePopupButton2 onClick={() => setPopupShow(false)}></ClosePopupButton2>
                         <span></span>
                         <span>작성파일 업로드</span>
                         <span></span>
@@ -829,7 +842,7 @@ const WorkHistoryList = () => {
                     </Stack>
                 </Grid>
             </Grid>
-        </DefaultLayout>
+        </DefaultLayout >
     );
 };
 
