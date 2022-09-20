@@ -1,4 +1,5 @@
 import { makeStyles } from '@mui/styles';
+import searchIcon from '../../assets/images/ic_search.png';
 
 const useStyles = makeStyles(() => ({
     uploadPopup: {
@@ -65,9 +66,9 @@ const useStyles = makeStyles(() => ({
         }
     },
     popupTextField: {
+        width: '100%',
         marginBottom: '10px !important',
-        overflow: 'hidden',
-        height: '40px',
+        height: '45px',
         '& >div': {
             background: '#fff',
             fontSize: '16px',
@@ -76,10 +77,32 @@ const useStyles = makeStyles(() => ({
             fontSize: '16px',
             height: '40px',
             boxSizing: 'border-box',
+            padding: '10px',
             '&::-webkit-file-upload-button': {
-                display: 'none'
+                top: '0px',
+                left: '270px',
+                position: 'absolute',
+                width: '45px',
+                height: '45px',
+                color: '#fff',
+                fontSize: '20px',
+                letterSpacing: '-1.08px',
+                borderRadius: '50%',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'background .2s',
+                fontSize: '0px',
+                color: 'transparent',
+                userSelect: 'none',
+                background: '#00adef url(' + searchIcon + ') no-repeat 50% 50%',
+                '&:hover': {
+                    background: '#3a5298 url(' + searchIcon + ') no-repeat 50% 50%',
+                } 
             },
         },
+        '& fieldset': {
+            marginRight: '70px',
+        }
     },
     popupOverlay: {
         position: 'absolute',

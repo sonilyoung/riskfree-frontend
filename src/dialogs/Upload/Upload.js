@@ -88,14 +88,13 @@ function Upload({ open, onClose, onInputChange, onUpload }) {
                     id="standard-basic"
                     placeholder="여수공장 시정조치요청 파일.hwp"
                     variant="outlined"
-                    sx={{ width: 250 }}
                     className={classes.popupTextField}
                     type="file"
                     onChange={onInputChange}
                 />
-                <SearchButton component="label">
+                {/* <SearchButton component="label">
                     <input hidden accept="image/*" multiple type="file" />
-                </SearchButton>
+                </SearchButton> */}
                 <UnknownButton1 onClick={ onUpload }>전체사업장</UnknownButton1>
             </div>
         </div>
