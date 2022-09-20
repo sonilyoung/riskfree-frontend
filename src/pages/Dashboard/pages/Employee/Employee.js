@@ -96,6 +96,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import useGeolocation from "react-hook-geolocation";
 import Dialog from '../../../../dialogs/Upload/Upload';
 
+import icoFile from '../../../../assets/images/ic_file.png';
+
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
         backgroundColor: '#33374f',
@@ -1472,6 +1474,71 @@ const useStyles = makeStyles(() => ({
                 fontSize: '16px',
             }
         }
+    },
+    notificationPopup: {
+        display: 'block',
+        '--border_radius': '15px',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        width: '850px',
+        height: '400px',
+        transform: 'translate(-50%, -50%)',
+        borderRadius: '15px',
+        background: 'white',
+        '& >button': {
+            position: 'absolute',
+            top: '-8px',
+            right: '-60px'
+        },
+        '& >div:first-of-type': {
+            height: '60px',
+            padding: '20px',
+            boxSizing: 'border-box',
+            background: '#EFF2F9',
+            borderTopLeftRadius: 'var(--border_radius)',
+            borderTopRightRadius: 'var(--border_radius)',
+            fontSize: '18px',
+            fontWeight: 'bold',
+        },
+        '& >div:last-of-type': {
+            position: 'absolute',
+            bottom: '0px',
+            padding: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            '& img': {
+                marginRight: '10px',
+            }
+        },
+        '& $slideLabelHot': {
+            padding: '2px 10px',
+        },
+        '& p': {
+            padding: '20px',
+            margin: '0px',
+            lineHeight: '25px',
+        }
+    },
+    popNews: {
+        height: '280px',
+        overflowY: 'scroll',
+        '&::-webkit-scrollbar': {
+            width: '8px',
+            height: '8px',
+            border: '8px solid #1e2132',
+        },
+        '&::-webkit-scrollbar-track': {
+            background: '#fff',
+            borderRadius: '0px',
+        },
+        '&::-webkit-scrollbar-thumb': {
+            height: '50px',
+            width: '8px',
+            background: '#C3C6CD',
+            borderRadius: '8px',
+            boxShadow: 'inset 0px 10px 0px 0px #fff, inset 0px -10px 0px 0px #fff'
+        },
     },
     pageOverlayInactive: {
         display: 'none',
@@ -2952,6 +3019,24 @@ const Employee = () => {
                     </Grid>
 
                 </Grid>
+                <div className={classes.notificationPopup}>
+                    <ClosePopupButton2></ClosePopupButton2>
+                    <div><span className={classes.slideLabelHot}>HOT</span> 서산사업장 BTX 공정 3번 TANK 화재 발생 !!</div>
+                    <div className={classes.popNews}>
+                        <p>
+                            월 6일 낮 12시 19분경 서산사업장 원료 제조공장에서 불이 났습니다.<br />
+                            불은 공장 2동을 모두 태우고 3시간만인 오후 3시 19분 완전히 꺼졌다고 합니다. 화재 당시 공장에는 휴일 근무자 2명이 있었지만 다행히 자력 대피해 인명 피해는 발생하지 않았습니다.
+                        </p>
+                        <p>
+                            정확한 화재 원인은 아직 밝혀지지 않았는데요. 관계 당국은 피해 규모와 화재 원인 규명에 나설 것으로 보입니다. 공장 화재 소식은 정말 끊이지가 않는데요. 여름철에는 더욱 전력 소모가 많아지는 만큼 공장내 화재 감지 시설과 소방 시설에 더 신경을 써야 할 거 같습니다.
+                        </p>
+                        <p>
+                            정확한 화재 원인은 아직 밝혀지지 않았는데요. 관계 당국은 피해 규모와 화재 원인 규명에 나설 것으로 보입니다. 공장 화재 소식은 정말 끊이지가 않는데요. 여름철에는 더욱 전력 소모가 많아지는 만큼 공장내 화재 감지 시설과 소방 시설에 더 신경을 써야 할 거 같습니다.
+                        </p>
+                    </div>
+                    <div><img src={icoFile} alt="file icon" /> 개선조치 관련 내부 점검 파일 수정20220701.hwp</div>
+                    
+                </div>
             </Grid >
         </WideLayout >
     );
