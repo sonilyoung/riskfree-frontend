@@ -51,6 +51,7 @@ export const fileManagement = createApi({
                 url: 'file/fileUpload',
                 method: 'POST',
                 body: body,
+                contentType: 'multipart/form-data',
             })
         }),
         getImg: builder.mutation({

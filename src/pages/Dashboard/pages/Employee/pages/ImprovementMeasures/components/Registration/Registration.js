@@ -16,6 +16,7 @@ import { DefaultLayout } from '../../../../../../../../layouts/Default';
 
 import radioIcon from '../../../../../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../../../../../assets/images/ic_radio_on.png';
+import { useFileUploadMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 
 import imgPrev from '../../../../../../../../assets/images/prw_photo.jpg';
 import imgPrev2 from '../../../../../../../../assets/images/prw_photo2.jpg';
@@ -65,14 +66,19 @@ const Registration = () => {
             "workplaceId": workplaceSelect
         }
     )
+    const [fileUpload] = useFileUploadMutation();
 
     const handleDialogClose = () => {
         setOpenDialog(false);
     }
 
-    const handleDialogFileUpload = () => {
-        console.log(selectedFile);
-        //TODO: await fileUpload....
+    const handleDialogFileUpload = async (file) => {
+        let formData = new FormData();
+        formData.append("files", selectedFile)
+        const response = await fileUpload(formData)
+        
+        console.log(formData)
+        console.log(response)
     }
 
     const handleDialogInputChange = (event) => {
