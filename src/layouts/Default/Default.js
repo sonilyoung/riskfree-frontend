@@ -193,7 +193,7 @@ const useStyles = makeStyles(() => ({
         position: 'absolute',
         top: '0px',
         left: '0px',
-        width: '397px',
+        width: '420px',
         height: '700px',
         border: '2px solid #018de7',
         borderRadius: '5px',
@@ -448,7 +448,7 @@ const useStyles = makeStyles(() => ({
         flexWrap: 'wrap',
         '& >div': {
             '&:first-of-type': {
-                width: '194px',
+                width: '215px',
                 marginRight: '10px',
                 border: '1px solid #bbbdc0',
                 borderRadius: '5px',
@@ -465,7 +465,7 @@ const useStyles = makeStyles(() => ({
         }
     },
     popupAccord: {
-        width: '350px',
+        width: '375px',
         '& .MuiAccordionDetails-root': {
 
         },
@@ -524,6 +524,15 @@ const useStyles = makeStyles(() => ({
         },
         '& button': {
             paddingLeft: '0',
+        }
+    },
+    textArea: {
+        '& .MuiOutlinedInput-root': {
+            background: '#fff',
+            '& textarea': {
+                height: '74px !important',
+                fontSize: '16px',
+            }
         }
     },
     pageOverlay: {
@@ -866,13 +875,13 @@ const Default = ({ children }) => {
                                             id="standard-basic"
                                             value={safetyGoal}
                                             variant="outlined"
-                                            sx={{ width: 350 }}
+                                            sx={{ width: 370 }}
                                             className={classes.popupTextField}
                                             onChange={(event) => setSafetyGoal(event.target.value)}
                                         />
                                         <Select
                                             className={classes.popupTextField}
-                                            sx={{ width: 350 }}
+                                            sx={{ width: 370 }}
                                             value={missionStatement}
                                             onChange={(event) => setMissionStatement(event.target.value)}
                                             displayEmpty
@@ -946,26 +955,33 @@ const Default = ({ children }) => {
                                             >
                                                 <Typography>관리차수 신규등록</Typography>
                                             </AccordionSummary>
-                                            <AccordionDetails>
+                                            <AccordionDetails style={{ alignItems: 'center' }}>
                                                 <TextField
                                                     id="standard-basic"
-                                                    value={baselineInfo.baselineName}
+                                                    placeholder="관리차수"
                                                     variant="outlined"
-                                                    sx={{ width: 115 }}
+                                                    sx={{ width: 80 }}
                                                     className={classes.popupTextField}
-                                                    onChange={(event) => setBaselineInfo({ ...baselineInfo, "baselineName": event.target.value })}
                                                 />
                                                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                                                     <DesktopDatePicker
                                                         className={classes.selectMenuDate}
                                                         label=" "
                                                         inputFormat="YYYY-MM-DD"
-                                                        value={baselineInfo.baselineEnd}
-                                                        onChange={(newDate) => {
-                                                            const date = new Date(newDate.$d)
-                                                            setBaselineId({ ...baselineInfo, "baselineEnd": moment(date).format("YYYY-MM-DD") })
-                                                        }}
-                                                        renderInput={(params) => <TextField {...params} sx={{ width: 220 }} />}
+                                                        value={date}
+                                                        onChange={setDate}
+                                                        renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
+                                                    />
+                                                </LocalizationProvider>
+                                                ~
+                                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                                    <DesktopDatePicker
+                                                        className={classes.selectMenuDate}
+                                                        label=" "
+                                                        inputFormat="YYYY-MM-DD"
+                                                        value={date}
+                                                        onChange={setDate}
+                                                        renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                     />
                                                 </LocalizationProvider>
                                             </AccordionDetails>
@@ -979,12 +995,19 @@ const Default = ({ children }) => {
                                                 <Typography>관리차수 조회</Typography>
                                             </AccordionSummary>
                                             <AccordionDetails>
-                                                <TextField
+                                                {/* <TextField
                                                     id="standard-basic"
                                                     placeholder="관리차수 조회"
                                                     variant="outlined"
-                                                    sx={{ width: 350 }}
+                                                    sx={{ width: 370 }}
                                                     className={classes.popupTextField}
+                                                /> */}
+                                                <TextField
+                                                    className={classes.textArea}
+                                                    id="outlined-multiline-static"
+                                                    multiline
+                                                    rows={4}
+                                                    placeholder="1층에서                                        추락사고 발생하여 병원 이송함.&#10;2층으로                                       추락사고 발생하여 병원 이송함.&#10;3층으로                                       추락사고 발생하여 병원 이송함. "
                                                 />
                                             </AccordionDetails>
                                         </Accordion>
@@ -1020,7 +1043,7 @@ const Default = ({ children }) => {
                                             </AccordionDetails>
                                         </Accordion>
                                         <span></span>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setShowUploadPopup(true)}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
                                     </div>

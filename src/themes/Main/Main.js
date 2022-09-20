@@ -62,32 +62,51 @@ const main = createTheme({
                 root: {
                     borderRadius: 6,
                     fontSize: 17,
-                    '& input[type=date]': {
-                        display: 'flex',
-                        alignItems: 'center'
-                    },
-                    '& input[type=date]::-webkit-datetime-edit': {
-                        color: 'transparent',
-                        position: 'relative',
-                    },
-                    '& input[type=date]::-webkit-datetime-edit-year-field': {
-                        position: 'absolute !important',
-                        color: '#000',
-                        padding: '2px',
-                        left: '0px',
-                    },
-                    '& input[type=date]::-webkit-datetime-edit-month-field': {
-                        position: 'absolute !important',
-                        color: '#000',
-                        padding: '2px',
-                        left: '40px',
-                    },
-                    '& input[type=date]::-webkit-datetime-edit-day-field': {
-                        position: 'absolute !important',
-                        color: '#000',
-                        padding: '2px',
-                        right: '0px',
-                    },
+                    // '& textarea[id=outlined-multiline-static]': {
+                    //     '&::-webkit-scrollbar': {
+                    //         width: '6px',
+                    //         height: '6px',
+                    //         border: '6px solid #1e2132'
+                    //     },
+                    //     '&::-webkit-scrollbar-track': {
+                    //         background: '#1e2132',
+                    //         borderRadius: '0px',
+                    //         boxShadow: 'inset 0 0 4px rgb(0 0 0 / 20%)'
+                    //     },
+                    //     '&::-webkit-scrollbar-thumb': {
+                    //         height: '50px',
+                    //         width: '6px',
+                    //         background: '#3f4d72',
+                    //         borderRadius: '8px',
+                    //         boxShadow: 'inset 0px 10px 0px 0px #1e2132, inset 0px -10px 0px 0px #1e2132'
+                    //     },
+                    // }
+                    // '& input[type=date]': {
+                    //     display: 'flex',
+                    //     alignItems: 'center'
+                    // },
+                    // '& input[type=date]::-webkit-datetime-edit': {
+                    //     color: 'transparent',
+                    //     position: 'relative',
+                    // },
+                    // '& input[type=date]::-webkit-datetime-edit-year-field': {
+                    //     position: 'absolute !important',
+                    //     color: '#000',
+                    //     padding: '2px',
+                    //     left: '0px',
+                    // },
+                    // '& input[type=date]::-webkit-datetime-edit-month-field': {
+                    //     position: 'absolute !important',
+                    //     color: '#000',
+                    //     padding: '2px',
+                    //     left: '40px',
+                    // },
+                    // '& input[type=date]::-webkit-datetime-edit-day-field': {
+                    //     position: 'absolute !important',
+                    //     color: '#000',
+                    //     padding: '2px',
+                    //     right: '0px',
+                    // },
                 },
                 input: {
                     '&::placeholder': {

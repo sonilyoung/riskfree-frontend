@@ -205,13 +205,17 @@ const useStyles = makeStyles(() => ({
         minHeight: '40px',
         '& >img': {
             height: '20px',
+            cursor: 'pointer',
         },
         '& >button': {
+            width: '20px',
+            height: '20px',
             color: "#fff",
             backgroundColor: '#888',
             fontSize: '15px',
             marginRight: '10px',
             border: 'none',
+            cursor: 'pointer'
         },
         '&:first-of-type, &:nth-of-type(3)': {
             width: '100px'
@@ -966,7 +970,7 @@ const SystemAdministrator = () => {
                                 }}>
                                     {!!plusButtons && !!plusButtons?.length && plusButtons?.map((button, btnIndex) => {
                                         if (btnIndex === index) {
-                                            return <div className={classes.tableData}><button onClick={() => handlePlusButtonClick(button.id, subscriber.companyId)}>{button.plus ? "+" : "-"}</button>{index + 1}</div>
+                                            return <div className={classes.tableData}><button onClick={() => handlePlusButtonClick(button.id, subscriber.companyId)}>{button.plus ? "+" : "–"}</button>{index + 1}</div>
                                         }
                                     })
                                     }

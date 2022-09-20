@@ -100,9 +100,8 @@ const useStyles = makeStyles(() => ({
     dashboardWrap: {
         backgroundColor: '#33374f',
         justifyContent: 'center',
-        minWidth: '1920px !important',
+        minWidth: '1919px !important',
         minHeight: '100vh',
-        overflowY: 'scroll',
         '&::-webkit-scrollbar': {
             width: '6px',
             height: '6px',
@@ -603,7 +602,7 @@ const useStyles = makeStyles(() => ({
             flexWrap: 'wrap',
             width: '100%',
             wordBreak: 'keep-all',
-            lineHeight: '24px',
+            lineHeight: '25px',
             '& p, & a': {
                 width: 'calc(100% - 110px)',
                 paddingLeft: '20px',
@@ -1047,7 +1046,7 @@ const useStyles = makeStyles(() => ({
         position: 'absolute',
         top: '0px',
         left: '0px',
-        width: '397px',
+        width: '420px',
         height: '700px',
         border: '2px solid #018de7',
         borderRadius: '5px',
@@ -1167,7 +1166,7 @@ const useStyles = makeStyles(() => ({
         flexWrap: 'wrap',
         '& >div': {
             '&:first-of-type': {
-                width: '194px',
+                width: '215px',
                 marginRight: '10px',
                 border: '1px solid #bbbdc0',
                 borderRadius: '5px',
@@ -1184,7 +1183,7 @@ const useStyles = makeStyles(() => ({
         }
     },
     popupAccord: {
-        width: '350px',
+        width: '375px',
         '& .MuiAccordionDetails-root': {
 
         },
@@ -1465,9 +1464,18 @@ const useStyles = makeStyles(() => ({
         background: 'rgba(0, 0, 0, .5)',
         zIndex: '1',
     },
+    textArea: {
+        '& .MuiOutlinedInput-root': {
+            background: '#fff',
+            '& textarea': {
+                height: '74px !important',
+                fontSize: '16px',
+            }
+        }
+    },
     pageOverlayInactive: {
         display: 'none',
-    }
+    },
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -2177,13 +2185,13 @@ const Employee = () => {
                                             id="standard-basic"
                                             value={safetyGoal}
                                             variant="outlined"
-                                            sx={{ width: 350 }}
+                                            sx={{ width: 370 }}
                                             className={classes.popupTextField}
                                             onChange={(event) => setSafetyGoal(event.target.value)}
                                         />
                                         <Select
                                             className={classes.popupTextField}
-                                            sx={{ width: 350 }}
+                                            sx={{ width: 370 }}
                                             value={missionStatement}
                                             onChange={(event) => setMissionStatement(event.target.value)}
                                             displayEmpty
@@ -2257,12 +2265,12 @@ const Employee = () => {
                                             >
                                                 <Typography>관리차수 신규등록</Typography>
                                             </AccordionSummary>
-                                            <AccordionDetails>
+                                            <AccordionDetails style={{ alignItems: 'center' }}>
                                                 <TextField
                                                     id="standard-basic"
                                                     placeholder="관리차수"
                                                     variant="outlined"
-                                                    sx={{ width: 115 }}
+                                                    sx={{ width: 80 }}
                                                     className={classes.popupTextField}
                                                 />
                                                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
@@ -2272,7 +2280,18 @@ const Employee = () => {
                                                         inputFormat="YYYY-MM-DD"
                                                         value={date}
                                                         onChange={setDate}
-                                                        renderInput={(params) => <TextField {...params} sx={{ width: 220 }} />}
+                                                        renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
+                                                    />
+                                                </LocalizationProvider>
+                                                ~
+                                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                                    <DesktopDatePicker
+                                                        className={classes.selectMenuDate}
+                                                        label=" "
+                                                        inputFormat="YYYY-MM-DD"
+                                                        value={date}
+                                                        onChange={setDate}
+                                                        renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                     />
                                                 </LocalizationProvider>
                                             </AccordionDetails>
@@ -2286,12 +2305,19 @@ const Employee = () => {
                                                 <Typography>관리차수 조회</Typography>
                                             </AccordionSummary>
                                             <AccordionDetails>
-                                                <TextField
+                                                {/* <TextField
                                                     id="standard-basic"
                                                     placeholder="관리차수 조회"
                                                     variant="outlined"
-                                                    sx={{ width: 350 }}
+                                                    sx={{ width: 370 }}
                                                     className={classes.popupTextField}
+                                                /> */}
+                                                <TextField
+                                                    className={classes.textArea}
+                                                    id="outlined-multiline-static"
+                                                    multiline
+                                                    rows={4}
+                                                    placeholder="1층에서                                        추락사고 발생하여 병원 이송함.&#10;2층으로                                       추락사고 발생하여 병원 이송함.&#10;3층으로                                       추락사고 발생하여 병원 이송함. "
                                                 />
                                             </AccordionDetails>
                                         </Accordion>

@@ -21,9 +21,8 @@ const useStyles = makeStyles(() => ({
     dashboardWrap: {
         backgroundColor: '#33374f',
         justifyContent: 'center',
-        minWidth: '1920px !important',
+        minWidth: '1900px !important',
         minHeight: '100vh',
-        overflowY: 'scroll',
         '&::-webkit-scrollbar': {
             width: '6px',
             height: '6px',
