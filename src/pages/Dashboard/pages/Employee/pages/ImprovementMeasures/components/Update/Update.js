@@ -34,6 +34,8 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 import moment from "moment"
 import useUserInitialWorkplaceId from '../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
+import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+import { useFileUploadMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -313,6 +315,9 @@ const Registration = () => {
     const [workplaces, setWorkplaces] = useState([])
     const [workplaceSelect, setWorkplaceSelect] = useState(getInitialWorkplaceId())
     const [reqUserCd, setReqUserCd] = useState("")
+    const [openDialog, setOpenDialog] = useState(false)
+    const [selectedFile, setSelectedFile] = useState(null)
+    const [fileUpload] = useFileUploadMutation()
     const [improvement, setImprovement] = useState(
         {
             "actionAfterId": null,
@@ -348,6 +353,22 @@ const Registration = () => {
     const fetchImprovementView = async () => {
         const response = await improvementView(updateid)
         setImprovement(response.data.RET_DATA)
+    }
+
+    const handleDialogClose = () => {
+        setOpenDialog(false);
+    }
+
+    const handleDialogFileUpload = async (file) => {
+        const response = await fileUpload({
+            files: selectedFile
+        })
+        console.log(response);
+    }
+
+    const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
     }
 
     const handleUpdateImprovement = () => {
@@ -498,7 +519,7 @@ const Registration = () => {
                                         className={classes.selectMenu}
                                         disabled
                                     />
-                                    <UploadButton>찾아보기</UploadButton>
+                                    <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
                                 </div>
                             </div>
                         </div>
@@ -594,7 +615,7 @@ const Registration = () => {
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton>찾아보기</UploadButton>
+                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev} alt="uploaded image" />
                                         </div> */}
@@ -611,7 +632,7 @@ const Registration = () => {
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton>찾아보기</UploadButton>
+                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev2} alt="preview image" />
                                         </div> */}
@@ -627,6 +648,12 @@ const Registration = () => {
                     {/* <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton> */}
                 </Grid>
             </Grid>
+            <UploadDialog
+                open={openDialog}
+                onClose={handleDialogClose}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+            />
         </DefaultLayout>
     );
 };

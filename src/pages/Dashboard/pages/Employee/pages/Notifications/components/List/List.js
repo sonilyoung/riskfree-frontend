@@ -403,7 +403,7 @@ function List() {
                 <Grid item xs={12} className={classes.pagingBox}>
                     <div>총 게시글 <strong>{noticesList && noticesList[0]?.totalCount}</strong> 건</div>
                     <Stack spacing={2}>
-                        <Pagination count={!!noticesForCount?.data?.RET_DATA && (Math.ceil(noticesForCount?.data?.RET_DATA[0]?.totalCount / 10))} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
+                        {!!noticesForCount?.data?.RET_DATA && <Pagination count={!!noticesForCount?.data?.RET_DATA && (Math.floor(noticesForCount?.data?.RET_DATA[0]?.totalCount / 10))} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />}
                     </Stack>
                 </Grid>
             </Grid >

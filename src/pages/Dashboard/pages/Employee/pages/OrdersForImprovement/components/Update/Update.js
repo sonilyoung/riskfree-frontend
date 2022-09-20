@@ -37,6 +37,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 
+import { useFileUploadMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
+import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+
 const useStyles = makeStyles(() => ({
     pageWrap: {
         '& >div:not($listTitle, $footerButtons)': {
@@ -313,6 +316,8 @@ const Update = () => {
     const [lawUpdate] = useLawUpdateMutation();
     const [getLoginInfo] = useGetLoginInfoMutation()
     const [loginInfo, setLoginInfo] = useState({})
+    const [openDialog, setOpenDialog] = useState(false)
+    const [selectedFile, setSelectedFile] = useState(null)
     const todaysDate = moment().format("YYYY-MM-DD")
 
     const handleLoginInfo = async () => {
@@ -382,6 +387,23 @@ const Update = () => {
             "recvUserName": law.recvUserName
         })
             .then(() => handleRedirect())
+    }
+    const [fileUpload] = useFileUploadMutation()
+
+    const handleDialogClose = () => {
+        setOpenDialog(false);
+    }
+
+    const handleDialogFileUpload = async (file) => {
+        const response = await fileUpload({
+            files: selectedFile
+        })
+        console.log(response);
+    }
+
+    const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
     }
 
     const [date1, setDate1] = React.useState(null),
@@ -681,7 +703,7 @@ const Update = () => {
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton>찾아보기</UploadButton>
+                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev} alt="uploaded image" />
                                         </div> */}
@@ -698,7 +720,7 @@ const Update = () => {
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton>찾아보기</UploadButton>
+                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={noImg} alt="no image" />
                                         </div> */}
@@ -718,6 +740,12 @@ const Update = () => {
                     </WhiteButton>
                 </Grid>
             </Grid>
+            <UploadDialog
+                open={openDialog}
+                onClose={handleDialogClose}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+            />
         </DefaultLayout>
     );
 };

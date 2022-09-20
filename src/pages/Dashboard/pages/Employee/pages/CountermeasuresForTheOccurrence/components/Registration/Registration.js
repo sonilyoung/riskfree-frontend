@@ -35,6 +35,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 
+import { useFileUploadMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
+import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+
+
 const useStyles = makeStyles(() => ({
     pageWrap: {
         '& >div:not($listTitle, $footerButtons)': {
@@ -348,6 +352,8 @@ const Registration = () => {
     const [loginInfo, setLoginInfo] = useState({})
     const [occurDate, setOccurDate] = useState(null)
     const [recvName, setRecvName] = useState("")
+    const [openDialog, setOpenDialog] = useState(false)
+    const [selectedFile, setSelectedFile] = useState(null)
 
     const [accident, setAccident] = useState({
         accLevelCd: "",
@@ -382,6 +388,24 @@ const Registration = () => {
         recvUserName: recvName,
         sameAccidentInjury: null,
     });
+
+    const [fileUpload] = useFileUploadMutation()
+
+    const handleDialogClose = () => {
+        setOpenDialog(false);
+    }
+
+    const handleDialogFileUpload = async (file) => {
+        const response = await fileUpload({
+            files: selectedFile
+        })
+        console.log(response);
+    }
+
+    const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    }
 
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -932,10 +956,10 @@ const Registration = () => {
                                     />
                                 </div>
                                 <div className={classes.rowInfo}>
-                                    <AccidentReportButton sx={{ marginRight: "10px" }}>
+                                    <AccidentReportButton sx={{ marginRight: "10px" }} onClick={e => setOpenDialog(true)}>
                                         초기사고 보고서
                                     </AccidentReportButton>
-                                    <AccidentReportButton>최종사고 보고서</AccidentReportButton>
+                                    <AccidentReportButton onClick={e => setOpenDialog(true)}>최종사고 보고서</AccidentReportButton>
                                 </div>
                             </div>
                         </div>
@@ -976,7 +1000,7 @@ const Registration = () => {
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton>찾아보기</UploadButton>
+                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev} alt="uploaded image" />
                                         </div> */}
@@ -993,7 +1017,7 @@ const Registration = () => {
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton>찾아보기</UploadButton>
+                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={noImg} alt="no image" />
                                         </div> */}
@@ -1011,6 +1035,12 @@ const Registration = () => {
                     <WhiteButton className={"button-list"} onClick={handleRedirect}>목록</WhiteButton>
                 </Grid>
             </Grid>
+            <UploadDialog
+                open={openDialog}
+                onClose={handleDialogClose}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+            />
         </DefaultLayout>
     );
 };

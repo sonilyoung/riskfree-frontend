@@ -37,6 +37,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 
+import { useFileUploadMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
+import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+
 const useStyles = makeStyles(() => ({
     pageWrap: {
         '& >div:not($listTitle, $footerButtons)': {
@@ -335,6 +338,8 @@ const Update = () => {
     const [accidentView] = useAccidentViewMutation()
     const [accidentUpdate] = useAccidentUpdateMutation()
     const todayDate = moment().format("YYYY-MM-DD")
+    const [openDialog, setOpenDialog] = useState(false)
+    const [selectedFile, setSelectedFile] = useState(null)
     const [accident, setAccident] = useState({
         "accLevelCd": "",
         "accTypeCd001": "",
@@ -368,7 +373,25 @@ const Update = () => {
         "recvUserName": "",
         "sameAccidentInjury": null
     })
+    const [fileUpload] = useFileUploadMutation()
+
     const [locale] = React.useState('ko');
+
+    const handleDialogClose = () => {
+        setOpenDialog(false);
+    }
+
+    const handleDialogFileUpload = async (file) => {
+        const response = await fileUpload({
+            files: selectedFile
+        })
+        console.log(response);
+    }
+
+    const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    }
 
 
     const handleRedirect = () => {
@@ -789,8 +812,8 @@ const Update = () => {
                                     />
                                 </div>
                                 <div className={classes.rowInfo}>
-                                    <AccidentReportButton sx={{ marginRight: '10px' }}>초기사고 보고서</AccidentReportButton>
-                                    <AccidentReportButton>최종사고 보고서</AccidentReportButton>
+                                    <AccidentReportButton sx={{ marginRight: '10px' }} onClick={e => setOpenDialog(true)}>초기사고 보고서</AccidentReportButton>
+                                    <AccidentReportButton onClick={e => setOpenDialog(true)}>최종사고 보고서</AccidentReportButton>
                                 </div>
                             </div>
                         </div>
@@ -826,7 +849,7 @@ const Update = () => {
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton>찾아보기</UploadButton>
+                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev} alt="uploaded image" />
                                         </div> */}
@@ -843,7 +866,7 @@ const Update = () => {
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton>찾아보기</UploadButton>
+                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={noImg} alt="no image" />
                                         </div> */}
@@ -857,8 +880,14 @@ const Update = () => {
                     <BlueButton className={'button-correction'} onClick={handleUpdate}>수정</BlueButton>
                     <WhiteButton className={'button-cancellation'} onClick={handleRedirect}>취소</WhiteButton>
                 </Grid>
-            </Grid>
-        </DefaultLayout>
+            </Grid >
+            <UploadDialog
+                open={openDialog}
+                onClose={handleDialogClose}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+            />
+        </DefaultLayout >
 
     )
 }

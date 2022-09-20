@@ -20,6 +20,9 @@ import deleteButton from '../../../../../../../../assets/images/btn_del.png';
 
 import { useNoticesInsertMutation } from '../../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
 
+import { useFileUploadMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
+import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+
 const useStyles = makeStyles(() => ({
     pageWrap: {
 
@@ -230,6 +233,26 @@ const Registration = () => {
     const [title, setTitle] = useState("")
     const [important, setImportant] = useState("")
     const [content, setContent] = useState("")
+    const [openDialog, setOpenDialog] = useState(false)
+    const [selectedFile, setSelectedFile] = useState(null)
+
+    const [fileUpload] = useFileUploadMutation()
+
+    const handleDialogClose = () => {
+        setOpenDialog(false);
+    }
+
+    const handleDialogFileUpload = async (file) => {
+        const response = await fileUpload({
+            files: selectedFile
+        })
+        console.log(response);
+    }
+
+    const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    }
 
 
     const navigate = useNavigate()
@@ -346,7 +369,7 @@ const Registration = () => {
                                     //value="개선조치 관련 내부 점검 파일_수정20220701.hwp"
                                     disabled
                                 />
-                                <UploadButton>찾아보기</UploadButton>
+                                <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
                             </div>
                         </div>
                     </div>
@@ -360,6 +383,12 @@ const Registration = () => {
                     <WhiteButton className={'button-cancelation'} onClick={() => handleRedirect()}>취소</WhiteButton>
                 </Grid>
             </Grid>
+            <UploadDialog
+                open={openDialog}
+                onClose={handleDialogClose}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+            />
         </DefaultLayout>
 
     );

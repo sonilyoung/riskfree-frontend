@@ -381,15 +381,15 @@ const View = () => {
                                 <div>
                                     <div>조치 전</div>
                                     <div>
-                                        <TextField
+                                        {/* <TextField
                                             id="standard-basic"
                                             variant="outlined"
                                             value="20220607사고등록 전 사진.jpg"
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             disabled
-                                        />
-                                        <UploadButton>찾아보기</UploadButton>
+                                        /> */}
+                                        {/* <UploadButton>찾아보기</UploadButton> */}
                                         <div className={classes.imgPreview}>
                                             {/* <img src={imgPrev} alt="uploaded image" /> */}
                                         </div>
@@ -398,15 +398,15 @@ const View = () => {
                                 <div>
                                     <div>조치 후</div>
                                     <div>
-                                        <TextField
+                                        {/* <TextField
                                             id="standard-basic"
                                             variant="outlined"
                                             value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             disabled
-                                        />
-                                        <UploadButton>찾아보기</UploadButton>
+                                        /> */}
+                                        {/* <UploadButton>찾아보기</UploadButton> */}
                                         <div className={classes.imgPreview}>
                                             {/* <img src={noImg} alt="no image" /> */}
                                         </div>
