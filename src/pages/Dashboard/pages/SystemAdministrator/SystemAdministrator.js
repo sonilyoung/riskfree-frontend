@@ -192,6 +192,9 @@ const useStyles = makeStyles(() => ({
             },
         },
     },
+    tableRowClose: {
+        display: 'none',
+    },
     tableData: {
         display: 'flex',
         justifyContent: 'center',
@@ -202,6 +205,13 @@ const useStyles = makeStyles(() => ({
         minHeight: '40px',
         '& >img': {
             height: '20px',
+        },
+        '& >button': {
+            color: "#fff",
+            backgroundColor: '#888',
+            fontSize: '15px',
+            marginRight: '10px',
+            border: 'none',
         },
         '&:first-of-type, &:nth-of-type(3)': {
             width: '100px'
@@ -678,7 +688,6 @@ const SearchUserButton = styled(ButtonUnstyled)`
     }
 `;
 
-
 const SystemAdministrator = () => {
     const classes = useStyles();
     const navigate = useNavigate();
@@ -747,6 +756,26 @@ const SystemAdministrator = () => {
     const [codeGroup3, setCodeGroup3] = useState([]);
     const [page, setPage] = useState(1);
     const getPath = useUserURLRedirect();
+    const [plusButtons, setPlusButtons] = useState([]);
+    const [plusButtonId, setPlusButtonId] = useState(0);
+
+    const handlePlusButtonClick = (buttonId, companyId) => {
+        const plusButtonsChangedState = plusButtons?.map(button => {
+            if (button.id !== buttonId) {
+                return button;
+            } else {
+                fetchSubscribersWorkplaceSelectList(companyId);
+                return { ...button, clicked: !button.clicked, plus: !button.plus }
+            }
+        });
+        setPlusButtons(plusButtonsChangedState);
+        setPlusButtonId(buttonId);
+    }
+
+    const handleTableRowClasses = () => {
+        const activeClass = plusButtons?.find(item => item.id === plusButtonId);
+        return activeClass.clicked;
+    }
 
     const handleRedirect = async (workplaceId, userId) => {
         const response = await subscribersView(`${workplaceId}&userId=${userId}`);
@@ -762,6 +791,8 @@ const SystemAdministrator = () => {
             "param": param
         })
         setSubscribersList(response.data.RET_DATA);
+        const plusButtonsInitialState = response.data?.RET_DATA?.map((item, index) => { return { id: index + 1, clicked: false, plus: true } });
+        setPlusButtons(plusButtonsInitialState);
     }
 
     const fetchCommCodeListGroup1 = async () => {
@@ -787,7 +818,8 @@ const SystemAdministrator = () => {
 
     const fetchSubscribersWorkplaceSelectList = async (companyId) => {
         const response = await subscribersWorkplaceSelect(companyId);
-        setSubscribersWorkplaceSelectList(!!(response.data.RET_DATA) && response.data.RET_DATA)
+        console.log(response.data.RET_DATA);
+        setSubscribersWorkplaceSelectList(!!(response.data.RET_DATA) && response.data.RET_DATA);
     }
 
     const fetchSubscriberView = async (workplaceId, userId) => {
@@ -926,27 +958,55 @@ const SystemAdministrator = () => {
                         </div>
                     </div>
                     <div className={classes.tableBody}>
-                        {subscribersList?.map((subscriber, index) => (
-                            <div className={classes.tableRow} onDoubleClick={() => {
-                                setUserInfoPop(true);
-                                fetchSubscriberView(subscriber.workplaceId, subscriber.userId);
-                            }}>
-                                <div className={classes.tableData}>{index + 1}</div>
-                                <div className={classes.tableData}>{subscriber.companyName}</div>
-                                <div className={classes.tableData}>{subscriber.workplaceName}</div>
-                                <div className={classes.tableData}>{subscriber.registNo}</div>
-                                <div className={classes.tableData}>{subscriber.sector}</div>
-                                <div className={classes.tableData}>{subscriber.scale}</div>
-                                <div className={classes.tableData}>{subscriber.loginId}</div>
-                                <div className={classes.tableData}>{subscriber.managerRole}</div>
-                                <div className={classes.tableData}>{subscriber.managerName}</div>
-                                <div className={classes.tableData}>{subscriber.managerTel}</div>
-                                <div className={classes.tableData}>{subscriber.contractAmount && parseFloat(subscriber.contractAmount).toLocaleString()}</div>
-                                <div className={classes.tableData}>{subscriber.contractDate}</div>
-                                <div className={classes.tableData}>{subscriber.status}</div>
-                                <div className={classes.tableData}>{subscriber.contractFileld}</div>
-                                <div className={classes.tableData} onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}><img src={monitor} alt="monitor" /></div>
-                            </div>
+                        {!!subscribersList && !!subscribersList?.length && subscribersList?.map((subscriber, index) => (
+                            <>
+                                <div className={classes.tableRow} onDoubleClick={() => {
+                                    setUserInfoPop(true);
+                                    fetchSubscriberView(subscriber.workplaceId, subscriber.userId);
+                                }}>
+                                    {!!plusButtons && !!plusButtons?.length && plusButtons?.map((button, btnIndex) => {
+                                        if (btnIndex === index) {
+                                            return <div className={classes.tableData}><button onClick={() => handlePlusButtonClick(button.id, subscriber.companyId)}>{button.plus ? "+" : "-"}</button>{index + 1}</div>
+                                        }
+                                    })
+                                    }
+                                    <div className={classes.tableData}>{subscriber.companyName}</div>
+                                    <div className={classes.tableData}>{subscriber.workplaceName}</div>
+                                    <div className={classes.tableData}>{subscriber.registNo}</div>
+                                    <div className={classes.tableData}>{subscriber.sector}</div>
+                                    <div className={classes.tableData}>{subscriber.scale}</div>
+                                    <div className={classes.tableData}>{subscriber.loginId}</div>
+                                    <div className={classes.tableData}>{subscriber.managerRole}</div>
+                                    <div className={classes.tableData}>{subscriber.managerName}</div>
+                                    <div className={classes.tableData}>{subscriber.managerTel}</div>
+                                    <div className={classes.tableData}>{subscriber.contractAmount && parseFloat(subscriber.contractAmount).toLocaleString()}</div>
+                                    <div className={classes.tableData}>{subscriber.contractDate}</div>
+                                    <div className={classes.tableData}>{subscriber.status}</div>
+                                    <div className={classes.tableData}>{subscriber.contractFileld}</div>
+                                    <div className={classes.tableData} onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}><img src={monitor} alt="monitor" /></div>
+                                </div>
+                                {!!subscribersWorkplaceSelectList && !!subscribersWorkplaceSelectList?.length && subscribersWorkplaceSelectList?.map((subscribersWorkplaceItem, subscribersWorkplaceItemIndex) => {
+                                    if (index + 1 === plusButtonId) {
+                                        return (<div className={handleTableRowClasses() ? classes.tableRow : classes.tableRowClose} >
+                                            <div className={classes.tableData}></div>
+                                            <div className={classes.tableData}>{subscribersWorkplaceItem.companyName}</div>
+                                            <div className={classes.tableData}>{subscribersWorkplaceItem.workplaceName}</div>
+                                            <div className={classes.tableData}>{subscribersWorkplaceItem.registNo}</div>
+                                            <div className={classes.tableData}>{subscribersWorkplaceItem.sector}</div>
+                                            <div className={classes.tableData}>{subscribersWorkplaceItem.scale}</div>
+                                            <div className={classes.tableData}>{subscribersWorkplaceItem.loginId}</div>
+                                            <div className={classes.tableData}>{subscribersWorkplaceItem.managerRole}</div>
+                                            <div className={classes.tableData}>{subscribersWorkplaceItem.managerName}</div>
+                                            <div className={classes.tableData}>{subscribersWorkplaceItem.managerTel}</div>
+                                            <div className={classes.tableData}>{subscribersWorkplaceItem.contractAmount && parseFloat(subscribersWorkplaceItem.contractAmount).toLocaleString()}</div>
+                                            <div className={classes.tableData}>{subscribersWorkplaceItem.contractDate}</div>
+                                            <div className={classes.tableData}>{subscribersWorkplaceItem.status}</div>
+                                            <div className={classes.tableData}></div>
+                                            <div className={classes.tableData}></div>
+                                        </div>);
+                                    }
+                                })}
+                            </>
                         ))}
                     </div>
                     <div className={regMemberPop ? (classes.adminPopup + ' regMember') : (classes.adminPopup + ' regMemberClose')}>
