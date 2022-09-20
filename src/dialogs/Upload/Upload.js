@@ -72,7 +72,8 @@ function Upload({ open, onClose, onInputChange, onUpload }) {
     const classes = useStyles();
 
     return (
-        <div className={open ? classes.uploadPopup : classes.uploadPopupClose}>
+        <div className={open ? classes.popupOverlay : classes.popupOverlayClose}>
+        <div className={classes.uploadPopup}>
             <ClosePopupButton2 onClick={onClose}></ClosePopupButton2>
             <div className={classes.uploadInfo}>
                 <img src={alertIcon} alt="alert icon" />
@@ -97,6 +98,7 @@ function Upload({ open, onClose, onInputChange, onUpload }) {
                 </SearchButton>
                 <UnknownButton1 onClick={ onUpload }>전체사업장</UnknownButton1>
             </div>
+        </div>
         </div>
     );
 

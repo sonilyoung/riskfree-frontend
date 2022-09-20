@@ -4,9 +4,9 @@ const useStyles = makeStyles(() => ({
     uploadPopup: {
         position: 'absolute',
         zIndex: '1000',
-        top: '200px',
+        top: '50%',
         left: '50%',
-        transform: 'translateX(-50%)',
+        transform: 'translate(-50%, -50%)',
         width: '400px',
         height: '400px',
         background: '#fff',
@@ -81,6 +81,19 @@ const useStyles = makeStyles(() => ({
             },
         },
     },
+    popupOverlay: {
+        position: 'absolute',
+        top: '0px',
+        left: '0px',
+        width: '100vw',
+        height: '100vh',
+        background: 'rgba(0, 0, 0, .5)',
+        zIndex: '1',
+        display: 'block',
+    },
+    popupOverlayClose: {
+        display: 'none'
+    }
 }))
 
 export { useStyles };
