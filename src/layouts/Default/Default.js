@@ -73,6 +73,10 @@ const useStyles = makeStyles(() => ({
         backgroundColor: '#eff2f9',
         borderRadius: '24px 0 0 0',
         // width: '1874px',
+        '& >div:first-of-type': {
+            width: '1794px',
+            margin: '0 auto',
+        }
     },
     pageHeader: {
         display: 'flex',

@@ -2384,7 +2384,7 @@ const Employee = () => {
                                                     id="outlined-multiline-static"
                                                     multiline
                                                     rows={4}
-                                                    placeholder="1층에서                                        추락사고 발생하여 병원 이송함.&#10;2층으로                                       추락사고 발생하여 병원 이송함.&#10;3층으로                                       추락사고 발생하여 병원 이송함. "
+                                                    placeholder="1차                                                    2022.01.01 ~ 20 21.03.31.&#10;1차                                                    2022.01.01 ~ 20 21.03.31.&#10;3차                                                   2022.07.01 ~ 2021.09.30."
                                                 />
                                             </AccordionDetails>
                                         </Accordion>

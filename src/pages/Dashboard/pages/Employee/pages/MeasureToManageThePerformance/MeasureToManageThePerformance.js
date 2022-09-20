@@ -85,16 +85,17 @@ const useStyles = makeStyles(() => ({
         },
     },
     buttonPlus: {
+        width: '45px',
+        height: '45px',
         color: '#fff',
         fontSize: '30px',
-        padding: '5px 10px',
         marginLeft: '10px !important',
         background: '#3a5298',
         borderRadius: '5px',
-        border: '1px solid #3a5298',
+        cursor: 'pointer',
+        border: 'none',
         '&:hover': {
             backgroundImage: 'linear-gradient(#04b9fb, #017dfa)',
-            border: 'none',
         },
     },
     boxTable: {
@@ -151,7 +152,7 @@ const useStyles = makeStyles(() => ({
                 width: '240px',
             },
             '&:nth-of-type(3)': {
-                width: '135px',
+                width: '144px',
             },
             '&:nth-of-type(4)': {
                 width: '322px',
@@ -224,7 +225,7 @@ const useStyles = makeStyles(() => ({
                 width: '240px',
             },
             '&:nth-of-type(3)': {
-                width: '135px',
+                width: '144px',
             },
             '&:nth-of-type(4)': {
                 width: '322px',
@@ -279,7 +280,7 @@ const useStyles = makeStyles(() => ({
                 width: '240px',
             },
             '&:nth-of-type(3)': {
-                width: '135px',
+                width: '144px',
             },
             '&:nth-of-type(4)': {
                 width: '368px',
@@ -335,7 +336,7 @@ const useStyles = makeStyles(() => ({
             width: '240px',
         },
         '&:nth-of-type(4)': {
-            width: '135px',
+            width: '144px',
         },
         '&:nth-of-type(5)': {
             width: '322px',
@@ -363,7 +364,7 @@ const useStyles = makeStyles(() => ({
             width: '240px',
         },
         '&:nth-of-type(4)': {
-            width: '135px',
+            width: '144px',
         },
         '&:nth-of-type(5)': {
             width: '322px',
@@ -394,7 +395,7 @@ const useStyles = makeStyles(() => ({
             width: '240px',
         },
         '&:nth-of-type(4)': {
-            width: '135px',
+            width: '144px',
         },
         '&:nth-of-type(5)': {
             width: '368px',

@@ -455,10 +455,11 @@ const useStyles = makeStyles(() => ({
         }
     },
     pageBody: {
+        height: 'calc(100vh - 420px)',
         backgroundImage: 'linear-gradient(#424762, #1e2130)',
         borderRadius: '32px',
-        width: '1720px',
-        height: '545px',
+        maxWidth: '1700px !important',
+        minHeight: '545px',
         padding: '0 165px'
     },
     slickCircle: {
@@ -472,7 +473,7 @@ const useStyles = makeStyles(() => ({
         backgroundRepeat: 'no-repeat',
         transition: 'transform .3s',
         '&:hover': {
-            transform: 'scale(1.08)'
+            transform: 'scale(1.08)',
         },
         '&.green': {
             backgroundImage: 'url(' + circleGreen + ')',
@@ -532,6 +533,8 @@ const useStyles = makeStyles(() => ({
         }
     },
     dashSlider: {
+        top: '40%',
+        transform: 'translateY(-45%)',
         '& .slick-list': {
             padding: '1px 0 20px 0',
             marginTop: '8px',

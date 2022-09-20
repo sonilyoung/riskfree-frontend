@@ -186,12 +186,13 @@ const useStyles = makeStyles(() => ({
                         display: 'flex',
                         borderBottom: '1px solid #bdcbe9',
                         boxSizing: 'border-box',
-                        width: '970px',
+                        width: '989px',
                         '& >div': {
+                            boxSizing: 'border-box',
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            width: '120px',
+                            width: '123px',
                             height: '100%',
                             borderRight: '1px solid #bdcbe9',
                             '&:last-of-type': {
@@ -208,7 +209,7 @@ const useStyles = makeStyles(() => ({
                 width: '120px'
             },
             '&:nth-of-type(3)': {
-                width: '200px'
+                width: '180px'
             },
             '&:nth-of-type(4)': {
                 width: '285px'
@@ -217,7 +218,7 @@ const useStyles = makeStyles(() => ({
                 width: '160px'
             },
             '&:nth-of-type(6)': {
-                width: '970px'
+                width: '989px'
             },
         }
     },
@@ -234,7 +235,7 @@ const useStyles = makeStyles(() => ({
             borderBottom: '1px solid #bdcbe9',
             '&:last-of-type': {
                 borderRight: '0',
-                width: '123px !important',
+                width: '128px !important',
             },
             '&:nth-of-type(6), &:nth-of-type(7), &:nth-of-type(8)': {
                 justifyContent: 'flex-start',
@@ -246,16 +247,16 @@ const useStyles = makeStyles(() => ({
                 width: '120px'
             },
             '&:nth-of-type(3)': {
-                width: '200px'
+                width: '180px'
             },
             '&:nth-of-type(4)': {
-                width: '284px'
+                width: '285px'
             },
             '&:nth-of-type(5)': {
                 width: '160px'
             },
             '&:nth-of-type(n + 6)': {
-                width: '121px'
+                width: '123px'
             },
         },
         '&:last-of-type $tableRow': {
@@ -493,7 +494,7 @@ const useStyles = makeStyles(() => ({
         display: "none !important",
     },
     promptPopup: {
-        display: 'block',
+        display: 'none',
         position: 'absolute',
         top: '70%',
         left: '70%',

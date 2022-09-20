@@ -175,7 +175,7 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center',
         alignItems: 'center',
         height: '50px',
-        minWidth: '280px',
+        minWidth: '282px',
         boxSizing: 'border-box',
         padding: '13px 12px',
         '&:first-of-type': {

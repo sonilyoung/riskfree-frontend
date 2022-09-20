@@ -130,7 +130,7 @@ const useStyles = makeStyles(() => ({
                 width: '240px', 
             },
             '&:nth-of-type(3)': {
-                width: '135px', 
+                width: '144px', 
             },
             '&:nth-of-type(4)': {
                 width: '322px', 
@@ -186,7 +186,7 @@ const useStyles = makeStyles(() => ({
             width: '240px', 
         },
         '&:nth-of-type(4)': {
-            width: '135px', 
+            width: '144px', 
         },
         '&:nth-of-type(5)': {
             width: '322px', 
