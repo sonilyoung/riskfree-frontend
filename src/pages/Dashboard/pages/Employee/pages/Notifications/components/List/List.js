@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 // import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
@@ -25,6 +26,7 @@ import icoFile from '../../../../../../../../assets/images/ic_file.png';
 import { DefaultLayout } from '../../../../../../../../layouts/Default';
 
 import { useNoticesSelectMutation } from '../../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
+import { selectBaselineId, selectWorkplaceId, setBaselineId } from '../../../../../../../../slices/selections/MainSelection';
 
 
 const useStyles = makeStyles(() => ({
@@ -280,6 +282,9 @@ function List() {
     const [query, setQuery] = useState("")
     const [page, setPage] = useState(1)
 
+    const currentWorkplaceId = useSelector(selectWorkplaceId);
+
+
     const HOT = "001"
 
     const handleSelect = (event) => {
@@ -295,9 +300,10 @@ function List() {
             "col": select,
             "countPerPage": 10,
             "pageNum": page,
-            "param": query
+            "param": query,
+            "workplaceId": currentWorkplaceId
         })
-        setNoticesList(response)
+        setNoticesList(response?.data?.RET_DATA)
     }
     const handleSearch = () => {
         handleFetchList()
@@ -312,7 +318,8 @@ function List() {
             "col": "all",
             "countPerPage": null,
             "pageNum": null,
-            "param": null
+            "param": null,
+            "workplaceId": currentWorkplaceId
         })
         setNoticesForCount(response)
     }
@@ -374,7 +381,7 @@ function List() {
                         <div className={classes.tableRow}>조회수</div>
                     </div>
                     <>
-                        {!!noticesList && !!noticesList?.length && noticesList?.data.RET_DATA.map((notice, index) =>
+                        {!!noticesList && !!noticesList?.length && noticesList?.map((notice, index) =>
                         (
                             <div className={classes.tableBody} onDoubleClick={() => navigate(`/dashboard/director/notifications/view/${notice.noticeId}`)}>
                                 <div className={classes.tableRow}>{index + 1}</div>
@@ -394,9 +401,9 @@ function List() {
                     </>
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
-                    <div>총 게시글 <strong>{noticesList && noticesList?.data?.RET_DATA[0]?.totalCount}</strong> 건</div>
+                    <div>총 게시글 <strong>{noticesList && noticesList[0]?.totalCount}</strong> 건</div>
                     <Stack spacing={2}>
-                        <Pagination count={(Math.ceil(noticesForCount?.data?.RET_DATA[0]?.totalCount / 10))} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
+                        <Pagination count={!!noticesForCount?.data?.RET_DATA && (Math.ceil(noticesForCount?.data?.RET_DATA[0]?.totalCount / 10))} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
                     </Stack>
                 </Grid>
             </Grid >

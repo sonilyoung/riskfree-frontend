@@ -354,7 +354,6 @@ function List() {
     }
 
     const currentBaseline = useSelector(selectBaselineId);
-    const currentWorkplaceId = useSelector(selectWorkplaceId);
 
     const handleFetchList = async () => {
         const response = await improvementSelect(
