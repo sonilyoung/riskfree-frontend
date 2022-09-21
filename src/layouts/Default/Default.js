@@ -558,6 +558,10 @@ const UserButton = styled(ButtonUnstyled)`
     }
 `;
 
+const UserButtonInactive = styled(ButtonUnstyled)`
+    background: transparent url(${userIcon});
+`;
+
 const LogButton = styled(ButtonUnstyled)`
     background: transparent url(${logIcon});
     &:hover {
@@ -570,6 +574,10 @@ const SettingsButton = styled(ButtonUnstyled)`
     &:hover {
         background-image: url(${setIconHover});
     }
+`;
+
+const SettingsButtonInactive = styled(ButtonUnstyled)`
+    background: transparent url(${setIcon});
 `;
 
 const UploadImageButton = styled(ButtonUnstyled)`
@@ -737,6 +745,7 @@ const Default = ({ children }) => {
     const [settingsPopup, setSettingsPopup] = useState(false)
     const [companyInfo, setCompanyInfo] = useState({})
     const companyId = userToken.getUserCompanyId();
+    const roleCd = userToken.getUserRoleCd();
     const [baselineInfo, setBaselineInfo] = useState({
         "baselineName": "",
         "baselineStart": null,
@@ -854,65 +863,71 @@ const Default = ({ children }) => {
                         </Grid>
                         <Grid className={classes.mainMenu} item xs={6.3}>
                             <div className={classes.leftMenu}>
-                                <UserButton className={classes.mainMenuButton} onClick={() => setUserPopup(true)}></UserButton>
-                                <div className={userPopup ? (classes.headerPopup + ' user_popup') : (classes.headerPopup + ' user_popupClose')}>
-                                    <div className={classes.popHeader}>
-                                        최초 사용자 설정
-                                        <ButtonClosePop onClick={() => setUserPopup(!userPopup)}></ButtonClosePop>
-                                    </div>
-                                    <div className={classes.headerPopList}>
-                                        <div className={classes.userTab}>
-                                            <div className={classes.userImage}>
-                                                <img />
+                                {roleCd === '001'
+                                    ? <UserButtonInactive className={classes.mainMenuButton}></UserButtonInactive>
+                                    : (<>
+                                        <UserButton className={classes.mainMenuButton} onClick={() => setUserPopup(true)}></UserButton>
+                                        <div className={userPopup ? (classes.headerPopup + ' user_popup') : (classes.headerPopup + ' user_popupClose')}>
+                                            <div className={classes.popHeader}>
+                                                최초 사용자 설정
+                                                <ButtonClosePop onClick={() => setUserPopup(!userPopup)}></ButtonClosePop>
                                             </div>
-                                            <div className={classes.userName}>
-                                                삼성전자 주식회사
+                                            <div className={classes.headerPopList}>
+                                                <div className={classes.userTab}>
+                                                    <div className={classes.userImage}>
+                                                        <img />
+                                                    </div>
+                                                    <div className={classes.userName}>
+                                                        삼성전자 주식회사
+                                                    </div>
+                                                    <div className={classes.userInfo}>
+                                                        아래의 기업정보를 등록하신 후 이용하시기 바랍니다
+                                                    </div>
+                                                </div>
+                                                <span>
+                                                    <span>기업정보 등록</span>
+                                                </span>
+                                                <TextField
+                                                    id="standard-basic"
+                                                    value={safetyGoal}
+                                                    variant="outlined"
+                                                    sx={{ width: 370 }}
+                                                    className={classes.popupTextField}
+                                                    onChange={(event) => setSafetyGoal(event.target.value)}
+                                                />
+                                                <Select
+                                                    className={classes.popupTextField}
+                                                    sx={{ width: 370 }}
+                                                    value={missionStatement}
+                                                    onChange={(event) => setMissionStatement(event.target.value)}
+                                                    displayEmpty
+                                                    inputProps={{ 'aria-label': 'Without label' }}
+                                                >
+                                                    <MenuItem value="">경영방침 등록 (띠어쓰기 포함 16자 이내)</MenuItem>
+                                                </Select>
+                                                <div className={classes.preFootPop}>
+                                                    <div>
+                                                        <span>로고등록</span>
+                                                    </div>
+                                                    <div>
+                                                        <UploadImageButton>찾아보기</UploadImageButton>
+                                                        <Alert
+                                                            icon={<img src={alertIcon} alt="alert icon" />}
+                                                            severity="error">
+                                                            사이즈 83px*67px
+                                                            <br />
+                                                            (   gif, jpg, png 파일허용)
+                                                        </Alert>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className={classes.userInfo}>
-                                                아래의 기업정보를 등록하신 후 이용하시기 바랍니다
+                                            <div className={classes.headerPopFooter}>
+                                                <PopupFootButton>저장하기</PopupFootButton>
                                             </div>
                                         </div>
-                                        <span>
-                                            <span>기업정보 등록</span>
-                                        </span>
-                                        <TextField
-                                            id="standard-basic"
-                                            value={safetyGoal}
-                                            variant="outlined"
-                                            sx={{ width: 370 }}
-                                            className={classes.popupTextField}
-                                            onChange={(event) => setSafetyGoal(event.target.value)}
-                                        />
-                                        <Select
-                                            className={classes.popupTextField}
-                                            sx={{ width: 370 }}
-                                            value={missionStatement}
-                                            onChange={(event) => setMissionStatement(event.target.value)}
-                                            displayEmpty
-                                            inputProps={{ 'aria-label': 'Without label' }}
-                                        >
-                                            <MenuItem value="">경영방침 등록 (띠어쓰기 포함 16자 이내)</MenuItem>
-                                        </Select>
-                                        <div className={classes.preFootPop}>
-                                            <div>
-                                                <span>로고등록</span>
-                                            </div>
-                                            <div>
-                                                <UploadImageButton>찾아보기</UploadImageButton>
-                                                <Alert
-                                                    icon={<img src={alertIcon} alt="alert icon" />}
-                                                    severity="error">
-                                                    사이즈 83px*67px
-                                                    <br />
-                                                    (   gif, jpg, png 파일허용)
-                                                </Alert>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={classes.headerPopFooter}>
-                                        <PopupFootButton>저장하기</PopupFootButton>
-                                    </div>
-                                </div>
+                                    </>)
+                                }
+
                                 <FormControl sx={{ width: 180 }} className={classes.dropMenu}>
                                     <Select
                                         className={classes.selectMenu}
@@ -944,118 +959,124 @@ const Default = ({ children }) => {
                                     <div>계약기간 : {companyInfo?.contractStartDate} ~ {companyInfo?.contractEndDate}</div>
                                 </div>
                                 <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
-                                <SettingsButton className={classes.mainMenuButton} onClick={() => setSettingsPopup(true)}></SettingsButton>
-                                <div className={settingsPopup ? (classes.headerPopup + ' settings_popup') : (classes.headerPopup + ' settings_popupClose')}>
-                                    <div className={classes.popHeader}>
-                                        중대재해 자체점검 등록 차수 설정
-                                        <ButtonClosePop onClick={() => setSettingsPopup(false)}></ButtonClosePop>
-                                    </div>
-                                    <div className={classes.headerPopList}>
-                                        <Accordion className={classes.popupAccord}>
-                                            <AccordionSummary
-                                                expandIcon={<img src={arrowDown} alt="arrow down" />}
-                                                aria-controls="panel1a-content"
-                                                id="panel1a-header"
-                                            >
-                                                <Typography>관리차수 신규등록</Typography>
-                                            </AccordionSummary>
-                                            <AccordionDetails style={{ alignItems: 'center' }}>
-                                                <TextField
-                                                    id="standard-basic"
-                                                    placeholder="관리차수"
-                                                    variant="outlined"
-                                                    sx={{ width: 80 }}
-                                                    className={classes.popupTextField}
-                                                />
-                                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-                                                    <DesktopDatePicker
-                                                        className={classes.selectMenuDate}
-                                                        label=" "
-                                                        inputFormat="YYYY-MM-DD"
-                                                        value={date}
-                                                        onChange={setDate}
-                                                        renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
-                                                    />
-                                                </LocalizationProvider>
-                                                ~
-                                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-                                                    <DesktopDatePicker
-                                                        className={classes.selectMenuDate}
-                                                        label=" "
-                                                        inputFormat="YYYY-MM-DD"
-                                                        value={date}
-                                                        onChange={setDate}
-                                                        renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
-                                                    />
-                                                </LocalizationProvider>
-                                            </AccordionDetails>
-                                        </Accordion>
-                                        <Accordion className={classes.popupAccord}>
-                                            <AccordionSummary
-                                                expandIcon={<img src={arrowDown} alt="arrow down" />}
-                                                aria-controls="panel1a-content"
-                                                id="panel1a-header"
-                                            >
-                                                <Typography>관리차수 조회</Typography>
-                                            </AccordionSummary>
-                                            <AccordionDetails>
-                                                {/* <TextField
+                                {roleCd === '001'
+                                    ? <SettingsButtonInactive className={classes.mainMenuButton}></SettingsButtonInactive>
+                                    : (<>
+                                        <SettingsButton className={classes.mainMenuButton} onClick={() => setSettingsPopup(true)}></SettingsButton>
+                                        <div className={settingsPopup ? (classes.headerPopup + ' settings_popup') : (classes.headerPopup + ' settings_popupClose')}>
+                                            <div className={classes.popHeader}>
+                                                중대재해 자체점검 등록 차수 설정
+                                                <ButtonClosePop onClick={() => setSettingsPopup(false)}></ButtonClosePop>
+                                            </div>
+                                            <div className={classes.headerPopList}>
+                                                <Accordion className={classes.popupAccord}>
+                                                    <AccordionSummary
+                                                        expandIcon={<img src={arrowDown} alt="arrow down" />}
+                                                        aria-controls="panel1a-content"
+                                                        id="panel1a-header"
+                                                    >
+                                                        <Typography>관리차수 신규등록</Typography>
+                                                    </AccordionSummary>
+                                                    <AccordionDetails style={{ alignItems: 'center' }}>
+                                                        <TextField
+                                                            id="standard-basic"
+                                                            placeholder="관리차수"
+                                                            variant="outlined"
+                                                            sx={{ width: 80 }}
+                                                            className={classes.popupTextField}
+                                                        />
+                                                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                                            <DesktopDatePicker
+                                                                className={classes.selectMenuDate}
+                                                                label=" "
+                                                                inputFormat="YYYY-MM-DD"
+                                                                value={date}
+                                                                onChange={setDate}
+                                                                renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
+                                                            />
+                                                        </LocalizationProvider>
+                                                        ~
+                                                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                                            <DesktopDatePicker
+                                                                className={classes.selectMenuDate}
+                                                                label=" "
+                                                                inputFormat="YYYY-MM-DD"
+                                                                value={date}
+                                                                onChange={setDate}
+                                                                renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
+                                                            />
+                                                        </LocalizationProvider>
+                                                    </AccordionDetails>
+                                                </Accordion>
+                                                <Accordion className={classes.popupAccord}>
+                                                    <AccordionSummary
+                                                        expandIcon={<img src={arrowDown} alt="arrow down" />}
+                                                        aria-controls="panel1a-content"
+                                                        id="panel1a-header"
+                                                    >
+                                                        <Typography>관리차수 조회</Typography>
+                                                    </AccordionSummary>
+                                                    <AccordionDetails>
+                                                        {/* <TextField
                                                     id="standard-basic"
                                                     placeholder="관리차수 조회"
                                                     variant="outlined"
                                                     sx={{ width: 370 }}
                                                     className={classes.popupTextField}
                                                 /> */}
-                                                <TextField
-                                                    className={classes.textArea}
-                                                    id="outlined-multiline-static"
-                                                    multiline
-                                                    rows={4}
-                                                    placeholder="1층에서                                        추락사고 발생하여 병원 이송함.&#10;2층으로                                       추락사고 발생하여 병원 이송함.&#10;3층으로                                       추락사고 발생하여 병원 이송함. "
-                                                />
-                                            </AccordionDetails>
-                                        </Accordion>
-                                        <Accordion className={classes.popupAccord}>
-                                            <AccordionSummary
-                                                expandIcon={<img src={arrowDown} alt="arrow down" />}
-                                                aria-controls="panel1a-content"
-                                                id="panel1a-header"
-                                            >
-                                                <Typography>관리차수 복사</Typography>
-                                            </AccordionSummary>
-                                            <AccordionDetails>
-                                                <Select
-                                                    className={classes.popupTextField}
-                                                    sx={{ width: 150, marginBottom: '25px !important' }}
-                                                    value={num}
-                                                    onChange={handleChange}
-                                                    displayEmpty
-                                                >
-                                                    <MenuItem value="">복사할 차수</MenuItem>
-                                                </Select>
-                                                <span>2022-07-01 ~ 2022-12-31</span>
-                                                <div className={classes.popupPrompt}>
-                                                    <Alert
-                                                        icon={<img src={alertIcon} alt="alert icon" />}
-                                                        severity="error">
-                                                        <strong>2차 차수의 DATA</strong>
-                                                        를 현재 차수에 복사 하시겠습니까
-                                                    </Alert>
-                                                    <PromptButtonBlue>예</PromptButtonBlue>
-                                                    <PromptButtonWhite>예</PromptButtonWhite>
-                                                </div>
-                                            </AccordionDetails>
-                                        </Accordion>
-                                        <span></span>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setShowUploadPopup(true)}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setShowUploadPopup(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
-                                    </div>
-                                    <div className={classes.headerPopFooter}>
-                                        <PopupFootButton>저장하기</PopupFootButton>
-                                    </div>
-                                </div>
+                                                        <TextField
+                                                            className={classes.textArea}
+                                                            id="outlined-multiline-static"
+                                                            multiline
+                                                            rows={4}
+                                                            placeholder="1층에서                                        추락사고 발생하여 병원 이송함.&#10;2층으로                                       추락사고 발생하여 병원 이송함.&#10;3층으로                                       추락사고 발생하여 병원 이송함. "
+                                                        />
+                                                    </AccordionDetails>
+                                                </Accordion>
+                                                <Accordion className={classes.popupAccord}>
+                                                    <AccordionSummary
+                                                        expandIcon={<img src={arrowDown} alt="arrow down" />}
+                                                        aria-controls="panel1a-content"
+                                                        id="panel1a-header"
+                                                    >
+                                                        <Typography>관리차수 복사</Typography>
+                                                    </AccordionSummary>
+                                                    <AccordionDetails>
+                                                        <Select
+                                                            className={classes.popupTextField}
+                                                            sx={{ width: 150, marginBottom: '25px !important' }}
+                                                            value={num}
+                                                            onChange={handleChange}
+                                                            displayEmpty
+                                                        >
+                                                            <MenuItem value="">복사할 차수</MenuItem>
+                                                        </Select>
+                                                        <span>2022-07-01 ~ 2022-12-31</span>
+                                                        <div className={classes.popupPrompt}>
+                                                            <Alert
+                                                                icon={<img src={alertIcon} alt="alert icon" />}
+                                                                severity="error">
+                                                                <strong>2차 차수의 DATA</strong>
+                                                                를 현재 차수에 복사 하시겠습니까
+                                                            </Alert>
+                                                            <PromptButtonBlue>예</PromptButtonBlue>
+                                                            <PromptButtonWhite>예</PromptButtonWhite>
+                                                        </div>
+                                                    </AccordionDetails>
+                                                </Accordion>
+                                                <span></span>
+                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
+                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
+                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setShowUploadPopup(true)}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
+                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setShowUploadPopup(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
+                                            </div>
+                                            <div className={classes.headerPopFooter}>
+                                                <PopupFootButton>저장하기</PopupFootButton>
+                                            </div>
+                                        </div>
+                                    </>)
+                                }
+
                                 <div className={showUploadPopup ? classes.uploadPopup : classes.uploadPopupHide}>
                                     <ClosePopupButton2 onClick={() => setShowUploadPopup(false)}></ClosePopupButton2>
                                     <div className={classes.uploadInfo}>

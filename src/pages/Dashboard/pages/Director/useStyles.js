@@ -943,6 +943,51 @@ const useStyles = makeStyles(() => ({
     settingPopup: {
 
     },
+    notificationPopup: {
+        // display: 'none',
+        '--border_radius': '15px',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        width: '850px',
+        height: '400px',
+        transform: 'translate(-50%, -50%)',
+        borderRadius: 'var(--border_radius)',
+        background: 'white',
+        '& >button': {
+            position: 'absolute',
+            top: '-8px',
+            right: '-60px'
+        },
+        '& >div:first-of-type': {
+            height: '60px',
+            padding: '20px',
+            boxSizing: 'border-box',
+            background: '#EFF2F9',
+            borderTopLeftRadius: 'var(--border_radius)',
+            borderTopRightRadius: 'var(--border_radius)',
+            fontSize: '18px',
+            fontWeight: 'bold',
+        },
+        '& >div:last-of-type': {
+            position: 'absolute',
+            bottom: '0px',
+            padding: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            '& img': {
+                marginRight: '10px',
+            }
+        },
+        '& $slideLabelHot': {
+            padding: '2px 10px',
+        },
+        '& p': {
+            padding: '20px',
+            margin: '0px',
+            lineHeight: '25px',
+        }
+    },
     popupTextField: {
         marginBottom: '10px !important',
         overflow: 'hidden',

@@ -82,7 +82,7 @@ import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useUserToken } from '../../../../hooks/core/UserToken';
 import moment from 'moment'
 
@@ -1476,7 +1476,7 @@ const useStyles = makeStyles(() => ({
         }
     },
     notificationPopup: {
-        display: 'none',
+        // display: 'none',
         '--border_radius': '15px',
         position: 'absolute',
         top: '50%',
@@ -1950,8 +1950,15 @@ const Employee = () => {
         userWorkplaceId: userToken.getUserWorkplaceId(),
         userRoleCode: userToken.getUserRoleCd()
     });
+    const [noticeHotList, setNoticeHotList] = useState([]);
+    const [getNoticeHotList] = useGetNoticeHotListMutation();
 
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
+
+    const handleNotificationPopupsShow = (notificationIndex) => {
+        const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex != index);
+        setNoticeHotList(notificationPopupList);
+    }
 
     const fetchLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -1959,6 +1966,7 @@ const Employee = () => {
     }
     const handleLogOut = () => {
         remove();
+        window.sessionStorage.removeItem('firstLoad');
         navigate('/');
     }
 
@@ -2158,6 +2166,11 @@ const Employee = () => {
         setWeatherData(response?.data?.RET_DATA)
     }
 
+    const fetchNoticeHotList = async () => {
+        const response = await getNoticeHotList({});
+        setNoticeHotList(response?.data?.RET_DATA);
+    }
+
     useEffect(() => {
         fetchBaseline()
     }, [currentBaselineId])
@@ -2209,6 +2222,13 @@ const Employee = () => {
     }, [])
 
     useEffect(() => {
+
+        if (window.sessionStorage.getItem('firstLoad') === null) {
+            fetchNoticeHotList();
+            window.sessionStorage.setItem('firstLoad', 1);
+            console.log('firstLoad');
+        }
+
         navigator.geolocation.getCurrentPosition(position => {
             setLatitude(position.coords.latitude)
             setLongitude(position.coords.longitude)
@@ -3020,24 +3040,19 @@ const Employee = () => {
                     </Grid>
 
                 </Grid>
-                <div className={classes.notificationPopup}>
-                    <ClosePopupButton2></ClosePopupButton2>
-                    <div><span className={classes.slideLabelHot}>HOT</span> 서산사업장 BTX 공정 3번 TANK 화재 발생 !!</div>
-                    <div className={classes.popNews}>
-                        <p>
-                            월 6일 낮 12시 19분경 서산사업장 원료 제조공장에서 불이 났습니다.<br />
-                            불은 공장 2동을 모두 태우고 3시간만인 오후 3시 19분 완전히 꺼졌다고 합니다. 화재 당시 공장에는 휴일 근무자 2명이 있었지만 다행히 자력 대피해 인명 피해는 발생하지 않았습니다.
-                        </p>
-                        <p>
-                            정확한 화재 원인은 아직 밝혀지지 않았는데요. 관계 당국은 피해 규모와 화재 원인 규명에 나설 것으로 보입니다. 공장 화재 소식은 정말 끊이지가 않는데요. 여름철에는 더욱 전력 소모가 많아지는 만큼 공장내 화재 감지 시설과 소방 시설에 더 신경을 써야 할 거 같습니다.
-                        </p>
-                        <p>
-                            정확한 화재 원인은 아직 밝혀지지 않았는데요. 관계 당국은 피해 규모와 화재 원인 규명에 나설 것으로 보입니다. 공장 화재 소식은 정말 끊이지가 않는데요. 여름철에는 더욱 전력 소모가 많아지는 만큼 공장내 화재 감지 시설과 소방 시설에 더 신경을 써야 할 거 같습니다.
-                        </p>
+                {/* NOTIFICATION POPUP */}
+                {!!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
+                    <div className={classes.notificationPopup}>
+                        <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)}></ClosePopupButton2>
+                        <div><span className={classes.slideLabelHot}>HOT</span> {noticeHotItem.title}</div>
+                        <div className={classes.popNews}>
+                            <p>
+                                {noticeHotItem.content}
+                            </p>
+                        </div>
+                        <div>{noticeHotItem.attachId && <img src={icoFile} alt="file icon" />} {noticeHotItem.fileName}</div>
                     </div>
-                    <div><img src={icoFile} alt="file icon" /> 개선조치 관련 내부 점검 파일 수정20220701.hwp</div>
-                    
-                </div>
+                </>))}
             </Grid >
         </WideLayout >
     );

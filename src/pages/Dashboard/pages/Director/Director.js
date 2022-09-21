@@ -45,7 +45,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentsPreventionMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetLoginInfoMutation, useGetNoticeListMutation, useGetRelatedLawRateMutation, useGetWorkplaceListMutation, useGetWeatherMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentsPreventionMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetLoginInfoMutation, useGetNoticeListMutation, useGetRelatedLawRateMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetLeaderImprovementListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetAccidentTotalMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetSafeWorkHistoryListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
@@ -61,6 +61,8 @@ import { useStyles } from './useStyles';
 
 import adminIcon from '../../../../assets/images/btn_admin.png';
 import adminIconHover from '../../../../assets/images/btn_admin_ov.png';
+import icoFile from '../../../../assets/images/ic_file.png';
+import popupClose2 from '../../../../assets/images/btn_popClose2.png';
 
 const UserButton = styled(ButtonUnstyled)`
     background: transparent url(${userIcon});
@@ -230,6 +232,15 @@ const PromptButtonWhite = styled(ButtonUnstyled)`
     } 
 `;
 
+const ClosePopupButton2 = styled(ButtonUnstyled)`
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: url(${popupClose2}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s; 
+`;
 
 const headerSlider = {
     dots: false,
@@ -269,6 +280,7 @@ const Director = () => {
     const [getWorkplaceList] = useGetWorkplaceListMutation();
     const [getBaseline] = useGetBaselineMutation();
     const [getBaselineList] = useGetBaselineListMutation();
+    const [getNoticeHotList] = useGetNoticeHotListMutation();
 
     const [noticesList, setNoticesList] = useState([]);
     const [userPopup, setUserPopup] = useState(false)
@@ -301,11 +313,9 @@ const Director = () => {
     const [weatherData, setWeatherData] = useState({})
     const [dayInfo, setDayInfo] = useState({});
     const currentWorkplaceId = useSelector(selectWorkplaceId);
-    const currentBaselineId = useSelector(selectBaselineId)
+    const currentBaselineId = useSelector(selectBaselineId);
+    const [noticeHotList, setNoticeHotList] = useState([]);
 
-
-
-    // izmeniti ovo
     const [userInfo, setUserInfo] = useState({
         userCompanyId: userToken.getUserCompanyId(),
         userWorkplaceId: userToken.getUserWorkplaceId(),
@@ -318,6 +328,7 @@ const Director = () => {
 
     const handleLogOut = () => {
         remove();
+        window.sessionStorage.removeItem('firstLoad');
         navigate('/');
     }
 
@@ -329,6 +340,11 @@ const Director = () => {
     const handleChange = (event) => {
         setNum(event.target.value);
     };
+
+    const handleNotificationPopupsShow = (notificationIndex) => {
+        const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex != index);
+        setNoticeHotList(notificationPopupList);
+    }
 
     const handleSlickCircleColor = (percentage) => {
         if (!percentage && percentage != '%') {
@@ -453,6 +469,11 @@ const Director = () => {
 
     }
 
+    const fetchNoticeHotList = async () => {
+        const response = await getNoticeHotList({});
+        setNoticeHotList(response?.data?.RET_DATA);
+    }
+
     const refreshClock = () => {
         const now = moment()
         setHours(now.format("hh"))
@@ -559,6 +580,13 @@ const Director = () => {
     }, []);
 
     useEffect(() => {
+
+        if (window.sessionStorage.getItem('firstLoad') === null) {
+            fetchNoticeHotList();
+            window.sessionStorage.setItem('firstLoad', 1);
+            console.log('firstLoad');
+        }
+
         navigator.geolocation.getCurrentPosition(position => {
             setLatitude(position.coords.latitude)
             setLongitude(position.coords.longitude)
@@ -1116,6 +1144,18 @@ const Director = () => {
                     </Grid>
 
                 </Grid>
+                {!!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
+                    <div className={classes.notificationPopup}>
+                        <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)}></ClosePopupButton2>
+                        <div><span className={classes.slideLabelHot}>HOT</span> {noticeHotItem.title}</div>
+                        <div className={classes.popNews}>
+                            <p>
+                                {noticeHotItem.content}
+                            </p>
+                        </div>
+                        <div>{noticeHotItem.attachId && <img src={icoFile} alt="file icon" />} {noticeHotItem.fileName}</div>
+                    </div>
+                </>))}
 
             </Grid>
 
