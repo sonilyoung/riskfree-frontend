@@ -113,12 +113,16 @@ const Registration = () => {
             setActionBeforePath(response?.data?.RET_DATA[0].originalFileName)
             setActionBeforeFileSn(response.data.RET_DATA[0].fileSn)
             setOpenDialogBeforeId(false)
+            console.log(response)
+            handleDialogFileDownload(response.data.RET_DATA[0].atchFileId, response.data.RET_DATA[0].fileSn, "actionBeforeId")
         }
     }
 
-    const handleDialogFileDownload = async (atchFileId, fileSn, dialog) => {
+    async function handleDialogFileDownload(atchFileId, fileSn, dialog) {
         const response = await fileDown({ atchFileId, fileSn })
+        console.log(response)
         const url = window.URL.createObjectURL(new Blob([response]))
+        console.log(url)
         if (dialog === "reqFile") {
             setReqFileLink(url)
             console.log(url)
@@ -441,6 +445,7 @@ const Registration = () => {
                 onUpload={() => handleDialogFileUpload("actionBeforeId")}
                 onDownload={() => handleDialogFileDownload(improvement.actionBeforeId, 1, "actionBeforeId")}
                 link={actionBeforeLink}
+                fileName={actionBeforePath}
             />
         </DefaultLayout>
     );
