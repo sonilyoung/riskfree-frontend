@@ -82,7 +82,7 @@ const useStyles = makeStyles(() => ({
                 borderRadius: '6px',
             },
             '&:nth-of-type(4)': {
-                marginLeft: '90px',
+                marginLeft: '86px',
                 width: '437px',
             },
         },

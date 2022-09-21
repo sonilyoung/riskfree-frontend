@@ -10,12 +10,14 @@ import { OrdersForImprovementPage } from '../pages/Dashboard/pages/Employee/page
 import { MeasureToManageThePerformancePage } from '../pages/Dashboard/pages/Employee/pages/MeasureToManageThePerformance'
 import { ContentsOfWorkPage } from '../pages/Dashboard/pages/Employee/pages/ContentsOfWork';
 import { SystemAdministratorPage } from '../pages/Dashboard/pages/SystemAdministrator';
-import { IMStatusPage, IMRegistrationPage, NoticeListPage, NoticeDetailsPage, NoticeRegistrationPage, ACIStatusPage, ACIRegistrationPage, OICLawPage, OICRegistrationPage, MPDLawFirstPage, MPDLawSecondPage, MPDLawThirdPage, SecurityWorkContentPage, MembersManagementPage, WorkHistoryListPage } from '../pages/Dashoard/pages';
 import { ForgottenPasswordPage } from '../pages/Login/pages/ForgottenPassword';
 
 import { useUserStatus } from '../hooks/core/UserStatus';
 import { useUserToken } from '../hooks/core/UserToken';
 import useUserURLRedirect from '../hooks/core/UserURLRedirect/UserURLRedirect';
+
+{/* DEPRECATED IMPORT PAGES */}
+// import { IMStatus_deprecatedPage, IMRegistration_deprecatedPage, NoticeList_deprecatedPage, NoticeDetails_deprecatedPage, NoticeRegistration_deprecatedPage, ACIStatus_deprecatedPage, ACIRegistration_deprecatedPage, OICLaw_deprecatedPage, OICRegistration_deprecatedPage, MPDLawFirst_deprecatedPage, MPDLawSecond_deprecatedPage, MPDLawThird_deprecatedPage, SecurityWorkContent_deprecatedPage, MembersManagement_deprecatedPage, WorkHistoryList_deprecatedPage } from '../pages/Dashoard/pages';
 
 const PrivateRoute = () => {
     const isLoggedIn = useUserStatus();
@@ -43,22 +45,8 @@ const DefaultRoutes = () => (
         <Route element={<PrivateRoute />}>
             <Route path="/dashboard/director" element={<DashboardDirectorPage />} />
             <Route path="/dashboard/director" element={<DashboardDirectorPage />} />
-            <Route path="/dashboard/director/improvement-measure-status" element={<IMStatusPage />} />
-            <Route path="/dashboard/director/improvement-measure-registration" element={<IMRegistrationPage />} />
-            <Route path="/dashboard/director/notice-list" element={<NoticeListPage />} />
-            <Route path="/dashboard/director/notice-details" element={<NoticeDetailsPage />} />
-            <Route path="/dashboard/director/notice-registration" element={<NoticeRegistrationPage />} />
-            <Route path="/dashboard/director/accident-countermeasures-implementation-status" element={<ACIStatusPage />} />
-            <Route path="/dashboard/director/accident-countermeasures-implementation-registration" element={<ACIRegistrationPage />} />
-            <Route path="/dashboard/director/order-for-improvement-and-correction-under-related-law" element={<OICLawPage />} />
-            <Route path="/dashboard/director/order-for-improvement-and-correction-registration" element={<OICRegistrationPage />} />
-            <Route path="/dashboard/director/measure-manage-performance-od-duties-law-first" element={<MPDLawFirstPage />} />
-            <Route path="/dashboard/director/measure-manage-performance-od-duties-law-second" element={<MPDLawSecondPage />} />
-            <Route path="/dashboard/director/measure-manage-performance-od-duties-law-third" element={<MPDLawThirdPage />} />
-            <Route path="/dashboard/director/work-history-list" element={<WorkHistoryListPage />} />
             <Route path="/dashboard/director/notifications/*" element={<NotificationsPage />} />
             <Route path="/dashboard/director/improvement-measures/*" element={<ImprovementMeasuresPage />} />
-            {/* <Route path="/dashboard/director/security-work-content" element={<SecurityWorkContentPage />} /> */}
             <Route path="/dashboard/director/notifications/*" element={<NotificationsPage />} />
             <Route path="/dashboard/director/accident-countermeasures-implementation/*" element={<CountermeasuresForTheOccurrencePage />} />
             <Route path="/dashboard/director/order-for-improvement-and-correction-under-related-law/*" element={<OrdersForImprovementPage />} />
@@ -78,6 +66,24 @@ const DefaultRoutes = () => (
             <Route exact path="/" element={<LoginPage />} />
             <Route path="/registration" element={<RegistrationPage />} />
             <Route path="/forgotten-password/*" element={<ForgottenPasswordPage />} />
+        </Route>
+
+        {/* DEPRECATED ROUTES */}
+        <Route element={<PrivateRoute />}>
+            {/* <Route path="/dashboard/director/improvement-measure-status" element={<IMStatus_deprecatedPage />} /> */}
+            {/* <Route path="/dashboard/director/improvement-measure-registration" element={<IMRegistration_deprecatedPage />} /> */}
+            {/* <Route path="/dashboard/director/notice-list" element={<NoticeList_deprecatedPage />} /> */}
+            {/* <Route path="/dashboard/director/notice-details" element={<NoticeDetails_deprecatedPage />} /> */}
+            {/* <Route path="/dashboard/director/notice-registration" element={<NoticeRegistration_deprecatedPage />} /> */}
+            {/* <Route path="/dashboard/director/accident-countermeasures-implementation-status" element={<ACIStatus_deprecatedPage />} /> */}
+            {/* <Route path="/dashboard/director/accident-countermeasures-implementation-registration" element={<ACIRegistration_deprecatedPage />} /> */}
+            {/* <Route path="/dashboard/director/order-for-improvement-and-correction-under-related-law" element={<OICLaw_deprecatedPage />} /> */}
+            {/* <Route path="/dashboard/director/order-for-improvement-and-correction-registration" element={<OICRegistration_deprecatedPage />} /> */}
+            {/* <Route path="/dashboard/director/measure-manage-performance-od-duties-law-first" element={<MPDLawFirst_deprecatedPage />} /> */}
+            {/* <Route path="/dashboard/director/measure-manage-performance-od-duties-law-second" element={<MPDLawSecond_deprecatedPage />} /> */}
+            {/* <Route path="/dashboard/director/measure-manage-performance-od-duties-law-third" element={<MPDLawThird_deprecatedPage />} /> */}
+            {/* <Route path="/dashboard/director/work-history-list" element={<WorkHistoryList_deprecatedPage />} /> */}
+            {/* <Route path="/dashboard/director/security-work-content" element={<SecurityWorkContent_deprecatedPage />} /> */}
         </Route>
     </Routes>
 );

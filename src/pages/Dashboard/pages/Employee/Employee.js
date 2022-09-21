@@ -2384,7 +2384,7 @@ const Employee = () => {
                                                     id="outlined-multiline-static"
                                                     multiline
                                                     rows={4}
-                                                    placeholder="1차                                                    2022.01.01 ~ 20 21.03.31.&#10;1차                                                    2022.01.01 ~ 20 21.03.31.&#10;3차                                                   2022.07.01 ~ 2021.09.30."
+                                                    placeholder="1차                                                    2022.01.01 ~ 20 21.03.31.&#10;2차                                                   2022.01.01 ~ 20 21.03.31.&#10;3차                                                   2022.07.01 ~ 2021.09.30."
                                                 />
                                             </AccordionDetails>
                                         </Accordion>
@@ -2423,6 +2423,7 @@ const Employee = () => {
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setShowUploadPopup(true)}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setShowUploadPopup(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
                                     </div>
                                     <div className={classes.headerPopFooter}>
                                         <PopupFootButton>저장하기</PopupFootButton>
