@@ -98,6 +98,62 @@ const useStyles = makeStyles(() => ({
             borderBottom: 'none'
         }
     },
+    promptPopup: {
+        // display: 'none',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%,-50%)',
+        width: '320px',
+        height: '220px',
+        borderRadius: '18px',
+        border: '2px solid #018de7',
+        background: 'white',
+        color: '#333',
+        overflow: 'hidden',
+        zIndex: '6',
+        '& >div': {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '60px',
+            '&:first-of-type': {
+                fontSize: '20px',
+                fontWeight: 'bold',
+                paddingTop: '10px',
+            },
+            '&:last-of-type': {
+                position: 'absolute',
+                bottom: '0px',
+                width: '100%',
+                '& button': {
+                    width: '50%',
+                    height: '100%',
+                    border: 'none',
+                    background: '#eeeff7',
+                    cursor: 'pointer',
+                    fontSize: '18px',
+                    transition: '.2s',
+                    '&:last-of-type': {
+                        borderLeft: '1px solid #fff',
+                        background: '#018de7',
+                        color: '#fff',
+                        '&:hover': {
+                            background: '#0355b0',
+                            color: '#fff'
+                        }
+                    },
+                    '&:hover': {
+                        background: '#bdcbe9',
+                        color: '#333',
+                    }
+                }
+            },
+        }
+    },
+    promptPopupClose: {
+        display: 'none !important',
+    },
     rowTitle: {
         display: 'flex',
         flexDirection: 'column',
@@ -279,6 +335,7 @@ const View = () => {
     const [lawDelete] = useLawDeleteMutation();
     const { id } = useParams()
     const [law, setLaw] = useState({})
+    const [promptPopupShow, setPromptPopupShow] = useState(false);
 
     const handleRedirect = () => {
         navigate(
@@ -294,6 +351,7 @@ const View = () => {
 
     const handleLawDelete = () => {
         lawDelete(id)
+            .then(() => setPromptPopupShow(false))
             .then(() => handleRedirect())
     }
 
@@ -418,7 +476,7 @@ const View = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
                     <BlueButton className={"button-correction"} onClick={() => navigate(`/dashboard/employee/order-for-improvement-and-correction-under-related-law/update/${law.lawImproveId}`)}>수정</BlueButton>
-                    <WhiteButton className={"button-delete"} onClick={handleLawDelete}>삭제</WhiteButton>
+                    <WhiteButton className={"button-delete"} onClick={() => setPromptPopupShow(true)}>삭제</WhiteButton>
                     <WhiteButton
                         className={"button-list"}
                         onClick={() => handleRedirect()}
@@ -427,6 +485,14 @@ const View = () => {
                     </WhiteButton>
                 </Grid>
             </Grid>
+            <div className={promptPopupShow ? classes.promptPopup : classes.promptPopupClose}>
+                <div>알림</div>
+                <div>삭제 하시겠습니까?</div>
+                <div>
+                    <button onClick={() => setPromptPopupShow(false)} >취소</button>
+                    <button onClick={() => handleLawDelete()}>확인</button>
+                </div>
+            </div>
         </DefaultLayout>
     );
 };

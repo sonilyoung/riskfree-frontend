@@ -980,7 +980,7 @@ const Default = ({ children }) => {
                                                     <AccordionDetails style={{ alignItems: 'center' }}>
                                                         <TextField
                                                             id="standard-basic"
-                                                            placeholder="관리차수"
+                                                            value={baselineInfo.baselineName}
                                                             variant="outlined"
                                                             sx={{ width: 80 }}
                                                             className={classes.popupTextField}
@@ -990,8 +990,11 @@ const Default = ({ children }) => {
                                                                 className={classes.selectMenuDate}
                                                                 label=" "
                                                                 inputFormat="YYYY-MM-DD"
-                                                                value={date}
-                                                                onChange={setDate}
+                                                                value={baselineInfo.baselineStart}
+                                                                onChange={(newDate) => {
+                                                                    const date = new Date(newDate.$d);
+                                                                    setBaselineInfo({ ...baselineInfo, "baselineStart": moment(date).format("YYYY-MM-DD") })
+                                                                }}
                                                                 renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                             />
                                                         </LocalizationProvider>
@@ -1001,8 +1004,11 @@ const Default = ({ children }) => {
                                                                 className={classes.selectMenuDate}
                                                                 label=" "
                                                                 inputFormat="YYYY-MM-DD"
-                                                                value={date}
-                                                                onChange={setDate}
+                                                                value={baselineInfo.baselineEnd}
+                                                                onChange={(newDate) => {
+                                                                    const date = new Date(newDate.$d);
+                                                                    setBaselineInfo({ ...baselineInfo, "baselineEnd": moment(date).format("YYYY-MM-DD") })
+                                                                }}
                                                                 renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                             />
                                                         </LocalizationProvider>

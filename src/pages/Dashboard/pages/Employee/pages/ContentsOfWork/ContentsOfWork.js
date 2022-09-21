@@ -50,6 +50,7 @@ import useUserInitialWorkplaceId from '../../../../../../hooks/core/UserInitialW
 
 import CloseIcon from '@mui/icons-material/Close';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { useDeleteFileMutation } from '../../../../../../hooks/api/FileManagement/FIleManagement';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -391,7 +392,7 @@ const useStyles = makeStyles(() => ({
             }
         },
     },
-    uploadPopup: {
+    registerUploadPopup: {
         position: 'absolute',
         zIndex: '1000',
         top: '45%',
@@ -413,6 +414,39 @@ const useStyles = makeStyles(() => ({
             transform: 'translateY(-5px)',
             '&:nth-of-type(2)': {
                 width: '40%',
+                border: 'none',
+                padding: '0 10px',
+                boxSizing: 'border-box',
+                textAlign: 'center',
+                transform: 'unset',
+            }
+        },
+        '& >button': {
+            position: 'absolute',
+            top: '0px',
+            right: '-65px'
+        }
+    },
+    uploadPopup: {
+        position: 'absolute',
+        zIndex: '1000',
+        top: '52%',
+        left: '5%',
+        width: '400px',
+        height: '400px',
+        background: '#fff',
+        borderRadius: '30px',
+        padding: '40px',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexWrap: 'wrap',
+        '& >span': {
+            width: '20%',
+            height: '20px',
+            borderBottom: '1px solid #bdcbe9',
+            transform: 'translateY(-5px)',
+            '&:nth-of-type(2)': {
+                width: '60%',
                 border: 'none',
                 padding: '0 10px',
                 boxSizing: 'border-box',
@@ -494,7 +528,7 @@ const useStyles = makeStyles(() => ({
         display: "none !important",
     },
     promptPopup: {
-        display: 'none',
+        // display: 'none',
         position: 'absolute',
         top: '70%',
         left: '70%',
@@ -544,6 +578,9 @@ const useStyles = makeStyles(() => ({
                 }
             },
         }
+    },
+    promptPopupClose: {
+        display: 'none',
     },
 }));
 const SearchPopupButton = styled(ButtonUnstyled)`
@@ -694,6 +731,7 @@ const WorkHistoryList = () => {
     const [getSafeWork] = useGetSafeWorkMutation();
     const [getSafeWorkFileTopInfo] = useGetSafeWorkFileTopInfoMutation();
     const [getSafeWorkFile] = useGetSafeWorkFileMutation();
+    const [deleteFile] = useDeleteFileMutation();
     const getInitialWorkplaceId = useUserInitialWorkplaceId();
 
     const [locale] = React.useState('ko');
@@ -706,8 +744,26 @@ const WorkHistoryList = () => {
     const [insertDate, setInsertDate] = useState(null);
     const [username, setUsername] = useState("");
     const [noticeId, setNoticeId] = useState(null);
-    const [popupShow, setPopupShow] = useState(false);
+    const [registerPopupShow, setRegisterPopupShow] = useState(false);
     const [workplaceId, setWorkplaceId] = useState(getInitialWorkplaceId());
+    const [promptPopupShow, setPromptPopupShow] = useState(false);
+    const [uploadPopupShow, setUploadPopupShow] = useState(false);
+    const [delteFileParams, setDeleteFileParams] = useState({
+        "attachedFileId": '',
+        "fileSn": ''
+    });
+
+    const handleAllPopupClose = () => {
+        setHide(true);
+        setUploadPopupShow(false);
+        setPromptPopupShow(false);
+    }
+
+    const handleDeleteFile = async (attachedFileId, fileSn) => {
+        const response = await deleteFile(attachedFileId, fileSn);
+        console.log(response);
+        setPromptPopupShow(false);
+    }
 
     const fetchWorkplaceList = async () => {
         const response = await getWorkplaceList();
@@ -721,8 +777,8 @@ const WorkHistoryList = () => {
             "userName": username
         });
         setSafeWorkList(response.data.RET_DATA);
-        console.log(response);
-        console.log(workplaceId, insertDate, username);
+        // console.log(response);
+        // console.log(workplaceId, insertDate, username);
     }
 
     const fetchSafeWorkFileTopInfo = async () => {
@@ -730,6 +786,7 @@ const WorkHistoryList = () => {
             "noticeId": noticeId
         });
         setSafeWorkFileTopinfo(response.data.RET_DATA);
+        console.log(response);
     }
 
     const fetchSafeWorkFileList = async () => {
@@ -737,8 +794,8 @@ const WorkHistoryList = () => {
             "workplaceId": workplaceId
         });
         setSafeWorkFileList(response.data.RET_DATA);
-        console.log(workplaceId);
-        console.log(response.data.RET_DATA);
+        // console.log(workplaceId);
+        // console.log(response.data.RET_DATA);
     }
 
     useEffect(() => {
@@ -804,7 +861,7 @@ const WorkHistoryList = () => {
                         </div>
                         <div className={classes.searchButtons}>
                             <SearchButton onClick={() => fetchSafeWorkList()}>조회</SearchButton>
-                            <RegisterButton sx={{ marginLeft: '10px' }} onClick={() => setPopupShow(true)}>등록</RegisterButton>
+                            <RegisterButton sx={{ marginLeft: '10px' }} onClick={() => setRegisterPopupShow(true)}>등록</RegisterButton>
                         </div>
                     </div>
                 </Grid>
@@ -858,7 +915,7 @@ const WorkHistoryList = () => {
                     <div className={hide ? classes.popupHide : classes.headerPopup}>
                         <div className={classes.popHeader}>
                             안전작업허가 공사내역 관리
-                            <ButtonClosePop onClick={() => setHide(true)}></ButtonClosePop>
+                            <ButtonClosePop onClick={() => handleAllPopupClose()}></ButtonClosePop>
                         </div>
                         <div className={hide ? classes.popupHide : classes.popupBody}>
                             <div className={hide ? classes.popupHide : classes.popTop}>
@@ -886,10 +943,10 @@ const WorkHistoryList = () => {
                                     <div className={classes.tableRow}>공사내역_광명기업_2022033101.xlsx</div>
                                     <div className={classes.tableRow}>
                                         <RowButton>
-                                            <FileDownloadIcon sx={{ color: '#333' }}></FileDownloadIcon>
+                                            <FileDownloadIcon sx={{ color: '#333' }} onClick={() => setUploadPopupShow(true)}></FileDownloadIcon>
                                         </RowButton>
                                         <RowButton>
-                                            <CloseIcon sx={{ color: '#333' }}></CloseIcon>
+                                            <CloseIcon sx={{ color: '#333' }} onClick={() => { setPromptPopupShow(true); setDeleteFileParams({ "attachedFileId": "", "fileSn": "" }) }}></CloseIcon>
                                         </RowButton>
                                     </div>
                                 </div>
@@ -901,7 +958,7 @@ const WorkHistoryList = () => {
                                             <FileDownloadIcon sx={{ color: '#333' }}></FileDownloadIcon>
                                         </RowButton>
                                         <RowButton>
-                                            <CloseIcon sx={{ color: '#333' }}></CloseIcon>
+                                            <CloseIcon sx={{ color: '#333' }} ></CloseIcon>
                                         </RowButton>
                                     </div>
                                 </div>
@@ -918,19 +975,19 @@ const WorkHistoryList = () => {
                                     </div>
                                 </div>
                             </Grid>
-                            <NoButton>취소</NoButton>
+                            <NoButton onClick={() => setHide(true)}>취소</NoButton>
                         </div>
                     </div>
-                    <div className={classes.promptPopup}>
+                    <div className={promptPopupShow ? classes.promptPopup : classes.promptPopupClose}>
                         <div>알림</div>
                         <div>삭제 하시겠습니까?</div>
                         <div>
-                            <button>취소</button>
-                            <button>확인</button>
+                            <button onClick={() => setPromptPopupShow(false)} >취소</button>
+                            <button /*onClick={() => handleDeleteFile()}*/>확인</button>
                         </div>
                     </div>
-                    <div className={popupShow ? classes.uploadPopup : classes.uploadPopupHide}>
-                        <ClosePopupButton2 onClick={() => setPopupShow(false)}></ClosePopupButton2>
+                    <div className={registerPopupShow ? classes.registerUploadPopup : classes.uploadPopupHide}>
+                        <ClosePopupButton2 onClick={() => setRegisterPopupShow(false)}></ClosePopupButton2>
                         <span></span>
                         <span>작성파일 업로드</span>
                         <span></span>
@@ -943,7 +1000,29 @@ const WorkHistoryList = () => {
                                 className={classes.popupTextField}
                             />
                             <SearchPopupButton></SearchPopupButton>
-                            <UnknownButton1 onClick={() => setPopupShow(false)}>파일 업로드</UnknownButton1>
+                            <UnknownButton1 onClick={() => setRegisterPopupShow(false)}>파일 업로드</UnknownButton1>
+                        </div>
+                    </div>
+                    <div className={uploadPopupShow ? classes.uploadPopup : classes.uploadPopupHide}>
+                        <ClosePopupButton2 onClick={() => setUploadPopupShow(false)}></ClosePopupButton2>
+                        <div className={classes.uploadInfo}>
+                            <img src={alertIcon} alt="alert icon" />
+                            <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
+                            <UnknownButton2>전체사업장</UnknownButton2>
+                        </div>
+                        <span></span>
+                        <span>의무조치별 상세 점검</span>
+                        <span></span>
+                        <div className={classes.uploadSearch}>
+                            <TextField
+                                id="standard-basic"
+                                placeholder="여수공장 시정조치요청 파일.hwp"
+                                variant="outlined"
+                                sx={{ width: 250 }}
+                                className={classes.popupTextField}
+                            />
+                            <SearchPopupButton></SearchPopupButton>
+                            <UnknownButton1 onClick={() => setUploadPopupShow(false)}>전체사업장</UnknownButton1>
                         </div>
                     </div>
                 </Grid>
