@@ -16,7 +16,7 @@ import { DefaultLayout } from '../../../../../../../../layouts/Default';
 
 import radioIcon from '../../../../../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../../../../../assets/images/ic_radio_on.png';
-import { useFileUploadMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
+import { useFileUploadMutation, useFileDownMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 
 import imgPrev from '../../../../../../../../assets/images/prw_photo.jpg';
 import imgPrev2 from '../../../../../../../../assets/images/prw_photo2.jpg';
@@ -51,10 +51,16 @@ const Registration = () => {
     const [selectedFile, setSelectedFile] = useState(null)
     const [atchFileId, setAtchFileId] = useState(null)
     const [atchFilePath, setAtchFilePath] = useState("")
+    const [atchFileSn, setAtchFileSn] = useState(null)
     const [actionAfterId, setActionAfterId] = useState(null)
-    const [actionAfterPath, setActionAfterPath] = useState("")
+    const [actionAfterPath, setActionAfterPath] = useState(null)
+    const [actionAfterFileSn, setActionAfterFileSn] = useState(null)
     const [actionBeforeId, setActionBeforeId] = useState(null)
+    const [actionBeforeFileSn, setActionBeforeFileSn] = useState(null)
     const [actionBeforePath, setActionBeforePath] = useState("")
+    const [reqFileLink, setReqFileLink] = useState("")
+    const [actionBeforeLink, setActionBeforeLink] = useState("")
+    const [actionAfterLink, setActionAfterLink] = useState("")
     const [improvement, setImprovement] = useState(
         {
             "actionAfterId": actionAfterId,
@@ -71,10 +77,11 @@ const Registration = () => {
             "reqUserCd": reqUserCd,
             "statusCd": "",
             "updateId": null,
-            "workplaceId": workplaceSelect
+            "workplaceId": parseInt(workplaceSelect)
         }
     )
     const [fileUpload] = useFileUploadMutation();
+    const [fileDown] = useFileDownMutation()
 
     const handleDialogClose = (dialog) => {
         if (dialog === "openDialogReqFile") {
@@ -91,16 +98,46 @@ const Registration = () => {
         formData.append("files", selectedFile)
         const response = await fileUpload(formData)
         if (params === "reqFile") {
-            setAtchFileId(response?.data?.RET_DATA[0].atchFileId)
+            console.log(response.data.RET_DATA[0].atchFileId)
+            setImprovement({ ...improvement, "reqFileId": response.data.RET_DATA[0].atchFileId })
             setAtchFilePath(response?.data?.RET_DATA[0].originalFileName)
+            setAtchFileSn(response.data.RET_DATA[0].fileSn)
+            setOpenDialogReqFile(false)
         } else if (params === "actionAfterId") {
-            setActionAfterId(response?.data?.RET_DATA?.atchFileId)
+            setImprovement({ ...improvement, "actionAfterId": response.data.RET_DATA[0].atchFileId })
             setActionAfterPath(response?.data?.RET_DATA[0].originalFileName)
+            setActionAfterFileSn(response.data.RET_DATA[0].fileSn)
+            setOpenDialogAfterId(false)
         } else if (params === "actionBeforeId") {
-            setActionBeforeId(response?.data?.RET_DATA?.atchFileId)
+            setImprovement({ ...improvement, "actionBeforeId": response.data.RET_DATA[0].atchFileId })
             setActionBeforePath(response?.data?.RET_DATA[0].originalFileName)
-            console.log(response)
+            setActionBeforeFileSn(response.data.RET_DATA[0].fileSn)
+            setOpenDialogBeforeId(false)
         }
+    }
+
+    const handleDialogFileDownload = async (atchFileId, fileSn, dialog) => {
+        const response = await fileDown({ atchFileId, fileSn })
+        const url = window.URL.createObjectURL(new Blob([response]))
+        if (dialog === "reqFile") {
+            setReqFileLink(url)
+            console.log(url)
+        }
+        else if (dialog === "actionAfterId") {
+            setActionAfterLink(url)
+            console.log(url)
+        }
+        else if (dialog === "actionBeforeId") {
+            setActionBeforeLink(url)
+            console.log(url)
+        }
+        // const link = document.createElement('a')
+        // link.href = url
+        // link.setAttribute('download', fileName)
+        // document.body.appendChild(link)
+        // link.click()
+        // link.remove()
+        // window.URL.revokeObjectURL(url)
     }
 
     const handleDialogInputChange = (event) => {
@@ -127,10 +164,10 @@ const Registration = () => {
         [date2, setDate2] = React.useState(null);
 
     const [locale] = React.useState('ko');
-
     useEffect(() => {
         fetchComapanyWorkplace()
     }, [])
+    console.log(actionBeforeFileSn)
 
     useEffect(() => {
     }, [actionBeforePath, actionBeforePath, atchFilePath])
@@ -201,10 +238,10 @@ const Registration = () => {
                                             className={classes.selectMenuDate}
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
-                                            value={reqDate}
+                                            value={improvement.reqDate}
                                             onChange={(newDate) => {
                                                 const date = new Date(newDate.$d)
-                                                setReqDate(moment(date).format("YYYY-MM-DD"))
+                                                setImprovement({ ...improvement, "reqDate": moment(date).format("YYYY-MM-DD") })
                                             }}
                                             renderInput={(params) => <TextField {...params} sx={{ width: 200 }} />}
                                         />
@@ -231,10 +268,10 @@ const Registration = () => {
                                             className={classes.selectMenuDate}
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
-                                            value={finDate}
+                                            value={improvement.finDate}
                                             onChange={(newDate) => {
                                                 const date = new Date(newDate.$d)
-                                                setFinDate(moment(date).format("YYYY-MM-DD"))
+                                                setImprovement({ ...improvement, "finDate": moment(date).format("YYYY-MM-DD") })
                                             }}
                                             renderInput={(params) => <TextField {...params} sx={{ width: 200 }} />}
                                         />
@@ -384,18 +421,26 @@ const Registration = () => {
                 onClose={() => handleDialogClose("openDialogReqFile")}
                 onInputChange={handleDialogInputChange}
                 onUpload={() => handleDialogFileUpload("reqFile")}
+                onDownload={() => handleDialogFileDownload(improvement.reqFileId, 1, "reqFile")}
+                link={reqFileLink}
+
             />
             <UploadDialog
                 open={openDialogAfterId}
                 onClose={() => handleDialogClose("openDialogAfterId")}
                 onInputChange={handleDialogInputChange}
                 onUpload={() => handleDialogFileUpload("actionAfterId")}
+                onDownload={() => handleDialogFileDownload(improvement.actionAfterId, 1, "actionAfterId")}
+                link={actionAfterLink}
+
             />
             <UploadDialog
                 open={openDialogBeforeId}
                 onClose={() => handleDialogClose("openDialogBeforeId")}
                 onInputChange={handleDialogInputChange}
                 onUpload={() => handleDialogFileUpload("actionBeforeId")}
+                onDownload={() => handleDialogFileDownload(improvement.actionBeforeId, 1, "actionBeforeId")}
+                link={actionBeforeLink}
             />
         </DefaultLayout>
     );

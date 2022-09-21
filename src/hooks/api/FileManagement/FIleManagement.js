@@ -32,18 +32,11 @@ export const fileManagement = createApi({
             })
         }),
         fileDown: builder.mutation({
-            query: (atchFileId, fileSn) => ({
-                url: `file/fileDown?atchFileId=${atchFileId}&fileSn${fileSn}`,
+            query: ({ atchFileId, fileSn }) => ({
+                url: `file/fileDown?atchFileId=${atchFileId}&fileSn=${fileSn}`,
                 method: 'GET',
                 contentType: 'multipart/form-data',
-            })
-        }),
-        fileDownload: builder.mutation({
-            query: (body) => ({
-                url: `file/fileDownload`,
-                method: 'POST',
-                body: body,
-                contentType: 'multipart/form-data',
+                responseType: 'blob'
             })
         }),
         fileUpload: builder.mutation({
@@ -61,12 +54,12 @@ export const fileManagement = createApi({
             })
         }),
         getFileInfo: builder.mutation({
-            query: (body) => ({
-                url: 'file/getFileInfo',
+            query: ({ atchFileId, fileSn }) => ({
+                url: `/file/getFileInfo?atchFileId=${atchFileId}&fileSn=${fileSn}`,
                 method: 'GET',
             })
         }),
     }),
 });
 
-export const { useAttachDetailListMutation, useDeleteFileMutation, useFileDownMutation, useFileDownloadMutation, useFileUploadMutation, useGetImgMutation, useGetFileInfoMutation } = fileManagement;
+export const { useAttachDetailListMutation, useDeleteFileMutation, useFileDownMutation, useFileUploadMutation, useGetImgMutation, useGetFileInfoMutation } = fileManagement;

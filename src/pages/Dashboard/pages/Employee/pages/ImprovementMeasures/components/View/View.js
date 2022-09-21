@@ -27,6 +27,7 @@ import imgPrev from '../../../../../../../../assets/images/prw_photo.jpg';
 import imgPrev2 from '../../../../../../../../assets/images/prw_photo2.jpg';
 
 import { useImprovementViewMutation, useImprovementDeleteMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement'
+import { useGetFileInfoMutation, useGetImgMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -288,6 +289,9 @@ const Registration = () => {
     const [improvemetnDelete] = useImprovementDeleteMutation()
     const [improvement, setImprovement] = useState({})
     const [num, setNum] = React.useState('');
+    const [getFileInfo] = useGetFileInfoMutation()
+    const [filePathBefore, setFilePathBefore] = useState("")
+    const [filePathAfter, setFilePathAfter] = useState("")
 
     const handleChange = (event) => {
         setNum(event.target.value);
@@ -300,7 +304,21 @@ const Registration = () => {
     const handleFetchView = async () => {
         const response = await improvementView(id)
         setImprovement(response.data.RET_DATA)
+        // console.log(improvement)
+        if (response.data.RET_DATA) {
+            const responseFileInfoBefore = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.actionBeforeId), fileSn: 1 })
+            setFilePathBefore(responseFileInfoBefore.data.RET_DATA.filePath + "/" + responseFileInfoBefore.data.RET_DATA.saveFileName)
+        }
+        if (response.data.RET_DATA) {
+            const responseFileInfoAfter = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.actionAfterId), fileSn: 1 })
+            setFilePathAfter(responseFileInfoAfter.data.RET_DATA.filePath + "/" + responseFileInfoAfter.data.RET_DATA.saveFileName)
+        }
     }
+
+    // const fetchFileInfo = async (improvement) => {
+    //     const response = await getFileInfo({ atchFileId: improvement.reqFileId, fileSn: 1 })
+    //     console.log(response)
+    // }
 
     const handleDeleteImprovement = () => {
         improvemetnDelete(id)
@@ -309,9 +327,10 @@ const Registration = () => {
 
     useEffect(() => {
         handleFetchView()
+        // console.log(filePath)
     }, [])
 
-    console.log(improvement)
+    // console.log(improvement)
     return (
         <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
@@ -399,13 +418,13 @@ const Registration = () => {
                                 <div>
                                     <div>조치 전</div>
                                     <div>
-
+                                        {filePathBefore && <img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${filePathBefore}`} alt="beforeImg" />}
                                     </div>
                                 </div>
                                 <div>
                                     <div>조치 후</div>
                                     <div>
-
+                                        {filePathAfter && <img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${filePathAfter}`} alt="beforeImg" />}
                                     </div>
                                 </div>
                             </div>
@@ -413,7 +432,7 @@ const Registration = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
-                    <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/employee/improvement-measures/update/${improvement.improveId}`)}>수정</BlueButton>
+                    <BlueButton className={'button-correction'} onClick={() => navigate(`/ dashboard / employee / improvement - measures / update / ${improvement.improveId} `)}>수정</BlueButton>
                     <WhiteButton className={'button-delete'} onClick={handleDeleteImprovement}>삭제</WhiteButton>
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
