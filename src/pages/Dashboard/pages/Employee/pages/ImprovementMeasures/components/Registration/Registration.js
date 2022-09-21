@@ -32,7 +32,7 @@ import moment from "moment"
 import useUserInitialWorkplaceId from '../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
 import { useStyles } from './useStyles';
 import { UploadButton, WhiteButton, BlueButton } from './buttons/Unstyled';
-import { UploadDialog }  from '../../../../../../../../dialogs/Upload';
+import { UploadDialog } from '../../../../../../../../dialogs/Upload';
 
 const Registration = () => {
     const classes = useStyles();
@@ -45,12 +45,20 @@ const Registration = () => {
     const [reqUserCd, setReqUserCd] = useState("")
     const [reqDate, setReqDate] = useState(null)
     const [finDate, setFinDate] = useState(null)
-    const [openDialog, setOpenDialog] = useState(false)
+    const [openDialogReqFile, setOpenDialogReqFile] = useState(false)
+    const [openDialogAfterId, setOpenDialogAfterId] = useState(false)
+    const [openDialogBeforeId, setOpenDialogBeforeId] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
+    const [atchFileId, setAtchFileId] = useState(null)
+    const [atchFilePath, setAtchFilePath] = useState("")
+    const [actionAfterId, setActionAfterId] = useState(null)
+    const [actionAfterPath, setActionAfterPath] = useState("")
+    const [actionBeforeId, setActionBeforeId] = useState(null)
+    const [actionBeforePath, setActionBeforePath] = useState("")
     const [improvement, setImprovement] = useState(
         {
-            "actionAfterId": null,
-            "actionBeforeId": null,
+            "actionAfterId": actionAfterId,
+            "actionBeforeId": actionBeforeId,
             "actionCn": "",
             "companyId": 1,
             "finDate": finDate,
@@ -59,7 +67,7 @@ const Registration = () => {
             "improveNo": "",
             "insertId": null,
             "reqDate": reqDate,
-            "reqFileId": 1,
+            "reqFileId": atchFileId,
             "reqUserCd": reqUserCd,
             "statusCd": "",
             "updateId": null,
@@ -68,17 +76,31 @@ const Registration = () => {
     )
     const [fileUpload] = useFileUploadMutation();
 
-    const handleDialogClose = () => {
-        setOpenDialog(false);
+    const handleDialogClose = (dialog) => {
+        if (dialog === "openDialogReqFile") {
+            setOpenDialogReqFile(false)
+        } else if (dialog === "openDialogAfterId") {
+            setOpenDialogAfterId(false)
+        } else if (dialog === "openDialogBeforeId") {
+            setOpenDialogBeforeId(false)
+        }
     }
 
-    const handleDialogFileUpload = async (file) => {
+    const handleDialogFileUpload = async (params) => {
         let formData = new FormData();
         formData.append("files", selectedFile)
         const response = await fileUpload(formData)
-        
-        console.log(formData)
-        console.log(response)
+        if (params === "reqFile") {
+            setAtchFileId(response?.data?.RET_DATA[0].atchFileId)
+            setAtchFilePath(response?.data?.RET_DATA[0].originalFileName)
+        } else if (params === "actionAfterId") {
+            setActionAfterId(response?.data?.RET_DATA?.atchFileId)
+            setActionAfterPath(response?.data?.RET_DATA[0].originalFileName)
+        } else if (params === "actionBeforeId") {
+            setActionBeforeId(response?.data?.RET_DATA?.atchFileId)
+            setActionBeforePath(response?.data?.RET_DATA[0].originalFileName)
+            console.log(response)
+        }
     }
 
     const handleDialogInputChange = (event) => {
@@ -109,6 +131,9 @@ const Registration = () => {
     useEffect(() => {
         fetchComapanyWorkplace()
     }, [])
+
+    useEffect(() => {
+    }, [actionBeforePath, actionBeforePath, atchFilePath])
 
     return (
         <DefaultLayout>
@@ -220,13 +245,13 @@ const Registration = () => {
                                     <TextField
                                         id="standard-basic"
                                         variant="outlined"
-                                        placeholder="여수공장 시정조치요청 파일.hwp"
-                                        value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
+                                        // placeholder="여수공장 시정조치요청 파일.hwp"
+                                        value={atchFilePath ?? ""}
                                         sx={{ width: 390 }}
                                         className={classes.selectMenu}
                                         disabled
                                     />
-                                    <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
+                                    <UploadButton onClick={e => setOpenDialogReqFile(true)}>찾아보기</UploadButton>
                                 </div>
                             </div>
                         </div>
@@ -316,12 +341,12 @@ const Registration = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
+                                            value={actionBeforePath ?? ""}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
+                                        <UploadButton onClick={e => setOpenDialogBeforeId(true)}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev} alt="uploaded image" />
                                         </div> */}
@@ -333,12 +358,12 @@ const Registration = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
+                                            value={actionAfterPath ?? ""}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
+                                        <UploadButton onClick={e => setOpenDialogAfterId(true)}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev2} alt="preview image" />
                                         </div> */}
@@ -355,10 +380,22 @@ const Registration = () => {
                 </Grid>
             </Grid>
             <UploadDialog
-                open={openDialog}
-                onClose={handleDialogClose}
+                open={openDialogReqFile}
+                onClose={() => handleDialogClose("openDialogReqFile")}
                 onInputChange={handleDialogInputChange}
-                onUpload={handleDialogFileUpload}
+                onUpload={() => handleDialogFileUpload("reqFile")}
+            />
+            <UploadDialog
+                open={openDialogAfterId}
+                onClose={() => handleDialogClose("openDialogAfterId")}
+                onInputChange={handleDialogInputChange}
+                onUpload={() => handleDialogFileUpload("actionAfterId")}
+            />
+            <UploadDialog
+                open={openDialogBeforeId}
+                onClose={() => handleDialogClose("openDialogBeforeId")}
+                onInputChange={handleDialogInputChange}
+                onUpload={() => handleDialogFileUpload("actionBeforeId")}
             />
         </DefaultLayout>
     );

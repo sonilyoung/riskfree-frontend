@@ -60,7 +60,13 @@ export const fileManagement = createApi({
                 method: 'GET',
             })
         }),
+        getFileInfo: builder.mutation({
+            query: (body) => ({
+                url: 'file/getFileInfo',
+                method: 'GET',
+            })
+        }),
     }),
 });
 
-export const { useAttachDetailListMutation, useDeleteFileMutation, useFileDownMutation, useFileDownloadMutation, useFileUploadMutation, useGetImgMutation } = fileManagement;
+export const { useAttachDetailListMutation, useDeleteFileMutation, useFileDownMutation, useFileDownloadMutation, useFileUploadMutation, useGetImgMutation, useGetFileInfoMutation } = fileManagement;
