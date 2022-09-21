@@ -490,7 +490,7 @@ const Registration = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
-                    <BlueButton className={'button-correction'} onClick={() => navigate(`/ dashboard / employee / improvement - measures / update / ${improvement.improveId} `)}>수정</BlueButton>
+                    <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/employee/improvement-measures/update/${improvement.improveId}`)}>수정</BlueButton>
                     <WhiteButton className={'button-delete'} onClick={() => setPromptPopupShow(true)}>삭제</WhiteButton>
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>

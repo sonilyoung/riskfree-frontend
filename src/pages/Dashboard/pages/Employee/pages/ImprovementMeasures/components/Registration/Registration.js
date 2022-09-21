@@ -260,9 +260,9 @@ const Registration = () => {
                                         onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
                                         displayEmpty
                                     >
-                                        <MenuItem value="002">대표이사</MenuItem>
-                                        <MenuItem value="003">안전책임자</MenuItem>안전책임자
-                                        <MenuItem value="004">안전실무자</MenuItem>
+                                        <MenuItem value="001">대표이사</MenuItem>
+                                        <MenuItem value="002">안전책임자</MenuItem>안전책임자
+                                        <MenuItem value="003">안전실무자</MenuItem>
                                     </Select>
                                 </div>
                                 <div className={classes.rowTitle}>완료요청일</div>
