@@ -69,7 +69,7 @@ const SearchButton = styled(ButtonUnstyled)`
     }   
 `;
 
-function Upload({ open, onClose, onInputChange, onUpload, link, fileName }) {
+function Upload({ open, onClose, onInputChange, onUpload, onDownload }) {
     const classes = useStyles();
 
     return (
@@ -80,7 +80,7 @@ function Upload({ open, onClose, onInputChange, onUpload, link, fileName }) {
                     <div className={classes.uploadInfo}>
                         <img src={alertIcon} alt="alert icon" />
                         <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
-                        <UnknownButton2><a href={link} download={fileName}>전체사업장</a></UnknownButton2>
+                        <UnknownButton2 onClick={onDownload}>전체사업장</UnknownButton2>
                     </div>
                     <span></span>
                     <span>의무조치별 상세 점검</span>

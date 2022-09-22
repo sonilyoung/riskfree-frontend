@@ -45,7 +45,7 @@ const Registration = () => {
     const [reqUserCd, setReqUserCd] = useState("")
     const [reqDate, setReqDate] = useState(null)
     const [finDate, setFinDate] = useState(null)
-    const [openDialogReqFile, setOpenDialogReqFile] = useState(false)
+    const [openDialog, setOpenDialog] = useState(false)
     const [openDialogAfterId, setOpenDialogAfterId] = useState(false)
     const [openDialogBeforeId, setOpenDialogBeforeId] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
@@ -61,6 +61,7 @@ const Registration = () => {
     const [reqFileLink, setReqFileLink] = useState("")
     const [actionBeforeLink, setActionBeforeLink] = useState("")
     const [actionAfterLink, setActionAfterLink] = useState("")
+    const [dialogId, setDialogId] = useState("")
     const [improvement, setImprovement] = useState(
         {
             "actionAfterId": actionAfterId,
@@ -82,59 +83,46 @@ const Registration = () => {
     )
     const [fileUpload] = useFileUploadMutation();
     const [fileDown] = useFileDownMutation()
-
-    const handleDialogClose = (dialog) => {
-        if (dialog === "openDialogReqFile") {
-            setOpenDialogReqFile(false)
-        } else if (dialog === "openDialogAfterId") {
-            setOpenDialogAfterId(false)
-        } else if (dialog === "openDialogBeforeId") {
-            setOpenDialogBeforeId(false)
-        }
+    
+    const handleDialogOpen = (event) => {
+        setOpenDialog(true);
+        setDialogId(event.target.id);
     }
 
-    const handleDialogFileUpload = async (params) => {
+    const handleDialogClose = () => {
+        setOpenDialog(false)
+        console.log(improvement)
+    }
+
+    const handleDialogFileUpload = async () => {
         let formData = new FormData();
         formData.append("files", selectedFile)
         const response = await fileUpload(formData)
-        if (params === "reqFile") {
-            console.log(response.data.RET_DATA[0].atchFileId)
-            setImprovement({ ...improvement, "reqFileId": response.data.RET_DATA[0].atchFileId })
-            setAtchFilePath(response?.data?.RET_DATA[0].originalFileName)
-            setAtchFileSn(response.data.RET_DATA[0].fileSn)
-            setOpenDialogReqFile(false)
-        } else if (params === "actionAfterId") {
-            setImprovement({ ...improvement, "actionAfterId": response.data.RET_DATA[0].atchFileId })
-            setActionAfterPath(response?.data?.RET_DATA[0].originalFileName)
-            setActionAfterFileSn(response.data.RET_DATA[0].fileSn)
-            setOpenDialogAfterId(false)
-        } else if (params === "actionBeforeId") {
-            setImprovement({ ...improvement, "actionBeforeId": response.data.RET_DATA[0].atchFileId })
-            setActionBeforePath(response?.data?.RET_DATA[0].originalFileName)
-            setActionBeforeFileSn(response.data.RET_DATA[0].fileSn)
-            setOpenDialogBeforeId(false)
-            console.log(response)
-            handleDialogFileDownload(response.data.RET_DATA[0].atchFileId, response.data.RET_DATA[0].fileSn, "actionBeforeId")
-        }
+        const fileId = response.data.RET_DATA[0].atchFileId
+        const originalFileName = response.data.RET_DATA[0].originalFileName
+        setImprovement({ ...improvement,  [dialogId]: fileId})
+
+        //TODO: We have to store filename to the appropriate field
     }
 
-    async function handleDialogFileDownload(atchFileId, fileSn, dialog) {
-        const response = await fileDown({ atchFileId, fileSn })
-        console.log(response)
-        const url = window.URL.createObjectURL(new Blob([response]))
-        console.log(url)
-        if (dialog === "reqFile") {
-            setReqFileLink(url)
-            console.log(url)
-        }
-        else if (dialog === "actionAfterId") {
-            setActionAfterLink(url)
-            console.log(url)
-        }
-        else if (dialog === "actionBeforeId") {
-            setActionBeforeLink(url)
-            console.log(url)
-        }
+    async function handleDialogFileDownload() {
+        // TODO: Download is not good practice here. Please ask David tomorrow
+        // const response = await fileDown({ atchFileId, fileSn })
+        // console.log(response)
+        // const url = window.URL.createObjectURL(new Blob([response]))
+        // console.log(url);
+        // if (dialog === "reqFile") {
+        //     setReqFileLink(url)
+        //     console.log(url) 
+        // }
+        // else if (dialog === "actionAfterId") {
+        //     setActionAfterLink(url)
+        //     console.log(url)
+        // }
+        // else if (dialog === "actionBeforeId") {
+        //     setActionBeforeLink(url)
+        //     console.log(url)
+        // }
         // const link = document.createElement('a')
         // link.href = url
         // link.setAttribute('download', fileName)
@@ -292,7 +280,7 @@ const Registration = () => {
                                         className={classes.selectMenu}
                                         disabled
                                     />
-                                    <UploadButton onClick={e => setOpenDialogReqFile(true)}>찾아보기</UploadButton>
+                                    <UploadButton id="reqFileId" onClick={ handleDialogOpen }>찾아보기</UploadButton>
                                 </div>
                             </div>
                         </div>
@@ -387,7 +375,7 @@ const Registration = () => {
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton onClick={e => setOpenDialogBeforeId(true)}>찾아보기</UploadButton>
+                                        <UploadButton id="actionBeforeId" onClick={ handleDialogOpen }>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev} alt="uploaded image" />
                                         </div> */}
@@ -404,7 +392,7 @@ const Registration = () => {
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton onClick={e => setOpenDialogAfterId(true)}>찾아보기</UploadButton>
+                                        <UploadButton id="actionAfterId" onClick={ handleDialogOpen }>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev2} alt="preview image" />
                                         </div> */}
@@ -421,31 +409,11 @@ const Registration = () => {
                 </Grid>
             </Grid>
             <UploadDialog
-                open={openDialogReqFile}
-                onClose={() => handleDialogClose("openDialogReqFile")}
+                open={openDialog}
+                onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
-                onUpload={() => handleDialogFileUpload("reqFile")}
-                onDownload={() => handleDialogFileDownload(improvement.reqFileId, 1, "reqFile")}
-                link={reqFileLink}
-
-            />
-            <UploadDialog
-                open={openDialogAfterId}
-                onClose={() => handleDialogClose("openDialogAfterId")}
-                onInputChange={handleDialogInputChange}
-                onUpload={() => handleDialogFileUpload("actionAfterId")}
-                onDownload={() => handleDialogFileDownload(improvement.actionAfterId, 1, "actionAfterId")}
-                link={actionAfterLink}
-
-            />
-            <UploadDialog
-                open={openDialogBeforeId}
-                onClose={() => handleDialogClose("openDialogBeforeId")}
-                onInputChange={handleDialogInputChange}
-                onUpload={() => handleDialogFileUpload("actionBeforeId")}
-                onDownload={() => handleDialogFileDownload(improvement.actionBeforeId, 1, "actionBeforeId")}
-                link={actionBeforeLink}
-                fileName={actionBeforePath}
+                onUpload={handleDialogFileUpload}
+                onDownload={handleDialogFileDownload}
             />
         </DefaultLayout>
     );
