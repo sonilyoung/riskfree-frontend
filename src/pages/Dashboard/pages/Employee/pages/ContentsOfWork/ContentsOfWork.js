@@ -528,12 +528,11 @@ const useStyles = makeStyles(() => ({
         display: "none !important",
     },
     promptPopup: {
-        // display: 'none',
         position: 'absolute',
         top: '70%',
         left: '70%',
-        width: '320px',
-        height: '220px',
+        width: '300px',
+        height: '200px',
         borderRadius: '18px',
         border: '2px solid #018de7',
         background: 'white',
@@ -544,7 +543,7 @@ const useStyles = makeStyles(() => ({
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            height: '60px',
+            height: '50px',
             '&:first-of-type': {
                 fontSize: '20px',
                 fontWeight: 'bold',

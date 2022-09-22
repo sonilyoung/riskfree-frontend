@@ -101,13 +101,11 @@ const useStyles = makeStyles(() => ({
         }
     },
     promptPopup: {
-        // display: 'none',
         position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%,-50%)',
-        width: '320px',
-        height: '220px',
+        top: '70%',
+        left: '70%',
+        width: '300px',
+        height: '200px',
         borderRadius: '18px',
         border: '2px solid #018de7',
         background: 'white',
@@ -118,7 +116,7 @@ const useStyles = makeStyles(() => ({
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            height: '60px',
+            height: '50px',
             '&:first-of-type': {
                 fontSize: '20px',
                 fontWeight: 'bold',
@@ -154,7 +152,7 @@ const useStyles = makeStyles(() => ({
         }
     },
     promptPopupClose: {
-        display: 'none !important',
+        display: 'none',
     },
     rowTitle: {
         display: 'flex',
