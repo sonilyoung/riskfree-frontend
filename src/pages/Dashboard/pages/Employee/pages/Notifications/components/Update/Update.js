@@ -279,7 +279,7 @@ const Update = () => {
 
 
     const handleUpdate = async () => {
-        noticesUpdate({
+        await noticesUpdate({
             "attachId": notice.attachId,
             "companyId": notice.companyId,
             "content": notice.content,
@@ -288,8 +288,8 @@ const Update = () => {
             "noticeId": updateid,
             "title": notice.title,
             "updateId": notice.updateId
-        })
-            .then(() => navigate("/dashboard/director/notifications/list"))
+        });
+        navigate("/dashboard/director/notifications/list");
     }
 
     const handleSelect = (e) => {

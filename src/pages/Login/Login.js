@@ -61,6 +61,8 @@ const Login = () => {
         if (!localStorage.getItem(`loggedIn${currentUser}`)) {
             setWelcomePopupShow(true);
             localStorage.setItem(`loggedIn${currentUser}`, currentUser);
+        } else {
+            handleLogin();
         }
     }
 
@@ -81,8 +83,6 @@ const Login = () => {
         if (userLoginResponse.data.RET_CODE === '0000') {
             const jwtToken = userLoginResponse.data.RET_DATA.accessToken;
             userToken.setItem(jwtToken);
-
-            handleWelcomeScreenPopup(values.id.value);
 
             const userLoggedInRoleCd = userToken.getUserRoleCd();
             const redirectPath = getPath(userLoggedInRoleCd);
@@ -109,7 +109,7 @@ const Login = () => {
         const handleKeyDown = (event) => {
             if (event.keyCode === 13) {
                 // event.preventDefault()
-                handleLogin();
+                handleWelcomeScreenPopup(values.id.value);
             }
         }
         document.addEventListener('keydown', handleKeyDown)
@@ -124,7 +124,7 @@ const Login = () => {
                 <div className={welcomePopupShow ? classes.welcomePopup : classes.welcomePopupClose}>
                     <div>
                         <img src={welcomeImg} alt="welcome" />
-                        <ClosePopupButton2 onClick={() => setWelcomePopupShow(false)}></ClosePopupButton2>
+                        <ClosePopupButton2 onClick={() => handleWelcomeScreenPopup(values.id.value)}></ClosePopupButton2>
                     </div>
                 </div>
                 <div className={classes.loginWrap}>
@@ -147,7 +147,7 @@ const Login = () => {
                         />
                         <Link to={"/forgotten-password/step-1"} className={classes.linkBtn} underline="hover">비밀번호 찾기 / 재설정</Link>
                     </div>
-                    <Button variant="contained" onClick={handleLogin}>로그인</Button>
+                    <Button variant="contained" onClick={() => handleWelcomeScreenPopup(values.id.value)}>로그인</Button>
                 </div>
             </div>
         </WideLayout>

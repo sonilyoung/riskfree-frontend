@@ -1025,7 +1025,7 @@ const Default = ({ children }) => {
                                                         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                                                             <DesktopDatePicker
                                                                 className={classes.selectMenuDate}
-                                                                placeholder='관리차수'
+                                                                // placeholder='관리차수'
                                                                 label=" "
                                                                 inputFormat="YYYY-MM-DD"
                                                                 value={baselineInfo.baselineStart}
@@ -1041,7 +1041,7 @@ const Default = ({ children }) => {
                                                             <DesktopDatePicker
                                                                 className={classes.selectMenuDate}
                                                                 label=" "
-                                                                placeholder='점검기간'
+                                                                // placeholder='점검기간'
                                                                 inputFormat="YYYY-MM-DD"
                                                                 value={baselineInfo.baselineEnd}
                                                                 onChange={(newDate) => {
@@ -1079,12 +1079,12 @@ const Default = ({ children }) => {
                                                     </AccordionSummary>
                                                     <AccordionDetails>
                                                         <Select
-                                                            placeholder='복사할 차수'
+                                                            // placeholder='복사할 차수'
                                                             className={classes.popupTextField}
                                                             sx={{ width: 150, marginBottom: '25px !important' }}
                                                             value={targetBaselineId}
                                                             onChange={(event) => setTargetBaselineId(event.target.value)}
-                                                            displayEmpty
+                                                        // displayEmpty
                                                         >
                                                             {!!baselineList && !!baselineList?.length && baselineList?.map(baselineItem =>
                                                                 <MenuItem value={baselineItem.baselineId}>{baselineItem.baselineName}</MenuItem>)}

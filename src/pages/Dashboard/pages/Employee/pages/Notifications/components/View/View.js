@@ -199,20 +199,22 @@ const View = (props) => {
         navigate("/dashboard/director/notifications/list")
     }
 
-    const handleFetch = () => {
-        noticesView(id)
-            .then(() => setPromptPopupShow(false))
-            .then((response) => setNotice(response))
+    const handleFetch = async () => {
+        const response = await noticesView(id);
+        console.log(response);
+        setNotice(response);
+
+    }
+
+    const handleDelete = async () => {
+        await noticesDelete(id)
+        setPromptPopupShow(false);
+        navigate("/dashboard/director/notifications/list");
     }
 
     useEffect(() => {
-        handleFetch()
+        handleFetch();
     }, [])
-
-    const handleDelete = () => {
-        noticesDelete(id)
-            .then(() => navigate("/dashboard/director/notifications/list"))
-    }
 
     return (
         <DefaultLayout>

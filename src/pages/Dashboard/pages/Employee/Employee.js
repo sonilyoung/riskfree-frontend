@@ -2429,7 +2429,7 @@ const Employee = () => {
                                                     <DesktopDatePicker
                                                         className={classes.selectMenuDate}
                                                         label=' '
-                                                        placeholder='관리차수'
+                                                        // placeholder='관리차수'
                                                         inputFormat="YYYY-MM-DD"
                                                         value={baselineInfo.baselineStart}
                                                         onChange={(newDate) => {
@@ -2444,7 +2444,7 @@ const Employee = () => {
                                                     <DesktopDatePicker
                                                         className={classes.selectMenuDate}
                                                         label=" "
-                                                        placeholder='점검기간'
+                                                        // placeholder='점검기간'
                                                         inputFormat="YYYY-MM-DD"
                                                         value={baselineInfo.baselineEnd}
                                                         onChange={(newDate) => {
@@ -2483,9 +2483,8 @@ const Employee = () => {
                                             <AccordionDetails>
                                                 <Select
                                                     className={classes.popupTextField}
-                                                    placeholder='복사할 차수'
                                                     sx={{ width: 150, marginBottom: '25px !important' }}
-                                                    value={targetBaselineId}
+                                                    value={targetBaselineId || '복사할 차수'}
                                                     onChange={(event) => setTargetBaselineId(event.target.value)}
                                                 >
                                                     {!!baselineList && !!baselineList?.length && baselineList?.map(baselineItem =>

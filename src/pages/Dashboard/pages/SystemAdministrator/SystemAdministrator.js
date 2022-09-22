@@ -92,7 +92,7 @@ const useStyles = makeStyles(() => ({
         borderRadius: '6px',
         overflow: 'hidden',
         boxShadow: '0 0 12px rgb(189 203 203 / 50%)',
-        background: '#fff',
+        background: 'rgba(205,205,225,0.1)',
         '& *': {
             boxSizing: 'border-box',
             letterSpacing: '-1.08px',
@@ -774,7 +774,7 @@ const SystemAdministrator = () => {
     const [locale] = React.useState('ko');
     const [regMemberPop, setRegMemberPop] = useState(false)
     const [userInfoPop, setUserInfoPop] = useState(false)
-    const [col, setCol] = useState("")
+    const [col, setCol] = useState("all")
     const [param, setParam] = useState("")
     const [subscribersSelect] = useSubscribersSelectMutation()
     const [subscribersInsert] = useSubscribersInsertMutation()
