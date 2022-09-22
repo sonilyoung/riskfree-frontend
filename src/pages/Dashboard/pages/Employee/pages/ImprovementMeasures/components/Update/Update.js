@@ -389,6 +389,33 @@ const Registration = () => {
         setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
     }
 
+    async function handleDialogFileDownload() {
+        // TODO: Download is not good practice here. Please ask David tomorrow
+        const response = await fileDown({ atchFileId, fileSn })
+        console.log(response)
+        const url = window.URL.createObjectURL(new Blob([response]))
+        console.log(url);
+        if (dialog === "reqFile") {
+            setReqFileLink(url)
+            console.log(url)
+        }
+        else if (dialog === "actionAfterId") {
+            setActionAfterLink(url)
+            console.log(url)
+        }
+        else if (dialog === "actionBeforeId") {
+            setActionBeforeLink(url)
+            console.log(url)
+        }
+        // const link = document.createElement('a')
+        // link.href = url
+        // link.setAttribute('download', fileName)
+        // document.body.appendChild(link)
+        // link.click()
+        // link.remove()
+        // window.URL.revokeObjectURL(url)
+    }
+
     const handleDialogClose = () => {
         setOpenDialog(false);
     }
