@@ -35,7 +35,7 @@ import 'dayjs/locale/ko';
 import moment from "moment"
 import useUserInitialWorkplaceId from '../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
 import { UploadDialog } from '../../../../../../../../dialogs/Upload';
-import { useFileUploadMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
+import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -318,6 +318,13 @@ const Registration = () => {
     const [openDialog, setOpenDialog] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
     const [fileUpload] = useFileUploadMutation()
+    const [getFileInfo] = useGetFileInfoMutation()
+    const [dialogId, setDialogId] = useState("")
+    const [filePath, setFilePath] = useState({
+        "reqFileId": "",
+        "actionBeforeId": "",
+        "actionAfterId": ""
+    })
     const [improvement, setImprovement] = useState(
         {
             "actionAfterId": null,
@@ -353,17 +360,37 @@ const Registration = () => {
     const fetchImprovementView = async () => {
         const response = await improvementView(updateid)
         setImprovement(response.data.RET_DATA)
+        // if (response.data.RET_DATA.actionBeforeId) {
+        //     const responseFileInfoBefore = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.actionBeforeId), fileSn: 1 })
+        //     setFilePath({ ...filePath, "actionBeforeId": responseFileInfoBefore.data.RET_DATA.originalFileName ?? "" })
+        // }
+        // if (response.data.RET_DATA.actionAfterId) {
+        //     const responseFileInfoAfter = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.actionAfterId), fileSn: 1 })
+        //     setFilePath({ ...filePath, "actionAfterId": responseFileInfoAfter.data.RET_DATA.originalFileName ?? "" })
+        // }
+        // if (response.data.RET_DATA.reqFileId) {
+        //     const responseFileInfoExel = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.reqFileId), fileSn: 1 })
+        //     setFilePath({ ...filePath, "reqFileId": responseFileInfoExel.data.RET_DATA.originalFileName ?? "" })
+        // }
+    }
+
+    const handleDialogFileUpload = async () => {
+        let formData = new FormData();
+        formData.append("files", selectedFile)
+        const response = await fileUpload(formData)
+        const fileId = response.data.RET_DATA[0].atchFileId
+        setImprovement({ ...improvement, [dialogId]: fileId })
+        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+        console.log(improvement)
     }
 
     const handleDialogClose = () => {
         setOpenDialog(false);
     }
 
-    const handleDialogFileUpload = async (file) => {
-        const response = await fileUpload({
-            files: selectedFile
-        })
-        console.log(response);
+    const handleDialogOpen = (event) => {
+        setOpenDialog(true);
+        setDialogId(event.target.id);
     }
 
     const handleDialogInputChange = (event) => {
@@ -391,7 +418,6 @@ const Registration = () => {
                 "workplaceId": improvement.workplaceId
             }
         )
-            .then(res => console.log(res))
             .then(() => handleRedirect())
     }
 
@@ -400,7 +426,9 @@ const Registration = () => {
         fetchImprovementView()
     }, [])
 
-    console.log(improvement)
+    useEffect(() => {
+
+    }, [filePath])
 
     return (
         <DefaultLayout>
@@ -480,7 +508,7 @@ const Registration = () => {
                                 </div>
                                 <div className={classes.rowTitle}>요청자</div>
                                 <div className={classes.rowInfo}>
-                                    <Select
+                                    {/* <Select
                                         sx={{ width: 200 }}
                                         className={classes.selectMenu}
                                         value={improvement && improvement.reqUserCd}
@@ -490,7 +518,7 @@ const Registration = () => {
                                         <MenuItem value="001">대표이사</MenuItem>
                                         <MenuItem value="002">안전책임자</MenuItem>안전책임자
                                         <MenuItem value="003">안전실무자</MenuItem>
-                                    </Select>
+                                    </Select> */}
                                 </div>
                                 <div className={classes.rowTitle}>완료요청일</div>
                                 <div className={classes.rowInfo}>
@@ -513,13 +541,11 @@ const Registration = () => {
                                     <TextField
                                         id="standard-basic"
                                         variant="outlined"
-                                        placeholder="여수공장 시정조치요청 파일.hwp"
-                                        value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
+                                        value={filePath.reqFileId ?? ""}
                                         sx={{ width: 390 }}
                                         className={classes.selectMenu}
-                                        disabled
                                     />
-                                    <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
+                                    <UploadButton id="reqFileId" onClick={handleDialogOpen}>찾아보기</UploadButton>
                                 </div>
                             </div>
                         </div>
@@ -610,12 +636,12 @@ const Registration = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
+                                            value={filePath.actionBeforeId ?? ""}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
-                                            disabled
+                                        // disabled
                                         />
-                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
+                                        <UploadButton id="actionBeforeId" onClick={handleDialogOpen}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev} alt="uploaded image" />
                                         </div> */}
@@ -627,12 +653,12 @@ const Registration = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
+                                            value={filePath.actionAfterId ?? ""}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
-                                            disabled
+                                        // disabled
                                         />
-                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
+                                        <UploadButton id="actionAfterId" onClick={handleDialogOpen}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev2} alt="preview image" />
                                         </div> */}

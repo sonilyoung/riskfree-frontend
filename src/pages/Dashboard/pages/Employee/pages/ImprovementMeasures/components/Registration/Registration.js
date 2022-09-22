@@ -106,7 +106,6 @@ const Registration = () => {
         const fileId = response.data.RET_DATA[0].atchFileId
         setImprovement({ ...improvement, [dialogId]: fileId })
         setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
-        //TODO: We have to store filename to the appropriate field
     }
 
     async function handleDialogFileDownload() {
