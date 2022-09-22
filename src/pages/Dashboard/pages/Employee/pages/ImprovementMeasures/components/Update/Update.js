@@ -358,8 +358,14 @@ const Registration = () => {
     }
 
     const fetchImprovementView = async () => {
+        let filePathMain = {}
         const response = await improvementView(updateid)
-        setImprovement(response.data.RET_DATA)
+        setImprovement(response?.data?.RET_DATA)
+        for (const path in filePath) {
+            let fileInfo = await getFileInfo({ atchFileId: parseInt(response?.data?.RET_DATA[path]), fileSn: 1 })
+            filePathMain[path] = fileInfo.data.RET_DATA.originalFileName
+        }
+        setFilePath(filePathMain)
         // if (response.data.RET_DATA.actionBeforeId) {
         //     const responseFileInfoBefore = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.actionBeforeId), fileSn: 1 })
         //     setFilePath({ ...filePath, "actionBeforeId": responseFileInfoBefore.data.RET_DATA.originalFileName ?? "" })
@@ -420,7 +426,6 @@ const Registration = () => {
         )
             .then(() => handleRedirect())
     }
-
     useEffect(() => {
         fetchComapanyWorkplace()
         fetchImprovementView()
