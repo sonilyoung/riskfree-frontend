@@ -385,9 +385,8 @@ const Registration = () => {
         formData.append("files", selectedFile)
         const response = await fileUpload(formData)
         const fileId = response.data.RET_DATA[0].atchFileId
-        setImprovement({ ...improvement, [dialogId]: fileId })
+        setImprovement({ ...improvement, [dialogId]: parseInt(fileId) })
         setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
-        console.log(improvement)
     }
 
     const handleDialogClose = () => {
@@ -407,8 +406,8 @@ const Registration = () => {
     const handleUpdateImprovement = () => {
         improvementUpdate(
             {
-                "actionAfterId": null,
-                "actionBeforeId": null,
+                "actionAfterId": parseInt(improvement.actionAfterId),
+                "actionBeforeId": parseInt(improvement.actionBeforeId),
                 "actionCn": improvement.actionCn,
                 "companyId": 1,
                 "finDate": improvement.finDate,
@@ -417,7 +416,7 @@ const Registration = () => {
                 "improveNo": improvement.improveNo,
                 "insertId": null,
                 "reqDate": improvement.reqDate,
-                "reqFileId": improvement.reqFileId,
+                "reqFileId": parseInt(improvement.reqFileId),
                 "reqUserCd": improvement.reqUserCd,
                 "statusCd": improvement.statusCd,
                 "updateId": null,
@@ -432,7 +431,7 @@ const Registration = () => {
     }, [])
 
     useEffect(() => {
-
+        console.log(improvement)
     }, [filePath])
 
     return (
