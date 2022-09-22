@@ -363,15 +363,15 @@ const Registration = () => {
         const response = await improvementView(id)
         setImprovement(response.data.RET_DATA)
         // console.log(improvement)
-        if (response.data.RET_DATA) {
+        if (response.data.RET_DATA.actionBeforeId) {
             const responseFileInfoBefore = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.actionBeforeId), fileSn: 1 })
             setFilePathBefore(responseFileInfoBefore.data.RET_DATA.filePath + "/" + responseFileInfoBefore.data.RET_DATA.saveFileName)
         }
-        if (response.data.RET_DATA) {
+        if (response.data.RET_DATA.actionAfterId) {
             const responseFileInfoAfter = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.actionAfterId), fileSn: 1 })
             setFilePathAfter(responseFileInfoAfter.data.RET_DATA.filePath + "/" + responseFileInfoAfter.data.RET_DATA.saveFileName)
         }
-        if (response.data.RET_DATA) {
+        if (response.data.RET_DATA.reqFileId) {
             const responseFileInfoExel = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.reqFileId), fileSn: 1 })
             setFileNameExel(responseFileInfoExel.data.RET_DATA.originalFileName)
         }
