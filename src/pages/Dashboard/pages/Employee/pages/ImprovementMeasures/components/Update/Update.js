@@ -36,6 +36,7 @@ import moment from "moment"
 import useUserInitialWorkplaceId from '../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
 import { UploadDialog } from '../../../../../../../../dialogs/Upload';
 import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
+import { useFileDownMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -325,6 +326,7 @@ const Registration = () => {
         "actionBeforeId": "",
         "actionAfterId": ""
     })
+    const [fileDown] = useFileDownMutation()
     const [improvement, setImprovement] = useState(
         {
             "actionAfterId": null,
@@ -390,30 +392,21 @@ const Registration = () => {
     }
 
     async function handleDialogFileDownload() {
-        // TODO: Download is not good practice here. Please ask David tomorrow
-        const response = await fileDown({ atchFileId, fileSn })
-        console.log(response)
+        const fileId = improvement[dialogId]
+        const fileSerialNumber = 1
+        const response = await fileDown({ atchFileId: fileId,  fileSn: fileSerialNumber})
+
         const url = window.URL.createObjectURL(new Blob([response]))
-        console.log(url);
-        if (dialog === "reqFile") {
-            setReqFileLink(url)
-            console.log(url)
-        }
-        else if (dialog === "actionAfterId") {
-            setActionAfterLink(url)
-            console.log(url)
-        }
-        else if (dialog === "actionBeforeId") {
-            setActionBeforeLink(url)
-            console.log(url)
-        }
-        // const link = document.createElement('a')
-        // link.href = url
-        // link.setAttribute('download', fileName)
-        // document.body.appendChild(link)
-        // link.click()
-        // link.remove()
-        // window.URL.revokeObjectURL(url)
+        //const url = "blob:http://tbs-a.thebridgesoft.com:8102/038f9d38-ecc6-4077-ab04-b9d745b0354e"
+        console.log(url)
+        
+        const link = document.createElement('a')
+        link.href = url
+        link.setAttribute('download', 'profile.png')
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
+        window.URL.revokeObjectURL(url)
     }
 
     const handleDialogClose = () => {
@@ -710,6 +703,8 @@ const Registration = () => {
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
+                enableDownload={true}
+                onDownload={handleDialogFileDownload}
             />
         </DefaultLayout>
     );
