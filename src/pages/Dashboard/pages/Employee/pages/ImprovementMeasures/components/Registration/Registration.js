@@ -62,6 +62,11 @@ const Registration = () => {
     const [actionBeforeLink, setActionBeforeLink] = useState("")
     const [actionAfterLink, setActionAfterLink] = useState("")
     const [dialogId, setDialogId] = useState("")
+    const [filePath, setFilePath] = useState({
+        "reqFileId": "",
+        "actionBeforeId": "",
+        "actionAfterId": ""
+    })
     const [improvement, setImprovement] = useState(
         {
             "actionAfterId": actionAfterId,
@@ -99,9 +104,8 @@ const Registration = () => {
         formData.append("files", selectedFile)
         const response = await fileUpload(formData)
         const fileId = response.data.RET_DATA[0].atchFileId
-        const originalFileName = response.data.RET_DATA[0].originalFileName
         setImprovement({ ...improvement, [dialogId]: fileId })
-
+        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
         //TODO: We have to store filename to the appropriate field
     }
 
@@ -159,10 +163,9 @@ const Registration = () => {
     useEffect(() => {
         fetchComapanyWorkplace()
     }, [])
-    console.log(actionBeforeFileSn)
 
     useEffect(() => {
-    }, [actionBeforePath, actionBeforePath, atchFilePath])
+    }, [filePath.reqFileId, filePath.actionBeforeId, filePath.actionAfterId])
 
     return (
         <DefaultLayout>
@@ -275,7 +278,7 @@ const Registration = () => {
                                         id="standard-basic"
                                         variant="outlined"
                                         // placeholder="여수공장 시정조치요청 파일.hwp"
-                                        value={atchFilePath ?? ""}
+                                        value={filePath.reqFileId ?? ""}
                                         sx={{ width: 390 }}
                                         className={classes.selectMenu}
                                         disabled
@@ -370,7 +373,7 @@ const Registration = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value={actionBeforePath ?? ""}
+                                            value={filePath.actionBeforeId ?? ""}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             disabled
@@ -387,7 +390,7 @@ const Registration = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value={actionAfterPath ?? ""}
+                                            value={filePath.actionAfterId ?? ""}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             disabled
