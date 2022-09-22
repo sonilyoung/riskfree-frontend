@@ -768,19 +768,6 @@ const ClosePopupButton2 = styled(ButtonUnstyled)`
     transition: background .2s; 
 `;
 
-
-const lista = [
-    { id: 1, text: "text1", rowNum: 1 },
-    { id: 2, text: "text2", rowNum: 2 },
-    { id: 3, text: "text3", rowNum: 3 },
-    { id: 4, text: "text4", rowNum: 4 },
-    { id: 5, text: "text5", rowNum: 5 },
-    { id: 6, text: "text6", rowNum: 6 },
-    { id: 7, text: "text7", rowNum: 7 },
-
-]
-
-
 const SystemAdministrator = () => {
     const classes = useStyles();
     const navigate = useNavigate();
@@ -862,6 +849,7 @@ const SystemAdministrator = () => {
             "param": param
         });
         setSubscribersList(response.data.RET_DATA);
+        console.log(response);
     }
 
     const fetchCommCodeListGroup1 = async () => {
@@ -1049,7 +1037,7 @@ const SystemAdministrator = () => {
                                     fetchSubscriberView(subscriber.workplaceId, subscriber.userId);
                                 }}>
                                     <div className={classes.tableData}>
-                                        {subscriber.rowNum > 1 && <button onClick={() => fetchSubscribersWorkplaceSelectList(subscriber.companyId)} >+</button>}
+                                        {subscriber.rowCount > 1 && <button onClick={() => fetchSubscribersWorkplaceSelectList(subscriber.companyId)} >+</button>}
                                         {index + 1}
                                     </div>
                                     <div className={classes.tableData}>{subscriber.companyName}</div>
@@ -1067,7 +1055,7 @@ const SystemAdministrator = () => {
                                     <div className={classes.tableData}>{subscriber.contractFileld}</div>
                                     <div className={classes.tableData} onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}><img src={monitor} alt="monitor" /></div>
                                 </div>
-                                {subscriber.rowNum > 1 && !!subscribersWorkplaceSelectList && !!subscribersWorkplaceSelectList?.length
+                                {subscriber.rowCount > 1 && !!subscribersWorkplaceSelectList && !!subscribersWorkplaceSelectList?.length
                                     && subscribersWorkplaceSelectList?.map((subscribersWorkplaceItem) =>
                                     (<div className={classes.tableRow} >
                                         <div className={classes.tableData}></div>
