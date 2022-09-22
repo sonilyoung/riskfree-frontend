@@ -2896,15 +2896,15 @@ const Employee = () => {
                                         <div className={classes.bottomBox}>
                                             <div>
                                                 <div>지시</div>
-                                                <div><strong>{improvmentList && improvmentList?.instruction}</strong>건</div>
+                                                <div><strong>{(improvmentList && improvmentList?.instruction) ?? "0"}</strong>건</div>
                                             </div>
                                             <div>
                                                 <div>진행</div>
-                                                <div><strong>{improvmentList && improvmentList?.progress}</strong>건</div>
+                                                <div><strong>{(improvmentList && improvmentList?.progress) ?? "0"}</strong>건</div>
                                             </div>
                                             <div>
                                                 <div>완료</div>
-                                                <div><strong>{improvmentList && improvmentList?.complete}</strong>건</div>
+                                                <div><strong>{(improvmentList && improvmentList?.complete) ?? "0"}</strong>건</div>
                                             </div>
                                         </div>
                                     </div>
@@ -2913,15 +2913,15 @@ const Employee = () => {
                                         <div className={classes.bottomBox}>
                                             <div>
                                                 <div>지시</div>
-                                                <div><strong>{leaderImprovementList && leaderImprovementList?.instruction}</strong>건</div>
+                                                <div><strong>{(leaderImprovementList && leaderImprovementList?.instruction) ?? "0"}</strong>건</div>
                                             </div>
                                             <div>
                                                 <div>진행</div>
-                                                <div><strong>{leaderImprovementList && leaderImprovementList?.progress}</strong>건</div>
+                                                <div><strong>{(leaderImprovementList && leaderImprovementList?.progress) ?? "0"}</strong>건</div>
                                             </div>
                                             <div>
                                                 <div>완료</div>
-                                                <div><strong>{leaderImprovementList && leaderImprovementList?.complete}</strong>건</div>
+                                                <div><strong>{(leaderImprovementList && leaderImprovementList?.complete) ?? "0"}</strong>건</div>
                                             </div>
                                         </div>
                                     </div>
@@ -2931,39 +2931,39 @@ const Employee = () => {
                                     <div className={classes.bottomBox}>
                                         <div>
                                             <div>사망</div>
-                                            <div><strong>{accidentTotal && accidentTotal?.deathTollCnt}</strong>건</div>
+                                            <div><strong>{(accidentTotal && accidentTotal?.deathTollCnt) ?? "0"}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>동일사고</div>
-                                            <div><strong>{accidentTotal && accidentTotal?.sameAccidentInjuryCnt}</strong>건</div>
+                                            <div><strong>{(accidentTotal && accidentTotal?.sameAccidentInjuryCnt) ?? "0"}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>직업질환</div>
-                                            <div><strong>{accidentTotal && accidentTotal?.jobDeseaseTollCnt}</strong>건</div>
+                                            <div><strong>{(accidentTotal && accidentTotal?.jobDeseaseTollCnt) ?? "0"}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>추락</div>
-                                            <div><strong>{accidentTotal && accidentTotal?.caughtCnt}</strong>건</div>
+                                            <div><strong>{(accidentTotal && accidentTotal?.caughtCnt) ?? "0"}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>끼임</div>
-                                            <div><strong>{accidentTotal && accidentTotal?.fireCnt}</strong>건</div>
+                                            <div><strong>{(accidentTotal && accidentTotal?.fireCnt) ?? "0"}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>화재</div>
-                                            <div><strong>{accidentTotal && accidentTotal?.fallCnt}</strong>건</div>
+                                            <div><strong>{(accidentTotal && accidentTotal?.fallCnt) ?? "0"}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>전기</div>
-                                            <div><strong>{accidentTotal && accidentTotal?.electCnt}</strong>건</div>
+                                            <div><strong>{(accidentTotal && accidentTotal?.electCnt) ?? "0"}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>밀폐</div>
-                                            <div><strong>{accidentTotal && accidentTotal?.confinedCnt}</strong>건</div>
+                                            <div><strong>{(accidentTotal && accidentTotal?.confinedCnt) ?? "0"}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>중량물</div>
-                                            <div><strong>{accidentTotal && accidentTotal?.heavyCnt}</strong>건</div>
+                                            <div><strong>{(accidentTotal && accidentTotal?.heavyCnt) ?? "0"}</strong>건</div>
                                         </div>
                                     </div>
                                 </Grid>

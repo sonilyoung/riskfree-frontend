@@ -23,6 +23,7 @@ import { styled } from '@mui/system';
 import useUserURLRedirect from '../../hooks/core/UserURLRedirect/UserURLRedirect';
 import { useUserToken } from '../../hooks/core/UserToken';
 import { useStyles } from './useStyles';
+import { RoleService } from '../../services/core/User';
 
 const ClosePopupButton2 = styled(ButtonUnstyled)`
     width: 60px;
@@ -76,7 +77,7 @@ const Login = () => {
             const userLoggedInRoleCd = userToken.getUserRoleCd();
             const redirectPath = getPath(userLoggedInRoleCd);
 
-            if (userLoggedInRoleCd) {
+            if (userLoggedInRoleCd !== RoleService.ROLE_CODE_ADMIN) {
                 const defaultBaselineResponse = await getBaseline({});
                 const defaultBaselineId = defaultBaselineResponse.data.RET_DATA.baselineId;
                 dispatch(setBaselineId(defaultBaselineId));
