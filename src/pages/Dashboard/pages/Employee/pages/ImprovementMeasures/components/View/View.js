@@ -348,6 +348,7 @@ const Registration = () => {
     const [getFileInfo] = useGetFileInfoMutation()
     const [filePathBefore, setFilePathBefore] = useState("")
     const [filePathAfter, setFilePathAfter] = useState("")
+    const [fileNameExel, setFileNameExel] = useState("")
     const [promptPopupShow, setPromptPopupShow] = useState(false);
 
     const handleChange = (event) => {
@@ -370,6 +371,10 @@ const Registration = () => {
             const responseFileInfoAfter = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.actionAfterId), fileSn: 1 })
             setFilePathAfter(responseFileInfoAfter.data.RET_DATA.filePath + "/" + responseFileInfoAfter.data.RET_DATA.saveFileName)
         }
+        if (response.data.RET_DATA) {
+            const responseFileInfoExel = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.reqFileId), fileSn: 1 })
+            setFileNameExel(responseFileInfoExel.data.RET_DATA.originalFileName)
+        }
     }
 
     // const fetchFileInfo = async (improvement) => {
@@ -382,13 +387,10 @@ const Registration = () => {
             .then(() => setPromptPopupShow(false))
             .then(() => handleRedirect())
     }
-
     useEffect(() => {
         handleFetchView()
-        // console.log(filePath)
     }, [])
 
-    // console.log(improvement)
     return (
         <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
@@ -442,7 +444,7 @@ const Registration = () => {
                                 </div>
                                 <div className={classes.rowTitle}>첨부파일</div>
                                 <div className={classes.rowInfo}>
-                                    {improvement && improvement.reqFileId}
+                                    {fileNameExel && fileNameExel}
                                 </div>
                             </div>
                         </div>
