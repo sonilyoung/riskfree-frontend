@@ -848,7 +848,7 @@ const DefaultLight = ({ children }) => {
                                         className={classes.popupTextField}
                                     />
                                     <SearchButton></SearchButton>
-                                    <UnknownButton1>전체사업장</UnknownButton1>
+                                    <UnknownButton1 onClick={() => setUploadPopupShow(false)}>전체사업장</UnknownButton1>
                                 </div>
                             </div>
                         </Grid>

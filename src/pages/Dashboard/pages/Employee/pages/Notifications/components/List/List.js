@@ -304,6 +304,7 @@ function List() {
             "workplaceId": currentWorkplaceId
         })
         setNoticesList(response?.data?.RET_DATA)
+        console.log(response);
     }
     const handleSearch = () => {
         handleFetchList()
@@ -390,7 +391,7 @@ function List() {
                                     {notice.title}
                                 </div>
                                 <div className={classes.tableRow}>
-                                    {notice.attachId === 0 && <img src={icoFile} alt="file icon" />}
+                                    {notice?.attachId && <img src={icoFile} alt="file icon" />}
                                 </div>
                                 <div className={classes.tableRow}>{notice.insertName}</div>
                                 <div className={classes.tableRow}>{notice.insertDate}</div>

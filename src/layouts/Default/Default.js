@@ -24,7 +24,8 @@ import Select from '@mui/material/Select';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
-import { useGetLoginInfoMutation, useGetCompanyInfoMutation, useGetWeatherMutation, useInsertBaselineMutation, useInsertBaseLineDataCopyMutation, useGetBaselineListMutation, useCloseMutation } from '../../hooks/api/MainManagement/MainManagement';
+import { useGetLoginInfoMutation, useGetCompanyInfoMutation, useGetWeatherMutation, useInsertBaselineMutation, useInsertBaseLineDataCopyMutation, useGetBaselineListMutation, useCloseMutation, useUpdateUserCompanyMutation, useInsertBaseLineDataUpdateMutation } from '../../hooks/api/MainManagement/MainManagement';
+// import { useFileUploadMutation } from '../../hooks/api/FileManagement/FileManagement';
 import { remove } from '../../services/core/User/Token';
 import { useUserToken } from '../../hooks/core/UserToken';
 
@@ -501,6 +502,9 @@ const useStyles = makeStyles(() => ({
             marginLeft: '10px'
         }
     },
+    popupPromptClose: {
+        display: 'none !important',
+    },
     listLink: {
         display: 'flex',
         alignItems: 'center',
@@ -549,6 +553,23 @@ const useStyles = makeStyles(() => ({
         zIndex: '1',
         display: 'none',
     },
+    readonlyTextWrapper: {
+        width: '100%',
+        padding: '15px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '15px',
+        backgroundColor: '#fff',
+        color: '#888',
+        borderRadius: '8px',
+        border: '1px solid #bbb'
+    },
+    readonlyText: {
+        fontSize: '16px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    }
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -734,9 +755,11 @@ const Default = ({ children }) => {
     const [getCompanyInfo] = useGetCompanyInfoMutation()
     const [insertBaseline] = useInsertBaselineMutation();
     const [insertBaseLineDataCopy] = useInsertBaseLineDataCopyMutation();
+    const [insertBaseLineDataUpdate] = useInsertBaseLineDataUpdateMutation();
     const [getBaselineList] = useGetBaselineListMutation();
     const [close] = useCloseMutation();
-    const [insertBaseLineDataUpdate] = useInsertBaseLineDataCopyMutation();
+    const [updateUserCompany] = useUpdateUserCompanyMutation();
+    // const [fileUpload] = useFileUploadMutation();
 
     const [locale] = React.useState('ko');
     const [date, setDate] = React.useState(null);
@@ -754,8 +777,10 @@ const Default = ({ children }) => {
     const [baselineList, setBaselineList] = useState([]);
     const [showUploadPopup, setShowUploadPopup] = useState(false);
     const [safetyGoal, setSafetyGoal] = useState("");
-    const [missionStatements, setMissionStatements] = useState([]);
     const [missionStatement, setMissionStatement] = useState("");
+    const [attachedFileId, setAttachedFileId] = useState(1);
+    const [targetBaselineId, setTargetBaselineId] = useState("");
+    const [popupPrompt, setPopupPrompt] = useState(false);
 
     const dispatch = useDispatch();
     const localStorage = useLocalStorage();
@@ -786,33 +811,43 @@ const Default = ({ children }) => {
     }
 
     const handleClose = async () => {
-        const response = await insertBaseLineDataCopy({});
-        // console.log(response.data.RET_DESC);
+        const response = await close({});
     }
 
     const handleInsertBaseline = async () => {
         const response = await insertBaseline(baselineInfo);
-        console.log(response.data.RET_DESC);
+        fetchBaselineList();
+        setBaselineInfo({ "baselineName": "", "baselineStart": null, "baselineEnd": null })
     }
 
     const handleInsertBaseLineDataCopy = async () => {
         const response = await insertBaseLineDataCopy({
-            "targetBaselineId": "",
-            "baselineId": ""
+            "targetBaselineId": targetBaselineId,
+            "baselineId": currentBaseline
         });
-        console.log(response.data.RET_DESC);
     }
 
     const handleInsertBaseLineDataUpdate = async () => {
-        const response = await insertBaseLineDataUpdate({
-            // proveriti parametre
+        const response = await insertBaseLineDataCopy({});
+        console.log(response);
+        setPopupPrompt(false);
+    }
+
+    const handleUpdateUserCompany = async () => {
+        const response = await updateUserCompany({
+            "attachFileId": attachedFileId,
+            "missionStatements": missionStatement,
+            "safetyGoal": safetyGoal
         });
-        alert(response.data.RET_DESC);
+        console.log(response);
+        fetchCompanyInfo();
+        setMissionStatement("");
+        setSafetyGoal("");
     }
 
     const fetchBaselineList = async () => {
-        const response = await getBaselineList({})
-        setBaselineList(response.data.RET_DATA)
+        const response = await getBaselineList({});
+        setBaselineList(response.data.RET_DATA);
     }
 
     const fetchCompanyInfo = async () => {
@@ -889,22 +924,22 @@ const Default = ({ children }) => {
                                                 </span>
                                                 <TextField
                                                     id="standard-basic"
+                                                    placeholder='안전보건 목표 등록 (띄어쓰기 포함 16자 이내)'
                                                     value={safetyGoal}
                                                     variant="outlined"
                                                     sx={{ width: 370 }}
                                                     className={classes.popupTextField}
                                                     onChange={(event) => setSafetyGoal(event.target.value)}
                                                 />
-                                                <Select
-                                                    className={classes.popupTextField}
-                                                    sx={{ width: 370 }}
+                                                <TextField
+                                                    id="standard-basic"
+                                                    placeholder='경영방침 등록 (띄어쓰기 포함 16자 이내)'
                                                     value={missionStatement}
                                                     onChange={(event) => setMissionStatement(event.target.value)}
-                                                    displayEmpty
-                                                    inputProps={{ 'aria-label': 'Without label' }}
-                                                >
-                                                    <MenuItem value="">경영방침 등록 (띠어쓰기 포함 16자 이내)</MenuItem>
-                                                </Select>
+                                                    variant="outlined"
+                                                    sx={{ width: 370 }}
+                                                    className={classes.popupTextField}
+                                                />
                                                 <div className={classes.preFootPop}>
                                                     <div>
                                                         <span>로고등록</span>
@@ -922,7 +957,7 @@ const Default = ({ children }) => {
                                                 </div>
                                             </div>
                                             <div className={classes.headerPopFooter}>
-                                                <PopupFootButton>저장하기</PopupFootButton>
+                                                <PopupFootButton onClick={() => handleUpdateUserCompany()}>저장하기</PopupFootButton>
                                             </div>
                                         </div>
                                     </>)
@@ -980,14 +1015,17 @@ const Default = ({ children }) => {
                                                     <AccordionDetails style={{ alignItems: 'center' }}>
                                                         <TextField
                                                             id="standard-basic"
+                                                            placeholder='관리차수'
                                                             value={baselineInfo.baselineName}
                                                             variant="outlined"
                                                             sx={{ width: 80 }}
                                                             className={classes.popupTextField}
+                                                            onChange={(event) => setBaselineInfo({ ...baselineInfo, "baselineName": event.target.value })}
                                                         />
                                                         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                                                             <DesktopDatePicker
                                                                 className={classes.selectMenuDate}
+                                                                placeholder='관리차수'
                                                                 label=" "
                                                                 inputFormat="YYYY-MM-DD"
                                                                 value={baselineInfo.baselineStart}
@@ -1003,6 +1041,7 @@ const Default = ({ children }) => {
                                                             <DesktopDatePicker
                                                                 className={classes.selectMenuDate}
                                                                 label=" "
+                                                                placeholder='점검기간'
                                                                 inputFormat="YYYY-MM-DD"
                                                                 value={baselineInfo.baselineEnd}
                                                                 onChange={(newDate) => {
@@ -1023,20 +1062,11 @@ const Default = ({ children }) => {
                                                         <Typography>관리차수 조회</Typography>
                                                     </AccordionSummary>
                                                     <AccordionDetails>
-                                                        {/* <TextField
-                                                    id="standard-basic"
-                                                    placeholder="관리차수 조회"
-                                                    variant="outlined"
-                                                    sx={{ width: 370 }}
-                                                    className={classes.popupTextField}
-                                                /> */}
-                                                        <TextField
-                                                            className={classes.textArea}
-                                                            id="outlined-multiline-static"
-                                                            multiline
-                                                            rows={4}
-                                                            placeholder="1층에서                                        추락사고 발생하여 병원 이송함.&#10;2층으로                                       추락사고 발생하여 병원 이송함.&#10;3층으로                                       추락사고 발생하여 병원 이송함. "
-                                                        />
+                                                        <div className={classes.readonlyTextWrapper}>
+                                                            {baselineList?.length > 0 ? baselineList?.map(baselineItem => (
+                                                                <div className={classes.readonlyText}><span>{baselineItem.baselineName}</span> <span>{baselineItem.baselineStart}~{baselineItem.baselineEnd}</span></div>
+                                                            )) : <div className={classes.readonlyText}>관리차수</div>}
+                                                        </div>
                                                     </AccordionDetails>
                                                 </Accordion>
                                                 <Accordion className={classes.popupAccord}>
@@ -1049,15 +1079,19 @@ const Default = ({ children }) => {
                                                     </AccordionSummary>
                                                     <AccordionDetails>
                                                         <Select
+                                                            placeholder='복사할 차수'
                                                             className={classes.popupTextField}
                                                             sx={{ width: 150, marginBottom: '25px !important' }}
-                                                            value={num}
-                                                            onChange={handleChange}
+                                                            value={targetBaselineId}
+                                                            onChange={(event) => setTargetBaselineId(event.target.value)}
                                                             displayEmpty
                                                         >
-                                                            <MenuItem value="">복사할 차수</MenuItem>
+                                                            {!!baselineList && !!baselineList?.length && baselineList?.map(baselineItem =>
+                                                                <MenuItem value={baselineItem.baselineId}>{baselineItem.baselineName}</MenuItem>)}
                                                         </Select>
-                                                        <span>2022-07-01 ~ 2022-12-31</span>
+                                                        {!!baselineList && !!baselineList?.length
+                                                            && baselineList?.filter(baselineItem => baselineItem.baselineId === targetBaselineId)
+                                                                ?.map(item => <span>{item.baselineStart}~{item.baselineEnd}</span>)}
                                                         <div className={classes.popupPrompt}>
                                                             <Alert
                                                                 icon={<img src={alertIcon} alt="alert icon" />}
@@ -1065,19 +1099,29 @@ const Default = ({ children }) => {
                                                                 <strong>2차 차수의 DATA</strong>
                                                                 를 현재 차수에 복사 하시겠습니까
                                                             </Alert>
-                                                            <PromptButtonBlue>예</PromptButtonBlue>
+                                                            <PromptButtonBlue onClick={() => handleInsertBaseLineDataCopy()}>예</PromptButtonBlue>
                                                             <PromptButtonWhite>예</PromptButtonWhite>
                                                         </div>
                                                     </AccordionDetails>
                                                 </Accordion>
                                                 <span></span>
-                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
+                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setShowUploadPopup(true)}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
-                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setShowUploadPopup(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
+                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setPopupPrompt(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
+                                                <div className={popupPrompt ? classes.popupPrompt : classes.popupPromptClose}>
+                                                    <Alert
+                                                        icon={<img src={alertIcon} alt="alert icon" />}
+                                                        severity="error">
+                                                        {/* <strong>2차 차수의 DATA</strong> */}
+                                                        데이터가 존재합니다. 덮어 쓰시겠습니까
+                                                    </Alert>
+                                                    <PromptButtonBlue onClick={() => handleInsertBaseLineDataUpdate()}>예</PromptButtonBlue>
+                                                    <PromptButtonWhite onClick={() => setPopupPrompt(false)} >예</PromptButtonWhite>
+                                                </div>
                                             </div>
                                             <div className={classes.headerPopFooter}>
-                                                <PopupFootButton>저장하기</PopupFootButton>
+                                                <PopupFootButton onClick={() => handleInsertBaseline()}>저장하기</PopupFootButton>
                                             </div>
                                         </div>
                                     </>)

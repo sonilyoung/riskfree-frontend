@@ -50,7 +50,6 @@ const useStyles = makeStyles(() => ({
         height: '100vh',
         background: 'rgba(0, 0, 0, 0.7)',
         zIndex: '1000',
-        display: 'none !important',
         '& >div': {
             position: 'relative',
             '& button': {
@@ -59,6 +58,9 @@ const useStyles = makeStyles(() => ({
                 right: '0'
             }
         }
+    },
+    welcomePopupClose: {
+        display: 'none !important',
     }
 }));
 

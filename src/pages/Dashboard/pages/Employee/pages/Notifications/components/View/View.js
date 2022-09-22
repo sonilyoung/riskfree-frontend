@@ -51,6 +51,62 @@ const useStyles = makeStyles(() => ({
             borderBottom: 'none'
         }
     },
+    promptPopup: {
+        // display: 'none',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%,-50%)',
+        width: '320px',
+        height: '220px',
+        borderRadius: '18px',
+        border: '2px solid #018de7',
+        background: 'white',
+        color: '#333',
+        overflow: 'hidden',
+        zIndex: '6',
+        '& >div': {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '60px',
+            '&:first-of-type': {
+                fontSize: '20px',
+                fontWeight: 'bold',
+                paddingTop: '10px',
+            },
+            '&:last-of-type': {
+                position: 'absolute',
+                bottom: '0px',
+                width: '100%',
+                '& button': {
+                    width: '50%',
+                    height: '100%',
+                    border: 'none',
+                    background: '#eeeff7',
+                    cursor: 'pointer',
+                    fontSize: '18px',
+                    transition: '.2s',
+                    '&:last-of-type': {
+                        borderLeft: '1px solid #fff',
+                        background: '#018de7',
+                        color: '#fff',
+                        '&:hover': {
+                            background: '#0355b0',
+                            color: '#fff'
+                        }
+                    },
+                    '&:hover': {
+                        background: '#bdcbe9',
+                        color: '#333',
+                    }
+                }
+            },
+        }
+    },
+    promptPopupClose: {
+        display: 'none !important',
+    },
     rowInfo: {
         width: 'calc(100% - 220px)',
         display: 'flex',
@@ -134,6 +190,7 @@ const View = (props) => {
     const [notice, setNotice] = useState()
     const HOT = "001"
     const NOT_HOT = "002"
+    const [promptPopupShow, setPromptPopupShow] = useState(false);
 
 
 
@@ -144,6 +201,7 @@ const View = (props) => {
 
     const handleFetch = () => {
         noticesView(id)
+            .then(() => setPromptPopupShow(false))
             .then((response) => setNotice(response))
     }
 
@@ -216,10 +274,18 @@ const View = (props) => {
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
                     <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/director/notifications/update/${notice?.data.RET_DATA.noticeId}`)}>수정</BlueButton>
-                    <WhiteButton className={'button-delete'} onClick={handleDelete}>삭제</WhiteButton>
+                    <WhiteButton className={'button-delete'} onClick={() => setPromptPopupShow(true)}>삭제</WhiteButton>
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
             </Grid>
+            <div className={promptPopupShow ? classes.promptPopup : classes.promptPopupClose}>
+                <div>알림</div>
+                <div>삭제 하시겠습니까?</div>
+                <div>
+                    <button onClick={() => setPromptPopupShow(false)} >취소</button>
+                    <button onClick={() => handleDelete()}>확인</button>
+                </div>
+            </div>
         </DefaultLayout>
     );
 };

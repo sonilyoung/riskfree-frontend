@@ -55,6 +55,14 @@ const Login = () => {
     const localStorage = useLocalStorage();
     const [login] = useLoginMutation();
     const getPath = useUserURLRedirect();
+    const [welcomePopupShow, setWelcomePopupShow] = useState(false);
+
+    const handleWelcomeScreenPopup = (currentUser) => {
+        if (!localStorage.getItem(`loggedIn${currentUser}`)) {
+            setWelcomePopupShow(true);
+            localStorage.setItem(`loggedIn${currentUser}`, currentUser);
+        }
+    }
 
     const handleChange = (prop) => (event) => {
         setValues({
@@ -74,15 +82,19 @@ const Login = () => {
             const jwtToken = userLoginResponse.data.RET_DATA.accessToken;
             userToken.setItem(jwtToken);
 
+            handleWelcomeScreenPopup(values.id.value);
+
             const userLoggedInRoleCd = userToken.getUserRoleCd();
             const redirectPath = getPath(userLoggedInRoleCd);
 
             if (userLoggedInRoleCd !== RoleService.ROLE_CODE_ADMIN) {
                 const defaultBaselineResponse = await getBaseline({});
-                const defaultBaselineId = defaultBaselineResponse.data.RET_DATA.baselineId;
+                console.log(defaultBaselineResponse);
+                const defaultBaselineId = defaultBaselineResponse.data?.RET_DATA?.baselineId;
                 dispatch(setBaselineId(defaultBaselineId));
                 localStorage.setDefaultBaselineId(defaultBaselineId);
             }
+            console.log(redirectPath);
             navigate(redirectPath);
 
         } else {
@@ -97,7 +109,7 @@ const Login = () => {
         const handleKeyDown = (event) => {
             if (event.keyCode === 13) {
                 // event.preventDefault()
-                handleLogin()
+                handleLogin();
             }
         }
         document.addEventListener('keydown', handleKeyDown)
@@ -109,10 +121,10 @@ const Login = () => {
     return (
         <WideLayout>
             <div className={classes.pageWrap}>
-                <div className={classes.welcomePopup}>
+                <div className={welcomePopupShow ? classes.welcomePopup : classes.welcomePopupClose}>
                     <div>
                         <img src={welcomeImg} alt="welcome" />
-                        <ClosePopupButton2></ClosePopupButton2>
+                        <ClosePopupButton2 onClick={() => setWelcomePopupShow(false)}></ClosePopupButton2>
                     </div>
                 </div>
                 <div className={classes.loginWrap}>

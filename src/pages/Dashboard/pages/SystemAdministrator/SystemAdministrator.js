@@ -27,19 +27,12 @@ import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
 import searchIcon from '../../../../assets/images/ic_search.png';
 
-import pageFirst from '../../../../assets/images/btn_first.png';
-import pageLast from '../../../../assets/images/btn_last.png';
-import pageNext from '../../../../assets/images/btn_nxt.png';
-import pagePrev from '../../../../assets/images/btn_pre.png';
-
 import Alert from '@mui/material/Alert';
+import popupClose2 from '../../../../assets/images/btn_popClose2.png';
 import alertIcon from '../../../../assets/images/ic_refer.png';
 import monitor from '../../../../assets/images/admin_monitor.png'
 
 // import popupClose from '../../../assets/images/btn_popClose.png';
-
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
 
 import { useSubscribersSelectMutation, useSubscribersInsertMutation, useSubscribersViewMutation, useSubscribersUpdateMutation, useSubscribersWorkplaceSelectMutation } from '../../../../hooks/api/SubscribersManagement/SubscribersManagement';
 import { useGetCommCodeListMutation } from '../../../../hooks/api/CommCodeManagement/CommCodeManagement';
@@ -170,6 +163,11 @@ const useStyles = makeStyles(() => ({
         }
     },
     tableBody: {
+        height: '80vh',
+        overflowY: 'scroll',
+        '&::-webkit-scrollbar ': {
+            display: 'none',
+        },
         '& $tableData': {
             borderRight: '1px solid #bdcbe9',
             borderBottom: '1px solid #bdcbe9',
@@ -291,66 +289,23 @@ const useStyles = makeStyles(() => ({
             padding: '0 10px',
         }
     },
-    pagingBox: {
-        position: 'relative',
+    popupTextField: {
+        marginBottom: '10px !important',
+        overflow: 'hidden',
         height: '40px',
-        marginTop: '40px !important',
-        '& .MuiPagination-root': {
-            display: 'flex',
-            justifyContent: 'center'
+        borderRadius: ' 46px',
+        '& .MuiOutlinedInput-notchedOutline': {
+            border: 'none'
         },
-        '& >div:first-of-type': {
-            position: 'absolute',
-            height: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            top: '0',
-            left: '0',
-            '& strong': {
-                color: '#018de7'
-            }
+        '& >div': {
+            background: '#fff',
+            fontSize: '16px',
         },
-        '& >div:last-of-type': {
-            position: 'absolute',
-            top: '0',
-            right: '0'
-        },
-        '& .MuiPagination-ul button': {
-            width: '40px',
+        '& input': {
+            fontSize: '16px',
             height: '40px',
-            margin: '0',
-            borderRadius: '0',
-            fontSize: '14px',
-            color: '#666',
-            '&:hover': {
-                background: 'transparent'
-            },
-            '&.Mui-selected': {
-                background: '#6e7884',
-                color: '#fff',
-                cursor: 'default',
-            },
-            '&[aria-label$=page]': {
-                '& svg': {
-                    display: 'none'
-                }
-            },
-            '&[class*=MuiPaginationItem-firstLast][aria-label*=first]': {
-                background: 'url(' + pageFirst + ')',
-                marginRight: '-1px'
-            },
-            '&[class*=MuiPaginationItem-firstLast][aria-label*=last]': {
-                background: 'url(' + pageLast + ')',
-                marginLeft: '-1px'
-            },
-            '&[class*=MuiPaginationItem-previousNext][aria-label*=next]': {
-                background: 'url(' + pageNext + ')',
-                marginLeft: '8px'
-            },
-            '&[class*=MuiPaginationItem-previousNext][aria-label*=previous]': {
-                background: 'url(' + pagePrev + ')',
-                marginRight: '8px'
-            }
+            boxSizing: 'border-box',
+            background: '#eff2f9',
         }
     },
     adminPopup: {
@@ -527,6 +482,69 @@ const useStyles = makeStyles(() => ({
         width: '100%',
         background: '#bdcbe9',
     },
+    uploadPopup: {
+        position: 'fixed',
+        zIndex: '1000',
+        top: '70%',
+        left: '80%',
+        transform: 'translate(-50%,-50%)',
+        width: '400px',
+        height: '400px',
+        background: '#fff',
+        borderRadius: '30px',
+        padding: '40px',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexWrap: 'wrap',
+        color: 'black',
+        '& >span': {
+            width: '20%',
+            height: '20px',
+            borderBottom: '1px solid #bdcbe9',
+            transform: 'translateY(-5px)',
+            '&:nth-of-type(2)': {
+                width: '60%',
+                border: 'none',
+                padding: '0 10px',
+                boxSizing: 'border-box',
+                textAlign: 'center',
+                transform: 'unset',
+            }
+        },
+        '& >button': {
+            position: 'absolute',
+            top: '0px',
+            right: '-65px'
+        }
+    },
+    uploadPopupClose: {
+        display: 'none',
+    },
+    uploadInfo: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        height: '50%',
+        '& >*': {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        '& img': {
+            width: '30px',
+            height: '30px',
+        }
+    },
+    uploadSearch: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        '& button:first-of-type': {
+            marginLeft: '10px'
+        }
+    },
     uploadTitle: {
         width: '100%',
         height: '50px',
@@ -692,6 +710,77 @@ const SearchUserButton = styled(ButtonUnstyled)`
     }
 `;
 
+const UnknownButton1 = styled(ButtonUnstyled)`
+    width: 150px;
+    height: 46px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: -1.08px;
+    border-radius: 46px;
+    background: #00adef;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #3a5298;
+    }   
+`;
+
+const UnknownButton2 = styled(ButtonUnstyled)`
+    width: 200px;
+    height: 46px;
+    color: #000;
+    font-size: 20px;
+    letter-spacing: -1.08px;
+    border-radius: 46px;
+    background: #eff2f9;
+    border: 2px solid #00adef;
+    cursor: pointer;
+    transition: border-color .2s;
+    &:hover {
+        border-color: #3a5298;
+    }  
+`;
+
+const SearchButtonPopup = styled(ButtonUnstyled)`
+    width: 46px;
+    height: 46px;
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: -1.08px;
+    border-radius: 50%;
+    background: #00adef url(${searchIcon}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s;
+    &:hover {
+        background: #3a5298 url(${searchIcon}) no-repeat 50% 50%;
+    }   
+`;
+
+const ClosePopupButton2 = styled(ButtonUnstyled)`
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: url(${popupClose2}) no-repeat 50% 50%;
+    border: none;
+    cursor: pointer;
+    transition: background .2s; 
+`;
+
+
+const lista = [
+    { id: 1, text: "text1", rowNum: 1 },
+    { id: 2, text: "text2", rowNum: 2 },
+    { id: 3, text: "text3", rowNum: 3 },
+    { id: 4, text: "text4", rowNum: 4 },
+    { id: 5, text: "text5", rowNum: 5 },
+    { id: 6, text: "text6", rowNum: 6 },
+    { id: 7, text: "text7", rowNum: 7 },
+
+]
+
+
 const SystemAdministrator = () => {
     const classes = useStyles();
     const navigate = useNavigate();
@@ -758,28 +847,8 @@ const SystemAdministrator = () => {
     const [codeGroup1, setCodeGroup1] = useState([]);
     const [codeGroup2, setCodeGroup2] = useState([]);
     const [codeGroup3, setCodeGroup3] = useState([]);
-    const [page, setPage] = useState(1);
     const getPath = useUserURLRedirect();
-    const [plusButtons, setPlusButtons] = useState([]);
-    const [plusButtonId, setPlusButtonId] = useState(0);
-
-    const handlePlusButtonClick = (buttonId, companyId) => {
-        const plusButtonsChangedState = plusButtons?.map(button => {
-            if (button.id !== buttonId) {
-                return button;
-            } else {
-                fetchSubscribersWorkplaceSelectList(companyId);
-                return { ...button, clicked: !button.clicked, plus: !button.plus }
-            }
-        });
-        setPlusButtons(plusButtonsChangedState);
-        setPlusButtonId(buttonId);
-    }
-
-    const handleTableRowClasses = () => {
-        const activeClass = plusButtons?.find(item => item.id === plusButtonId);
-        return activeClass.clicked;
-    }
+    const [uploadPopupShow, setUploadPopupShow] = useState(false);
 
     const handleRedirect = async (workplaceId, userId) => {
         const response = await subscribersView(`${workplaceId}&userId=${userId}`);
@@ -790,13 +859,9 @@ const SystemAdministrator = () => {
     const fetchSubscribersList = async () => {
         const response = await subscribersSelect({
             "col": col,
-            "countPerPage": 10,
-            "pageNum": page,
             "param": param
-        })
+        });
         setSubscribersList(response.data.RET_DATA);
-        const plusButtonsInitialState = response.data?.RET_DATA?.map((item, index) => { return { id: index + 1, clicked: false, plus: true } });
-        setPlusButtons(plusButtonsInitialState);
     }
 
     const fetchCommCodeListGroup1 = async () => {
@@ -822,7 +887,6 @@ const SystemAdministrator = () => {
 
     const fetchSubscribersWorkplaceSelectList = async (companyId) => {
         const response = await subscribersWorkplaceSelect(companyId);
-        console.log(response.data.RET_DATA);
         setSubscribersWorkplaceSelectList(!!(response.data.RET_DATA) && response.data.RET_DATA);
     }
 
@@ -843,11 +907,9 @@ const SystemAdministrator = () => {
         setSubscriberView(!!(response.data.RET_DATA) && response?.data?.RET_DATA);
     }
 
-    const handlePageChange = (event, value) => {
-        setPage(value)
-    }
     const handleSubscribersInsert = async () => {
-        await subscribersInsert({
+        console.log(subscriberInsert);
+        const response = await subscribersInsert({
             "companyName": subscriberInsert.companyName,
             "contractAmount": subscriberInsert.contractAmount,
             "contractEndDate": subscriberInsert.contractEndDate,
@@ -864,9 +926,27 @@ const SystemAdministrator = () => {
             "statusCd": subscriberInsert.statusCd,
             "workplaceName": subscriberInsert.workplaceName
         });
+        setSubscriberInsert({
+            "companyName": "",
+            "contractAmount": "",
+            "contractEndDate": null,
+            "contractFileId": "",
+            "contractStartDate": null,
+            "loginId": "",
+            "managerEmail": subscriberInsertEmailBeforeSign + '@' + subscriberInsertEmailAfterSign,
+            "managerName": "",
+            "managerRoleCd": "",
+            "managerTel": "",
+            "registNo": "",
+            "scaleCd": "",
+            "sectorCd": "",
+            "statusCd": "",
+            "workplaceName": ""
+        });
+        setSubscriberInsertEmailAfterSign("");
+        setSubscriberInsertEmailBeforeSign("");
         fetchSubscribersList();
         setRegMemberPop(false);
-        setSubscriberInsert({});
     }
 
     const handleSubscribersUpdate = async () => {
@@ -899,7 +979,7 @@ const SystemAdministrator = () => {
         fetchCommCodeListGroup1();
         fetchCommCodeListGroup2();
         fetchCommCodeListGroup3();
-    }, [page]);
+    }, []);
 
     return (
         <DefaultLightLayout>
@@ -968,12 +1048,10 @@ const SystemAdministrator = () => {
                                     setUserInfoPop(true);
                                     fetchSubscriberView(subscriber.workplaceId, subscriber.userId);
                                 }}>
-                                    {!!plusButtons && !!plusButtons?.length && plusButtons?.map((button, btnIndex) => {
-                                        if (btnIndex === index) {
-                                            return <div className={classes.tableData}><button onClick={() => handlePlusButtonClick(button.id, subscriber.companyId)}>{button.plus ? "+" : "–"}</button>{index + 1}</div>
-                                        }
-                                    })
-                                    }
+                                    <div className={classes.tableData}>
+                                        {subscriber.rowNum > 1 && <button onClick={() => fetchSubscribersWorkplaceSelectList(subscriber.companyId)} >+</button>}
+                                        {index + 1}
+                                    </div>
                                     <div className={classes.tableData}>{subscriber.companyName}</div>
                                     <div className={classes.tableData}>{subscriber.workplaceName}</div>
                                     <div className={classes.tableData}>{subscriber.registNo}</div>
@@ -989,27 +1067,25 @@ const SystemAdministrator = () => {
                                     <div className={classes.tableData}>{subscriber.contractFileld}</div>
                                     <div className={classes.tableData} onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}><img src={monitor} alt="monitor" /></div>
                                 </div>
-                                {!!subscribersWorkplaceSelectList && !!subscribersWorkplaceSelectList?.length && subscribersWorkplaceSelectList?.map((subscribersWorkplaceItem, subscribersWorkplaceItemIndex) => {
-                                    if (index + 1 === plusButtonId) {
-                                        return (<div className={handleTableRowClasses() ? classes.tableRow : classes.tableRowClose} >
-                                            <div className={classes.tableData}></div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.companyName}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.workplaceName}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.registNo}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.sector}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.scale}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.loginId}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.managerRole}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.managerName}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.managerTel}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.contractAmount && parseFloat(subscribersWorkplaceItem.contractAmount).toLocaleString()}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.contractDate}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.status}</div>
-                                            <div className={classes.tableData}></div>
-                                            <div className={classes.tableData}></div>
-                                        </div>);
-                                    }
-                                })}
+                                {subscriber.rowNum > 1 && !!subscribersWorkplaceSelectList && !!subscribersWorkplaceSelectList?.length
+                                    && subscribersWorkplaceSelectList?.map((subscribersWorkplaceItem) =>
+                                    (<div className={classes.tableRow} >
+                                        <div className={classes.tableData}></div>
+                                        <div className={classes.tableData}>{subscribersWorkplaceItem.companyName}</div>
+                                        <div className={classes.tableData}>{subscribersWorkplaceItem.workplaceName}</div>
+                                        <div className={classes.tableData}>{subscribersWorkplaceItem.registNo}</div>
+                                        <div className={classes.tableData}>{subscribersWorkplaceItem.sector}</div>
+                                        <div className={classes.tableData}>{subscribersWorkplaceItem.scale}</div>
+                                        <div className={classes.tableData}>{subscribersWorkplaceItem.loginId}</div>
+                                        <div className={classes.tableData}>{subscribersWorkplaceItem.managerRole}</div>
+                                        <div className={classes.tableData}>{subscribersWorkplaceItem.managerName}</div>
+                                        <div className={classes.tableData}>{subscribersWorkplaceItem.managerTel}</div>
+                                        <div className={classes.tableData}>{subscribersWorkplaceItem.contractAmount && parseFloat(subscribersWorkplaceItem.contractAmount).toLocaleString()}</div>
+                                        <div className={classes.tableData}>{subscribersWorkplaceItem.contractDate}</div>
+                                        <div className={classes.tableData}>{subscribersWorkplaceItem.status}</div>
+                                        <div className={classes.tableData}></div>
+                                        <div className={classes.tableData}></div>
+                                    </div>))}
                             </>
                         ))}
                     </div>
@@ -1081,7 +1157,7 @@ const SystemAdministrator = () => {
                                         <div>
                                             <TextField
                                                 variant="outlined"
-                                                value={subscribersInsert.loginId}
+                                                value={subscriberInsert.loginId}
                                                 className={classes.tableTextField}
                                                 onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "loginId": e.target.value })}
                                             />
@@ -1203,7 +1279,7 @@ const SystemAdministrator = () => {
                                         onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "contractFileId": e.target.value })}
                                         sx={{ width: 300 }}
                                     />
-                                    <SearchUserButton>찾아보기</SearchUserButton>
+                                    <SearchUserButton onClick={() => setUploadPopupShow(true)}>찾아보기</SearchUserButton>
                                 </div>
                             </div>
                         </div>
@@ -1353,7 +1429,7 @@ const SystemAdministrator = () => {
                                     <TextField
                                         variant="outlined"
                                         className={classes.tableTextField}
-                                        value={subscriberView.contractAmount}
+                                        value={!subscriberView.contractAmount ? "" : subscriberView.contractAmount}
                                         onChange={(event) => setSubscriberView({ ...subscriberView, "contractAmount": event.target.value })}
                                         sx={{ width: 190 }}
                                     />
@@ -1397,7 +1473,7 @@ const SystemAdministrator = () => {
                                 <div className={classes.popupData}>
                                     <Select
                                         className={classes.tableTextField}
-                                        value={!!(subscriberView.companyName) ? subscriberView.statusCd : ""}
+                                        value={subscriberView.statusCd}
                                         onChange={(event) => setSubscriberView({ ...subscriberView, "statusCd": event.target.value })}
                                         sx={{ width: 250 }}
                                     >
@@ -1416,7 +1492,7 @@ const SystemAdministrator = () => {
                                         onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "contractFileId": e.target.value })}
                                         sx={{ width: 300 }}
                                     />
-                                    <SearchUserButton>찾아보기</SearchUserButton>
+                                    <SearchUserButton onClick={() => setUploadPopupShow(true)}>찾아보기</SearchUserButton>
                                 </div>
                             </div>
                         </div>
@@ -1448,13 +1524,29 @@ const SystemAdministrator = () => {
                         </div>
                     </div>
                 </Grid>
-                <Grid item xs={12} className={classes.pagingBox}>
-                    <div>총 게시글 <strong>{!!(subscribersList) && !!(subscribersList.length) && subscribersList[0]?.totalCount}</strong> 건</div>
-                    <Stack spacing={2}>
-                        <Pagination count={subscribersList?.length && Math.ceil(subscribersList[0]?.totalCount / 10)} boundaryCount={10} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
-                    </Stack>
-                </Grid>
             </Grid>
+            <div className={uploadPopupShow ? classes.uploadPopup : classes.uploadPopupClose}>
+                <ClosePopupButton2 onClick={() => setUploadPopupShow(false)}></ClosePopupButton2>
+                <div className={classes.uploadInfo}>
+                    <img src={alertIcon} alt="alert icon" />
+                    <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
+                    <UnknownButton2>전체사업장</UnknownButton2>
+                </div>
+                <span></span>
+                <span>의무조치별 상세 점검</span>
+                <span></span>
+                <div className={classes.uploadSearch}>
+                    <TextField
+                        id="standard-basic"
+                        placeholder="여수공장 시정조치요청 파일.hwp"
+                        variant="outlined"
+                        sx={{ width: 250 }}
+                        className={classes.popupTextField}
+                    />
+                    <SearchButtonPopup></SearchButtonPopup>
+                    <UnknownButton1 onClick={() => setUploadPopupShow(false)}>전체사업장</UnknownButton1>
+                </div>
+            </div>
         </DefaultLightLayout >
     );
 };

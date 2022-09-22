@@ -82,7 +82,7 @@ import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useUserToken } from '../../../../hooks/core/UserToken';
 import moment from 'moment'
 
@@ -1217,11 +1217,14 @@ const useStyles = makeStyles(() => ({
             marginLeft: '10px'
         }
     },
+    popupPromptClose: {
+        display: 'none !important',
+    },
     uploadPopup: {
         position: 'absolute',
         zIndex: '1000',
         top: '0px',
-        left: '50%',
+        left: '40%',
         transform: 'translateX(-50%)',
         width: '400px',
         height: '400px',
@@ -1231,7 +1234,6 @@ const useStyles = makeStyles(() => ({
         boxSizing: 'border-box',
         display: 'flex',
         flexWrap: 'wrap',
-        display: 'none !important',
         '& >span': {
             width: '20%',
             height: '20px',
@@ -1543,6 +1545,23 @@ const useStyles = makeStyles(() => ({
     pageOverlayInactive: {
         display: 'none',
     },
+    readonlyTextWrapper: {
+        width: '100%',
+        padding: '15px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '15px',
+        backgroundColor: '#fff',
+        color: '#888',
+        borderRadius: '8px',
+        border: '1px solid #bbb'
+    },
+    readonlyText: {
+        fontSize: '16px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    }
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -1933,6 +1952,11 @@ const Employee = () => {
     const [longitude, setLongitude] = useState("")
     const [getWeather] = useGetWeatherMutation()
     const [weatherData, setWeatherData] = useState({})
+    const [insertBaseline] = useInsertBaselineMutation();
+    const [insertBaseLineDataCopy] = useInsertBaseLineDataCopyMutation();
+    const [insertBaseLineDataUpdate] = useInsertBaseLineDataUpdateMutation();
+    const [close] = useCloseMutation();
+    const [updateUserCompany] = useUpdateUserCompanyMutation();
     const [inspectionDocsPopup, setInspectionDocsPopup] = useState(false);
     const [baselineInfo, setBaselineInfo] = useState({
         "baselineName": "",
@@ -1941,8 +1965,11 @@ const Employee = () => {
     });
     const [showUploadPopup, setShowUploadPopup] = useState(false);
     const [safetyGoal, setSafetyGoal] = useState("");
-    const [missionStatements, setMissionStatements] = useState([]);
     const [missionStatement, setMissionStatement] = useState("");
+    // treba da se menja
+    const [attachedFileId, setAttachedFileId] = useState(1);
+    const [targetBaselineId, setTargetBaselineId] = useState("");
+    const [popupPrompt, setPopupPrompt] = useState(false);
     const dispatch = useDispatch();
 
     const [userInfo, setUserInfo] = useState({
@@ -1958,6 +1985,41 @@ const Employee = () => {
     const handleNotificationPopupsShow = (notificationIndex) => {
         const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex != index);
         setNoticeHotList(notificationPopupList);
+    }
+
+    const handleClose = async () => {
+        const response = await close({});
+    }
+
+    const handleInsertBaseline = async () => {
+        const response = await insertBaseline(baselineInfo);
+        fetchBaselineList();
+        setBaselineInfo({ "baselineName": "", "baselineStart": null, "baselineEnd": null })
+    }
+
+    const handleInsertBaseLineDataCopy = async () => {
+        const response = await insertBaseLineDataCopy({
+            "targetBaselineId": targetBaselineId,
+            "baselineId": currentBaselineId
+        });
+    }
+
+    const handleInsertBaseLineDataUpdate = async () => {
+        const response = await insertBaseLineDataCopy({});
+        console.log(response);
+        setPopupPrompt(false);
+    }
+
+    const handleUpdateUserCompany = async () => {
+        const response = await updateUserCompany({
+            "attachFileId": attachedFileId,
+            "missionStatements": missionStatement,
+            "safetyGoal": safetyGoal
+        });
+        console.log(response);
+        fetchCompanyInfo();
+        setMissionStatement("");
+        setSafetyGoal("");
     }
 
     const fetchLoginInfo = async () => {
@@ -2014,7 +2076,8 @@ const Employee = () => {
             "companyId": userCompanyId,
             "workplaceId": userWorkplaceId
         })
-        setCompanyInfo(response?.data?.RET_DATA)
+        setCompanyInfo(response?.data?.RET_DATA);
+        console.log(response);
     }
 
     const fetchAccidentTotalList = async () => {
@@ -2270,22 +2333,22 @@ const Employee = () => {
                                         </span>
                                         <TextField
                                             id="standard-basic"
+                                            placeholder='안전보건 목표 등록 (띄어쓰기 포함 16자 이내)'
                                             value={safetyGoal}
                                             variant="outlined"
                                             sx={{ width: 370 }}
                                             className={classes.popupTextField}
                                             onChange={(event) => setSafetyGoal(event.target.value)}
                                         />
-                                        <Select
-                                            className={classes.popupTextField}
-                                            sx={{ width: 370 }}
+                                        <TextField
+                                            id="standard-basic"
+                                            placeholder='경영방침 등록 (띄어쓰기 포함 16자 이내)'
                                             value={missionStatement}
                                             onChange={(event) => setMissionStatement(event.target.value)}
-                                            displayEmpty
-                                            inputProps={{ 'aria-label': 'Without label' }}
-                                        >
-                                            <MenuItem value="">경영방침 등록 (띠어쓰기 포함 16자 이내)</MenuItem>
-                                        </Select>
+                                            variant="outlined"
+                                            sx={{ width: 370 }}
+                                            className={classes.popupTextField}
+                                        />
                                         <div className={classes.preFootPop}>
                                             <div>
                                                 <span>로고등록</span>
@@ -2303,7 +2366,7 @@ const Employee = () => {
                                         </div>
                                     </div>
                                     <div className={classes.headerPopFooter}>
-                                        <PopupFootButton>저장하기</PopupFootButton>
+                                        <PopupFootButton onClick={() => handleUpdateUserCompany()}>저장하기</PopupFootButton>
                                     </div>
                                 </div>
                                 <FormControl sx={{ width: 180 }} className={classes.dropMenu}>
@@ -2356,17 +2419,23 @@ const Employee = () => {
                                                 <TextField
                                                     id="standard-basic"
                                                     placeholder="관리차수"
+                                                    value={baselineInfo.baselineName}
                                                     variant="outlined"
                                                     sx={{ width: 80 }}
                                                     className={classes.popupTextField}
+                                                    onChange={(event) => setBaselineInfo({ ...baselineInfo, "baselineName": event.target.value })}
                                                 />
                                                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                                                     <DesktopDatePicker
                                                         className={classes.selectMenuDate}
-                                                        label=" "
+                                                        label=' '
+                                                        placeholder='관리차수'
                                                         inputFormat="YYYY-MM-DD"
-                                                        value={date}
-                                                        onChange={setDate}
+                                                        value={baselineInfo.baselineStart}
+                                                        onChange={(newDate) => {
+                                                            const date = new Date(newDate.$d);
+                                                            setBaselineInfo({ ...baselineInfo, "baselineStart": moment(date).format("YYYY-MM-DD") })
+                                                        }}
                                                         renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                     />
                                                 </LocalizationProvider>
@@ -2375,9 +2444,13 @@ const Employee = () => {
                                                     <DesktopDatePicker
                                                         className={classes.selectMenuDate}
                                                         label=" "
+                                                        placeholder='점검기간'
                                                         inputFormat="YYYY-MM-DD"
-                                                        value={date}
-                                                        onChange={setDate}
+                                                        value={baselineInfo.baselineEnd}
+                                                        onChange={(newDate) => {
+                                                            const date = new Date(newDate.$d);
+                                                            setBaselineInfo({ ...baselineInfo, "baselineEnd": moment(date).format("YYYY-MM-DD") })
+                                                        }}
                                                         renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                     />
                                                 </LocalizationProvider>
@@ -2392,20 +2465,11 @@ const Employee = () => {
                                                 <Typography>관리차수 조회</Typography>
                                             </AccordionSummary>
                                             <AccordionDetails>
-                                                {/* <TextField
-                                                    id="standard-basic"
-                                                    placeholder="관리차수 조회"
-                                                    variant="outlined"
-                                                    sx={{ width: 370 }}
-                                                    className={classes.popupTextField}
-                                                /> */}
-                                                <TextField
-                                                    className={classes.textArea}
-                                                    id="outlined-multiline-static"
-                                                    multiline
-                                                    rows={4}
-                                                    placeholder="1차                                                    2022.01.01 ~ 20 21.03.31.&#10;2차                                                   2022.01.01 ~ 20 21.03.31.&#10;3차                                                   2022.07.01 ~ 2021.09.30."
-                                                />
+                                                <div className={classes.readonlyTextWrapper}>
+                                                    {baselineList?.length > 0 ? baselineList?.map(baselineItem => (
+                                                        <div className={classes.readonlyText}><span>{baselineItem.baselineName}</span> <span>{baselineItem.baselineStart}~{baselineItem.baselineEnd}</span></div>
+                                                    )) : <div className={classes.readonlyText}>관리차수</div>}
+                                                </div>
                                             </AccordionDetails>
                                         </Accordion>
                                         <Accordion className={classes.popupAccord}>
@@ -2419,14 +2483,17 @@ const Employee = () => {
                                             <AccordionDetails>
                                                 <Select
                                                     className={classes.popupTextField}
+                                                    placeholder='복사할 차수'
                                                     sx={{ width: 150, marginBottom: '25px !important' }}
-                                                    value={num}
-                                                    onChange={handleChange}
-                                                    displayEmpty
+                                                    value={targetBaselineId}
+                                                    onChange={(event) => setTargetBaselineId(event.target.value)}
                                                 >
-                                                    <MenuItem value="">복사할 차수</MenuItem>
+                                                    {!!baselineList && !!baselineList?.length && baselineList?.map(baselineItem =>
+                                                        <MenuItem value={baselineItem.baselineId}>{baselineItem.baselineName}</MenuItem>)}
                                                 </Select>
-                                                <span>2022-07-01 ~ 2022-12-31</span>
+                                                {!!baselineList && !!baselineList?.length
+                                                    && baselineList?.filter(baselineItem => baselineItem.baselineId === targetBaselineId)
+                                                        ?.map(item => <span>{item.baselineStart}~{item.baselineEnd}</span>)}
                                                 <div className={classes.popupPrompt}>
                                                     <Alert
                                                         icon={<img src={alertIcon} alt="alert icon" />}
@@ -2434,19 +2501,29 @@ const Employee = () => {
                                                         <strong>2차 차수의 DATA</strong>
                                                         를 현재 차수에 복사 하시겠습니까
                                                     </Alert>
-                                                    <PromptButtonBlue>예</PromptButtonBlue>
+                                                    <PromptButtonBlue onClick={() => handleInsertBaseLineDataCopy()}>예</PromptButtonBlue>
                                                     <PromptButtonWhite>예</PromptButtonWhite>
                                                 </div>
                                             </AccordionDetails>
                                         </Accordion>
                                         <span></span>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none">관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setShowUploadPopup(true)}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setShowUploadPopup(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setPopupPrompt(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
+                                        <div className={popupPrompt ? classes.popupPrompt : classes.popupPromptClose}>
+                                            <Alert
+                                                icon={<img src={alertIcon} alt="alert icon" />}
+                                                severity="error">
+                                                {/* <strong>2차 차수의 DATA</strong> */}
+                                                데이터가 존재합니다. 덮어 쓰시겠습니까
+                                            </Alert>
+                                            <PromptButtonBlue onClick={() => handleInsertBaseLineDataUpdate()}>예</PromptButtonBlue>
+                                            <PromptButtonWhite onClick={() => setPopupPrompt(false)} >예</PromptButtonWhite>
+                                        </div>
                                     </div>
                                     <div className={classes.headerPopFooter}>
-                                        <PopupFootButton>저장하기</PopupFootButton>
+                                        <PopupFootButton onClick={() => handleInsertBaseline()}>저장하기</PopupFootButton>
                                     </div>
                                 </div>
                             </div>
@@ -2640,8 +2717,8 @@ const Employee = () => {
                 <div className={userRoleCode === '000' ? classes.pageOverlay : classes.pageOverlayInactive}></div>
 
                 <Grid className={classes.pageBody} item xs={10.7}>
-                    <div className={classes.uploadPopup}>
-                        <ClosePopupButton2></ClosePopupButton2>
+                    <div className={showUploadPopup ? classes.uploadPopup : classes.uploadPopupClose}>
+                        <ClosePopupButton2 onClick={() => setShowUploadPopup(false)}></ClosePopupButton2>
                         <div className={classes.uploadInfo}>
                             <img src={alertIcon} alt="alert icon" />
                             <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
