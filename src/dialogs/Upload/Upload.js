@@ -69,7 +69,7 @@ const SearchButton = styled(ButtonUnstyled)`
     }   
 `;
 
-function Upload({ open, onClose, onInputChange, onUpload, onDownload }) {
+function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDownload }) {
     const classes = useStyles();
 
     return (
@@ -94,9 +94,6 @@ function Upload({ open, onClose, onInputChange, onUpload, onDownload }) {
                             type="file"
                             onChange={onInputChange}
                         />
-                        {/* <SearchButton component="label">
-                            <input hidden accept="image/*" multiple type="file" />
-                        </SearchButton> */}
                         <UnknownButton1 onClick={onUpload}>전체사업장</UnknownButton1>
                     </div>
                 </div>
