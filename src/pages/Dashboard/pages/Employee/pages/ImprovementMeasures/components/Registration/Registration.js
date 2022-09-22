@@ -83,7 +83,7 @@ const Registration = () => {
     )
     const [fileUpload] = useFileUploadMutation();
     const [fileDown] = useFileDownMutation()
-    
+
     const handleDialogOpen = (event) => {
         setOpenDialog(true);
         setDialogId(event.target.id);
@@ -100,7 +100,7 @@ const Registration = () => {
         const response = await fileUpload(formData)
         const fileId = response.data.RET_DATA[0].atchFileId
         const originalFileName = response.data.RET_DATA[0].originalFileName
-        setImprovement({ ...improvement,  [dialogId]: fileId})
+        setImprovement({ ...improvement, [dialogId]: fileId })
 
         //TODO: We have to store filename to the appropriate field
     }
@@ -280,7 +280,7 @@ const Registration = () => {
                                         className={classes.selectMenu}
                                         disabled
                                     />
-                                    <UploadButton id="reqFileId" onClick={ handleDialogOpen }>찾아보기</UploadButton>
+                                    <UploadButton id="reqFileId" onClick={handleDialogOpen}>찾아보기</UploadButton>
                                 </div>
                             </div>
                         </div>
@@ -375,7 +375,7 @@ const Registration = () => {
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton id="actionBeforeId" onClick={ handleDialogOpen }>찾아보기</UploadButton>
+                                        <UploadButton id="actionBeforeId" onClick={handleDialogOpen}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev} alt="uploaded image" />
                                         </div> */}
@@ -392,7 +392,7 @@ const Registration = () => {
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton id="actionAfterId" onClick={ handleDialogOpen }>찾아보기</UploadButton>
+                                        <UploadButton id="actionAfterId" onClick={handleDialogOpen}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev2} alt="preview image" />
                                         </div> */}
@@ -414,6 +414,7 @@ const Registration = () => {
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
                 onDownload={handleDialogFileDownload}
+                enableDownload={false}
             />
         </DefaultLayout>
     );
