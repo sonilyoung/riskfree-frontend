@@ -24,6 +24,8 @@ import useUserURLRedirect from '../../hooks/core/UserURLRedirect/UserURLRedirect
 import { useUserToken } from '../../hooks/core/UserToken';
 import { useStyles } from './useStyles';
 import { RoleService } from '../../services/core/User';
+import Ok from '../../components/MessageBox/Ok';
+import { Overlay } from '../../components/Overlay';
 
 const ClosePopupButton2 = styled(ButtonUnstyled)`
     width: 60px;
@@ -56,15 +58,9 @@ const Login = () => {
     const [login] = useLoginMutation();
     const getPath = useUserURLRedirect();
     const [welcomePopupShow, setWelcomePopupShow] = useState(false);
-
-    const handleWelcomeScreenPopup = (currentUser) => {
-        if (!localStorage.getItem(`loggedIn${currentUser}`)) {
-            setWelcomePopupShow(true);
-            localStorage.setItem(`loggedIn${currentUser}`, currentUser);
-        } else {
-            handleLogin();
-        }
-    }
+    const [redirectPath, setRedirectPath] = useState("");
+    const [wrongCredentialsPopup, setWrongCredentialsPopup] = useState(false);
+    const [message, setMessage] = useState('');
 
     const handleChange = (prop) => (event) => {
         setValues({
@@ -72,6 +68,11 @@ const Login = () => {
             [prop]: { ...values[prop], value: event.target.value }
         });
     };
+
+    const handleFirstLogin = () => {
+        navigate(redirectPath);
+        setWelcomePopupShow(false);
+    }
 
     const handleLogin = async () => {
 
@@ -85,7 +86,9 @@ const Login = () => {
             userToken.setItem(jwtToken);
 
             const userLoggedInRoleCd = userToken.getUserRoleCd();
-            const redirectPath = getPath(userLoggedInRoleCd);
+            const userRedirectPath = getPath(userLoggedInRoleCd);
+            setRedirectPath(userRedirectPath);
+            const userLoginCount = userToken.getUserLoginCount();
 
             if (userLoggedInRoleCd !== RoleService.ROLE_CODE_ADMIN) {
                 const defaultBaselineResponse = await getBaseline({});
@@ -94,12 +97,19 @@ const Login = () => {
                 dispatch(setBaselineId(defaultBaselineId));
                 localStorage.setDefaultBaselineId(defaultBaselineId);
             }
-            console.log(redirectPath);
-            navigate(redirectPath);
+            console.log(redirectPath, userLoginCount);
+
+            if (userLoginCount < 2) {
+                setWelcomePopupShow(true);
+            } else {
+                setWelcomePopupShow(false);
+                navigate(userRedirectPath);
+            }
 
         } else {
             //TODO: This message has to be replaced with dialog.
-            alert('Credentials are wrong. Please try again.');
+            // alert('Credentials are wrong. Please try again.');
+            setWrongCredentialsPopup(true);
         }
 
 
@@ -109,7 +119,7 @@ const Login = () => {
         const handleKeyDown = (event) => {
             if (event.keyCode === 13) {
                 // event.preventDefault()
-                handleWelcomeScreenPopup(values.id.value);
+                handleLogin();
             }
         }
         document.addEventListener('keydown', handleKeyDown)
@@ -124,7 +134,7 @@ const Login = () => {
                 <div className={welcomePopupShow ? classes.welcomePopup : classes.welcomePopupClose}>
                     <div>
                         <img src={welcomeImg} alt="welcome" />
-                        <ClosePopupButton2 onClick={() => handleWelcomeScreenPopup(values.id.value)}></ClosePopupButton2>
+                        <ClosePopupButton2 onClick={() => handleFirstLogin(redirectPath)}></ClosePopupButton2>
                     </div>
                 </div>
                 <div className={classes.loginWrap}>
@@ -147,9 +157,15 @@ const Login = () => {
                         />
                         <Link to={"/forgotten-password/step-1"} className={classes.linkBtn} underline="hover">비밀번호 찾기 / 재설정</Link>
                     </div>
-                    <Button variant="contained" onClick={() => handleWelcomeScreenPopup(values.id.value)}>로그인</Button>
+                    <Button variant="contained" onClick={() => handleLogin()}>로그인</Button>
                 </div>
             </div>
+            <Overlay show={wrongCredentialsPopup}>
+                <Ok
+                    show={wrongCredentialsPopup}
+                    message={{ RET_CODE: 'Credentials are wrong.', RET_DESC: "Please try again." }}
+                    onConfirm={() => setWrongCredentialsPopup(false)} />
+            </Overlay>
         </WideLayout>
     );
 };

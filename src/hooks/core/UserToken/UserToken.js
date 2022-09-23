@@ -57,9 +57,12 @@ function useUserToken(props) {
         return decodedTokenPayload[11];
     }
 
+    const getUserLoginCount = () => {
+        const decodedTokenPayload = getDecodedTokenPayload();
+        return decodedTokenPayload[13];
+    }
 
-
-    return [{ setItem, getItem, getDecoded, isValid, getUserRoleCd, getUserLoginId, getUserCompanyId, getUserWorkplaceId }];
+    return [{ setItem, getItem, getDecoded, isValid, getUserRoleCd, getUserLoginId, getUserCompanyId, getUserWorkplaceId, getUserLoginCount }];
 }
 
 export default useUserToken;

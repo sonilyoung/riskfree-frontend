@@ -37,23 +37,17 @@ import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import alertIcon from '../../assets/images/ic_refer.png';
 
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-
 import arrowDown from '../../assets/images/ic_down.png';
-
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import 'dayjs/locale/ko';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { selectBaselineId, setBaselineId } from '../../slices/selections/MainSelection';
 import { useLocalStorage } from '../../hooks/misc/LocalStorage';
 
 import LogoutIcon from '@mui/icons-material/Logout';
+import { Overlay } from '../../components/Overlay';
+import Ok from '../../components/MessageBox/Ok';
+import { useFileUploadMutation } from '../../hooks/api/FileManagement/FIleManagement';
+import { UploadDialog } from '../../dialogs/Upload';
 
 
 const useStyles = makeStyles(() => ({
@@ -389,9 +383,9 @@ const useStyles = makeStyles(() => ({
             right: '-65px'
         }
     },
-    uploadPopupClose: {
-        display: 'none',
-    },
+    // uploadPopupClose: {
+    //     display: 'none',
+    // },
     uploadInfo: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -727,13 +721,15 @@ const DefaultLight = ({ children }) => {
     const navigate = useNavigate()
     const [getLoginInfo] = useGetLoginInfoMutation()
     const [loginInfo, setLoginInfo] = useState({})
-    const [userPopup, setUserPopup] = useState(false)
-    const [settingsPopup, setSettingsPopup] = useState(false)
     const [userToken] = useUserToken()
     const [companyInfo, setCompanyInfo] = useState({})
     const companyId = userToken.getUserCompanyId()
     const [getCompanyInfo] = useGetCompanyInfoMutation()
-    const [uploadPopupShow, setUploadPopupShow] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [selectedFile, setSelectedFile] = useState(null)
+
+    const [okPopupShow, setOkPopupShow] = useState(false);
+    const [okPopupMessage, setOkPopupMessage] = useState(null);
 
     const dispatch = useDispatch();
     const localStorage = useLocalStorage();
@@ -744,22 +740,37 @@ const DefaultLight = ({ children }) => {
     const [getWeather] = useGetWeatherMutation()
     const [weatherData, setWeatherData] = useState({})
 
+    const [fileUpload] = useFileUploadMutation();
+
+    const handleDialogClose = () => {
+        setOpenDialog(false);
+    }
+
+    const handleDialogFileUpload = async (file) => {
+        const response = await fileUpload({
+            files: selectedFile
+        })
+        console.log(response);
+        setOkPopupMessage(response.data);
+        handleDialogClose(false);
+        setOkPopupShow(true);
+    }
+
+    const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    }
+
 
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
         setLoginInfo(response.data.RET_DATA)
     }
 
-    const [num, setNum] = React.useState('');
-
     const handleLogOut = () => {
         remove();
         navigate('/');
     }
-
-    const handleChange = (event) => {
-        setNum(event.target.value);
-    };
 
     const handleRedirect = () => {
         navigate(-1)
@@ -787,10 +798,6 @@ const DefaultLight = ({ children }) => {
         handleLoginInfo()
         fetchCompanyInfo()
     }, [])
-
-    const [date, setDate] = React.useState(null);
-
-    const [locale] = React.useState('ko');
 
     useEffect(() => {
         fetchWeather()
@@ -820,7 +827,7 @@ const DefaultLight = ({ children }) => {
                             <div className={classes.rightMenu}></div>
                         </Grid>
                         <Grid className={classes.mainAsside} item xs={3}>
-                            <SettingsButton className={classes.mainMenuButton} onClick={() => setUploadPopupShow(true)}></SettingsButton>
+                            <SettingsButton className={classes.mainMenuButton} onClick={() => setOpenDialog(true)}></SettingsButton>
                             <AdminButton className={classes.mainMenuButton}></AdminButton>
                             <div className={classes.userInformation}>
                                 <div>{loginInfo?.loginId} / <span>{loginInfo?.roleName}</span></div>
@@ -829,34 +836,24 @@ const DefaultLight = ({ children }) => {
                             <LogButton className={classes.mainMenuButton} onClick={handleLogOut}>
                                 <LogoutIcon fontSize="large" sx={{ color: 'gray' }}></LogoutIcon>
                             </LogButton>
-                            <div className={uploadPopupShow ? classes.uploadPopup : classes.uploadPopupClose}>
-                                <ClosePopupButton2 onClick={() => setUploadPopupShow(false)}></ClosePopupButton2>
-                                <div className={classes.uploadInfo}>
-                                    <img src={alertIcon} alt="alert icon" />
-                                    <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
-                                    <UnknownButton2>전체사업장</UnknownButton2>
-                                </div>
-                                <span></span>
-                                <span>의무조치별 상세 점검</span>
-                                <span></span>
-                                <div className={classes.uploadSearch}>
-                                    <TextField
-                                        id="standard-basic"
-                                        placeholder="여수공장 시정조치요청 파일.hwp"
-                                        variant="outlined"
-                                        sx={{ width: 250 }}
-                                        className={classes.popupTextField}
-                                    />
-                                    <SearchButton></SearchButton>
-                                    <UnknownButton1 onClick={() => setUploadPopupShow(false)}>전체사업장</UnknownButton1>
-                                </div>
-                            </div>
                         </Grid>
                     </Grid>
 
                 </Grid>
 
             </Grid>
+            <UploadDialog
+                open={openDialog}
+                onClose={handleDialogClose}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+            />
+            <Overlay show={okPopupShow}>
+                <Ok
+                    show={okPopupShow}
+                    message={{ RET_CODE: "0201", RET_DESC: "저장성공" }}
+                    onConfirm={() => setOkPopupShow(false)} />
+            </Overlay>
             {/* <BackButton onClick={() => handleRedirect()}></BackButton> */}
             <div className={classes.pageOverlay}></div>
             <div className={classes.sectionWrap}>

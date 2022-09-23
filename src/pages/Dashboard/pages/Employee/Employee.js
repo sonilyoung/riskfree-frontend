@@ -97,6 +97,10 @@ import useGeolocation from "react-hook-geolocation";
 import Dialog from '../../../../dialogs/Upload/Upload';
 
 import icoFile from '../../../../assets/images/ic_file.png';
+import { UploadDialog, UploadImageDialog } from '../../../../dialogs/Upload';
+import { Overlay } from '../../../../components/Overlay';
+import Ok from '../../../../components/MessageBox/Ok';
+import { useFileUploadMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
 
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
@@ -1969,7 +1973,6 @@ const Employee = () => {
     // treba da se menja
     const [attachedFileId, setAttachedFileId] = useState(1);
     const [targetBaselineId, setTargetBaselineId] = useState("");
-    const [popupPrompt, setPopupPrompt] = useState(false);
     const dispatch = useDispatch();
 
     const [userInfo, setUserInfo] = useState({
@@ -1980,7 +1983,39 @@ const Employee = () => {
     const [noticeHotList, setNoticeHotList] = useState([]);
     const [getNoticeHotList] = useGetNoticeHotListMutation();
 
+    const [openDialog, setOpenDialog] = useState({
+        openDialog: false,
+        openImageDialog: false
+    });
+    const [okPopupShow, setOkPopupShow] = useState(false);
+    const [okPopupMessage, setOkPopupMessage] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const [fileUpload] = useFileUploadMutation();
+
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
+
+
+    const handleDialogClose = (prop) => {
+        setOpenDialog({ ...openDialog, [prop]: false });
+    }
+
+    const handleDialogFileUpload = async (prop) => {
+        const response = await fileUpload({
+            files: selectedFile
+        })
+        console.log(response);
+        setOkPopupMessage(response.data);
+        handleDialogClose(prop);
+        if (prop === 'openDialog') {
+            setOkPopupShow(true);
+        }
+    }
+
+    const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    }
 
     const handleNotificationPopupsShow = (notificationIndex) => {
         const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex != index);
@@ -2006,8 +2041,7 @@ const Employee = () => {
 
     const handleInsertBaseLineDataUpdate = async () => {
         const response = await insertBaseLineDataCopy({});
-        console.log(response);
-        setPopupPrompt(false);
+        setOkPopupMessage(response.data);
     }
 
     const handleUpdateUserCompany = async () => {
@@ -2354,7 +2388,7 @@ const Employee = () => {
                                                 <span>로고등록</span>
                                             </div>
                                             <div>
-                                                <UploadImageButton>찾아보기</UploadImageButton>
+                                                <UploadImageButton onClick={() => setOpenDialog({ ...openDialog, openImageDialog: true })}>찾아보기</UploadImageButton>
                                                 <Alert
                                                     icon={<img src={alertIcon} alt="alert icon" />}
                                                     severity="error">
@@ -2508,18 +2542,8 @@ const Employee = () => {
                                         <span></span>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setShowUploadPopup(true)}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setPopupPrompt(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
-                                        <div className={popupPrompt ? classes.popupPrompt : classes.popupPromptClose}>
-                                            <Alert
-                                                icon={<img src={alertIcon} alt="alert icon" />}
-                                                severity="error">
-                                                {/* <strong>2차 차수의 DATA</strong> */}
-                                                데이터가 존재합니다. 덮어 쓰시겠습니까
-                                            </Alert>
-                                            <PromptButtonBlue onClick={() => handleInsertBaseLineDataUpdate()}>예</PromptButtonBlue>
-                                            <PromptButtonWhite onClick={() => setPopupPrompt(false)} >예</PromptButtonWhite>
-                                        </div>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setOpenDialog({ ...openDialog, openDialog: true })}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setOkPopupShow(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
                                     </div>
                                     <div className={classes.headerPopFooter}>
                                         <PopupFootButton onClick={() => handleInsertBaseline()}>저장하기</PopupFootButton>
@@ -3130,6 +3154,30 @@ const Employee = () => {
                     </div>
                 </>))}
             </Grid >
+            <UploadDialog
+                open={openDialog.openDialog}
+                onClose={handleDialogClose}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+            />
+            <Overlay show={okPopupShow}>
+                <Ok
+                    show={okPopupShow}
+                    message={{ RET_CODE: "0201", RET_DESC: "저장성공" }}
+                    onConfirm={() => setOkPopupShow(false)} />
+            </Overlay>
+            <UploadImageDialog
+                open={openDialog.openImageDialog}
+                onClose={handleDialogClose}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+            />
+            <Overlay show={okPopupShow}>
+                <Ok
+                    show={okPopupShow}
+                    message={{ RET_CODE: "0201", RET_DESC: "저장성공" }}
+                    onConfirm={() => setOkPopupShow(false)} />
+            </Overlay>
         </WideLayout >
     );
 };

@@ -25,7 +25,6 @@ import Select from '@mui/material/Select';
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
 import { useGetLoginInfoMutation, useGetCompanyInfoMutation, useGetWeatherMutation, useInsertBaselineMutation, useInsertBaseLineDataCopyMutation, useGetBaselineListMutation, useCloseMutation, useUpdateUserCompanyMutation, useInsertBaseLineDataUpdateMutation } from '../../hooks/api/MainManagement/MainManagement';
-// import { useFileUploadMutation } from '../../hooks/api/FileManagement/FileManagement';
 import { remove } from '../../services/core/User/Token';
 import { useUserToken } from '../../hooks/core/UserToken';
 
@@ -53,6 +52,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectBaselineId, setBaselineId } from '../../slices/selections/MainSelection';
 import { useLocalStorage } from '../../hooks/misc/LocalStorage';
 import moment from 'moment';
+import { useFileUploadMutation } from '../../hooks/api/FileManagement/FIleManagement';
+import Ok from '../../components/MessageBox/Ok';
+import { Overlay } from '../../components/Overlay';
+import { UploadDialog, UploadImageDialog } from '../../dialogs/Upload';
 
 
 const useStyles = makeStyles(() => ({
@@ -790,6 +793,37 @@ const Default = ({ children }) => {
     const [longitude, setLongitude] = useState("")
     const [weatherData, setWeatherData] = useState({})
 
+    const [openDialog, setOpenDialog] = useState({
+        openDialog: false,
+        openImageDialog: false
+    });
+    const [okPopupShow, setOkPopupShow] = useState(false);
+    const [okPopupMessage, setOkPopupMessage] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const [fileUpload] = useFileUploadMutation();
+
+    const handleDialogClose = (prop) => {
+        setOpenDialog({ ...openDialog, [prop]: false });
+    }
+
+    const handleDialogFileUpload = async (prop) => {
+        const response = await fileUpload({
+            files: selectedFile
+        })
+        console.log(response);
+        setOkPopupMessage(response.data);
+        handleDialogClose(prop);
+        if (prop === 'openDialog') {
+            setOkPopupShow(true);
+        }
+    }
+
+    const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    }
+
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
         setLoginInfo(response.data.RET_DATA)
@@ -945,7 +979,7 @@ const Default = ({ children }) => {
                                                         <span>로고등록</span>
                                                     </div>
                                                     <div>
-                                                        <UploadImageButton>찾아보기</UploadImageButton>
+                                                        <UploadImageButton onClick={() => setOpenDialog({ ...openDialog, openImageDialog: true })}>찾아보기</UploadImageButton>
                                                         <Alert
                                                             icon={<img src={alertIcon} alt="alert icon" />}
                                                             severity="error">
@@ -1107,8 +1141,8 @@ const Default = ({ children }) => {
                                                 <span></span>
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
-                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setShowUploadPopup(true)}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
-                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setPopupPrompt(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
+                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setOpenDialog({ ...openDialog, openDialog: true })}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
+                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setOkPopupShow(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
                                                 <div className={popupPrompt ? classes.popupPrompt : classes.popupPromptClose}>
                                                     <Alert
                                                         icon={<img src={alertIcon} alt="alert icon" />}
@@ -1166,6 +1200,30 @@ const Default = ({ children }) => {
                 </Grid>
 
             </Grid>
+            <UploadDialog
+                open={openDialog.openDialog}
+                onClose={handleDialogClose}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+            />
+            <Overlay show={okPopupShow}>
+                <Ok
+                    show={okPopupShow}
+                    message={{ RET_CODE: "0201", RET_DESC: "저장성공" }}
+                    onConfirm={() => setOkPopupShow(false)} />
+            </Overlay>
+            <UploadImageDialog
+                open={openDialog.openImageDialog}
+                onClose={handleDialogClose}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+            />
+            <Overlay show={okPopupShow}>
+                <Ok
+                    show={okPopupShow}
+                    message={{ RET_CODE: "0201", RET_DESC: "저장성공" }}
+                    onConfirm={() => setOkPopupShow(false)} />
+            </Overlay>
             <BackButton onClick={() => handleRedirect()}></BackButton>
             <div className={classes.pageOverlay}></div>
             <div className={classes.sectionWrap}>

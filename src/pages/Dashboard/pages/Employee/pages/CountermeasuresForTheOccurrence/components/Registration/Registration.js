@@ -37,6 +37,8 @@ import 'dayjs/locale/ko';
 
 import { useFileUploadMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+import { Overlay } from '../../../../../../../../components/Overlay';
+import Ok from '../../../../../../../../components/MessageBox/Ok';
 
 
 const useStyles = makeStyles(() => ({
@@ -365,6 +367,8 @@ const Registration = () => {
         "performBeforeId": "",
         "performAfterId": ""
     })
+    const [okPopupShow, setOkPopupShow] = useState(false);
+    const [okPopupMessage, setOkPopupMessage] = useState(null);
 
     const [accident, setAccident] = useState({
         accLevelCd: "",
@@ -444,8 +448,8 @@ const Registration = () => {
 
     const handleAccidentInsert = () => {
         accidentInsert(accident)
-            .then((res) => console.log(res))
-            .then(() => handleRedirect());
+            .then((response) => setOkPopupMessage(response.data))
+            .then(() => setOkPopupShow(true));
     };
 
     const [date, setDate] = React.useState(null);
@@ -1065,6 +1069,13 @@ const Registration = () => {
                 // onDownload={handleDialogFileDownload}
                 enableDownload={false}
             />
+            <Overlay show={okPopupShow}>
+                <Ok
+                    show={okPopupShow}
+                    message={{ RET_CODE: "0201", RET_DESC: "저장성공" }}
+                    // message={okPopupMessage}
+                    onConfirm={() => setOkPopupShow(false)} />
+            </Overlay>
         </DefaultLayout>
     );
 };

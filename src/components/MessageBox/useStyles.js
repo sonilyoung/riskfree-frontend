@@ -59,7 +59,7 @@ const useStyles = makeStyles(() => ({
         }
     },
     noticePopup: {
-        display: 'none',
+        // display: 'none',
         position: 'absolute',
         top: '50%',
         left: '50%',
@@ -108,6 +108,9 @@ const useStyles = makeStyles(() => ({
             },
         }
     },
+    noticePopupClose: {
+        display: 'none',
+    }
 }));
 
 export { useStyles };

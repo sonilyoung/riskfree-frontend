@@ -69,26 +69,16 @@ const SearchButton = styled(ButtonUnstyled)`
     }   
 `;
 
-function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDownload }) {
+function UploadImage({ open, onClose, onInputChange, onUpload, enableDownload, onDownload }) {
     const classes = useStyles();
 
     return (
         <Overlay show={open}>
             <div className={open ? classes.uploadPopup : classes.uploadPopupClose}>
                 <div className={classes.uploadPopup}>
-                    <ClosePopupButton2 onClick={() => onClose('openDialog')}></ClosePopupButton2>
-                    <div className={classes.uploadInfo}>
-                        <img src={alertIcon} alt="alert icon" />
-                        <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
-                        <UnknownButton2 onClick={() => {
-                            if (enableDownload) {
-                                onDownload()
-                            }
-                        }}>전체사업장</UnknownButton2>
-                    </div>
-                    <span></span>
-                    <span>의무조치별 상세 점검</span>
-                    <span></span>
+                    <ClosePopupButton2 onClick={() => onClose('openImageDialog')}></ClosePopupButton2>
+                    <h3>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지</h3>
+                    <p>의무조치별 상세 점검</p>
                     <div className={classes.uploadSearch}>
                         <TextField
                             id="standard-basic"
@@ -98,7 +88,7 @@ function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDown
                             type="file"
                             onChange={onInputChange}
                         />
-                        <UnknownButton1 onClick={() => onUpload('openDialog')}>전체사업장</UnknownButton1>
+                        <UnknownButton1 onClick={() => onUpload('openImageDialog')}>전체사업장</UnknownButton1>
                     </div>
                 </div>
             </div>
@@ -108,4 +98,4 @@ function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDown
 
 }
 
-export default Upload;
+export default UploadImage;

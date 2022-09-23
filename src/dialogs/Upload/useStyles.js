@@ -97,7 +97,7 @@ const useStyles = makeStyles(() => ({
                 background: '#00adef url(' + searchIcon + ') no-repeat 50% 50%',
                 '&:hover': {
                     background: '#3a5298 url(' + searchIcon + ') no-repeat 50% 50%',
-                } 
+                }
             },
         },
         '& fieldset': {
