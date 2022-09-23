@@ -26,6 +26,7 @@ import noImg from '../../../../../../../../assets/images/ic_no_image.png';
 import { useLawViewMutation } from "../../../../../../../../hooks/api/LawImprovementsManagement/LawImprovementsManagement";
 import { useLawDeleteMutation } from "../../../../../../../../hooks/api/LawImprovementsManagement/LawImprovementsManagement";
 import { DefaultLayout } from "../../../../../../../../layouts/Default";
+import { useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -334,6 +335,9 @@ const View = () => {
     const { id } = useParams()
     const [law, setLaw] = useState({})
     const [promptPopupShow, setPromptPopupShow] = useState(false);
+    const [filePathBefore, setFilePathBefore] = useState("")
+    const [filePathAfter, setFilePathAfter] = useState("")
+    const [getFileInfo] = useGetFileInfoMutation()
 
     const handleRedirect = () => {
         navigate(
@@ -344,7 +348,14 @@ const View = () => {
     const handleLawView = async () => {
         const response = await lawView(id)
         setLaw(response.data.RET_DATA)
-        console.log(response)
+        if (response.data.RET_DATA.performBeforeId) {
+            const responseFileInfoBefore = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.performBeforeId), fileSn: 1 })
+            setFilePathBefore(responseFileInfoBefore.data.RET_DATA.filePath + "/" + responseFileInfoBefore.data.RET_DATA.saveFileName)
+        }
+        if (response.data.RET_DATA.performAfterId) {
+            const responseFileInfoAfter = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.performAfterId), fileSn: 1 })
+            setFilePathAfter(responseFileInfoAfter.data.RET_DATA.filePath + "/" + responseFileInfoAfter.data.RET_DATA.saveFileName)
+        }
     };
 
     const handleLawDelete = () => {
@@ -389,7 +400,11 @@ const View = () => {
                                 </div>
                                 <div className={classes.rowTitle}>명령구분</div>
                                 <div className={classes.rowInfo}>
-                                    {(law && law.cmmdOrgName001) || (law && law.cmmdOrgName002) || (law && law.cmmdOrgName003) || (law && law.cmmdOrgName004) || (law && law.cmmdOrgName005) || (law && law.cmmdOrgName006)}
+                                    {law && Object.keys(law).map(cmmdOrg => {
+                                        if (cmmdOrg.includes("cmmdOrgName0") && law[cmmdOrg] != undefined) {
+                                            return law[cmmdOrg]
+                                        }
+                                    }).filter(e => !!e).join(", ")}
                                 </div>
                             </div>
                         </div>
@@ -447,7 +462,7 @@ const View = () => {
                                         /> */}
                                         {/* <UploadButton>찾아보기</UploadButton> */}
                                         <div className={classes.imgPreview}>
-                                            {/* <img src={imgPrev} alt="uploaded image" /> */}
+                                            {filePathBefore && <img height={350} src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${filePathBefore}`} alt="beforeImg" />}
                                         </div>
                                     </div>
                                 </div>
@@ -464,7 +479,7 @@ const View = () => {
                                         /> */}
                                         {/* <UploadButton>찾아보기</UploadButton> */}
                                         <div className={classes.imgPreview}>
-                                            {/* <img src={noImg} alt="no image" /> */}
+                                            {filePathAfter && <img height={350} src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${filePathAfter}`} alt="AfterImg" />}
                                         </div>
                                     </div>
                                 </div>

@@ -38,6 +38,8 @@ import { UploadDialog } from '../../../../../../../../dialogs/Upload';
 import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 import { useFileDownMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const useStyles = makeStyles(() => ({
     pageWrap: {
         '& >div:not($listTitle, $footerButtons)': {
@@ -393,20 +395,7 @@ const Registration = () => {
 
     async function handleDialogFileDownload() {
         const fileId = improvement[dialogId]
-        const fileSerialNumber = 1
-        const response = await fileDown({ atchFileId: fileId,  fileSn: fileSerialNumber})
-
-        const url = window.URL.createObjectURL(new Blob([response]))
-        //const url = "blob:http://tbs-a.thebridgesoft.com:8102/038f9d38-ecc6-4077-ab04-b9d745b0354e"
-        console.log(url)
-        
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', 'profile.png')
-        document.body.appendChild(link)
-        link.click()
-        link.remove()
-        window.URL.revokeObjectURL(url)
+        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
     }
 
     const handleDialogClose = () => {

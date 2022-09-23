@@ -37,8 +37,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 
-import { useFileUploadMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
+import { useFileUploadMutation, useFileDownMutation, useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -262,6 +265,9 @@ const useStyles = makeStyles(() => ({
             paddingLeft: '0',
         }
     },
+    activeReportBtn: {
+        backgroundColor: "#9099a1 !important"
+    }
 }));
 
 const AccidentReportButton = styled(ButtonUnstyled)`
@@ -373,19 +379,23 @@ const Update = () => {
         "recvUserName": "",
         "sameAccidentInjury": null
     })
+    const [finalReportId, setFinalReportId] = useState(null)
+    const [initReportId, setInitReportId] = useState(null)
+    const [performAfterId, setPerformAfterId] = useState(null)
+    const [performBeforeId, setPerformBeforeId] = useState(null)
+    const [dialogId, setDialogId] = useState("")
+    const [filePath, setFilePath] = useState({
+        "performBeforeId": "",
+        "performAfterId": ""
+    })
+    const [fileDown] = useFileDownMutation()
     const [fileUpload] = useFileUploadMutation()
+    const [getFileInfo] = useGetFileInfoMutation()
 
     const [locale] = React.useState('ko');
 
     const handleDialogClose = () => {
         setOpenDialog(false);
-    }
-
-    const handleDialogFileUpload = async (file) => {
-        const response = await fileUpload({
-            files: selectedFile
-        })
-        console.log(response);
     }
 
     const handleDialogInputChange = (event) => {
@@ -399,8 +409,36 @@ const Update = () => {
     }
 
     const fetchAccidentView = async () => {
+        let filePathMain = {}
         const response = await accidentView(updateid)
         setAccident(response.data.RET_DATA)
+        for (const path in filePath) {
+            let fileInfo = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA[path]), fileSn: 1 })
+            filePathMain[path] = fileInfo.data.RET_DATA.originalFileName
+        }
+        setFilePath(filePathMain)
+        console.log(filePathMain)
+    }
+
+    const handleDialogFileUpload = async () => {
+        let formData = new FormData();
+        formData.append("files", selectedFile)
+        handleDialogClose()
+        const response = await fileUpload(formData)
+        const fileId = response.data.RET_DATA[0].atchFileId
+        setAccident({ ...accident, [dialogId]: parseInt(fileId) })
+        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+    }
+
+    async function handleDialogFileDownload() {
+        const fileId = accident[dialogId]
+        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+    }
+
+    const handleDialogOpen = (event) => {
+        setOpenDialog(true);
+        setDialogId(event.target.id);
+        console.log(event.target.id)
     }
 
     const handleUpdate = () => {
@@ -417,15 +455,15 @@ const Update = () => {
                 "accidentId": accident.accidentId,
                 "accidentTypeCd": accident.accidentTypeCd,
                 "deathToll": accident.deathToll,
-                "finalReportId": null,
-                "initReportId": null,
+                "finalReportId": accident.finalReportId,
+                "initReportId": accident.initReportId,
                 "jobDeseaseToll": accident.jobDeseaseToll,
                 "managerName": accident.managerName,
                 "occurDate": accident.occurDate,
                 "occurPlace": accident.occurPlace,
                 "occurReason": accident.occurReason,
-                "performAfterId": null,
-                "performBeforeId": null,
+                "performAfterId": accident.performAfterId,
+                "performBeforeId": accident.performBeforeId,
                 "preventCn": accident.preventCn,
                 "recvDate": accident.recvDate,
                 "recvFormCd": accident.recvFormCd,
@@ -446,6 +484,10 @@ const Update = () => {
         window.scrollTo(0, 0);
         fetchAccidentView()
     }, [])
+
+    useEffect(() => {
+        console.log(accident)
+    }, [filePath])
 
     return (
         <DefaultLayout>
@@ -812,8 +854,8 @@ const Update = () => {
                                     />
                                 </div>
                                 <div className={classes.rowInfo}>
-                                    <AccidentReportButton sx={{ marginRight: '10px' }} onClick={e => setOpenDialog(true)}>초기사고 보고서</AccidentReportButton>
-                                    <AccidentReportButton onClick={e => setOpenDialog(true)}>최종사고 보고서</AccidentReportButton>
+                                    <AccidentReportButton sx={{ marginRight: "10px" }} id="initReportId" onClick={handleDialogOpen} className={accident.initReportId && classes.activeReportBtn}>초기사고 보고서</AccidentReportButton>
+                                    <AccidentReportButton id="finalReportId" onClick={handleDialogOpen} className={accident.finalReportId && classes.activeReportBtn}>최종사고 보고서</AccidentReportButton>
                                 </div>
                             </div>
                         </div>
@@ -844,12 +886,12 @@ const Update = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value="20220607사고등록 전 사진.jpg"
+                                            value={filePath.performBeforeId ?? ""}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
+                                        <UploadButton id="performBeforeId" onClick={handleDialogOpen}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev} alt="uploaded image" />
                                         </div> */}
@@ -861,12 +903,12 @@ const Update = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
+                                            value={filePath.performAfterId ?? ""}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
+                                        <UploadButton id="performAfterId" onClick={handleDialogOpen}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={noImg} alt="no image" />
                                         </div> */}
@@ -886,6 +928,8 @@ const Update = () => {
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
+                enableDownload={true}
+                onDownload={handleDialogFileDownload}
             />
         </DefaultLayout >
 

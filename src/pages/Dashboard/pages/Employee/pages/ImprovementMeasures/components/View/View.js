@@ -476,13 +476,13 @@ const Registration = () => {
                                 <div>
                                     <div>조치 전</div>
                                     <div>
-                                        {filePathBefore && <img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${filePathBefore}`} alt="beforeImg" />}
+                                        {filePathBefore && <img height={350} src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${filePathBefore}`} alt="beforeImg" />}
                                     </div>
                                 </div>
                                 <div>
                                     <div>조치 후</div>
                                     <div>
-                                        {filePathAfter && <img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${filePathAfter}`} alt="beforeImg" />}
+                                        {filePathAfter && <img height={350} src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${filePathAfter}`} alt="AfterImg" />}
                                     </div>
                                 </div>
                             </div>

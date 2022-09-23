@@ -29,6 +29,8 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
 import { useAccidentViewMutation, useAccidentDeleteMutation } from '../../../../../../../../hooks/api/AccidentManagement/AccidentManagement';
+import { useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
+
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -289,9 +291,10 @@ const useStyles = makeStyles(() => ({
         '& img': {
             padding: '20px 20px 10px 20px',
         }
+    },
+    activeReportBtn: {
+        backgroundColor: "#9099a1 !important"
     }
-
-
 }));
 
 const AccidentReportButton = styled(ButtonUnstyled)`
@@ -368,7 +371,10 @@ const View = () => {
     const [accidentView] = useAccidentViewMutation()
     const [accidentDelete] = useAccidentDeleteMutation()
     const [accident, setAccident] = useState({});
+    const [getFileInfo] = useGetFileInfoMutation()
     const [promptPopupShow, setPromptPopupShow] = useState(false);
+    const [filePathBefore, setFilePathBefore] = useState("")
+    const [filePathAfter, setFilePathAfter] = useState("")
 
     const handleRedirect = () => {
         navigate("/dashboard/employee/accident-countermeasures-implementation/list")
@@ -377,7 +383,24 @@ const View = () => {
     const fetchAccidentView = async () => {
         const response = await accidentView(id)
         setAccident(response.data.RET_DATA)
+        if (response.data.RET_DATA.performBeforeId) {
+            const responseFileInfoBefore = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.performBeforeId), fileSn: 1 })
+            setFilePathBefore(responseFileInfoBefore.data.RET_DATA.filePath + "/" + responseFileInfoBefore.data.RET_DATA.saveFileName)
+        }
+        if (response.data.RET_DATA.performAfterId) {
+            const responseFileInfoAfter = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.performAfterId), fileSn: 1 })
+            setFilePathAfter(responseFileInfoAfter.data.RET_DATA.filePath + "/" + responseFileInfoAfter.data.RET_DATA.saveFileName)
+        }
+        // if (response.data.RET_DATA.reqFileId) {
+        //     const responseFileInfoExel = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.reqFileId), fileSn: 1 })
+        //     setFileNameExel(responseFileInfoExel.data.RET_DATA.originalFileName)
+        // }
     }
+
+    console.log(accident)
+
+
+
     const handleDelete = () => {
         accidentDelete(id)
             .then(() => setPromptPopupShow(false))
@@ -410,7 +433,11 @@ const View = () => {
                                 </div>
                                 <div className={classes.rowTitle}>접수유형</div>
                                 <div className={classes.rowInfo}>
-                                    {(accident && accident.accType001) || (accident && accident.accType002) || (accident && accident.accType003) || (accident && accident.accType004) || (accident && accident.accType005) || (accident && accident.accType006)}
+                                    {accident && Object.keys(accident).map(recvType => {
+                                        if (recvType.includes("recvType0") && accident[recvType] != undefined) {
+                                            return accident[recvType]
+                                        }
+                                    }).filter(e => !!e).join(", ")}
                                 </div>
                             </div>
                         </div>
@@ -438,7 +465,11 @@ const View = () => {
                                 </div>
                                 <div className={classes.rowTitle}>사고유형</div>
                                 <div className={classes.rowInfo}>
-                                    {(accident && accident.accType001) || (accident && accident.accType002) || (accident && accident.accType003) || (accident && accident.accType004) || (accident && accident.accType005) || (accident && accident.accType006)}
+                                    {accident && Object.keys(accident).map(accType => {
+                                        if (accType.includes("accType0") && accident[accType] != undefined) {
+                                            return accident[accType]
+                                        }
+                                    }).filter(e => !!e).join(", ")}
                                 </div>
                                 <div className={classes.rowTitle}>사고등급</div>
                                 <div className={classes.rowInfo}>
@@ -518,8 +549,8 @@ const View = () => {
                                     {accident && accident.occurReason}
                                 </div>
                                 <div className={classes.rowInfo}>
-                                    <AccidentReportButton sx={{ marginRight: '10px' }}>초기사고 보고서</AccidentReportButton>
-                                    <AccidentReportButton>최종사고 보고서</AccidentReportButton>
+                                    <AccidentReportButton sx={{ marginRight: '10px' }} className={accident.initReportId && classes.activeReportBtn}>초기사고 보고서</AccidentReportButton>
+                                    <AccidentReportButton className={accident.finalReportId && classes.activeReportBtn}>최종사고 보고서</AccidentReportButton>
                                 </div>
                             </div>
                         </div>
@@ -550,7 +581,7 @@ const View = () => {
                                         /> */}
                                         {/* <UploadButton>찾아보기</UploadButton> */}
                                         <div className={classes.imgPreview}>
-                                            {/* <img src={imgPrev} alt="uploaded image" /> */}
+                                            {filePathBefore && <img height={350} src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${filePathBefore}`} alt="beforeImg" />}
                                         </div>
                                     </div>
                                 </div>
@@ -567,7 +598,7 @@ const View = () => {
                                         /> */}
                                         {/* <UploadButton>찾아보기</UploadButton> */}
                                         <div className={classes.imgPreview}>
-                                            {/* <img src={noImg} alt="no image" /> */}
+                                            {filePathAfter && <img height={350} src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${filePathAfter}`} alt="AfterImg" />}
                                         </div>
                                     </div>
                                 </div>

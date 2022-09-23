@@ -318,6 +318,13 @@ const Registration = () => {
     const [recvUserName, setRecvUserName] = useState("")
     const [openDialog, setOpenDialog] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
+    const [performAfterId, setPerformAfterId] = useState(null)
+    const [performBeforeId, setPerformBeforeId] = useState(null)
+    const [dialogId, setDialogId] = useState("")
+    const [filePath, setFilePath] = useState({
+        "performBeforeId": "",
+        "performAfterId": ""
+    })
 
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -359,16 +366,26 @@ const Registration = () => {
         setOpenDialog(false);
     }
 
-    const handleDialogFileUpload = async (file) => {
-        const response = await fileUpload({
-            files: selectedFile
-        })
-        console.log(response);
+    const handleDialogOpen = (event) => {
+        setOpenDialog(true);
+        setDialogId(event.target.id);
+        console.log(event.target.id)
     }
 
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        console.log(law)
+    }
+
+    const handleDialogFileUpload = async () => {
+        let formData = new FormData();
+        formData.append("files", selectedFile)
+        const response = await fileUpload(formData)
+        const fileId = response.data.RET_DATA[0].atchFileId
+        setLaw({ ...law, [dialogId]: fileId })
+        handleDialogClose()
+        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0]?.originalFileName })
     }
 
     const handleRedirect = () => {
@@ -676,12 +693,12 @@ const Registration = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
+                                            value={filePath.performBeforeId ?? ""}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
+                                        <UploadButton id="performBeforeId" onClick={handleDialogOpen}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev} alt="uploaded image" />
                                         </div> */}
@@ -693,12 +710,12 @@ const Registration = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
+                                            value={filePath.performAfterId ?? ""}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             disabled
                                         />
-                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
+                                        <UploadButton id="performAfterId" onClick={handleDialogOpen}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={noImg} alt="no image" />
                                         </div> */}

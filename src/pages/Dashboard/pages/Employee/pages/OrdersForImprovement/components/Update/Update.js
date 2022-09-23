@@ -37,8 +37,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 
-import { useFileUploadMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
+import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -319,6 +322,14 @@ const Update = () => {
     const [openDialog, setOpenDialog] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
     const todaysDate = moment().format("YYYY-MM-DD")
+    const [filePathBefore, setFilePathBefore] = useState("")
+    const [filePathAfter, setFilePathAfter] = useState("")
+    const [getFileInfo] = useGetFileInfoMutation()
+    const [dialogId, setDialogId] = useState("")
+    const [filePath, setFilePath] = useState({
+        "performBeforeId": "",
+        "performAfterId": ""
+    })
 
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -359,9 +370,15 @@ const Update = () => {
         );
     };
 
-    const handleLawView = async () => {
+    const fetchLawView = async () => {
+        let filePathMain = {}
         const response = await lawView(updateid)
         setLaw(response.data.RET_DATA)
+        for (const path in filePath) {
+            let fileInfo = await getFileInfo({ atchFileId: 434, fileSn: 1 })
+            filePathMain[path] = fileInfo.data.RET_DATA.originalFileName
+        }
+        setFilePath(filePathMain)
     };
 
     const handleLawUpdate = async () => {
@@ -394,11 +411,20 @@ const Update = () => {
         setOpenDialog(false);
     }
 
-    const handleDialogFileUpload = async (file) => {
-        const response = await fileUpload({
-            files: selectedFile
-        })
-        console.log(response);
+    const handleDialogFileUpload = async () => {
+        let formData = new FormData();
+        formData.append("files", selectedFile)
+        const response = await fileUpload(formData)
+        const fileId = response.data.RET_DATA[0].atchFileId
+        setLaw({ ...law, [dialogId]: fileId })
+        handleDialogClose()
+        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0]?.originalFileName })
+    }
+
+    async function handleDialogFileDownload() {
+        console.log("Hellooo")
+        const fileId = law[dialogId]
+        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
     }
 
     const handleDialogInputChange = (event) => {
@@ -406,16 +432,23 @@ const Update = () => {
         setSelectedFile(file);
     }
 
-    const [date1, setDate1] = React.useState(null),
-        [date2, setDate2] = React.useState(null);
+    const handleDialogOpen = (event) => {
+        setOpenDialog(true);
+        setDialogId(event.target.id);
+        console.log(event.target.id)
+    }
 
     const [locale] = React.useState('ko');
 
     useEffect(() => {
         window.scrollTo(0, 0);
         handleLoginInfo()
-        handleLawView()
+        fetchLawView()
     }, [])
+
+    useEffect(() => {
+
+    }, [filePath])
 
     return (
         <DefaultLayout>
@@ -698,12 +731,11 @@ const Update = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value="20220607사고등록 전 사진.jpg"
+                                            value={filePath.performBeforeId ?? ""}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
-                                            disabled
                                         />
-                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
+                                        <UploadButton id="performBeforeId" onClick={handleDialogOpen}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={imgPrev} alt="uploaded image" />
                                         </div> */}
@@ -715,12 +747,11 @@ const Update = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value="이미지를 등록하세요 (gif, jpg, png 파일허용)"
+                                            value={filePath.performAfterId ?? ""}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
-                                            disabled
                                         />
-                                        <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
+                                        <UploadButton id="performAfterId" onClick={handleDialogOpen}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
                                             <img src={noImg} alt="no image" />
                                         </div> */}
@@ -745,6 +776,8 @@ const Update = () => {
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
+                enableDownload={true}
+                onDownload={handleDialogFileDownload}
             />
         </DefaultLayout>
     );
