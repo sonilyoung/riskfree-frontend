@@ -3,7 +3,7 @@ import searchIcon from '../../assets/images/ic_search.png';
 
 const useStyles = makeStyles(() => ({
     uploadPopup: {
-        position: 'absolute',
+        position: 'fixed',
         zIndex: '1000',
         top: '50%',
         left: '50%',

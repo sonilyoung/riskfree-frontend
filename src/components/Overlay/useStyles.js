@@ -2,7 +2,7 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles(() => ({
     popupOverlay: {
-        position: 'absolute',
+        position: 'fixed',
         top: '0px',
         left: '0px',
         width: '100vw',
