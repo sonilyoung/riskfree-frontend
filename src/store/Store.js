@@ -15,6 +15,7 @@ import { lawImprovementsManagement } from '../hooks/api/LawImprovementsManagemen
 import { relatedLawManagement } from '../hooks/api/RelatedLawManagement/RelatedLawManagement';
 import { safeWorkManagement } from '../hooks/api/SafeWorkManagement/SafeWorkManagement';
 import { fileManagement } from '../hooks/api/FileManagement/FIleManagement';
+import { excelController } from '../hooks/api/ExcelController/ExcelController'
 
 export const store = configureStore({
     reducer: {
@@ -33,6 +34,7 @@ export const store = configureStore({
         [relatedLawManagement.reducerPath]: relatedLawManagement.reducer,
         [safeWorkManagement.reducerPath]: safeWorkManagement.reducer,
         [fileManagement.reducerPath]: fileManagement.reducer,
+        [excelController.reducerPath]: excelController.reducer,
         devTools: process.env.NODE_ENV === 'development',
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()
@@ -49,6 +51,7 @@ export const store = configureStore({
         .concat(relatedLawManagement.middleware)
         .concat(safeWorkManagement.middleware)
         .concat(fileManagement.middleware)
+        .concat(excelController.middleware)
 
 });
 

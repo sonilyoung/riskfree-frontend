@@ -45,6 +45,12 @@ import { useGetCommCodeListMutation } from '../../../../hooks/api/CommCodeManage
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import useUserURLRedirect from '../../../../hooks/core/UserURLRedirect/UserURLRedirect';
+import { CleaningServices } from '@mui/icons-material';
+import { useFileUploadMutation, useFileDownMutation, useGetFileInfoMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
+import { UploadDialog } from '../../../../dialogs/Upload';
+
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -363,14 +369,16 @@ const useStyles = makeStyles(() => ({
         background: '#eeeff7',
         overflow: 'hidden',
         '&.regMember': {
-            top: '180px',
+            position: 'fixed',
+            top: '100px',
             left: '560px',
         },
         '&.regMemberClose': {
             display: "none"
         },
         '&.infoMember': {
-            top: '109px',
+            position: 'fixed',
+            top: '90px',
             left: '560px',
             '& $headNest $dataNest': {
                 background: '#c8ddf2'
@@ -709,6 +717,12 @@ const SystemAdministrator = () => {
     const [subscribersWorkplaceSelectList, setSubscribersWorkplaceSelectList] = useState([]);
     const [subscriberInsertEmailBeforeSign, setSubscriberInsertEmailBeforeSign] = useState("")
     const [subscriberInsertEmailAfterSign, setSubscriberInsertEmailAfterSign] = useState("")
+    const [dialogId, setDialogId] = useState("")
+    const [filePath, setFilePath] = useState({
+        "contractFileId": ""
+    })
+    const [openDialog, setOpenDialog] = useState(false)
+    const [selectedFile, setSelectedFile] = useState(null)
     const [subscriberInsert, setSubscriberInsert] = useState({
         "companyName": "",
         "contractAmount": "",
@@ -756,16 +770,18 @@ const SystemAdministrator = () => {
     });
     const [codeGroup1, setCodeGroup1] = useState([]);
     const [codeGroup2, setCodeGroup2] = useState([]);
-    const [codeGroup3, setCodeGroup3] = useState([]);    
+    const [codeGroup3, setCodeGroup3] = useState([]);
     const getPath = useUserURLRedirect();
     const [plusButtons, setPlusButtons] = useState([]);
     const [plusButtonId, setPlusButtonId] = useState(0);
+    const [getFileInfo] = useGetFileInfoMutation()
+    const [fileUpload] = useFileUploadMutation()
 
     const handlePlusButtonClick = (buttonId, companyId) => {
         const plusButtonsChangedState = plusButtons?.map(button => {
 
-            if(button.clicked === true){
-                return{...button, clicked : false, plus : true}
+            if (button.clicked === true) {
+                return { ...button, clicked: false, plus: true }
             }
 
             if (button.id !== buttonId) {
@@ -828,6 +844,7 @@ const SystemAdministrator = () => {
     }
 
     const fetchSubscriberView = async (workplaceId, userId) => {
+        let filePathMain = {}
         const response = await subscribersView(`${workplaceId}&userId=${userId}`);
         const managerTelWithOutHyphen = !!(response.data.RET_DATA) && response.data.RET_DATA?.managerTel?.split("-").join("");
         setManagerTel({
@@ -842,6 +859,10 @@ const SystemAdministrator = () => {
         setContractStartDate(response.data.RET_DATA?.contractStartDate);
         setContractEndDate(response.data.RET_DATA?.contractEndDate);
         setSubscriberView(!!(response.data.RET_DATA) && response?.data?.RET_DATA);
+        let fileInfo = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA["contractFileId"]), fileSn: 1 })
+        console.log(response.data.RET_DATA)
+        filePathMain["contractFileId"] = fileInfo.data.RET_DATA.originalFileName
+        setFilePath(filePathMain)
     }
 
 
@@ -866,6 +887,7 @@ const SystemAdministrator = () => {
         fetchSubscribersList();
         setRegMemberPop(false);
         setSubscriberInsert({});
+        setFilePath({ ...filePath, "contractFileId": "" })
     }
 
     const handleSubscribersUpdate = async () => {
@@ -893,12 +915,47 @@ const SystemAdministrator = () => {
         setUserInfoPop(false);
     }
 
+    const handleDialogClose = () => {
+        setOpenDialog(false);
+    }
+
+    const handleDialogOpen = (event) => {
+        setOpenDialog(true);
+        setDialogId(event.target.id);
+        console.log(event.target.id)
+    }
+
+    const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    }
+
+    const handleDialogFileUpload = async () => {
+        let formData = new FormData();
+        formData.append("files", selectedFile)
+        console.log(selectedFile)
+        const response = await fileUpload(formData)
+        const fileId = response.data.RET_DATA[0].atchFileId
+        setSubscriberInsert({ ...subscriberInsert, [dialogId]: fileId })
+        console.log(response.data.RET_DATA[0].originalFileName)
+        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0]?.originalFileName })
+        handleDialogClose()
+    }
+
+    async function handleDialogFileDownload() {
+        const fileId = subscriberView[dialogId]
+        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+    }
+    console.log(subscriberInsert)
     useEffect(() => {
         fetchSubscribersList();
         fetchCommCodeListGroup1();
         fetchCommCodeListGroup2();
         fetchCommCodeListGroup3();
     }, []);
+
+    // useEffect(() => {
+    // }, [filePath])
 
     return (
         <DefaultLightLayout>
@@ -967,11 +1024,11 @@ const SystemAdministrator = () => {
                                     setUserInfoPop(true);
                                     fetchSubscriberView(subscriber.workplaceId, subscriber.userId);
                                 }}>
-                                    
+
                                     {!!plusButtons && !!plusButtons?.length && plusButtons?.map((button, btnIndex) => {
                                         if (btnIndex === index && subscriber.rowCount > 1) {
                                             return <div className={classes.tableData}><button onClick={() => handlePlusButtonClick(button.id, subscriber.companyId)}>{button.plus ? "+" : "–"}</button>{index + 1}</div>
-                                        }else if(btnIndex === 1 && subscriber.rowCount === 1){
+                                        } else if (btnIndex === 1 && subscriber.rowCount === 1) {
                                             return <div className={classes.tableData}>{index + 1}</div>
                                         }
                                     })}
@@ -988,11 +1045,14 @@ const SystemAdministrator = () => {
                                     <div className={classes.tableData}>{subscriber.contractDate}</div>
                                     <div className={classes.tableData}>{subscriber.status}</div>
                                     <div className={classes.tableData}>{subscriber.contractFileld}</div>
-                                    <div className={classes.tableData} onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}><img src={monitor} alt="monitor" /></div>
+                                    <div className={classes.tableData} /*onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}*/><img src={monitor} alt="monitor" /></div>
                                 </div>
                                 {!!subscribersWorkplaceSelectList && !!subscribersWorkplaceSelectList?.length && subscribersWorkplaceSelectList?.map((subscribersWorkplaceItem, subscribersWorkplaceItemIndex) => {
                                     if (index + 1 === plusButtonId) {
-                                        return (<div className={handleTableRowClasses() ? classes.tableRow : classes.tableRowClose} >
+                                        return (<div className={handleTableRowClasses() ? classes.tableRow : classes.tableRowClose} onDoubleClick={() => {
+                                            setUserInfoPop(true);
+                                            fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId)
+                                        }} >
                                             <div className={classes.tableData}></div>
                                             <div className={classes.tableData}>{subscribersWorkplaceItem.companyName}</div>
                                             <div className={classes.tableData}>{subscribersWorkplaceItem.workplaceName}</div>
@@ -1143,7 +1203,9 @@ const SystemAdministrator = () => {
                                         variant="outlined"
                                         value={subscriberInsert.contractAmount}
                                         className={classes.tableTextField}
-                                        onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "contractAmount": e.target.value })}
+                                        onChange={(e) => {
+                                            setSubscriberInsert({ ...subscriberInsert, "contractAmount": e.target.value })
+                                        }}
                                         sx={{ width: 180 }}
                                     />
                                     &nbsp;원
@@ -1189,8 +1251,8 @@ const SystemAdministrator = () => {
                                         value={subscriberInsert.statusCd}
                                         onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "statusCd": e.target.value })}
                                     >
-                                        <MenuItem value="1">사용</MenuItem>
-                                        <MenuItem value="0">사용중지</MenuItem>
+                                        <MenuItem value={1}>사용</MenuItem>
+                                        <MenuItem value={0}>사용중지</MenuItem>
                                     </Select>
                                 </div>
                             </div>
@@ -1199,12 +1261,12 @@ const SystemAdministrator = () => {
                                 <div className={classes.popupData}>
                                     <TextField
                                         variant="outlined"
-                                        value={subscriberInsert.contractFileId}
+                                        value={filePath.contractFileId ?? ""}
                                         className={classes.tableTextField}
-                                        onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "contractFileId": e.target.value })}
+                                        // onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "contractFileId": e.target.value })}
                                         sx={{ width: 300 }}
                                     />
-                                    <SearchUserButton>찾아보기</SearchUserButton>
+                                    <SearchUserButton id="contractFileId" onClick={handleDialogOpen}>찾아보기</SearchUserButton>
                                 </div>
                             </div>
                         </div>
@@ -1412,12 +1474,12 @@ const SystemAdministrator = () => {
                                 <div className={classes.popupData}>
                                     <TextField
                                         variant="outlined"
-                                        value={subscriberInsert.contractFileId}
+                                        value={filePath.contractFileId ?? ""}
                                         className={classes.tableTextField}
-                                        onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "contractFileId": e.target.value })}
+                                        // onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "contractFileId": e.target.value })}
                                         sx={{ width: 300 }}
                                     />
-                                    <SearchUserButton>찾아보기</SearchUserButton>
+                                    <SearchUserButton id="contractFileId" onClick={handleDialogOpen}>찾아보기</SearchUserButton>
                                 </div>
                             </div>
                         </div>
@@ -1451,10 +1513,18 @@ const SystemAdministrator = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
                     <div>총 게시글 <strong>{!!(subscribersList) && !!(subscribersList.length) && subscribersList[0]?.totalCount}</strong> 건</div>
-                    <Stack spacing={2}>                        
+                    <Stack spacing={2}>
                     </Stack>
                 </Grid>
             </Grid>
+            <UploadDialog
+                open={openDialog}
+                onClose={handleDialogClose}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+                onDownload={handleDialogFileDownload}
+                enableDownload={true}
+            />
         </DefaultLightLayout >
     );
 };

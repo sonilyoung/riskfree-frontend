@@ -48,6 +48,7 @@ import { Overlay } from '../../components/Overlay';
 import Ok from '../../components/MessageBox/Ok';
 import { useFileUploadMutation } from '../../hooks/api/FileManagement/FIleManagement';
 import { UploadDialog } from '../../dialogs/Upload';
+import { useExcelUploadMutation } from '../../hooks/api/ExcelController/ExcelController';
 
 
 const useStyles = makeStyles(() => ({
@@ -740,17 +741,17 @@ const DefaultLight = ({ children }) => {
     const [getWeather] = useGetWeatherMutation()
     const [weatherData, setWeatherData] = useState({})
 
-    const [fileUpload] = useFileUploadMutation();
+    const [excelUpload] = useExcelUploadMutation()
 
     const handleDialogClose = () => {
         setOpenDialog(false);
     }
 
     const handleDialogFileUpload = async (file) => {
-        const response = await fileUpload({
-            files: selectedFile
-        })
-        console.log(response);
+        let formData = new FormData();
+        formData.append("files", selectedFile)
+        handleDialogClose()
+        const response = await excelUpload(formData)
         setOkPopupMessage(response.data);
         handleDialogClose(false);
         setOkPopupShow(true);

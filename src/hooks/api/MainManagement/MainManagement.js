@@ -234,6 +234,13 @@ export const mainManagement = createApi({
                 body: body,
             }),
         }),
+        getEssentialDutyVerision: builder.mutation({
+            query: (body) => ({
+                url: 'main/updateUserCompany',
+                method: 'POST',
+                body: body,
+            })
+        })
 
 
     }),
