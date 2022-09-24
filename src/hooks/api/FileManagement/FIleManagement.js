@@ -55,10 +55,10 @@ export const fileManagement = createApi({
         }),
         getFileInfo: builder.mutation({
             query: ({ atchFileId, fileSn }) => ({
-                url: `/file/getFileInfo?atchFileId=${atchFileId}&fileSn=${fileSn}`,
+                url: `file/getFileInfo?atchFileId=${atchFileId}&fileSn=${fileSn}`,
                 method: 'GET',
             })
-        }),
+        })
     }),
 });
 

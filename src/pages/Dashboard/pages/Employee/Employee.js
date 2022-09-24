@@ -82,7 +82,7 @@ import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation, useUpdateSafetyFileMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useUserToken } from '../../../../hooks/core/UserToken';
 import moment from 'moment'
 
@@ -2004,6 +2004,7 @@ const Employee = () => {
 
     const [fileUpload] = useFileUploadMutation();
     const [getFileInfo] = useGetFileInfoMutation()
+    const [updateSafetyFile] = useUpdateSafetyFileMutation()
 
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
 
@@ -2032,6 +2033,7 @@ const Employee = () => {
         const response = await insertBaseline(baselineInfo);
         fetchBaselineList();
         setBaselineInfo({ "baselineName": "", "baselineStart": null, "baselineEnd": null })
+        const responseSaferyFile = await updateSafetyFile({ "attachFileId": employeeFiles.safetyFileUpload, })
     }
 
     const handleInsertBaseLineDataCopy = async () => {
