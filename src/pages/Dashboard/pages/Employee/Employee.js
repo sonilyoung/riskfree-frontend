@@ -2008,18 +2008,6 @@ const Employee = () => {
 
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
 
-
-    // const handleDialogFileUpload = async (prop) => {
-    //     const response = await fileUpload({
-    //         files: selectedFile
-    //     })
-    //     console.log(response);
-    //     setOkPopupMessage(response.data);
-    //     handleDialogClose(prop);
-    //     if (prop === 'openDialog') {
-    //         setOkPopupShow(true);
-    //     }
-    // }
     const handleNotificationPopupsShow = (notificationIndex) => {
         const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex != index);
         setNoticeHotList(notificationPopupList);
@@ -2156,8 +2144,6 @@ const Employee = () => {
         setEssentialRates(response?.data?.RET_DATA)
     }
 
-    const [date, setDate] = React.useState(null);
-
     const [locale] = React.useState('ko');
 
     const handleSlickCircleColor = (percentage) => {
@@ -2216,38 +2202,48 @@ const Employee = () => {
     }
 
     const fetchInspectionDocs = async () => {
-        const response = await getInspectionsDocs({
-            "articleNo": clickedDuty
-        })
-        setInspectionsDocs(response?.data?.RET_DATA)
+        if (clickedDuty) {
+            const response = await getInspectionsDocs({
+                "articleNo": clickedDuty
+            })
+            setInspectionsDocs(response?.data?.RET_DATA)
+        }
     }
 
     const fetchDutyCycle = async () => {
-        const response = await getDutyCycle({
-            'articleNo': clickedDuty
-        })
-        setDutyCycle(response?.data?.RET_DATA)
+        if (clickedDuty) {
+            const response = await getDutyCycle({
+                'articleNo': clickedDuty
+            })
+            setDutyCycle(response?.data?.RET_DATA)
+        }
     }
 
     const fetchDutyAssigned = async () => {
-        const response = await getDutyAssigned({
-            'articleNo': clickedDuty
-        })
-        setDutyAssigned(response?.data?.RET_DATA)
+        if (clickedDuty) {
+            const response = await getDutyAssigned({
+                'articleNo': clickedDuty
+            })
+            setDutyAssigned(response?.data?.RET_DATA)
+        }
     }
 
     const fetchRelatedArticle = async () => {
-        const response = await getRelatedArticle({
-            'articleNo': clickedDuty
-        })
-        setRelatedArticle(response?.data?.RET_DATA)
+        if (clickedDuty) {
+            const response = await getRelatedArticle({
+                'articleNo': clickedDuty
+            })
+            setRelatedArticle(response?.data?.RET_DATA)
+        }
     }
 
     const fetchGuideLine = async () => {
-        const response = await getGuideLine({
-            'articleNo': clickedDuty
-        })
-        setGuideLine(response?.data?.RET_DATA)
+        if (clickedDuty) {
+            const response = await getGuideLine({
+                'articleNo': clickedDuty
+            })
+            setGuideLine(response?.data?.RET_DATA)
+        }
     }
 
     const fetchWorkplaceList = async () => {
