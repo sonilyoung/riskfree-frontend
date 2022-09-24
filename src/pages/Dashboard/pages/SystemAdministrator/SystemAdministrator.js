@@ -1051,6 +1051,7 @@ const SystemAdministrator = () => {
                                     if (index + 1 === plusButtonId) {
                                         return (<div className={handleTableRowClasses() ? classes.tableRow : classes.tableRowClose} onDoubleClick={() => {
                                             setUserInfoPop(true);
+                                            console.log(subscribersWorkplaceItem.userId)
                                             fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId)
                                         }} >
                                             <div className={classes.tableData}></div>

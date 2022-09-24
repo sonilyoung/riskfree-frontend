@@ -50,6 +50,8 @@ import { useFileUploadMutation } from '../../hooks/api/FileManagement/FIleManage
 import { UploadDialog } from '../../dialogs/Upload';
 import { useExcelUploadMutation } from '../../hooks/api/ExcelController/ExcelController';
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 
 const useStyles = makeStyles(() => ({
     bodyWrap: {
@@ -742,6 +744,21 @@ const DefaultLight = ({ children }) => {
     const [weatherData, setWeatherData] = useState({})
 
     const [excelUpload] = useExcelUploadMutation()
+    const [fileUpload] = useFileUploadMutation()
+
+    const [dialogId, setDialogId] = useState("")
+    const [filePath, setFilePath] = useState({
+        "excelFileId": "",
+    })
+    const [excel, setExcel] = useState({
+        "excelFileId": "",
+    })
+
+    const handleDialogOpen = (event) => {
+        setOpenDialog(true);
+        setDialogId(event.target.id);
+        console.log(event.target.id)
+    }
 
     const handleDialogClose = () => {
         setOpenDialog(false);
@@ -751,10 +768,17 @@ const DefaultLight = ({ children }) => {
         let formData = new FormData();
         formData.append("files", selectedFile)
         handleDialogClose()
-        const response = await excelUpload(formData)
+        const response = await fileUpload(formData)
+        const fileId = response.data.RET_DATA[0].atchFileId
+        setExcel({ ...excel, [dialogId]: parseInt(fileId) })
         setOkPopupMessage(response.data);
         handleDialogClose(false);
         setOkPopupShow(true);
+    }
+
+    async function handleDialogFileDownload() {
+        const fileId = excel[dialogId]
+        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
     }
 
     const handleDialogInputChange = (event) => {
@@ -828,7 +852,7 @@ const DefaultLight = ({ children }) => {
                             <div className={classes.rightMenu}></div>
                         </Grid>
                         <Grid className={classes.mainAsside} item xs={3}>
-                            <SettingsButton className={classes.mainMenuButton} onClick={() => setOpenDialog(true)}></SettingsButton>
+                            <SettingsButton className={classes.mainMenuButton} id={"excelFileId"} onClick={handleDialogOpen}></SettingsButton>
                             <AdminButton className={classes.mainMenuButton}></AdminButton>
                             <div className={classes.userInformation}>
                                 <div>{loginInfo?.loginId} / <span>{loginInfo?.roleName}</span></div>
@@ -848,6 +872,8 @@ const DefaultLight = ({ children }) => {
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
+                onDownload={handleDialogFileDownload}
+                enableDownload={true}
             />
             <Overlay show={okPopupShow}>
                 <Ok

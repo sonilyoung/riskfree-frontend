@@ -100,7 +100,9 @@ import icoFile from '../../../../assets/images/ic_file.png';
 import { UploadDialog, UploadImageDialog } from '../../../../dialogs/Upload';
 import { Overlay } from '../../../../components/Overlay';
 import Ok from '../../../../components/MessageBox/Ok';
-import { useFileUploadMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
+import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
+
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
@@ -1983,40 +1985,40 @@ const Employee = () => {
     const [noticeHotList, setNoticeHotList] = useState([]);
     const [getNoticeHotList] = useGetNoticeHotListMutation();
 
-    const [openDialog, setOpenDialog] = useState({
-        openDialog: false,
-        openImageDialog: false
-    });
+    const [openDialog, setOpenDialog] = useState(false)
     const [okPopupShow, setOkPopupShow] = useState(false);
     const [okPopupMessage, setOkPopupMessage] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
 
+    const [dialogId, setDialogId] = useState("")
+    const [filePath, setFilePath] = useState({
+        "performBeforeId": "",
+        "performAfterId": ""
+    })
+
+    const [employeeFiles, setEmployeeFiles] = useState({
+        "safetyFileUpload": "",
+        "logoImgUpload": "",
+        "documentFileUpload": ""
+    })
+
     const [fileUpload] = useFileUploadMutation();
+    const [getFileInfo] = useGetFileInfoMutation()
 
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
 
 
-    const handleDialogClose = (prop) => {
-        setOpenDialog({ ...openDialog, [prop]: false });
-    }
-
-    const handleDialogFileUpload = async (prop) => {
-        const response = await fileUpload({
-            files: selectedFile
-        })
-        console.log(response);
-        setOkPopupMessage(response.data);
-        handleDialogClose(prop);
-        if (prop === 'openDialog') {
-            setOkPopupShow(true);
-        }
-    }
-
-    const handleDialogInputChange = (event) => {
-        const file = event.target.files[0];
-        setSelectedFile(file);
-    }
-
+    // const handleDialogFileUpload = async (prop) => {
+    //     const response = await fileUpload({
+    //         files: selectedFile
+    //     })
+    //     console.log(response);
+    //     setOkPopupMessage(response.data);
+    //     handleDialogClose(prop);
+    //     if (prop === 'openDialog') {
+    //         setOkPopupShow(true);
+    //     }
+    // }
     const handleNotificationPopupsShow = (notificationIndex) => {
         const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex != index);
         setNoticeHotList(notificationPopupList);
@@ -2037,6 +2039,7 @@ const Employee = () => {
             "targetBaselineId": targetBaselineId,
             "baselineId": currentBaselineId
         });
+        setOkPopupMessage(response.data);
     }
 
     const handleInsertBaseLineDataUpdate = async () => {
@@ -2046,7 +2049,7 @@ const Employee = () => {
 
     const handleUpdateUserCompany = async () => {
         const response = await updateUserCompany({
-            "attachFileId": attachedFileId,
+            "attachFileId": employeeFiles.logoImgUpload,
             "missionStatements": missionStatement,
             "safetyGoal": safetyGoal
         });
@@ -2268,6 +2271,36 @@ const Employee = () => {
         setNoticeHotList(response?.data?.RET_DATA);
     }
 
+    const handleDialogFileUpload = async () => {
+        let formData = new FormData();
+        formData.append("files", selectedFile)
+        handleDialogClose()
+        const response = await fileUpload(formData)
+        const fileId = response.data.RET_DATA[0].atchFileId
+        setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
+        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+    }
+
+    async function handleDialogFileDownload() {
+        const fileId = employeeFiles[dialogId]
+        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+    }
+
+    const handleDialogOpen = (event) => {
+        setOpenDialog(true);
+        setDialogId(event.target.id);
+        console.log(event.target.id)
+    }
+
+    const handleDialogClose = () => {
+        setOpenDialog(false);
+    }
+
+    const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    }
+
     useEffect(() => {
         fetchBaseline()
     }, [currentBaselineId])
@@ -2385,10 +2418,10 @@ const Employee = () => {
                                         />
                                         <div className={classes.preFootPop}>
                                             <div>
-                                                <span>로고등록</span>
+                                                <span>{filePath.logoImgUpload}</span>
                                             </div>
                                             <div>
-                                                <UploadImageButton onClick={() => setOpenDialog({ ...openDialog, openImageDialog: true })}>찾아보기</UploadImageButton>
+                                                <UploadImageButton id={"logoImgUpload"} onClick={handleDialogOpen}>찾아보기</UploadImageButton>
                                                 <Alert
                                                     icon={<img src={alertIcon} alt="alert icon" />}
                                                     severity="error">
@@ -2542,7 +2575,7 @@ const Employee = () => {
                                         <span></span>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setOpenDialog({ ...openDialog, openDialog: true })}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" id="safetyFileUpload" onClick={handleDialogOpen}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setOkPopupShow(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
                                     </div>
                                     <div className={classes.headerPopFooter}>
@@ -3155,10 +3188,12 @@ const Employee = () => {
                 </>))}
             </Grid >
             <UploadDialog
-                open={openDialog.openDialog}
+                open={openDialog}
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
+                onDownload={handleDialogFileDownload}
+                enableDownload={true}
             />
             <Overlay show={okPopupShow}>
                 <Ok
@@ -3166,12 +3201,6 @@ const Employee = () => {
                     message={{ RET_CODE: "0201", RET_DESC: "저장성공" }}
                     onConfirm={() => setOkPopupShow(false)} />
             </Overlay>
-            <UploadImageDialog
-                open={openDialog.openImageDialog}
-                onClose={handleDialogClose}
-                onInputChange={handleDialogInputChange}
-                onUpload={handleDialogFileUpload}
-            />
             <Overlay show={okPopupShow}>
                 <Ok
                     show={okPopupShow}
