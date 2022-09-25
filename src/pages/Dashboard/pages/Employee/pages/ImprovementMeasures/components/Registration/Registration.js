@@ -107,6 +107,7 @@ const Registration = () => {
         const response = await fileUpload(formData)
         const fileId = response.data.RET_DATA[0].atchFileId
         setImprovement({ ...improvement, [dialogId]: fileId })
+        handleDialogClose()
         setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
     }
 
@@ -132,8 +133,9 @@ const Registration = () => {
 
     const getGeneratedKey = async () => {
         const response = await getGenerateKey()
-        setGeneratedKey(response?.data?.RET_DATA?.improveKey)
+        setImprovement({ ...improvement, "improveNo": response?.data?.RET_DATA?.improveKey })
     }
+
 
     const [locale] = React.useState('ko');
     useEffect(() => {
@@ -142,6 +144,7 @@ const Registration = () => {
     }, [])
 
     useEffect(() => {
+        console.log(improvement)
     }, [filePath.reqFileId, filePath.actionBeforeId, filePath.actionAfterId])
 
     return (
