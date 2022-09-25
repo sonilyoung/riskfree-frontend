@@ -24,7 +24,7 @@ import Select from '@mui/material/Select';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
-import { useGetLoginInfoMutation, useGetCompanyInfoMutation, useGetWeatherMutation, useInsertBaselineMutation, useInsertBaseLineDataCopyMutation, useGetBaselineListMutation, useCloseMutation, useUpdateUserCompanyMutation, useInsertBaseLineDataUpdateMutation } from '../../hooks/api/MainManagement/MainManagement';
+import { useUpdateSafetyFileMutation, useGetLoginInfoMutation, useGetCompanyInfoMutation, useGetWeatherMutation, useInsertBaselineMutation, useInsertBaseLineDataCopyMutation, useGetBaselineListMutation, useCloseMutation, useUpdateUserCompanyMutation, useInsertBaseLineDataUpdateMutation } from '../../hooks/api/MainManagement/MainManagement';
 import { remove } from '../../services/core/User/Token';
 import { useUserToken } from '../../hooks/core/UserToken';
 
@@ -52,10 +52,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectBaselineId, setBaselineId } from '../../slices/selections/MainSelection';
 import { useLocalStorage } from '../../hooks/misc/LocalStorage';
 import moment from 'moment';
-import { useFileUploadMutation } from '../../hooks/api/FileManagement/FIleManagement';
+import { useFileUploadMutation, useGetFileInfoMutation } from '../../hooks/api/FileManagement/FIleManagement';
 import Ok from '../../components/MessageBox/Ok';
 import { Overlay } from '../../components/Overlay';
 import { UploadDialog, UploadImageDialog } from '../../dialogs/Upload';
+
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 
 const useStyles = makeStyles(() => ({
@@ -793,30 +795,51 @@ const Default = ({ children }) => {
     const [longitude, setLongitude] = useState("")
     const [weatherData, setWeatherData] = useState({})
 
-    const [openDialog, setOpenDialog] = useState({
-        openDialog: false,
-        openImageDialog: false
-    });
     const [okPopupShow, setOkPopupShow] = useState(false);
     const [okPopupMessage, setOkPopupMessage] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [openDialog, setOpenDialog] = useState(false)
+
+    const [employeeFiles, setEmployeeFiles] = useState({
+        "safetyFileUpload": "",
+        "logoImgUpload": "",
+        "documentFileUpload": ""
+    })
+
+    const [dialogId, setDialogId] = useState("")
+    const [filePath, setFilePath] = useState({
+        "performBeforeId": "",
+        "performAfterId": ""
+    })
 
     const [fileUpload] = useFileUploadMutation();
+    const [getFileInfo] = useGetFileInfoMutation()
+    const [updateSafetyFile] = useUpdateSafetyFileMutation()
 
-    const handleDialogClose = (prop) => {
-        setOpenDialog({ ...openDialog, [prop]: false });
+
+    const handleDialogFileUpload = async () => {
+        let formData = new FormData();
+        formData.append("files", selectedFile)
+        handleDialogClose()
+        const response = await fileUpload(formData)
+        const fileId = response.data.RET_DATA[0].atchFileId
+        setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
+        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
     }
 
-    const handleDialogFileUpload = async (prop) => {
-        const response = await fileUpload({
-            files: selectedFile
-        })
-        console.log(response);
-        setOkPopupMessage(response.data);
-        handleDialogClose(prop);
-        if (prop === 'openDialog') {
-            setOkPopupShow(true);
-        }
+    async function handleDialogFileDownload() {
+        const fileId = employeeFiles[dialogId]
+        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+    }
+
+    const handleDialogOpen = (event) => {
+        setOpenDialog(true);
+        setDialogId(event.target.id);
+        console.log(event.target.id)
+    }
+
+    const handleDialogClose = () => {
+        setOpenDialog(false);
     }
 
     const handleDialogInputChange = (event) => {
@@ -852,6 +875,8 @@ const Default = ({ children }) => {
         const response = await insertBaseline(baselineInfo);
         fetchBaselineList();
         setBaselineInfo({ "baselineName": "", "baselineStart": null, "baselineEnd": null })
+        const responseSaferyFile = await updateSafetyFile({ "attachFileId": employeeFiles.safetyFileUpload, })
+        // window.localStorage.setItem("safetyFileId", responseSaferyFile.data.RET_DATA.attachFileId)
     }
 
     const handleInsertBaseLineDataCopy = async () => {
@@ -869,11 +894,10 @@ const Default = ({ children }) => {
 
     const handleUpdateUserCompany = async () => {
         const response = await updateUserCompany({
-            "attachFileId": attachedFileId,
+            "attachFileId": employeeFiles.logoImgUpload,
             "missionStatements": missionStatement,
             "safetyGoal": safetyGoal
         });
-        console.log(response);
         fetchCompanyInfo();
         setMissionStatement("");
         setSafetyGoal("");
@@ -976,10 +1000,10 @@ const Default = ({ children }) => {
                                                 />
                                                 <div className={classes.preFootPop}>
                                                     <div>
-                                                        <span>로고등록</span>
+                                                        {filePath.logoImgUpload ? (<span>{filePath.logoImgUpload}</span>) : (<span>로고등록</span>)}
                                                     </div>
                                                     <div>
-                                                        <UploadImageButton onClick={() => setOpenDialog({ ...openDialog, openImageDialog: true })}>찾아보기</UploadImageButton>
+                                                        <UploadImageButton id={"logoImgUpload"} onClick={handleDialogOpen}>찾아보기</UploadImageButton>
                                                         <Alert
                                                             icon={<img src={alertIcon} alt="alert icon" />}
                                                             severity="error">
@@ -1141,7 +1165,7 @@ const Default = ({ children }) => {
                                                 <span></span>
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
-                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setOpenDialog({ ...openDialog, openDialog: true })}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
+                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" id="safetyFileUpload" onClick={handleDialogOpen}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setOkPopupShow(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
                                                 <div className={popupPrompt ? classes.popupPrompt : classes.popupPromptClose}>
                                                     <Alert
@@ -1155,7 +1179,7 @@ const Default = ({ children }) => {
                                                 </div>
                                             </div>
                                             <div className={classes.headerPopFooter}>
-                                                <PopupFootButton onClick={() => handleInsertBaseline()}>저장하기</PopupFootButton>
+                                                <PopupFootButton onClick={handleInsertBaseline}>저장하기</PopupFootButton>
                                             </div>
                                         </div>
                                     </>)
@@ -1200,23 +1224,19 @@ const Default = ({ children }) => {
                 </Grid>
 
             </Grid>
-            <UploadDialog
-                open={openDialog.openDialog}
-                onClose={handleDialogClose}
-                onInputChange={handleDialogInputChange}
-                onUpload={handleDialogFileUpload}
-            />
             <Overlay show={okPopupShow}>
                 <Ok
                     show={okPopupShow}
                     message={{ RET_CODE: "0201", RET_DESC: "저장성공" }}
                     onConfirm={() => setOkPopupShow(false)} />
             </Overlay>
-            <UploadImageDialog
-                open={openDialog.openImageDialog}
+            <UploadDialog
+                open={openDialog}
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
+                onDownload={handleDialogFileDownload}
+                enableDownload={true}
             />
             <Overlay show={okPopupShow}>
                 <Ok

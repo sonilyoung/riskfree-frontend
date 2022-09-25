@@ -2043,7 +2043,6 @@ const Employee = () => {
             "missionStatements": missionStatement,
             "safetyGoal": safetyGoal
         });
-        console.log(response);
         fetchCompanyInfo();
         setMissionStatement("");
         setSafetyGoal("");
@@ -2416,7 +2415,7 @@ const Employee = () => {
                                         />
                                         <div className={classes.preFootPop}>
                                             <div>
-                                                <span>{filePath.logoImgUpload}</span>
+                                                {filePath.logoImgUpload ? (<span>{filePath.logoImgUpload}</span>) : (<span>로고등록</span>)}
                                             </div>
                                             <div>
                                                 <UploadImageButton id={"logoImgUpload"} onClick={handleDialogOpen}>찾아보기</UploadImageButton>
