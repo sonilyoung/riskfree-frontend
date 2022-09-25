@@ -22,7 +22,7 @@ import imgPrev from '../../../../../../../../assets/images/prw_photo.jpg';
 import imgPrev2 from '../../../../../../../../assets/images/prw_photo2.jpg';
 
 import { useGetWorkplaceListMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
-import { useImprovementInsertMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement';
+import { useGetGenerateKeyMutation, useImprovementInsertMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement';
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -67,6 +67,11 @@ const Registration = () => {
         "actionBeforeId": "",
         "actionAfterId": ""
     })
+    const [fileUpload] = useFileUploadMutation();
+    const [fileDown] = useFileDownMutation()
+    const [getGenerateKey] = useGetGenerateKeyMutation()
+    const [generatedKey, setGeneratedKey] = useState("")
+
     const [improvement, setImprovement] = useState(
         {
             "actionAfterId": actionAfterId,
@@ -76,7 +81,7 @@ const Registration = () => {
             "finDate": finDate,
             "improveCn": "",
             "improveId": null,
-            "improveNo": "",
+            "improveNo": generatedKey,
             "insertId": null,
             "reqDate": reqDate,
             "reqFileId": atchFileId,
@@ -86,8 +91,6 @@ const Registration = () => {
             "workplaceId": parseInt(workplaceSelect)
         }
     )
-    const [fileUpload] = useFileUploadMutation();
-    const [fileDown] = useFileDownMutation()
 
     const handleDialogOpen = (event) => {
         setOpenDialog(true);
@@ -96,7 +99,6 @@ const Registration = () => {
 
     const handleDialogClose = () => {
         setOpenDialog(false)
-        console.log(improvement)
     }
 
     const handleDialogFileUpload = async () => {
@@ -106,33 +108,6 @@ const Registration = () => {
         const fileId = response.data.RET_DATA[0].atchFileId
         setImprovement({ ...improvement, [dialogId]: fileId })
         setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
-    }
-
-    async function handleDialogFileDownload() {
-        // TODO: Download is not good practice here. Please ask David tomorrow
-        // const response = await fileDown({ atchFileId, fileSn })
-        // console.log(response)
-        // const url = window.URL.createObjectURL(new Blob([response]))
-        // console.log(url);
-        // if (dialog === "reqFile") {
-        //     setReqFileLink(url)
-        //     console.log(url) 
-        // }
-        // else if (dialog === "actionAfterId") {
-        //     setActionAfterLink(url)
-        //     console.log(url)
-        // }
-        // else if (dialog === "actionBeforeId") {
-        //     setActionBeforeLink(url)
-        //     console.log(url)
-        // }
-        // const link = document.createElement('a')
-        // link.href = url
-        // link.setAttribute('download', fileName)
-        // document.body.appendChild(link)
-        // link.click()
-        // link.remove()
-        // window.URL.revokeObjectURL(url)
     }
 
     const handleDialogInputChange = (event) => {
@@ -155,12 +130,15 @@ const Registration = () => {
             .then(() => handleRedirect())
     }
 
-    const [date1, setDate1] = React.useState(null),
-        [date2, setDate2] = React.useState(null);
+    const getGeneratedKey = async () => {
+        const response = await getGenerateKey()
+        setGeneratedKey(response?.data?.RET_DATA?.improveKey)
+    }
 
     const [locale] = React.useState('ko');
     useEffect(() => {
         fetchComapanyWorkplace()
+        getGeneratedKey()
     }, [])
 
     useEffect(() => {
@@ -200,8 +178,9 @@ const Registration = () => {
                                         id="standard-basic"
                                         variant="outlined"
                                         sx={{ width: 200 }}
+                                        value={generatedKey ?? ""}
                                         className={classes.selectMenu}
-                                        onChange={(event) => setImprovement({ ...improvement, "improveNo": event.target.value })}
+                                    // onChange={(event) => setImprovement({ ...improvement, "improveNo": event.target.value })}
                                     />
                                 </div>
                             </div>
@@ -415,7 +394,7 @@ const Registration = () => {
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
-                onDownload={handleDialogFileDownload}
+                // onDownload={handleDialogFileDownload}
                 enableDownload={false}
             />
         </DefaultLayout>

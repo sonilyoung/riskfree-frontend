@@ -57,7 +57,13 @@ export const improvementsManagement = createApi({
                 method: 'POST',
             }),
         }),
+        getGenerateKey: builder.mutation({
+            query: () => ({
+                url: 'improvement/getGenerateKey',
+                method: 'POST'
+            }),
+        }),
     }),
 });
 
-export const { useImprovementViewMutation, useImprovementUpdateMutation, useImprovementSelectMutation, useImprovementRequestersSelectMutation, useImprovementInsertMutation, useImprovementDeleteMutation } = improvementsManagement;
+export const { useGetGenerateKeyMutation, useImprovementViewMutation, useImprovementUpdateMutation, useImprovementSelectMutation, useImprovementRequestersSelectMutation, useImprovementInsertMutation, useImprovementDeleteMutation } = improvementsManagement;
