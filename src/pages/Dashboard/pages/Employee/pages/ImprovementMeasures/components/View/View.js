@@ -495,6 +495,14 @@ const Registration = () => {
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
             </Grid>
+            <div className={promptPopupShow ? classes.promptPopup : classes.promptPopupClose}>
+                <div>알림</div>
+                <div>삭제 하시겠습니까?</div>
+                <div>
+                    <button onClick={() => setPromptPopupShow(false)} >취소</button>
+                    <button onClick={() => handleDeleteImprovement()}>확인</button>
+                </div>
+            </div>
         </DefaultLayout>
     );
 };
