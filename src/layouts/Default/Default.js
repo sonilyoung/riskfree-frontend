@@ -764,7 +764,6 @@ const Default = ({ children }) => {
     const [getBaselineList] = useGetBaselineListMutation();
     const [close] = useCloseMutation();
     const [updateUserCompany] = useUpdateUserCompanyMutation();
-    // const [fileUpload] = useFileUploadMutation();
 
     const [locale] = React.useState('ko');
     const [date, setDate] = React.useState(null);

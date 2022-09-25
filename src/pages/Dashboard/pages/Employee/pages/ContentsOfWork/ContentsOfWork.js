@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { DefaultLayout } from '../../../../../../layouts/Default';
 
 import Checkbox from '@mui/material/Checkbox';
@@ -51,6 +51,9 @@ import useUserInitialWorkplaceId from '../../../../../../hooks/core/UserInitialW
 import CloseIcon from '@mui/icons-material/Close';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { useDeleteFileMutation } from '../../../../../../hooks/api/FileManagement/FIleManagement';
+import { UploadDialog } from '../../../../../../dialogs/Upload';
+
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -345,7 +348,7 @@ const useStyles = makeStyles(() => ({
     },
     headerPopup: {
         position: 'absolute',
-        zIndex: '5',
+        zIndex: '1',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%,-50%)',
@@ -529,8 +532,8 @@ const useStyles = makeStyles(() => ({
     },
     promptPopup: {
         position: 'absolute',
-        top: '70%',
-        left: '70%',
+        top: '30%',
+        left: '30%',
         width: '300px',
         height: '200px',
         borderRadius: '18px',
@@ -742,7 +745,7 @@ const WorkHistoryList = () => {
 
     const [insertDate, setInsertDate] = useState(null);
     const [username, setUsername] = useState("");
-    const [noticeId, setNoticeId] = useState(null);
+    // const [noticeId, setNoticeId] = useState(null);
     const [registerPopupShow, setRegisterPopupShow] = useState(false);
     const [workplaceId, setWorkplaceId] = useState(getInitialWorkplaceId());
     const [promptPopupShow, setPromptPopupShow] = useState(false);
@@ -751,6 +754,10 @@ const WorkHistoryList = () => {
         "attachedFileId": '',
         "fileSn": ''
     });
+    const [openDialog, setOpenDialog] = useState(false)
+    const [constructionType, setConstructionType] = useState(null)
+    const [attachFileId, setAttachFileId] = useState(null)
+    const [fileIdForDelete, setFileIdForDelete] = useState(null)
 
     const handleAllPopupClose = () => {
         setHide(true);
@@ -758,11 +765,31 @@ const WorkHistoryList = () => {
         setPromptPopupShow(false);
     }
 
-    const handleDeleteFile = async (attachedFileId, fileSn) => {
-        const response = await deleteFile(attachedFileId, fileSn);
+    const handleDeleteFile = async () => {
+        const response = await deleteFile({ "atchFileId": fileIdForDelete, fileSn: 1 });
         console.log(response);
         setPromptPopupShow(false);
+        setHide(true)
     }
+
+    async function handleDialogFileDownload() {
+        window.location = `${BASE_URL}/file/fileDown?atchFileId=${attachFileId}&fileSn=1`;
+    }
+
+    const handleDialogOpen = (id) => {
+        setOpenDialog(true);
+        setAttachFileId(id);
+        console.log(id)
+    }
+
+    const handleDialogClose = () => {
+        setOpenDialog(false);
+    }
+
+    // const handleDialogInputChange = (event) => {
+    //     const file = event.target.files[0];
+    //     setSelectedFile(file);
+    // }
 
     const fetchWorkplaceList = async () => {
         const response = await getWorkplaceList();
@@ -780,21 +807,27 @@ const WorkHistoryList = () => {
         // console.log(workplaceId, insertDate, username);
     }
 
-    const fetchSafeWorkFileTopInfo = async () => {
+    const fetchSafeWorkFileTopInfo = async (noticeId) => {
         const response = await getSafeWorkFileTopInfo({
             "noticeId": noticeId
         });
         setSafeWorkFileTopinfo(response.data.RET_DATA);
-        console.log(response);
+        console.log("FileTopInfo");
     }
 
-    const fetchSafeWorkFileList = async () => {
+    const fetchSafeWorkFileList = async (constructionType) => {
         const response = await getSafeWorkFile({
-            "workplaceId": workplaceId
+            "workplaceId": workplaceId,
+            "constructionType": constructionType
+
         });
         setSafeWorkFileList(response.data.RET_DATA);
-        // console.log(workplaceId);
-        // console.log(response.data.RET_DATA);
+        console.log("SafeWorkFileList");
+    }
+    const handleFileInfo = async (id, constructionType) => {
+        fetchSafeWorkFileList(constructionType)
+        fetchSafeWorkFileTopInfo(id)
+        setHide(false)
     }
 
     useEffect(() => {
@@ -802,10 +835,13 @@ const WorkHistoryList = () => {
         fetchSafeWorkList();
     }, []);
 
+    // useEffect(() => {
+    //     fetchSafeWorkFileTopInfo();
+    //     fetchSafeWorkFileList();
+    // }, [attachFileId]);
+
     useEffect(() => {
-        fetchSafeWorkFileTopInfo();
-        // fetchSafeWorkFileList();
-    }, [noticeId]);
+    }, [])
 
     return (
         <DefaultLayout>
@@ -886,7 +922,7 @@ const WorkHistoryList = () => {
                         </div>
                     </div>
                     {safeWorkList?.length > 0 && safeWorkList.map((safeWorkItem, index) =>
-                    (<div className={classes.tableBody} onClick={() => { setNoticeId(safeWorkItem.noticeId); setHide(false); }}>
+                    (<div className={classes.tableBody}>
                         <div className={classes.tableRow}>
                             <FormControlLabel
                                 control={
@@ -901,13 +937,13 @@ const WorkHistoryList = () => {
                         <div className={classes.tableRow}>{safeWorkItem.workplaceName}</div>
                         <div className={classes.tableRow}>{safeWorkItem.insertDate}</div>
                         <div className={classes.tableRow}>{safeWorkItem.userName}</div>
-                        <div className={classes.tableRow}>{safeWorkItem.fire}</div>
-                        <div className={classes.tableRow}>{safeWorkItem.closeness}</div>
-                        <div className={classes.tableRow}>{safeWorkItem.blackout}</div>
-                        <div className={classes.tableRow}>{safeWorkItem.excavation}</div>
-                        <div className={classes.tableRow}>{safeWorkItem.radiation}</div>
-                        <div className={classes.tableRow}>{safeWorkItem.sue}</div>
-                        <div className={classes.tableRow}>{safeWorkItem.heavy}</div>
+                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 1)}>{safeWorkItem.fire}</div>
+                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 2)}>{safeWorkItem.closeness}</div>
+                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 3)}>{safeWorkItem.blackout}</div>
+                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 4)}>{safeWorkItem.excavation}</div>
+                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 5)}>{safeWorkItem.radiation}</div>
+                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 6)}>{safeWorkItem.sue}</div>
+                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 7)}>{safeWorkItem.heavy}</div>
                         <div className={classes.tableRow}>{safeWorkItem.totalCount}건</div>
                     </div>)
                     )}
@@ -937,52 +973,31 @@ const WorkHistoryList = () => {
                                     <div className={classes.tableRow}>파일명</div>
                                     <div className={classes.tableRow}>다운로드/삭제</div>
                                 </div>
-                                <div className={classes.tableBody}>
-                                    <div className={classes.tableRow}>1</div>
-                                    <div className={classes.tableRow}>공사내역_광명기업_2022033101.xlsx</div>
+                                {safeWorkFileList?.map((file, index) => (<div className={classes.tableBody}>
+                                    <div className={classes.tableRow}>{index + 1}</div>
+                                    <div className={classes.tableRow}>{file.fileName}</div>
                                     <div className={classes.tableRow}>
                                         <RowButton>
-                                            <FileDownloadIcon sx={{ color: '#333' }} onClick={() => setUploadPopupShow(true)}></FileDownloadIcon>
+                                            <FileDownloadIcon sx={{ color: '#333' }} onClick={() => handleDialogOpen(file.attachId)}></FileDownloadIcon>
                                         </RowButton>
                                         <RowButton>
-                                            <CloseIcon sx={{ color: '#333' }} onClick={() => { setPromptPopupShow(true); setDeleteFileParams({ "attachedFileId": "", "fileSn": "" }) }}></CloseIcon>
+                                            <CloseIcon sx={{ color: '#333' }} onClick={() => {
+                                                setPromptPopupShow(true)
+                                                setFileIdForDelete(file.attachId)
+                                            }}></CloseIcon>
                                         </RowButton>
                                     </div>
-                                </div>
-                                <div className={classes.tableBody}>
-                                    <div className={classes.tableRow}>2</div>
-                                    <div className={classes.tableRow}>공사내역_광명기업_2022033101.xlsx</div>
-                                    <div className={classes.tableRow}>
-                                        <RowButton>
-                                            <FileDownloadIcon sx={{ color: '#333' }}></FileDownloadIcon>
-                                        </RowButton>
-                                        <RowButton>
-                                            <CloseIcon sx={{ color: '#333' }} ></CloseIcon>
-                                        </RowButton>
-                                    </div>
-                                </div>
-                                <div className={classes.tableBody}>
-                                    <div className={classes.tableRow}>3</div>
-                                    <div className={classes.tableRow}>공사내역_광명기업_2022033101.xlsx</div>
-                                    <div className={classes.tableRow}>
-                                        <RowButton>
-                                            <FileDownloadIcon sx={{ color: '#333' }}></FileDownloadIcon>
-                                        </RowButton>
-                                        <RowButton>
-                                            <CloseIcon sx={{ color: '#333' }}></CloseIcon>
-                                        </RowButton>
+                                </div>))}
+                                <div className={promptPopupShow ? classes.promptPopup : classes.promptPopupClose}>
+                                    <div>알림</div>
+                                    <div>삭제 하시겠습니까?</div>
+                                    <div>
+                                        <button onClick={() => setPromptPopupShow(false)} >취소</button>
+                                        <button onClick={() => handleDeleteFile()}>확인</button>
                                     </div>
                                 </div>
                             </Grid>
                             <NoButton onClick={() => setHide(true)}>취소</NoButton>
-                        </div>
-                    </div>
-                    <div className={promptPopupShow ? classes.promptPopup : classes.promptPopupClose}>
-                        <div>알림</div>
-                        <div>삭제 하시겠습니까?</div>
-                        <div>
-                            <button onClick={() => setPromptPopupShow(false)} >취소</button>
-                            <button /*onClick={() => handleDeleteFile()}*/>확인</button>
                         </div>
                     </div>
                     <div className={registerPopupShow ? classes.registerUploadPopup : classes.uploadPopupHide}>
@@ -1031,6 +1046,14 @@ const WorkHistoryList = () => {
                     </Stack>
                 </Grid>
             </Grid>
+            <UploadDialog
+                open={openDialog}
+                onClose={handleDialogClose}
+                // onInputChange={handleDialogInputChange}
+                // onUpload={handleDialogFileUpload}
+                onDownload={handleDialogFileDownload}
+                enableDownload={true}
+            />
         </DefaultLayout >
     );
 };
