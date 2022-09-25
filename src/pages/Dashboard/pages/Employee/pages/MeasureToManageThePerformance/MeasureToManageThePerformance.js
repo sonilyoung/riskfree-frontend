@@ -30,8 +30,13 @@ import popupClose2 from '../../../../../../assets/images/btn_popClose2.png';
 import searchIcon from '../../../../../../assets/images/ic_search.png';
 import DefaultLayout from '../../../../../../layouts/Default/Default';
 import { useGetRelatedRawButtonMutation, useGetRelatedRawMutation, useInsertDutyButtonMutation, useUpdateRelatedRawMutation } from '../../../../../../hooks/api/RelatedLawManagement/RelatedLawManagement';
+import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../../hooks/api/FileManagement/FIleManagement';
 import { selectBaselineId } from '../../../../../../slices/selections/MainSelection';
 import { useSelector } from 'react-redux';
+import { UploadDialog } from '../../../../../../dialogs/Upload';
+
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -746,13 +751,61 @@ const MeasureToManageThePerformance = () => {
     const [page, setPage] = useState(1);
     const [toggleList, setToggleList] = useState('one');
 
+    const [files, setFiles] = useState({
+        "safetyFileUpload": "",
+        "logoImgUpload": "",
+        "documentFileUpload": ""
+    })
+
+    const [dialogId, setDialogId] = useState("")
+    const [filePath, setFilePath] = useState({
+        "performBeforeId": "",
+        "performAfterId": ""
+    })
+
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [openDialog, setOpenDialog] = useState(false)
+
+
     const [getRelatedRaw] = useGetRelatedRawMutation();
     const [insertDutyButton] = useInsertDutyButtonMutation();
     const [getRelatedRawButton] = useGetRelatedRawButtonMutation();
     const [updateRelatedRaw] = useUpdateRelatedRawMutation();
+    const [fileUpload] = useFileUploadMutation();
+    const [getFileInfo] = useGetFileInfoMutation()
 
     const currentBaseline = useSelector(selectBaselineId);
     // console.log(currentBaseline);
+
+    const handleDialogFileUpload = async () => {
+        let formData = new FormData();
+        formData.append("files", selectedFile)
+        handleDialogClose()
+        const response = await fileUpload(formData)
+        const fileId = response.data.RET_DATA[0].atchFileId
+        setFiles({ ...files, [dialogId]: parseInt(fileId) })
+        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+    }
+
+    // async function handleDialogFileDownload() {
+    //     const fileId = employeeFiles[dialogId]
+    //     window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+    // }
+
+    const handleDialogOpen = (id) => {
+        setOpenDialog(true);
+        setDialogId(id);
+        console.log(id)
+    }
+
+    const handleDialogClose = () => {
+        setOpenDialog(false);
+    }
+
+    const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    }
 
     const handlePageChange = (event, value) => {
         setPage(value)
@@ -795,6 +848,8 @@ const MeasureToManageThePerformance = () => {
             .then(() => fetchRelatedRawList(lawId));
     }
 
+    // console.log(dialogId)
+
     useEffect(() => {
         fetchRelatedRawList(lawId);
         fetchRelatedRawButtonList();
@@ -810,14 +865,14 @@ const MeasureToManageThePerformance = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.headerButtons}>
                     {!!relatedRawButtonList && relatedRawButtonList.length > 0 && relatedRawButtonList.map(relatedRawButtonItem =>
-                    (<Link to="#" className={classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)} onDoubleClick={() => setPopupButton(true)}>
+                    (<Link to="#" className={classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)} onDoubleClick={() => handleDialogOpen(relatedRawButtonItem.lawButtonId)}>
                         <span>{relatedRawButtonItem?.lawName}</span>
                     </Link>)
                     )}
                     <button className={classes.buttonPlus} onClick={() => setPopupPlusButton(true)}>+</button>
                 </Grid>
                 <Grid className={classes.pageBody} item xs={10.7}>
-                    <div className={popupButton ? classes.uploadPopup : classes.uploadPopupHide} >
+                    {/* <div className={popupButton ? classes.uploadPopup : classes.uploadPopupHide} >
                         <ClosePopupButton2 onClick={() => setPopupButton(false)}></ClosePopupButton2>
                         <div className={classes.uploadInfo}>
                             <img src={alertIcon} alt="alert icon" />
@@ -838,7 +893,7 @@ const MeasureToManageThePerformance = () => {
                             <SearchButton></SearchButton>
                             <UnknownButton1>전체사업장</UnknownButton1>
                         </div>
-                    </div>
+                    </div> */}
                     <div className={popupPlusButton ? classes.uploadPlusPopup : classes.uploadPopupHide} >
                         <ClosePopupButton2 onClick={() => setPopupPlusButton(false)}></ClosePopupButton2>
                         <h3>의무조치별 상세 점검</h3>
@@ -990,6 +1045,14 @@ const MeasureToManageThePerformance = () => {
                         <WhiteButton className={'button-cancelation'} >취소</WhiteButton>
                     </Grid>}
             </Grid>
+            <UploadDialog
+                open={openDialog}
+                onClose={handleDialogClose}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+                // onDownload={handleDialogFileDownload}
+                enableDownload={false}
+            />
         </DefaultLayout >
     );
 };

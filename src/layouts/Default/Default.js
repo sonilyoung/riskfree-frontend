@@ -1236,7 +1236,7 @@ const Default = ({ children }) => {
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
                 onDownload={handleDialogFileDownload}
-                enableDownload={true}
+                enableDownload={false}
             />
             <Overlay show={okPopupShow}>
                 <Ok
