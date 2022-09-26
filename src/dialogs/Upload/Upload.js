@@ -41,7 +41,7 @@ const UnknownButton2 = styled(ButtonUnstyled)`
     width: 200px;
     height: 46px;
     color: #000;
-    font-size: 20px;
+    font-size: 17px;
     letter-spacing: -1.08px;
     border-radius: 46px;
     background: #eff2f9;
@@ -84,7 +84,7 @@ function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDown
                             if (enableDownload) {
                                 onDownload()
                             }
-                        }}>전체사업장</UnknownButton2>
+                        }}>업로드 양식 다운로드</UnknownButton2>
                     </div>
                     <span></span>
                     <span>의무조치별 상세 점검</span>
@@ -98,7 +98,7 @@ function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDown
                             type="file"
                             onChange={onInputChange}
                         />
-                        <UnknownButton1 onClick={() => onUpload('openDialog')}>전체사업장</UnknownButton1>
+                        <UnknownButton1 onClick={() => onUpload('openDialog')}>파일 업로드</UnknownButton1>
                     </div>
                 </div>
             </div>

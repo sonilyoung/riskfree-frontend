@@ -82,7 +82,7 @@ import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 
 import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation, useUpdateSafetyFileMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation, useUpdateSafetyFileMutation, useUpdateScoreMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useUserToken } from '../../../../hooks/core/UserToken';
 import moment from 'moment'
 
@@ -697,6 +697,7 @@ const useStyles = makeStyles(() => ({
                 '& span': {
                     fontSize: '16px',
                     marginLeft: '25px',
+                    cursor: "pointer",
                     '&.green': {
                         color: '#22e004'
                     },
@@ -706,6 +707,15 @@ const useStyles = makeStyles(() => ({
                     '&.red': {
                         color: '#fc4b07'
                     },
+                    '&.empty': {
+                        width: "40px",
+                        height: "20px"
+                    },
+
+                },
+                '& >div': {
+                    display: "flex",
+                    alignItems: "center"
                 }
             }
         },
@@ -1354,7 +1364,7 @@ const useStyles = makeStyles(() => ({
         top: '120px',
         right: '440px',
         width: '140px',
-        height: '240px',
+        height: '220px',
         background: '#fff',
         borderRadius: '30px',
         padding: '25px 25px',
@@ -1362,7 +1372,7 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexWrap: 'wrap',
         alignContent: 'space-between',
-        display: 'none !important',
+        display: 'block',
         '& button': {
             marginTop: '15px'
         }
@@ -1380,6 +1390,9 @@ const useStyles = makeStyles(() => ({
         '& label': {
             marginRight: '10px'
         }
+    },
+    uploadedPopupClose: {
+        display: "none !important"
     },
     boxTable: {
         borderRadius: '6px',
@@ -1856,7 +1869,7 @@ const ClosePopupButton2 = styled(ButtonUnstyled)`
 `;
 
 const SubmitButton = styled(ButtonUnstyled)`
-    width: 150px;
+    width: 84px;
     height: 46px;
     color: #fff;
     font-size: 20px;
@@ -1997,6 +2010,8 @@ const Employee = () => {
     const [inspectionFileId, setInspectionFileId] = useState(null)
     const [articleNoForInspection, setArticleNoForInspection] = useState(null)
     const [uploadFlag, setUploadFlag] = useState(false)
+    const [evaluation, setEvaluation] = useState("")
+    const [evaluationPopup, setEvaluationPopup] = useState(false)
 
     const [dialogId, setDialogId] = useState("")
     const [filePath, setFilePath] = useState({
@@ -2016,6 +2031,7 @@ const Employee = () => {
     const [getFileInfo] = useGetFileInfoMutation()
     const [updateSafetyFile] = useUpdateSafetyFileMutation()
     const [updateDocumentFileId] = useUpdateDocumentFileIdMutation()
+    const [updateScore] = useUpdateScoreMutation()
 
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
 
@@ -2328,6 +2344,24 @@ const Employee = () => {
     }
 
     console.log(inspectionsDocs)
+
+
+    const handleUpdateScore = async () => {
+        const response = await updateScore({
+            "evaluation": evaluation,
+            "articleNo": articleNoForInspection
+        })
+        setEvaluationPopup(false)
+        setUploadFlag(!uploadFlag)
+        setEvaluation("")
+    }
+
+    const handleEvaluation = (evaluation) => {
+        setEvaluationPopup(!evaluationPopup)
+        setEvaluation(evaluation)
+    }
+
+    console.log(evaluation)
 
     useEffect(() => {
         fetchBaseline()
@@ -2831,12 +2865,12 @@ const Employee = () => {
                             <UnknownButton1>전체사업장</UnknownButton1>
                         </div>
                     </div>
-                    <div className={classes.uploadedPopup}>
-                        <FormControl className={classes.searchRadio}>
-                            <RadioGroup row>
+                    <div className={evaluationPopup ? classes.uploadedPopup : classes.uploadedPopupClose}>
+                        <FormControl className={classes.searchRadio} onChange={(e) => setEvaluation(e.target.value)}>
+                            <RadioGroup row value={evaluation ?? ""}>
                                 <FormControlLabel
-                                    value="Opt1"
-                                    label="Opt1"
+                                    value="10"
+                                    label="상"
                                     control={
                                         <Radio
                                             icon={<img src={radioIcon} alt="radio icon" />}
@@ -2845,8 +2879,8 @@ const Employee = () => {
                                     }
                                 />
                                 <FormControlLabel
-                                    value="Opt2"
-                                    label="Opt2"
+                                    value="7"
+                                    label="중"
                                     control={
                                         <Radio
                                             icon={<img src={radioIcon} alt="radio icon" />}
@@ -2855,8 +2889,8 @@ const Employee = () => {
                                     }
                                 />
                                 <FormControlLabel
-                                    value="Opt3"
-                                    label="Opt3"
+                                    value="5"
+                                    label="하"
                                     control={
                                         <Radio
                                             icon={<img src={radioIcon} alt="radio icon" />}
@@ -2866,7 +2900,7 @@ const Employee = () => {
                                 />
                             </RadioGroup>
                         </FormControl>
-                        <SubmitButton>Submit</SubmitButton>
+                        <SubmitButton onClick={handleUpdateScore}>확인</SubmitButton>
                     </div>
                     <div className={classes.managementOrder}>
                         {/* 관리차수<strong>11</strong> 차 :<strong>22.01.01 ~ 22.04.30</strong> */}
@@ -2958,7 +2992,9 @@ const Employee = () => {
                                     <div className={classes.listTitle}><strong>{!!(inspectionsDocs) && inspectionsDocs[0]?.fileCount}</strong>건 /{!!(inspectionsDocs) && !!(inspectionsDocs.length) && inspectionsDocs[0].totalCount}건</div>
                                     <ul className={classes.menuList + ' buttonList'}>
                                         {inspectionsDocs?.map((inspection) => (<><li>
-                                            {inspection.fileId === null ? <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo)}></FileButtonNone> : <FileButtonExis id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo, inspection.fileId)}><span className={'orange'}>중</span></FileButtonExis>}
+                                            <div>{inspection.fileId === null ? <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo)}></FileButtonNone> : <FileButtonExis id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo, inspection.fileId)}></FileButtonExis>}
+                                                {inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'} onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}>상</span>) || (inspection.evaluation === "7" && <span className={'orange'} onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}>중</span>) || (inspection.evaluation === "5" && <span className={'red'} onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}>하</span>) || ((inspection.evaluation === null || inspection.evaluation === "0") && <span className={'empty'} onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}></span>))}
+                                            </div>
                                         </li>
                                             {/* <li>
                                                 <FileButtonExis><span className={'orange'}>중</span></FileButtonExis>
