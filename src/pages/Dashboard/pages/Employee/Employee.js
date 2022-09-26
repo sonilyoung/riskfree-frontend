@@ -100,7 +100,7 @@ import icoFile from '../../../../assets/images/ic_file.png';
 import { UploadDialog, UploadImageDialog } from '../../../../dialogs/Upload';
 import { Overlay } from '../../../../components/Overlay';
 import Ok from '../../../../components/MessageBox/Ok';
-import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
+import { useFileUploadMutation, useGetFileInfoMutation, useUpdateDocumentFileIdMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -576,6 +576,11 @@ const useStyles = makeStyles(() => ({
                             backgroundImage: 'url(' + checkIconHover + ')',
                             backgroundColor: 'transparent'
                         }
+                    },
+                    '&.check-blue': {
+                        width: '18px',
+                        height: '18px',
+                        backgroundImage: 'url(' + checkIconHover + ')',
                     }
                 },
             },
@@ -1989,6 +1994,8 @@ const Employee = () => {
     const [okPopupShow, setOkPopupShow] = useState(false);
     const [okPopupMessage, setOkPopupMessage] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [inspectionFileId, setInspectionFileId] = useState(null)
+    const [articleNoForInspection, setArticleNoForInspection] = useState(null)
 
     const [dialogId, setDialogId] = useState("")
     const [filePath, setFilePath] = useState({
@@ -1999,12 +2006,15 @@ const Employee = () => {
     const [employeeFiles, setEmployeeFiles] = useState({
         "safetyFileUpload": "",
         "logoImgUpload": "",
-        "documentFileUpload": ""
+        "documentFileUpload": "",
+        "inspectionFile": ""
     })
+
 
     const [fileUpload] = useFileUploadMutation();
     const [getFileInfo] = useGetFileInfoMutation()
     const [updateSafetyFile] = useUpdateSafetyFileMutation()
+    const [updateDocumentFileId] = useUpdateDocumentFileIdMutation()
 
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
 
@@ -2047,7 +2057,6 @@ const Employee = () => {
         setMissionStatement("");
         setSafetyGoal("");
     }
-
     const fetchLoginInfo = async () => {
         const response = await getLoginInfo()
         setLoginInfo(response.data.RET_DATA)
@@ -2269,24 +2278,43 @@ const Employee = () => {
     }
 
     const handleDialogFileUpload = async () => {
-        let formData = new FormData();
-        formData.append("files", selectedFile)
-        handleDialogClose()
-        const response = await fileUpload(formData)
-        const fileId = response.data.RET_DATA[0].atchFileId
-        setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
-        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+        console.log(dialogId)
+        if (dialogId === "logoImgUpload" || dialogId === "documentFileUpload" || dialogId === "safetyFileUpload") {
+            let formData = new FormData();
+            formData.append("files", selectedFile)
+            handleDialogClose()
+            const response = await fileUpload(formData)
+            const fileId = response.data.RET_DATA[0].atchFileId
+            setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
+            setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+            console.log("Hellloooooo")
+        } else if (dialogId === "inspectionFile") {
+            let formData = new FormData();
+            formData.append("files", selectedFile)
+            handleDialogClose()
+            const response = await fileUpload(formData)
+            const fileId = response.data.RET_DATA[0].atchFileId
+            setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
+            setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+            const responseDocumentFile = await updateDocumentFileId({
+                "articleNo": parseInt(articleNoForInspection),
+                "fileId": fileId,
+            })
+            console.log(responseDocumentFile, "--------------")
+        }
     }
 
+    console.log(employeeFiles)
     async function handleDialogFileDownload() {
         const fileId = employeeFiles[dialogId]
-        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId || inspectionFileId}&fileSn=1`;
     }
 
-    const handleDialogOpen = (event) => {
+    const handleDialogOpen = (event, articleNo, fileId) => {
         setOpenDialog(true);
         setDialogId(event.target.id);
-        console.log(event.target.id)
+        setArticleNoForInspection(articleNo)
+        setInspectionFileId(fileId)
     }
 
     const handleDialogClose = () => {
@@ -2297,6 +2325,8 @@ const Employee = () => {
         const file = event.target.files[0];
         setSelectedFile(file);
     }
+
+    console.log(inspectionsDocs)
 
     useEffect(() => {
         fetchBaseline()
@@ -2919,7 +2949,7 @@ const Employee = () => {
                                     <div className={classes.listTitle}><strong>{!!(inspectionsDocs) && inspectionsDocs[0]?.fileCount}</strong>건 /{!!(inspectionsDocs) && !!(inspectionsDocs.length) && inspectionsDocs[0].totalCount}건</div>
                                     <ul className={classes.menuList + ' buttonList'}>
                                         {inspectionsDocs?.map((inspection) => (<><li>
-                                            {inspection.fileId === null ? <FileButtonNone></FileButtonNone> : <FileButtonExis><span className={'orange'}>중</span></FileButtonExis>}
+                                            {inspection.fileId === null ? <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo)}></FileButtonNone> : <FileButtonExis id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo, inspection.fileId)}><span className={'orange'}>중</span></FileButtonExis>}
                                         </li>
                                             {/* <li>
                                                 <FileButtonExis><span className={'orange'}>중</span></FileButtonExis>
@@ -2968,9 +2998,14 @@ const Employee = () => {
                                     <div className={classes.listTitle}>Check</div>
                                     <ul className={classes.menuList + ' checkList'}>
                                         {relatedArticle?.map((checkBtn) => (
-                                            <li>{(checkBtn.managerChecked === 1 || checkBtn.managerChecked === 0) &&
-                                                <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>}
-                                            </li>
+                                            <>
+                                                <li>{(checkBtn.managerChecked == 0 || checkBtn.managerChecked == null) &&
+                                                    <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>}
+                                                </li>
+                                                <li>{(checkBtn.managerChecked == 1) &&
+                                                    <Link className={classes.listLink + ' check-blue'} to={"#none"} underline="none"></Link>}
+                                                </li>
+                                            </>
                                         ))}
                                     </ul>
                                 </div>

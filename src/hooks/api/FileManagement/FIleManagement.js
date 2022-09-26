@@ -58,8 +58,16 @@ export const fileManagement = createApi({
                 url: `file/getFileInfo?atchFileId=${atchFileId}&fileSn=${fileSn}`,
                 method: 'GET',
             })
-        })
+        }),
+        updateDocumentFileId: builder.mutation({
+            query: (body) => ({
+                url: 'main/updateDocumentFileId',
+                method: 'POST',
+                body: body
+            })
+        }),
+
     }),
 });
 
-export const { useAttachDetailListMutation, useDeleteFileMutation, useFileDownMutation, useFileUploadMutation, useGetImgMutation, useGetFileInfoMutation } = fileManagement;
+export const { useUpdateDocumentFileIdMutation, useAttachDetailListMutation, useDeleteFileMutation, useFileDownMutation, useFileUploadMutation, useGetImgMutation, useGetFileInfoMutation } = fileManagement;
