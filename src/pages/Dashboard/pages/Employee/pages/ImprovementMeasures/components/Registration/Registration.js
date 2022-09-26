@@ -133,6 +133,7 @@ const Registration = () => {
 
     const getGeneratedKey = async () => {
         const response = await getGenerateKey()
+        setGeneratedKey(response?.data?.RET_DATA?.improveKey)
         setImprovement({ ...improvement, "improveNo": response?.data?.RET_DATA?.improveKey })
     }
 
