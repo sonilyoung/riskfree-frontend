@@ -2129,7 +2129,6 @@ const Employee = () => {
             "workplaceId": userWorkplaceId
         })
         setCompanyInfo(response?.data?.RET_DATA);
-        console.log(response);
     }
 
     const fetchAccidentTotalList = async () => {
@@ -2295,7 +2294,6 @@ const Employee = () => {
     }
 
     const handleDialogFileUpload = async () => {
-        console.log(dialogId)
         if (dialogId === "logoImgUpload" || dialogId === "documentFileUpload" || dialogId === "safetyFileUpload") {
             let formData = new FormData();
             formData.append("files", selectedFile)
@@ -2304,7 +2302,6 @@ const Employee = () => {
             const fileId = response.data.RET_DATA[0].atchFileId
             setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
             setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
-            console.log("Hellloooooo")
         } else if (dialogId === "inspectionFile") {
             let formData = new FormData();
             formData.append("files", selectedFile)
@@ -2321,7 +2318,6 @@ const Employee = () => {
         }
     }
 
-    console.log(employeeFiles)
     async function handleDialogFileDownload() {
         const fileId = employeeFiles[dialogId]
         window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId || inspectionFileId}&fileSn=1`;
@@ -2343,9 +2339,6 @@ const Employee = () => {
         setSelectedFile(file);
     }
 
-    console.log(inspectionsDocs)
-
-
     const handleUpdateScore = async () => {
         const response = await updateScore({
             "evaluation": evaluation,
@@ -2355,13 +2348,6 @@ const Employee = () => {
         setUploadFlag(!uploadFlag)
         setEvaluation("")
     }
-
-    const handleEvaluation = (evaluation) => {
-        setEvaluationPopup(!evaluationPopup)
-        setEvaluation(evaluation)
-    }
-
-    console.log(evaluation)
 
     useEffect(() => {
         fetchBaseline()
@@ -2426,7 +2412,6 @@ const Employee = () => {
         if (window.sessionStorage.getItem('firstLoad') === null) {
             fetchNoticeHotList();
             window.sessionStorage.setItem('firstLoad', 1);
-            console.log('firstLoad');
         }
 
         navigator.geolocation.getCurrentPosition(position => {
@@ -2993,7 +2978,11 @@ const Employee = () => {
                                     <ul className={classes.menuList + ' buttonList'}>
                                         {inspectionsDocs?.map((inspection) => (<><li>
                                             <div>{inspection.fileId === null ? <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo)}></FileButtonNone> : <FileButtonExis id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo, inspection.fileId)}></FileButtonExis>}
-                                                {inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'} onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}>상</span>) || (inspection.evaluation === "7" && <span className={'orange'} onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}>중</span>) || (inspection.evaluation === "5" && <span className={'red'} onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}>하</span>) || ((inspection.evaluation === null || inspection.evaluation === "0") && <span className={'empty'} onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}></span>))}
+                                                {inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}
+                                                    onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}>상</span>) || (inspection.evaluation === "7" && <span className={'orange'}
+                                                        onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}>중</span>) || (inspection.evaluation === "5" && <span className={'red'}
+                                                            onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}>하</span>) || ((inspection.evaluation === null || inspection.evaluation === "0") && <span className={'empty'}
+                                                                onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}></span>))}
                                             </div>
                                         </li>
                                             {/* <li>
