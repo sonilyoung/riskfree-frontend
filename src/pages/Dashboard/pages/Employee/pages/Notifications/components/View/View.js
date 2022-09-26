@@ -270,7 +270,7 @@ const View = (props) => {
                     <div className={classes.boxRow}>
                         <div className={classes.rowTitle}>첨부파일</div>
                         <div className={classes.rowInfo}>
-                            {`${notice?.data.RET_DATA.originalFilename ?? ""}${notice?.data.RET_DATA.filePath ?? ""}`}
+                            {`${notice?.data.RET_DATA.originalFilename ?? ""}`}
                         </div>
                     </div>
                 </Grid>
