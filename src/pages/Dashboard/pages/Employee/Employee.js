@@ -2394,10 +2394,6 @@ const Employee = () => {
 
     useEffect(() => {
         fetchInspectionDocs()
-        fetchDutyCycle()
-        fetchDutyAssigned()
-        fetchRelatedArticle()
-        fetchGuideLine()
     }, [uploadFlag])
 
     useEffect(() => {
