@@ -1996,6 +1996,7 @@ const Employee = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [inspectionFileId, setInspectionFileId] = useState(null)
     const [articleNoForInspection, setArticleNoForInspection] = useState(null)
+    const [uploadFlag, setUploadFlag] = useState(false)
 
     const [dialogId, setDialogId] = useState("")
     const [filePath, setFilePath] = useState({
@@ -2300,7 +2301,7 @@ const Employee = () => {
                 "articleNo": parseInt(articleNoForInspection),
                 "fileId": fileId,
             })
-            console.log(responseDocumentFile, "--------------")
+            setUploadFlag(!uploadFlag)
         }
     }
 
@@ -2370,6 +2371,14 @@ const Employee = () => {
         fetchRelatedArticle()
         fetchGuideLine()
     }, [clickedDuty])
+
+    useEffect(() => {
+        fetchInspectionDocs()
+        fetchDutyCycle()
+        fetchDutyAssigned()
+        fetchRelatedArticle()
+        fetchGuideLine()
+    }, [uploadFlag])
 
     useEffect(() => {
         const timerId = setInterval(refreshClock, 1000);
