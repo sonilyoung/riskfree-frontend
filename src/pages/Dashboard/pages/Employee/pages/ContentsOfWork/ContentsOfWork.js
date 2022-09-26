@@ -50,8 +50,9 @@ import useUserInitialWorkplaceId from '../../../../../../hooks/core/UserInitialW
 
 import CloseIcon from '@mui/icons-material/Close';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import { useDeleteFileMutation } from '../../../../../../hooks/api/FileManagement/FIleManagement';
+import { useDeleteFileMutation, useFileUploadMutation } from '../../../../../../hooks/api/FileManagement/FIleManagement';
 import { UploadDialog } from '../../../../../../dialogs/Upload';
+import { Overlay } from '../../../../../../components/Overlay';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -493,13 +494,9 @@ const useStyles = makeStyles(() => ({
         }
     },
     popupTextField: {
+        width: '100%',
         marginBottom: '10px !important',
-        overflow: 'hidden',
-        height: '40px',
-        borderRadius: ' 46px',
-        '& .MuiOutlinedInput-notchedOutline': {
-            border: 'none'
-        },
+        height: '45px',
         '& >div': {
             background: '#fff',
             fontSize: '16px',
@@ -508,8 +505,32 @@ const useStyles = makeStyles(() => ({
             fontSize: '16px',
             height: '40px',
             boxSizing: 'border-box',
-            background: '#eff2f9',
+            padding: '10px',
+            '&::-webkit-file-upload-button': {
+                top: '0px',
+                left: '300px',
+                position: 'absolute',
+                width: '45px',
+                height: '45px',
+                color: '#fff',
+                fontSize: '20px',
+                letterSpacing: '-1.08px',
+                borderRadius: '50%',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'background .2s',
+                fontSize: '0px',
+                color: 'transparent',
+                userSelect: 'none',
+                background: '#00adef url(' + searchIcon + ') no-repeat 50% 50%',
+                '&:hover': {
+                    background: '#3a5298 url(' + searchIcon + ') no-repeat 50% 50%',
+                }
+            },
         },
+        '& fieldset': {
+            marginRight: '102px',
+        }
     },
     selectMenuDate: {
         height: '40px',
@@ -758,6 +779,10 @@ const WorkHistoryList = () => {
     const [constructionType, setConstructionType] = useState(null)
     const [attachFileId, setAttachFileId] = useState(null)
     const [fileIdForDelete, setFileIdForDelete] = useState(null)
+    const [selectedFile, setSelectedFile] = useState(null)
+
+    const [fileUpload] = useFileUploadMutation()
+
 
     const handleAllPopupClose = () => {
         setHide(true);
@@ -785,11 +810,6 @@ const WorkHistoryList = () => {
     const handleDialogClose = () => {
         setOpenDialog(false);
     }
-
-    // const handleDialogInputChange = (event) => {
-    //     const file = event.target.files[0];
-    //     setSelectedFile(file);
-    // }
 
     const fetchWorkplaceList = async () => {
         const response = await getWorkplaceList();
@@ -828,6 +848,21 @@ const WorkHistoryList = () => {
         fetchSafeWorkFileList(constructionType)
         fetchSafeWorkFileTopInfo(id)
         setHide(false)
+    }
+
+    const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    }
+
+    const handleDialogFileUpload = async () => {
+        let formData = new FormData();
+        formData.append("files", selectedFile)
+        const response = await fileUpload(formData)
+        setRegisterPopupShow(false)
+        const fileId = response.data.RET_DATA[0].atchFileId
+        // setImprovement({ ...improvement, [dialogId]: fileId })
+        // setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
     }
 
     useEffect(() => {
@@ -1000,23 +1035,25 @@ const WorkHistoryList = () => {
                             <NoButton onClick={() => setHide(true)}>취소</NoButton>
                         </div>
                     </div>
-                    <div className={registerPopupShow ? classes.registerUploadPopup : classes.uploadPopupHide}>
-                        <ClosePopupButton2 onClick={() => setRegisterPopupShow(false)}></ClosePopupButton2>
-                        <span></span>
-                        <span>작성파일 업로드</span>
-                        <span></span>
-                        <div className={classes.uploadSearch}>
-                            <TextField
-                                id="standard-basic"
-                                placeholder="20220802 경영방침내.xsX"
-                                variant="outlined"
-                                sx={{ width: 250 }}
-                                className={classes.popupTextField}
-                            />
-                            <SearchPopupButton></SearchPopupButton>
-                            <UnknownButton1 onClick={() => setRegisterPopupShow(false)}>파일 업로드</UnknownButton1>
+                    <Overlay show={registerPopupShow}>
+                        <div className={registerPopupShow ? classes.registerUploadPopup : classes.uploadPopupHide}>
+                            <ClosePopupButton2 onClick={() => setRegisterPopupShow(false)}></ClosePopupButton2>
+                            <span></span>
+                            <span>작성파일 업로드</span>
+                            <span></span>
+                            <div className={classes.uploadSearch}>
+                                <TextField
+                                    id="standard-basic"
+                                    placeholder="여수공장 시정조치요청 파일.hwp"
+                                    variant="outlined"
+                                    className={classes.popupTextField}
+                                    type="file"
+                                    onChange={handleDialogInputChange}
+                                />
+                                <UnknownButton1 onClick={() => setRegisterPopupShow(false)}>파일 업로드</UnknownButton1>
+                            </div>
                         </div>
-                    </div>
+                    </Overlay>
                     <div className={uploadPopupShow ? classes.uploadPopup : classes.uploadPopupHide}>
                         <ClosePopupButton2 onClick={() => setUploadPopupShow(false)}></ClosePopupButton2>
                         <div className={classes.uploadInfo}>
@@ -1036,7 +1073,7 @@ const WorkHistoryList = () => {
                                 className={classes.popupTextField}
                             />
                             <SearchPopupButton></SearchPopupButton>
-                            <UnknownButton1 onClick={() => setUploadPopupShow(false)}>전체사업장</UnknownButton1>
+                            <UnknownButton1 onClick={handleDialogFileUpload}>전체사업장</UnknownButton1>
                         </div>
                     </div>
                 </Grid>

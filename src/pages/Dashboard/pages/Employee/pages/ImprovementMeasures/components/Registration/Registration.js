@@ -105,9 +105,9 @@ const Registration = () => {
         let formData = new FormData();
         formData.append("files", selectedFile)
         const response = await fileUpload(formData)
+        handleDialogClose()
         const fileId = response.data.RET_DATA[0].atchFileId
         setImprovement({ ...improvement, [dialogId]: fileId })
-        handleDialogClose()
         setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
     }
 

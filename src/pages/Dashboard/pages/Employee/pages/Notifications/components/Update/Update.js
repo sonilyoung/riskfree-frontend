@@ -20,8 +20,10 @@ import deleteButton from '../../../../../../../../assets/images/btn_del.png';
 
 import { useNoticesUpdateMutation, useNoticesViewMutation } from '../../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
 
-import { useFileUploadMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
+import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 
 const useStyles = makeStyles(() => ({
@@ -245,27 +247,17 @@ const Update = () => {
         "title": "",
         "updateId": 0
     })
+    const [dialogId, setDialogId] = useState("")
+    const [fileName, setFileName] = useState({
+        "attachId": ""
+    })
 
     const HOT = "001"
     const NOT_HOT = "002"
 
     const [fileUpload] = useFileUploadMutation()
+    const [getFileInfo] = useGetFileInfoMutation()
 
-    const handleDialogClose = () => {
-        setOpenDialog(false);
-    }
-
-    const handleDialogFileUpload = async (file) => {
-        const response = await fileUpload({
-            files: selectedFile
-        })
-        console.log(response);
-    }
-
-    const handleDialogInputChange = (event) => {
-        const file = event.target.files[0];
-        setSelectedFile(file);
-    }
 
     const navigate = useNavigate()
     const handleRedirect = () => {
@@ -274,7 +266,39 @@ const Update = () => {
 
     const handleFetchView = async () => {
         const response = await noticesView(updateid)
+        console.log(response)
         setNotice(response.data.RET_DATA)
+        let fileInfo = await getFileInfo({ atchFileId: parseInt(response?.data?.RET_DATA["attachId"]), fileSn: 1 })
+        setFileName({ ...fileName, "attachId": fileInfo.data.RET_DATA.originalFileName })
+    }
+
+    const handleDialogFileUpload = async () => {
+        let formData = new FormData();
+        formData.append("files", selectedFile)
+        const response = await fileUpload(formData)
+        const fileId = response.data.RET_DATA[0].atchFileId
+        handleDialogClose()
+        setNotice({ ...notice, "attachId": parseInt(fileId) })
+        setFileName({ ...fileName, "attachId": response.data.RET_DATA[0].originalFileName })
+    }
+
+    async function handleDialogFileDownload() {
+        const fileId = notice["attachId"]
+        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+    }
+
+    const handleDialogClose = () => {
+        setOpenDialog(false);
+    }
+
+    const handleDialogOpen = (event) => {
+        setOpenDialog(true);
+        setDialogId(event.target.id);
+    }
+
+    const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
     }
 
 
@@ -389,9 +413,7 @@ const Update = () => {
                                 <TextField
                                     className={classes.textArea}
                                     id="outlined-basic"
-                                    placeholder="파일을 등록하세요. (파일용량 00kb 제한)"
-                                    value="개선조치 관련 내부 점검 파일_수정20220701.hwp"
-                                    disabled
+                                    value={fileName.attachId ?? ""}
                                 />
                                 <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
                             </div>
@@ -412,6 +434,8 @@ const Update = () => {
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
+                onDownload={handleDialogFileDownload}
+                enableDownload={true}
             />
         </DefaultLayout>
 
