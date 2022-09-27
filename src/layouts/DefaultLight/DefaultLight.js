@@ -766,9 +766,9 @@ const DefaultLight = ({ children }) => {
 
     const handleDialogFileUpload = async (file) => {
         let formData = new FormData();
-        formData.append("files", selectedFile)
+        formData.append("excelFile", selectedFile)
         handleDialogClose()
-        const response = await fileUpload(formData)
+        const response = await excelUpload(formData)
         const fileId = response.data.RET_DATA[0].atchFileId
         setExcel({ ...excel, [dialogId]: parseInt(fileId) })
         setOkPopupMessage(response.data);
