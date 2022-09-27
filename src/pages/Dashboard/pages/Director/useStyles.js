@@ -286,13 +286,13 @@ const useStyles = makeStyles(() => ({
 
     },
     graphImage: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
+        // display: 'flex',
+        // flexWrap: 'wrap',
+        // justifyContent: 'center',
         padding: '34px',
         borderRadius: '8px',
         background: '#fff',
-        boxShadow: '0 0 10px rgb(0 0 0 / 30%)'
+        boxShadow: '0 0 10px rgb(0 0 0 / 30%)',
     },
     graphImageNone: {
         display: "none !important"

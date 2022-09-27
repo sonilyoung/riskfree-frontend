@@ -254,8 +254,21 @@ export const mainManagement = createApi({
                 method: 'POST',
                 body: body,
             }),
+        }),
+        getAccidentsPreventionReport: builder.mutation({
+            query: (body) => ({
+                url: 'main/getAccidentsPreventionReport',
+                method: 'POST',
+                body: body,
+            }),
+        }),
+        getImprovemetLawOrderReport: builder.mutation({
+            query: (body) => ({
+                url: 'main/getImprovemetLawOrderReport',
+                method: 'POST',
+                body: body,
+            }),
         })
     }),
 });
-
-export const { useUpdateScoreMutation, useUpdateSafetyFileMutation, useGetWorkplaceListMutation, useGetLoginInfoMutation, useGetAccidentTotalMutation, useGetImprovementListMutation, useGetSafeWorkHistoryListMutation, useGetLeaderImprovementListMutation, useGetDayInfoMutation, useGetNoticeListMutation, useGetBaselineMutation, useGetBaselineListMutation, useGetNoticeHotListMutation, useGetAccidentsPreventionMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useUpdateRelatedArticleMutation, useGetGuideLineMutation, useGetTitleReportMutation, useGetCompanyInfoMutation, useGetBaseLineReportMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaselineMutation, useGetWeatherMutation, useInsertBaseLineDataUpdateMutation, useUpdateUserCompanyMutation } = mainManagement;
+export const { useUpdateScoreMutation, useUpdateSafetyFileMutation, useGetWorkplaceListMutation, useGetLoginInfoMutation, useGetAccidentTotalMutation, useGetImprovementListMutation, useGetSafeWorkHistoryListMutation, useGetLeaderImprovementListMutation, useGetDayInfoMutation, useGetNoticeListMutation, useGetBaselineMutation, useGetBaselineListMutation, useGetNoticeHotListMutation, useGetAccidentsPreventionMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useUpdateRelatedArticleMutation, useGetGuideLineMutation, useGetTitleReportMutation, useGetCompanyInfoMutation, useGetBaseLineReportMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaselineMutation, useGetWeatherMutation, useInsertBaseLineDataUpdateMutation, useUpdateUserCompanyMutation, useGetAccidentsPreventionReportMutation, useGetImprovemetLawOrderReportMutation } = mainManagement;

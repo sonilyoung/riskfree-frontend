@@ -45,7 +45,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentsPreventionMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetLoginInfoMutation, useGetNoticeListMutation, useGetRelatedLawRateMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentsPreventionMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetLoginInfoMutation, useGetNoticeListMutation, useGetRelatedLawRateMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useGetBaseLineReportMutation, useGetTitleReportMutation, useGetAccidentsPreventionReportMutation, useGetImprovemetLawOrderReportMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetLeaderImprovementListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetAccidentTotalMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetSafeWorkHistoryListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
@@ -63,6 +63,8 @@ import adminIcon from '../../../../assets/images/btn_admin.png';
 import adminIconHover from '../../../../assets/images/btn_admin_ov.png';
 import icoFile from '../../../../assets/images/ic_file.png';
 import popupClose2 from '../../../../assets/images/btn_popClose2.png';
+
+import Chart from 'react-apexcharts';
 
 const UserButton = styled(ButtonUnstyled)`
     background: transparent url(${userIcon});
@@ -263,6 +265,20 @@ const footerSlider = {
     autoplaySpeed: 3000,
 }
 
+const reduceAPIResponse = (array, parametarOne, parametarTwo) => {
+    return (array?.length > 0 && array?.reduce(function
+        (filteredObj, item) {
+        if (item[parametarOne] in filteredObj) {
+            filteredObj[item[parametarOne]] = { ...filteredObj[item[parametarOne]], data: [...filteredObj[item[parametarOne]].data, item[parametarTwo]] };
+        }
+        else {
+            filteredObj[item[parametarOne]] = { name: item[parametarOne], data: [item[parametarTwo]] };
+        }
+
+        return filteredObj;
+
+    }, {}));
+}
 
 const Director = () => {
     const classes = useStyles();
@@ -281,6 +297,10 @@ const Director = () => {
     const [getBaseline] = useGetBaselineMutation();
     const [getBaselineList] = useGetBaselineListMutation();
     const [getNoticeHotList] = useGetNoticeHotListMutation();
+    const [getBaseLineReport] = useGetBaseLineReportMutation();
+    const [getTitleReport] = useGetTitleReportMutation();
+    const [getAccidentsPreventionReport] = useGetAccidentsPreventionReportMutation();
+    const [getImprovemetLawOrderReport] = useGetImprovemetLawOrderReportMutation();
 
     const [noticesList, setNoticesList] = useState([]);
     const [userPopup, setUserPopup] = useState(false)
@@ -315,6 +335,58 @@ const Director = () => {
     const currentWorkplaceId = useSelector(selectWorkplaceId);
     const currentBaselineId = useSelector(selectBaselineId);
     const [noticeHotList, setNoticeHotList] = useState([]);
+    const [condition, setCondition] = useState(1);
+    const [activeReportItem, setActiveReportItem] = useState(condition);
+    // grid report 
+    const [reportList, setReportList] = useState([]);
+    const [reportTitle, setReportTitle] = useState([]);
+    // grid graph
+    const [categories, setCategories] = useState([]);
+    const [chartSeries, setChartSeries] = useState([{ name: 'name', data: [] }]);
+    const [chartInfo, setChartInfo] = useState({
+        series: chartSeries,
+        options: {
+            chart: {
+                type: 'bar',
+                height: '100%',
+                width: '100%'
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '55%',
+                    endingShape: 'rounded'
+                },
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                show: true,
+                width: 15,
+                colors: ['transparent']
+            },
+            xaxis: {
+                // categories: ['g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9', 'g10', 'g11', 'g12'],
+                categories: ['안전보건관리체계의 구축 및 이행', '유해,위험 요인 개선 업무절차 마련 및 점검', '안전보건업무 총괄관리 전담조직 구축', '안전보건관리책임자 권한 부여 및 집행 점검', '안전,보건관련 필요예산 편성 및 집행', '안전보건 전문 인력 배치 및 업무시간 보장', '종사자 의견수렴 및 개선방안 이행점검', '중대재해발생 비상대응 메뉴얼 마련&점검', '도급용역 위탁시 평가기준 및 절차 점검', '재해발생 방지대책 및 이행현황', '관계법령에 따른 개선,시정명령 조치', '관계법령에 의무이행의 관리의 조치'],
+            },
+            yaxis: {
+                title: {
+                    text: '% rate'
+                }
+            },
+            fill: {
+                opacity: 1
+            },
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        return val + "% rate"
+                    }
+                }
+            }
+        },
+    });
 
     const [userInfo, setUserInfo] = useState({
         userCompanyId: userToken.getUserCompanyId(),
@@ -323,8 +395,6 @@ const Director = () => {
     });
 
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
-
-    console.log(userRoleCode)
 
     const handleLogOut = () => {
         remove();
@@ -372,7 +442,6 @@ const Director = () => {
     const fetchBaselineList = async () => {
         const response = await getBaselineList({});
         setBaselineList(response.data.RET_DATA);
-        console.log(response);
     }
 
     const fetchBaseline = async () => {
@@ -466,12 +535,55 @@ const Director = () => {
             "baselineStart": baselineData.baselineStart
         })
         setDayInfo(response.data.RET_DATA);
-
     }
 
     const fetchNoticeHotList = async () => {
         const response = await getNoticeHotList({});
         setNoticeHotList(response?.data?.RET_DATA);
+    }
+
+    const fetchTitleReport = async () => {
+        const response = await getTitleReport({
+            "baselineId": currentBaselineId,
+            "condition": condition
+        });
+        setReportTitle(response.data.RET_DATA);
+    }
+
+    const fetchBaseLineReportList = async () => {
+        const response = await getBaseLineReport({
+            "baselineId": currentBaselineId,
+            "condition": condition
+        });
+        setReportList(response.data.RET_DATA);
+        const reportChartInformation = reduceAPIResponse(response.data.RET_DATA, "workplaceName", "evaluationRate");
+        const reportGridInformation = reduceAPIResponse(response.data.RET_DATA, "menuTitle", "evaluationRate");
+        setChartSeries(Object.values(reportChartInformation));
+        setReportList(Object.values(reportGridInformation));
+    }
+
+    const fetchAccidentsPreventionReportList = async () => {
+        const response = await getAccidentsPreventionReport({
+            "baselineId": currentBaselineId,
+            "workplaceId": currentWorkplaceId
+        });
+        const reportChartInformation = reduceAPIResponse(response.data.RET_DATA, "workplaceName", "enforceRate");
+        const reportGridInformation = reduceAPIResponse(response.data.RET_DATA, "enforceTitle", "enforceRate");
+        setChartSeries(Object.values(reportChartInformation));
+        setReportTitle(response.data.RET_DATA);
+        setReportList(Object.values(reportGridInformation));
+    }
+
+    const fetchImprovemetReportList = async () => {
+        const response = await getImprovemetLawOrderReport({
+            "baselineId": currentBaselineId,
+            "workplaceId": currentWorkplaceId
+        });
+        const reportChartInformation = reduceAPIResponse(response.data.RET_DATA, "workplaceName", "improvemetRate");
+        const reportGridInformation = reduceAPIResponse(response.data.RET_DATA, "improvemetTitle", "improvemetRate");
+        setChartSeries(Object.values(reportChartInformation));
+        setReportTitle(response.data.RET_DATA);
+        setReportList(Object.values(reportGridInformation));
     }
 
     const refreshClock = () => {
@@ -501,11 +613,6 @@ const Director = () => {
                 className={className}
                 style={{ ...style, display: parseInt(baselineData.nextBaseline) ? "block" : "none" }}
                 onClick={() => {
-                    // let baselineIdIndex = currentBaselineId && baselineList.length ? baselineList.findIndex(baselineItem => baselineItem.baselineId === currentBaselineId) + 1 : 0;
-                    // if (baselineIdIndex >= baselineList.length) {
-                    //     baselineIdIndex = 0;
-                    // }
-                    // setBaselineStart(baselineList.at(baselineIdIndex).baselineStart);
                     if (parseInt(baselineData.nextBaseline)) {
                         dispatch(setBaselineId(parseInt(baselineData.nextBaseline)))
                         onClick();
@@ -542,7 +649,6 @@ const Director = () => {
             "longitude": longitude,
         })
         setWeatherData(response?.data?.RET_DATA)
-        console.log(response);
     }
 
     useEffect(() => {
@@ -562,6 +668,11 @@ const Director = () => {
         fetchAccidentsPrevention()
         // fetchDayInfo();
     }, [currentBaselineId, userWorkplaceId]);
+
+    useEffect(() => {
+        fetchBaseLineReportList(condition);
+        fetchTitleReport(condition);
+    }, [condition, currentBaselineId]);
 
     useEffect(() => {
         fetchCompanyInfo();
@@ -591,7 +702,7 @@ const Director = () => {
             setLatitude(position.coords.latitude)
             setLongitude(position.coords.longitude)
         })
-    }, [])
+    }, []);
 
     return (
         <WideLayout>
@@ -677,6 +788,7 @@ const Director = () => {
                     </Grid>
                     <Grid className={classes.headerNavigation} item xs={5.8}>
                         <ChartButton onClick={() => setChartPop(true)}></ChartButton>
+                        {/* CHART POPUP CEO */}
                         <div className={chartPop ? classes.chartPopup : classes.chartPopupClose}>
                             <div className={classes.chartPopList}>
                                 <div className={classes.popHeader}>
@@ -684,13 +796,13 @@ const Director = () => {
                                     <ButtonClosePop onClick={() => setChartPop(false)}></ButtonClosePop>
                                 </div>
                                 <div className={classes.popList}>
-                                    <div className={classes.PopListItem + ' active'}>차수별 대응수준 현황 (통합)</div>
-                                    <div className={classes.PopListItem}>차수별 대응수준 현황 (사업장별)</div>
-                                    <div className={classes.PopListItem}>항목별 대응수준 현황 (통합)</div>
-                                    <div className={classes.PopListItem}>항목별 대응수준 현황 (사업장별)</div>
-                                    <div className={classes.PopListItem}>사업장별 재해발생 통계</div>
-                                    <div className={classes.PopListItem}>개선.시정명령 조치내역 통계</div>
-                                    <div className={classes.PopListItem}>안전보건 법정교육 실시내역 통계</div>
+                                    <div className={activeReportItem === 1 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setCondition(1); setActiveReportItem(1) }}>차수별 대응수준 현황 (통합)</div>
+                                    <div className={activeReportItem === 2 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setCondition(2); setActiveReportItem(2) }}>차수별 대응수준 현황 (사업장별)</div>
+                                    <div className={activeReportItem === 3 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setCondition(3); setActiveReportItem(3) }}>항목별 대응수준 현황 (통합)</div>
+                                    <div className={activeReportItem === 4 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setCondition(4); setActiveReportItem(4) }}>항목별 대응수준 현황 (사업장별)</div>
+                                    <div className={activeReportItem === 5 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { fetchAccidentsPreventionReportList(); setActiveReportItem(5) }}>사업장별 재해발생 통계</div>
+                                    <div className={activeReportItem === 6 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { fetchImprovemetReportList(); setActiveReportItem(6) }}>개선.시정명령 조치내역 통계</div>
+                                    {/* <div className={classes.PopListItem}>안전보건 법정교육 실시내역 통계</div> */}
                                 </div>
                             </div>
                             <div className={classes.chartPopGraph}>
@@ -699,124 +811,53 @@ const Director = () => {
                                         <ButtonGrid onClick={() => setToggleGrid(!toggleGrid)}>{toggleGrid ? "Graph" : "Grid"}</ButtonGrid>
                                     </div>
                                     <div>
-                                        <ButtonGraphPrev></ButtonGraphPrev>
+                                        <ButtonGraphPrev
+                                            onClick={() => {
+                                                if (parseInt(baselineData.prevBaseline)) {
+                                                    dispatch(setBaselineId(parseInt(baselineData.prevBaseline)))
+                                                }
+                                            }}
+                                            style={{ display: parseInt(baselineData.prevBaseline) ? "block" : "none" }}
+                                        ></ButtonGraphPrev>
                                         <div>
                                             <span>중대대해처벌법 대응수준 현황</span>
-                                            <span>(3차 : 22/01/01 ~ 22/04/30)</span>
+                                            <span>({baselineData?.baselineName} : {baselineData?.baselineStart} ~ {baselineData?.baselineEnd})</span>
                                         </div>
-                                        <ButtonGraphNext></ButtonGraphNext>
+                                        <ButtonGraphNext
+                                            onClick={() => {
+                                                if (parseInt(baselineData.nextBaseline)) {
+                                                    dispatch(setBaselineId(parseInt(baselineData.nextBaseline)))
+                                                }
+                                            }}
+                                            style={{ display: parseInt(baselineData.nextBaseline) ? "block" : "none" }}
+                                        ></ButtonGraphNext>
                                     </div>
                                 </div>
+                                {/* Chart deo */}
                                 <div className={toggleGrid ? classes.graphImageNone : classes.graphImage}>
-                                    <img src={imageGraph} alt="graph" />
-                                    <div className={classes.graphLabel}>
-                                        <div className={classes.labelItem}>
-                                            <span></span>
-                                            <span>여수사업장</span>
-                                        </div>
-                                        <div className={classes.labelItem}>
-                                            <span></span>
-                                            <span>인천사업장</span>
-                                        </div>
-                                        <div className={classes.labelItem}>
-                                            <span></span>
-                                            <span>울산사업장</span>
-                                        </div>
-                                        <div className={classes.labelItem}>
-                                            <span></span>
-                                            <span>서산사업장</span>
-                                        </div>
-                                        <div className={classes.labelItem}>
-                                            <span></span>
-                                            <span>춘천사업장</span>
-                                        </div>
-                                        <div className={classes.labelItem}>
-                                            <span></span>
-                                            <span>세종사업장</span>
-                                        </div>
-                                    </div>
+                                    <Chart options={chartInfo.options} series={chartSeries} type="bar" height={450} />
                                 </div>
                                 <Grid item xs={12} className={toggleGrid ? classes.boxTable : classes.boxTableNone}>
                                     <div className={classes.tableHead}>
                                         <div className={classes.tableRow}>
                                             <div className={classes.tableData}>구분</div>
-                                            <div className={classes.tableData}>인천사업장</div>
-                                            <div className={classes.tableData}>여수사업장</div>
-                                            <div className={classes.tableData}>울산사업장</div>
-                                            <div className={classes.tableData}>세종사업장</div>
+                                            {
+                                                reportTitle?.length > 0 && reportTitle?.map(reportTitleItem =>
+                                                    <div className={classes.tableData}>{reportTitleItem.workplaceName}</div>
+                                                )}
                                         </div>
                                     </div>
                                     <div className={classes.tableBody}>
-                                        <div className={classes.tableRow}>
-                                            <div className={classes.tableData}>안전보건 목표 및 경영방침</div>
-                                            <div className={classes.tableData}>98</div>
-                                            <div className={classes.tableData}>98</div>
-                                            <div className={classes.tableData}>98</div>
-                                            <div className={classes.tableData}>98</div>
-                                        </div>
-                                        <div className={classes.tableRow}>
-                                            <div className={classes.tableData}>안전보건업무 종괄관리</div>
-                                            <div className={classes.tableData}>96</div>
-                                            <div className={classes.tableData}>96</div>
-                                            <div className={classes.tableData}>96</div>
-                                            <div className={classes.tableData}>96</div>
-                                        </div>
-                                        <div className={classes.tableRow}>
-                                            <div className={classes.tableData}>유해.위혐요인 개선절차</div>
-                                            <div className={classes.tableData}>80</div>
-                                            <div className={classes.tableData}>80</div>
-                                            <div className={classes.tableData}>80</div>
-                                            <div className={classes.tableData}>80</div>
-                                        </div>
-                                        <div className={classes.tableRow}>
-                                            <div className={classes.tableData}>유해.위험요인 개선절차</div>
-                                            <div className={classes.tableData}>82</div>
-                                            <div className={classes.tableData}>82</div>
-                                            <div className={classes.tableData}>82</div>
-                                            <div className={classes.tableData}>82</div>
-                                        </div>
-                                        <div className={classes.tableRow}>
-                                            <div className={classes.tableData}>안전보건관리책임자권한</div>
-                                            <div className={classes.tableData}>76</div>
-                                            <div className={classes.tableData}>76</div>
-                                            <div className={classes.tableData}>76</div>
-                                            <div className={classes.tableData}>76</div>
-                                        </div>
-                                        <div className={classes.tableRow}>
-                                            <div className={classes.tableData}>안전|보건관련 필요예산편성</div>
-                                            <div className={classes.tableData}>90</div>
-                                            <div className={classes.tableData}>90</div>
-                                            <div className={classes.tableData}>90</div>
-                                            <div className={classes.tableData}>90</div>
-                                        </div>
-                                        <div className={classes.tableRow}>
-                                            <div className={classes.tableData}>안전보건 전문인력 배치</div>
-                                            <div className={classes.tableData}>89</div>
-                                            <div className={classes.tableData}>89</div>
-                                            <div className={classes.tableData}>89</div>
-                                            <div className={classes.tableData}>89</div>
-                                        </div>
-                                        <div className={classes.tableRow}>
-                                            <div className={classes.tableData}>종사자의견수렴</div>
-                                            <div className={classes.tableData}>87</div>
-                                            <div className={classes.tableData}>87</div>
-                                            <div className={classes.tableData}>87</div>
-                                            <div className={classes.tableData}>87</div>
-                                        </div>
-                                        <div className={classes.tableRow}>
-                                            <div className={classes.tableData}>중대재해발생 비상대응 매뉴얼</div>
-                                            <div className={classes.tableData}>96</div>
-                                            <div className={classes.tableData}>96</div>
-                                            <div className={classes.tableData}>96</div>
-                                            <div className={classes.tableData}>96</div>
-                                        </div>
-                                        <div className={classes.tableRow}>
-                                            <div className={classes.tableData}>도급용역위탁시 평가기준</div>
-                                            <div className={classes.tableData}>100</div>
-                                            <div className={classes.tableData}>100</div>
-                                            <div className={classes.tableData}>100</div>
-                                            <div className={classes.tableData}>100</div>
-                                        </div>
+                                        {
+                                            reportList?.length > 0 && reportList?.map(reportItem =>
+                                                <div className={classes.tableRow}>
+                                                    <div className={classes.tableData}>{reportItem.name}</div>
+                                                    {
+                                                        reportTitle?.map((item, index) =>
+                                                            <div className={classes.tableData}>{reportItem.data[index]}</div>
+                                                        )}
+                                                </div>
+                                            )}
                                     </div>
                                 </Grid>
                             </div>
@@ -843,7 +884,7 @@ const Director = () => {
                         </div>
                     </Grid>
 
-                </Grid>
+                </Grid >
                 <Grid className={classes.pageBody} item xs={10.7}>
                     <div className={classes.managementOrder}>
                         {baselineData && <>{baselineData?.baselineName} :<strong>{baselineData?.baselineStart} ~ {baselineData?.baselineEnd}</strong></>}
@@ -1144,20 +1185,22 @@ const Director = () => {
                     </Grid>
 
                 </Grid>
-                {!!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
-                    <div className={classes.notificationPopup}>
-                        <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)}></ClosePopupButton2>
-                        <div><span className={classes.slideLabelHot}>HOT</span> {noticeHotItem.title}</div>
-                        <div className={classes.popNews}>
-                            <p>
-                                {noticeHotItem.content}
-                            </p>
+                {
+                    !!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
+                        <div className={classes.notificationPopup}>
+                            <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)}></ClosePopupButton2>
+                            <div><span className={classes.slideLabelHot}>HOT</span> {noticeHotItem.title}</div>
+                            <div className={classes.popNews}>
+                                <p>
+                                    {noticeHotItem.content}
+                                </p>
+                            </div>
+                            <div>{noticeHotItem.attachId ? <img src={icoFile} alt="file icon" /> : null}{noticeHotItem.fileName}</div>
                         </div>
-                        <div>{noticeHotItem.attachId && <img src={icoFile} alt="file icon" />} {noticeHotItem.fileName}</div>
-                    </div>
-                </>))}
+                    </>))
+                }
 
-            </Grid>
+            </Grid >
 
         </WideLayout >
     );
