@@ -25,7 +25,23 @@ export const excelController = createApi({
                 contentType: 'multipart/form-data',
             })
         }),
+        relatedRawExcelUpload: builder.mutation({
+            query: (body) => ({
+                url: 'common/excel/relatedRawExcelUpload',
+                method: 'POST',
+                body: body,
+                contentType: 'multipart/form-data',
+            })
+        }),
+        safeWorkExcelUpload: builder.mutation({
+            query: (body) => ({
+                url: 'common/excel/safeWorkExcelUpload',
+                method: 'POST',
+                body: body,
+                contentType: 'multipart/form-data'
+            })
+        }),
     }),
 });
 
-export const { useExcelUploadMutation } = excelController
+export const { useSafeWorkExcelUploadMutation, useRelatedRawExcelUploadMutation, useExcelUploadMutation } = excelController

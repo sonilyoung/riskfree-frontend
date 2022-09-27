@@ -34,6 +34,7 @@ import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../..
 import { selectBaselineId } from '../../../../../../slices/selections/MainSelection';
 import { useSelector } from 'react-redux';
 import { UploadDialog } from '../../../../../../dialogs/Upload';
+import { useRelatedRawExcelUploadMutation } from '../../../../../../hooks/api/ExcelController/ExcelController';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -773,24 +774,21 @@ const MeasureToManageThePerformance = () => {
     const [updateRelatedRaw] = useUpdateRelatedRawMutation();
     const [fileUpload] = useFileUploadMutation();
     const [getFileInfo] = useGetFileInfoMutation()
+    const [relatedRawExcelUpload] = useRelatedRawExcelUploadMutation()
 
     const currentBaseline = useSelector(selectBaselineId);
-    // console.log(currentBaseline);
 
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
-        formData.append("files", selectedFile)
-        handleDialogClose()
-        const response = await fileUpload(formData)
+        formData.append("excelFile", selectedFile)
+        const lawButtonId = { lawButtonId: dialogId }
+        formData.append('lawButtonId', new Blob([JSON.stringify(lawButtonId)], { type: 'application/json' }))
+        const response = await relatedRawExcelUpload(formData)
         const fileId = response.data.RET_DATA[0].atchFileId
+        handleDialogClose()
         setFiles({ ...files, [dialogId]: parseInt(fileId) })
         setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
     }
-
-    // async function handleDialogFileDownload() {
-    //     const fileId = employeeFiles[dialogId]
-    //     window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
-    // }
 
     const handleDialogOpen = (id) => {
         setOpenDialog(true);

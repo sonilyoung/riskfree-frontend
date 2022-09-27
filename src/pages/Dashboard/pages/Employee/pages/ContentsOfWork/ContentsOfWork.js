@@ -53,6 +53,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { useDeleteFileMutation, useFileUploadMutation } from '../../../../../../hooks/api/FileManagement/FIleManagement';
 import { UploadDialog } from '../../../../../../dialogs/Upload';
 import { Overlay } from '../../../../../../components/Overlay';
+import { useSafeWorkExcelUploadMutation } from '../../../../../../hooks/api/ExcelController/ExcelController';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -782,6 +783,7 @@ const WorkHistoryList = () => {
     const [selectedFile, setSelectedFile] = useState(null)
 
     const [fileUpload] = useFileUploadMutation()
+    const [safeWorkExcelUpload] = useSafeWorkExcelUploadMutation()
 
 
     const handleAllPopupClose = () => {
@@ -823,8 +825,6 @@ const WorkHistoryList = () => {
             "userName": username
         });
         setSafeWorkList(response.data.RET_DATA);
-        // console.log(response);
-        // console.log(workplaceId, insertDate, username);
     }
 
     const fetchSafeWorkFileTopInfo = async (noticeId) => {
@@ -857,23 +857,16 @@ const WorkHistoryList = () => {
 
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
-        formData.append("files", selectedFile)
-        const response = await fileUpload(formData)
+        formData.append("excelFile", selectedFile)
+        const response = await safeWorkExcelUpload(formData)
+        console.log("Hello")
         setRegisterPopupShow(false)
-        const fileId = response.data.RET_DATA[0].atchFileId
-        // setImprovement({ ...improvement, [dialogId]: fileId })
-        // setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
     }
 
     useEffect(() => {
         fetchWorkplaceList();
         fetchSafeWorkList();
     }, []);
-
-    // useEffect(() => {
-    //     fetchSafeWorkFileTopInfo();
-    //     fetchSafeWorkFileList();
-    // }, [attachFileId]);
 
     useEffect(() => {
     }, [])
@@ -1050,7 +1043,7 @@ const WorkHistoryList = () => {
                                     type="file"
                                     onChange={handleDialogInputChange}
                                 />
-                                <UnknownButton1 onClick={() => setRegisterPopupShow(false)}>파일 업로드</UnknownButton1>
+                                <UnknownButton1 onClick={handleDialogFileUpload}>파일 업로드</UnknownButton1>
                             </div>
                         </div>
                     </Overlay>
@@ -1073,7 +1066,7 @@ const WorkHistoryList = () => {
                                 className={classes.popupTextField}
                             />
                             <SearchPopupButton></SearchPopupButton>
-                            <UnknownButton1 onClick={handleDialogFileUpload}>전체사업장</UnknownButton1>
+                            <UnknownButton1 onClick={() => console.log("Hello")}>전체사업장</UnknownButton1>
                         </div>
                     </div>
                 </Grid>
