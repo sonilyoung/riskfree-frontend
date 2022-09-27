@@ -781,6 +781,7 @@ const WorkHistoryList = () => {
     const [attachFileId, setAttachFileId] = useState(null)
     const [fileIdForDelete, setFileIdForDelete] = useState(null)
     const [selectedFile, setSelectedFile] = useState(null)
+    const [dialogId, setDialogId] = useState("")
 
     const [fileUpload] = useFileUploadMutation()
     const [safeWorkExcelUpload] = useSafeWorkExcelUploadMutation()
@@ -806,6 +807,7 @@ const WorkHistoryList = () => {
     const handleDialogOpen = (id) => {
         setOpenDialog(true);
         setAttachFileId(id);
+        setDialogId(id);
         console.log(id)
     }
 
@@ -832,7 +834,6 @@ const WorkHistoryList = () => {
             "noticeId": noticeId
         });
         setSafeWorkFileTopinfo(response.data.RET_DATA);
-        console.log("FileTopInfo");
     }
 
     const fetchSafeWorkFileList = async (constructionType) => {
@@ -842,7 +843,7 @@ const WorkHistoryList = () => {
 
         });
         setSafeWorkFileList(response.data.RET_DATA);
-        console.log("SafeWorkFileList");
+
     }
     const handleFileInfo = async (id, constructionType) => {
         fetchSafeWorkFileList(constructionType)
@@ -859,7 +860,6 @@ const WorkHistoryList = () => {
         let formData = new FormData();
         formData.append("excelFile", selectedFile)
         const response = await safeWorkExcelUpload(formData)
-        console.log("Hello")
         setRegisterPopupShow(false)
     }
 
@@ -924,7 +924,7 @@ const WorkHistoryList = () => {
                         </div>
                         <div className={classes.searchButtons}>
                             <SearchButton onClick={() => fetchSafeWorkList()}>조회</SearchButton>
-                            <RegisterButton sx={{ marginLeft: '10px' }} onClick={() => setRegisterPopupShow(true)}>등록</RegisterButton>
+                            <RegisterButton sx={{ marginLeft: '10px' }} id={"excelFileUpload"} onClick={(e) => handleDialogOpen(e.target.id)}>등록</RegisterButton>
                         </div>
                     </div>
                 </Grid>
@@ -1043,7 +1043,7 @@ const WorkHistoryList = () => {
                                     type="file"
                                     onChange={handleDialogInputChange}
                                 />
-                                <UnknownButton1 onClick={handleDialogFileUpload}>파일 업로드</UnknownButton1>
+                                <UnknownButton1 id={"excelFileUpload"} onClick={(event) => handleDialogFileUpload(event.target.id)}>파일 업로드</UnknownButton1>
                             </div>
                         </div>
                     </Overlay>
@@ -1066,7 +1066,7 @@ const WorkHistoryList = () => {
                                 className={classes.popupTextField}
                             />
                             <SearchPopupButton></SearchPopupButton>
-                            <UnknownButton1 onClick={() => console.log("Hello")}>전체사업장</UnknownButton1>
+                            <UnknownButton1>전체사업장</UnknownButton1>
                         </div>
                     </div>
                 </Grid>
@@ -1079,8 +1079,8 @@ const WorkHistoryList = () => {
             <UploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
-                // onInputChange={handleDialogInputChange}
-                // onUpload={handleDialogFileUpload}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
                 onDownload={handleDialogFileDownload}
                 enableDownload={true}
             />
