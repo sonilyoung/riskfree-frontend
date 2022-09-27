@@ -2261,6 +2261,8 @@ const Employee = () => {
         }
     }
 
+    console.log(relatedArticle)
+
     const fetchGuideLine = async () => {
         if (clickedDuty) {
             const response = await getGuideLine({
@@ -2312,7 +2314,7 @@ const Employee = () => {
             setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
             const responseDocumentFile = await updateDocumentFileId({
                 "articleNo": parseInt(articleNoForInspection),
-                "fileId": fileId,
+                "fileId": fileId
             })
             setUploadFlag(!uploadFlag)
         }
@@ -2972,8 +2974,8 @@ const Employee = () => {
                                 <div>
                                     <div className={classes.listTitle}><strong>{!!(inspectionsDocs) && inspectionsDocs[0]?.fileCount}</strong>건 /{!!(inspectionsDocs) && !!(inspectionsDocs.length) && inspectionsDocs[0].totalCount}건</div>
                                     <ul className={classes.menuList + ' buttonList'}>
-                                        {inspectionsDocs?.map((inspection) => (<><li>
-                                            <div>{inspection.fileId === null ? <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo)}></FileButtonNone> : <FileButtonExis id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo, inspection.fileId)}></FileButtonExis>}
+                                        {inspectionsDocs?.map((inspection, index) => (<><li>
+                                            <div>{inspection.fileId === null ? <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone> : <FileButtonExis id={"inspectionFile"} onClick={(event, index) => handleDialogOpen(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>}
                                                 {inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}
                                                     onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}>상</span>) || (inspection.evaluation === "7" && <span className={'orange'}
                                                         onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}>중</span>) || (inspection.evaluation === "5" && <span className={'red'}
@@ -3029,11 +3031,9 @@ const Employee = () => {
                                     <ul className={classes.menuList + ' checkList'}>
                                         {relatedArticle?.map((checkBtn) => (
                                             <>
-                                                <li>{(checkBtn.managerChecked == 0 || checkBtn.managerChecked == null) &&
-                                                    <Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>}
-                                                </li>
-                                                <li>{(checkBtn.managerChecked == 1) &&
-                                                    <Link className={classes.listLink + ' check-blue'} to={"#none"} underline="none"></Link>}
+                                                <li>{((checkBtn.managerChecked === "0" || checkBtn.managerChecked == null) &&
+                                                    (<Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>)) || ((checkBtn.managerChecked === "1") &&
+                                                        (<Link className={classes.listLink + ' check-blue'} to={"#none"} underline="none"></Link>))}
                                                 </li>
                                             </>
                                         ))}

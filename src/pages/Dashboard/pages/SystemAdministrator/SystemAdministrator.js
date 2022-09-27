@@ -48,6 +48,7 @@ import useUserURLRedirect from '../../../../hooks/core/UserURLRedirect/UserURLRe
 import { CleaningServices } from '@mui/icons-material';
 import { useFileUploadMutation, useFileDownMutation, useGetFileInfoMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
 import { UploadDialog } from '../../../../dialogs/Upload';
+import { Overlay } from '../../../../components/Overlay';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -1075,420 +1076,424 @@ const SystemAdministrator = () => {
                             </>
                         ))}
                     </div>
-                    <div className={regMemberPop ? (classes.adminPopup + ' regMember') : (classes.adminPopup + ' regMemberClose')}>
-                        <div className={classes.popHeader}>
-                            가입자 등록
-                        </div>
-                        <div className={classes.popupTable}>
-                            <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}>회사명</div>
-                                <div className={classes.popupData}>
-                                    <TextField
-                                        variant="outlined"
-                                        value={subscriberInsert.companyName}
-                                        className={classes.tableTextField}
-                                        onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "companyName": e.target.value })}
-                                    />
-                                </div>
+                    <Overlay show={regMemberPop}>
+                        <div className={regMemberPop ? (classes.adminPopup + ' regMember') : (classes.adminPopup + ' regMemberClose')}>
+                            <div className={classes.popHeader}>
+                                가입자 등록
                             </div>
-                            <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}>
-                                    <div className={classes.headNest}>사용자</div>
-                                    <div className={classes.headNest}>
-                                        <div className={classes.dataNest}>사업장명</div>
-                                        <div className={classes.dataNest}>사업자등록번호</div>
-                                        <div className={classes.dataNest}>업종</div>
-                                        <div className={classes.dataNest}>규모</div>
-                                        <div className={classes.dataNest}>ID</div>
-                                        <div className={classes.dataNest}>담당자명</div>
-                                        <div className={classes.dataNest}>이메일</div>
+                            <div className={classes.popupTable}>
+                                <div className={classes.popupRow}>
+                                    <div className={classes.popupData + ' data_head'}>회사명</div>
+                                    <div className={classes.popupData}>
+                                        <TextField
+                                            variant="outlined"
+                                            value={subscriberInsert.companyName}
+                                            className={classes.tableTextField}
+                                            onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "companyName": e.target.value })}
+                                        />
                                     </div>
                                 </div>
-                                <div className={classes.popupData}>
-                                    <div className={classes.dataNest}>
-                                        <TextField
-                                            variant="outlined"
-                                            value={subscriberInsert.workplaceName}
-                                            className={classes.tableTextField}
-                                            onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "workplaceName": e.target.value })}
-                                        />
+                                <div className={classes.popupRow}>
+                                    <div className={classes.popupData + ' data_head'}>
+                                        <div className={classes.headNest}>사용자</div>
+                                        <div className={classes.headNest}>
+                                            <div className={classes.dataNest}>사업장명</div>
+                                            <div className={classes.dataNest}>사업자등록번호</div>
+                                            <div className={classes.dataNest}>업종</div>
+                                            <div className={classes.dataNest}>규모</div>
+                                            <div className={classes.dataNest}>ID</div>
+                                            <div className={classes.dataNest}>담당자명</div>
+                                            <div className={classes.dataNest}>이메일</div>
+                                        </div>
                                     </div>
-                                    <div className={classes.dataNest}>
-                                        <TextField
-                                            variant="outlined"
-                                            value={subscriberInsert.registNo}
-                                            className={classes.tableTextField}
-                                            onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "registNo": e.target.value })}
-                                        />
-                                    </div>
-                                    <div className={classes.dataNest}>
-                                        <Select
-                                            className={classes.tableTextField}
-                                            value={subscriberInsert.sectorCd}
-                                            onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "sectorCd": e.target.value })}
-                                        >
-                                            {codeGroup2?.map((code) => (<MenuItem value={code.codeId}>{code.codeNameKor}</MenuItem>))}
-                                        </Select>
-                                    </div>
-                                    <div className={classes.dataNest}>
-                                        <Select
-                                            className={classes.tableTextField}
-                                            value={subscriberInsert.scaleCd}
-                                            onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "scaleCd": e.target.value })}
-                                        >
-                                            {codeGroup1?.map((code) => (<MenuItem value={code.codeId}>{code.codeNameKor}</MenuItem>))}
-                                        </Select>
-                                    </div>
-                                    <div className={classes.dataNest + ' headTitle'}>
-                                        <div>
+                                    <div className={classes.popupData}>
+                                        <div className={classes.dataNest}>
                                             <TextField
                                                 variant="outlined"
-                                                value={subscribersInsert.loginId}
+                                                value={subscriberInsert.workplaceName}
                                                 className={classes.tableTextField}
-                                                onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "loginId": e.target.value })}
+                                                onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "workplaceName": e.target.value })}
                                             />
                                         </div>
-                                        <div>사용자권한</div>
-                                        <div>
+                                        <div className={classes.dataNest}>
+                                            <TextField
+                                                variant="outlined"
+                                                value={subscriberInsert.registNo}
+                                                className={classes.tableTextField}
+                                                onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "registNo": e.target.value })}
+                                            />
+                                        </div>
+                                        <div className={classes.dataNest}>
                                             <Select
                                                 className={classes.tableTextField}
-                                                value={subscriberInsert.managerRoleCd}
-                                                onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "managerRoleCd": e.target.value })}
+                                                value={subscriberInsert.sectorCd}
+                                                onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "sectorCd": e.target.value })}
+                                            >
+                                                {codeGroup2?.map((code) => (<MenuItem value={code.codeId}>{code.codeNameKor}</MenuItem>))}
+                                            </Select>
+                                        </div>
+                                        <div className={classes.dataNest}>
+                                            <Select
+                                                className={classes.tableTextField}
+                                                value={subscriberInsert.scaleCd}
+                                                onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "scaleCd": e.target.value })}
+                                            >
+                                                {codeGroup1?.map((code) => (<MenuItem value={code.codeId}>{code.codeNameKor}</MenuItem>))}
+                                            </Select>
+                                        </div>
+                                        <div className={classes.dataNest + ' headTitle'}>
+                                            <div>
+                                                <TextField
+                                                    variant="outlined"
+                                                    value={subscribersInsert.loginId}
+                                                    className={classes.tableTextField}
+                                                    onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "loginId": e.target.value })}
+                                                />
+                                            </div>
+                                            <div>사용자권한</div>
+                                            <div>
+                                                <Select
+                                                    className={classes.tableTextField}
+                                                    value={subscriberInsert.managerRoleCd}
+                                                    onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "managerRoleCd": e.target.value })}
+                                                >
+                                                    {codeGroup3?.map((code) => (<MenuItem value={code.codeId}>{code.codeNameKor}</MenuItem>))}
+                                                </Select>
+                                            </div>
+                                        </div>
+                                        <div className={classes.dataNest + ' headTitle'}>
+                                            <div>
+                                                <TextField
+                                                    variant="outlined"
+                                                    value={subscriberInsert.managerName}
+                                                    className={classes.tableTextField}
+                                                    onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "managerName": e.target.value })}
+                                                />
+                                            </div>
+                                            <div style={{ borderBottom: 'none' }}>연락처</div>
+                                            <div>
+                                                <TextField
+                                                    variant="outlined"
+                                                    value={subscriberInsert.managerTel}
+                                                    className={classes.tableTextField}
+                                                    onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "managerTel": e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className={classes.dataNest}>
+                                            <TextField
+                                                variant="outlined"
+                                                value={subscriberInsertEmailBeforeSign}
+                                                className={classes.tableTextField}
+                                                onChange={(e) => setSubscriberInsertEmailBeforeSign(e.target.value)}
+                                                sx={{ width: 180 }}
+                                            />
+                                            &nbsp;@&nbsp;
+                                            <TextField
+                                                variant="outlined"
+                                                value={subscriberInsertEmailAfterSign}
+                                                className={classes.tableTextField}
+                                                onChange={(e) => setSubscriberInsertEmailAfterSign(e.target.value)}
+                                                sx={{ width: 232 }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={classes.popupRow}>
+                                    <div className={classes.popupData + ' data_head'}>계약금액</div>
+                                    <div className={classes.popupData}>
+                                        <TextField
+                                            variant="outlined"
+                                            value={subscriberInsert.contractAmount}
+                                            className={classes.tableTextField}
+                                            onChange={(e) => {
+                                                setSubscriberInsert({ ...subscriberInsert, "contractAmount": e.target.value })
+                                            }}
+                                            sx={{ width: 180 }}
+                                        />
+                                        &nbsp;원
+                                    </div>
+                                </div>
+                                <div className={classes.popupRow}>
+                                    <div className={classes.popupData + ' data_head'}>계약기간</div>
+                                    <div className={classes.popupData}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                            <DesktopDatePicker
+                                                className={classes.selectMenuDate}
+                                                label=" "
+                                                inputFormat="YYYY-MM-DD"
+                                                value={subscriberInsert.contractStartDate}
+                                                onChange={(newDate) => {
+                                                    const date = new Date(newDate.$d)
+                                                    setSubscriberInsert({ ...subscriberInsert, "contractStartDate": moment(date).format("YYYY-MM-DD") })
+                                                }}
+                                                renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
+                                            />
+                                        </LocalizationProvider>
+                                        &nbsp;~&nbsp;
+                                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                            <DesktopDatePicker
+                                                className={classes.selectMenuDate}
+                                                label=" "
+                                                inputFormat="YYYY-MM-DD"
+                                                value={subscriberInsert.contractEndDate}
+                                                onChange={(newDate) => {
+                                                    const date = new Date(newDate.$d)
+                                                    setSubscriberInsert({ ...subscriberInsert, "contractEndDate": moment(date).format("YYYY-MM-DD") })
+                                                }}
+                                                renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
+                                            />
+                                        </LocalizationProvider>
+                                    </div>
+                                </div>
+                                <div className={classes.popupRow}>
+                                    <div className={classes.popupData + ' data_head'}>상태</div>
+                                    <div className={classes.popupData}>
+                                        <Select
+                                            className={classes.tableTextField}
+                                            value={subscriberInsert.statusCd}
+                                            onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "statusCd": e.target.value })}
+                                        >
+                                            <MenuItem value={1}>사용</MenuItem>
+                                            <MenuItem value={0}>사용중지</MenuItem>
+                                        </Select>
+                                    </div>
+                                </div>
+                                <div className={classes.popupRow}>
+                                    <div className={classes.popupData + ' data_head'}>계약서</div>
+                                    <div className={classes.popupData}>
+                                        <TextField
+                                            variant="outlined"
+                                            value={filePath.contractFileId ?? ""}
+                                            className={classes.tableTextField}
+                                            // onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "contractFileId": e.target.value })}
+                                            sx={{ width: 300 }}
+                                        />
+                                        <SearchUserButton id="contractFileId" onClick={handleDialogOpen}>찾아보기</SearchUserButton>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={classes.popButtons}>
+                                <YesButton onClick={() => handleSubscribersInsert()}>등록</YesButton>
+                                <NoButton onClick={() => setRegMemberPop(false)}>취소</NoButton>
+                            </div>
+                        </div>
+                    </Overlay>
+                    <Overlay show={userInfoPop}>
+                        <div className={userInfoPop ? (classes.adminPopup + ' infoMember') : (classes.adminPopup + ' infoMemberClose')}>
+                            <div className={classes.popHeader}>
+                                가입자 정보 수정
+                            </div>
+                            <div className={classes.popupTable}>
+                                <div className={classes.popupRow}>
+                                    <div className={classes.popupData + ' data_head'}>회사명</div>
+                                    <div className={classes.popupData}>
+                                        <TextField
+                                            variant="outlined"
+                                            value={subscriberView.companyName}
+                                            className={classes.tableTextField}
+                                            onChange={(event) => setSubscriberView({ ...subscriberView, "companyName": event.target.value })}
+                                        />
+                                    </div>
+                                </div>
+                                <div className={classes.popupRow}>
+                                    <div className={classes.popupData + ' data_head'}>
+                                        <div className={classes.headNest}>사용자</div>
+                                        <div className={classes.headNest}>
+                                            <div className={classes.dataNest}>사업장명</div>
+                                            <div className={classes.dataNest}>사업자등록번호</div>
+                                            <div className={classes.dataNest}>업종</div>
+                                            <div className={classes.dataNest}>규모</div>
+                                            <div className={classes.dataNest}>ID</div>
+                                            <div className={classes.dataNest}>사용자권한</div>
+                                            <div className={classes.dataNest}>담당자명</div>
+                                            <div className={classes.dataNest}>연락처</div>
+                                            <div className={classes.dataNest}>이메일</div>
+                                        </div>
+                                    </div>
+                                    <div className={classes.popupData}>
+                                        <div className={classes.dataNest}>
+                                            <TextField
+                                                variant="outlined"
+                                                value={subscriberView.workplaceName}
+                                                className={classes.tableTextField}
+                                                onChange={(event) => setSubscriberView({ ...subscriberView, "workplaceName": event.target.value })}
+                                            />
+                                        </div>
+                                        <div className={classes.dataNest}>
+                                            <TextField
+                                                variant="outlined"
+                                                value={subscriberView.registNo}
+                                                className={classes.tableTextField}
+                                                onChange={(event) => setSubscriberView({ ...subscriberView, "registNo": event.target.value })}
+                                            />
+                                        </div>
+                                        <div className={classes.dataNest}>
+                                            <Select
+                                                className={classes.tableTextField}
+                                                value={subscriberView.sectorCd}
+                                                onChange={(event) => setSubscriberView({ ...subscriberView, "sectorCd": event.target.value })}
+                                            >
+                                                {codeGroup2?.map((code) => (<MenuItem value={code.codeId}>{code.codeNameKor}</MenuItem>))}
+                                            </Select>
+                                        </div>
+                                        <div className={classes.dataNest}>
+                                            <Select
+                                                className={classes.tableTextField}
+                                                value={subscriberView.scaleCd}
+                                                onChange={(e) => setSubscriberView({ ...subscriberView, "scaleCd": e.target.value })}
+                                            >
+                                                {codeGroup1?.map((code) => (<MenuItem value={code.codeId}>{code.codeNameKor}</MenuItem>))}
+                                            </Select>
+                                        </div>
+                                        <div className={classes.dataNest}>
+                                            <TextField
+                                                variant="outlined"
+                                                className={classes.tableTextField}
+                                                value={subscriberView.loginId}
+                                                onChange={(event) => setSubscriberView({ ...subscriberView, "loginId": event.target.value })}
+                                            />
+                                        </div>
+                                        <div className={classes.dataNest}>
+                                            <Select
+                                                className={classes.tableTextField}
+                                                value={subscriberView.managerRoleCd}
+                                                onChange={(event) => setSubscriberView({ ...subscriberView, "managerRoleCd": event.target.value })}
                                             >
                                                 {codeGroup3?.map((code) => (<MenuItem value={code.codeId}>{code.codeNameKor}</MenuItem>))}
                                             </Select>
                                         </div>
-                                    </div>
-                                    <div className={classes.dataNest + ' headTitle'}>
-                                        <div>
+                                        <div className={classes.dataNest}>
                                             <TextField
                                                 variant="outlined"
-                                                value={subscriberInsert.managerName}
                                                 className={classes.tableTextField}
-                                                onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "managerName": e.target.value })}
+                                                value={subscriberView.managerName}
+                                                onChange={(event) => setSubscriberView({ ...subscriberView, "managerName": event.target.value })}
                                             />
                                         </div>
-                                        <div style={{ borderBottom: 'none' }}>연락처</div>
-                                        <div>
+                                        <div className={classes.dataNest}>
                                             <TextField
                                                 variant="outlined"
-                                                value={subscriberInsert.managerTel}
                                                 className={classes.tableTextField}
-                                                onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "managerTel": e.target.value })}
+                                                value={managerTel.firstInput}
+                                                onChange={(event) => setManagerTel({ ...managerTel, firstInput: event.target.value })}
+                                                sx={{ width: 70 }}
+                                            />
+                                            &nbsp;‒&nbsp;
+                                            <TextField
+                                                variant="outlined"
+                                                className={classes.tableTextField}
+                                                value={managerTel.secondeInput}
+                                                onChange={(event) => setManagerTel({ ...managerTel, secondeInput: event.target.value })}
+                                                sx={{ width: 70 }}
+                                            />
+                                            &nbsp;‒&nbsp;
+                                            <TextField
+                                                variant="outlined"
+                                                className={classes.tableTextField}
+                                                value={managerTel.thirdInput}
+                                                onChange={(event) => setManagerTel({ ...managerTel, thirdInput: event.target.value })}
+                                                sx={{ width: 70 }}
+                                            />
+                                        </div>
+                                        <div className={classes.dataNest}>
+                                            <TextField
+                                                variant="outlined"
+                                                className={classes.tableTextField}
+                                                value={managerEmail.firstInput}
+                                                onChange={(event) => setManagerEmail({ ...managerEmail, firstInput: event.target.value })}
+                                                sx={{ width: 189 }}
+                                            />
+                                            &nbsp;@&nbsp;
+                                            <TextField
+                                                variant="outlined"
+                                                className={classes.tableTextField}
+                                                value={managerEmail.secondeInput}
+                                                onChange={(event) => setManagerEmail({ ...managerEmail, secondeInput: event.target.value })}
+                                                sx={{ width: 189 }}
                                             />
                                         </div>
                                     </div>
-                                    <div className={classes.dataNest}>
+                                </div>
+                                <div className={classes.popupRow}>
+                                    <div className={classes.popupData + ' data_head'}>계약금액</div>
+                                    <div className={classes.popupData}>
                                         <TextField
                                             variant="outlined"
-                                            value={subscriberInsertEmailBeforeSign}
                                             className={classes.tableTextField}
-                                            onChange={(e) => setSubscriberInsertEmailBeforeSign(e.target.value)}
-                                            sx={{ width: 180 }}
+                                            value={subscriberView.contractAmount}
+                                            onChange={(event) => setSubscriberView({ ...subscriberView, "contractAmount": event.target.value })}
+                                            sx={{ width: 190 }}
                                         />
-                                        &nbsp;@&nbsp;
-                                        <TextField
-                                            variant="outlined"
-                                            value={subscriberInsertEmailAfterSign}
-                                            className={classes.tableTextField}
-                                            onChange={(e) => setSubscriberInsertEmailAfterSign(e.target.value)}
-                                            sx={{ width: 232 }}
-                                        />
+                                        &nbsp;원
                                     </div>
                                 </div>
-                            </div>
-                            <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}>계약금액</div>
-                                <div className={classes.popupData}>
-                                    <TextField
-                                        variant="outlined"
-                                        value={subscriberInsert.contractAmount}
-                                        className={classes.tableTextField}
-                                        onChange={(e) => {
-                                            setSubscriberInsert({ ...subscriberInsert, "contractAmount": e.target.value })
-                                        }}
-                                        sx={{ width: 180 }}
-                                    />
-                                    &nbsp;원
-                                </div>
-                            </div>
-                            <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}>계약기간</div>
-                                <div className={classes.popupData}>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-                                        <DesktopDatePicker
-                                            className={classes.selectMenuDate}
-                                            label=" "
-                                            inputFormat="YYYY-MM-DD"
-                                            value={subscriberInsert.contractStartDate}
-                                            onChange={(newDate) => {
-                                                const date = new Date(newDate.$d)
-                                                setSubscriberInsert({ ...subscriberInsert, "contractStartDate": moment(date).format("YYYY-MM-DD") })
-                                            }}
-                                            renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
-                                        />
-                                    </LocalizationProvider>
-                                    &nbsp;~&nbsp;
-                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-                                        <DesktopDatePicker
-                                            className={classes.selectMenuDate}
-                                            label=" "
-                                            inputFormat="YYYY-MM-DD"
-                                            value={subscriberInsert.contractEndDate}
-                                            onChange={(newDate) => {
-                                                const date = new Date(newDate.$d)
-                                                setSubscriberInsert({ ...subscriberInsert, "contractEndDate": moment(date).format("YYYY-MM-DD") })
-                                            }}
-                                            renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
-                                        />
-                                    </LocalizationProvider>
-                                </div>
-                            </div>
-                            <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}>상태</div>
-                                <div className={classes.popupData}>
-                                    <Select
-                                        className={classes.tableTextField}
-                                        value={subscriberInsert.statusCd}
-                                        onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "statusCd": e.target.value })}
-                                    >
-                                        <MenuItem value={1}>사용</MenuItem>
-                                        <MenuItem value={0}>사용중지</MenuItem>
-                                    </Select>
-                                </div>
-                            </div>
-                            <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}>계약서</div>
-                                <div className={classes.popupData}>
-                                    <TextField
-                                        variant="outlined"
-                                        value={filePath.contractFileId ?? ""}
-                                        className={classes.tableTextField}
-                                        // onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "contractFileId": e.target.value })}
-                                        sx={{ width: 300 }}
-                                    />
-                                    <SearchUserButton id="contractFileId" onClick={handleDialogOpen}>찾아보기</SearchUserButton>
-                                </div>
-                            </div>
-                        </div>
-                        <div className={classes.popButtons}>
-                            <YesButton onClick={() => handleSubscribersInsert()}>등록</YesButton>
-                            <NoButton onClick={() => setRegMemberPop(false)}>취소</NoButton>
-                        </div>
-                    </div>
-                    <div className={userInfoPop ? (classes.adminPopup + ' infoMember') : (classes.adminPopup + ' infoMemberClose')}>
-                        <div className={classes.popHeader}>
-                            가입자 정보 수정
-                        </div>
-                        <div className={classes.popupTable}>
-                            <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}>회사명</div>
-                                <div className={classes.popupData}>
-                                    <TextField
-                                        variant="outlined"
-                                        value={subscriberView.companyName}
-                                        className={classes.tableTextField}
-                                        onChange={(event) => setSubscriberView({ ...subscriberView, "companyName": event.target.value })}
-                                    />
-                                </div>
-                            </div>
-                            <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}>
-                                    <div className={classes.headNest}>사용자</div>
-                                    <div className={classes.headNest}>
-                                        <div className={classes.dataNest}>사업장명</div>
-                                        <div className={classes.dataNest}>사업자등록번호</div>
-                                        <div className={classes.dataNest}>업종</div>
-                                        <div className={classes.dataNest}>규모</div>
-                                        <div className={classes.dataNest}>ID</div>
-                                        <div className={classes.dataNest}>사용자권한</div>
-                                        <div className={classes.dataNest}>담당자명</div>
-                                        <div className={classes.dataNest}>연락처</div>
-                                        <div className={classes.dataNest}>이메일</div>
+                                <div className={classes.popupRow}>
+                                    <div className={classes.popupData + ' data_head'}>계약기간</div>
+                                    <div className={classes.popupData}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                            <DesktopDatePicker
+                                                className={classes.selectMenuDate}
+                                                label=" "
+                                                inputFormat="YYYY-MM-DD"
+                                                value={contractStartDate}
+                                                onChange={(newDate) => {
+                                                    const date = new Date(newDate.$d)
+                                                    setContractStartDate(moment(date).format("YYYY-MM-DD"))
+                                                }}
+                                                renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
+                                            />
+                                        </LocalizationProvider>
+                                        &nbsp;~&nbsp;
+                                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                            <DesktopDatePicker
+                                                className={classes.selectMenuDate}
+                                                label=" "
+                                                inputFormat="YYYY-MM-DD"
+                                                value={contractEndDate}
+                                                onChange={(newDate) => {
+                                                    const date = new Date(newDate.$d)
+                                                    setContractEndDate(moment(date).format("YYYY-MM-DD"))
+                                                }}
+                                                renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
+                                            />
+                                        </LocalizationProvider>
                                     </div>
                                 </div>
-                                <div className={classes.popupData}>
-                                    <div className={classes.dataNest}>
-                                        <TextField
-                                            variant="outlined"
-                                            value={subscriberView.workplaceName}
-                                            className={classes.tableTextField}
-                                            onChange={(event) => setSubscriberView({ ...subscriberView, "workplaceName": event.target.value })}
-                                        />
-                                    </div>
-                                    <div className={classes.dataNest}>
-                                        <TextField
-                                            variant="outlined"
-                                            value={subscriberView.registNo}
-                                            className={classes.tableTextField}
-                                            onChange={(event) => setSubscriberView({ ...subscriberView, "registNo": event.target.value })}
-                                        />
-                                    </div>
-                                    <div className={classes.dataNest}>
+                                <div className={classes.popupRow}>
+                                    <div className={classes.popupData + ' data_head'}>상태</div>
+                                    <div className={classes.popupData}>
                                         <Select
                                             className={classes.tableTextField}
-                                            value={subscriberView.sectorCd}
-                                            onChange={(event) => setSubscriberView({ ...subscriberView, "sectorCd": event.target.value })}
+                                            value={!!(subscriberView.companyName) ? subscriberView.statusCd : ""}
+                                            onChange={(event) => setSubscriberView({ ...subscriberView, "statusCd": event.target.value })}
+                                            sx={{ width: 250 }}
                                         >
-                                            {codeGroup2?.map((code) => (<MenuItem value={code.codeId}>{code.codeNameKor}</MenuItem>))}
+                                            <MenuItem value="1">사용</MenuItem>
+                                            <MenuItem value="0">사용중지</MenuItem>
                                         </Select>
                                     </div>
-                                    <div className={classes.dataNest}>
-                                        <Select
-                                            className={classes.tableTextField}
-                                            value={subscriberView.scaleCd}
-                                            onChange={(e) => setSubscriberView({ ...subscriberView, "scaleCd": e.target.value })}
-                                        >
-                                            {codeGroup1?.map((code) => (<MenuItem value={code.codeId}>{code.codeNameKor}</MenuItem>))}
-                                        </Select>
-                                    </div>
-                                    <div className={classes.dataNest}>
+                                </div>
+                                <div className={classes.popupRow}>
+                                    <div className={classes.popupData + ' data_head'}>계약서</div>
+                                    <div className={classes.popupData}>
                                         <TextField
                                             variant="outlined"
+                                            value={filePath.contractFileId ?? ""}
                                             className={classes.tableTextField}
-                                            value={subscriberView.loginId}
-                                            onChange={(event) => setSubscriberView({ ...subscriberView, "loginId": event.target.value })}
+                                            // onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "contractFileId": e.target.value })}
+                                            sx={{ width: 300 }}
                                         />
-                                    </div>
-                                    <div className={classes.dataNest}>
-                                        <Select
-                                            className={classes.tableTextField}
-                                            value={subscriberView.managerRoleCd}
-                                            onChange={(event) => setSubscriberView({ ...subscriberView, "managerRoleCd": event.target.value })}
-                                        >
-                                            {codeGroup3?.map((code) => (<MenuItem value={code.codeId}>{code.codeNameKor}</MenuItem>))}
-                                        </Select>
-                                    </div>
-                                    <div className={classes.dataNest}>
-                                        <TextField
-                                            variant="outlined"
-                                            className={classes.tableTextField}
-                                            value={subscriberView.managerName}
-                                            onChange={(event) => setSubscriberView({ ...subscriberView, "managerName": event.target.value })}
-                                        />
-                                    </div>
-                                    <div className={classes.dataNest}>
-                                        <TextField
-                                            variant="outlined"
-                                            className={classes.tableTextField}
-                                            value={managerTel.firstInput}
-                                            onChange={(event) => setManagerTel({ ...managerTel, firstInput: event.target.value })}
-                                            sx={{ width: 70 }}
-                                        />
-                                        &nbsp;‒&nbsp;
-                                        <TextField
-                                            variant="outlined"
-                                            className={classes.tableTextField}
-                                            value={managerTel.secondeInput}
-                                            onChange={(event) => setManagerTel({ ...managerTel, secondeInput: event.target.value })}
-                                            sx={{ width: 70 }}
-                                        />
-                                        &nbsp;‒&nbsp;
-                                        <TextField
-                                            variant="outlined"
-                                            className={classes.tableTextField}
-                                            value={managerTel.thirdInput}
-                                            onChange={(event) => setManagerTel({ ...managerTel, thirdInput: event.target.value })}
-                                            sx={{ width: 70 }}
-                                        />
-                                    </div>
-                                    <div className={classes.dataNest}>
-                                        <TextField
-                                            variant="outlined"
-                                            className={classes.tableTextField}
-                                            value={managerEmail.firstInput}
-                                            onChange={(event) => setManagerEmail({ ...managerEmail, firstInput: event.target.value })}
-                                            sx={{ width: 189 }}
-                                        />
-                                        &nbsp;@&nbsp;
-                                        <TextField
-                                            variant="outlined"
-                                            className={classes.tableTextField}
-                                            value={managerEmail.secondeInput}
-                                            onChange={(event) => setManagerEmail({ ...managerEmail, secondeInput: event.target.value })}
-                                            sx={{ width: 189 }}
-                                        />
+                                        <SearchUserButton id="contractFileId" onClick={handleDialogOpen}>찾아보기</SearchUserButton>
                                     </div>
                                 </div>
                             </div>
-                            <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}>계약금액</div>
-                                <div className={classes.popupData}>
-                                    <TextField
-                                        variant="outlined"
-                                        className={classes.tableTextField}
-                                        value={subscriberView.contractAmount}
-                                        onChange={(event) => setSubscriberView({ ...subscriberView, "contractAmount": event.target.value })}
-                                        sx={{ width: 190 }}
-                                    />
-                                    &nbsp;원
-                                </div>
-                            </div>
-                            <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}>계약기간</div>
-                                <div className={classes.popupData}>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-                                        <DesktopDatePicker
-                                            className={classes.selectMenuDate}
-                                            label=" "
-                                            inputFormat="YYYY-MM-DD"
-                                            value={contractStartDate}
-                                            onChange={(newDate) => {
-                                                const date = new Date(newDate.$d)
-                                                setContractStartDate(moment(date).format("YYYY-MM-DD"))
-                                            }}
-                                            renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
-                                        />
-                                    </LocalizationProvider>
-                                    &nbsp;~&nbsp;
-                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-                                        <DesktopDatePicker
-                                            className={classes.selectMenuDate}
-                                            label=" "
-                                            inputFormat="YYYY-MM-DD"
-                                            value={contractEndDate}
-                                            onChange={(newDate) => {
-                                                const date = new Date(newDate.$d)
-                                                setContractEndDate(moment(date).format("YYYY-MM-DD"))
-                                            }}
-                                            renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
-                                        />
-                                    </LocalizationProvider>
-                                </div>
-                            </div>
-                            <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}>상태</div>
-                                <div className={classes.popupData}>
-                                    <Select
-                                        className={classes.tableTextField}
-                                        value={!!(subscriberView.companyName) ? subscriberView.statusCd : ""}
-                                        onChange={(event) => setSubscriberView({ ...subscriberView, "statusCd": event.target.value })}
-                                        sx={{ width: 250 }}
-                                    >
-                                        <MenuItem value="1">사용</MenuItem>
-                                        <MenuItem value="0">사용중지</MenuItem>
-                                    </Select>
-                                </div>
-                            </div>
-                            <div className={classes.popupRow}>
-                                <div className={classes.popupData + ' data_head'}>계약서</div>
-                                <div className={classes.popupData}>
-                                    <TextField
-                                        variant="outlined"
-                                        value={filePath.contractFileId ?? ""}
-                                        className={classes.tableTextField}
-                                        // onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "contractFileId": e.target.value })}
-                                        sx={{ width: 300 }}
-                                    />
-                                    <SearchUserButton id="contractFileId" onClick={handleDialogOpen}>찾아보기</SearchUserButton>
-                                </div>
+                            <div className={classes.popButtons}>
+                                <YesButton onClick={() => handleSubscribersUpdate()}>수정</YesButton>
+                                <NoButton onClick={() => setUserInfoPop(false)}>취소</NoButton>
                             </div>
                         </div>
-                        <div className={classes.popButtons}>
-                            <YesButton onClick={() => handleSubscribersUpdate()}>수정</YesButton>
-                            <NoButton onClick={() => setUserInfoPop(false)}>취소</NoButton>
-                        </div>
-                    </div>
+                    </Overlay>
                     <div className={classes.adminPopup + ' popSettings'}>
                         <div className={classes.popHeader}>
                             파일업로드
