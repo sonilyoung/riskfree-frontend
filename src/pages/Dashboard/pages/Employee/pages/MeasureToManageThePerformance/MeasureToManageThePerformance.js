@@ -766,6 +766,7 @@ const MeasureToManageThePerformance = () => {
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [openDialog, setOpenDialog] = useState(false)
+    const [uploadFlag, setUploadFlag] = useState(false)
 
 
     const [getRelatedRaw] = useGetRelatedRawMutation();
@@ -784,10 +785,12 @@ const MeasureToManageThePerformance = () => {
         const lawButtonId = { lawButtonId: dialogId }
         formData.append('lawButtonId', new Blob([JSON.stringify(lawButtonId)], { type: 'application/json' }))
         const response = await relatedRawExcelUpload(formData)
-        const fileId = response.data.RET_DATA[0].atchFileId
+        console.log(response)
+        // const fileId = response.data.RET_DATA[0].atchFileId
         handleDialogClose()
-        setFiles({ ...files, [dialogId]: parseInt(fileId) })
-        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+        // setFiles({ ...files, [dialogId]: parseInt(fileId) })
+        // setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+        setUploadFlag(!uploadFlag)
     }
 
     const handleDialogOpen = (id) => {
@@ -846,7 +849,10 @@ const MeasureToManageThePerformance = () => {
             .then(() => fetchRelatedRawList(lawId));
     }
 
-    // console.log(dialogId)
+    useEffect(() => {
+        fetchRelatedRawList(lawId);
+        fetchRelatedRawButtonList();
+    }, [uploadFlag])
 
     useEffect(() => {
         fetchRelatedRawList(lawId);
