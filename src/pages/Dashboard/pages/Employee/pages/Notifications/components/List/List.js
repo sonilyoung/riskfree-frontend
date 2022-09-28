@@ -28,6 +28,8 @@ import { DefaultLayout } from '../../../../../../../../layouts/Default';
 import { useNoticesSelectMutation } from '../../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { selectBaselineId, selectWorkplaceId, setBaselineId } from '../../../../../../../../slices/selections/MainSelection';
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -228,6 +230,9 @@ const useStyles = makeStyles(() => ({
         '&:visited': {
             color: 'black'
         }
+    },
+    fileIconImg: {
+        cursor: 'pointer'
     }
 }));
 
@@ -325,6 +330,12 @@ function List() {
         setNoticesForCount(response)
     }
 
+    const handleFileDownload = (fileId) => {
+        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+    }
+
+    console.log(noticesList)
+
     useEffect(() => {
         handleFetchList()
     }, [page])
@@ -391,7 +402,7 @@ function List() {
                                     {notice.title}
                                 </div>
                                 <div className={classes.tableRow}>
-                                    {!!notice?.attachId && <img src={icoFile} alt="file icon" />}
+                                    {!!notice?.attachId && <img src={icoFile} className={classes.fileIconImg} alt="file icon" onClick={() => handleFileDownload(notice.attachId)} />}
                                 </div>
                                 <div className={classes.tableRow}>{notice.insertName}</div>
                                 <div className={classes.tableRow}>{notice.insertDate}</div>
