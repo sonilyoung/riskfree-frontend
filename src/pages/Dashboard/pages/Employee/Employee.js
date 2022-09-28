@@ -2469,6 +2469,12 @@ const Employee = () => {
         setReportList(Object.values(reportGridInformation));
     }
 
+    console.log(companyInfo)
+    const fetchImg = async () => {
+        // const response = await getImg(`${companyInfo?.logoImg}`)
+        // setImgPath(response.data.RET_DATA)
+    }
+
     useEffect(() => {
         fetchBaseline(baselineIdForSelect);
     }, [currentBaselineId])
@@ -2727,7 +2733,7 @@ const Employee = () => {
                                                 <Select
                                                     className={classes.popupTextField}
                                                     sx={{ width: 150, marginBottom: '25px !important' }}
-                                                    value={targetBaselineId || '복사할 차수'}
+                                                    value={targetBaselineId}
                                                     onChange={(event) => setTargetBaselineId(event.target.value)}
                                                 >
                                                     {!!baselineList && !!baselineList?.length && baselineList?.map(baselineItem =>
@@ -2764,7 +2770,7 @@ const Employee = () => {
                             <AdminButton className={classes.mainMenuButton} style={{ display: 'none' }}></AdminButton>
                             <div className={classes.weatherSection}>
                                 <span>
-                                    <img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${weatherData?.weatherImgUrl}`} alt="weather icon" />
+                                    <img src={`${BASE_URL}/file/getImg?imgPath=${weatherData?.weatherImgUrl}`} alt="weather icon" />
                                 </span>
                                 <span>{weatherData?.temperature} °</span>
                                 <span>{weatherData?.address}</span>
@@ -2778,7 +2784,7 @@ const Employee = () => {
                             <div className={classes.adminFieldText}>{companyInfo?.shGoal}</div>
                         </div>
                         <div className={classes.adminLogo}>
-                            {!!(companyInfo) && !!companyInfo.logoImg && (<img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
+                            {!!(companyInfo) && !!companyInfo.logoImg && (<img height={60} src={`${BASE_URL}/file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
                         </div>
                         <div className={classes.adminField + ' ' + classes.adminFieldRight}>
                             <div className={classes.adminFieldText}>경영방침</div>
@@ -2951,7 +2957,7 @@ const Employee = () => {
                         <FormControl sx={{ width: 130 }} className={classes.dropMenu + ' page_drop_menu'}>
                             <Select
                                 className={classes.selectMenu}
-                                value={baselineIdForSelect}
+                                value={baselineIdForSelect ?? ""}
                                 onChange={(e) => setBaselineIdForSelect(e.target.value)}
                                 inputProps={{ 'aria-label': 'Without label' }}>
                                 {!!baselineList && !!baselineList.length && baselineList?.map((baseline, index) => (

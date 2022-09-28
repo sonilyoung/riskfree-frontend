@@ -63,8 +63,10 @@ import adminIcon from '../../../../assets/images/btn_admin.png';
 import adminIconHover from '../../../../assets/images/btn_admin_ov.png';
 import icoFile from '../../../../assets/images/ic_file.png';
 import popupClose2 from '../../../../assets/images/btn_popClose2.png';
-
 import Chart from 'react-apexcharts';
+
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 
 const UserButton = styled(ButtonUnstyled)`
     background: transparent url(${userIcon});
@@ -758,7 +760,7 @@ const Director = () => {
                             <AdminButton className={classes.mainMenuButton} style={{ display: 'none' }}></AdminButton>
                             <div className={classes.weatherSection}>
                                 <span>
-                                    <img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${weatherData?.weatherImgUrl}`} alt="weather icon" />
+                                    <img src={`${BASE_URL}/file/getImg?imgPath=${weatherData?.weatherImgUrl}`} alt="weather icon" />
                                 </span>
                                 <span>{weatherData?.temperature} °</span>
                                 <span>{weatherData?.address}</span>
@@ -779,7 +781,7 @@ const Director = () => {
                             <div className={classes.adminFieldText}> {companyInfo.data?.RET_DATA?.shGoal}</div>
                         </div>
                         <div className={classes.adminLogo}>
-                            {companyInfo.data && !!(companyInfo.data.RET_DATA) && !!companyInfo.data.RET_DATA.logoImg && <img src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${companyInfo?.data?.RET_DATA?.logoImg}`} alt="logo" />}
+                            {companyInfo.data && !!(companyInfo.data.RET_DATA) && !!companyInfo.data.RET_DATA.logoImg && <img heigth={60} src={`${BASE_URL}/file/getImg?imgPath=${companyInfo?.data?.RET_DATA?.logoImg}`} alt="logo" />}
                         </div>
                         <div className={classes.adminField + ' ' + classes.adminFieldRight}>
                             <div className={classes.adminFieldText}>경영방침</div>

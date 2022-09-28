@@ -829,9 +829,9 @@ const WorkHistoryList = () => {
         setSafeWorkList(response.data.RET_DATA);
     }
 
-    const fetchSafeWorkFileTopInfo = async (noticeId) => {
+    const fetchSafeWorkFileTopInfo = async (constructionType) => {
         const response = await getSafeWorkFileTopInfo({
-            "noticeId": noticeId
+            "constructionType": constructionType
         });
         setSafeWorkFileTopinfo(response.data.RET_DATA);
     }
@@ -840,14 +840,13 @@ const WorkHistoryList = () => {
         const response = await getSafeWorkFile({
             "workplaceId": workplaceId,
             "constructionType": constructionType
-
         });
         setSafeWorkFileList(response.data.RET_DATA);
 
     }
     const handleFileInfo = async (id, constructionType) => {
         fetchSafeWorkFileList(constructionType)
-        fetchSafeWorkFileTopInfo(id)
+        fetchSafeWorkFileTopInfo(constructionType)
         setHide(false)
     }
 
