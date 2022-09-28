@@ -58,8 +58,12 @@ const useStyles = makeStyles(() => ({
             },
         }
     },
+    promptPopupClose: {
+        display: 'none'
+    },
     noticePopup: {
         // display: 'none',
+        textAlign: 'center',
         position: 'absolute',
         top: '50%',
         left: '50%',

@@ -103,6 +103,7 @@ import Ok from '../../../../components/MessageBox/Ok';
 import { useFileUploadMutation, useGetFileInfoMutation, useUpdateDocumentFileIdMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
 
 import Chart from 'react-apexcharts';
+import YesNo from '../../../../components/MessageBox/YesNo';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -2020,9 +2021,10 @@ const Employee = () => {
     const [noticeHotList, setNoticeHotList] = useState([]);
     const [getNoticeHotList] = useGetNoticeHotListMutation();
 
+    const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
     const [openDialog, setOpenDialog] = useState(false)
     const [okPopupShow, setOkPopupShow] = useState(false);
-    const [okPopupMessage, setOkPopupMessage] = useState(null);
+    const [okPopupMessage, setOkPopupMessage] = useState({ RET_CODE: "0201", RET_DESC: "저장성공" });
     const [selectedFile, setSelectedFile] = useState(null);
     const [inspectionFileId, setInspectionFileId] = useState(null)
     const [articleNoForInspection, setArticleNoForInspection] = useState(null)
@@ -2097,8 +2099,7 @@ const Employee = () => {
         "documentFileUpload": "",
         "inspectionFile": ""
     })
-
-
+    const [workplaceId, setWorkplaceId] = useState(null);
     const [fileUpload] = useFileUploadMutation();
     const [getFileInfo] = useGetFileInfoMutation()
     const [updateSafetyFile] = useUpdateSafetyFileMutation()
@@ -2114,6 +2115,8 @@ const Employee = () => {
 
     const handleClose = async () => {
         const response = await close({});
+        setOkPopupShow(true);
+        setOkPopupMessage(response.data);
     }
 
     const handleInsertBaseline = async () => {
@@ -2128,11 +2131,14 @@ const Employee = () => {
             "targetBaselineId": targetBaselineId,
             "baselineId": currentBaselineId
         });
+        setOkPopupShow(true);
         setOkPopupMessage(response.data);
     }
 
     const handleInsertBaseLineDataUpdate = async () => {
         const response = await insertBaseLineDataCopy({});
+        setYesNoPopupShow(false);
+        setOkPopupShow(true);
         setOkPopupMessage(response.data);
     }
 
@@ -2142,6 +2148,8 @@ const Employee = () => {
             "missionStatements": missionStatement,
             "safetyGoal": safetyGoal
         });
+        setOkPopupShow(true);
+        setOkPopupMessage(response.data);
         fetchCompanyInfo();
         setMissionStatement("");
         setSafetyGoal("");
@@ -2433,7 +2441,7 @@ const Employee = () => {
         const response = await getBaseLineReport({
             "baselineId": currentBaselineId,
             "condition": condition,
-            "workplaceId": userWorkplaceId
+            "workplaceId": workplaceId
         });
         setReportList(response.data.RET_DATA);
         const reportChartInformation = reduceAPIResponse(response.data.RET_DATA, "workplaceName", "evaluationRate");
@@ -2498,8 +2506,8 @@ const Employee = () => {
     }, [baselineIdForSelect, baselineData]);
 
     useEffect(() => {
-        fetchBaseLineReportList(condition);
-        fetchTitleReport(condition);
+        fetchBaseLineReportList();
+        fetchTitleReport();
     }, [condition, currentBaselineId]);
 
     useEffect(() => {
@@ -2749,7 +2757,7 @@ const Employee = () => {
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" id="safetyFileUpload" onClick={handleDialogOpen}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setOkPopupShow(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setYesNoPopupShow(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
                                     </div>
                                     <div className={classes.headerPopFooter}>
                                         <PopupFootButton onClick={() => handleInsertBaseline()}>저장하기</PopupFootButton>
@@ -2791,12 +2799,13 @@ const Employee = () => {
                                     <ButtonClosePop onClick={() => setChartPop(false)}></ButtonClosePop>
                                 </div>
                                 <div className={classes.popList}>
-                                    <div className={activeReportItem === 1 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setCondition(1); setActiveReportItem(1) }}>차수별 대응수준 현황 (통합)</div>
-                                    <div className={activeReportItem === 2 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setCondition(2); setActiveReportItem(2) }}>차수별 대응수준 현황 (사업장별)</div>
-                                    <div className={activeReportItem === 3 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setCondition(3); setActiveReportItem(3) }}>항목별 대응수준 현황 (통합)</div>
-                                    <div className={activeReportItem === 4 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setCondition(4); setActiveReportItem(4) }}>항목별 대응수준 현황 (사업장별)</div>
+                                    <div className={activeReportItem === 1 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setWorkplaceId(null); setCondition(1); setActiveReportItem(1) }}>차수별 대응수준 현황 (통합)</div>
+                                    <div className={activeReportItem === 2 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setWorkplaceId(userWorkplaceId); setCondition(2); setActiveReportItem(2) }}>차수별 대응수준 현황 (사업장별)</div>
+                                    <div className={activeReportItem === 3 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setWorkplaceId(null); setCondition(3); setActiveReportItem(3) }}>항목별 대응수준 현황 (통합)</div>
+                                    <div className={activeReportItem === 4 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setWorkplaceId(userWorkplaceId); setCondition(4); setActiveReportItem(4) }}>항목별 대응수준 현황 (사업장별)</div>
                                     <div className={activeReportItem === 5 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { fetchAccidentsPreventionReportList(); setActiveReportItem(5) }}>사업장별 재해발생 통계</div>
                                     <div className={activeReportItem === 6 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { fetchImprovemetReportList(); setActiveReportItem(6) }}>개선.시정명령 조치내역 통계</div>
+                                    <div className={classes.PopListItem}>안전보건 법정교육 실시내역 통계</div>
                                 </div>
                             </div>
                             <div className={classes.chartPopGraph}>
@@ -2810,9 +2819,7 @@ const Employee = () => {
                                                 if (parseInt(baselineData.prevBaseline)) {
                                                     console.log(parseInt(baselineData.prevBaseline));
                                                     setBaselineIdForSelect(parseInt(baselineData.prevBaseline));
-                                                    // fetchBaseline(parseInt(baselineData.prevBaseline));
                                                     dispatch(setBaselineId(parseInt(baselineData.prevBaseline)));
-                                                    // setBaselineIdForSelect(parseInt(baselineData.prevBaseline));
                                                 }
                                             }}
                                             style={{ display: parseInt(baselineData.prevBaseline) ? "block" : "none" }}
@@ -2826,9 +2833,7 @@ const Employee = () => {
                                                 if (parseInt(baselineData.nextBaseline)) {
                                                     console.log(parseInt(baselineData.nextBaseline));
                                                     setBaselineIdForSelect(parseInt(baselineData.nextBaseline));
-                                                    // fetchBaseline(parseInt(baselineData.nextBaseline));
                                                     dispatch(setBaselineId(parseInt(baselineData.nextBaseline)));
-                                                    // setBaselineIdForSelect(parseInt(baselineData.nextBaseline));
                                                 }
                                             }}
                                             style={{ display: parseInt(baselineData.nextBaseline) ? "block" : "none" }}
@@ -3315,15 +3320,22 @@ const Employee = () => {
             <Overlay show={okPopupShow}>
                 <Ok
                     show={okPopupShow}
-                    message={{ RET_CODE: "0201", RET_DESC: "저장성공" }}
+                    message={okPopupMessage}
                     onConfirm={() => setOkPopupShow(false)} />
             </Overlay>
-            <Overlay show={okPopupShow}>
-                <Ok
-                    show={okPopupShow}
-                    message={{ RET_CODE: "0201", RET_DESC: "저장성공" }}
-                    onConfirm={() => setOkPopupShow(false)} />
+            <Overlay show={yesNoPopupShow}>
+                <YesNo
+                    show={yesNoPopupShow}
+                    onConfirmYes={handleInsertBaseLineDataUpdate}
+                    onConfirmNo={() => setYesNoPopupShow(false)}
+                />
             </Overlay>
+            {/* <Overlay show={okPopupShow}>
+                        <Ok
+                            show={okPopupShow}
+                            message={okPopupMessage}
+                            onConfirm={() => setOkPopupShow(false)} />
+                    </Overlay> */}
         </WideLayout >
     );
 };

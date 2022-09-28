@@ -336,6 +336,7 @@ const Director = () => {
     const [dayInfo, setDayInfo] = useState({});
     const currentWorkplaceId = useSelector(selectWorkplaceId);
     const currentBaselineId = useSelector(selectBaselineId);
+    const [workplaceId, setWorkplaceId] = useState(null);
     const [noticeHotList, setNoticeHotList] = useState([]);
     const [condition, setCondition] = useState(1);
     const [activeReportItem, setActiveReportItem] = useState(condition);
@@ -556,7 +557,7 @@ const Director = () => {
         const response = await getBaseLineReport({
             "baselineId": currentBaselineId,
             "condition": condition,
-            "workplaceId": currentWorkplaceId
+            "workplaceId": workplaceId
         });
         setReportList(response.data.RET_DATA);
         const reportChartInformation = reduceAPIResponse(response.data.RET_DATA, "workplaceName", "evaluationRate");
@@ -673,8 +674,8 @@ const Director = () => {
     }, [currentBaselineId, userWorkplaceId]);
 
     useEffect(() => {
-        fetchBaseLineReportList(condition);
-        fetchTitleReport(condition);
+        fetchBaseLineReportList();
+        fetchTitleReport();
     }, [condition, currentBaselineId]);
 
     useEffect(() => {
@@ -799,13 +800,13 @@ const Director = () => {
                                     <ButtonClosePop onClick={() => setChartPop(false)}></ButtonClosePop>
                                 </div>
                                 <div className={classes.popList}>
-                                    <div className={activeReportItem === 1 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setCondition(1); setActiveReportItem(1) }}>차수별 대응수준 현황 (통합)</div>
-                                    <div className={activeReportItem === 2 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setCondition(2); setActiveReportItem(2) }}>차수별 대응수준 현황 (사업장별)</div>
-                                    <div className={activeReportItem === 3 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setCondition(3); setActiveReportItem(3) }}>항목별 대응수준 현황 (통합)</div>
-                                    <div className={activeReportItem === 4 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setCondition(4); setActiveReportItem(4) }}>항목별 대응수준 현황 (사업장별)</div>
+                                    <div className={activeReportItem === 1 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setWorkplaceId(null); setCondition(1); setActiveReportItem(1) }}>차수별 대응수준 현황 (통합)</div>
+                                    <div className={activeReportItem === 2 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setWorkplaceId(userWorkplaceId); setCondition(2); setActiveReportItem(2) }}>차수별 대응수준 현황 (사업장별)</div>
+                                    <div className={activeReportItem === 3 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setWorkplaceId(null); setCondition(3); setActiveReportItem(3) }}>항목별 대응수준 현황 (통합)</div>
+                                    <div className={activeReportItem === 4 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setWorkplaceId(userWorkplaceId); setCondition(4); setActiveReportItem(4) }}>항목별 대응수준 현황 (사업장별)</div>
                                     <div className={activeReportItem === 5 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { fetchAccidentsPreventionReportList(); setActiveReportItem(5) }}>사업장별 재해발생 통계</div>
                                     <div className={activeReportItem === 6 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { fetchImprovemetReportList(); setActiveReportItem(6) }}>개선.시정명령 조치내역 통계</div>
-                                    {/* <div className={classes.PopListItem}>안전보건 법정교육 실시내역 통계</div> */}
+                                    <div className={classes.PopListItem}>안전보건 법정교육 실시내역 통계</div>
                                 </div>
                             </div>
                             <div className={classes.chartPopGraph}>

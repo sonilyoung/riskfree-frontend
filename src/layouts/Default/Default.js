@@ -795,7 +795,7 @@ const Default = ({ children }) => {
     const [weatherData, setWeatherData] = useState({})
 
     const [okPopupShow, setOkPopupShow] = useState(false);
-    const [okPopupMessage, setOkPopupMessage] = useState(null);
+    const [okPopupMessage, setOkPopupMessage] = useState({ RET_CODE: "0201", RET_DESC: "저장성공" });
     const [selectedFile, setSelectedFile] = useState(null);
     const [openDialog, setOpenDialog] = useState(false)
 
@@ -868,6 +868,8 @@ const Default = ({ children }) => {
 
     const handleClose = async () => {
         const response = await close({});
+        setOkPopupShow(true);
+        setOkPopupMessage(response.data);
     }
 
     const handleInsertBaseline = async () => {
@@ -888,7 +890,8 @@ const Default = ({ children }) => {
     const handleInsertBaseLineDataUpdate = async () => {
         const response = await insertBaseLineDataCopy({});
         console.log(response);
-        setPopupPrompt(false);
+        setOkPopupShow(true);
+        setOkPopupMessage(response.data);
     }
 
     const handleUpdateUserCompany = async () => {
@@ -897,6 +900,8 @@ const Default = ({ children }) => {
             "missionStatements": missionStatement,
             "safetyGoal": safetyGoal
         });
+        setOkPopupShow(true);
+        setOkPopupMessage(response.data);
         fetchCompanyInfo();
         setMissionStatement("");
         setSafetyGoal("");
@@ -1165,17 +1170,7 @@ const Default = ({ children }) => {
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" id="safetyFileUpload" onClick={handleDialogOpen}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
-                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setOkPopupShow(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
-                                                <div className={popupPrompt ? classes.popupPrompt : classes.popupPromptClose}>
-                                                    <Alert
-                                                        icon={<img src={alertIcon} alt="alert icon" />}
-                                                        severity="error">
-                                                        {/* <strong>2차 차수의 DATA</strong> */}
-                                                        데이터가 존재합니다. 덮어 쓰시겠습니까
-                                                    </Alert>
-                                                    <PromptButtonBlue onClick={() => handleInsertBaseLineDataUpdate()}>예</PromptButtonBlue>
-                                                    <PromptButtonWhite onClick={() => setPopupPrompt(false)} >예</PromptButtonWhite>
-                                                </div>
+                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleInsertBaseLineDataUpdate()}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
                                             </div>
                                             <div className={classes.headerPopFooter}>
                                                 <PopupFootButton onClick={handleInsertBaseline}>저장하기</PopupFootButton>
@@ -1223,12 +1218,6 @@ const Default = ({ children }) => {
                 </Grid>
 
             </Grid>
-            <Overlay show={okPopupShow}>
-                <Ok
-                    show={okPopupShow}
-                    message={{ RET_CODE: "0201", RET_DESC: "저장성공" }}
-                    onConfirm={() => setOkPopupShow(false)} />
-            </Overlay>
             <UploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
@@ -1240,9 +1229,15 @@ const Default = ({ children }) => {
             <Overlay show={okPopupShow}>
                 <Ok
                     show={okPopupShow}
-                    message={{ RET_CODE: "0201", RET_DESC: "저장성공" }}
+                    message={okPopupMessage}
                     onConfirm={() => setOkPopupShow(false)} />
             </Overlay>
+            {/* <Overlay show={okPopupShow}>
+                        <Ok
+                            show={okPopupShow}
+                            message={{ RET_CODE: "0201", RET_DESC: "저장성공" }}
+                            onConfirm={() => setOkPopupShow(false)} />
+                    </Overlay> */}
             <BackButton onClick={() => handleRedirect()}></BackButton>
             <div className={classes.pageOverlay}></div>
             <div className={classes.sectionWrap}>
