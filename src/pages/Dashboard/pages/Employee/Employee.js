@@ -2436,7 +2436,8 @@ const Employee = () => {
     const fetchBaseLineReportList = async () => {
         const response = await getBaseLineReport({
             "baselineId": currentBaselineId,
-            "condition": condition
+            "condition": condition,
+            "workplaceId": userWorkplaceId
         });
         setReportList(response.data.RET_DATA);
         const reportChartInformation = reduceAPIResponse(response.data.RET_DATA, "workplaceName", "evaluationRate");
