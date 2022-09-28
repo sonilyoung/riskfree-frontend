@@ -45,7 +45,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 import { useGetWorkplaceListMutation } from '../../../../../../hooks/api/MainManagement/MainManagement';
 import moment from 'moment';
-import { useGetSafeWorkFileMutation, useGetSafeWorkFileTopInfoMutation, useGetSafeWorkMutation } from '../../../../../../hooks/api/SafeWorkManagement/SafeWorkManagement';
+import { useDeleteSafeWork, useDeleteSafeWorkMutation, useGetSafeWorkFileMutation, useGetSafeWorkFileTopInfoMutation, useGetSafeWorkMutation } from '../../../../../../hooks/api/SafeWorkManagement/SafeWorkManagement';
 import useUserInitialWorkplaceId from '../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
 
 import CloseIcon from '@mui/icons-material/Close';
@@ -785,6 +785,7 @@ const WorkHistoryList = () => {
 
     const [fileUpload] = useFileUploadMutation()
     const [safeWorkExcelUpload] = useSafeWorkExcelUploadMutation()
+    const [deleteSafeWork] = useDeleteSafeWorkMutation()
 
 
     const handleAllPopupClose = () => {
@@ -795,7 +796,7 @@ const WorkHistoryList = () => {
 
     const handleDeleteFile = async () => {
         const response = await deleteFile({ "atchFileId": fileIdForDelete, fileSn: 1 });
-        console.log(response);
+        const responseForDelete = await deleteSafeWork({ "atchFileId": fileIdForDelete })
         setPromptPopupShow(false);
         setHide(true)
     }

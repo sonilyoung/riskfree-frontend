@@ -38,7 +38,14 @@ export const safeWorkManagement = createApi({
                 body: body,
             })
         }),
+        deleteSafeWork: builder.mutation({
+            query: (body) => ({
+                url: 'work/deleteSafeWork',
+                method: 'POST',
+                body: body,
+            })
+        }),
     })
 });
 
-export const { useGetSafeWorkMutation, useGetSafeWorkFileMutation, useGetSafeWorkFileTopInfoMutation } = safeWorkManagement;
+export const { useDeleteSafeWorkMutation, useGetSafeWorkMutation, useGetSafeWorkFileMutation, useGetSafeWorkFileTopInfoMutation } = safeWorkManagement;
