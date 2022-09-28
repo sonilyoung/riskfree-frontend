@@ -2333,10 +2333,6 @@ const Employee = () => {
         }
     }
 
-    console.log(relatedArticle)
-
-    console.log(relatedArticle)
-
     const fetchGuideLine = async () => {
         if (clickedDuty) {
             const response = await getGuideLine({
@@ -2468,12 +2464,6 @@ const Employee = () => {
         setChartSeries(Object.values(reportChartInformation));
         setReportTitle(response.data.RET_DATA);
         setReportList(Object.values(reportGridInformation));
-    }
-
-    console.log(companyInfo)
-    const fetchImg = async () => {
-        // const response = await getImg(`${companyInfo?.logoImg}`)
-        // setImgPath(response.data.RET_DATA)
     }
 
     useEffect(() => {
@@ -2958,11 +2948,11 @@ const Employee = () => {
                         <FormControl sx={{ width: 130 }} className={classes.dropMenu + ' page_drop_menu'}>
                             <Select
                                 className={classes.selectMenu}
-                                value={baselineIdForSelect ?? ""}
+                                value={"" || baselineIdForSelect}
                                 onChange={(e) => setBaselineIdForSelect(e.target.value)}
                                 inputProps={{ 'aria-label': 'Without label' }}>
-                                {!!baselineList && !!baselineList.length && baselineList?.map((baseline, index) => (
-                                    <MenuItem key={index} value={baseline.baselineId || ""}>{baseline.baselineName}</MenuItem>
+                                {!!baselineList && !!baselineList.length && baselineList?.slice(0).reverse().map((baseline, index) => (
+                                    <MenuItem key={index} value={"" || baseline.baselineId}>{baseline.baselineName}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
