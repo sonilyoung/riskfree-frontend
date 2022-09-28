@@ -2187,10 +2187,10 @@ const Employee = () => {
         setBaselineStart(!!response.data.RET_DATA && response.data.RET_DATA.baselineStart)
     }
 
-    const fetchBaseline = async () => {
-        dispatch(setBaselineId(baselineIdForSelect))
+    const fetchBaseline = async (baselineId) => {
+        dispatch(setBaselineId(baselineId))
         const response = await getBaseline({
-            "baselineId": baselineIdForSelect
+            "baselineId": baselineId
         })
         setBaselineData(!!response.data.RET_DATA && response.data.RET_DATA)
     }
@@ -2470,7 +2470,7 @@ const Employee = () => {
     }
 
     useEffect(() => {
-        fetchBaseline()
+        fetchBaseline(baselineIdForSelect);
     }, [currentBaselineId])
 
     useEffect(() => {
@@ -2503,7 +2503,7 @@ const Employee = () => {
     useEffect(() => {
         fetchBaseLineReportList(condition);
         fetchTitleReport(condition);
-    }, [condition, baselineIdForSelect]);
+    }, [condition, currentBaselineId]);
 
     useEffect(() => {
         fetchDutyDetailList()
@@ -2811,19 +2811,27 @@ const Employee = () => {
                                         <ButtonGraphPrev
                                             onClick={() => {
                                                 if (parseInt(baselineData.prevBaseline)) {
-                                                    setBaselineIdForSelect(parseInt(baselineData.prevBaseline))
+                                                    console.log(parseInt(baselineData.prevBaseline));
+                                                    setBaselineIdForSelect(parseInt(baselineData.prevBaseline));
+                                                    // fetchBaseline(parseInt(baselineData.prevBaseline));
+                                                    dispatch(setBaselineId(parseInt(baselineData.prevBaseline)));
+                                                    // setBaselineIdForSelect(parseInt(baselineData.prevBaseline));
                                                 }
                                             }}
                                             style={{ display: parseInt(baselineData.prevBaseline) ? "block" : "none" }}
                                         ></ButtonGraphPrev>
                                         <div>
                                             <span>중대대해처벌법 대응수준 현황</span>
-                                            <span>({baselineData?.baselineName} : {baselineData?.baselineStart} ~ {baselineData?.baselineEnd})</span>
+                                            <span>{baselineData && (baselineData?.baselineName + ' : ' + baselineData?.baselineStart + ' ~ ' + baselineData?.baselineEnd)}</span>
                                         </div>
                                         <ButtonGraphNext
                                             onClick={() => {
                                                 if (parseInt(baselineData.nextBaseline)) {
-                                                    setBaselineIdForSelect(parseInt(baselineData.nextBaseline))
+                                                    console.log(parseInt(baselineData.nextBaseline));
+                                                    setBaselineIdForSelect(parseInt(baselineData.nextBaseline));
+                                                    // fetchBaseline(parseInt(baselineData.nextBaseline));
+                                                    dispatch(setBaselineId(parseInt(baselineData.nextBaseline)));
+                                                    // setBaselineIdForSelect(parseInt(baselineData.nextBaseline));
                                                 }
                                             }}
                                             style={{ display: parseInt(baselineData.nextBaseline) ? "block" : "none" }}
@@ -2951,7 +2959,7 @@ const Employee = () => {
                                 ))}
                             </Select>
                         </FormControl>
-                        <div><PageSideButton onClick={fetchBaseline}>이동</PageSideButton></div>
+                        <div><PageSideButton onClick={() => fetchBaseline(baselineIdForSelect)}>이동</PageSideButton></div>
                     </div>
                 </Grid>
 
