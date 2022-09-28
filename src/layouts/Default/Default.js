@@ -53,9 +53,10 @@ import { selectBaselineId, setBaselineId } from '../../slices/selections/MainSel
 import { useLocalStorage } from '../../hooks/misc/LocalStorage';
 import moment from 'moment';
 import { useFileUploadMutation, useGetFileInfoMutation } from '../../hooks/api/FileManagement/FIleManagement';
-import Ok from '../../components/MessageBox/Ok';
 import { Overlay } from '../../components/Overlay';
 import { UploadDialog, UploadImageDialog } from '../../dialogs/Upload';
+import Okay from '../../components/MessageBox/Okay';
+import YesNo from '../../components/MessageBox/YesNo';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -794,8 +795,11 @@ const Default = ({ children }) => {
     const [longitude, setLongitude] = useState("")
     const [weatherData, setWeatherData] = useState({})
 
-    const [okPopupShow, setOkPopupShow] = useState(false);
-    const [okPopupMessage, setOkPopupMessage] = useState({ RET_CODE: "0201", RET_DESC: "저장성공" });
+    const [okeyPopupShow, setOkeyPopupShow] = useState(false);
+    const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
+
+    const [okeyPopupMessage, setOkeyPopupMessage] = useState("");
+    const [okeyPopupTitle, setOkeyPopupTitle] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
     const [openDialog, setOpenDialog] = useState(false)
 
@@ -868,8 +872,8 @@ const Default = ({ children }) => {
 
     const handleClose = async () => {
         const response = await close({});
-        setOkPopupShow(true);
-        setOkPopupMessage(response.data);
+        setOkeyPopupShow(true);
+        setOkeyPopupMessage(response.data.RET_DESC);
     }
 
     const handleInsertBaseline = async () => {
@@ -890,8 +894,10 @@ const Default = ({ children }) => {
     const handleInsertBaseLineDataUpdate = async () => {
         const response = await insertBaseLineDataCopy({});
         console.log(response);
-        setOkPopupShow(true);
-        setOkPopupMessage(response.data);
+        setYesNoPopupShow(false);
+        setOkeyPopupTitle("알림");
+        setOkeyPopupMessage(response.data.RET_DESC);
+        setOkeyPopupShow(true);
     }
 
     const handleUpdateUserCompany = async () => {
@@ -900,8 +906,11 @@ const Default = ({ children }) => {
             "missionStatements": missionStatement,
             "safetyGoal": safetyGoal
         });
-        setOkPopupShow(true);
-        setOkPopupMessage(response.data);
+
+        setOkeyPopupTitle("알림");
+        setOkeyPopupMessage(response.data.RET_DESC);
+        setOkeyPopupShow(true);
+
         fetchCompanyInfo();
         setMissionStatement("");
         setSafetyGoal("");
@@ -1170,7 +1179,7 @@ const Default = ({ children }) => {
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" id="safetyFileUpload" onClick={handleDialogOpen}>안전작업허가 공사현황<img src={arrowDown} alt="arrow down" /></Link>
-                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleInsertBaseLineDataUpdate()}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
+                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setYesNoPopupShow(true)}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
                                             </div>
                                             <div className={classes.headerPopFooter}>
                                                 <PopupFootButton onClick={handleInsertBaseline}>저장하기</PopupFootButton>
@@ -1226,18 +1235,20 @@ const Default = ({ children }) => {
                 onDownload={handleDialogFileDownload}
                 enableDownload={false}
             />
-            <Overlay show={okPopupShow}>
-                <Ok
-                    show={okPopupShow}
-                    message={okPopupMessage}
-                    onConfirm={() => setOkPopupShow(false)} />
+            <Overlay show={okeyPopupShow}>
+                <Okay
+                    show={okeyPopupShow}
+                    message={okeyPopupMessage}
+                    title={okeyPopupTitle}
+                    onConfirm={() => setOkeyPopupShow(false)} />
             </Overlay>
-            {/* <Overlay show={okPopupShow}>
-                        <Ok
-                            show={okPopupShow}
-                            message={{ RET_CODE: "0201", RET_DESC: "저장성공" }}
-                            onConfirm={() => setOkPopupShow(false)} />
-                    </Overlay> */}
+            <Overlay show={yesNoPopupShow}>
+                <YesNo
+                    show={yesNoPopupShow}
+                    onConfirmYes={handleInsertBaseLineDataUpdate}
+                    onConfirmNo={() => setYesNoPopupShow(false)}
+                />
+            </Overlay>
             <BackButton onClick={() => handleRedirect()}></BackButton>
             <div className={classes.pageOverlay}></div>
             <div className={classes.sectionWrap}>

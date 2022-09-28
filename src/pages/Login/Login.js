@@ -24,8 +24,8 @@ import useUserURLRedirect from '../../hooks/core/UserURLRedirect/UserURLRedirect
 import { useUserToken } from '../../hooks/core/UserToken';
 import { useStyles } from './useStyles';
 import { RoleService } from '../../services/core/User';
-import Ok from '../../components/MessageBox/Ok';
 import { Overlay } from '../../components/Overlay';
+import Okey from '../../components/MessageBox/Okay';
 
 const ClosePopupButton2 = styled(ButtonUnstyled)`
     width: 60px;
@@ -161,9 +161,10 @@ const Login = () => {
                 </div>
             </div>
             <Overlay show={wrongCredentialsPopup}>
-                <Ok
+                <Okey
                     show={wrongCredentialsPopup}
-                    message={{ RET_CODE: 'Credentials are wrong.', RET_DESC: "Please try again." }}
+                    title={"알림"}
+                    message={"필수 입력 항목이 누락되었습니다. 입력하신 내용을 확인하시기 바랍니다."}
                     onConfirm={() => setWrongCredentialsPopup(false)} />
             </Overlay>
         </WideLayout>

@@ -839,20 +839,20 @@ const Director = () => {
                                 </div>
                                 {/* Chart deo */}
                                 <div className={toggleGrid ? classes.graphImageNone : classes.graphImage}>
-                                    <Chart options={chartInfo.options} series={chartSeries} type="bar" height={450} />
+                                    {/* <Chart options={chartInfo.options} series={chartSeries} type="bar" height={450} /> */}
                                 </div>
                                 <Grid item xs={12} className={toggleGrid ? classes.boxTable : classes.boxTableNone}>
                                     <div className={classes.tableHead}>
                                         <div className={classes.tableRow}>
                                             <div className={classes.tableData}>구분</div>
-                                            {
+                                            {/* {
                                                 reportTitle?.length > 0 && reportTitle?.map(reportTitleItem =>
                                                     <div className={classes.tableData}>{reportTitleItem.workplaceName}</div>
-                                                )}
+                                                )} */}
                                         </div>
                                     </div>
                                     <div className={classes.tableBody}>
-                                        {
+                                        {/* {
                                             reportList?.length > 0 && reportList?.map(reportItem =>
                                                 <div className={classes.tableRow}>
                                                     <div className={classes.tableData}>{reportItem.name}</div>
@@ -861,7 +861,7 @@ const Director = () => {
                                                             <div className={classes.tableData}>{reportItem.data[index]}</div>
                                                         )}
                                                 </div>
-                                            )}
+                                            )} */}
                                     </div>
                                 </Grid>
                             </div>
