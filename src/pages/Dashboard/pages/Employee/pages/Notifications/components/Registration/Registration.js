@@ -236,21 +236,34 @@ const Registration = () => {
     const [openDialog, setOpenDialog] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
     const [fileUpload] = useFileUploadMutation()
+    const [dialogId, setDialogId] = useState("")
+    const [notice, setNotice] = useState({})
+    const [filePath, setFilePath] = useState({
+        "attachId": ""
+    })
 
     const labelObject = {
         upperLabel: "첨부파일 등록",
         middleLabel: "등록할 파일을 업로드 합니다.",
     }
 
-    const handleDialogClose = () => {
-        setOpenDialog(false);
+    const handleDialogOpen = (event) => {
+        setOpenDialog(true);
+        setDialogId(event.target.id);
     }
 
-    const handleDialogFileUpload = async (file) => {
-        const response = await fileUpload({
-            files: selectedFile
-        })
-        console.log(response);
+    const handleDialogClose = () => {
+        setOpenDialog(false)
+    }
+
+    const handleDialogFileUpload = async () => {
+        let formData = new FormData();
+        formData.append("files", selectedFile)
+        const response = await fileUpload(formData)
+        handleDialogClose()
+        const fileId = response.data.RET_DATA[0].atchFileId
+        setNotice({ ...notice, [dialogId]: fileId })
+        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
     }
 
     const handleDialogInputChange = (event) => {
@@ -266,7 +279,7 @@ const Registration = () => {
 
     const handlePost = async () => {
         noticesInsert({
-            "attachId": 0,
+            "attachId": notice.attachId,
             "companyId": 1,
             "content": content,
             "importCd": important || "002",
@@ -302,6 +315,7 @@ const Registration = () => {
                                 className={classes.textArea}
                                 id="outlined-basic"
                                 placeholder="제목을 입력하세요"
+                                value={title}
                                 onChange={(e) => setTitle(e.target.value)}
                             />
                         </div>
@@ -354,6 +368,7 @@ const Registration = () => {
                                 multiline
                                 rows={14}
                                 placeholder="내용을 입력하세요"
+                                value={content}
                                 onChange={(e) => setContent(e.target.value)}
                             />
                         </div>
@@ -369,11 +384,11 @@ const Registration = () => {
                                 <TextField
                                     className={classes.textArea}
                                     id="outlined-basic"
-                                    placeholder="파일을 등록하세요. (파일용량 00kb 제한)"
-                                    //value="개선조치 관련 내부 점검 파일_수정20220701.hwp"
+                                    // placeholder="개선조치 관련 내부 점검 파일_수정20220701.hwp"
+                                    value={filePath.attachId}
                                     disabled
                                 />
-                                <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
+                                <UploadButton id={"attachId"} onClick={handleDialogOpen}>찾아보기</UploadButton>
                             </div>
                         </div>
                     </div>

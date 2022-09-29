@@ -21,7 +21,7 @@ import deleteButton from '../../../../../../../../assets/images/btn_del.png';
 import { useNoticesUpdateMutation, useNoticesViewMutation } from '../../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
 
 import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
-import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+import { OnlyUploadDialog, UploadDialog } from '../../../../../../../../dialogs/Upload';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -255,6 +255,11 @@ const Update = () => {
     const HOT = "001"
     const NOT_HOT = "002"
 
+    const labelObject = {
+        upperLabel: "첨부파일 등록",
+        middleLabel: "등록할 파일을 업로드 합니다.",
+    }
+
     const [fileUpload] = useFileUploadMutation()
     const [getFileInfo] = useGetFileInfoMutation()
 
@@ -429,13 +434,12 @@ const Update = () => {
                     <WhiteButton className={'button-cancelation'} onClick={() => handleRedirect()}>취소</WhiteButton>
                 </Grid>
             </Grid>
-            <UploadDialog
+            <OnlyUploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
-                onDownload={handleDialogFileDownload}
-                enableDownload={true}
+                label={labelObject}
             />
         </DefaultLayout>
 
