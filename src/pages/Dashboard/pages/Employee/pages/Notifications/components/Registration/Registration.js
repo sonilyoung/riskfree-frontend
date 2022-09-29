@@ -21,7 +21,7 @@ import deleteButton from '../../../../../../../../assets/images/btn_del.png';
 import { useNoticesInsertMutation } from '../../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
 
 import { useFileUploadMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
-import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+import { DownloadDialog, OnlyUploadDialog, UploadDialog } from '../../../../../../../../dialogs/Upload';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -235,8 +235,12 @@ const Registration = () => {
     const [content, setContent] = useState("")
     const [openDialog, setOpenDialog] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
-
     const [fileUpload] = useFileUploadMutation()
+
+    const labelObject = {
+        upperLabel: "첨부파일 등록",
+        middleLabel: "등록할 파일을 업로드 합니다.",
+    }
 
     const handleDialogClose = () => {
         setOpenDialog(false);
@@ -383,11 +387,12 @@ const Registration = () => {
                     <WhiteButton className={'button-cancelation'} onClick={() => handleRedirect()}>취소</WhiteButton>
                 </Grid>
             </Grid>
-            <UploadDialog
+            <OnlyUploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
+                label={labelObject}
             />
         </DefaultLayout>
 

@@ -9,14 +9,14 @@ import popupClose2 from '../../assets/images/btn_popClose2.png';
 import { Overlay } from '../../components/Overlay';
 
 const useStyles = makeStyles(() => ({
-    downloadPopup: {
+    onlyUploadPopup: {
         position: 'fixed',
         zIndex: '1000',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: '400px',
-        height: '250px',
+        height: '300px',
         background: '#fff',
         borderRadius: '30px',
         padding: '40px',
@@ -47,7 +47,7 @@ const useStyles = makeStyles(() => ({
     popupClose: {
         display: 'none !important',
     },
-    uploadSearch: {
+    onlyUploadSearch: {
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'center',
@@ -55,7 +55,7 @@ const useStyles = makeStyles(() => ({
             marginLeft: '10px',
         }
     },
-    downloadInfo: {
+    onlyUploadInfo: {
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'center',
@@ -142,38 +142,46 @@ const ClosePopupButton2 = styled(ButtonUnstyled)`
     transition: background .2s; 
 `;
 
-const UnknownButton2 = styled(ButtonUnstyled)`
-    width: 200px;
+const UnknownButton1 = styled(ButtonUnstyled)`
+    width: 150px;
     height: 46px;
-    color: #000;
-    font-size: 17px;
+    color: #fff;
+    font-size: 20px;
     letter-spacing: -1.08px;
     border-radius: 46px;
-    background: #eff2f9;
-    border: 2px solid #00adef;
+    background: #00adef;
+    border: none;
     cursor: pointer;
-    transition: border-color .2s;
+    margin-top: 10px;
+    transition: background .2s;
     &:hover {
-        border-color: #3a5298;
-    }  
+        background: #3a5298;
+    }   
 `;
 
-function Download({ open, onClose, enableDownload, onDownload }) {
+function OnlyUpload({ open, onClose, onInputChange, onUpload, label }) {
     const classes = useStyles();
 
     return (
         <Overlay show={open}>
-            <div className={open ? classes.downloadPopup : classes.popupClose}>
-                <div className={classes.downloadPopup}>
+            <div className={open ? classes.onlyUploadPopup : classes.popupClose}>
+                <div className={classes.onlyUploadPopup}>
                     <ClosePopupButton2 onClick={() => onClose('openDialog')}></ClosePopupButton2>
-                    <div className={classes.downloadInfo}>
-                        <span className={classes.topSpan}>신청서 다운로드</span>
-                        <span className={classes.middleSpan}>등록된 파일을 다운로드 합니다.</span>
-                        <UnknownButton2 onClick={() => {
-                            if (enableDownload) {
-                                onDownload()
-                            }
-                        }}>업로드 양식 다운로드</UnknownButton2>
+                    <div className={classes.onlyUploadInfo}>
+                        <span className={classes.topSpan}>{label.upperLabel}</span>
+                        <span className={classes.middleSpan}>{label.middleLabel}</span>
+                        <span></span>
+                        <div className={classes.onlyUploadSearch}>
+                            <TextField
+                                id="standard-basic"
+                                placeholder="여수공장 시정조치요청 파일.hwp"
+                                variant="outlined"
+                                className={classes.popupTextField}
+                                type="file"
+                                onChange={onInputChange}
+                            />
+                            <UnknownButton1 onClick={() => onUpload('openDialog')}>파일 업로드</UnknownButton1>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -183,4 +191,4 @@ function Download({ open, onClose, enableDownload, onDownload }) {
 
 }
 
-export default Download;
+export default OnlyUpload;

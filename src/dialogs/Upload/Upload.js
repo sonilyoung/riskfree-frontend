@@ -69,7 +69,7 @@ const SearchButton = styled(ButtonUnstyled)`
     }   
 `;
 
-function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDownload }) {
+function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDownload, label }) {
     const classes = useStyles();
 
     return (
