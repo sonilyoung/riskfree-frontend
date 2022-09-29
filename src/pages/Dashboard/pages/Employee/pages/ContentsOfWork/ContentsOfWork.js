@@ -121,6 +121,11 @@ const useStyles = makeStyles(() => ({
         background: '#fff',
         overflow: 'hidden',
         minWidth: '1783px',
+        '& >div:nth-last-of-type(4)': {
+            '& $tableRow': {
+                borderBottom: 'none !important',
+            }
+        },
         '&.popup_table': {
             minWidth: 'unset',
             marginTop: '20px',
@@ -146,17 +151,6 @@ const useStyles = makeStyles(() => ({
                     }
                 },
             },
-            '& $tableHead': {
-                '& $tableRow': {
-
-                }
-            },
-            '& $tableBody': {
-                '& $tableRow': {
-
-                }
-            },
-
         },
     },
     tableHead: {
@@ -244,7 +238,7 @@ const useStyles = makeStyles(() => ({
                 width: '128px !important',
             },
             '&:nth-of-type(6), &:nth-of-type(7), &:nth-of-type(8)': {
-                justifyContent: 'flex-start',
+                // justifyContent: 'flex-start',
             },
             '&:first-of-type': {
                 width: '60px'
