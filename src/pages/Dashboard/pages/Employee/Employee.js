@@ -81,7 +81,7 @@ import radioIcon from '../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation, useGetTitleReportMutation, useGetBaseLineReportMutation, useUpdateSafetyFileMutation, useUpdateScoreMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation, useGetTitleReportMutation, useGetBaseLineReportMutation, useUpdateSafetyFileMutation, useUpdateScoreMutation, useUpdateRelatedArticleMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useUserToken } from '../../../../hooks/core/UserToken';
 import moment from 'moment'
 
@@ -2094,6 +2094,8 @@ const Employee = () => {
     const [updateSafetyFile] = useUpdateSafetyFileMutation()
     const [updateDocumentFileId] = useUpdateDocumentFileIdMutation()
     const [updateScore] = useUpdateScoreMutation()
+    const [evaluationIndex, setEvaluationIndex] = useState(null)
+    const [updateRelatedArticle] = useUpdateRelatedArticleMutation()
 
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
 
@@ -2355,6 +2357,8 @@ const Employee = () => {
         }
     }
 
+    // console.log(relatedArticle)
+
     const fetchGuideLine = async () => {
         if (clickedDuty) {
             const response = await getGuideLine({
@@ -2387,6 +2391,8 @@ const Employee = () => {
         setNoticeHotList(response?.data?.RET_DATA);
     }
 
+    const [inspectionIndex, setInspectionIndex] = useState(null)
+
     const handleDialogFileUpload = async () => {
         if (dialogId === "logoImgUpload" || dialogId === "documentFileUpload" || dialogId === "safetyFileUpload") {
             let formData = new FormData();
@@ -2404,10 +2410,22 @@ const Employee = () => {
             const fileId = response.data.RET_DATA[0].atchFileId
             setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
             setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
-            const responseDocumentFile = await updateDocumentFileId({
-                "articleNo": parseInt(articleNoForInspection),
-                "fileId": fileId
+            const deepCopyObj = JSON.parse(JSON.stringify(inspectionsDocs))
+            const updatedArray = deepCopyObj.map((obj, index) => {
+                if (index === inspectionIndex) {
+                    return { "fileId": fileId }
+                } else {
+                    return {
+                        fileId: obj["fileId"]
+                    }
+                }
             })
+            console.log(updatedArray, "-----updated")
+            const responseDocumentFile = await updateDocumentFileId(
+                {
+                    "updateList": updatedArray,
+                    "articleNo": articleNoForInspection
+                })
             setUploadFlag(!uploadFlag)
         }
     }
@@ -2417,11 +2435,14 @@ const Employee = () => {
         window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId || inspectionFileId}&fileSn=1`;
     }
 
-    const handleDialogOpen = (event, articleNo, fileId) => {
+    const handleDialogOpen = (event, articleNo, fileId, index) => {
         setOpenDialog(true);
-        setDialogId(event.target.id);
+        setDialogId((event.target.id).toString());
         setArticleNoForInspection(articleNo)
         setInspectionFileId(fileId)
+        setInspectionIndex(index)
+        console.log(index, "----index")
+        console.log((event.target.id).toString())
     }
 
     const handleDialogClose = () => {
@@ -2434,13 +2455,43 @@ const Employee = () => {
     }
 
     const handleUpdateScore = async () => {
+        const deepCopyObj = JSON.parse(JSON.stringify(inspectionsDocs))
+        const updatedArray = deepCopyObj.map((obj, index) => {
+            if (index === evaluationIndex) {
+                return { "evaluation": evaluation }
+            } else {
+                return {
+                    evaluation: obj["evaluation"]
+                }
+            }
+        })
         const response = await updateScore({
-            "evaluation": evaluation,
+            "updateList": updatedArray,
             "articleNo": articleNoForInspection
         })
+        console.log(evaluationIndex, "----index")
         setEvaluationPopup(false)
         setUploadFlag(!uploadFlag)
-        setEvaluation("")
+    }
+
+    const handleManagerChecked = async (checkedStatus, checkedIndex, articleNo) => {
+        const deepCopyObj = JSON.parse(JSON.stringify(inspectionsDocs))
+        const updatedArray = deepCopyObj.map((obj, index) => {
+            if (index === checkedIndex && checkedStatus === "1") {
+                return ({ "managerChecked": "0" })
+            } else if (index === checkedIndex && (checkedStatus === "0" || checkedStatus === null || checkedStatus === "null")) {
+                return ({ "managerChecked": "1" })
+            } else {
+                return ({
+                    managerChecked: obj["managerChecked"]
+                })
+            }
+        })
+        const response = await updateRelatedArticle({
+            "updateList": updatedArray,
+            "articleNo": articleNo
+        })
+        setUploadFlag(!uploadFlag)
     }
 
     const fetchTitleReport = async () => {
@@ -2460,6 +2511,7 @@ const Employee = () => {
         setReportList(response.data.RET_DATA);
         console.log(response, currentBaselineId);
     }
+    // console.log(inspectionsDocs)
 
     useEffect(() => {
         fetchBaseline(baselineIdForSelect);
@@ -3017,30 +3069,14 @@ const Employee = () => {
                                     <div className={classes.listTitle}><strong>{!!(inspectionsDocs) && inspectionsDocs[0]?.fileCount}</strong>건 /{!!(inspectionsDocs) && !!(inspectionsDocs.length) && inspectionsDocs[0].totalCount}건</div>
                                     <ul className={classes.menuList + ' buttonList'}>
                                         {inspectionsDocs?.map((inspection, index) => (<><li>
-                                            <div>{inspection.fileId === null ? <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone> : <FileButtonExis id={"inspectionFile"} onClick={(event, index) => handleDialogOpen(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>}
+                                            <div>{(inspection.fileId === null || inspection.fileId === "null") ? <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone> : <FileButtonExis id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>}
                                                 {inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}
-                                                    onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}>상</span>) || (inspection.evaluation === "7" && <span className={'orange'}
-                                                        onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}>중</span>) || (inspection.evaluation === "5" && <span className={'red'}
-                                                            onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}>하</span>) || ((inspection.evaluation === null || inspection.evaluation === "0") && <span className={'empty'}
-                                                                onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo) }}></span>))}
+                                                    onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>상</span>) || (inspection.evaluation === "7" && <span className={'orange'}
+                                                        onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>중</span>) || (inspection.evaluation === "5" && <span className={'red'}
+                                                            onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>하</span>) || ((inspection.evaluation === null || inspection.evaluation === "0" || inspection.evaluation === "null") && <span className={'empty'}
+                                                                onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}></span>))}
                                             </div>
                                         </li>
-                                            {/* <li>
-                                                <FileButtonExis><span className={'orange'}>중</span></FileButtonExis>
-
-                                            </li>
-                                            <li>
-                                                <FileButtonExis><span className={'green'}>상</span></FileButtonExis>
-                                            </li>
-                                            <li>
-                                                <FileButtonNone></FileButtonNone>
-                                            </li>
-                                            <li>
-                                                <FileButtonExis><span className={'red'}>하</span></FileButtonExis>
-                                            </li>
-                                            <li>
-                                                <FileButtonNone></FileButtonNone>
-                                            </li> */}
                                         </>))}
                                     </ul>
                                 </div>
@@ -3071,11 +3107,11 @@ const Employee = () => {
                                 <div>
                                     <div className={classes.listTitle}>Check</div>
                                     <ul className={classes.menuList + ' checkList'}>
-                                        {relatedArticle?.map((checkBtn) => (
+                                        {inspectionsDocs?.map((checkBtn, index) => (
                                             <>
-                                                <li>{((checkBtn.managerChecked === "0" || checkBtn.managerChecked == null) &&
-                                                    (<Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>)) || ((checkBtn.managerChecked === "1") &&
-                                                        (<Link className={classes.listLink + ' check-blue'} to={"#none"} underline="none"></Link>))}
+                                                <li>{((checkBtn.managerChecked === "0" || checkBtn.managerChecked == null || checkBtn.managerChecked === "null") &&
+                                                    (<Link className={classes.listLink + ' check'} to={"#none"} underline="none" onClick={() => handleManagerChecked(checkBtn.managerChecked, index, checkBtn.articleNo)}></Link>)) || ((checkBtn.managerChecked === "1") &&
+                                                        (<Link className={classes.listLink + ' check-blue'} to={"#none"} underline="none" onClick={(e) => handleManagerChecked(checkBtn.managerChecked, index, checkBtn.articleNo)} onDoubleClick={() => navigate("/dashboard/employee/improvement-measures/list")}></Link>))}
                                                 </li>
                                             </>
                                         ))}
