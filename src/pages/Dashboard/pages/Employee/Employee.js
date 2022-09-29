@@ -1909,21 +1909,6 @@ const footerSlider = {
     autoplaySpeed: 3000,
 }
 
-const reduceAPIResponse = (array, parametarOne, parametarTwo) => {
-    return (array?.length > 0 && array?.reduce(function
-        (filteredObj, item) {
-        if (item[parametarOne] in filteredObj) {
-            filteredObj[item[parametarOne]] = { ...filteredObj[item[parametarOne]], data: [...filteredObj[item[parametarOne]].data, item[parametarTwo]] };
-        }
-        else {
-            filteredObj[item[parametarOne]] = { name: item[parametarOne], data: [item[parametarTwo]] };
-        }
-
-        return filteredObj;
-
-    }, {}));
-}
-
 const Employee = () => {
     const classes = useStyles();
 
@@ -2033,15 +2018,12 @@ const Employee = () => {
     const [evaluationPopup, setEvaluationPopup] = useState(false)
     const [getTitleReport] = useGetTitleReportMutation();
     const [getBaseLineReport] = useGetBaseLineReportMutation();
-    const [getAccidentsPreventionReport] = useGetAccidentsPreventionReportMutation();
-    const [getImprovemetLawOrderReport] = useGetImprovemetLawOrderReportMutation();
-    const [condition, setCondition] = useState(1);
-    const [activeReportItem, setActiveReportItem] = useState(condition);
+    const [condition, setCondition] = useState("1");
     // grid report 
     const [reportList, setReportList] = useState([]);
     const [reportTitle, setReportTitle] = useState([]);
     // grid graph
-    const [categories, setCategories] = useState([]);
+    const [chartCategories, setChartCategories] = useState([]);
     const [chartSeries, setChartSeries] = useState([{ name: 'name', data: [] }]);
     const [chartInfo, setChartInfo] = useState({
         series: chartSeries,
@@ -2067,8 +2049,8 @@ const Employee = () => {
                 colors: ['transparent']
             },
             xaxis: {
-                // categories: ['g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9', 'g10', 'g11', 'g12'],
-                categories: ['안전보건관리체계의 구축 및 이행', '유해,위험 요인 개선 업무절차 마련 및 점검', '안전보건업무 총괄관리 전담조직 구축', '안전보건관리책임자 권한 부여 및 집행 점검', '안전,보건관련 필요예산 편성 및 집행', '안전보건 전문 인력 배치 및 업무시간 보장', '종사자 의견수렴 및 개선방안 이행점검', '중대재해발생 비상대응 메뉴얼 마련&점검', '도급용역 위탁시 평가기준 및 절차 점검', '재해발생 방지대책 및 이행현황', '관계법령에 따른 개선,시정명령 조치', '관계법령에 의무이행의 관리의 조치'],
+                categories: chartCategories,
+                // categories: ['안전보건관리체계의 구축 및 이행', '유해,위험 요인 개선 업무절차 마련 및 점검', '안전보건업무 총괄관리 전담조직 구축', '안전보건관리책임자 권한 부여 및 집행 점검', '안전,보건관련 필요예산 편성 및 집행', '안전보건 전문 인력 배치 및 업무시간 보장', '종사자 의견수렴 및 개선방안 이행점검', '중대재해발생 비상대응 메뉴얼 마련&점검', '도급용역 위탁시 평가기준 및 절차 점검', '재해발생 방지대책 및 이행현황', '관계법령에 따른 개선,시정명령 조치', '관계법령에 의무이행의 관리의 조치'],
             },
             yaxis: {
                 title: {
@@ -2092,14 +2074,12 @@ const Employee = () => {
         "performBeforeId": "",
         "performAfterId": ""
     })
-
     const [employeeFiles, setEmployeeFiles] = useState({
         "safetyFileUpload": "",
         "logoImgUpload": "",
         "documentFileUpload": "",
         "inspectionFile": ""
     })
-    const [workplaceId, setWorkplaceId] = useState(null);
     const [fileUpload] = useFileUploadMutation();
     const [getFileInfo] = useGetFileInfoMutation()
     const [updateSafetyFile] = useUpdateSafetyFileMutation()
@@ -2107,6 +2087,31 @@ const Employee = () => {
     const [updateScore] = useUpdateScoreMutation()
 
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
+
+    const reduceAPIResponse = (array) => {
+        const chartParametars = array?.length > 0 && array?.map((arrayItem, index) => {
+            if (index === 0) {
+                return !!(arrayItem?.length) && arrayItem?.reduce(function
+                    (filteredObj, item) {
+                    if (item.workplaceName in filteredObj) {
+                        filteredObj[item.workplaceName] = { ...filteredObj[item.workplaceName], data: [...filteredObj[item.workplaceName].data, item.evaluationRate] };
+                    }
+                    else {
+                        filteredObj[item.workplaceName] = { name: item.workplaceName, data: [item.evaluationRate] };
+                    }
+
+
+                    return filteredObj;
+
+                }, {});
+            }
+        });
+        // console.log(chartParametars);
+        // console.log(Object.values(chartParametars));
+        // console.log(Object.keys(chartParametars));
+        setChartSeries(Object.values(chartParametars));
+        setChartCategories(Object.keys(chartParametars));
+    }
 
     const handleNotificationPopupsShow = (notificationIndex) => {
         const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex != index);
@@ -2431,47 +2436,20 @@ const Employee = () => {
 
     const fetchTitleReport = async () => {
         const response = await getTitleReport({
-            "baselineId": currentBaselineId,
             "condition": condition
         });
         setReportTitle(response.data.RET_DATA);
+        console.log(response);
     }
 
     const fetchBaseLineReportList = async () => {
         const response = await getBaseLineReport({
             "baselineId": currentBaselineId,
-            "condition": condition,
-            "workplaceId": workplaceId
+            "condition": condition
         });
+        reduceAPIResponse(response.data.RET_DATA);
         setReportList(response.data.RET_DATA);
-        const reportChartInformation = reduceAPIResponse(response.data.RET_DATA, "workplaceName", "evaluationRate");
-        const reportGridInformation = reduceAPIResponse(response.data.RET_DATA, "menuTitle", "evaluationRate");
-        setChartSeries(Object.values(reportChartInformation));
-        setReportList(Object.values(reportGridInformation));
-    }
-
-    const fetchAccidentsPreventionReportList = async () => {
-        const response = await getAccidentsPreventionReport({
-            "baselineId": currentBaselineId,
-            "workplaceId": userWorkplaceId
-        });
-        const reportChartInformation = reduceAPIResponse(response.data.RET_DATA, "workplaceName", "enforceRate");
-        const reportGridInformation = reduceAPIResponse(response.data.RET_DATA, "enforceTitle", "enforceRate");
-        setChartSeries(Object.values(reportChartInformation));
-        setReportTitle(response.data.RET_DATA);
-        setReportList(Object.values(reportGridInformation));
-    }
-
-    const fetchImprovemetReportList = async () => {
-        const response = await getImprovemetLawOrderReport({
-            "baselineId": currentBaselineId,
-            "workplaceId": userWorkplaceId
-        });
-        const reportChartInformation = reduceAPIResponse(response.data.RET_DATA, "workplaceName", "improvemetRate");
-        const reportGridInformation = reduceAPIResponse(response.data.RET_DATA, "improvemetTitle", "improvemetRate");
-        setChartSeries(Object.values(reportChartInformation));
-        setReportTitle(response.data.RET_DATA);
-        setReportList(Object.values(reportGridInformation));
+        console.log(response);
     }
 
     useEffect(() => {
@@ -2506,8 +2484,8 @@ const Employee = () => {
     }, [baselineIdForSelect, baselineData]);
 
     useEffect(() => {
-        fetchBaseLineReportList();
         fetchTitleReport();
+        fetchBaseLineReportList();
     }, [condition, currentBaselineId]);
 
     useEffect(() => {
@@ -2799,12 +2777,12 @@ const Employee = () => {
                                     <ButtonClosePop onClick={() => setChartPop(false)}></ButtonClosePop>
                                 </div>
                                 <div className={classes.popList}>
-                                    <div className={activeReportItem === 1 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setWorkplaceId(null); setCondition(1); setActiveReportItem(1) }}>차수별 대응수준 현황 (통합)</div>
-                                    <div className={activeReportItem === 2 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setWorkplaceId(userWorkplaceId); setCondition(2); setActiveReportItem(2) }}>차수별 대응수준 현황 (사업장별)</div>
-                                    <div className={activeReportItem === 3 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setWorkplaceId(null); setCondition(3); setActiveReportItem(3) }}>항목별 대응수준 현황 (통합)</div>
-                                    <div className={activeReportItem === 4 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { setWorkplaceId(userWorkplaceId); setCondition(4); setActiveReportItem(4) }}>항목별 대응수준 현황 (사업장별)</div>
-                                    <div className={activeReportItem === 5 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { fetchAccidentsPreventionReportList(); setActiveReportItem(5) }}>사업장별 재해발생 통계</div>
-                                    <div className={activeReportItem === 6 ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => { fetchImprovemetReportList(); setActiveReportItem(6) }}>개선.시정명령 조치내역 통계</div>
+                                    <div className={condition === "1" ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => setCondition("1")}>차수별 대응수준 현황 (통합)</div>
+                                    <div className={condition === "2" ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => setCondition("2")}>차수별 대응수준 현황 (사업장별)</div>
+                                    <div className={condition === "3" ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => setCondition("3")}>항목별 대응수준 현황 (통합)</div>
+                                    <div className={condition === "4" ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => setCondition("4")}>항목별 대응수준 현황 (사업장별)</div>
+                                    <div className={condition === "5" ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => setCondition("5")}>사업장별 재해발생 통계</div>
+                                    <div className={condition === "6" ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => setCondition("6")}>개선.시정명령 조치내역 통계</div>
                                     <div className={classes.PopListItem}>안전보건 법정교육 실시내역 통계</div>
                                 </div>
                             </div>
@@ -2817,7 +2795,6 @@ const Employee = () => {
                                         <ButtonGraphPrev
                                             onClick={() => {
                                                 if (parseInt(baselineData.prevBaseline)) {
-                                                    console.log(parseInt(baselineData.prevBaseline));
                                                     setBaselineIdForSelect(parseInt(baselineData.prevBaseline));
                                                     dispatch(setBaselineId(parseInt(baselineData.prevBaseline)));
                                                 }
@@ -2831,7 +2808,6 @@ const Employee = () => {
                                         <ButtonGraphNext
                                             onClick={() => {
                                                 if (parseInt(baselineData.nextBaseline)) {
-                                                    console.log(parseInt(baselineData.nextBaseline));
                                                     setBaselineIdForSelect(parseInt(baselineData.nextBaseline));
                                                     dispatch(setBaselineId(parseInt(baselineData.nextBaseline)));
                                                 }
@@ -2847,23 +2823,20 @@ const Employee = () => {
                                     <div className={classes.tableHead}>
                                         <div className={classes.tableRow}>
                                             <div className={classes.tableData}>구분</div>
-                                            {/* {
-                                                reportTitle?.length > 0 && reportTitle?.map(reportTitleItem =>
-                                                    <div className={classes.tableData}>{reportTitleItem.workplaceName}</div>
-                                                )} */}
+                                            {!!reportTitle && !!(reportTitle?.length) && reportTitle?.map(reportTitleItem =>
+                                                <div className={classes.tableData}>{reportTitleItem.workplaceName}</div>
+                                            )}
                                         </div>
                                     </div>
                                     <div className={classes.tableBody}>
-                                        {/* {
-                                            reportList?.length > 0 && reportList?.map(reportItem =>
-                                                <div className={classes.tableRow}>
-                                                    <div className={classes.tableData}>{reportItem.name}</div>
-                                                    {
-                                                        reportTitle?.map((item, index) =>
-                                                            <div className={classes.tableData}>{reportItem.data[index]}</div>
-                                                        )}
-                                                </div>
-                                            )} */}
+                                        {!!reportList && !!(reportList?.length) && reportList?.map((reportItem, reportItemIndex) =>
+                                            <div className={classes.tableRow}>
+                                                <div className={classes.tableData}>{reportItem[0]?.menuTitle}</div>
+                                                {reportTitle?.map((reportTitleItem) => {
+                                                    const elment = reportItem?.find(item => item.workplaceId === reportTitleItem.workplaceId);
+                                                    return <div className={classes.tableData}>{elment?.evaluationRate ?? null}</div>;
+                                                })}
+                                            </div>)}
                                     </div>
                                 </Grid>
                             </div>
