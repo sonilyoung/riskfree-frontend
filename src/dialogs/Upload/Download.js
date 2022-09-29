@@ -21,22 +21,6 @@ const ClosePopupButton2 = styled(ButtonUnstyled)`
     transition: background .2s; 
 `;
 
-const UnknownButton1 = styled(ButtonUnstyled)`
-    width: 150px;
-    height: 46px;
-    color: #fff;
-    font-size: 20px;
-    letter-spacing: -1.08px;
-    border-radius: 46px;
-    background: #00adef;
-    border: none;
-    cursor: pointer;
-    transition: background .2s;
-    &:hover {
-        background: #3a5298;
-    }   
-`;
-
 const UnknownButton2 = styled(ButtonUnstyled)`
     width: 200px;
     height: 46px;
@@ -53,23 +37,7 @@ const UnknownButton2 = styled(ButtonUnstyled)`
     }  
 `;
 
-const SearchButton = styled(ButtonUnstyled)`
-    width: 46px;
-    height: 46px;
-    color: #fff;
-    font-size: 20px;
-    letter-spacing: -1.08px;
-    border-radius: 50%;
-    background: #00adef url(${searchIcon}) no-repeat 50% 50%;
-    border: none;
-    cursor: pointer;
-    transition: background .2s;
-    &:hover {
-        background: #3a5298 url(${searchIcon}) no-repeat 50% 50%;
-    }   
-`;
-
-function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDownload }) {
+function Download({ open, onClose, enableDownload, onDownload }) {
     const classes = useStyles();
 
     return (
@@ -86,20 +54,6 @@ function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDown
                             }
                         }}>업로드 양식 다운로드</UnknownButton2>
                     </div>
-                    <span></span>
-                    <span>의무조치별 상세 점검</span>
-                    <span></span>
-                    <div className={classes.uploadSearch}>
-                        <TextField
-                            id="standard-basic"
-                            placeholder="여수공장 시정조치요청 파일.hwp"
-                            variant="outlined"
-                            className={classes.popupTextField}
-                            type="file"
-                            onChange={onInputChange}
-                        />
-                        <UnknownButton1 onClick={() => onUpload('openDialog')}>파일 업로드</UnknownButton1>
-                    </div>
                 </div>
             </div>
         </Overlay >
@@ -108,4 +62,4 @@ function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDown
 
 }
 
-export default Upload;
+export default Download;

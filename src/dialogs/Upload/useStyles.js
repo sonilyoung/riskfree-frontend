@@ -37,7 +37,7 @@ const useStyles = makeStyles(() => ({
             right: '-65px'
         }
     },
-    uploadPopupClose: {
+    popupClose: {
         display: 'none !important',
     },
     uploadSearch: {

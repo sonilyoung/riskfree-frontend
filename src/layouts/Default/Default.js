@@ -795,11 +795,11 @@ const Default = ({ children }) => {
     const [longitude, setLongitude] = useState("")
     const [weatherData, setWeatherData] = useState({})
 
-    const [okeyPopupShow, setOkeyPopupShow] = useState(false);
+    const [okayPopupShow, setOkayPopupShow] = useState(false);
     const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
 
-    const [okeyPopupMessage, setOkeyPopupMessage] = useState("");
-    const [okeyPopupTitle, setOkeyPopupTitle] = useState("");
+    const [okayPopupMessage, setOkayPopupMessage] = useState("");
+    const [okayPopupTitle, setOkayPopupTitle] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
     const [openDialog, setOpenDialog] = useState(false)
 
@@ -872,8 +872,8 @@ const Default = ({ children }) => {
 
     const handleClose = async () => {
         const response = await close({});
-        setOkeyPopupShow(true);
-        setOkeyPopupMessage(response.data.RET_DESC);
+        setOkayPopupMessage(response.data.RET_DESC);
+        setOkayPopupShow(true);
     }
 
     const handleInsertBaseline = async () => {
@@ -895,9 +895,9 @@ const Default = ({ children }) => {
         const response = await insertBaseLineDataCopy({});
         console.log(response);
         setYesNoPopupShow(false);
-        setOkeyPopupTitle("알림");
-        setOkeyPopupMessage(response.data.RET_DESC);
-        setOkeyPopupShow(true);
+        setOkayPopupTitle("알림");
+        setOkayPopupMessage(response.data.RET_DESC);
+        setOkayPopupShow(true);
     }
 
     const handleUpdateUserCompany = async () => {
@@ -907,9 +907,9 @@ const Default = ({ children }) => {
             "safetyGoal": safetyGoal
         });
 
-        setOkeyPopupTitle("알림");
-        setOkeyPopupMessage(response.data.RET_DESC);
-        setOkeyPopupShow(true);
+        setOkayPopupTitle("알림");
+        setOkayPopupMessage(response.data.RET_DESC);
+        setOkayPopupShow(true);
 
         fetchCompanyInfo();
         setMissionStatement("");
@@ -1235,12 +1235,12 @@ const Default = ({ children }) => {
                 onDownload={handleDialogFileDownload}
                 enableDownload={false}
             />
-            <Overlay show={okeyPopupShow}>
+            <Overlay show={okayPopupShow}>
                 <Okay
-                    show={okeyPopupShow}
-                    message={okeyPopupMessage}
-                    title={okeyPopupTitle}
-                    onConfirm={() => setOkeyPopupShow(false)} />
+                    show={okayPopupShow}
+                    message={okayPopupMessage}
+                    title={okayPopupTitle}
+                    onConfirm={() => setOkayPopupShow(false)} />
             </Overlay>
             <Overlay show={yesNoPopupShow}>
                 <YesNo

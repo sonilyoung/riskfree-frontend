@@ -164,7 +164,7 @@ const Login = () => {
                 <Okey
                     show={wrongCredentialsPopup}
                     title={"알림"}
-                    message={"필수 입력 항목이 누락되었습니다. 입력하신 내용을 확인하시기 바랍니다."}
+                    message={"사용자를 찾을수 없거나 입력정보에 오류가 있습니다"}
                     onConfirm={() => setWrongCredentialsPopup(false)} />
             </Overlay>
         </WideLayout>

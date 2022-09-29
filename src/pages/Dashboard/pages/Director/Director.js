@@ -821,7 +821,7 @@ const Director = () => {
                                     {/* <Chart options={chartInfo.options} series={chartSeries} type="bar" height={450} /> */}
                                 </div>
                                 <Grid item xs={12} className={toggleGrid ? classes.boxTable : classes.boxTableNone}>
-                                    <div className={classes.tableHead}>
+                                    {/* <div className={classes.tableHead}>
                                         <div className={classes.tableRow}>
                                             <div className={classes.tableData}>구분</div>
                                             {!!reportTitle && !!(reportTitle?.length) && reportTitle?.map(reportTitleItem =>
@@ -838,7 +838,7 @@ const Director = () => {
                                                     return <div className={classes.tableData}>{elment?.evaluationRate ?? null}</div>;
                                                 })}
                                             </div>)}
-                                    </div>
+                                    </div> */}
                                 </Grid>
                             </div>
                         </div>

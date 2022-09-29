@@ -74,7 +74,7 @@ function UploadImage({ open, onClose, onInputChange, onUpload, enableDownload, o
 
     return (
         <Overlay show={open}>
-            <div className={open ? classes.uploadPopup : classes.uploadPopupClose}>
+            <div className={open ? classes.uploadPopup : classes.popupClose}>
                 <div className={classes.uploadPopup}>
                     <ClosePopupButton2 onClick={() => onClose('openImageDialog')}></ClosePopupButton2>
                     <h3>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지</h3>

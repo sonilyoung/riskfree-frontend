@@ -47,8 +47,9 @@ import { useNavigate } from 'react-router-dom';
 import useUserURLRedirect from '../../../../hooks/core/UserURLRedirect/UserURLRedirect';
 import { CleaningServices } from '@mui/icons-material';
 import { useFileUploadMutation, useFileDownMutation, useGetFileInfoMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
-import { UploadDialog } from '../../../../dialogs/Upload';
+import { DownloadDialog, UploadDialog } from '../../../../dialogs/Upload';
 import { Overlay } from '../../../../components/Overlay';
+import Okay from '../../../../components/MessageBox/Okay';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -704,26 +705,30 @@ const SystemAdministrator = () => {
     const classes = useStyles();
     const navigate = useNavigate();
     const [locale] = React.useState('ko');
-    const [regMemberPop, setRegMemberPop] = useState(false)
-    const [userInfoPop, setUserInfoPop] = useState(false)
-    const [col, setCol] = useState("")
-    const [param, setParam] = useState("")
-    const [subscribersSelect] = useSubscribersSelectMutation()
-    const [subscribersInsert] = useSubscribersInsertMutation()
+    const [regMemberPop, setRegMemberPop] = useState(false);
+    const [userInfoPop, setUserInfoPop] = useState(false);
+    const [col, setCol] = useState("");
+    const [param, setParam] = useState("");
+    const [subscribersSelect] = useSubscribersSelectMutation();
+    const [subscribersInsert] = useSubscribersInsertMutation();
     const [subscribersUpdate] = useSubscribersUpdateMutation();
     const [subscribersWorkplaceSelect] = useSubscribersWorkplaceSelectMutation();
-    const [subscribersList, setSubscribersList] = useState([])
-    const [getCommCodeList] = useGetCommCodeListMutation()
-    const [subscribersView] = useSubscribersViewMutation()
+    const [subscribersList, setSubscribersList] = useState([]);
+    const [getCommCodeList] = useGetCommCodeListMutation();
+    const [subscribersView] = useSubscribersViewMutation();
     const [subscribersWorkplaceSelectList, setSubscribersWorkplaceSelectList] = useState([]);
     const [subscriberInsertEmailBeforeSign, setSubscriberInsertEmailBeforeSign] = useState("")
     const [subscriberInsertEmailAfterSign, setSubscriberInsertEmailAfterSign] = useState("")
-    const [dialogId, setDialogId] = useState("")
+    const [dialogId, setDialogId] = useState("");
+    const [downloadDialogShow, setDownloadDialogShow] = useState(false);
+    const [okayPopupShow, setOkayPopupShow] = useState(false);
+    const [okayPopupMessage, setOkayPopupMessage] = useState("");
+    const [okayPopupTitle, setOkayPopupTitle] = useState("");
     const [filePath, setFilePath] = useState({
         "contractFileId": ""
-    })
-    const [openDialog, setOpenDialog] = useState(false)
-    const [selectedFile, setSelectedFile] = useState(null)
+    });
+    const [openDialog, setOpenDialog] = useState(false);
+    const [selectedFile, setSelectedFile] = useState(null);
     const [subscriberInsert, setSubscriberInsert] = useState({
         "companyName": "",
         "contractAmount": "",
@@ -740,7 +745,7 @@ const SystemAdministrator = () => {
         "sectorCd": "",
         "statusCd": "",
         "workplaceName": ""
-    })
+    });
     const [managerEmail, setManagerEmail] = useState({
         firstInput: '',
         secondeInput: ''
@@ -801,6 +806,18 @@ const SystemAdministrator = () => {
         return activeClass.clicked;
     }
 
+    const handleInputValidation = (data, callback) => {
+        const arrayOfObjectValues = Object.values(data);
+        const emptyInputFields = arrayOfObjectValues?.filter(item => item === "" || item === null);
+        if (emptyInputFields?.length === 0) {
+            callback();
+        } else {
+            setOkayPopupTitle("알림");
+            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다");
+            setOkayPopupShow(true);
+        }
+    }
+
     const handleRedirect = async (workplaceId, userId) => {
         const response = await subscribersView(`${workplaceId}&userId=${userId}`);
         const redirectPath = getPath(response.data?.RET_DATA?.managerRoleCd);
@@ -811,7 +828,8 @@ const SystemAdministrator = () => {
         const response = await subscribersSelect({
             "col": col,
             "param": param
-        })
+        });
+        console.log(response);
         setSubscribersList(response.data.RET_DATA);
         const plusButtonsInitialState = response.data?.RET_DATA?.map((item, index) => { return { id: index + 1, clicked: false, plus: true } });
         setPlusButtons(plusButtonsInitialState);
@@ -866,6 +884,27 @@ const SystemAdministrator = () => {
         setFilePath(filePathMain)
     }
 
+    const handleRegisterInitialValue = () => {
+        setSubscriberInsertEmailBeforeSign("");
+        setSubscriberInsertEmailAfterSign("");
+        setSubscriberInsert({
+            "companyName": "",
+            "contractAmount": "",
+            "contractEndDate": null,
+            "contractFileId": "",
+            "contractStartDate": null,
+            "loginId": "",
+            "managerEmail": subscriberInsertEmailBeforeSign + '@' + subscriberInsertEmailAfterSign,
+            "managerName": "",
+            "managerRoleCd": "",
+            "managerTel": "",
+            "registNo": "",
+            "scaleCd": "",
+            "sectorCd": "",
+            "statusCd": "",
+            "workplaceName": ""
+        });
+    }
 
     const handleSubscribersInsert = async () => {
         await subscribersInsert({
@@ -887,7 +926,7 @@ const SystemAdministrator = () => {
         });
         fetchSubscribersList();
         setRegMemberPop(false);
-        setSubscriberInsert({});
+        handleRegisterInitialValue();
         setFilePath({ ...filePath, "contractFileId": "" })
     }
 
@@ -1021,10 +1060,7 @@ const SystemAdministrator = () => {
                     <div className={classes.tableBody}>
                         {!!subscribersList && !!subscribersList?.length && subscribersList?.map((subscriber, index) => (
                             <>
-                                <div className={classes.tableRow} onDoubleClick={() => {
-                                    setUserInfoPop(true);
-                                    fetchSubscriberView(subscriber.workplaceId, subscriber.userId);
-                                }}>
+                                <div className={classes.tableRow}>
 
                                     {!!plusButtons && !!plusButtons?.length && plusButtons?.map((button, btnIndex) => {
                                         if (btnIndex === index && subscriber.rowCount > 1) {
@@ -1033,20 +1069,20 @@ const SystemAdministrator = () => {
                                             return <div className={classes.tableData}>{index + 1}</div>
                                         }
                                     })}
-                                    <div className={classes.tableData}>{subscriber.companyName}</div>
-                                    <div className={classes.tableData}>{subscriber.workplaceName}</div>
-                                    <div className={classes.tableData}>{subscriber.registNo}</div>
-                                    <div className={classes.tableData}>{subscriber.sector}</div>
-                                    <div className={classes.tableData}>{subscriber.scale}</div>
-                                    <div className={classes.tableData}>{subscriber.loginId}</div>
-                                    <div className={classes.tableData}>{subscriber.managerRole}</div>
-                                    <div className={classes.tableData}>{subscriber.managerName}</div>
-                                    <div className={classes.tableData}>{subscriber.managerTel}</div>
-                                    <div className={classes.tableData}>{subscriber.contractAmount && parseFloat(subscriber.contractAmount).toLocaleString()}</div>
-                                    <div className={classes.tableData}>{subscriber.contractDate}</div>
-                                    <div className={classes.tableData}>{subscriber.status}</div>
-                                    <div className={classes.tableData}>{subscriber.contractFileld}</div>
-                                    <div className={classes.tableData} /*onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}*/><img src={monitor} alt="monitor" /></div>
+                                    <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.companyName}</div>
+                                    <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.workplaceName}</div>
+                                    <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.registNo}</div>
+                                    <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.sector}</div>
+                                    <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.scale}</div>
+                                    <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.loginId}</div>
+                                    <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.managerRole}</div>
+                                    <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.managerName}</div>
+                                    <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.managerTel}</div>
+                                    <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.contractAmount && parseFloat(subscriber.contractAmount).toLocaleString()}</div>
+                                    <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.contractDate}</div>
+                                    <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.status}</div>
+                                    <div className={classes.tableData} onDoubleClick={() => setDownloadDialogShow(true)}>{subscriber.contractFileYn}</div>
+                                    <div className={classes.tableData} /*onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}*/>{subscriber?.statusCd ? <img src={monitor} alt="monitor" /> : null}</div>
                                 </div>
                                 {!!subscribersWorkplaceSelectList && !!subscribersWorkplaceSelectList?.length && subscribersWorkplaceSelectList?.map((subscribersWorkplaceItem, subscribersWorkplaceItemIndex) => {
                                     if (index + 1 === plusButtonId) {
@@ -1068,8 +1104,8 @@ const SystemAdministrator = () => {
                                             <div className={classes.tableData}>{subscribersWorkplaceItem.contractAmount && parseFloat(subscribersWorkplaceItem.contractAmount).toLocaleString()}</div>
                                             <div className={classes.tableData}>{subscribersWorkplaceItem.contractDate}</div>
                                             <div className={classes.tableData}>{subscribersWorkplaceItem.status}</div>
-                                            <div className={classes.tableData}></div>
-                                            <div className={classes.tableData}></div>
+                                            <div className={classes.tableData}>{subscribersWorkplaceItem.contractFileYn}</div>
+                                            <div className={classes.tableData}>{subscribersWorkplaceItem?.statusCd ? <img src={monitor} alt="monitor" /> : null}</div>
                                         </div>);
                                     }
                                 })}
@@ -1274,8 +1310,8 @@ const SystemAdministrator = () => {
                                 </div>
                             </div>
                             <div className={classes.popButtons}>
-                                <YesButton onClick={() => handleSubscribersInsert()}>등록</YesButton>
-                                <NoButton onClick={() => setRegMemberPop(false)}>취소</NoButton>
+                                <YesButton onClick={() => handleInputValidation(subscriberInsert, handleSubscribersInsert)}>등록</YesButton>
+                                <NoButton onClick={() => { handleRegisterInitialValue(); setRegMemberPop(false); }}>취소</NoButton>
                             </div>
                         </div>
                     </Overlay>
@@ -1489,7 +1525,7 @@ const SystemAdministrator = () => {
                                 </div>
                             </div>
                             <div className={classes.popButtons}>
-                                <YesButton onClick={() => handleSubscribersUpdate()}>수정</YesButton>
+                                <YesButton onClick={() => handleInputValidation(subscriberView, handleSubscribersUpdate)}>수정</YesButton>
                                 <NoButton onClick={() => setUserInfoPop(false)}>취소</NoButton>
                             </div>
                         </div>
@@ -1531,6 +1567,19 @@ const SystemAdministrator = () => {
                 onDownload={handleDialogFileDownload}
                 enableDownload={true}
             />
+            <DownloadDialog
+                open={downloadDialogShow}
+                onClose={() => setDownloadDialogShow(false)}
+                onDownload={handleDialogFileDownload}
+                enableDownload={true}
+            />
+            <Overlay show={okayPopupShow}>
+                <Okay
+                    show={okayPopupShow}
+                    message={okayPopupMessage}
+                    title={okayPopupTitle}
+                    onConfirm={() => setOkayPopupShow(false)} />
+            </Overlay>
         </DefaultLightLayout >
     );
 };

@@ -80,9 +80,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import radioIcon from '../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 
-import { useNoticesSelectMutation } from '../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation, useGetAccidentsPreventionReportMutation, useGetImprovemetLawOrderReportMutation, useGetTitleReportMutation, useGetBaseLineReportMutation, useUpdateSafetyFileMutation, useUpdateScoreMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation, useGetTitleReportMutation, useGetBaseLineReportMutation, useUpdateSafetyFileMutation, useUpdateScoreMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useUserToken } from '../../../../hooks/core/UserToken';
 import moment from 'moment'
 
@@ -93,11 +92,9 @@ import 'dayjs/locale/ko';
 
 import { setWorkplaceId, selectWorkplaceId, selectBaselineId, setBaselineId } from '../../../../slices/selections/MainSelection';
 import { useDispatch, useSelector } from 'react-redux';
-import useGeolocation from "react-hook-geolocation";
-import Dialog from '../../../../dialogs/Upload/Upload';
 
 import icoFile from '../../../../assets/images/ic_file.png';
-import { UploadDialog, UploadImageDialog } from '../../../../dialogs/Upload';
+import { UploadDialog } from '../../../../dialogs/Upload';
 import { Overlay } from '../../../../components/Overlay';
 import Ok from '../../../../components/MessageBox/Ok';
 import { useFileUploadMutation, useGetFileInfoMutation, useUpdateDocumentFileIdMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
@@ -2026,7 +2023,19 @@ const Employee = () => {
     const [chartCategories, setChartCategories] = useState([]);
     const [chartSeries, setChartSeries] = useState([{ name: 'name', data: [] }]);
     const [chartInfo, setChartInfo] = useState({
-        series: chartSeries,
+        series: [
+            {
+                name: "series-1",
+                data: [30, 40, 45, 50, 49, 60, 70, 91]
+            },
+            {
+                name: "series-1",
+                data: [30, 40, 45, 50, 49, 60, 70, 91]
+            }, {
+                name: "series-1",
+                data: [30, 40, 45, 50, 49, 60, 70, 91]
+            }
+        ],
         options: {
             chart: {
                 type: 'bar',
@@ -2049,8 +2058,8 @@ const Employee = () => {
                 colors: ['transparent']
             },
             xaxis: {
-                categories: chartCategories,
-                // categories: ['안전보건관리체계의 구축 및 이행', '유해,위험 요인 개선 업무절차 마련 및 점검', '안전보건업무 총괄관리 전담조직 구축', '안전보건관리책임자 권한 부여 및 집행 점검', '안전,보건관련 필요예산 편성 및 집행', '안전보건 전문 인력 배치 및 업무시간 보장', '종사자 의견수렴 및 개선방안 이행점검', '중대재해발생 비상대응 메뉴얼 마련&점검', '도급용역 위탁시 평가기준 및 절차 점검', '재해발생 방지대책 및 이행현황', '관계법령에 따른 개선,시정명령 조치', '관계법령에 의무이행의 관리의 조치'],
+                // categories: chartCategories,
+                categories: ['안전보건관리체계의 구축 및 이행', '유해,위험 요인 개선 업무절차 마련 및 점검', '안전보건업무 총괄관리 전담조직 구축', '안전보건관리책임자 권한 부여 및 집행 점검', '안전,보건관련 필요예산 편성 및 집행', '안전보건 전문 인력 배치 및 업무시간 보장', '종사자 의견수렴 및 개선방안 이행점검', '중대재해발생 비상대응 메뉴얼 마련&점검', '도급용역 위탁시 평가기준 및 절차 점검', '재해발생 방지대책 및 이행현황', '관계법령에 따른 개선,시정명령 조치', '관계법령에 의무이행의 관리의 조치'],
             },
             yaxis: {
                 title: {
@@ -2449,7 +2458,7 @@ const Employee = () => {
         });
         reduceAPIResponse(response.data.RET_DATA);
         setReportList(response.data.RET_DATA);
-        console.log(response);
+        console.log(response, currentBaselineId);
     }
 
     useEffect(() => {
@@ -2817,10 +2826,10 @@ const Employee = () => {
                                     </div>
                                 </div>
                                 <div className={toggleGrid ? classes.graphImageNone : classes.graphImage}>
-                                    {/* <Chart options={chartInfo.options} series={chartSeries} type="bar" height={450} /> */}
+                                    {/* <Chart options={chartInfo.options} series={chartInfo.series} type="bar" height={450} /> */}
                                 </div>
                                 <Grid item xs={12} className={toggleGrid ? classes.boxTable : classes.boxTableNone}>
-                                    <div className={classes.tableHead}>
+                                    {/* <div className={classes.tableHead}>
                                         <div className={classes.tableRow}>
                                             <div className={classes.tableData}>구분</div>
                                             {!!reportTitle && !!(reportTitle?.length) && reportTitle?.map(reportTitleItem =>
@@ -2837,7 +2846,7 @@ const Employee = () => {
                                                     return <div className={classes.tableData}>{elment?.evaluationRate ?? null}</div>;
                                                 })}
                                             </div>)}
-                                    </div>
+                                    </div> */}
                                 </Grid>
                             </div>
                         </div>
