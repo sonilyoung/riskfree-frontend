@@ -727,6 +727,7 @@ const SystemAdministrator = () => {
     const [filePath, setFilePath] = useState({
         "contractFileId": ""
     });
+    const [fileIdForDownload, setFileIdForDownload] = useState(null)
     const [openDialog, setOpenDialog] = useState(false);
     const [openDialogOnly, setOpenDialogOnly] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -989,7 +990,7 @@ const SystemAdministrator = () => {
 
     async function handleDialogFileDownload() {
         const fileId = subscriberView[dialogId]
-        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId || fileIdForDownload}&fileSn=1`;
     }
 
     const handleDialogCloseOnly = () => {
@@ -1102,7 +1103,7 @@ const SystemAdministrator = () => {
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.contractAmount && parseFloat(subscriber.contractAmount).toLocaleString()}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.contractDate}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.status}</div>
-                                    <div className={classes.tableData} style={{ cursor: "pointer" }} onDoubleClick={() => setDownloadDialogShow(true)}>{subscriber.contractFileYn}</div>
+                                    <div className={classes.tableData} style={{ cursor: "pointer" }} onDoubleClick={() => { setDownloadDialogShow(true); setFileIdForDownload(subscriber.contractFileId) }}>{subscriber.contractFileYn}</div>
                                     <div className={classes.tableData} /*onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}*/>{subscriber?.statusCd ? <img src={monitor} alt="monitor" /> : null}</div>
                                 </div>
                                 {!!subscribersWorkplaceSelectList && !!subscribersWorkplaceSelectList?.length && subscribersWorkplaceSelectList?.map((subscribersWorkplaceItem, subscribersWorkplaceItemIndex) => {

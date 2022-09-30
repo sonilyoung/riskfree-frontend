@@ -834,7 +834,8 @@ const WorkHistoryList = () => {
     const fetchSafeWorkFileList = async (constructionType) => {
         const response = await getSafeWorkFile({
             "workplaceId": workplaceId,
-            "constructionType": constructionType
+            "constructionType": constructionType,
+            "insertDate": insertDate
         });
         setSafeWorkFileList(response.data.RET_DATA);
 
