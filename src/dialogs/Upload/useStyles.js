@@ -44,9 +44,29 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexWrap: 'wrap',
         justifyContent: 'center',
+        paddingTop: '10px',
         '& label:first-of-type': {
             marginLeft: '10px',
-        }
+        },
+        '& $popupTextField:not($zeroOpacity):last-of-type': {
+            position: 'absolute',
+            left: '40px',
+            height: '40px',
+            width: '250px',
+            background: '#fff',
+            '& >div': {
+                background: 'transparent',
+            },
+            '& input': {
+
+            },
+            '& fieldset': {
+                margin: '0 !important',
+            }
+        },
+        '& $zeroOpacity': {
+            overflow: 'hidden'
+        },
     },
     uploadInfo: {
         display: 'flex',
@@ -103,9 +123,6 @@ const useStyles = makeStyles(() => ({
         '& fieldset': {
             marginRight: '70px',
         },
-        '& .doppelganger': {
-            
-        }
     },
     popupOverlay: {
         position: 'absolute',
@@ -121,7 +138,7 @@ const useStyles = makeStyles(() => ({
         display: 'none'
     },
     zeroOpacity: {
-        opacity: 0.5
+        opacity: 1,
     }
 }))
 

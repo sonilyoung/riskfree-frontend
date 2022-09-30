@@ -53,7 +53,26 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center',
         '& label:first-of-type': {
             marginLeft: '10px',
-        }
+        },
+        '& $popupTextField:not($zeroOpacity):last-of-type': {
+            position: 'absolute',
+            left: '40px',
+            height: '40px',
+            width: '250px',
+            background: '#fff',
+            '& >div': {
+                background: 'transparent',
+            },
+            '& input': {
+
+            },
+            '& fieldset': {
+                margin: '0 !important',
+            }
+        },
+        '& $zeroOpacity': {
+            overflow: 'hidden'
+        },
     },
     onlyUploadInfo: {
         display: 'flex',
@@ -131,7 +150,7 @@ const useStyles = makeStyles(() => ({
         fontSize: '28px'
     },
     zeroOpacity: {
-        opacity: 0.5
+        opacity: 1,
     }
 }))
 
