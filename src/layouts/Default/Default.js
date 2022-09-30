@@ -844,7 +844,9 @@ const Default = ({ children }) => {
 
     async function handleDialogFileDownload() {
         const fileId = employeeFiles[dialogId]
-        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        if (fileId) {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        }
     }
 
     const handleDialogOpen = (event) => {

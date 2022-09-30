@@ -778,7 +778,9 @@ const DefaultLight = ({ children }) => {
 
     async function handleDialogFileDownload() {
         const fileId = excel[dialogId]
-        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        if (fileId) {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        }
     }
 
     const handleDialogInputChange = (event) => {
