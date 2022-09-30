@@ -1005,7 +1005,7 @@ const Default = ({ children }) => {
                                                         {!!(companyInfo) && !!companyInfo.logoImg && (<img height={50} src={`${BASE_URL}/file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
                                                     </div>
                                                     <div className={classes.userName}>
-                                                        삼성전자 주식회사
+                                                        {companyInfo?.companyName}
                                                     </div>
                                                     <div className={classes.userInfo}>
                                                         아래의 기업정보를 등록하신 후 이용하시기 바랍니다
