@@ -400,16 +400,16 @@ const Director = () => {
         setNoticeHotList(notificationPopupList);
     }
 
-    const reduceAPIResponse = (array) => {
-        const chartParametars = array?.length > 0 && array?.map((arrayItem, index) => {
+    const reduceAPIResponse = (array, parameter) => {
+        const chartParameters = array?.length > 0 && array?.map((arrayItem, index) => {
             if (index === 0) {
                 return !!(arrayItem?.length) && arrayItem?.reduce(function
                     (filteredObj, item) {
-                    if (item.workplaceName in filteredObj) {
-                        filteredObj[item.workplaceName] = { ...filteredObj[item.workplaceName], data: [...filteredObj[item.workplaceName].data, item.evaluationRate] };
+                    if (item.menuTitle in filteredObj) {
+                        filteredObj[item.menuTitle] = { ...filteredObj[item.menuTitle], data: [...filteredObj[item.menuTitle].data, item.evaluationRate] };
                     }
                     else {
-                        filteredObj[item.workplaceName] = { name: item.workplaceName, data: [item.evaluationRate] };
+                        filteredObj[item.menuTitle] = { name: item[parameter], data: [item.evaluationRate] };
                     }
 
 
@@ -418,11 +418,12 @@ const Director = () => {
                 }, {});
             }
         });
+        console.log(chartParameters);
         // console.log(chartParametars);
         // console.log(Object.values(chartParametars));
         // console.log(Object.keys(chartParametars));
-        setChartSeries(Object.values(chartParametars));
-        setChartCategories(Object.keys(chartParametars));
+        // setChartSeries(Object.values(chartParameters));
+        setChartCategories(Object.keys(chartParameters));
     }
 
     const handleSlickCircleColor = (percentage) => {
@@ -451,6 +452,7 @@ const Director = () => {
     const fetchBaselineList = async () => {
         const response = await getBaselineList({});
         setBaselineList(response.data.RET_DATA);
+        console.log(response.data);
     }
 
     const fetchBaseline = async () => {
@@ -564,7 +566,6 @@ const Director = () => {
             "baselineId": currentBaselineId,
             "condition": condition
         });
-        reduceAPIResponse(response.data.RET_DATA);
         setReportList(response.data.RET_DATA);
         console.log(response);
     }
@@ -653,8 +654,8 @@ const Director = () => {
     }, [currentBaselineId, userWorkplaceId]);
 
     useEffect(() => {
-        fetchBaseLineReportList();
         fetchTitleReport();
+        fetchBaseLineReportList();
     }, [condition, currentBaselineId]);
 
     useEffect(() => {
@@ -821,24 +822,62 @@ const Director = () => {
                                     {/* <Chart options={chartInfo.options} series={chartSeries} type="bar" height={450} /> */}
                                 </div>
                                 <Grid item xs={12} className={toggleGrid ? classes.boxTable : classes.boxTableNone}>
-                                    {/* <div className={classes.tableHead}>
+                                    <div className={classes.tableHead}>
                                         <div className={classes.tableRow}>
                                             <div className={classes.tableData}>구분</div>
                                             {!!reportTitle && !!(reportTitle?.length) && reportTitle?.map(reportTitleItem =>
-                                                <div className={classes.tableData}>{reportTitleItem.workplaceName}</div>
+                                                <div className={classes.tableData}>{reportTitleItem.menuTitle}</div>
                                             )}
                                         </div>
                                     </div>
                                     <div className={classes.tableBody}>
-                                        {!!reportList && !!(reportList?.length) && reportList?.map((reportItem, reportItemIndex) =>
-                                            <div className={classes.tableRow}>
-                                                <div className={classes.tableData}>{reportItem[0]?.menuTitle}</div>
-                                                {reportTitle?.map((reportTitleItem) => {
-                                                    const elment = reportItem?.find(item => item.workplaceId === reportTitleItem.workplaceId);
-                                                    return <div className={classes.tableData}>{elment?.evaluationRate ?? null}</div>;
-                                                })}
-                                            </div>)}
-                                    </div> */}
+                                        {!!reportList && !!(reportList?.length) && (condition === "1" || condition === "3")
+                                            ? reportList?.map((reportItem) =>
+                                                <div className={classes.tableRow}>
+                                                    <div className={classes.tableData}>{reportItem[0]?.menuTitle}</div>
+                                                    {reportTitle?.map((reportTitleItem) => {
+                                                        const element = reportItem?.find(item => item.workplaceId === parseFloat(reportTitleItem.groupId));
+                                                        return <div className={classes.tableData}>{element?.evaluationRate ? element.evaluationRate : null}</div>;
+                                                    })}
+                                                </div>)
+                                            : !!reportList && !!(reportList?.length) && condition === "5"
+                                                ? reportList?.map((reportItem) =>
+                                                (<div className={classes.tableRow}>
+                                                    {reportItem?.map((item) =>
+                                                        <>
+                                                            <div className={classes.tableData}>{item?.workplaceName}</div>
+                                                            <div className={classes.tableData}>{item?.accType001}</div>
+                                                            <div className={classes.tableData}>{item?.accType002}</div>
+                                                            <div className={classes.tableData}>{item?.accType003}</div>
+                                                            <div className={classes.tableData}>{item?.accType004}</div>
+                                                            <div className={classes.tableData}>{item?.accType005}</div>
+                                                            <div className={classes.tableData}>{item?.accType006}</div>
+                                                        </>
+                                                    )}
+                                                </div>))
+                                                : !!reportList && !!(reportList?.length) && condition === "6"
+                                                    ? reportList?.map((reportItem) =>
+                                                    (<div className={classes.tableRow}>
+                                                        {reportItem?.map((item) =>
+                                                            <>
+                                                                <div className={classes.tableData}>{item?.workplaceName}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd002}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd003}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd004}</div>
+                                                            </>
+                                                        )}
+                                                    </div>))
+                                                    : reportList?.map((reportItem) =>
+                                                    (<div className={classes.tableRow}>
+                                                        <div className={classes.tableData}>{reportItem[0]?.workplaceName}</div>
+                                                        {reportTitle?.map((reportTitleItem) => {
+                                                            const element = reportItem?.find(item => item.groupId === reportTitleItem.groupId);
+                                                            return <div className={classes.tableData}>{element?.evaluationRate ? element.evaluationRate : null}</div>;
+                                                        })}
+                                                    </div>))
+                                        }
+                                    </div>
                                 </Grid>
                             </div>
                         </div>
@@ -1129,7 +1168,7 @@ const Director = () => {
                         <Grid container item xs={12} sx={{ marginBottom: '3px' }}>
                             <Grid className={classes.footBox + ' boxDown'} item xs={8.75}>
                                 <Slider className={classes.footSlider} {...footerSlider}>
-                                    {noticesList.length && noticesList.map((notice) =>
+                                    {noticesList?.length && noticesList?.map((notice) =>
                                     (<div>
                                         <div>{notice.insertDate}</div>
                                         {notice.importCd === "001" && <span className={classes.slideLabelHot}>HOT</span>}

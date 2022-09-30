@@ -2594,8 +2594,6 @@ const Employee = () => {
         setReportList(response.data.RET_DATA);
     }
 
-    console.log(companyInfo)
-
     useEffect(() => {
         fetchBaseline(baselineIdForSelect);
     }, [currentBaselineId])
@@ -2964,24 +2962,62 @@ const Employee = () => {
                                     {/* <Chart options={chartInfo.options} series={chartInfo.series} type="bar" height={450} /> */}
                                 </div>
                                 <Grid item xs={12} className={toggleGrid ? classes.boxTable : classes.boxTableNone}>
-                                    {/* <div className={classes.tableHead}>
+                                    <div className={classes.tableHead}>
                                         <div className={classes.tableRow}>
                                             <div className={classes.tableData}>구분</div>
                                             {!!reportTitle && !!(reportTitle?.length) && reportTitle?.map(reportTitleItem =>
-                                                <div className={classes.tableData}>{reportTitleItem.workplaceName}</div>
+                                                <div className={classes.tableData}>{reportTitleItem.menuTitle}</div>
                                             )}
                                         </div>
                                     </div>
                                     <div className={classes.tableBody}>
-                                        {!!reportList && !!(reportList?.length) && reportList?.map((reportItem, reportItemIndex) =>
-                                            <div className={classes.tableRow}>
-                                                <div className={classes.tableData}>{reportItem[0]?.menuTitle}</div>
-                                                {reportTitle?.map((reportTitleItem) => {
-                                                    const elment = reportItem?.find(item => item.workplaceId === reportTitleItem.workplaceId);
-                                                    return <div className={classes.tableData}>{elment?.evaluationRate ?? null}</div>;
-                                                })}
-                                            </div>)}
-                                    </div> */}
+                                        {!!reportList && !!(reportList?.length) && (condition === "1" || condition === "3")
+                                            ? reportList?.map((reportItem) =>
+                                                <div className={classes.tableRow}>
+                                                    <div className={classes.tableData}>{reportItem[0]?.menuTitle}</div>
+                                                    {reportTitle?.map((reportTitleItem) => {
+                                                        const element = reportItem?.find(item => item.workplaceId === parseFloat(reportTitleItem.groupId));
+                                                        return <div className={classes.tableData}>{element?.evaluationRate ? element.evaluationRate : null}</div>;
+                                                    })}
+                                                </div>)
+                                            : !!reportList && !!(reportList?.length) && condition === "5"
+                                                ? reportList?.map((reportItem) =>
+                                                (<div className={classes.tableRow}>
+                                                    {reportItem?.map((item) =>
+                                                        <>
+                                                            <div className={classes.tableData}>{item?.workplaceName}</div>
+                                                            <div className={classes.tableData}>{item?.accType001}</div>
+                                                            <div className={classes.tableData}>{item?.accType002}</div>
+                                                            <div className={classes.tableData}>{item?.accType003}</div>
+                                                            <div className={classes.tableData}>{item?.accType004}</div>
+                                                            <div className={classes.tableData}>{item?.accType005}</div>
+                                                            <div className={classes.tableData}>{item?.accType006}</div>
+                                                        </>
+                                                    )}
+                                                </div>))
+                                                : !!reportList && !!(reportList?.length) && condition === "6"
+                                                    ? reportList?.map((reportItem) =>
+                                                    (<div className={classes.tableRow}>
+                                                        {reportItem?.map((item) =>
+                                                            <>
+                                                                <div className={classes.tableData}>{item?.workplaceName}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd002}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd003}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd004}</div>
+                                                            </>
+                                                        )}
+                                                    </div>))
+                                                    : reportList?.map((reportItem) =>
+                                                    (<div className={classes.tableRow}>
+                                                        <div className={classes.tableData}>{reportItem[0]?.workplaceName}</div>
+                                                        {reportTitle?.map((reportTitleItem) => {
+                                                            const element = reportItem?.find(item => item.groupId === reportTitleItem.groupId);
+                                                            return <div className={classes.tableData}>{element?.evaluationRate ? element.evaluationRate : null}</div>;
+                                                        })}
+                                                    </div>))
+                                        }
+                                    </div>
                                 </Grid>
                             </div>
                         </div>
