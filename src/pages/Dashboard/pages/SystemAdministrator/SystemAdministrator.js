@@ -986,6 +986,7 @@ const SystemAdministrator = () => {
         console.log(response.data.RET_DATA[0].originalFileName)
         setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0]?.originalFileName })
         handleDialogClose()
+        handleDialogCloseOnly()
     }
 
     async function handleDialogFileDownload() {

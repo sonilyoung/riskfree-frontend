@@ -94,7 +94,7 @@ import { setWorkplaceId, selectWorkplaceId, selectBaselineId, setBaselineId } fr
 import { useDispatch, useSelector } from 'react-redux';
 
 import icoFile from '../../../../assets/images/ic_file.png';
-import { UploadDialog } from '../../../../dialogs/Upload';
+import { OnlyUploadDialog, UploadDialog } from '../../../../dialogs/Upload';
 import { Overlay } from '../../../../components/Overlay';
 import Ok from '../../../../components/MessageBox/Ok';
 import { useFileUploadMutation, useGetFileInfoMutation, useUpdateDocumentFileIdMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
@@ -2016,6 +2016,11 @@ const Employee = () => {
     const [getTitleReport] = useGetTitleReportMutation();
     const [getBaseLineReport] = useGetBaseLineReportMutation();
     const [condition, setCondition] = useState("1");
+    const [openDialogOnly, setOpenDialogOnly] = useState(false);
+    const labelObjectOnly = {
+        upperLabel: "로고 등록",
+        middleLabel: "등록할 파일을 업로드 합니다."
+    }
     // grid report 
     const [reportList, setReportList] = useState([]);
     const [reportTitle, setReportTitle] = useState([]);
@@ -2398,10 +2403,16 @@ const Employee = () => {
             let formData = new FormData();
             formData.append("files", selectedFile)
             handleDialogClose()
+            handleDialogCloseOnly()
             const response = await fileUpload(formData)
             const fileId = response.data.RET_DATA[0].atchFileId
+            console.log(response.data.RET_DATA[0])
             setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
-            setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+            if (dialogId === "logoImgUpload") {
+                setFilePath({ ...filePath, [dialogId]: (response.data.RET_DATA[0].filePath + "/" + response.data.RET_DATA[0].saveFileName) })
+            } else {
+                setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+            }
         } else if (dialogId === "inspectionFile") {
             let formData = new FormData();
             formData.append("files", selectedFile)
@@ -2450,6 +2461,21 @@ const Employee = () => {
     }
 
     const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    }
+
+    const handleDialogCloseOnly = () => {
+        setOpenDialogOnly(false);
+    }
+
+    const handleDialogOpenOnly = (event) => {
+        setOpenDialogOnly(true);
+        setDialogId(event.target.id);
+        console.log(event.target.id)
+    }
+
+    const handleDialogInputChangeOnly = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
     }
@@ -2511,7 +2537,7 @@ const Employee = () => {
         setReportList(response.data.RET_DATA);
         console.log(response, currentBaselineId);
     }
-    console.log(inspectionsDocs)
+    console.log(filePath.logoImgUpload)
 
     useEffect(() => {
         fetchBaseline(baselineIdForSelect);
@@ -2638,10 +2664,10 @@ const Employee = () => {
                                         />
                                         <div className={classes.preFootPop}>
                                             <div>
-                                                {filePath.logoImgUpload ? (<span>{filePath.logoImgUpload}</span>) : (<span>로고등록</span>)}
+                                                {filePath.logoImgUpload ? (<img height={60} src={`${BASE_URL}/file/getImg?imgPath=${filePath.logoImgUpload}`} alt="logo" />) : (<span>로고등록</span>)}
                                             </div>
                                             <div>
-                                                <UploadImageButton id={"logoImgUpload"} onClick={handleDialogOpen}>찾아보기</UploadImageButton>
+                                                <UploadImageButton id={"logoImgUpload"} onClick={handleDialogOpenOnly}>찾아보기</UploadImageButton>
                                                 <Alert
                                                     icon={<img src={alertIcon} alt="alert icon" />}
                                                     severity="error">
@@ -3334,6 +3360,13 @@ const Employee = () => {
                 onUpload={handleDialogFileUpload}
                 onDownload={handleDialogFileDownload}
                 enableDownload={true}
+            />
+            <OnlyUploadDialog
+                open={openDialogOnly}
+                onClose={handleDialogCloseOnly}
+                onInputChange={handleDialogInputChangeOnly}
+                onUpload={handleDialogFileUpload}
+                label={labelObjectOnly}
             />
             <Overlay show={okPopupShow}>
                 <Ok
