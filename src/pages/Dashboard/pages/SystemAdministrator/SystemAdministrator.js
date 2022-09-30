@@ -278,8 +278,8 @@ const useStyles = makeStyles(() => ({
         alignItems: 'center',
     },
     selectMenu: {
-        height: '41px',
-        overflow: 'hidden',
+        height: '40px',
+        // overflow: 'hidden',
         '& div': {
             height: 'inherit',
         }

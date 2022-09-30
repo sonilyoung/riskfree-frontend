@@ -225,7 +225,7 @@ const useStyles = makeStyles(() => ({
     },
     selectMenu: {
         height: '40px',
-        overflow: 'hidden',
+        // overflow: 'hidden',
         '& div': {
             height: 'inherit',
         }
