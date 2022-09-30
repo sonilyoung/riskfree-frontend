@@ -61,7 +61,22 @@ const useStyles = makeStyles(() => ({
         },
         '& $boxContent $boxRow:first-of-type]': {
             height: '60px'
-        }
+        },
+        '& $boxRow:last-of-type $rowInfo': {
+            width: 'auto',
+            '&:first-of-type': {
+                width: '672px',
+            }
+        },
+        '& $boxContent $boxRow:nth-of-type(2) $rowTitle': {
+            borderTop: 'none',
+            '& +$rowInfo': {
+                width: '200px !important',
+            }
+        },
+        '& $boxContent $boxRow:nth-of-type(2) $rowTitle:first-of-type': {
+            borderTop: '1px solid #fff'
+        },
     },
     boxTitle: {
         display: 'flex',
@@ -416,6 +431,18 @@ const View = () => {
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
                                     {law && law.improveCn}
+                                </div>
+                                <div className={classes.rowTitle}>구분</div>
+                                <div className={classes.rowInfo}>
+                                    data
+                                </div>
+                                <div className={classes.rowTitle}>지적일자</div>
+                                <div className={classes.rowInfo}>
+                                    data
+                                </div>
+                                <div className={classes.rowTitle}>완료요청일</div>
+                                <div className={classes.rowInfo}>
+                                    data
                                 </div>
                             </div>
                         </div>
