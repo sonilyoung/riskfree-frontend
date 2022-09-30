@@ -372,20 +372,21 @@ const Registration = () => {
     }
 
     const handleDialogOpen = (event) => {
+        setSelectedFileName("");
         setOpenDialog(true);
         setDialogId(event.target.id);
-        console.log(event.target.id)
     }
 
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
-        console.log(law)
+        setSelectedFileName(file.name)
     }
 
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
         formData.append("files", selectedFile)
+        handleDialogClose()
         const response = await fileUpload(formData)
         const fileId = response.data.RET_DATA[0].atchFileId
         setLaw({ ...law, [dialogId]: fileId })
@@ -744,6 +745,7 @@ const Registration = () => {
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
                 label={labelObject}
+                selectedFileName={selectedFileName}
             />
         </DefaultLayout>
     );

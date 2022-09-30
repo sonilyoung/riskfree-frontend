@@ -51,7 +51,7 @@ import useUserInitialWorkplaceId from '../../../../../../hooks/core/UserInitialW
 import CloseIcon from '@mui/icons-material/Close';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { useDeleteFileMutation, useFileUploadMutation } from '../../../../../../hooks/api/FileManagement/FIleManagement';
-import { UploadDialog } from '../../../../../../dialogs/Upload';
+import { OnlyUploadDialog, UploadDialog } from '../../../../../../dialogs/Upload';
 import { Overlay } from '../../../../../../components/Overlay';
 import { useSafeWorkExcelUploadMutation } from '../../../../../../hooks/api/ExcelController/ExcelController';
 
@@ -771,15 +771,22 @@ const WorkHistoryList = () => {
         "fileSn": ''
     });
     const [openDialog, setOpenDialog] = useState(false)
+    const [openDialogOnly, setOpenDialogOnly] = useState(false)
     const [constructionType, setConstructionType] = useState(null)
     const [attachFileId, setAttachFileId] = useState(null)
     const [fileIdForDelete, setFileIdForDelete] = useState(null)
     const [selectedFile, setSelectedFile] = useState(null)
     const [dialogId, setDialogId] = useState("")
+    const [selectedFileName, setSelectedFileName] = useState("")
 
     const [fileUpload] = useFileUploadMutation()
     const [safeWorkExcelUpload] = useSafeWorkExcelUploadMutation()
     const [deleteSafeWork] = useDeleteSafeWorkMutation()
+
+    const [labelObject, setLabelObject] = useState({
+        upperLabel: "공사허가서 등록",
+        middleLabel: "공사허가서 파일을 업로드 합니다.",
+    })
 
 
     const handleAllPopupClose = () => {
@@ -805,11 +812,27 @@ const WorkHistoryList = () => {
         setOpenDialog(true);
         setAttachFileId(id);
         setDialogId(id);
-        console.log(id)
+        setSelectedFileName("");
     }
 
     const handleDialogClose = () => {
         setOpenDialog(false);
+    }
+
+    const handleDialogCloseOnly = () => {
+        setOpenDialogOnly(false);
+    }
+
+    const handleDialogOpenOnly = (id) => {
+        setOpenDialogOnly(true);
+        setDialogId(id);
+        setSelectedFileName("");
+    }
+
+    const handleDialogInputChangeOnly = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+        setSelectedFileName(file.name)
     }
 
     const fetchWorkplaceList = async () => {
@@ -851,13 +874,15 @@ const WorkHistoryList = () => {
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        setSelectedFileName(file.name)
     }
 
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
         formData.append("excelFile", selectedFile)
         const response = await safeWorkExcelUpload(formData)
-        setRegisterPopupShow(false)
+        handleDialogClose()
+        handleDialogCloseOnly()
     }
 
     console.log(safeWorkFileList)
@@ -923,7 +948,7 @@ const WorkHistoryList = () => {
                         </div>
                         <div className={classes.searchButtons}>
                             <SearchButton onClick={() => fetchSafeWorkList()}>조회</SearchButton>
-                            <RegisterButton sx={{ marginLeft: '10px' }} id={"excelFileUpload"} onClick={(e) => handleDialogOpen(e.target.id)}>등록</RegisterButton>
+                            <RegisterButton sx={{ marginLeft: '10px' }} id={"excelFileUpload"} onClick={(e) => handleDialogOpenOnly(e.target.id)}>등록</RegisterButton>
                         </div>
                     </div>
                 </Grid>
@@ -1075,6 +1100,15 @@ const WorkHistoryList = () => {
                     </Stack>
                 </Grid>
             </Grid>
+            <OnlyUploadDialog
+                open={openDialogOnly}
+                onClose={handleDialogCloseOnly}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+                onDownload={handleDialogFileDownload}
+                label={labelObject}
+                selectedFileName={selectedFileName}
+            />
             <UploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
@@ -1082,6 +1116,7 @@ const WorkHistoryList = () => {
                 onUpload={handleDialogFileUpload}
                 onDownload={handleDialogFileDownload}
                 enableDownload={true}
+                selectedFileName={selectedFileName}
             />
         </DefaultLayout >
     );

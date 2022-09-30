@@ -382,7 +382,6 @@ const View = () => {
             .then(() => handleRedirect())
     }
 
-
     useEffect(() => {
         handleLawView()
     }, [])
@@ -437,15 +436,15 @@ const View = () => {
                                 </div>
                                 <div className={classes.rowTitle}>구분</div>
                                 <div className={classes.rowInfo}>
-                                    data
+                                    {law && law.improveType}
                                 </div>
                                 <div className={classes.rowTitle}>지적일자</div>
                                 <div className={classes.rowInfo}>
-                                    data
+                                    {law && law.orderDate}
                                 </div>
                                 <div className={classes.rowTitle}>완료요청일</div>
                                 <div className={classes.rowInfo}>
-                                    data
+                                    {law && law.dueDate}
                                 </div>
                             </div>
                         </div>

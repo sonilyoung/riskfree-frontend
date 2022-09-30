@@ -369,6 +369,7 @@ const Registration = () => {
     })
     const [okPopupShow, setOkPopupShow] = useState(false);
     const [okPopupMessage, setOkPopupMessage] = useState(null);
+    const [selectedFileName, setSelectedFileName] = useState("")
 
     const [accident, setAccident] = useState({
         accLevelCd: "",
@@ -416,6 +417,7 @@ const Registration = () => {
     }
 
     const handleDialogOpen = (event) => {
+        setSelectedFileName("");
         setOpenDialog(true);
         setDialogId(event.target.id);
         if (event.target.id === ("performBeforeId" || "performAfterId")) {
@@ -436,6 +438,7 @@ const Registration = () => {
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        setSelectedFileName(file.name)
     }
 
     const handleDialogFileUpload = async () => {
@@ -1084,6 +1087,7 @@ const Registration = () => {
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
                 label={labelObject}
+                selectedFileName={selectedFileName}
             />
             <Overlay show={okPopupShow}>
                 <Ok

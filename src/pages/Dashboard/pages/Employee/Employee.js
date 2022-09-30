@@ -2178,8 +2178,8 @@ const Employee = () => {
     const handleUpdateUserCompany = async () => {
         const response = await updateUserCompany({
             "attachFileId": employeeFiles.logoImgUpload,
-            "missionStatements": missionStatement,
-            "safetyGoal": safetyGoal
+            "missionStatements": companyInfo?.missionStatements,
+            "safetyGoal": companyInfo?.shGoal
         });
         setOkayPopupMessage(response.data.RET_DESC);
         setOkayPopupShow(true);
@@ -2544,6 +2544,8 @@ const Employee = () => {
         setReportList(response.data.RET_DATA);
     }
 
+    console.log(companyInfo)
+
     useEffect(() => {
         fetchBaseline(baselineIdForSelect);
     }, [currentBaselineId])
@@ -2652,17 +2654,17 @@ const Employee = () => {
                                         <TextField
                                             id="standard-basic"
                                             placeholder='안전보건 목표 등록 (띄어쓰기 포함 16자 이내)'
-                                            value={safetyGoal}
+                                            value={companyInfo?.shGoal}
                                             variant="outlined"
                                             sx={{ width: 370 }}
                                             className={classes.popupTextField}
-                                            onChange={(event) => setSafetyGoal(event.target.value)}
+                                            onChange={(event) => setCompanyInfo({ ...companyInfo, "shGoal": event.target.value })}
                                         />
                                         <TextField
                                             id="standard-basic"
                                             placeholder='경영방침 등록 (띄어쓰기 포함 16자 이내)'
-                                            value={missionStatement}
-                                            onChange={(event) => setMissionStatement(event.target.value)}
+                                            value={companyInfo?.missionStatements}
+                                            onChange={(event) => setCompanyInfo({ ...companyInfo, "missionStatements": event.target.value })}
                                             variant="outlined"
                                             sx={{ width: 370 }}
                                             className={classes.popupTextField}

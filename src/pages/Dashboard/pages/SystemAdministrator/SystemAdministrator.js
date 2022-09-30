@@ -727,6 +727,7 @@ const SystemAdministrator = () => {
     const [filePath, setFilePath] = useState({
         "contractFileId": ""
     });
+    const [selectedFileName, setSelectedFileName] = useState("")
     const [fileIdForDownload, setFileIdForDownload] = useState(null)
     const [openDialog, setOpenDialog] = useState(false);
     const [openDialogOnly, setOpenDialogOnly] = useState(false);
@@ -983,11 +984,13 @@ const SystemAdministrator = () => {
     const handleDialogOpen = (event) => {
         setOpenDialog(true);
         setDialogId(event.target.id);
+        setSelectedFileName("")
     }
 
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        setSelectedFileName(file.name);
     }
 
     const handleDialogFileUpload = async () => {
@@ -1016,13 +1019,14 @@ const SystemAdministrator = () => {
     const handleDialogOpenOnly = (event) => {
         setOpenDialogOnly(true);
         setDialogId(event.target.id);
-        console.log(event.target.id)
+        setSelectedFileName("");
     }
 
-    const handleDialogInputChangeOnly = (event) => {
-        const file = event.target.files[0];
-        setSelectedFile(file);
-    }
+    // const handleDialogInputChangeOnly = (event) => {
+    //     const file = event.target.files[0];
+    //     setSelectedFile(file);
+    //     setSelectedFileName(file.name);
+    // }
 
     useEffect(() => {
         fetchSubscribersList();
@@ -1603,13 +1607,15 @@ const SystemAdministrator = () => {
                 onUpload={handleDialogFileUpload}
                 onDownload={handleDialogFileDownload}
                 enableDownload={true}
+                selectedFileName={selectedFileName}
             />
             <OnlyUploadDialog
                 open={openDialogOnly}
                 onClose={handleDialogCloseOnly}
-                onInputChange={handleDialogInputChangeOnly}
+                onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
                 label={labelObjectOnly}
+                selectedFileName={selectedFileName}
             />
             <DownloadDialog
                 open={downloadDialogShow}
