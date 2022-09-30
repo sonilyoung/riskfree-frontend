@@ -289,7 +289,9 @@ const Update = () => {
 
     async function handleDialogFileDownload() {
         const fileId = notice["attachId"]
-        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        if (fileId) {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        }
     }
 
     const handleDialogClose = () => {

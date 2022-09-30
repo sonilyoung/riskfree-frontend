@@ -398,7 +398,6 @@ const Registration = () => {
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
-                // onDownload={handleDialogFileDownload}
                 enableDownload={false}
             />
         </DefaultLayout>

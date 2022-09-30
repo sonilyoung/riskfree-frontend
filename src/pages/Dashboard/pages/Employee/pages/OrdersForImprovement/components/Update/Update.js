@@ -422,9 +422,10 @@ const Update = () => {
     }
 
     async function handleDialogFileDownload() {
-        console.log("Hellooo")
         const fileId = law[dialogId]
-        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        if (fileId) {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        }
     }
 
     const handleDialogInputChange = (event) => {

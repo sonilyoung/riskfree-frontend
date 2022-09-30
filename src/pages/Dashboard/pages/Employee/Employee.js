@@ -2444,7 +2444,9 @@ const Employee = () => {
 
     async function handleDialogFileDownload() {
         const fileId = employeeFiles[dialogId]
-        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId || inspectionFileId}&fileSn=1`;
+        if (fileId || inspectionFileId) {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId || inspectionFileId}&fileSn=1`;
+        }
     }
 
     const handleDialogOpen = (event, articleNo, fileId, index) => {
