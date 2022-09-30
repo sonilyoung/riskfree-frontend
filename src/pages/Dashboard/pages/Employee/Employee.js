@@ -2492,6 +2492,8 @@ const Employee = () => {
         setUploadFlag(!uploadFlag)
     }
 
+    console.log(companyInfo)
+
     const handleManagerChecked = async (checkedStatus, checkedIndex, articleNo) => {
         const deepCopyObj = JSON.parse(JSON.stringify(inspectionsDocs))
         const updatedArray = deepCopyObj.map((obj, index) => {
@@ -2621,10 +2623,10 @@ const Employee = () => {
                                     <div className={classes.headerPopList}>
                                         <div className={classes.userTab}>
                                             <div className={classes.userImage}>
-                                                <img />
+                                                {!!(companyInfo) && !!companyInfo.logoImg && (<img height={50} src={`${BASE_URL}/file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
                                             </div>
                                             <div className={classes.userName}>
-                                                삼성전자 주식회사
+                                                {companyInfo?.companyName}
                                             </div>
                                             <div className={classes.userInfo}>
                                                 아래의 기업정보를 등록하신 후 이용하시기 바랍니다

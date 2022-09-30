@@ -834,7 +834,6 @@ const SystemAdministrator = () => {
             "col": col,
             "param": param
         });
-        console.log(response);
         setSubscribersList(response.data.RET_DATA);
         const plusButtonsInitialState = response.data?.RET_DATA?.map((item, index) => { return { id: index + 1, clicked: false, plus: true } });
         setPlusButtons(plusButtonsInitialState);
@@ -863,7 +862,6 @@ const SystemAdministrator = () => {
 
     const fetchSubscribersWorkplaceSelectList = async (companyId) => {
         const response = await subscribersWorkplaceSelect(companyId);
-        console.log(response.data.RET_DATA);
         setSubscribersWorkplaceSelectList(!!(response.data.RET_DATA) && response.data.RET_DATA);
     }
 
@@ -885,7 +883,6 @@ const SystemAdministrator = () => {
         setContractEndDate(response.data.RET_DATA?.contractEndDate);
         setSubscriberView(!!(response.data.RET_DATA) && response?.data?.RET_DATA);
         let fileInfo = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA["contractFileId"]), fileSn: 1 })
-        console.log(response.data.RET_DATA)
         filePathMain["contractFileId"] = fileInfo.data.RET_DATA.originalFileName
         setFilePath(filePathMain)
     }
@@ -986,7 +983,6 @@ const SystemAdministrator = () => {
     const handleDialogOpen = (event) => {
         setOpenDialog(true);
         setDialogId(event.target.id);
-        console.log(event.target.id)
     }
 
     const handleDialogInputChange = (event) => {
@@ -997,15 +993,16 @@ const SystemAdministrator = () => {
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
         formData.append("files", selectedFile)
-        console.log(selectedFile)
         const response = await fileUpload(formData)
         const fileId = response.data.RET_DATA[0].atchFileId
         setSubscriberInsert({ ...subscriberInsert, [dialogId]: fileId })
-        console.log(response.data.RET_DATA[0].originalFileName)
+        setSubscriberView({ ...subscriberView, [dialogId]: fileId })
         setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0]?.originalFileName })
         handleDialogClose()
         handleDialogCloseOnly()
     }
+
+    console.log(subscriberView, "------view")
 
     async function handleDialogFileDownload() {
         const fileId = subscriberView[dialogId]
@@ -1027,7 +1024,6 @@ const SystemAdministrator = () => {
         setSelectedFile(file);
     }
 
-    console.log(subscriberInsert)
     useEffect(() => {
         fetchSubscribersList();
         fetchCommCodeListGroup1();
@@ -1567,7 +1563,7 @@ const SystemAdministrator = () => {
                             </div>
                             <div className={classes.popButtons}>
                                 <YesButton onClick={() => handleInputValidation(subscriberView, handleSubscribersUpdate, 3)}>수정</YesButton>
-                                <NoButton onClick={() => setUserInfoPop(false)}>취소</NoButton>
+                                <NoButton onClick={() => { setUserInfoPop(false); setFilePath({ ...filePath, "contractFileId": "" }) }}>취소</NoButton>
                             </div>
                         </div>
                     </Overlay>
