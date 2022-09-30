@@ -131,7 +131,7 @@ const useStyles = makeStyles(() => ({
         fontSize: '28px'
     },
     zeroOpacity: {
-        opacity: 0
+        opacity: 0.5
     }
 }))
 

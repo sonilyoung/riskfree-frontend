@@ -796,7 +796,9 @@ const WorkHistoryList = () => {
     }
 
     async function handleDialogFileDownload() {
-        window.location = `${BASE_URL}/file/fileDown?atchFileId=${attachFileId}&fileSn=1`;
+        if (!!attachFileId) {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${attachFileId}&fileSn=1`;
+        }
     }
 
     const handleDialogOpen = (id) => {
@@ -835,7 +837,7 @@ const WorkHistoryList = () => {
         const response = await getSafeWorkFile({
             "workplaceId": workplaceId,
             "constructionType": constructionType,
-            "insertDate": insertDate
+            "insertDate": safeWorkFileTopinfo.insertDate
         });
         setSafeWorkFileList(response.data.RET_DATA);
 
@@ -857,6 +859,8 @@ const WorkHistoryList = () => {
         const response = await safeWorkExcelUpload(formData)
         setRegisterPopupShow(false)
     }
+
+    console.log(safeWorkFileList)
 
     useEffect(() => {
         fetchWorkplaceList();

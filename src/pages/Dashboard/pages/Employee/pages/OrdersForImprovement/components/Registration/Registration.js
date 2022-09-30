@@ -37,7 +37,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 
 import { useFileUploadMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
-import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+import { OnlyUploadDialog, UploadDialog } from '../../../../../../../../dialogs/Upload';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -325,6 +325,11 @@ const Registration = () => {
         "performBeforeId": "",
         "performAfterId": ""
     })
+    const [selectedFileName, setSelectedFileName] = useState("")
+    const labelObject = {
+        upperLabel: "이미지 등록",
+        middleLabel: "등록할 파일을 업로드 합니다."
+    }
 
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
@@ -733,11 +738,12 @@ const Registration = () => {
                     <WhiteButton className={"button-list"} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
             </Grid>
-            <UploadDialog
+            <OnlyUploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
+                label={labelObject}
             />
         </DefaultLayout>
     );
