@@ -33,7 +33,7 @@ import { useGetRelatedRawButtonMutation, useGetRelatedRawMutation, useInsertDuty
 import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../../hooks/api/FileManagement/FIleManagement';
 import { selectBaselineId } from '../../../../../../slices/selections/MainSelection';
 import { useSelector } from 'react-redux';
-import { UploadDialog } from '../../../../../../dialogs/Upload';
+import { UploadDialog, UploadEmployeeDialog } from '../../../../../../dialogs/Upload';
 import { useRelatedRawExcelUploadMutation } from '../../../../../../hooks/api/ExcelController/ExcelController';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -751,6 +751,7 @@ const MeasureToManageThePerformance = () => {
     const [popupPlusButton, setPopupPlusButton] = useState(false);
     const [page, setPage] = useState(1);
     const [toggleList, setToggleList] = useState('one');
+    const [selectedFileName, setSelectedFileName] = useState("")
 
     const [files, setFiles] = useState({
         "safetyFileUpload": "",
@@ -763,6 +764,11 @@ const MeasureToManageThePerformance = () => {
         "performBeforeId": "",
         "performAfterId": ""
     })
+
+    const labelObject = {
+        upperLabel: "법령데이터 관리",
+        middleLabel: "등록된 데이터를 엑셀로 다운로드 합니다."
+    }
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [openDialog, setOpenDialog] = useState(false)
@@ -794,9 +800,9 @@ const MeasureToManageThePerformance = () => {
     }
 
     const handleDialogOpen = (id) => {
+        setSelectedFileName("");
         setOpenDialog(true);
         setDialogId(id);
-        console.log(id)
     }
 
     const handleDialogClose = () => {
@@ -806,6 +812,7 @@ const MeasureToManageThePerformance = () => {
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        setSelectedFileName(file.name)
     }
 
     const handlePageChange = (event, value) => {
@@ -847,6 +854,12 @@ const MeasureToManageThePerformance = () => {
         updateRelatedRaw({ "updateList": updateList })
             .then(res => console.log(res))
             .then(() => fetchRelatedRawList(lawId));
+    }
+    async function handleDialogFileDownload() {
+        const fileId = files[dialogId]
+        if (fileId) {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        }
     }
 
     useEffect(() => {
@@ -1049,13 +1062,15 @@ const MeasureToManageThePerformance = () => {
                         <WhiteButton className={'button-cancelation'} >취소</WhiteButton>
                     </Grid>}
             </Grid>
-            <UploadDialog
+            <UploadEmployeeDialog
                 open={openDialog}
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
-                // onDownload={handleDialogFileDownload}
+                onDownload={handleDialogFileDownload}
                 enableDownload={false}
+                label={labelObject}
+                selectedFileName={selectedFileName}
             />
         </DefaultLayout >
     );
