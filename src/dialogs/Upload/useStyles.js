@@ -143,7 +143,13 @@ const useStyles = makeStyles(() => ({
     },
     zeroOpacity: {
         opacity: 1,
-    }
+    },
+    middleSpan: {
+        marginBottom: '15px'
+    },
+    topSpan: {
+        fontSize: '28px'
+    },
 }))
 
 export { useStyles };

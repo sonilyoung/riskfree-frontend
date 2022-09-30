@@ -94,7 +94,7 @@ import { setWorkplaceId, selectWorkplaceId, selectBaselineId, setBaselineId } fr
 import { useDispatch, useSelector } from 'react-redux';
 
 import icoFile from '../../../../assets/images/ic_file.png';
-import { OnlyUploadDialog, UploadDialog } from '../../../../dialogs/Upload';
+import { OnlyUploadDialog, UploadDialog, UploadEmployeeDialog } from '../../../../dialogs/Upload';
 import { Overlay } from '../../../../components/Overlay';
 import Ok from '../../../../components/MessageBox/Ok';
 import { useFileUploadMutation, useGetFileInfoMutation, useUpdateDocumentFileIdMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
@@ -2016,6 +2016,7 @@ const Employee = () => {
     const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
     const [yesNoPopupMessage, setYesNoPopupMessage] = useState("");
     const [openDialog, setOpenDialog] = useState(false)
+    const [openDialogEmployee, setOpenDialogEmployee] = useState(false)
     const [okayPopupShow, setOkayPopupShow] = useState(false);
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
@@ -2033,6 +2034,11 @@ const Employee = () => {
         upperLabel: "로고 등록",
         middleLabel: "등록할 파일을 업로드 합니다."
     }
+    const [selectedFileName, setSelectedFileName] = useState("")
+    const [labelObject, setLabelObject] = useState({
+        upperLabel: "이미지 등록",
+        middleLabel: "등록할 파일을 업로드 합니다.",
+    })
     // grid report 
     const [reportList, setReportList] = useState([]);
     const [reportTitle, setReportTitle] = useState([]);
@@ -2414,6 +2420,7 @@ const Employee = () => {
             formData.append("files", selectedFile)
             handleDialogClose()
             handleDialogCloseOnly()
+            handleDialogCloseEmployee()
             const response = await fileUpload(formData);
             setOkayPopupMessage("등록 되었습니다.");
             setOkayPopupShow(true);
@@ -2464,6 +2471,20 @@ const Employee = () => {
         setArticleNoForInspection(articleNo)
         setInspectionFileId(fileId)
         setInspectionIndex(index)
+        setSelectedFileName("");
+        if (event.target.id === "safetyFileUpload") {
+            setLabelObject({
+                ...labelObject,
+                upperLabel: "안전작업허가서 양식 관리",
+                middleLabel: "등록된 양식을 다운로드 합니다.",
+            })
+        } else if (event.target.id === "inspectionFile") {
+            setLabelObject({
+                ...labelObject,
+                upperLabel: "보고서",
+                middleLabel: "등록된 양식을 다운로드 합니다.",
+            })
+        }
     }
 
     const handleDialogClose = () => {
@@ -2473,6 +2494,7 @@ const Employee = () => {
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        setSelectedFileName(file.name)
     }
 
     const handleDialogCloseOnly = () => {
@@ -2482,11 +2504,39 @@ const Employee = () => {
     const handleDialogOpenOnly = (event) => {
         setOpenDialogOnly(true);
         setDialogId(event.target.id);
+        setSelectedFileName("");
+    }
+
+    const handleDialogCloseEmployee = () => {
+        setOpenDialogEmployee(false);
+    }
+
+    const handleDialogOpenEmployee = (event, articleNo, fileId, index) => {
+        setOpenDialogEmployee(true);
+        setDialogId((event.target.id).toString());
+        setArticleNoForInspection(articleNo)
+        setInspectionFileId(fileId)
+        setInspectionIndex(index)
+        setSelectedFileName("");
+        if (event.target.id === "safetyFileUpload") {
+            setLabelObject({
+                ...labelObject,
+                upperLabel: "안전작업허가서 양식 관리",
+                middleLabel: "등록된 양식을 다운로드 합니다.",
+            })
+        } else if (event.target.id === "inspectionFile") {
+            setLabelObject({
+                ...labelObject,
+                upperLabel: "보고서",
+                middleLabel: "등록된 양식을 다운로드 합니다.",
+            })
+        }
     }
 
     const handleDialogInputChangeOnly = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        setSelectedFileName(file.name)
     }
 
     const handleUpdateScore = async () => {
@@ -2828,7 +2878,7 @@ const Employee = () => {
                                         <span></span>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" id="safetyFileUpload" onClick={handleDialogOpen}>안전작업허가서 양식 업/다운로드​<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" id="safetyFileUpload" onClick={handleDialogOpenEmployee}>안전작업허가서 양식 업/다운로드​<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => { setYesNoPopupShow(true); setYesNoPopupMessage("업데이트 하시겠습니까?") }}>안전보건관리체계의 구축 및 이행 항목 업데이트​<img src={arrowDown} alt="arrow down" /></Link>
                                     </div>
                                     <div className={classes.headerPopFooter}>
@@ -3102,7 +3152,7 @@ const Employee = () => {
                                     <div className={classes.listTitle}><strong>{!!(inspectionsDocs) && inspectionsDocs[0]?.fileCount}</strong>건 /{!!(inspectionsDocs) && !!(inspectionsDocs.length) && inspectionsDocs[0].totalCount}건</div>
                                     <ul className={classes.menuList + ' buttonList'}>
                                         {inspectionsDocs?.map((inspection, index) => (<><li>
-                                            <div>{(inspection.fileId === null || inspection.fileId === "null" || inspection.fileId === "") ? <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone> : <FileButtonExis id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>}
+                                            <div>{(inspection.fileId === null || inspection.fileId === "null" || inspection.fileId === "") ? <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone> : <FileButtonExis id={"inspectionFile"} onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>}
                                                 {inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}
                                                     onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>상</span>) || (inspection.evaluation === "7" && <span className={'orange'}
                                                         onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>중</span>) || (inspection.evaluation === "5" && <span className={'red'}
@@ -3367,6 +3417,17 @@ const Employee = () => {
                 onUpload={handleDialogFileUpload}
                 onDownload={handleDialogFileDownload}
                 enableDownload={true}
+                selectedFileName={selectedFileName}
+            />
+            <UploadEmployeeDialog
+                open={openDialogEmployee}
+                onClose={handleDialogCloseEmployee}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+                onDownload={handleDialogFileDownload}
+                enableDownload={true}
+                label={labelObject}
+                selectedFileName={selectedFileName}
             />
             <OnlyUploadDialog
                 open={openDialogOnly}
@@ -3374,6 +3435,7 @@ const Employee = () => {
                 onInputChange={handleDialogInputChangeOnly}
                 onUpload={handleDialogFileUpload}
                 label={labelObjectOnly}
+                selectedFileName={selectedFileName}
             />
             <Overlay show={okayPopupShow}>
                 <Okay
