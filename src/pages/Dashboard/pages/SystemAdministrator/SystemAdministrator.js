@@ -881,7 +881,7 @@ const SystemAdministrator = () => {
         });
         setContractStartDate(response.data.RET_DATA?.contractStartDate);
         setContractEndDate(response.data.RET_DATA?.contractEndDate);
-        setSubscriberView(!!(response.data.RET_DATA) && response?.data?.RET_DATA);
+        setSubscriberView(response?.data?.RET_DATA);
         let fileInfo = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA["contractFileId"]), fileSn: 1 })
         filePathMain["contractFileId"] = fileInfo.data.RET_DATA.originalFileName
         setFilePath(filePathMain)
@@ -930,7 +930,7 @@ const SystemAdministrator = () => {
 
         if (response?.data?.RET_CODE === "0000") {
             fetchSubscribersList();
-            setOkayPopupMessage("Registration");
+            setOkayPopupMessage("등록 되었습니다.");
             setOkayPopupShow(true);
             handleRegisterInitialValue();
             setFilePath({ ...filePath, "contractFileId": "" });
@@ -963,11 +963,11 @@ const SystemAdministrator = () => {
             "workplaceName": subscriberView.workplaceName
         });
 
-        console.log(response);
         if (response?.data?.RET_CODE === "0000") {
             fetchSubscribersList();
-            setOkayPopupMessage("Update");
+            setOkayPopupMessage("등록 되었습니다.");
             setOkayPopupShow(true);
+            setFilePath({ ...filePath, "contractFileId": "" });
             setUserInfoPop(false);
         } else {
             setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다");
@@ -1562,7 +1562,7 @@ const SystemAdministrator = () => {
                                 </div>
                             </div>
                             <div className={classes.popButtons}>
-                                <YesButton onClick={() => handleInputValidation(subscriberView, handleSubscribersUpdate, 3)}>수정</YesButton>
+                                <YesButton onClick={() => handleInputValidation(subscriberView, handleSubscribersUpdate, 2)}>수정</YesButton>
                                 <NoButton onClick={() => { setUserInfoPop(false); setFilePath({ ...filePath, "contractFileId": "" }) }}>취소</NoButton>
                             </div>
                         </div>
