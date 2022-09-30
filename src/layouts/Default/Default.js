@@ -54,7 +54,7 @@ import { useLocalStorage } from '../../hooks/misc/LocalStorage';
 import moment from 'moment';
 import { useFileUploadMutation, useGetFileInfoMutation } from '../../hooks/api/FileManagement/FIleManagement';
 import { Overlay } from '../../components/Overlay';
-import { UploadDialog, UploadImageDialog } from '../../dialogs/Upload';
+import { OnlyUploadDialog, UploadDialog, UploadImageDialog } from '../../dialogs/Upload';
 import Okay from '../../components/MessageBox/Okay';
 import YesNo from '../../components/MessageBox/YesNo';
 
@@ -799,9 +799,14 @@ const Default = ({ children }) => {
     const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
 
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
-    const [okayPopupTitle, setOkayPopupTitle] = useState("");
+    const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
     const [selectedFile, setSelectedFile] = useState(null);
-    const [openDialog, setOpenDialog] = useState(false)
+    const [openDialog, setOpenDialog] = useState(false);
+    const [openDialogOnly, setOpenDialogOnly] = useState(false);
+    const labelObjectOnly = {
+        upperLabel: "로고 등록",
+        middleLabel: "등록할 파일을 업로드 합니다."
+    }
 
     const [employeeFiles, setEmployeeFiles] = useState({
         "safetyFileUpload": "",
@@ -816,18 +821,25 @@ const Default = ({ children }) => {
     })
 
     const [fileUpload] = useFileUploadMutation();
-    const [getFileInfo] = useGetFileInfoMutation()
-    const [updateSafetyFile] = useUpdateSafetyFileMutation()
+    const [getFileInfo] = useGetFileInfoMutation();
+    const [updateSafetyFile] = useUpdateSafetyFileMutation();
 
 
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
         formData.append("files", selectedFile)
-        handleDialogClose()
-        const response = await fileUpload(formData)
+        handleDialogClose();
+        handleDialogCloseOnly();
+        const response = await fileUpload(formData);
+        setOkayPopupMessage("등록 되었습니다.");
+        setOkayPopupShow(true);
         const fileId = response.data.RET_DATA[0].atchFileId
-        setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
-        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+        setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) });
+        if (dialogId === "logoImgUpload") {
+            setFilePath({ ...filePath, [dialogId]: (response.data.RET_DATA[0].filePath + "/" + response.data.RET_DATA[0].saveFileName) })
+        } else {
+            setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+        }
     }
 
     async function handleDialogFileDownload() {
@@ -846,6 +858,20 @@ const Default = ({ children }) => {
     }
 
     const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    }
+
+    const handleDialogCloseOnly = () => {
+        setOpenDialogOnly(false);
+    }
+
+    const handleDialogOpenOnly = (event) => {
+        setOpenDialogOnly(true);
+        setDialogId(event.target.id);
+    }
+
+    const handleDialogInputChangeOnly = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
     }
@@ -893,9 +919,7 @@ const Default = ({ children }) => {
 
     const handleInsertBaseLineDataUpdate = async () => {
         const response = await insertBaseLineDataCopy({});
-        console.log(response);
         setYesNoPopupShow(false);
-        setOkayPopupTitle("알림");
         setOkayPopupMessage(response.data.RET_DESC);
         setOkayPopupShow(true);
     }
@@ -906,11 +930,8 @@ const Default = ({ children }) => {
             "missionStatements": missionStatement,
             "safetyGoal": safetyGoal
         });
-
-        setOkayPopupTitle("알림");
         setOkayPopupMessage(response.data.RET_DESC);
         setOkayPopupShow(true);
-
         fetchCompanyInfo();
         setMissionStatement("");
         setSafetyGoal("");
@@ -981,7 +1002,7 @@ const Default = ({ children }) => {
                                             <div className={classes.headerPopList}>
                                                 <div className={classes.userTab}>
                                                     <div className={classes.userImage}>
-                                                        <img />
+                                                        {!!(companyInfo) && !!companyInfo.logoImg && (<img height={50} src={`${BASE_URL}/file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
                                                     </div>
                                                     <div className={classes.userName}>
                                                         삼성전자 주식회사
@@ -1013,10 +1034,10 @@ const Default = ({ children }) => {
                                                 />
                                                 <div className={classes.preFootPop}>
                                                     <div>
-                                                        {filePath.logoImgUpload ? (<span>{filePath.logoImgUpload}</span>) : (<span>로고등록</span>)}
+                                                        {filePath.logoImgUpload ? (<img height={60} src={`${BASE_URL}/file/getImg?imgPath=${filePath.logoImgUpload}`} alt="logo" />) : (<span>로고등록</span>)}
                                                     </div>
                                                     <div>
-                                                        <UploadImageButton id={"logoImgUpload"} onClick={handleDialogOpen}>찾아보기</UploadImageButton>
+                                                        <UploadImageButton id={"logoImgUpload"} onClick={handleDialogOpenOnly}>찾아보기</UploadImageButton>
                                                         <Alert
                                                             icon={<img src={alertIcon} alt="alert icon" />}
                                                             severity="error">
@@ -1234,6 +1255,13 @@ const Default = ({ children }) => {
                 onUpload={handleDialogFileUpload}
                 onDownload={handleDialogFileDownload}
                 enableDownload={false}
+            />
+            <OnlyUploadDialog
+                open={openDialogOnly}
+                onClose={handleDialogCloseOnly}
+                onInputChange={handleDialogInputChangeOnly}
+                onUpload={handleDialogFileUpload}
+                label={labelObjectOnly}
             />
             <Overlay show={okayPopupShow}>
                 <Okay

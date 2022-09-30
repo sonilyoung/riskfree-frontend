@@ -101,6 +101,7 @@ import { useFileUploadMutation, useGetFileInfoMutation, useUpdateDocumentFileIdM
 
 import Chart from 'react-apexcharts';
 import YesNo from '../../../../components/MessageBox/YesNo';
+import Okay from '../../../../components/MessageBox/Okay';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -2005,8 +2006,9 @@ const Employee = () => {
 
     const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
     const [openDialog, setOpenDialog] = useState(false)
-    const [okPopupShow, setOkPopupShow] = useState(false);
-    const [okPopupMessage, setOkPopupMessage] = useState({ RET_CODE: "0201", RET_DESC: "저장성공" });
+    const [okayPopupShow, setOkayPopupShow] = useState(false);
+    const [okayPopupMessage, setOkayPopupMessage] = useState("");
+    const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
     const [selectedFile, setSelectedFile] = useState(null);
     const [inspectionFileId, setInspectionFileId] = useState(null)
     const [articleNoForInspection, setArticleNoForInspection] = useState(null)
@@ -2136,8 +2138,9 @@ const Employee = () => {
 
     const handleClose = async () => {
         const response = await close({});
-        setOkPopupShow(true);
-        setOkPopupMessage(response.data);
+        console.log(response);
+        setOkayPopupMessage("등록 되었습니다.");
+        setOkayPopupShow(true);
     }
 
     const handleInsertBaseline = async () => {
@@ -2152,15 +2155,15 @@ const Employee = () => {
             "targetBaselineId": targetBaselineId,
             "baselineId": currentBaselineId
         });
-        setOkPopupShow(true);
-        setOkPopupMessage(response.data);
+        setOkayPopupMessage(response.data.RET_DESC);
+        setOkayPopupShow(true);
     }
 
     const handleInsertBaseLineDataUpdate = async () => {
         const response = await insertBaseLineDataCopy({});
         setYesNoPopupShow(false);
-        setOkPopupShow(true);
-        setOkPopupMessage(response.data);
+        setOkayPopupMessage(response.data.RET_DESC);
+        setOkayPopupShow(true);
     }
 
     const handleUpdateUserCompany = async () => {
@@ -2169,8 +2172,8 @@ const Employee = () => {
             "missionStatements": missionStatement,
             "safetyGoal": safetyGoal
         });
-        setOkPopupShow(true);
-        setOkPopupMessage(response.data);
+        setOkayPopupMessage(response.data.RET_DESC);
+        setOkayPopupShow(true);
         fetchCompanyInfo();
         setMissionStatement("");
         setSafetyGoal("");
@@ -2402,7 +2405,9 @@ const Employee = () => {
             formData.append("files", selectedFile)
             handleDialogClose()
             handleDialogCloseOnly()
-            const response = await fileUpload(formData)
+            const response = await fileUpload(formData);
+            setOkayPopupMessage("등록 되었습니다.");
+            setOkayPopupShow(true);
             const fileId = response.data.RET_DATA[0].atchFileId
             setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
             if (dialogId === "logoImgUpload") {
@@ -2491,8 +2496,6 @@ const Employee = () => {
         setEvaluationPopup(false)
         setUploadFlag(!uploadFlag)
     }
-
-    console.log(companyInfo)
 
     const handleManagerChecked = async (checkedStatus, checkedIndex, articleNo) => {
         const deepCopyObj = JSON.parse(JSON.stringify(inspectionsDocs))
@@ -3359,11 +3362,12 @@ const Employee = () => {
                 onUpload={handleDialogFileUpload}
                 label={labelObjectOnly}
             />
-            <Overlay show={okPopupShow}>
-                <Ok
-                    show={okPopupShow}
-                    message={okPopupMessage}
-                    onConfirm={() => setOkPopupShow(false)} />
+            <Overlay show={okayPopupShow}>
+                <Okay
+                    show={okayPopupShow}
+                    message={okayPopupMessage}
+                    title={okayPopupTitle}
+                    onConfirm={() => setOkayPopupShow(false)} />
             </Overlay>
             <Overlay show={yesNoPopupShow}>
                 <YesNo
@@ -3372,12 +3376,6 @@ const Employee = () => {
                     onConfirmNo={() => setYesNoPopupShow(false)}
                 />
             </Overlay>
-            {/* <Overlay show={okPopupShow}>
-                        <Ok
-                            show={okPopupShow}
-                            message={okPopupMessage}
-                            onConfirm={() => setOkPopupShow(false)} />
-                    </Overlay> */}
         </WideLayout >
     );
 };
