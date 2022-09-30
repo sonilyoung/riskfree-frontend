@@ -36,7 +36,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 
 import { useFileUploadMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
-import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+import { OnlyUploadDialog, UploadDialog } from '../../../../../../../../dialogs/Upload';
 import { Overlay } from '../../../../../../../../components/Overlay';
 import Ok from '../../../../../../../../components/MessageBox/Ok';
 
@@ -404,6 +404,11 @@ const Registration = () => {
         sameAccidentInjury: null,
     });
 
+    const [labelObject, setLabelObject] = useState({
+        upperLabel: "이미지 등록",
+        middleLabel: "등록할 파일을 업로드 합니다.",
+    })
+
     const [fileUpload] = useFileUploadMutation()
 
     const handleDialogClose = () => {
@@ -413,7 +418,19 @@ const Registration = () => {
     const handleDialogOpen = (event) => {
         setOpenDialog(true);
         setDialogId(event.target.id);
-        console.log(event.target.id)
+        if (event.target.id === ("performBeforeId" || "performAfterId")) {
+            setLabelObject({
+                ...labelObject,
+                upperLabel: "이미지 등록",
+                middleLabel: "등록할 파일을 업로드 합니다.",
+            })
+        } else {
+            setLabelObject({
+                ...labelObject,
+                upperLabel: "보고서 등록",
+                middleLabel: "등록할 파일을 업로드 합니다.",
+            })
+        }
     }
 
     const handleDialogInputChange = (event) => {
@@ -1061,13 +1078,12 @@ const Registration = () => {
                     <WhiteButton className={"button-list"} onClick={handleRedirect}>목록</WhiteButton>
                 </Grid>
             </Grid>
-            <UploadDialog
+            <OnlyUploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
-                // onDownload={handleDialogFileDownload}
-                enableDownload={false}
+                label={labelObject}
             />
             <Overlay show={okPopupShow}>
                 <Ok
