@@ -430,9 +430,11 @@ const Update = () => {
         setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
     }
 
-    async function handleDialogFileDownload() {
+    async function handleDialogFileDownload(id) {
         const fileId = accident[dialogId]
-        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        if (fileId || id) {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId || id}&fileSn=1`;
+        }
     }
 
     const handleDialogOpen = (event) => {
@@ -890,6 +892,7 @@ const Update = () => {
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             disabled
+                                            onDoubleClick={() => handleDialogFileDownload(accident.performBeforeId)}
                                         />
                                         <UploadButton id="performBeforeId" onClick={handleDialogOpen}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>
@@ -907,6 +910,7 @@ const Update = () => {
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             disabled
+                                            onDoubleClick={() => handleDialogFileDownload(accident.performAfterId)}
                                         />
                                         <UploadButton id="performAfterId" onClick={handleDialogOpen}>찾아보기</UploadButton>
                                         {/* <div className={classes.imgPreview}>

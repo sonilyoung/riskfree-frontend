@@ -31,6 +31,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { useAccidentViewMutation, useAccidentDeleteMutation } from '../../../../../../../../hooks/api/AccidentManagement/AccidentManagement';
 import { useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -293,7 +295,10 @@ const useStyles = makeStyles(() => ({
         }
     },
     activeReportBtn: {
-        backgroundColor: "#9099a1 !important"
+        backgroundColor: "#989898 !important",
+        '&:hover': {
+            backgroundColor: "#7b7b7b !important",
+        }
     }
 }));
 
@@ -397,9 +402,11 @@ const View = () => {
         // }
     }
 
-    console.log(accident)
-
-
+    async function handleDialogFileDownload(id) {
+        if (id) {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${id}&fileSn=1`;
+        }
+    }
 
     const handleDelete = () => {
         accidentDelete(id)
@@ -549,8 +556,8 @@ const View = () => {
                                     {accident && accident.occurReason}
                                 </div>
                                 <div className={classes.rowInfo}>
-                                    <AccidentReportButton sx={{ marginRight: '10px' }} className={accident.initReportId && classes.activeReportBtn}>초기사고 보고서</AccidentReportButton>
-                                    <AccidentReportButton className={accident.finalReportId && classes.activeReportBtn}>최종사고 보고서</AccidentReportButton>
+                                    <AccidentReportButton sx={{ marginRight: '10px' }} className={accident.initReportId && classes.activeReportBtn} onDoubleClick={() => handleDialogFileDownload(accident.initReportId)}>초기사고 보고서</AccidentReportButton>
+                                    <AccidentReportButton className={accident.finalReportId && classes.activeReportBtn} onDoubleClick={() => handleDialogFileDownload(accident.finalReportId)}>최종사고 보고서</AccidentReportButton>
                                 </div>
                             </div>
                         </div>
@@ -620,7 +627,7 @@ const View = () => {
                     <button onClick={() => handleDelete()}>확인</button>
                 </div>
             </div>
-        </DefaultLayout>
+        </DefaultLayout >
     )
 }
 
