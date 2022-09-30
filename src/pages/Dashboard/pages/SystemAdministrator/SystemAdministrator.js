@@ -1352,7 +1352,7 @@ const SystemAdministrator = () => {
                             </div>
                             <div className={classes.popButtons}>
                                 <YesButton onClick={() => handleInputValidation(subscriberInsert, handleSubscribersInsert, 0)}>등록</YesButton>
-                                <NoButton onClick={() => { handleRegisterInitialValue(); setRegMemberPop(false); }}>취소</NoButton>
+                                <NoButton onClick={() => { handleRegisterInitialValue(); setRegMemberPop(false); setFilePath({ ...filePath, "contractFileId": "" }) }}>취소</NoButton>
                             </div>
                         </div>
                     </Overlay>
