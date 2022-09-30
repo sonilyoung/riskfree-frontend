@@ -2362,8 +2362,6 @@ const Employee = () => {
         }
     }
 
-    // console.log(relatedArticle)
-
     const fetchGuideLine = async () => {
         if (clickedDuty) {
             const response = await getGuideLine({
@@ -2406,7 +2404,6 @@ const Employee = () => {
             handleDialogCloseOnly()
             const response = await fileUpload(formData)
             const fileId = response.data.RET_DATA[0].atchFileId
-            console.log(response.data.RET_DATA[0])
             setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
             if (dialogId === "logoImgUpload") {
                 setFilePath({ ...filePath, [dialogId]: (response.data.RET_DATA[0].filePath + "/" + response.data.RET_DATA[0].saveFileName) })
@@ -2431,7 +2428,6 @@ const Employee = () => {
                     }
                 }
             })
-            console.log(updatedArray, "-----updated")
             const responseDocumentFile = await updateDocumentFileId(
                 {
                     "updateList": updatedArray,
@@ -2452,8 +2448,6 @@ const Employee = () => {
         setArticleNoForInspection(articleNo)
         setInspectionFileId(fileId)
         setInspectionIndex(index)
-        console.log(index, "----index")
-        console.log((event.target.id).toString())
     }
 
     const handleDialogClose = () => {
@@ -2472,7 +2466,6 @@ const Employee = () => {
     const handleDialogOpenOnly = (event) => {
         setOpenDialogOnly(true);
         setDialogId(event.target.id);
-        console.log(event.target.id)
     }
 
     const handleDialogInputChangeOnly = (event) => {
@@ -2495,7 +2488,6 @@ const Employee = () => {
             "updateList": updatedArray,
             "articleNo": articleNoForInspection
         })
-        console.log(evaluationIndex, "----index")
         setEvaluationPopup(false)
         setUploadFlag(!uploadFlag)
     }
@@ -2525,7 +2517,6 @@ const Employee = () => {
             "condition": condition
         });
         setReportTitle(response.data.RET_DATA);
-        console.log(response);
     }
 
     const fetchBaseLineReportList = async () => {
@@ -2535,9 +2526,7 @@ const Employee = () => {
         });
         reduceAPIResponse(response.data.RET_DATA);
         setReportList(response.data.RET_DATA);
-        console.log(response, currentBaselineId);
     }
-    console.log(filePath.logoImgUpload)
 
     useEffect(() => {
         fetchBaseline(baselineIdForSelect);
