@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
         height: '400px',
         background: '#fff',
         borderRadius: '30px',
-        padding: '40px',
+        padding: '40px 40px 0px 40px',
         boxSizing: 'border-box',
         display: 'flex',
         flexWrap: 'wrap',
@@ -49,8 +49,8 @@ const useStyles = makeStyles(() => ({
             marginLeft: '10px',
         },
         '& $popupTextField:not($zeroOpacity):last-of-type': {
-            position: 'absolute',
-            left: '40px',
+            top: '-55px',
+            left: '-35px',
             height: '40px',
             width: '250px',
             background: '#fff',
@@ -66,6 +66,10 @@ const useStyles = makeStyles(() => ({
         },
         '& $zeroOpacity': {
             overflow: 'hidden'
+        },
+        '& button': {
+            position: 'relative',
+            top: '-45px',
         },
     },
     uploadInfo: {

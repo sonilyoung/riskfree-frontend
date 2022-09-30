@@ -55,8 +55,8 @@ const useStyles = makeStyles(() => ({
             marginLeft: '10px',
         },
         '& $popupTextField:not($zeroOpacity):last-of-type': {
-            position: 'absolute',
-            left: '40px',
+            top: '-55px',
+            left: '-35px',
             height: '40px',
             width: '250px',
             background: '#fff',
@@ -72,6 +72,10 @@ const useStyles = makeStyles(() => ({
         },
         '& $zeroOpacity': {
             overflow: 'hidden'
+        },
+        '& button': {
+            position: 'relative',
+            top: '-55px',
         },
     },
     onlyUploadInfo: {
