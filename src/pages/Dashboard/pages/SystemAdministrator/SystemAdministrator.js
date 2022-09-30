@@ -1004,7 +1004,7 @@ const SystemAdministrator = () => {
 
     async function handleDialogFileDownload() {
         const fileId = subscriberView[dialogId]
-        if (fileId || inspectionFileId) {
+        if (fileId || fileIdForDownload) {
             window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId || fileIdForDownload}&fileSn=1`;
         }
     }
