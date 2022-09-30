@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { makeStyles } from '@mui/styles';
 import { styled } from '@mui/system';
 import TextField from '@mui/material/TextField';
@@ -129,6 +129,9 @@ const useStyles = makeStyles(() => ({
     },
     topSpan: {
         fontSize: '28px'
+    },
+    zeroOpacity: {
+        opacity: 0
     }
 }))
 
@@ -159,8 +162,13 @@ const UnknownButton1 = styled(ButtonUnstyled)`
     }   
 `;
 
-function OnlyUpload({ open, onClose, onInputChange, onUpload, label }) {
+function OnlyUpload({ open, onClose, onInputChange, onUpload, label, selectedFileName }) {
     const classes = useStyles();
+    const inputRef = useRef(null);
+
+    const handleChooseFile = () => {
+        inputRef.current.click();
+    }
 
     return (
         <Overlay show={open}>
@@ -176,9 +184,19 @@ function OnlyUpload({ open, onClose, onInputChange, onUpload, label }) {
                                 id="standard-basic"
                                 placeholder="여수공장 시정조치요청 파일.hwp"
                                 variant="outlined"
-                                className={classes.popupTextField}
+                                className={[classes.popupTextField, classes.zeroOpacity]}
                                 type="file"
                                 onChange={onInputChange}
+                            />
+                            <TextField
+                                id="upload-field-real"
+                                placeholder="여수공장 시정조치요청 파일.hwp"
+                                variant="outlined"
+                                className={classes.popupTextField}
+                                onChange={onInputChange}
+                                onClick={handleChooseFile}
+                                value={selectedFileName}
+                                readOnly={true}
                             />
                             <UnknownButton1 onClick={() => onUpload('openDialog')}>파일 업로드</UnknownButton1>
                         </div>

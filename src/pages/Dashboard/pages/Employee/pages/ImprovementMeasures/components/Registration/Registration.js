@@ -407,7 +407,7 @@ const Registration = () => {
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
                 label={labelObject}
-                selectedFileName = {selectedFileName}
+                selectedFileName={selectedFileName}
             />
         </DefaultLayout>
     );
