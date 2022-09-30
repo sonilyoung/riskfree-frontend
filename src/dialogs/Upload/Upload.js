@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { makeStyles } from '@mui/styles';
 import { styled } from '@mui/system';
 import TextField from '@mui/material/TextField';
@@ -69,8 +69,13 @@ const SearchButton = styled(ButtonUnstyled)`
     }   
 `;
 
-function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDownload, label }) {
+function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDownload, selectedFileName }) {
     const classes = useStyles();
+    const inputRef = useRef(null);
+
+    const handleChooseFile = () => {
+        inputRef.current.click();
+    }
 
     return (
         <Overlay show={open}>
@@ -91,12 +96,23 @@ function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDown
                     <span></span>
                     <div className={classes.uploadSearch}>
                         <TextField
-                            id="standard-basic"
+                            id="upload-field-hidden"
+                            inputRef={inputRef}
+                            placeholder="여수공장 시정조치요청 파일.hwp"
+                            variant="outlined"
+                            className={[classes.popupTextField, classes.zeroOpacity]}
+                            type="file"
+                            onChange={onInputChange}
+                        />
+                        <TextField
+                            id="upload-field-real"
                             placeholder="여수공장 시정조치요청 파일.hwp"
                             variant="outlined"
                             className={classes.popupTextField}
-                            type="file"
                             onChange={onInputChange}
+                            onClick={handleChooseFile}
+                            value={selectedFileName}
+                            readOnly={true}
                         />
                         <UnknownButton1 onClick={() => onUpload('openDialog')}>파일 업로드</UnknownButton1>
                     </div>

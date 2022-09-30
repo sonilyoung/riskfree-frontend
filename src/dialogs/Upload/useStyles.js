@@ -116,6 +116,9 @@ const useStyles = makeStyles(() => ({
     },
     popupOverlayClose: {
         display: 'none'
+    },
+    zeroOpacity: {
+        opacity: 0.5
     }
 }))
 

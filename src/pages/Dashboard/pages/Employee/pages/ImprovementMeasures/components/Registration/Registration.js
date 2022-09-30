@@ -49,6 +49,7 @@ const Registration = () => {
     const [openDialogAfterId, setOpenDialogAfterId] = useState(false)
     const [openDialogBeforeId, setOpenDialogBeforeId] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
+    const [selectedFileName, setSelectedFileName] = useState("")
     const [atchFileId, setAtchFileId] = useState(null)
     const [atchFilePath, setAtchFilePath] = useState("")
     const [atchFileSn, setAtchFileSn] = useState(null)
@@ -100,6 +101,7 @@ const Registration = () => {
     const handleDialogOpen = (event) => {
         setOpenDialog(true);
         setDialogId(event.target.id);
+        setSelectedFileName("");
     }
 
     const handleDialogClose = () => {
@@ -119,6 +121,7 @@ const Registration = () => {
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        setSelectedFileName(file.name);
     }
 
     const handleRedirect = () => {
@@ -404,6 +407,7 @@ const Registration = () => {
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
                 label={labelObject}
+                selectedFileName = {selectedFileName}
             />
         </DefaultLayout>
     );
