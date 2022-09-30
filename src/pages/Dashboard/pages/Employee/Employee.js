@@ -2147,7 +2147,6 @@ const Employee = () => {
 
     const handleClose = async () => {
         const response = await close({});
-        console.log(response);
         setOkayPopupMessage("등록 되었습니다.");
         setOkayPopupShow(true);
     }

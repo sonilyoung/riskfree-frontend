@@ -433,6 +433,9 @@ const useStyles = makeStyles(() => ({
             margin: '0 auto'
         },
         '& .slick-track': {
+            '& .slick-slide button.current': {
+                background: 'linear-gradient(#0186d8, #347dfa)'
+            },
             '& .slick-slide button.active': {
                 background: 'linear-gradient(#04b9fb, #017dfa)'
             },

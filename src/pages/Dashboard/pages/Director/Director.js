@@ -371,7 +371,7 @@ const Director = () => {
             }
         },
     });
-
+    const workplaceIdFromToken = userToken.getUserWorkplaceId();
     const [userInfo, setUserInfo] = useState({
         userCompanyId: userToken.getUserCompanyId(),
         userWorkplaceId: userToken.getUserWorkplaceId(),
@@ -594,10 +594,10 @@ const Director = () => {
         return (
             <div
                 className={className}
-                style={{ ...style, display: parseInt(baselineData.nextBaseline) ? "block" : "none" }}
+                style={{ ...style, display: parseInt(baselineData?.nextBaseline) ? "block" : "none" }}
                 onClick={() => {
-                    if (parseInt(baselineData.nextBaseline)) {
-                        dispatch(setBaselineId(parseInt(baselineData.nextBaseline)))
+                    if (parseInt(baselineData?.nextBaseline)) {
+                        dispatch(setBaselineId(parseInt(baselineData?.nextBaseline)))
                         onClick();
                     }
                 }}
@@ -610,10 +610,10 @@ const Director = () => {
         return (
             <div
                 className={className}
-                style={{ ...style, display: parseInt(baselineData.prevBaseline) ? "block" : "none" }}
+                style={{ ...style, display: parseInt(baselineData?.prevBaseline) ? "block" : "none" }}
                 onClick={() => {
-                    if (parseInt(baselineData.prevBaseline)) {
-                        dispatch(setBaselineId(parseInt(baselineData.prevBaseline)))
+                    if (parseInt(baselineData?.prevBaseline)) {
+                        dispatch(setBaselineId(parseInt(baselineData?.prevBaseline)))
                         onClick();
                     }
                 }}
@@ -796,11 +796,11 @@ const Director = () => {
                                     <div>
                                         <ButtonGraphPrev
                                             onClick={() => {
-                                                if (parseInt(baselineData.prevBaseline)) {
+                                                if (parseInt(baselineData?.prevBaseline)) {
                                                     dispatch(setBaselineId(parseInt(baselineData.prevBaseline)))
                                                 }
                                             }}
-                                            style={{ display: parseInt(baselineData.prevBaseline) ? "block" : "none" }}
+                                            style={{ display: parseInt(baselineData?.prevBaseline) ? "block" : "none" }}
                                         ></ButtonGraphPrev>
                                         <div>
                                             <span>중대대해처벌법 대응수준 현황</span>
@@ -808,11 +808,11 @@ const Director = () => {
                                         </div>
                                         <ButtonGraphNext
                                             onClick={() => {
-                                                if (parseInt(baselineData.nextBaseline)) {
-                                                    dispatch(setBaselineId(parseInt(baselineData.nextBaseline)))
+                                                if (parseInt(baselineData?.nextBaseline)) {
+                                                    dispatch(setBaselineId(parseInt(baselineData?.nextBaseline)))
                                                 }
                                             }}
-                                            style={{ display: parseInt(baselineData.nextBaseline) ? "block" : "none" }}
+                                            style={{ display: parseInt(baselineData?.nextBaseline) ? "block" : "none" }}
                                         ></ButtonGraphNext>
                                     </div>
                                 </div>
@@ -843,17 +843,18 @@ const Director = () => {
                             </div>
                         </div>
                         <div className={classes.navSlider}>
-                            {/* WORKPLACE LIST */}
                             <Slider {...headerSlider}>
-                                <div>
-                                    <MainNavButton className={currentWorkplaceId === null ? "active" : ""} onClick={
-                                        () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })
-                                    }>전체사업장</MainNavButton>
-                                </div>
-                                {workplaceList.length != 0 && workplaceList?.RET_DATA?.map(workplaceItem =>
+                                {workplaceList?.length != 0 && workplaceList?.length != 1
+                                    && <div>
+                                        <MainNavButton className={currentWorkplaceId === null ? "active" : ""} onClick={
+                                            () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })
+                                        }>전체사업장</MainNavButton>
+                                    </div>}
+                                {workplaceList?.length != 0 && workplaceList?.RET_DATA?.map(workplaceItem =>
                                     <div>
                                         <MainNavButton
-                                            className={currentWorkplaceId === workplaceItem.workplaceId ? "active" : ""}
+                                            className={currentWorkplaceId === workplaceItem.workplaceId ? "active" : workplaceIdFromToken === workplaceItem.workplaceId ? "current" : ""}
+                                            // className={(currentWorkplaceId === workplaceItem.workplaceId && currentWorkplaceId === workplaceIdFromToken) || currentWorkplaceId === workplaceItem.workplaceId ? "active" : workplaceIdFromToken === workplaceItem.workplaceId ? "current" : ""}
                                             onClick={() => handleFactoryChange({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}
                                         >
                                             {workplaceItem.workplaceName}

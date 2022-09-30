@@ -900,7 +900,7 @@ const Default = ({ children }) => {
 
     const handleClose = async () => {
         const response = await close({});
-        setOkayPopupMessage(response.data.RET_DESC);
+        setOkayPopupMessage("등록 되었습니다.");
         setOkayPopupShow(true);
     }
 
