@@ -29,6 +29,8 @@ import imgPrev2 from '../../../../../../../../assets/images/prw_photo2.jpg';
 import { useImprovementViewMutation, useImprovementDeleteMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement'
 import { useGetFileInfoMutation, useGetImgMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL
+
 const useStyles = makeStyles(() => ({
     pageWrap: {
         '& >div:not($listTitle, $footerButtons)': {
@@ -380,6 +382,12 @@ const Registration = () => {
     //     console.log(response)
     // }
 
+    async function handleDialogFileDownload(id) {
+        if (id) {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${id}&fileSn=1`;
+        }
+    }
+
     const handleDeleteImprovement = () => {
         improvemetnDelete(id)
             .then(() => setPromptPopupShow(false))
@@ -441,7 +449,7 @@ const Registration = () => {
                                     {improvement && improvement.finDate}
                                 </div>
                                 <div className={classes.rowTitle}>첨부파일</div>
-                                <div className={classes.rowInfo}>
+                                <div className={classes.rowInfo} style={{ cursor: "pointer" }} onDoubleClick={() => handleDialogFileDownload(improvement.reqFileId)}>
                                     {fileNameExel && fileNameExel}
                                 </div>
                             </div>

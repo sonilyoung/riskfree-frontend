@@ -32,7 +32,7 @@ import moment from "moment"
 import useUserInitialWorkplaceId from '../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
 import { useStyles } from './useStyles';
 import { UploadButton, WhiteButton, BlueButton } from './buttons/Unstyled';
-import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+import { OnlyUploadDialog, UploadDialog } from '../../../../../../../../dialogs/Upload';
 
 const Registration = () => {
     const classes = useStyles();
@@ -91,6 +91,11 @@ const Registration = () => {
             "workplaceId": parseInt(workplaceSelect)
         }
     )
+
+    const labelObject = {
+        upperLabel: "이미지 등록",
+        middleLabel: "등록할 파일을 업로드 합니다."
+    }
 
     const handleDialogOpen = (event) => {
         setOpenDialog(true);
@@ -393,12 +398,12 @@ const Registration = () => {
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
             </Grid>
-            <UploadDialog
+            <OnlyUploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
-                enableDownload={false}
+                label={labelObject}
             />
         </DefaultLayout>
     );

@@ -393,10 +393,10 @@ const Registration = () => {
         setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
     }
 
-    async function handleDialogFileDownload() {
+    async function handleDialogFileDownload(id) {
         const fileId = improvement[dialogId]
-        if (fileId) {
-            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        if (fileId || id) {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId || id}&fileSn=1`;
         }
     }
 
@@ -559,6 +559,8 @@ const Registration = () => {
                                         value={filePath.reqFileId ?? ""}
                                         sx={{ width: 390 }}
                                         className={classes.selectMenu}
+                                        style={{ cursor: "pointer" }}
+                                        onDoubleClick={() => handleDialogFileDownload(improvement.reqFileId)}
                                     />
                                     <UploadButton id="reqFileId" onClick={handleDialogOpen}>찾아보기</UploadButton>
                                 </div>
@@ -654,6 +656,8 @@ const Registration = () => {
                                             value={filePath.actionBeforeId ?? ""}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
+                                            style={{ cursor: "pointer" }}
+                                            onDoubleClick={() => handleDialogFileDownload(improvement.actionBeforeId)}
                                         // disabled
                                         />
                                         <UploadButton id="actionBeforeId" onClick={handleDialogOpen}>찾아보기</UploadButton>
@@ -671,6 +675,8 @@ const Registration = () => {
                                             value={filePath.actionAfterId ?? ""}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
+                                            style={{ cursor: "pointer" }}
+                                            onDoubleClick={() => handleDialogFileDownload(improvement.actionAfterId)}
                                         // disabled
                                         />
                                         <UploadButton id="actionAfterId" onClick={handleDialogOpen}>찾아보기</UploadButton>
