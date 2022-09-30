@@ -723,7 +723,7 @@ const SystemAdministrator = () => {
     const [downloadDialogShow, setDownloadDialogShow] = useState(false);
     const [okayPopupShow, setOkayPopupShow] = useState(false);
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
-    const [okayPopupTitle, setOkayPopupTitle] = useState("");
+    const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
     const [filePath, setFilePath] = useState({
         "contractFileId": ""
     });
@@ -812,13 +812,12 @@ const SystemAdministrator = () => {
         return activeClass.clicked;
     }
 
-    const handleInputValidation = (data, callback) => {
+    const handleInputValidation = (data, callback, number) => {
         const arrayOfObjectValues = Object.values(data);
         const emptyInputFields = arrayOfObjectValues?.filter(item => item === "" || item === null);
-        if (emptyInputFields?.length === 0) {
+        if (emptyInputFields?.length === number) {
             callback();
         } else {
-            setOkayPopupTitle("알림");
             setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다");
             setOkayPopupShow(true);
         }
@@ -871,6 +870,7 @@ const SystemAdministrator = () => {
     const fetchSubscriberView = async (workplaceId, userId) => {
         let filePathMain = {}
         const response = await subscribersView(`${workplaceId}&userId=${userId}`);
+        console.log(response);
         const managerTelWithOutHyphen = !!(response.data.RET_DATA) && response.data.RET_DATA?.managerTel?.split("-").join("");
         setManagerTel({
             firstInput: managerTelWithOutHyphen.slice(0, 3),
@@ -913,7 +913,7 @@ const SystemAdministrator = () => {
     }
 
     const handleSubscribersInsert = async () => {
-        await subscribersInsert({
+        const response = await subscribersInsert({
             "companyName": subscriberInsert.companyName,
             "contractAmount": subscriberInsert.contractAmount,
             "contractEndDate": subscriberInsert.contractEndDate,
@@ -930,14 +930,22 @@ const SystemAdministrator = () => {
             "statusCd": subscriberInsert.statusCd,
             "workplaceName": subscriberInsert.workplaceName
         });
-        fetchSubscribersList();
-        setRegMemberPop(false);
-        handleRegisterInitialValue();
-        setFilePath({ ...filePath, "contractFileId": "" })
+
+        if (response?.data?.RET_CODE === "0000") {
+            fetchSubscribersList();
+            setOkayPopupMessage("Registration");
+            setOkayPopupShow(true);
+            handleRegisterInitialValue();
+            setFilePath({ ...filePath, "contractFileId": "" });
+            setRegMemberPop(false);
+        } else {
+            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다");
+            setOkayPopupShow(true);
+        }
     }
 
     const handleSubscribersUpdate = async () => {
-        await subscribersUpdate({
+        const response = await subscribersUpdate({
             "companyId": subscriberView.companyId,
             "companyName": subscriberView.companyName,
             "contractAmount": subscriberView.contractAmount,
@@ -957,8 +965,18 @@ const SystemAdministrator = () => {
             "workplaceId": subscriberView.workplaceId,
             "workplaceName": subscriberView.workplaceName
         });
-        fetchSubscribersList();
-        setUserInfoPop(false);
+
+        console.log(response);
+        if (response?.data?.RET_CODE === "0000") {
+            fetchSubscribersList();
+            setOkayPopupMessage("Update");
+            setOkayPopupShow(true);
+            setUserInfoPop(false);
+        } else {
+            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다");
+            setOkayPopupShow(true);
+        }
+
     }
 
     const handleDialogClose = () => {
@@ -1204,7 +1222,7 @@ const SystemAdministrator = () => {
                                             <div>
                                                 <TextField
                                                     variant="outlined"
-                                                    value={subscribersInsert.loginId}
+                                                    value={subscriberInsert.loginId}
                                                     className={classes.tableTextField}
                                                     onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "loginId": e.target.value })}
                                                 />
@@ -1333,7 +1351,7 @@ const SystemAdministrator = () => {
                                 </div>
                             </div>
                             <div className={classes.popButtons}>
-                                <YesButton onClick={() => handleInputValidation(subscriberInsert, handleSubscribersInsert)}>등록</YesButton>
+                                <YesButton onClick={() => handleInputValidation(subscriberInsert, handleSubscribersInsert, 0)}>등록</YesButton>
                                 <NoButton onClick={() => { handleRegisterInitialValue(); setRegMemberPop(false); }}>취소</NoButton>
                             </div>
                         </div>
@@ -1480,7 +1498,7 @@ const SystemAdministrator = () => {
                                         <TextField
                                             variant="outlined"
                                             className={classes.tableTextField}
-                                            value={subscriberView.contractAmount}
+                                            value={subscriberView.contractAmount === null ? "" : subscriberView.contractAmount}
                                             onChange={(event) => setSubscriberView({ ...subscriberView, "contractAmount": event.target.value })}
                                             sx={{ width: 190 }}
                                         />
@@ -1548,7 +1566,7 @@ const SystemAdministrator = () => {
                                 </div>
                             </div>
                             <div className={classes.popButtons}>
-                                <YesButton onClick={() => handleInputValidation(subscriberView, handleSubscribersUpdate)}>수정</YesButton>
+                                <YesButton onClick={() => handleInputValidation(subscriberView, handleSubscribersUpdate, 3)}>수정</YesButton>
                                 <NoButton onClick={() => setUserInfoPop(false)}>취소</NoButton>
                             </div>
                         </div>
