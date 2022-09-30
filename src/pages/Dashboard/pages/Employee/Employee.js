@@ -2511,7 +2511,7 @@ const Employee = () => {
         setReportList(response.data.RET_DATA);
         console.log(response, currentBaselineId);
     }
-    // console.log(inspectionsDocs)
+    console.log(inspectionsDocs)
 
     useEffect(() => {
         fetchBaseline(baselineIdForSelect);
@@ -3069,7 +3069,7 @@ const Employee = () => {
                                     <div className={classes.listTitle}><strong>{!!(inspectionsDocs) && inspectionsDocs[0]?.fileCount}</strong>건 /{!!(inspectionsDocs) && !!(inspectionsDocs.length) && inspectionsDocs[0].totalCount}건</div>
                                     <ul className={classes.menuList + ' buttonList'}>
                                         {inspectionsDocs?.map((inspection, index) => (<><li>
-                                            <div>{(inspection.fileId === null || inspection.fileId === "null") ? <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone> : <FileButtonExis id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>}
+                                            <div>{(inspection.fileId === null || inspection.fileId === "null" || inspection.fileId === "") ? <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone> : <FileButtonExis id={"inspectionFile"} onClick={(event) => handleDialogOpen(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>}
                                                 {inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}
                                                     onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>상</span>) || (inspection.evaluation === "7" && <span className={'orange'}
                                                         onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>중</span>) || (inspection.evaluation === "5" && <span className={'red'}
