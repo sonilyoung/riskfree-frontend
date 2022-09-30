@@ -1980,7 +1980,7 @@ const Employee = () => {
     const [workplaceList, setWorkplaceList] = useState([])
     // const currentWorkplaceId = useSelector(selectWorkplaceId);
     const [baselineStart, setBaselineStart] = useState("")
-    const currentBaselineId = useSelector(selectBaselineId)
+    const currentBaselineId = useSelector(selectBaselineId);
     const [baselineIdForSelect, setBaselineIdForSelect] = useState(currentBaselineId)
     const [latitude, setLatitude] = useState("")
     const [longitude, setLongitude] = useState("")
@@ -2014,6 +2014,7 @@ const Employee = () => {
     const [getNoticeHotList] = useGetNoticeHotListMutation();
 
     const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
+    const [yesNoPopupMessage, setYesNoPopupMessage] = useState("");
     const [openDialog, setOpenDialog] = useState(false)
     const [okayPopupShow, setOkayPopupShow] = useState(false);
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
@@ -2160,15 +2161,15 @@ const Employee = () => {
 
     const handleInsertBaseLineDataCopy = async () => {
         const response = await insertBaseLineDataCopy({
-            "targetBaselineId": targetBaselineId,
-            "baselineId": currentBaselineId
+            "baselineId": targetBaselineId,
+            "targetBaselineId": currentBaselineId
         });
         setOkayPopupMessage(response.data.RET_DESC);
         setOkayPopupShow(true);
     }
 
     const handleInsertBaseLineDataUpdate = async () => {
-        const response = await insertBaseLineDataCopy({});
+        const response = await insertBaseLineDataUpdate({});
         setYesNoPopupShow(false);
         setOkayPopupMessage(response.data.RET_DESC);
         setOkayPopupShow(true);
@@ -2826,7 +2827,7 @@ const Employee = () => {
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" id="safetyFileUpload" onClick={handleDialogOpen}>안전작업허가서 양식 업/다운로드​<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setYesNoPopupShow(true)}>안전보건관리체계의 구축 및 이행 항목 업데이트​<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => { setYesNoPopupShow(true); setYesNoPopupMessage("업데이트 하시겠습니까?") }}>안전보건관리체계의 구축 및 이행 항목 업데이트​<img src={arrowDown} alt="arrow down" /></Link>
                                     </div>
                                     <div className={classes.headerPopFooter}>
                                         <PopupFootButton onClick={() => handleInsertBaseline()}>저장하기</PopupFootButton>
@@ -3382,6 +3383,7 @@ const Employee = () => {
             <Overlay show={yesNoPopupShow}>
                 <YesNo
                     show={yesNoPopupShow}
+                    message={yesNoPopupMessage}
                     onConfirmYes={handleInsertBaseLineDataUpdate}
                     onConfirmNo={() => setYesNoPopupShow(false)}
                 />

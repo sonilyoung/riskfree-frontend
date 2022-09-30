@@ -789,7 +789,7 @@ const Default = ({ children }) => {
 
     const dispatch = useDispatch();
     const localStorage = useLocalStorage();
-    const currentBaseline = useSelector(selectBaselineId);
+    const currentBaselineId = useSelector(selectBaselineId);
 
     const [latitude, setLatitude] = useState("")
     const [longitude, setLongitude] = useState("")
@@ -798,6 +798,7 @@ const Default = ({ children }) => {
     const [okayPopupShow, setOkayPopupShow] = useState(false);
     const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
 
+    const [yesNoPopupMessage, setYesNoPopupMessage] = useState("")
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
     const [selectedFile, setSelectedFile] = useState(null);
@@ -914,13 +915,13 @@ const Default = ({ children }) => {
 
     const handleInsertBaseLineDataCopy = async () => {
         const response = await insertBaseLineDataCopy({
-            "targetBaselineId": targetBaselineId,
-            "baselineId": currentBaseline
+            "baselineId": targetBaselineId,
+            "targetBaselineId": currentBaselineId
         });
     }
 
     const handleInsertBaseLineDataUpdate = async () => {
-        const response = await insertBaseLineDataCopy({});
+        const response = await insertBaseLineDataUpdate({});
         setYesNoPopupShow(false);
         setOkayPopupMessage(response.data.RET_DESC);
         setOkayPopupShow(true);
@@ -960,7 +961,7 @@ const Default = ({ children }) => {
     }
 
     useEffect(() => {
-        if (currentBaseline === null) {
+        if (currentBaselineId === null) {
             dispatch(setBaselineId(localStorage.getDefaultBaselineId()));
         }
         handleLoginInfo();
@@ -1119,7 +1120,6 @@ const Default = ({ children }) => {
                                                         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                                                             <DesktopDatePicker
                                                                 className={classes.selectMenuDate}
-                                                                // placeholder='관리차수'
                                                                 label=" "
                                                                 inputFormat="YYYY-MM-DD"
                                                                 value={baselineInfo.baselineStart}
@@ -1135,7 +1135,6 @@ const Default = ({ children }) => {
                                                             <DesktopDatePicker
                                                                 className={classes.selectMenuDate}
                                                                 label=" "
-                                                                // placeholder='점검기간'
                                                                 inputFormat="YYYY-MM-DD"
                                                                 value={baselineInfo.baselineEnd}
                                                                 onChange={(newDate) => {
@@ -1173,12 +1172,10 @@ const Default = ({ children }) => {
                                                     </AccordionSummary>
                                                     <AccordionDetails>
                                                         <Select
-                                                            // placeholder='복사할 차수'
                                                             className={classes.popupTextField}
                                                             sx={{ width: 150, marginBottom: '25px !important' }}
                                                             value={targetBaselineId}
                                                             onChange={(event) => setTargetBaselineId(event.target.value)}
-                                                        // displayEmpty
                                                         >
                                                             {!!baselineList && !!baselineList?.length && baselineList?.map(baselineItem =>
                                                                 <MenuItem value={baselineItem.baselineId}>{baselineItem.baselineName}</MenuItem>)}
@@ -1202,7 +1199,7 @@ const Default = ({ children }) => {
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" id="safetyFileUpload" onClick={handleDialogOpen}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
-                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => setYesNoPopupShow(true)}>안전보건관리체계의 구축 및 이행 항목 업데이트<img src={arrowDown} alt="arrow down" /></Link>
+                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => { setYesNoPopupShow(true); setYesNoPopupMessage("업데이트 하시겠습니까?") }}>안전보건관리체계의 구축 및 이행 항목 업데이트<img src={arrowDown} alt="arrow down" /></Link>
                                             </div>
                                             <div className={classes.headerPopFooter}>
                                                 <PopupFootButton onClick={handleInsertBaseline}>저장하기</PopupFootButton>
@@ -1275,6 +1272,7 @@ const Default = ({ children }) => {
             <Overlay show={yesNoPopupShow}>
                 <YesNo
                     show={yesNoPopupShow}
+                    message={yesNoPopupMessage}
                     onConfirmYes={handleInsertBaseLineDataUpdate}
                     onConfirmNo={() => setYesNoPopupShow(false)}
                 />

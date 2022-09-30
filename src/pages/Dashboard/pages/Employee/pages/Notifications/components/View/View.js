@@ -7,6 +7,8 @@ import { styled } from '@mui/system';
 import { makeStyles } from '@mui/styles';
 import { DefaultLayout } from '../../../../../../../../layouts/Default';
 import { useNoticesViewMutation, useNoticesDeleteMutation } from '../../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
+import { Overlay } from '../../../../../../../../components/Overlay';
+import YesNo from '../../../../../../../../components/MessageBox/YesNo';
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const useStyles = makeStyles(() => ({
@@ -190,9 +192,8 @@ const View = (props) => {
     const [notice, setNotice] = useState()
     const HOT = "001"
     const NOT_HOT = "002"
-    const [promptPopupShow, setPromptPopupShow] = useState(false);
-
-
+    const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
+    const [yesNoPopupMessage, setYesNoPopupMessage] = useState("삭제 하시겠습니까?");
 
     const navigate = useNavigate()
     const handleRedirect = () => {
@@ -208,7 +209,7 @@ const View = (props) => {
 
     const handleDelete = async () => {
         await noticesDelete(id)
-        setPromptPopupShow(false);
+        setYesNoPopupShow(false);
         navigate("/dashboard/director/notifications/list");
     }
 
@@ -265,18 +266,18 @@ const View = (props) => {
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
                     <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/director/notifications/update/${notice?.data.RET_DATA.noticeId}`)}>수정</BlueButton>
-                    <WhiteButton className={'button-delete'} onClick={() => setPromptPopupShow(true)}>삭제</WhiteButton>
+                    <WhiteButton className={'button-delete'} onClick={() => setYesNoPopupShow(true)}>삭제</WhiteButton>
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
             </Grid>
-            <div className={promptPopupShow ? classes.promptPopup : classes.promptPopupClose}>
-                <div>알림</div>
-                <div>삭제 하시겠습니까?</div>
-                <div>
-                    <button onClick={() => setPromptPopupShow(false)} >취소</button>
-                    <button onClick={() => handleDelete()}>확인</button>
-                </div>
-            </div>
+            <Overlay show={yesNoPopupShow}>
+                <YesNo
+                    show={yesNoPopupShow}
+                    message={yesNoPopupMessage}
+                    onConfirmYes={handleDelete}
+                    onConfirmNo={() => setYesNoPopupShow(false)}
+                />
+            </Overlay>
         </DefaultLayout>
     );
 };

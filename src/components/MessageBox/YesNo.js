@@ -1,6 +1,5 @@
 import React from 'react';
 import { useStyles } from './useStyles';
-import checkIconOn from '../../assets/images/ic_chk2_on.png';
 
 function YesNo({ show, message, onConfirmYes, onConfirmNo }) {
     const classes = useStyles();
@@ -8,10 +7,10 @@ function YesNo({ show, message, onConfirmYes, onConfirmNo }) {
     return (
         <div className={show ? classes.promptPopup : classes.promptPopupClose}>
             <div>알림</div>
-            <div>삭제 하시겠습니까?</div>
+            <div>{message}</div>
             <div>
-                <button onClick={onConfirmYes}>취소</button>
-                <button onClick={onConfirmNo}>확인</button>
+                <button onClick={onConfirmNo}>취소</button>
+                <button onClick={onConfirmYes}>확인</button>
             </div>
         </div>
     );

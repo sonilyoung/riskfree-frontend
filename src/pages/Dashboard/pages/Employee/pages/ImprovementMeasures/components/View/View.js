@@ -28,6 +28,8 @@ import imgPrev2 from '../../../../../../../../assets/images/prw_photo2.jpg';
 
 import { useImprovementViewMutation, useImprovementDeleteMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement'
 import { useGetFileInfoMutation, useGetImgMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
+import YesNo from '../../../../../../../../components/MessageBox/YesNo';
+import { Overlay } from '../../../../../../../../components/Overlay';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL
 
@@ -349,7 +351,8 @@ const Registration = () => {
     const [filePathBefore, setFilePathBefore] = useState("")
     const [filePathAfter, setFilePathAfter] = useState("")
     const [fileNameExel, setFileNameExel] = useState("")
-    const [promptPopupShow, setPromptPopupShow] = useState(false);
+    const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
+    const [yesNoPopupMessage, setYesNoPopupMessage] = useState("삭제 하시겠습니까?");
 
     const handleChange = (event) => {
         setNum(event.target.value);
@@ -390,7 +393,7 @@ const Registration = () => {
 
     const handleDeleteImprovement = () => {
         improvemetnDelete(id)
-            .then(() => setPromptPopupShow(false))
+            .then(() => setYesNoPopupShow(false))
             .then(() => handleRedirect())
     }
     useEffect(() => {
@@ -499,18 +502,18 @@ const Registration = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
                     <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/employee/improvement-measures/update/${improvement.improveId}`)}>수정</BlueButton>
-                    <WhiteButton className={'button-delete'} onClick={() => setPromptPopupShow(true)}>삭제</WhiteButton>
+                    <WhiteButton className={'button-delete'} onClick={() => setYesNoPopupShow(true)}>삭제</WhiteButton>
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
             </Grid>
-            <div className={promptPopupShow ? classes.promptPopup : classes.promptPopupClose}>
-                <div>알림</div>
-                <div>삭제 하시겠습니까?</div>
-                <div>
-                    <button onClick={() => setPromptPopupShow(false)} >취소</button>
-                    <button onClick={() => handleDeleteImprovement()}>확인</button>
-                </div>
-            </div>
+            <Overlay show={yesNoPopupShow}>
+                <YesNo
+                    show={yesNoPopupShow}
+                    message={yesNoPopupMessage}
+                    onConfirmYes={handleDeleteImprovement}
+                    onConfirmNo={() => setYesNoPopupShow(false)}
+                />
+            </Overlay>
         </DefaultLayout>
     );
 };

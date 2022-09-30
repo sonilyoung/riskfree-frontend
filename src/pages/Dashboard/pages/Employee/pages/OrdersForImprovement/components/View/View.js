@@ -27,6 +27,8 @@ import { useLawViewMutation } from "../../../../../../../../hooks/api/LawImprove
 import { useLawDeleteMutation } from "../../../../../../../../hooks/api/LawImprovementsManagement/LawImprovementsManagement";
 import { DefaultLayout } from "../../../../../../../../layouts/Default";
 import { useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
+import { Overlay } from '../../../../../../../../components/Overlay';
+import YesNo from '../../../../../../../../components/MessageBox/YesNo';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -349,7 +351,8 @@ const View = () => {
     const [lawDelete] = useLawDeleteMutation();
     const { id } = useParams()
     const [law, setLaw] = useState({})
-    const [promptPopupShow, setPromptPopupShow] = useState(false);
+    const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
+    const [yesNoPopupMessage, setYesNoPopupMessage] = useState("삭제 하시겠습니까?");
     const [filePathBefore, setFilePathBefore] = useState("")
     const [filePathAfter, setFilePathAfter] = useState("")
     const [getFileInfo] = useGetFileInfoMutation()
@@ -375,7 +378,7 @@ const View = () => {
 
     const handleLawDelete = () => {
         lawDelete(id)
-            .then(() => setPromptPopupShow(false))
+            .then(() => setYesNoPopupShow(false))
             .then(() => handleRedirect())
     }
 
@@ -516,7 +519,7 @@ const View = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
                     <BlueButton className={"button-correction"} onClick={() => navigate(`/dashboard/employee/order-for-improvement-and-correction-under-related-law/update/${law.lawImproveId}`)}>수정</BlueButton>
-                    <WhiteButton className={"button-delete"} onClick={() => setPromptPopupShow(true)}>삭제</WhiteButton>
+                    <WhiteButton className={"button-delete"} onClick={() => setYesNoPopupShow(true)}>삭제</WhiteButton>
                     <WhiteButton
                         className={"button-list"}
                         onClick={() => handleRedirect()}
@@ -525,14 +528,14 @@ const View = () => {
                     </WhiteButton>
                 </Grid>
             </Grid>
-            <div className={promptPopupShow ? classes.promptPopup : classes.promptPopupClose}>
-                <div>알림</div>
-                <div>삭제 하시겠습니까?</div>
-                <div>
-                    <button onClick={() => setPromptPopupShow(false)} >취소</button>
-                    <button onClick={() => handleLawDelete()}>확인</button>
-                </div>
-            </div>
+            <Overlay show={yesNoPopupShow}>
+                <YesNo
+                    show={yesNoPopupShow}
+                    message={yesNoPopupMessage}
+                    onConfirmYes={handleLawDelete}
+                    onConfirmNo={() => setYesNoPopupShow(false)}
+                />
+            </Overlay>
         </DefaultLayout>
     );
 };

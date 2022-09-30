@@ -30,6 +30,8 @@ import MenuItem from '@mui/material/MenuItem';
 
 import { useAccidentViewMutation, useAccidentDeleteMutation } from '../../../../../../../../hooks/api/AccidentManagement/AccidentManagement';
 import { useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
+import { Overlay } from '../../../../../../../../components/Overlay';
+import YesNo from '../../../../../../../../components/MessageBox/YesNo';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -377,7 +379,8 @@ const View = () => {
     const [accidentDelete] = useAccidentDeleteMutation()
     const [accident, setAccident] = useState({});
     const [getFileInfo] = useGetFileInfoMutation()
-    const [promptPopupShow, setPromptPopupShow] = useState(false);
+    const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
+    const [yesNoPopupMessage, setYesNoPopupMessage] = useState("삭제 하시겠습니까?");
     const [filePathBefore, setFilePathBefore] = useState("")
     const [filePathAfter, setFilePathAfter] = useState("")
 
@@ -410,7 +413,7 @@ const View = () => {
 
     const handleDelete = () => {
         accidentDelete(id)
-            .then(() => setPromptPopupShow(false))
+            .then(() => setYesNoPopupShow(false))
             .then(() => handleRedirect())
     }
     useEffect(() => {
@@ -615,18 +618,18 @@ const View = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
                     <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/employee/accident-countermeasures-implementation/update/${accident.accidentId}`)}>수정</BlueButton>
-                    <WhiteButton className={'button-delete'} onClick={() => setPromptPopupShow(true)}>삭제</WhiteButton>
+                    <WhiteButton className={'button-delete'} onClick={() => setYesNoPopupShow(true)}>삭제</WhiteButton>
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
             </Grid>
-            <div className={promptPopupShow ? classes.promptPopup : classes.promptPopupClose}>
-                <div>알림</div>
-                <div>삭제 하시겠습니까?</div>
-                <div>
-                    <button onClick={() => setPromptPopupShow(false)} >취소</button>
-                    <button onClick={() => handleDelete()}>확인</button>
-                </div>
-            </div>
+            <Overlay show={yesNoPopupShow}>
+                <YesNo
+                    show={yesNoPopupShow}
+                    message={yesNoPopupMessage}
+                    onConfirmYes={handleDelete}
+                    onConfirmNo={() => setYesNoPopupShow(false)}
+                />
+            </Overlay>
         </DefaultLayout >
     )
 }
