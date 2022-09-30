@@ -47,7 +47,7 @@ import { useNavigate } from 'react-router-dom';
 import useUserURLRedirect from '../../../../hooks/core/UserURLRedirect/UserURLRedirect';
 import { CleaningServices } from '@mui/icons-material';
 import { useFileUploadMutation, useFileDownMutation, useGetFileInfoMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
-import { DownloadDialog, UploadDialog } from '../../../../dialogs/Upload';
+import { DownloadDialog, OnlyUploadDialog, UploadDialog } from '../../../../dialogs/Upload';
 import { Overlay } from '../../../../components/Overlay';
 import Okay from '../../../../components/MessageBox/Okay';
 
@@ -728,6 +728,7 @@ const SystemAdministrator = () => {
         "contractFileId": ""
     });
     const [openDialog, setOpenDialog] = useState(false);
+    const [openDialogOnly, setOpenDialogOnly] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [subscriberInsert, setSubscriberInsert] = useState({
         "companyName": "",
@@ -782,6 +783,10 @@ const SystemAdministrator = () => {
     const [plusButtonId, setPlusButtonId] = useState(0);
     const [getFileInfo] = useGetFileInfoMutation()
     const [fileUpload] = useFileUploadMutation()
+    const labelObjectOnly = {
+        upperLabel: "계약서 등록",
+        middleLabel: "등록할 파일을 업로드 합니다."
+    }
 
     const handlePlusButtonClick = (buttonId, companyId) => {
         const plusButtonsChangedState = plusButtons?.map(button => {
@@ -986,6 +991,22 @@ const SystemAdministrator = () => {
         const fileId = subscriberView[dialogId]
         window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
     }
+
+    const handleDialogCloseOnly = () => {
+        setOpenDialogOnly(false);
+    }
+
+    const handleDialogOpenOnly = (event) => {
+        setOpenDialogOnly(true);
+        setDialogId(event.target.id);
+        console.log(event.target.id)
+    }
+
+    const handleDialogInputChangeOnly = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    }
+
     console.log(subscriberInsert)
     useEffect(() => {
         fetchSubscribersList();
@@ -1081,7 +1102,7 @@ const SystemAdministrator = () => {
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.contractAmount && parseFloat(subscriber.contractAmount).toLocaleString()}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.contractDate}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.status}</div>
-                                    <div className={classes.tableData} onDoubleClick={() => setDownloadDialogShow(true)}>{subscriber.contractFileYn}</div>
+                                    <div className={classes.tableData} style={{ cursor: "pointer" }} onDoubleClick={() => setDownloadDialogShow(true)}>{subscriber.contractFileYn}</div>
                                     <div className={classes.tableData} /*onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}*/>{subscriber?.statusCd ? <img src={monitor} alt="monitor" /> : null}</div>
                                 </div>
                                 {!!subscribersWorkplaceSelectList && !!subscribersWorkplaceSelectList?.length && subscribersWorkplaceSelectList?.map((subscribersWorkplaceItem, subscribersWorkplaceItemIndex) => {
@@ -1305,7 +1326,7 @@ const SystemAdministrator = () => {
                                             // onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "contractFileId": e.target.value })}
                                             sx={{ width: 300 }}
                                         />
-                                        <SearchUserButton id="contractFileId" onClick={handleDialogOpen}>찾아보기</SearchUserButton>
+                                        <SearchUserButton id="contractFileId" onClick={handleDialogOpenOnly}>찾아보기</SearchUserButton>
                                     </div>
                                 </div>
                             </div>
@@ -1566,6 +1587,13 @@ const SystemAdministrator = () => {
                 onUpload={handleDialogFileUpload}
                 onDownload={handleDialogFileDownload}
                 enableDownload={true}
+            />
+            <OnlyUploadDialog
+                open={openDialogOnly}
+                onClose={handleDialogCloseOnly}
+                onInputChange={handleDialogInputChangeOnly}
+                onUpload={handleDialogFileUpload}
+                label={labelObjectOnly}
             />
             <DownloadDialog
                 open={downloadDialogShow}
