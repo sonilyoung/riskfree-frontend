@@ -102,6 +102,9 @@ const useStyles = makeStyles(() => ({
         },
         '& fieldset': {
             marginRight: '70px',
+        },
+        '& .doppelganger': {
+            
         }
     },
     popupOverlay: {
