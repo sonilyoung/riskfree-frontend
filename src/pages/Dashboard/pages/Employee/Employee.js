@@ -227,7 +227,16 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'center',
         alignItems: 'center',
         width: '135px',
-        height: '135px'
+        height: '135px',
+        borderRadius: '50%',
+        overflow: 'hidden',
+        '& img': {
+            width: '70%',
+            height: '70%',
+            borderRadius: '50%',
+        }
+
+
     },
     adminField: {
         marginTop: '20px',
