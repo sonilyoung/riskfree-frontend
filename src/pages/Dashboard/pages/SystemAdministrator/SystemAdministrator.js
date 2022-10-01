@@ -869,7 +869,6 @@ const SystemAdministrator = () => {
     const fetchSubscriberView = async (workplaceId, userId) => {
         let filePathMain = {}
         const response = await subscribersView(`${workplaceId}&userId=${userId}`);
-        console.log(response);
         const managerTelWithOutHyphen = !!(response.data.RET_DATA) && response.data.RET_DATA?.managerTel?.split("-").join("");
         setManagerTel({
             firstInput: managerTelWithOutHyphen.slice(0, 3),
@@ -1122,31 +1121,33 @@ const SystemAdministrator = () => {
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.contractAmount && parseFloat(subscriber.contractAmount).toLocaleString()}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.contractDate}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.status}</div>
-                                    <div className={classes.tableData} style={{ cursor: "pointer" }} onDoubleClick={() => { setDownloadDialogShow(true); setFileIdForDownload(subscriber.contractFileId) }}>{subscriber.contractFileYn}</div>
+                                    {subscriber?.contractFileYn === "O"
+                                        ? <div className={classes.tableData} style={{ cursor: "pointer" }} onDoubleClick={() => { setDownloadDialogShow(true); setFileIdForDownload(subscriber.contractFileId) }}>{subscriber.contractFileYn}</div>
+                                        : <div className={classes.tableData} style={{ cursor: "pointer" }}>{subscriber.contractFileYn}</div>
+                                    }
                                     <div className={classes.tableData} /*onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}*/>{subscriber?.statusCd ? <img src={monitor} alt="monitor" /> : null}</div>
                                 </div>
                                 {!!subscribersWorkplaceSelectList && !!subscribersWorkplaceSelectList?.length && subscribersWorkplaceSelectList?.map((subscribersWorkplaceItem, subscribersWorkplaceItemIndex) => {
                                     if (index + 1 === plusButtonId) {
-                                        return (<div className={handleTableRowClasses() ? classes.tableRow : classes.tableRowClose} onDoubleClick={() => {
-                                            setUserInfoPop(true);
-                                            console.log(subscribersWorkplaceItem.userId)
-                                            fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId)
-                                        }} >
+                                        return (<div className={handleTableRowClasses() ? classes.tableRow : classes.tableRowClose} >
                                             <div className={classes.tableData}></div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.companyName}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.workplaceName}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.registNo}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.sector}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.scale}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.loginId}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.managerRole}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.managerName}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.managerTel}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.contractAmount && parseFloat(subscribersWorkplaceItem.contractAmount).toLocaleString()}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.contractDate}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.status}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem.contractFileYn}</div>
-                                            <div className={classes.tableData}>{subscribersWorkplaceItem?.statusCd ? <img src={monitor} alt="monitor" /> : null}</div>
+                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.companyName}</div>
+                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.workplaceName}</div>
+                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.registNo}</div>
+                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.sector}</div>
+                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.scale}</div>
+                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.loginId}</div>
+                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.managerRole}</div>
+                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.managerName}</div>
+                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.managerTel}</div>
+                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.contractAmount && parseFloat(subscribersWorkplaceItem.contractAmount).toLocaleString()}</div>
+                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.contractDate}</div>
+                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.status}</div>
+                                            {subscribersWorkplaceItem?.contractFileYn === "O"
+                                                ? <div className={classes.tableData} style={{ cursor: "pointer" }} onDoubleClick={() => { setDownloadDialogShow(true); setFileIdForDownload(subscribersWorkplaceItem.contractFileId) }}>{subscribersWorkplaceItem.contractFileYn}</div>
+                                                : <div className={classes.tableData} style={{ cursor: "pointer" }}>{subscribersWorkplaceItem.contractFileYn}</div>
+                                            }
+                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem?.statusCd ? <img src={monitor} alt="monitor" /> : null}</div>
                                         </div>);
                                     }
                                 })}

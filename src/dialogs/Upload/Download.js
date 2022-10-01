@@ -173,7 +173,7 @@ function Download({ open, onClose, enableDownload, onDownload }) {
                             if (enableDownload) {
                                 onDownload()
                             }
-                        }}>업로드 양식 다운로드</UnknownButton2>
+                        }}>다운로드</UnknownButton2>
                     </div>
                 </div>
             </div>

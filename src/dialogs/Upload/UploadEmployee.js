@@ -90,10 +90,10 @@ function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDown
                             if (enableDownload) {
                                 onDownload()
                             }
-                        }}>업로드 양식 다운로드</UnknownButton2>
+                        }}>다운로드</UnknownButton2>
                     </div>
                     <span></span>
-                    <span>의무조치별 상세 점검</span>
+                    <span>업로드 파일</span>
                     <span></span>
                     <div className={classes.uploadSearch}>
                         <TextField
