@@ -733,6 +733,7 @@ const DefaultLight = ({ children }) => {
 
     const [okPopupShow, setOkPopupShow] = useState(false);
     const [okPopupMessage, setOkPopupMessage] = useState(null);
+    const [selectedFileName, setSelectedFileName] = useState("")
 
     const dispatch = useDispatch();
     const localStorage = useLocalStorage();
@@ -755,6 +756,7 @@ const DefaultLight = ({ children }) => {
     })
 
     const handleDialogOpen = (event) => {
+        setSelectedFileName("");
         setOpenDialog(true);
         setDialogId(event.target.id);
         console.log(event.target.id)
@@ -786,6 +788,7 @@ const DefaultLight = ({ children }) => {
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        setSelectedFileName(file.name)
     }
 
 
@@ -875,7 +878,8 @@ const DefaultLight = ({ children }) => {
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
                 onDownload={handleDialogFileDownload}
-                enableDownload={false}
+                enableDownload={true}
+                selectedFileName={selectedFileName}
             />
             <Overlay show={okPopupShow}>
                 <Ok

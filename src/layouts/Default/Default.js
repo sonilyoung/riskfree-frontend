@@ -804,6 +804,7 @@ const Default = ({ children }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
     const [openDialogOnly, setOpenDialogOnly] = useState(false);
+    const [selectedFileName, setSelectedFileName] = useState("")
     const labelObjectOnly = {
         upperLabel: "로고 등록",
         middleLabel: "등록할 파일을 업로드 합니다."
@@ -851,6 +852,7 @@ const Default = ({ children }) => {
     }
 
     const handleDialogOpen = (event) => {
+        setSelectedFileName("");
         setOpenDialog(true);
         setDialogId(event.target.id);
         console.log(event.target.id)
@@ -863,6 +865,7 @@ const Default = ({ children }) => {
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        setSelectedFileName(file.name)
     }
 
     const handleDialogCloseOnly = () => {
@@ -870,6 +873,7 @@ const Default = ({ children }) => {
     }
 
     const handleDialogOpenOnly = (event) => {
+        setSelectedFileName("");
         setOpenDialogOnly(true);
         setDialogId(event.target.id);
     }
@@ -877,6 +881,7 @@ const Default = ({ children }) => {
     const handleDialogInputChangeOnly = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        setSelectedFileName(file.name)
     }
 
     const handleLoginInfo = async () => {
@@ -930,8 +935,8 @@ const Default = ({ children }) => {
     const handleUpdateUserCompany = async () => {
         const response = await updateUserCompany({
             "attachFileId": employeeFiles.logoImgUpload,
-            "missionStatements": missionStatement,
-            "safetyGoal": safetyGoal
+            "missionStatements": companyInfo?.missionStatements,
+            "safetyGoal": companyInfo?.shGoal
         });
         setOkayPopupMessage(response.data.RET_DESC);
         setOkayPopupShow(true);
@@ -1020,17 +1025,17 @@ const Default = ({ children }) => {
                                                 <TextField
                                                     id="standard-basic"
                                                     placeholder='안전보건 목표 등록 (띄어쓰기 포함 16자 이내)'
-                                                    value={safetyGoal}
+                                                    value={companyInfo.shGoal}
                                                     variant="outlined"
                                                     sx={{ width: 370 }}
                                                     className={classes.popupTextField}
-                                                    onChange={(event) => setSafetyGoal(event.target.value)}
+                                                    onChange={(event) => setCompanyInfo({ ...companyInfo, "shGoal": event.target.value })}
                                                 />
                                                 <TextField
                                                     id="standard-basic"
                                                     placeholder='경영방침 등록 (띄어쓰기 포함 16자 이내)'
-                                                    value={missionStatement}
-                                                    onChange={(event) => setMissionStatement(event.target.value)}
+                                                    value={companyInfo.missionStatements}
+                                                    onChange={(event) => setCompanyInfo({ ...companyInfo, "missionStatements": event.target.value })}
                                                     variant="outlined"
                                                     sx={{ width: 370 }}
                                                     className={classes.popupTextField}
@@ -1254,6 +1259,7 @@ const Default = ({ children }) => {
                 onUpload={handleDialogFileUpload}
                 onDownload={handleDialogFileDownload}
                 enableDownload={false}
+                selectedFileName={selectedFileName}
             />
             <OnlyUploadDialog
                 open={openDialogOnly}
@@ -1261,6 +1267,7 @@ const Default = ({ children }) => {
                 onInputChange={handleDialogInputChangeOnly}
                 onUpload={handleDialogFileUpload}
                 label={labelObjectOnly}
+                selectedFileName={selectedFileName}
             />
             <Overlay show={okayPopupShow}>
                 <Okay
