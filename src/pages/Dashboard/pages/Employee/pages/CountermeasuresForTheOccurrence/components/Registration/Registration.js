@@ -469,7 +469,8 @@ const Registration = () => {
     const handleAccidentInsert = () => {
         accidentInsert(accident)
             .then((response) => setOkPopupMessage(response.data))
-            .then(() => setOkPopupShow(true));
+            .then(() => setOkPopupShow(true))
+            .then(() => navigate("/dashboard/employee/accident-countermeasures-implementation/list"))
     };
 
     const [date, setDate] = React.useState(null);
