@@ -33,6 +33,8 @@ import useUserInitialWorkplaceId from '../../../../../../../../hooks/core/UserIn
 import { useStyles } from './useStyles';
 import { UploadButton, WhiteButton, BlueButton } from './buttons/Unstyled';
 import { OnlyUploadDialog, UploadDialog } from '../../../../../../../../dialogs/Upload';
+import { Overlay } from '../../../../../../../../components/Overlay';
+import Okay from '../../../../../../../../components/MessageBox/Okay';
 
 const Registration = () => {
     const classes = useStyles();
@@ -97,6 +99,9 @@ const Registration = () => {
         upperLabel: "이미지 등록",
         middleLabel: "등록할 파일을 업로드 합니다."
     }
+    const [okayPopupShow, setOkayPopupShow] = useState(false);
+    const [okayPopupMessage, setOkayPopupMessage] = useState("");
+    const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
     const handleDialogOpen = (event) => {
         setOpenDialog(true);
@@ -133,10 +138,15 @@ const Registration = () => {
         setWorkplaces(response.data.RET_DATA)
     }
 
-    const handleImprovementInsert = () => {
-        improvementInsert(improvement)
-            .then(res => console.log(res))
-            .then(() => handleRedirect())
+    const handleImprovementInsert = async () => {
+        const response = await improvementInsert(improvement);
+        if (response?.data?.RET_CODE === "0000") {
+            setOkayPopupMessage("등록 되었습니다.");
+            setOkayPopupShow(true);
+        } else {
+            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다 ");
+            setOkayPopupShow(true);
+        }
     }
 
     const getGeneratedKey = async () => {
@@ -397,7 +407,6 @@ const Registration = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
                     <BlueButton className={'button-registration'} onClick={handleImprovementInsert}>등록</BlueButton>
-                    <WhiteButton className={'button-cancellation'} onClick={() => handleRedirect()}>취소</WhiteButton>
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
             </Grid>
@@ -409,6 +418,20 @@ const Registration = () => {
                 label={labelObject}
                 selectedFileName={selectedFileName}
             />
+            <Overlay show={okayPopupShow}>
+                <Okay
+                    show={okayPopupShow}
+                    message={okayPopupMessage}
+                    title={okayPopupTitle}
+                    onConfirm={() => {
+                        if (okayPopupMessage === "등록 되었습니다.") {
+                            setOkayPopupShow(false);
+                            handleRedirect();
+                        } else {
+                            setOkayPopupShow(false);
+                        }
+                    }} />
+            </Overlay>
         </DefaultLayout>
     );
 };

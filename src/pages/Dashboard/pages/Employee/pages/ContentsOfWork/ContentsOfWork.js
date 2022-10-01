@@ -751,6 +751,7 @@ const WorkHistoryList = () => {
     const [getSafeWorkFile] = useGetSafeWorkFileMutation();
     const [deleteFile] = useDeleteFileMutation();
     const getInitialWorkplaceId = useUserInitialWorkplaceId();
+    console.log(getInitialWorkplaceId());
 
     const [locale] = React.useState('ko');
     const [hide, setHide] = useState(true);
@@ -846,6 +847,7 @@ const WorkHistoryList = () => {
             "insertDate": insertDate,
             "userName": username
         });
+        console.log(response);
         setSafeWorkList(response.data.RET_DATA);
     }
 
@@ -856,17 +858,18 @@ const WorkHistoryList = () => {
         setSafeWorkFileTopinfo(response.data.RET_DATA);
     }
 
-    const fetchSafeWorkFileList = async (constructionType) => {
+    const fetchSafeWorkFileList = async (constructionType, insertDate) => {
         const response = await getSafeWorkFile({
             "workplaceId": workplaceId,
             "constructionType": constructionType,
-            "insertDate": safeWorkFileTopinfo.insertDate
+            "insertDate": insertDate
         });
         setSafeWorkFileList(response.data.RET_DATA);
+        console.log(response, workplaceId);
 
     }
-    const handleFileInfo = async (id, constructionType) => {
-        fetchSafeWorkFileList(constructionType)
+    const handleFileInfo = async (id, constructionType, insertDate) => {
+        fetchSafeWorkFileList(constructionType, insertDate)
         fetchSafeWorkFileTopInfo(constructionType)
         setHide(false)
     }
@@ -989,13 +992,13 @@ const WorkHistoryList = () => {
                         <div className={classes.tableRow}>{safeWorkItem.workplaceName}</div>
                         <div className={classes.tableRow}>{safeWorkItem.insertDate}</div>
                         <div className={classes.tableRow}>{safeWorkItem.userName}</div>
-                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 1)}>{safeWorkItem.fire}</div>
-                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 2)}>{safeWorkItem.closeness}</div>
-                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 3)}>{safeWorkItem.blackout}</div>
-                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 4)}>{safeWorkItem.excavation}</div>
-                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 5)}>{safeWorkItem.radiation}</div>
-                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 6)}>{safeWorkItem.sue}</div>
-                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 7)}>{safeWorkItem.heavy}</div>
+                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 1, safeWorkItem.insertDate)}>{safeWorkItem.fire}</div>
+                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 2, safeWorkItem.insertDate)}>{safeWorkItem.closeness}</div>
+                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 3, safeWorkItem.insertDate)}>{safeWorkItem.blackout}</div>
+                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 4, safeWorkItem.insertDate)}>{safeWorkItem.excavation}</div>
+                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 5, safeWorkItem.insertDate)}>{safeWorkItem.radiation}</div>
+                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 6, safeWorkItem.insertDate)}>{safeWorkItem.sue}</div>
+                        <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 7, safeWorkItem.insertDate)}>{safeWorkItem.heavy}</div>
                         <div className={classes.tableRow}>{safeWorkItem.totalCount}건</div>
                     </div>)
                     )}
@@ -1050,47 +1053,6 @@ const WorkHistoryList = () => {
                                 </div>
                             </Grid>
                             <NoButton onClick={() => setHide(true)}>취소</NoButton>
-                        </div>
-                    </div>
-                    <Overlay show={registerPopupShow}>
-                        <div className={registerPopupShow ? classes.registerUploadPopup : classes.uploadPopupHide}>
-                            <ClosePopupButton2 onClick={() => setRegisterPopupShow(false)}></ClosePopupButton2>
-                            <span></span>
-                            <span>작성파일 업로드</span>
-                            <span></span>
-                            <div className={classes.uploadSearch}>
-                                <TextField
-                                    id="standard-basic"
-                                    placeholder="여수공장 시정조치요청 파일.hwp"
-                                    variant="outlined"
-                                    className={classes.popupTextField}
-                                    type="file"
-                                    onChange={handleDialogInputChange}
-                                />
-                                <UnknownButton1 id={"excelFileUpload"} onClick={(event) => handleDialogFileUpload(event.target.id)}>파일 업로드</UnknownButton1>
-                            </div>
-                        </div>
-                    </Overlay>
-                    <div className={uploadPopupShow ? classes.uploadPopup : classes.uploadPopupHide}>
-                        <ClosePopupButton2 onClick={() => setUploadPopupShow(false)}></ClosePopupButton2>
-                        <div className={classes.uploadInfo}>
-                            <img src={alertIcon} alt="alert icon" />
-                            <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
-                            <UnknownButton2>전체사업장</UnknownButton2>
-                        </div>
-                        <span></span>
-                        <span>의무조치별 상세 점검</span>
-                        <span></span>
-                        <div className={classes.uploadSearch}>
-                            <TextField
-                                id="standard-basic"
-                                placeholder="여수공장 시정조치요청 파일.hwp"
-                                variant="outlined"
-                                sx={{ width: 250 }}
-                                className={classes.popupTextField}
-                            />
-                            <SearchPopupButton></SearchPopupButton>
-                            <UnknownButton1>전체사업장</UnknownButton1>
                         </div>
                     </div>
                 </Grid>

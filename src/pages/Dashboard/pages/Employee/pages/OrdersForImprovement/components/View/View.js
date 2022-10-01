@@ -29,6 +29,7 @@ import { DefaultLayout } from "../../../../../../../../layouts/Default";
 import { useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 import { Overlay } from '../../../../../../../../components/Overlay';
 import YesNo from '../../../../../../../../components/MessageBox/YesNo';
+import Okay from '../../../../../../../../components/MessageBox/Okay';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -355,7 +356,10 @@ const View = () => {
     const [yesNoPopupMessage, setYesNoPopupMessage] = useState("삭제 하시겠습니까?");
     const [filePathBefore, setFilePathBefore] = useState("")
     const [filePathAfter, setFilePathAfter] = useState("")
-    const [getFileInfo] = useGetFileInfoMutation()
+    const [getFileInfo] = useGetFileInfoMutation();
+    const [okayPopupShow, setOkayPopupShow] = useState(false);
+    const [okayPopupMessage, setOkayPopupMessage] = useState("");
+    const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
     const handleRedirect = () => {
         navigate(
@@ -376,10 +380,16 @@ const View = () => {
         }
     };
 
-    const handleLawDelete = () => {
-        lawDelete(id)
-            .then(() => setYesNoPopupShow(false))
-            .then(() => handleRedirect())
+    const handleLawDelete = async () => {
+        const response = await lawDelete(id);
+        setYesNoPopupShow(false);
+        if (response?.data?.RET_CODE === "0000") {
+            setOkayPopupMessage("등록 되었습니다.");
+            setOkayPopupShow(true);
+        } else {
+            setOkayPopupMessage("등록이 실패하였습니다.");
+            setOkayPopupShow(true);
+        }
     }
 
     useEffect(() => {
@@ -534,6 +544,20 @@ const View = () => {
                     onConfirmYes={handleLawDelete}
                     onConfirmNo={() => setYesNoPopupShow(false)}
                 />
+            </Overlay>
+            <Overlay show={okayPopupShow}>
+                <Okay
+                    show={okayPopupShow}
+                    message={okayPopupMessage}
+                    title={okayPopupTitle}
+                    onConfirm={() => {
+                        if (okayPopupMessage === "등록 되었습니다.") {
+                            setOkayPopupShow(false);
+                            handleRedirect();
+                        } else {
+                            setOkayPopupShow(false);
+                        }
+                    }} />
             </Overlay>
         </DefaultLayout>
     );

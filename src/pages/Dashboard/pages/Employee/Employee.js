@@ -2583,6 +2583,7 @@ const Employee = () => {
         const response = await getTitleReport({
             "condition": condition
         });
+        console.log(response);
         setReportTitle(response.data.RET_DATA);
     }
 
@@ -2591,6 +2592,7 @@ const Employee = () => {
             "baselineId": currentBaselineId,
             "condition": condition
         });
+        console.log(response);
         reduceAPIResponse(response.data.RET_DATA);
         setReportList(response.data.RET_DATA);
     }

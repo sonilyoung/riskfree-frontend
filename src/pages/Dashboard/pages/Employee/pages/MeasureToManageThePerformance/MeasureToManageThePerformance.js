@@ -35,6 +35,8 @@ import { selectBaselineId } from '../../../../../../slices/selections/MainSelect
 import { useSelector } from 'react-redux';
 import { UploadDialog, UploadEmployeeDialog } from '../../../../../../dialogs/Upload';
 import { useRelatedRawExcelUploadMutation } from '../../../../../../hooks/api/ExcelController/ExcelController';
+import Okay from '../../../../../../components/MessageBox/Okay';
+import { Overlay } from '../../../../../../components/Overlay';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -772,8 +774,10 @@ const MeasureToManageThePerformance = () => {
 
     const [selectedFile, setSelectedFile] = useState(null);
     const [openDialog, setOpenDialog] = useState(false)
-    const [uploadFlag, setUploadFlag] = useState(false)
-
+    const [uploadFlag, setUploadFlag] = useState(false);
+    const [okayPopupShow, setOkayPopupShow] = useState(false);
+    const [okayPopupMessage, setOkayPopupMessage] = useState("");
+    const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
     const [getRelatedRaw] = useGetRelatedRawMutation();
     const [insertDutyButton] = useInsertDutyButtonMutation();
@@ -850,10 +854,17 @@ const MeasureToManageThePerformance = () => {
         fetchRelatedRawButtonList();
     }
 
-    const handleUpdateRelatedRawList = () => {
-        updateRelatedRaw({ "updateList": updateList })
-            .then(res => console.log(res))
-            .then(() => fetchRelatedRawList(lawId));
+    const handleUpdateRelatedRawList = async () => {
+        const response = await updateRelatedRaw({ "updateList": updateList });
+        if (response?.data?.RET_CODE === "0000") {
+            setOkayPopupMessage("등록 되었습니다.");
+            setOkayPopupShow(true);
+            fetchRelatedRawList(lawId)
+        } else {
+            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다 ");
+            setOkayPopupShow(true);
+        }
+        console.log(response);
     }
     async function handleDialogFileDownload() {
         const fileId = files[dialogId]
@@ -1072,6 +1083,13 @@ const MeasureToManageThePerformance = () => {
                 label={labelObject}
                 selectedFileName={selectedFileName}
             />
+            <Overlay show={okayPopupShow}>
+                <Okay
+                    show={okayPopupShow}
+                    message={okayPopupMessage}
+                    title={okayPopupTitle}
+                    onConfirm={() => setOkayPopupShow(false)} />
+            </Overlay>
         </DefaultLayout >
     );
 };

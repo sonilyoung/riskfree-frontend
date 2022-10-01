@@ -39,6 +39,7 @@ import { useFileUploadMutation } from '../../../../../../../../hooks/api/FileMan
 import { OnlyUploadDialog, UploadDialog } from '../../../../../../../../dialogs/Upload';
 import { Overlay } from '../../../../../../../../components/Overlay';
 import Ok from '../../../../../../../../components/MessageBox/Ok';
+import Okay from '../../../../../../../../components/MessageBox/Okay';
 
 
 const useStyles = makeStyles(() => ({
@@ -367,8 +368,6 @@ const Registration = () => {
         "performBeforeId": "",
         "performAfterId": ""
     })
-    const [okPopupShow, setOkPopupShow] = useState(false);
-    const [okPopupMessage, setOkPopupMessage] = useState(null);
     const [selectedFileName, setSelectedFileName] = useState("")
 
     const [accident, setAccident] = useState({
@@ -408,7 +407,10 @@ const Registration = () => {
     const [labelObject, setLabelObject] = useState({
         upperLabel: "이미지 등록",
         middleLabel: "등록할 파일을 업로드 합니다.",
-    })
+    });
+    const [okayPopupShow, setOkayPopupShow] = useState(false);
+    const [okayPopupMessage, setOkayPopupMessage] = useState("");
+    const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
     const [fileUpload] = useFileUploadMutation()
 
@@ -466,11 +468,15 @@ const Registration = () => {
         );
     };
 
-    const handleAccidentInsert = () => {
-        accidentInsert(accident)
-            .then((response) => setOkPopupMessage(response.data))
-            .then(() => setOkPopupShow(true))
-            .then(() => navigate("/dashboard/employee/accident-countermeasures-implementation/list"))
+    const handleAccidentInsert = async () => {
+        const response = await accidentInsert(accident);
+        if (response?.data?.RET_CODE === "0000") {
+            setOkayPopupMessage("등록 되었습니다.");
+            setOkayPopupShow(true);
+        } else {
+            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다 ");
+            setOkayPopupShow(true);
+        }
     };
 
     const [date, setDate] = React.useState(null);
@@ -1090,12 +1096,19 @@ const Registration = () => {
                 label={labelObject}
                 selectedFileName={selectedFileName}
             />
-            <Overlay show={okPopupShow}>
-                <Ok
-                    show={okPopupShow}
-                    message={{ RET_CODE: "0201", RET_DESC: "저장성공" }}
-                    // message={okPopupMessage}
-                    onConfirm={() => setOkPopupShow(false)} />
+            <Overlay show={okayPopupShow}>
+                <Okay
+                    show={okayPopupShow}
+                    message={okayPopupMessage}
+                    title={okayPopupTitle}
+                    onConfirm={() => {
+                        if (okayPopupMessage === "등록 되었습니다.") {
+                            setOkayPopupShow(false);
+                            handleRedirect();
+                        } else {
+                            setOkayPopupShow(false);
+                        }
+                    }} />
             </Overlay>
         </DefaultLayout>
     );

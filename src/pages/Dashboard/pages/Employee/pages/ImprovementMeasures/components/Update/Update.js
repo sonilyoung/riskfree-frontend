@@ -37,6 +37,8 @@ import useUserInitialWorkplaceId from '../../../../../../../../hooks/core/UserIn
 import { UploadDialog } from '../../../../../../../../dialogs/Upload';
 import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 import { useFileDownMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
+import Okay from '../../../../../../../../components/MessageBox/Okay';
+import { Overlay } from '../../../../../../../../components/Overlay';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -349,8 +351,9 @@ const Registration = () => {
         }
     )
     const [locale] = React.useState('ko');
-
-
+    const [okayPopupShow, setOkayPopupShow] = useState(false);
+    const [okayPopupMessage, setOkayPopupMessage] = useState("");
+    const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
     const handleRedirect = () => {
         navigate("/dashboard/employee/improvement-measures/list")
@@ -414,8 +417,8 @@ const Registration = () => {
         setSelectedFile(file);
     }
 
-    const handleUpdateImprovement = () => {
-        improvementUpdate(
+    const handleUpdateImprovement = async () => {
+        const response = await improvementUpdate(
             {
                 "actionAfterId": parseInt(improvement.actionAfterId),
                 "actionBeforeId": parseInt(improvement.actionBeforeId),
@@ -433,9 +436,16 @@ const Registration = () => {
                 "updateId": null,
                 "workplaceId": improvement.workplaceId
             }
-        )
-            .then(() => handleRedirect())
+        );
+        if (response?.data?.RET_CODE === "0000") {
+            setOkayPopupMessage("등록 되었습니다.");
+            setOkayPopupShow(true);
+        } else {
+            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다 ");
+            setOkayPopupShow(true);
+        }
     }
+
     useEffect(() => {
         fetchComapanyWorkplace()
         fetchImprovementView()
@@ -692,7 +702,6 @@ const Registration = () => {
                 <Grid item xs={12} className={classes.footerButtons}>
                     <BlueButton className={'button-correction'} onClick={handleUpdateImprovement}>수정</BlueButton>
                     <WhiteButton className={'button-cancellation'} onClick={() => handleRedirect()}>취소</WhiteButton>
-                    {/* <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton> */}
                 </Grid>
             </Grid>
             <UploadDialog
@@ -703,6 +712,20 @@ const Registration = () => {
                 enableDownload={true}
                 onDownload={handleDialogFileDownload}
             />
+            <Overlay show={okayPopupShow}>
+                <Okay
+                    show={okayPopupShow}
+                    message={okayPopupMessage}
+                    title={okayPopupTitle}
+                    onConfirm={() => {
+                        if (okayPopupMessage === "등록 되었습니다.") {
+                            setOkayPopupShow(false);
+                            handleRedirect();
+                        } else {
+                            setOkayPopupShow(false);
+                        }
+                    }} />
+            </Overlay>
         </DefaultLayout>
     );
 };

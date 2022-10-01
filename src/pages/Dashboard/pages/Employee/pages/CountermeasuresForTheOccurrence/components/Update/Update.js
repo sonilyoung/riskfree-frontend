@@ -39,6 +39,8 @@ import 'dayjs/locale/ko';
 
 import { useFileUploadMutation, useFileDownMutation, useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+import { Overlay } from '../../../../../../../../components/Overlay';
+import Okay from '../../../../../../../../components/MessageBox/Okay';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -390,7 +392,10 @@ const Update = () => {
     })
     const [fileDown] = useFileDownMutation()
     const [fileUpload] = useFileUploadMutation()
-    const [getFileInfo] = useGetFileInfoMutation()
+    const [getFileInfo] = useGetFileInfoMutation();
+    const [okayPopupShow, setOkayPopupShow] = useState(false);
+    const [okayPopupMessage, setOkayPopupMessage] = useState("");
+    const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
     const [locale] = React.useState('ko');
 
@@ -443,8 +448,8 @@ const Update = () => {
         console.log(event.target.id)
     }
 
-    const handleUpdate = () => {
-        accidentUpdate(
+    const handleUpdate = async () => {
+        const response = await accidentUpdate(
             {
                 "accLevelCd": "001",
                 "accTypeCd001": accident.accTypeCd001,
@@ -478,8 +483,14 @@ const Update = () => {
                 "recvUserName": accident.recvUserName,
                 "sameAccidentInjury": accident.sameAccidentInjury
             }
-        )
-            .then(() => navigate("/dashboard/employee/accident-countermeasures-implementation/list"))
+        );
+        if (response?.data?.RET_CODE === "0000") {
+            setOkayPopupMessage("등록 되었습니다.");
+            setOkayPopupShow(true);
+        } else {
+            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다 ");
+            setOkayPopupShow(true);
+        }
     }
 
     useEffect(() => {
@@ -935,6 +946,20 @@ const Update = () => {
                 enableDownload={true}
                 onDownload={handleDialogFileDownload}
             />
+            <Overlay show={okayPopupShow}>
+                <Okay
+                    show={okayPopupShow}
+                    message={okayPopupMessage}
+                    title={okayPopupTitle}
+                    onConfirm={() => {
+                        if (okayPopupMessage === "등록 되었습니다.") {
+                            setOkayPopupShow(false);
+                            handleRedirect();
+                        } else {
+                            setOkayPopupShow(false);
+                        }
+                    }} />
+            </Overlay>
         </DefaultLayout >
 
     )

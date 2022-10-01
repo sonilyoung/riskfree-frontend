@@ -9,6 +9,7 @@ import { DefaultLayout } from '../../../../../../../../layouts/Default';
 import { useNoticesViewMutation, useNoticesDeleteMutation } from '../../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { Overlay } from '../../../../../../../../components/Overlay';
 import YesNo from '../../../../../../../../components/MessageBox/YesNo';
+import Okay from '../../../../../../../../components/MessageBox/Okay';
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const useStyles = makeStyles(() => ({
@@ -194,6 +195,9 @@ const View = (props) => {
     const NOT_HOT = "002"
     const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
     const [yesNoPopupMessage, setYesNoPopupMessage] = useState("삭제 하시겠습니까?");
+    const [okayPopupShow, setOkayPopupShow] = useState(false);
+    const [okayPopupMessage, setOkayPopupMessage] = useState("");
+    const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
     const navigate = useNavigate()
     const handleRedirect = () => {
@@ -208,9 +212,15 @@ const View = (props) => {
     }
 
     const handleDelete = async () => {
-        await noticesDelete(id)
+        const response = await noticesDelete(id)
         setYesNoPopupShow(false);
-        navigate("/dashboard/director/notifications/list");
+        if (response?.data?.RET_CODE === "0000") {
+            setOkayPopupMessage("등록 되었습니다.");
+            setOkayPopupShow(true);
+        } else {
+            setOkayPopupMessage("등록이 실패하였습니다.");
+            setOkayPopupShow(true);
+        }
     }
 
     const handleFileDownload = (fileId) => {
@@ -277,6 +287,20 @@ const View = (props) => {
                     onConfirmYes={handleDelete}
                     onConfirmNo={() => setYesNoPopupShow(false)}
                 />
+            </Overlay>
+            <Overlay show={okayPopupShow}>
+                <Okay
+                    show={okayPopupShow}
+                    message={okayPopupMessage}
+                    title={okayPopupTitle}
+                    onConfirm={() => {
+                        if (okayPopupMessage === "등록 되었습니다.") {
+                            setOkayPopupShow(false);
+                            handleRedirect();
+                        } else {
+                            setOkayPopupShow(false);
+                        }
+                    }} />
             </Overlay>
         </DefaultLayout>
     );
