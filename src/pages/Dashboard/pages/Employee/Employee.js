@@ -2435,6 +2435,7 @@ const Employee = () => {
             let formData = new FormData();
             formData.append("files", selectedFile)
             handleDialogClose()
+            handleDialogCloseEmployee()
             const response = await fileUpload(formData)
             const fileId = response.data.RET_DATA[0].atchFileId
             setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
@@ -3192,7 +3193,7 @@ const Employee = () => {
                                                 {inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}
                                                     onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>상</span>) || (inspection.evaluation === "7" && <span className={'orange'}
                                                         onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>중</span>) || (inspection.evaluation === "5" && <span className={'red'}
-                                                            onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>하</span>) || ((inspection.evaluation === null || inspection.evaluation === "0" || inspection.evaluation === "null") && <span className={'empty'}
+                                                            onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>하</span>) || ((inspection.evaluation === null || inspection.evaluation === "0" || inspection.evaluation === "null" || inspection.evaluation === "") && <span className={'empty'}
                                                                 onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}></span>))}
                                             </div>
                                         </li>
