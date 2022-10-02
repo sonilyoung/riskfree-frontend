@@ -1122,7 +1122,7 @@ const SystemAdministrator = () => {
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.contractDate}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.status}</div>
                                     {subscriber?.contractFileYn === "O"
-                                        ? <div className={classes.tableData} style={{ cursor: "pointer" }} onDoubleClick={() => { setDownloadDialogShow(true); setFileIdForDownload(subscriber.contractFileId) }}>{subscriber.contractFileYn}</div>
+                                        ? <div className={classes.tableData} style={{ cursor: "pointer" }} onDoubleClick={() => handleDialogFileDownload(subscriber.contractFileId)}>{subscriber.contractFileYn}</div>
                                         : <div className={classes.tableData} style={{ cursor: "pointer" }}>{subscriber.contractFileYn}</div>
                                     }
                                     <div className={classes.tableData} /*onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}*/>{subscriber?.statusCd ? <img src={monitor} alt="monitor" /> : null}</div>
@@ -1144,7 +1144,7 @@ const SystemAdministrator = () => {
                                             <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.contractDate}</div>
                                             <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.status}</div>
                                             {subscribersWorkplaceItem?.contractFileYn === "O"
-                                                ? <div className={classes.tableData} style={{ cursor: "pointer" }} onDoubleClick={() => { setDownloadDialogShow(true); setFileIdForDownload(subscribersWorkplaceItem.contractFileId) }}>{subscribersWorkplaceItem.contractFileYn}</div>
+                                                ? <div className={classes.tableData} style={{ cursor: "pointer" }} onDoubleClick={() => { handleDialogFileDownload(subscribersWorkplaceItem.contractFileId) }}>{subscribersWorkplaceItem.contractFileYn}</div>
                                                 : <div className={classes.tableData} style={{ cursor: "pointer" }}>{subscribersWorkplaceItem.contractFileYn}</div>
                                             }
                                             <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem?.statusCd ? <img src={monitor} alt="monitor" /> : null}</div>

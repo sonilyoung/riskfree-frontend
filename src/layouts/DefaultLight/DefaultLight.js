@@ -47,7 +47,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Overlay } from '../../components/Overlay';
 import Ok from '../../components/MessageBox/Ok';
 import { useFileUploadMutation } from '../../hooks/api/FileManagement/FIleManagement';
-import { UploadDialog } from '../../dialogs/Upload';
+import { UploadDialog, UploadEmployeeDialog } from '../../dialogs/Upload';
 import { useExcelUploadMutation } from '../../hooks/api/ExcelController/ExcelController';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -755,6 +755,11 @@ const DefaultLight = ({ children }) => {
         "excelFileId": "",
     })
 
+    const labelObject = {
+        upperLabel: "안전보건 점검 항목 관리",
+        middleLabel: "등록된 파일을 다운로드 합니다."
+    }
+
     const handleDialogOpen = (event) => {
         setSelectedFileName("");
         setOpenDialog(true);
@@ -872,7 +877,7 @@ const DefaultLight = ({ children }) => {
                 </Grid>
 
             </Grid>
-            <UploadDialog
+            <UploadEmployeeDialog
                 open={openDialog}
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
@@ -880,6 +885,7 @@ const DefaultLight = ({ children }) => {
                 onDownload={handleDialogFileDownload}
                 enableDownload={true}
                 selectedFileName={selectedFileName}
+                label={labelObject}
             />
             <Overlay show={okPopupShow}>
                 <Ok

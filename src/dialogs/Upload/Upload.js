@@ -98,7 +98,6 @@ function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDown
                         <TextField
                             id="upload-field-hidden"
                             inputRef={inputRef}
-                            placeholder="여수공장 시정조치요청 파일.hwp"
                             variant="outlined"
                             className={[classes.popupTextField, classes.zeroOpacity]}
                             type="file"
@@ -106,7 +105,6 @@ function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDown
                         />
                         <TextField
                             id="upload-field-real"
-                            placeholder="여수공장 시정조치요청 파일.hwp"
                             variant="outlined"
                             className={classes.popupTextField}
                             onChange={onInputChange}

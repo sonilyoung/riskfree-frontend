@@ -82,7 +82,6 @@ function UploadImage({ open, onClose, onInputChange, onUpload, enableDownload, o
                     <div className={classes.uploadSearch}>
                         <TextField
                             id="standard-basic"
-                            placeholder="여수공장 시정조치요청 파일.hwp"
                             variant="outlined"
                             className={classes.popupTextField}
                             type="file"

@@ -205,7 +205,6 @@ function OnlyUpload({ open, onClose, onInputChange, onUpload, label, selectedFil
                         <div className={classes.onlyUploadSearch}>
                             <TextField
                                 id="standard-basic"
-                                placeholder="여수공장 시정조치요청 파일.hwp"
                                 variant="outlined"
                                 className={[classes.popupTextField, classes.zeroOpacity]}
                                 type="file"
@@ -213,7 +212,6 @@ function OnlyUpload({ open, onClose, onInputChange, onUpload, label, selectedFil
                             />
                             <TextField
                                 id="upload-field-real"
-                                placeholder="여수공장 시정조치요청 파일.hwp"
                                 variant="outlined"
                                 className={classes.popupTextField}
                                 onChange={onInputChange}
