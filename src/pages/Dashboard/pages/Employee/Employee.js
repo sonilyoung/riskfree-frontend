@@ -2559,12 +2559,14 @@ const Employee = () => {
         setUploadFlag(!uploadFlag)
     }
 
+    console.log(inspectionsDocs)
+
     const handleManagerChecked = async (checkedStatus, checkedIndex, articleNo) => {
         const deepCopyObj = JSON.parse(JSON.stringify(inspectionsDocs))
         const updatedArray = deepCopyObj.map((obj, index) => {
             if (index === checkedIndex && checkedStatus === "1") {
                 return ({ "managerChecked": "0" })
-            } else if (index === checkedIndex && (checkedStatus === "0" || checkedStatus === null || checkedStatus === "null")) {
+            } else if (index === checkedIndex && (checkedStatus === "0" || checkedStatus === null || checkedStatus === "null" || checkedStatus === "")) {
                 return ({ "managerChecked": "1" })
             } else {
                 return ({
@@ -2583,7 +2585,6 @@ const Employee = () => {
         const response = await getTitleReport({
             "condition": condition
         });
-        console.log(response);
         setReportTitle(response.data.RET_DATA);
     }
 
@@ -2592,7 +2593,6 @@ const Employee = () => {
             "baselineId": currentBaselineId,
             "condition": condition
         });
-        console.log(response);
         reduceAPIResponse(response.data.RET_DATA);
         setReportList(response.data.RET_DATA);
     }
@@ -3231,7 +3231,7 @@ const Employee = () => {
                                     <ul className={classes.menuList + ' checkList'}>
                                         {inspectionsDocs?.map((checkBtn, index) => (
                                             <>
-                                                <li>{((checkBtn.managerChecked === "0" || checkBtn.managerChecked == null || checkBtn.managerChecked === "null") &&
+                                                <li>{((checkBtn.managerChecked === "0" || checkBtn.managerChecked == null || checkBtn.managerChecked === "null" || checkBtn.managerChecked === "") &&
                                                     (<Link className={classes.listLink + ' check'} to={"#none"} underline="none" onClick={() => handleManagerChecked(checkBtn.managerChecked, index, checkBtn.articleNo)}></Link>)) || ((checkBtn.managerChecked === "1") &&
                                                         (<Link className={classes.listLink + ' check-blue'} to={"#none"} underline="none" onClick={(e) => handleManagerChecked(checkBtn.managerChecked, index, checkBtn.articleNo)} onDoubleClick={() => navigate("/dashboard/employee/improvement-measures/list")}></Link>))}
                                                 </li>
