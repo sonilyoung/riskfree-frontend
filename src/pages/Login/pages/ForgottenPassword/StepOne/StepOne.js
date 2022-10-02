@@ -12,6 +12,8 @@ import StepLabel from '@mui/material/StepLabel';
 import { WideLayout } from '../../../../../layouts/Wide';
 import { useNavigate } from 'react-router-dom';
 import { usePasswordResetMutation } from '../../../../../hooks/api/LoginManagement/LoginManagement';
+import Overlay from '../../../../../components/Overlay/Overlay';
+import Okay from '../../../../../components/MessageBox/Okay';
 
 
 const useStyles = makeStyles(() => ({
@@ -51,6 +53,9 @@ const StepOne = () => {
 
     const navigate = useNavigate();
     const [passwordReset] = usePasswordResetMutation();
+    const [okayPopupShow, setOkayPopupShow] = useState(false);
+    const [okayPopupMessage, setOkayPopupMessage] = useState("");
+    const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
     const [values, setValues] = useState({
         loginId: {
@@ -87,12 +92,11 @@ const StepOne = () => {
             registNo: values.registNo.value
         });
 
-        if (response.data.RET_CODE === '0000') {
-            // 
+        if (response?.data?.RET_CODE === '0000') {
             navigate(`/forgotten-password/step-2/${response.data.RET_DATA}`);
         } else {
-            //TODO: This message has to be replaced with dialog.
-            alert('Credentials are wrong. Please try again.');
+            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다");
+            setOkayPopupShow(true);
         }
     };
 
@@ -148,6 +152,13 @@ const StepOne = () => {
                     <Button sx={{ width: '100%', mt: 4 }} onClick={handleLoginStepOne} variant="contained">비밀번호 재설정</Button>
                 </Grid>
             </Grid>
+            <Overlay show={okayPopupShow}>
+                <Okay
+                    show={okayPopupShow}
+                    message={okayPopupMessage}
+                    title={okayPopupTitle}
+                    onConfirm={() => setOkayPopupShow(false)} />
+            </Overlay>
         </div>
     )
 }

@@ -12,6 +12,8 @@ import StepLabel from '@mui/material/StepLabel';
 import alertIcon from '../../../../../assets/images/ic_refer.png';
 import { useNavigate, useParams } from 'react-router-dom';
 import { usePasswordConfirmMutation } from '../../../../../hooks/api/LoginManagement/LoginManagement';
+import Overlay from '../../../../../components/Overlay/Overlay';
+import Okay from '../../../../../components/MessageBox/Okay';
 
 
 
@@ -52,6 +54,9 @@ const StepTwo = () => {
 
     const { userId } = useParams();
     const navigate = useNavigate();
+    const [okayPopupShow, setOkayPopupShow] = useState(false);
+    const [okayPopupMessage, setOkayPopupMessage] = useState("");
+    const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
     const [passwordConfirm] = usePasswordConfirmMutation();
 
@@ -82,10 +87,11 @@ const StepTwo = () => {
         });
 
         if (response.data.RET_CODE === '0000') {
-            navigate('/');
+            setOkayPopupMessage("등록 되었습니다.");
+            setOkayPopupShow(true);
         } else {
-            //TODO: This message has to be replaced with dialog.
-            alert('Credentials are wrong. Please try again.');
+            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다");
+            setOkayPopupShow(true);
         }
     }
 
@@ -134,6 +140,20 @@ const StepTwo = () => {
                     <Button sx={{ width: '100%', mt: 4 }} variant="contained" onClick={handleLogin}>비밀번호 재설정</Button>
                 </Grid>
             </Grid>
+            <Overlay show={okayPopupShow}>
+                <Okay
+                    show={okayPopupShow}
+                    message={okayPopupMessage}
+                    title={okayPopupTitle}
+                    onConfirm={() => {
+                        if (okayPopupMessage === "등록 되었습니다.") {
+                            navigate('/');
+                            setOkayPopupShow(false);
+                        } else {
+                            setOkayPopupShow(false);
+                        }
+                    }} />
+            </Overlay>
         </div>
     )
 }

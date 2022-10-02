@@ -60,7 +60,8 @@ const Login = () => {
     const [welcomePopupShow, setWelcomePopupShow] = useState(false);
     const [redirectPath, setRedirectPath] = useState("");
     const [wrongCredentialsPopup, setWrongCredentialsPopup] = useState(false);
-    const [message, setMessage] = useState('');
+    const [wrongCredentialsPopupMessage, setWrongCredentialsPopupMessage] = useState("");
+    const [wrongCredentialsPopupTitle, setWrongCredentialsPopupTitle] = useState("알림");
 
     const handleChange = (prop) => (event) => {
         setValues({
@@ -107,8 +108,7 @@ const Login = () => {
             }
 
         } else {
-            //TODO: This message has to be replaced with dialog.
-            // alert('Credentials are wrong. Please try again.');
+            setWrongCredentialsPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다");
             setWrongCredentialsPopup(true);
         }
 
@@ -163,8 +163,8 @@ const Login = () => {
             <Overlay show={wrongCredentialsPopup}>
                 <Okey
                     show={wrongCredentialsPopup}
-                    title={"알림"}
-                    message={"사용자를 찾을수 없거나 입력정보에 오류가 있습니다"}
+                    title={wrongCredentialsPopupTitle}
+                    message={wrongCredentialsPopupMessage}
                     onConfirm={() => setWrongCredentialsPopup(false)} />
             </Overlay>
         </WideLayout>
