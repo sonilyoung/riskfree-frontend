@@ -727,6 +727,7 @@ const SystemAdministrator = () => {
     const [filePath, setFilePath] = useState({
         "contractFileId": ""
     });
+    const [updateFlag, setUpdateFlag] = useState(false)
     const [selectedFileName, setSelectedFileName] = useState("")
     const [fileIdForDownload, setFileIdForDownload] = useState(null)
     const [openDialog, setOpenDialog] = useState(false);

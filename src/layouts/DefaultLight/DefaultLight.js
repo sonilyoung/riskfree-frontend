@@ -23,7 +23,7 @@ import Select from '@mui/material/Select';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
-import { useGetLoginInfoMutation, useGetCompanyInfoMutation, useGetWeatherMutation } from '../../hooks/api/MainManagement/MainManagement';
+import { useGetLoginInfoMutation, useGetCompanyInfoMutation, useGetWeatherMutation, useGetEssentialDutyVerisionMutation } from '../../hooks/api/MainManagement/MainManagement';
 import { remove } from '../../services/core/User/Token';
 import { useUserToken } from '../../hooks/core/UserToken';
 
@@ -49,6 +49,7 @@ import Ok from '../../components/MessageBox/Ok';
 import { useFileUploadMutation } from '../../hooks/api/FileManagement/FIleManagement';
 import { UploadDialog, UploadEmployeeDialog } from '../../dialogs/Upload';
 import { useExcelUploadMutation } from '../../hooks/api/ExcelController/ExcelController';
+
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -759,6 +760,14 @@ const DefaultLight = ({ children }) => {
         upperLabel: "안전보건 점검 항목 관리",
         middleLabel: "등록된 파일을 다운로드 합니다."
     }
+    const [essentialDutyFileId, setEssentialDutyFileId] = useState(null)
+
+    const [getEssentialDutyVerision] = useGetEssentialDutyVerisionMutation()
+    const fetchEssentialDutyVerision = async () => {
+        const response = await getEssentialDutyVerision()
+        setEssentialDutyFileId(response?.data?.RET_DATA?.attachFileId)
+        console.log(response, "------essentialFileId")
+    }
 
     const handleDialogOpen = (event) => {
         setSelectedFileName("");
@@ -785,8 +794,8 @@ const DefaultLight = ({ children }) => {
 
     async function handleDialogFileDownload() {
         const fileId = excel[dialogId]
-        if (fileId) {
-            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        if (fileId || essentialDutyFileId) {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId || essentialDutyFileId}&fileSn=1`;
         }
     }
 
@@ -832,10 +841,12 @@ const DefaultLight = ({ children }) => {
         }
         handleLoginInfo()
         fetchCompanyInfo()
+        fetchEssentialDutyVerision()
     }, [])
 
     useEffect(() => {
         fetchWeather()
+        fetchEssentialDutyVerision()
     }, [loginInfo])
 
     useEffect(() => {
