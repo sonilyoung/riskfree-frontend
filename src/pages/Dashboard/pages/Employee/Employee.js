@@ -3030,8 +3030,7 @@ const Employee = () => {
                                     () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })
                                 }>전체사업장</MainNavButton> */}
                                 {!!(workplaceList) && workplaceList?.map((workplaceItem, index) => (
-                                    <MainNavButton key={index} className={workplaceItem.workplaceId === parseFloat(userWorkplaceId) ? "active" : ""}
-                                        onClick={() => handleFactoryChange({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}>{workplaceItem.workplaceName}</MainNavButton>
+                                    <MainNavButton key={index} className={workplaceItem.workplaceId === parseFloat(userWorkplaceId) ? "active" : ""}>{workplaceItem.workplaceName}*/</MainNavButton>
                                 ))}
                             </Slider>
                         </div>
