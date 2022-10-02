@@ -23,7 +23,7 @@ import Select from '@mui/material/Select';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
-import { useGetLoginInfoMutation, useGetCompanyInfoMutation, useGetWeatherMutation, useGetEssentialDutyVerisionMutation } from '../../hooks/api/MainManagement/MainManagement';
+import { useGetLoginInfoMutation, useGetCompanyInfoMutation, useGetWeatherMutation } from '../../hooks/api/MainManagement/MainManagement';
 import { remove } from '../../services/core/User/Token';
 import { useUserToken } from '../../hooks/core/UserToken';
 
@@ -50,6 +50,7 @@ import { useFileUploadMutation } from '../../hooks/api/FileManagement/FIleManage
 import { UploadDialog, UploadEmployeeDialog } from '../../dialogs/Upload';
 import { useExcelUploadMutation } from '../../hooks/api/ExcelController/ExcelController';
 
+import { useGetEssentialDutyVersionMutation } from '../../hooks/api/MainManagement/MainManagement';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -762,9 +763,9 @@ const DefaultLight = ({ children }) => {
     }
     const [essentialDutyFileId, setEssentialDutyFileId] = useState(null)
 
-    const [getEssentialDutyVerision] = useGetEssentialDutyVerisionMutation()
+    const [getEssentialDutyVersion] = useGetEssentialDutyVersionMutation()
     const fetchEssentialDutyVerision = async () => {
-        const response = await getEssentialDutyVerision()
+        const response = await getEssentialDutyVersion()
         setEssentialDutyFileId(response?.data?.RET_DATA?.attachFileId)
         console.log(response, "------essentialFileId")
     }
