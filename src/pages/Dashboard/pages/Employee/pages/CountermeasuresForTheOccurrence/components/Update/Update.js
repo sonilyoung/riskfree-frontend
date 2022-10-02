@@ -268,7 +268,10 @@ const useStyles = makeStyles(() => ({
         }
     },
     activeReportBtn: {
-        backgroundColor: "#9099a1 !important"
+        backgroundColor: "#989898 !important",
+        '&:hover': {
+            backgroundColor: "#7b7b7b !important",
+        }
     }
 }));
 

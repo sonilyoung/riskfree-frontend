@@ -276,6 +276,12 @@ const useStyles = makeStyles(() => ({
             paddingLeft: '0',
         }
     },
+    activeReportBtn: {
+        backgroundColor: "#989898 !important",
+        '&:hover': {
+            backgroundColor: "#7b7b7b !important",
+        }
+    }
 }));
 
 const AccidentReportButton = styled(ButtonUnstyled)`
@@ -1009,10 +1015,10 @@ const Registration = () => {
                                     />
                                 </div>
                                 <div className={classes.rowInfo}>
-                                    <AccidentReportButton sx={{ marginRight: "10px" }} id="initReportId" onClick={handleDialogOpen}>
+                                    <AccidentReportButton sx={{ marginRight: "10px" }} id="initReportId" onClick={handleDialogOpen} className={accident.initReportId && classes.activeReportBtn}>
                                         초기사고 보고서
                                     </AccidentReportButton>
-                                    <AccidentReportButton id="finalReportId" onClick={handleDialogOpen}>최종사고 보고서</AccidentReportButton>
+                                    <AccidentReportButton id="finalReportId" onClick={handleDialogOpen} className={accident.finalReportId && classes.activeReportBtn}>최종사고 보고서</AccidentReportButton>
                                 </div>
                             </div>
                         </div>
