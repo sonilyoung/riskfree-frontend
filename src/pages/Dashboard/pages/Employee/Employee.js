@@ -81,7 +81,7 @@ import radioIcon from '../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation, useGetTitleReportMutation, useGetBaseLineReportMutation, useUpdateSafetyFileMutation, useUpdateScoreMutation, useUpdateRelatedArticleMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation, useGetTitleReportMutation, useGetBaseLineReportMutation, useUpdateSafetyFileMutation, useUpdateScoreMutation, useUpdateRelatedArticleMutation, useGetBaseLineReportGraphMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useUserToken } from '../../../../hooks/core/UserToken';
 import moment from 'moment'
 
@@ -1942,7 +1942,7 @@ const Employee = () => {
     const [accidentTotal, setAccidentTotal] = useState({});
     const [noticesList, setNoticesList] = useState([]);
     const [dayInfo, setDayInfo] = useState(null);
-    const [toggleGrid, setToggleGrid] = useState(false)
+    const [toggleGrid, setToggleGrid] = useState(false);
 
     const [userToken] = useUserToken()
     const [getSafeWorkHistoryList] = useGetSafeWorkHistoryListMutation();
@@ -2043,22 +2043,11 @@ const Employee = () => {
     const [reportList, setReportList] = useState([]);
     const [reportTitle, setReportTitle] = useState([]);
     // grid graph
+    const [getBaseLineReportGraph] = useGetBaseLineReportGraphMutation();
     const [chartCategories, setChartCategories] = useState([]);
     const [chartSeries, setChartSeries] = useState([{ name: 'name', data: [] }]);
     const [chartInfo, setChartInfo] = useState({
-        series: [
-            {
-                name: "series-1",
-                data: [30, 40, 45, 50, 49, 60, 70, 91]
-            },
-            {
-                name: "series-1",
-                data: [30, 40, 45, 50, 49, 60, 70, 91]
-            }, {
-                name: "series-1",
-                data: [30, 40, 45, 50, 49, 60, 70, 91]
-            }
-        ],
+        series: chartSeries,
         options: {
             chart: {
                 type: 'bar',
@@ -2077,12 +2066,11 @@ const Employee = () => {
             },
             stroke: {
                 show: true,
-                width: 15,
+                width: 2,
                 colors: ['transparent']
             },
             xaxis: {
-                // categories: chartCategories,
-                categories: ['안전보건관리체계의 구축 및 이행', '유해,위험 요인 개선 업무절차 마련 및 점검', '안전보건업무 총괄관리 전담조직 구축', '안전보건관리책임자 권한 부여 및 집행 점검', '안전,보건관련 필요예산 편성 및 집행', '안전보건 전문 인력 배치 및 업무시간 보장', '종사자 의견수렴 및 개선방안 이행점검', '중대재해발생 비상대응 메뉴얼 마련&점검', '도급용역 위탁시 평가기준 및 절차 점검', '재해발생 방지대책 및 이행현황', '관계법령에 따른 개선,시정명령 조치', '관계법령에 의무이행의 관리의 조치'],
+                categories: ["group1", "group2", "group3", "group4", "group5", "group6", "group7", "group8"],
             },
             yaxis: {
                 title: {
@@ -2121,31 +2109,6 @@ const Employee = () => {
     const [updateRelatedArticle] = useUpdateRelatedArticleMutation()
 
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
-
-    const reduceAPIResponse = (array) => {
-        const chartParametars = array?.length > 0 && array?.map((arrayItem, index) => {
-            if (index === 0) {
-                return !!(arrayItem?.length) && arrayItem?.reduce(function
-                    (filteredObj, item) {
-                    if (item.workplaceName in filteredObj) {
-                        filteredObj[item.workplaceName] = { ...filteredObj[item.workplaceName], data: [...filteredObj[item.workplaceName].data, item.evaluationRate] };
-                    }
-                    else {
-                        filteredObj[item.workplaceName] = { name: item.workplaceName, data: [item.evaluationRate] };
-                    }
-
-
-                    return filteredObj;
-
-                }, {});
-            }
-        });
-        // console.log(chartParametars);
-        // console.log(Object.values(chartParametars));
-        // console.log(Object.keys(chartParametars));
-        setChartSeries(Object.values(chartParametars));
-        setChartCategories(Object.keys(chartParametars));
-    }
 
     const handleNotificationPopupsShow = (notificationIndex) => {
         const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex != index);
@@ -2563,8 +2526,6 @@ const Employee = () => {
         setUploadFlag(!uploadFlag)
     }
 
-    console.log(inspectionsDocs)
-
     const handleManagerChecked = async (checkedStatus, checkedIndex, articleNo) => {
         const deepCopyObj = JSON.parse(JSON.stringify(inspectionsDocs))
         const updatedArray = deepCopyObj.map((obj, index) => {
@@ -2597,8 +2558,16 @@ const Employee = () => {
             "baselineId": currentBaselineId,
             "condition": condition
         });
-        reduceAPIResponse(response.data.RET_DATA);
         setReportList(response.data.RET_DATA);
+    }
+
+    const fetchBaseLineReportGraph = async () => {
+        const response = await getBaseLineReportGraph({
+            "baselineId": currentBaselineId,
+            "condition": condition
+        });
+        console.log(response?.data?.RET_DATA);
+        setChartSeries(response?.data?.RET_DATA);
     }
 
     useEffect(() => {
@@ -2633,9 +2602,13 @@ const Employee = () => {
     }, [baselineIdForSelect, baselineData]);
 
     useEffect(() => {
-        fetchTitleReport();
-        fetchBaseLineReportList();
-    }, [condition, currentBaselineId]);
+        if (toggleGrid) {
+            fetchTitleReport();
+            fetchBaseLineReportList();
+        } else {
+            fetchBaseLineReportGraph();
+        }
+    }, [condition, currentBaselineId, toggleGrid]);
 
     useEffect(() => {
         fetchDutyDetailList()
@@ -2966,7 +2939,7 @@ const Employee = () => {
                                     </div>
                                 </div>
                                 <div className={toggleGrid ? classes.graphImageNone : classes.graphImage}>
-                                    {/* <Chart options={chartInfo.options} series={chartInfo.series} type="bar" height={450} /> */}
+                                    <Chart options={chartInfo.options} series={chartSeries} type="bar" height={450} />
                                 </div>
                                 <Grid item xs={12} className={toggleGrid ? classes.boxTable : classes.boxTableNone}>
                                     <div className={classes.tableHead}>

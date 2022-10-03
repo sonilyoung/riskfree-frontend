@@ -45,7 +45,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentsPreventionMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetLoginInfoMutation, useGetNoticeListMutation, useGetRelatedLawRateMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useGetBaseLineReportMutation, useGetTitleReportMutation, useGetAccidentsPreventionReportMutation, useGetImprovemetLawOrderReportMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentsPreventionMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetLoginInfoMutation, useGetNoticeListMutation, useGetRelatedLawRateMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useGetBaseLineReportMutation, useGetTitleReportMutation, useGetAccidentsPreventionReportMutation, useGetImprovemetLawOrderReportMutation, useGetBaseLineReportGraphMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetLeaderImprovementListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetAccidentTotalMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetSafeWorkHistoryListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
@@ -325,6 +325,7 @@ const Director = () => {
     const [reportList, setReportList] = useState([]);
     const [reportTitle, setReportTitle] = useState([]);
     // grid graph
+    const [getBaseLineReportGraph] = useGetBaseLineReportGraphMutation();
     const [chartCategories, setChartCategories] = useState([]);
     const [chartSeries, setChartSeries] = useState([{ name: 'name', data: [] }]);
     const [chartInfo, setChartInfo] = useState({
@@ -347,12 +348,11 @@ const Director = () => {
             },
             stroke: {
                 show: true,
-                width: 15,
+                width: 2,
                 colors: ['transparent']
             },
             xaxis: {
-                categories: chartCategories
-                // categories: ['안전보건관리체계의 구축 및 이행', '유해,위험 요인 개선 업무절차 마련 및 점검', '안전보건업무 총괄관리 전담조직 구축', '안전보건관리책임자 권한 부여 및 집행 점검', '안전,보건관련 필요예산 편성 및 집행', '안전보건 전문 인력 배치 및 업무시간 보장', '종사자 의견수렴 및 개선방안 이행점검', '중대재해발생 비상대응 메뉴얼 마련&점검', '도급용역 위탁시 평가기준 및 절차 점검', '재해발생 방지대책 및 이행현황', '관계법령에 따른 개선,시정명령 조치', '관계법령에 의무이행의 관리의 조치'],
+                categories: ["group1", "group2", "group3", "group4", "group5", "group6", "group7", "group8"],
             },
             yaxis: {
                 title: {
@@ -398,32 +398,6 @@ const Director = () => {
     const handleNotificationPopupsShow = (notificationIndex) => {
         const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex != index);
         setNoticeHotList(notificationPopupList);
-    }
-
-    const reduceAPIResponse = (array, parameter) => {
-        const chartParameters = array?.length > 0 && array?.map((arrayItem, index) => {
-            if (index === 0) {
-                return !!(arrayItem?.length) && arrayItem?.reduce(function
-                    (filteredObj, item) {
-                    if (item.menuTitle in filteredObj) {
-                        filteredObj[item.menuTitle] = { ...filteredObj[item.menuTitle], data: [...filteredObj[item.menuTitle].data, item.evaluationRate] };
-                    }
-                    else {
-                        filteredObj[item.menuTitle] = { name: item[parameter], data: [item.evaluationRate] };
-                    }
-
-
-                    return filteredObj;
-
-                }, {});
-            }
-        });
-        console.log(chartParameters);
-        // console.log(chartParametars);
-        // console.log(Object.values(chartParametars));
-        // console.log(Object.keys(chartParametars));
-        // setChartSeries(Object.values(chartParameters));
-        setChartCategories(Object.keys(chartParameters));
     }
 
     const handleSlickCircleColor = (percentage) => {
@@ -635,6 +609,16 @@ const Director = () => {
         setWeatherData(response?.data?.RET_DATA)
     }
 
+    const fetchBaseLineReportGraph = async () => {
+        const response = await getBaseLineReportGraph({
+            "baselineId": currentBaselineId,
+            "condition": condition
+        });
+        console.log(response?.data?.RET_DATA);
+        setChartSeries(response?.data?.RET_DATA);
+    }
+
+
     useEffect(() => {
         fetchDayInfo()
         fetchWeather()
@@ -654,9 +638,13 @@ const Director = () => {
     }, [currentBaselineId, userWorkplaceId]);
 
     useEffect(() => {
-        fetchTitleReport();
-        fetchBaseLineReportList();
-    }, [condition, currentBaselineId]);
+        if (toggleGrid) {
+            fetchTitleReport();
+            fetchBaseLineReportList();
+        } else {
+            fetchBaseLineReportGraph();
+        }
+    }, [condition, currentBaselineId, toggleGrid]);
 
     useEffect(() => {
         fetchCompanyInfo();
@@ -819,7 +807,7 @@ const Director = () => {
                                 </div>
                                 {/* Chart deo */}
                                 <div className={toggleGrid ? classes.graphImageNone : classes.graphImage}>
-                                    {/* <Chart options={chartInfo.options} series={chartSeries} type="bar" height={450} /> */}
+                                    <Chart options={chartInfo.options} series={chartSeries} type="bar" height={450} />
                                 </div>
                                 <Grid item xs={12} className={toggleGrid ? classes.boxTable : classes.boxTableNone}>
                                     <div className={classes.tableHead}>
