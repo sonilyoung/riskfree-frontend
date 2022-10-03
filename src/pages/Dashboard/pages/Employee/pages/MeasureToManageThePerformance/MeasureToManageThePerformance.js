@@ -71,12 +71,11 @@ const useStyles = makeStyles(() => ({
         alignContent: 'center',
         height: '68px',
         textDecoration: "none",
-        // width: '100%',
+        width: '165px',
         marginLeft: '10px !important',
         background: '#3a5298',
         borderRadius: '5px',
         letterSpacing: '-1.08px',
-        textDecoration: 'none',
         '&:first-of-type': {
             marginLeft: '0 !important'
         },
@@ -90,8 +89,34 @@ const useStyles = makeStyles(() => ({
             fontWeight: '500',
             color: '#fff',
             padding: '0 20px'
-        },
+        }
     },
+    /* === Data: 2022.10.03 author:Jimmy add === */
+    buttonLinkactive: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        alignContent: 'center',
+        height: '68px',
+        textDecoration: "none",
+        width: '165px',
+        marginLeft: '10px !important',
+        borderRadius: '5px',
+        letterSpacing: '-1.08px',
+        '&:first-of-type': {
+            marginLeft: '0 !important'
+        },
+        backgroundImage: 'linear-gradient(#04b9fb, #017dfa)',
+        '& span': {
+            width: '100%',
+            textAlign: 'center',
+            fontSize: '20px',
+            fontWeight: '500',
+            color: '#fff',
+            padding: '0 20px'
+        }
+    },
+    /* ========================================= */
     buttonPlus: {
         width: '45px',
         height: '45px',
@@ -772,6 +797,10 @@ const MeasureToManageThePerformance = () => {
         middleLabel: "등록된 데이터를 엑셀로 다운로드 합니다."
     }
 
+    /* === Data: 2022.10.03 author:Jimmy add === */
+    const [law_Id, setlaw_Id] = useState("")
+    /* ========================================= */
+
     const [selectedFile, setSelectedFile] = useState(null);
     const [openDialog, setOpenDialog] = useState(false)
     const [uploadFlag, setUploadFlag] = useState(false);
@@ -830,6 +859,10 @@ const MeasureToManageThePerformance = () => {
             "countPerPage": 10,
             "pageNum": page
         });
+        /* === Data: 2022.10.03 author:Jimmy add === */
+        setlaw_Id(lawId)
+        /* ========================================= */
+
         setRelatedRawList(response.data.RET_DATA);
         setRelatedRawList(response.data.RET_DATA);
         const currentUpdateList = response.data?.RET_DATA?.map(relatedRawItem => {
@@ -893,7 +926,11 @@ const MeasureToManageThePerformance = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.headerButtons}>
                     {!!relatedRawButtonList && relatedRawButtonList.length > 0 && relatedRawButtonList.map(relatedRawButtonItem =>
-                    (<Link to="#" className={classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)} onDoubleClick={() => handleDialogOpen(relatedRawButtonItem.lawButtonId)}>
+                    
+                    /* === Data: 2022.10.03 author:Jimmy add === */
+                    (<Link to="#" className={law_Id === relatedRawButtonItem.lawButtonId ? classes.buttonLinkactive : classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)} onDoubleClick={() => handleDialogOpen(relatedRawButtonItem.lawButtonId)}>
+                    {/* ========================================= */}
+                    
                         <span>{relatedRawButtonItem?.lawName}</span>
                     </Link>)
                     )}
