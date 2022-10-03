@@ -174,7 +174,7 @@ const useStyles = makeStyles(() => ({
             height: '100px'
         },
         /* ============================================= */
-        
+
         '& $boxRow:last-of-type $rowContent': {
             display: 'flex',
             '& >div': {
@@ -390,7 +390,7 @@ const Update = () => {
         const response = await lawView(updateid)
         setLaw(response.data.RET_DATA)
         for (const path in filePath) {
-            let fileInfo = await getFileInfo({ atchFileId: 434, fileSn: 1 })
+            let fileInfo = await getFileInfo({ atchFileId: updateid, fileSn: 1 })
             filePathMain[path] = fileInfo.data.RET_DATA.originalFileName
         }
         setFilePath(filePathMain)
@@ -721,8 +721,8 @@ const Update = () => {
                                     />
                                 </div>
                             </div>
-                            
-                            { /* === Data: 2022.10.03 author:Jimmy add, edit === */ }
+
+                            { /* === Data: 2022.10.03 author:Jimmy add, edit === */}
                             <div className={classes.rowTitle}>완료일</div>
                             <div className={classes.rowInfo}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
@@ -739,7 +739,7 @@ const Update = () => {
                                     />
                                 </LocalizationProvider>
                             </div>
-                            { /* ====================================================== */ }
+                            { /* ====================================================== */}
 
                         </div>
                         <div className={classes.boxRow}>
