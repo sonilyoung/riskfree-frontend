@@ -216,6 +216,7 @@ function OnlyUpload({ open, onClose, onInputChange, onUpload, label, selectedFil
                                 type="file"
                                 onClick={handleRealChooseFile}
                                 onChange={onInputChange}
+                                onClick={handleRealChooseFile}
                             />
                             <TextField
                                 id="upload-field-real"
