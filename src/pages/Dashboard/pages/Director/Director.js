@@ -321,15 +321,11 @@ const Director = () => {
     const currentBaselineId = useSelector(selectBaselineId);
     const [noticeHotList, setNoticeHotList] = useState([]);
     const [condition, setCondition] = useState("1");
-    // grid report 
     const [reportList, setReportList] = useState([]);
     const [reportTitle, setReportTitle] = useState([]);
-    // grid graph
     const [getBaseLineReportGraph] = useGetBaseLineReportGraphMutation();
-    const [chartCategories, setChartCategories] = useState([]);
     const [chartSeries, setChartSeries] = useState([{ name: 'name', data: [] }]);
     const [chartInfo, setChartInfo] = useState({
-        series: chartSeries,
         options: {
             chart: {
                 type: 'bar',
@@ -352,7 +348,14 @@ const Director = () => {
                 colors: ['transparent']
             },
             xaxis: {
-                categories: ["group1", "group2", "group3", "group4", "group5", "group6", "group7", "group8"],
+                type: 'category',
+                categories: [],
+                tickPlacement: 'on',
+                position: 'bottom',
+                labels: {
+                    show: true,
+                    rotate: 0,
+                },
             },
             yaxis: {
                 title: {
@@ -370,6 +373,7 @@ const Director = () => {
                 }
             }
         },
+
     });
     const workplaceIdFromToken = userToken.getUserWorkplaceId();
     const [userInfo, setUserInfo] = useState({
@@ -394,6 +398,16 @@ const Director = () => {
     const handleChange = (event) => {
         setNum(event.target.value);
     };
+
+    const handleChartCategoriesDisplay = (chartCategories) => {
+        const changedChartCategories = chartCategories?.map(chartCategory => {
+            if (chartCategory?.includes(" ")) {
+                return chartCategory.split(" ");
+            }
+            return chartCategory;
+        });
+        setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: changedChartCategories } } });
+    }
 
     const handleNotificationPopupsShow = (notificationIndex) => {
         const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex != index);
@@ -614,8 +628,8 @@ const Director = () => {
             "baselineId": currentBaselineId,
             "condition": condition
         });
-        console.log(response?.data?.RET_DATA);
-        setChartSeries(response?.data?.RET_DATA);
+        handleChartCategoriesDisplay(response?.data?.RET_DATA?.categories);
+        setChartSeries(response?.data?.RET_DATA?.series);
     }
 
 
@@ -760,7 +774,6 @@ const Director = () => {
                     </Grid>
                     <Grid className={classes.headerNavigation} item xs={5.8}>
                         <ChartButton onClick={() => setChartPop(true)}></ChartButton>
-                        {/* CHART POPUP CEO */}
                         <div className={chartPop ? classes.chartPopup : classes.chartPopupClose}>
                             <div className={classes.chartPopList}>
                                 <div className={classes.popHeader}>
@@ -805,9 +818,8 @@ const Director = () => {
                                         ></ButtonGraphNext>
                                     </div>
                                 </div>
-                                {/* Chart deo */}
                                 <div className={toggleGrid ? classes.graphImageNone : classes.graphImage}>
-                                    <Chart options={chartInfo.options} series={chartSeries} type="bar" height={450} />
+                                    <Chart options={chartInfo.options} series={chartSeries} type="bar" />
                                 </div>
                                 <Grid item xs={12} className={toggleGrid ? classes.boxTable : classes.boxTableNone}>
                                     <div className={classes.tableHead}>

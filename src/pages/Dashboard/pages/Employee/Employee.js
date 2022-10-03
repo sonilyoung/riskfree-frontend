@@ -2039,15 +2039,11 @@ const Employee = () => {
         upperLabel: "이미지 등록",
         middleLabel: "등록할 파일을 업로드 합니다.",
     })
-    // grid report 
     const [reportList, setReportList] = useState([]);
     const [reportTitle, setReportTitle] = useState([]);
-    // grid graph
     const [getBaseLineReportGraph] = useGetBaseLineReportGraphMutation();
-    const [chartCategories, setChartCategories] = useState([]);
     const [chartSeries, setChartSeries] = useState([{ name: 'name', data: [] }]);
     const [chartInfo, setChartInfo] = useState({
-        series: chartSeries,
         options: {
             chart: {
                 type: 'bar',
@@ -2070,7 +2066,14 @@ const Employee = () => {
                 colors: ['transparent']
             },
             xaxis: {
-                categories: ["group1", "group2", "group3", "group4", "group5", "group6", "group7", "group8"],
+                type: 'category',
+                categories: [],
+                tickPlacement: 'on',
+                position: 'bottom',
+                labels: {
+                    show: true,
+                    rotate: 0,
+                },
             },
             yaxis: {
                 title: {
@@ -2088,7 +2091,9 @@ const Employee = () => {
                 }
             }
         },
+
     });
+
     const [dialogId, setDialogId] = useState("")
     const [filePath, setFilePath] = useState({
         "performBeforeId": "",
@@ -2109,6 +2114,16 @@ const Employee = () => {
     const [updateRelatedArticle] = useUpdateRelatedArticleMutation()
 
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
+
+    const handleChartCategoriesDisplay = (chartCategories) => {
+        const changedChartCategories = chartCategories?.map(chartCategory => {
+            if (chartCategory?.includes(" ")) {
+                return chartCategory.split(" ");
+            }
+            return chartCategory;
+        });
+        setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: changedChartCategories } } });
+    }
 
     const handleNotificationPopupsShow = (notificationIndex) => {
         const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex != index);
@@ -2566,8 +2581,8 @@ const Employee = () => {
             "baselineId": currentBaselineId,
             "condition": condition
         });
-        console.log(response?.data?.RET_DATA);
-        setChartSeries(response?.data?.RET_DATA);
+        handleChartCategoriesDisplay(response?.data?.RET_DATA?.categories);
+        setChartSeries(response?.data?.RET_DATA?.series);
     }
 
     useEffect(() => {
@@ -2644,7 +2659,9 @@ const Employee = () => {
             setLatitude(position.coords.latitude)
             setLongitude(position.coords.longitude)
         })
-    }, [])
+    }, []);
+
+    // console.log(chartCategories);
 
     return (
         <WideLayout>
@@ -2939,7 +2956,7 @@ const Employee = () => {
                                     </div>
                                 </div>
                                 <div className={toggleGrid ? classes.graphImageNone : classes.graphImage}>
-                                    <Chart options={chartInfo.options} series={chartSeries} type="bar" height={450} />
+                                    <Chart options={chartInfo.options} series={chartSeries} type="bar" />
                                 </div>
                                 <Grid item xs={12} className={toggleGrid ? classes.boxTable : classes.boxTableNone}>
                                     <div className={classes.tableHead}>
