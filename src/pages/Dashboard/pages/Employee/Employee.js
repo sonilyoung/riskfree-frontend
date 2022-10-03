@@ -3187,7 +3187,7 @@ const Employee = () => {
                                     <ul className={classes.menuList}>
                                         {inspectionsDocs?.map((inspection) => (
                                             <li>
-                                                <Link className={classes.listLink} to={"#none"} underline="none">{inspection.shGoal}</Link>
+                                                <Link className={classes.listLink} to={"#none"} underline="none">{inspection?.shGoal}</Link>
                                             </li>
                                         ))}
                                     </ul>

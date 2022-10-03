@@ -1029,7 +1029,7 @@ const Default = ({ children }) => {
                                                 <TextField
                                                     id="standard-basic"
                                                     placeholder='안전보건 목표 등록 (띄어쓰기 포함 16자 이내)'
-                                                    value={companyInfo.shGoal}
+                                                    value={companyInfo?.shGoal}
                                                     variant="outlined"
                                                     sx={{ width: 370 }}
                                                     className={classes.popupTextField}
@@ -1038,7 +1038,7 @@ const Default = ({ children }) => {
                                                 <TextField
                                                     id="standard-basic"
                                                     placeholder='경영방침 등록 (띄어쓰기 포함 16자 이내)'
-                                                    value={companyInfo.missionStatements}
+                                                    value={companyInfo?.missionStatements}
                                                     onChange={(event) => setCompanyInfo({ ...companyInfo, "missionStatements": event.target.value })}
                                                     variant="outlined"
                                                     sx={{ width: 370 }}
