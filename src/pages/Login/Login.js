@@ -27,6 +27,12 @@ import { RoleService } from '../../services/core/User';
 import { Overlay } from '../../components/Overlay';
 import Okey from '../../components/MessageBox/Okay';
 
+// === Data: 2022.10.03 author:Jimmy add ===
+// 아이디 저장 및 체크 
+const LS_KEY_ID = "LS_KEY_ID";
+const LS_KEY_SAVE_ID_FLAG = "LS_KEY_SAVE_ID_FLAG";
+// =========================================
+
 const ClosePopupButton2 = styled(ButtonUnstyled)`
     width: 60px;
     height: 60px;
@@ -50,6 +56,8 @@ const Login = () => {
             error: ''
         },
     });
+
+
     const [getBaseline] = useGetBaselineMutation();
     const navigate = useNavigate();
 
@@ -63,20 +71,42 @@ const Login = () => {
     const [wrongCredentialsPopupMessage, setWrongCredentialsPopupMessage] = useState("");
     const [wrongCredentialsPopupTitle, setWrongCredentialsPopupTitle] = useState("알림");
 
+    // === Data: 2022.10.03 author:Jimmy add ===
+    const [saveIDFlag, setSaveIDFlag] = useState(false);
+    
+    const dataRuleCheckForID = (ch) => {
+        let ascii = ch.charCodeAt(0);
+        if (48 /* 0 */ <= ascii && ascii <= 57 /* 9 */) return true;
+        if (65 /* A */ <= ascii && ascii <= 90 /* Z */) return true;
+        if (97 /* a */ <= ascii && ascii <= 122 /* z */) return true;
+        if (ch === ".") return true;
+        return false;
+    };
+    // =========================================
+
     const handleChange = (prop) => (event) => {
         setValues({
             ...values,
             [prop]: { ...values[prop], value: event.target.value }
         });
+        
+        // === Data: 2022.10.03 author:Jimmy add ===
+        if (event.target.value === "") {
+            setValues({...values, id: { ...values.id, value: event.target.value }})
+        };
+      
+        if (dataRuleCheckForID(event.target.value.length - 1) === false) return;
+            setValues({...values, id: { ...values.id, value: event.target.value }})
+        // =========================================
     };
 
+    
     const handleFirstLogin = () => {
         navigate(redirectPath);
         setWelcomePopupShow(false);
     }
 
     const handleLogin = async () => {
-
         const userLoginResponse = await login({
             loginId: values.id.value,
             loginPw: values.password.value
@@ -93,12 +123,12 @@ const Login = () => {
 
             if (userLoggedInRoleCd !== RoleService.ROLE_CODE_ADMIN) {
                 const defaultBaselineResponse = await getBaseline({});
-                console.log(defaultBaselineResponse);
+                //console.log(defaultBaselineResponse);
                 const defaultBaselineId = defaultBaselineResponse.data?.RET_DATA?.baselineId;
                 dispatch(setBaselineId(defaultBaselineId));
                 localStorage.setDefaultBaselineId(defaultBaselineId);
             }
-            console.log(redirectPath, userLoginCount);
+            //console.log(redirectPath, userLoginCount);
 
             if (userLoginCount < 2) {
                 setWelcomePopupShow(true);
@@ -106,6 +136,12 @@ const Login = () => {
                 setWelcomePopupShow(false);
                 navigate(userRedirectPath);
             }
+
+            // === Data: 2022.10.03 author:Jimmy add ===
+            if (true /* login success */) {
+                if (saveIDFlag) localStorage.setItem(LS_KEY_ID, values.id.value);
+            } 
+            // =========================================
 
         } else {
             setWrongCredentialsPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다");
@@ -116,17 +152,41 @@ const Login = () => {
     }
 
     useEffect(() => {
-        const handleKeyDown = (event) => {
-            if (event.keyCode === 13) {
-                // event.preventDefault()
-                handleLogin();
-            }
+        // === Data: 2022.10.03 author:Jimmy add ===
+        // 최초 페이지 진입시 name input에 focus
+        document.getElementById("id").focus()
+
+        let idFlag = JSON.parse(localStorage.getItem(LS_KEY_SAVE_ID_FLAG));
+        if (idFlag !== null) setSaveIDFlag(idFlag);
+        if (idFlag === false) localStorage.setItem(LS_KEY_ID, "");
+      
+        let data = localStorage.getItem(LS_KEY_ID);
+        if (data !== null) setValues({...values, id: { ...values.id, value: data }
+        });
+        // =========================================
+    }, [])
+
+    // === Data: 2022.10.03 author:Jimmy add ===
+    // Enter시 input으로 focus
+    const handleNextInput = (e) => {
+        if (e.key === "Enter") {
+            document.getElementById("pawwword").focus();
         }
-        document.addEventListener('keydown', handleKeyDown)
-        return () => {
-            document.removeEventListener("keydown", handleKeyDown);
-        };
-    }, [values])
+    };
+    
+    // Enter시 handleSubmit 호출
+    const handleChangeSubmit = (e) => {
+        if (e.key === "Enter") handleLogin();
+    };
+
+    const handleSaveIDFlag = (e) => {
+        if(e.target.checked === false){
+            setValues({...values, id: { ...values.id, value: "" } })
+        }
+        localStorage.setItem(LS_KEY_SAVE_ID_FLAG, !saveIDFlag);
+        setSaveIDFlag(!saveIDFlag);
+    };
+// =========================================
 
     return (
         <WideLayout>
@@ -142,8 +202,13 @@ const Login = () => {
                         <img src={logoLogin} alt="login logo" />
                     </div>
                     <div className={classes.loginInput}>
-                        <TextField id="id" onChange={handleChange("id")} placeholder="아이디" variant="outlined" />
-                        <TextField id="pawwword" type="password" onChange={handleChange("password")} placeholder="비밀번호" variant="outlined" />
+                        { /* 
+                            Data: 2022.10.03 author:Jimmy 
+                            add: onKeyPress, value
+                        */ }
+                        <TextField id="id" onChange={handleChange("id")} placeholder="아이디" onKeyPress={handleNextInput} value={values.id.value}/>
+                        <TextField id="pawwword" type="password" onChange={handleChange("password")} onKeyPress={handleChangeSubmit} placeholder="비밀번호" variant="outlined" />
+                        { /* ====================================================== */ }
                     </div>
                     <div className={classes.loginOptions}>
                         <FormControlLabel
@@ -152,6 +217,12 @@ const Login = () => {
                                 <Checkbox
                                     icon={<img src={checkIcon} alt="check icon" />}
                                     checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                    /* === Data: 2022.10.03 author:Jimmy add === */
+                                    name="saveId"
+                                    id="saveId"
+                                    checked={saveIDFlag}
+                                    onChange={handleSaveIDFlag}
+                                    /* ========================================= */
                                 />
                             }
                         />
