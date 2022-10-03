@@ -106,6 +106,11 @@ const useStyles = makeStyles(() => ({
             '& $rowInfo:first-of-type': {
                 marginRight: '334px'
             },
+            
+            '& $rowInfo:last-of-type': {
+                marginRight: '0px'
+            },
+
             '& $rowInfo:nth-of-type(3)': {
                 marginRight: '66px'
             },
