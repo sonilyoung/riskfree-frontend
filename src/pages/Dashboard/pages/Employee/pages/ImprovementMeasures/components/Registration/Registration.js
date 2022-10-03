@@ -21,7 +21,7 @@ import { useFileUploadMutation, useFileDownMutation } from '../../../../../../..
 import imgPrev from '../../../../../../../../assets/images/prw_photo.jpg';
 import imgPrev2 from '../../../../../../../../assets/images/prw_photo2.jpg';
 
-import { useGetWorkplaceListMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
+import { useGetWorkplaceListMutation, useGetLoginInfoMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
 import { useGetGenerateKeyMutation, useImprovementInsertMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement';
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -75,6 +75,14 @@ const Registration = () => {
     const [getGenerateKey] = useGetGenerateKeyMutation()
     const [generatedKey, setGeneratedKey] = useState("")
 
+    /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
+    const [loginInfos, setLoginInfos] = useState({});
+    const [getLoginInfo] = useGetLoginInfoMutation()
+    const fetchLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfos(response.data.RET_DATA)
+    }
+
     const [improvement, setImprovement] = useState(
         {
             "actionAfterId": actionAfterId,
@@ -86,7 +94,7 @@ const Registration = () => {
             "improveId": null,
             "improveNo": generatedKey,
             "insertId": null,
-            "reqDate": reqDate,
+            "reqDate": moment(new Date()),
             "reqFileId": atchFileId,
             "reqUserCd": reqUserCd,
             "statusCd": "",
@@ -158,6 +166,7 @@ const Registration = () => {
 
     const [locale] = React.useState('ko');
     useEffect(() => {
+        fetchLoginInfo()
         fetchComapanyWorkplace()
         getGeneratedKey()
     }, [])
@@ -183,16 +192,31 @@ const Registration = () => {
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>사업장</div>
                             <div className={classes.rowContent}>
+                                { /* === Data: 2022.10.03 author:Jimmy edit: 실무자일 경우 본인 속한 사업장만 표시 value === */}
                                 <div className={classes.rowInfo}>
+                                    {
+                                    loginInfos.roleCd === "003"
+                                    ?
                                     <Select
                                         sx={{ width: 200 }}
                                         className={classes.selectMenu}
-                                        value={improvement && improvement.workplaceId}
+                                        value={loginInfos.workplaceId}
+                                        onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
+                                        displayEmpty
+                                    >
+                                        <MenuItem value={loginInfos.workplaceId}>{loginInfos.workplaceName}</MenuItem>
+                                    </Select>
+                                    :
+                                    <Select
+                                        sx={{ width: 200 }}
+                                        className={classes.selectMenu}
+                                        value={improvement.workplaceId === '' ? loginInfos.workplaceId : improvement.workplaceId}
                                         onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
                                         displayEmpty
                                     >
                                         {workplaces?.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
                                     </Select>
+                                    }
                                 </div>
                                 <div className={classes.rowTitle}>개선조치 NO</div>
                                 <div className={classes.rowInfo}>
@@ -229,6 +253,7 @@ const Registration = () => {
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                    { /* === Data: 2022.10.03 author:Jimmy edit: value === */}
                                         <DesktopDatePicker
                                             className={classes.selectMenuDate}
                                             label=" "
@@ -244,10 +269,11 @@ const Registration = () => {
                                 </div>
                                 <div className={classes.rowTitle}>요청자</div>
                                 <div className={classes.rowInfo}>
+                                    { /* === Data: 2022.10.03 author:Jimmy edit: value === */}
                                     <Select
                                         sx={{ width: 200 }}
                                         className={classes.selectMenu}
-                                        value={improvement && improvement.reqUserCd}
+                                        value={(improvement.reqUserCd === null || improvement.reqUserCd === '') ? loginInfos.roleCd : improvement.reqUserCd} 
                                         onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
                                         displayEmpty
                                     >
@@ -308,7 +334,7 @@ const Registration = () => {
                                                     <Radio
                                                         icon={<img src={radioIcon} alt="radio icon" />}
                                                         checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                        value={"001"}
+                                                        value={"001"} checked
                                                     />
                                                 }
                                             />
