@@ -2048,7 +2048,8 @@ const Employee = () => {
             chart: {
                 type: 'bar',
                 height: '100%',
-                width: '100%'
+                width: '100%',
+                stackType: 'normal'
             },
             plotOptions: {
                 bar: {
@@ -2068,7 +2069,6 @@ const Employee = () => {
             xaxis: {
                 type: 'category',
                 categories: [],
-                tickPlacement: 'on',
                 position: 'bottom',
                 labels: {
                     show: true,
