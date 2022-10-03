@@ -2177,7 +2177,11 @@ const Employee = () => {
     const handleInsertBaseLineDataUpdate = async () => {
         const response = await insertBaseLineDataUpdate({});
         setYesNoPopupShow(false);
-        setOkayPopupMessage(response.data.RET_DESC);
+        if (response?.data?.RET_CODE === "0000") {
+            setOkayPopupMessage(`업데이트가 완료 되었습니다. ( ${response?.data?.RET_CODE} )`);
+        } else {
+            setOkayPopupMessage(`업데이트에 실패하였습니다. ( ${response?.data?.RET_CODE} )`);
+        }
         setOkayPopupShow(true);
     }
 
@@ -3029,8 +3033,8 @@ const Employee = () => {
                                 {/* {/* <MainNavButton className={currentWorkplaceId === null ? "active" : ""} onClick={
                                     () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })
                                 }>전체사업장</MainNavButton> */}
-                                
-                                { /* Data: 2022.10.03 author:Jimmy Edit */ }
+
+                                { /* Data: 2022.10.03 author:Jimmy Edit */}
                                 {!!(workplaceList) && workplaceList?.map((workplaceItem, index) => (
                                     <MainNavButton key={index} className={workplaceItem.workplaceId === parseFloat(userWorkplaceId) ? "active" : ""}>{workplaceItem.workplaceName}</MainNavButton>
                                 ))}

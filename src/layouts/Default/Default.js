@@ -928,7 +928,11 @@ const Default = ({ children }) => {
     const handleInsertBaseLineDataUpdate = async () => {
         const response = await insertBaseLineDataUpdate({});
         setYesNoPopupShow(false);
-        setOkayPopupMessage(response.data.RET_DESC);
+        if (response?.data?.RET_CODE === "0000") {
+            setOkayPopupMessage(`업데이트가 완료 되었습니다. ( ${response?.data?.RET_CODE} )`);
+        } else {
+            setOkayPopupMessage(`업데이트에 실패하였습니다. ( ${response?.data?.RET_CODE} )`);
+        }
         setOkayPopupShow(true);
     }
 
