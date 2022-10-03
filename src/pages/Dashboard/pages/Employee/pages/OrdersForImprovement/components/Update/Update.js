@@ -155,20 +155,30 @@ const useStyles = makeStyles(() => ({
         padding: '10px',
         boxSizing: 'border-box',
     },
+    /* === Data: 2022.10.03 author:Jimmy add, edit === */
     boxRegistration: {
-        '& $boxRow': {
-            height: '100px',
-            '&:last-of-type': {
-                height: 'auto'
-            },
+        height: '100%',
+        '& $boxRow:first-of-type $rowTitle': {
+            width: '125px'
+        },
+        '& $boxRow:first-of-type $rowInfo:last-of-type': {
+            width: '272px',
+        },
+
+        '& $boxRow:first-of-type $rowContent $rowInfo': {
+            width: '100%',
+            height: '100px'
         },
         '& $boxRow $rowContent $rowInfo': {
-            width: '100%'
+            width: '100%',
+            height: '100px'
         },
+        /* ============================================= */
+        
         '& $boxRow:last-of-type $rowContent': {
             display: 'flex',
             '& >div': {
-                width: '50%',
+                width: '100%',
                 borderLeft: '1px solid #d5dae2',
                 '& >div': {
                     display: 'flex',
@@ -711,6 +721,26 @@ const Update = () => {
                                     />
                                 </div>
                             </div>
+                            
+                            { /* === Data: 2022.10.03 author:Jimmy add, edit === */ }
+                            <div className={classes.rowTitle}>완료일</div>
+                            <div className={classes.rowInfo}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                    <DesktopDatePicker
+                                        className={classes.selectMenuDate}
+                                        label=" "
+                                        inputFormat="YYYY-MM-DD"
+                                        value={law.recvDate}
+                                        onChange={(newDate) => {
+                                            const date = new Date(newDate.$d)
+                                            setLaw({ ...law, "recvDate": moment(date).format("YYYY-MM-DD") })
+                                        }}
+                                        renderInput={(params) => <TextField {...params} sx={{ width: 180 }} />}
+                                    />
+                                </LocalizationProvider>
+                            </div>
+                            { /* ====================================================== */ }
+
                         </div>
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>
