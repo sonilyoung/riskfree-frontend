@@ -46,10 +46,10 @@ const useStyles = makeStyles(() => ({
         marginBottom: '20px !important',
         color: '#111',
     },
+    /* === Data: 2022.10.03 author:Jimmy edit === */
     boxReception: {
         display: 'flex',
         marginBottom: '16px !important',
-        height: '160px',
         '& $boxRow:first-of-type $rowInfo:first-of-type': {
             width: '160px',
         },
@@ -60,27 +60,23 @@ const useStyles = makeStyles(() => ({
             width: 'auto'
         },
         '& $boxRow:last-of-type $rowInfo': {
-            width: '100%',
+            width: '170px',
+            '&:first-of-type': {
+                width: '702px',
+                height: '60px'
+            }
         },
-        '& $boxContent $boxRow:first-of-type]': {
+        '& $boxContent $boxRow:first-of-type': {
             height: '60px'
         },
-        '& $boxRow:last-of-type $rowInfo': {
-            width: 'auto',
-            '&:first-of-type': {
-                width: '672px',
-            }
-        },
         '& $boxContent $boxRow:nth-of-type(2) $rowTitle': {
-            borderTop: 'none',
-            '& +$rowInfo': {
-                width: '200px !important',
-            }
+            borderTop: 'none'
         },
         '& $boxContent $boxRow:nth-of-type(2) $rowTitle:first-of-type': {
             borderTop: '1px solid #fff'
-        },
+        }
     },
+    /* ========================================= */
     boxTitle: {
         display: 'flex',
         justifyContent: 'center',
@@ -105,7 +101,7 @@ const useStyles = makeStyles(() => ({
             '& $rowContent': {
                 borderTop: 'none'
             },
-            '& $rowTitle': {
+            '& $rowTitle:first-of-type': {
                 borderTop: 'none'
             }
         },
@@ -202,16 +198,22 @@ const useStyles = makeStyles(() => ({
         padding: '10px',
         boxSizing: 'border-box',
     },
+    /* === Data: 2022.10.03 author:Jimmy edit === */
     boxRegistration: {
-        '& $boxRow': {
-            height: '100px',
-            '&:last-of-type': {
-                height: 'auto'
-            },
+        height: '100%',
+        '& $boxRow:first-of-type $rowTitle': {
+            width: '128px'
         },
+        '& $boxRow:first-of-type $rowContent:last-of-type': {
+            width: '321px',
+        },
+
         '& $boxRow $rowContent $rowInfo': {
-            width: '100%'
+            width: '100%',
+            height: '60px'
         },
+        /* ========================================= */
+
         '& $boxRow:last-of-type $rowContent': {
             display: 'flex',
             '& >div': {
@@ -473,6 +475,16 @@ const View = () => {
                                     {law && law.issueReason}
                                 </div>
                             </div>
+
+                            { /* === Data: 2022.10.03 author:Jimmy add === */ }
+                            <div className={classes.rowTitle}>완료일</div>
+                            <div className={classes.rowContent}>
+                                <div className={classes.rowInfo}>
+                                    {law && law.recvDate}
+                                </div>
+                            </div>
+                            { /* ========================================= */ }
+
                         </div>
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>
