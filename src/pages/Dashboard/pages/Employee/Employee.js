@@ -3029,6 +3029,8 @@ const Employee = () => {
                                 {/* {/* <MainNavButton className={currentWorkplaceId === null ? "active" : ""} onClick={
                                     () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })
                                 }>전체사업장</MainNavButton> */}
+                                
+                                { /* Data: 2022.10.03 author:Jimmy Edit */ }
                                 {!!(workplaceList) && workplaceList?.map((workplaceItem, index) => (
                                     <MainNavButton key={index} className={workplaceItem.workplaceId === parseFloat(userWorkplaceId) ? "active" : ""}>{workplaceItem.workplaceName}</MainNavButton>
                                 ))}
