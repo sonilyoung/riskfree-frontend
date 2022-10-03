@@ -398,6 +398,8 @@ function List() {
                                 value={workplaceSelect}
                                 displayEmpty
                             >
+                                { /* === Data: 2022.10.03 author:Jimmy add: 전체 === */ }
+                                <MenuItem value=''>전체</MenuItem>
                                 {workplaces?.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
                             </Select>
                         </div>
