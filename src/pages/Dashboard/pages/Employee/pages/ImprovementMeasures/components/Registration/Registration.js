@@ -195,27 +195,27 @@ const Registration = () => {
                                 { /* === Data: 2022.10.03 author:Jimmy edit: 실무자일 경우 본인 속한 사업장만 표시 value === */}
                                 <div className={classes.rowInfo}>
                                     {
-                                    loginInfos.roleCd === "003"
-                                    ?
-                                    <Select
-                                        sx={{ width: 200 }}
-                                        className={classes.selectMenu}
-                                        value={loginInfos.workplaceId}
-                                        onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
-                                        displayEmpty
-                                    >
-                                        <MenuItem value={loginInfos.workplaceId}>{loginInfos.workplaceName}</MenuItem>
-                                    </Select>
-                                    :
-                                    <Select
-                                        sx={{ width: 200 }}
-                                        className={classes.selectMenu}
-                                        value={improvement.workplaceId === '' ? loginInfos.workplaceId : improvement.workplaceId}
-                                        onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
-                                        displayEmpty
-                                    >
-                                        {workplaces?.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
-                                    </Select>
+                                        loginInfos.roleCd === "003"
+                                            ?
+                                            <Select
+                                                sx={{ width: 200 }}
+                                                className={classes.selectMenu}
+                                                value={loginInfos.workplaceId}
+                                                onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
+                                                displayEmpty
+                                            >
+                                                <MenuItem value={loginInfos.workplaceId}>{loginInfos.workplaceName}</MenuItem>
+                                            </Select>
+                                            :
+                                            <Select
+                                                sx={{ width: 200 }}
+                                                className={classes.selectMenu}
+                                                value={improvement.workplaceId === '' ? loginInfos.workplaceId : improvement.workplaceId}
+                                                onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
+                                                displayEmpty
+                                            >
+                                                {workplaces?.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
+                                            </Select>
                                     }
                                 </div>
                                 <div className={classes.rowTitle}>개선조치 NO</div>
@@ -253,12 +253,12 @@ const Registration = () => {
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-                                    { /* === Data: 2022.10.03 author:Jimmy edit: value === */}
+                                        { /* === Data: 2022.10.03 author:Jimmy edit: value === */}
                                         <DesktopDatePicker
                                             className={classes.selectMenuDate}
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
-                                            value={improvement.reqDate}
+                                            value={improvement?.reqDate}
                                             onChange={(newDate) => {
                                                 const date = new Date(newDate.$d)
                                                 setImprovement({ ...improvement, "reqDate": moment(date).format("YYYY-MM-DD") })
@@ -273,7 +273,7 @@ const Registration = () => {
                                     <Select
                                         sx={{ width: 200 }}
                                         className={classes.selectMenu}
-                                        value={(improvement.reqUserCd === null || improvement.reqUserCd === '') ? loginInfos.roleCd : improvement.reqUserCd} 
+                                        value={(improvement.reqUserCd === null || improvement.reqUserCd === '') ? (loginInfos.roleCd || "") : (improvement.reqUserCd || "")}
                                         onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
                                         displayEmpty
                                     >
@@ -435,7 +435,7 @@ const Registration = () => {
                     <BlueButton className={'button-registration'} onClick={handleImprovementInsert}>등록</BlueButton>
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
-            </Grid>
+            </Grid >
             <OnlyUploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
@@ -458,7 +458,7 @@ const Registration = () => {
                         }
                     }} />
             </Overlay>
-        </DefaultLayout>
+        </DefaultLayout >
     );
 };
 
