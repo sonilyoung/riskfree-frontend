@@ -916,6 +916,8 @@ const Default = ({ children }) => {
         setBaselineInfo({ "baselineName": "", "baselineStart": null, "baselineEnd": null })
         const responseSaferyFile = await updateSafetyFile({ "attachFileId": employeeFiles.safetyFileUpload, })
         // window.localStorage.setItem("safetyFileId", responseSaferyFile.data.RET_DATA.attachFileId)
+        alert(1);
+        window.location.reload();
     }
 
     const handleInsertBaseLineDataCopy = async () => {
@@ -929,9 +931,9 @@ const Default = ({ children }) => {
         const response = await insertBaseLineDataUpdate({});
         setYesNoPopupShow(false);
         if (response?.data?.RET_CODE === "0000") {
-            setOkayPopupMessage(`업데이트가 완료 되었습니다. ( ${response?.data?.RET_CODE} )`);
-        } else {
             setOkayPopupMessage(`업데이트에 실패하였습니다. ( ${response?.data?.RET_CODE} )`);
+        } else {
+            setOkayPopupMessage(`업데이트가 완료 되었습니다. ( ${response?.data?.RET_CODE} )`);
         }
         setOkayPopupShow(true);
     }
