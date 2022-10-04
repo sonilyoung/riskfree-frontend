@@ -205,6 +205,12 @@ const useStyles = makeStyles(() => ({
             height: 'auto'
         },
         '& $boxRow $rowContent $rowInfo': {
+            width: '58.8%'
+        },
+        '& $boxRow:first-of-type $rowContent $rowTitle': {
+            width: '166px',
+        },
+        '& $boxRow $rowContent $rowInfo:last-of-type': {
             width: '100%'
         },
         '& $boxRow:last-of-type $rowContent': {
@@ -347,7 +353,6 @@ const Registration = () => {
     const [improvementView] = useImprovementViewMutation()
     const [improvemetnDelete] = useImprovementDeleteMutation()
     const [improvement, setImprovement] = useState({})
-    const [num, setNum] = React.useState('');
     const [getFileInfo] = useGetFileInfoMutation()
     const [filePathBefore, setFilePathBefore] = useState("")
     const [filePathAfter, setFilePathAfter] = useState("")
@@ -358,10 +363,7 @@ const Registration = () => {
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
-    const handleChange = (event) => {
-        setNum(event.target.value);
-    };
-
+    
     const handleRedirect = () => {
         navigate("/dashboard/employee/improvement-measures/list")
     }
@@ -369,7 +371,7 @@ const Registration = () => {
     const handleFetchView = async () => {
         const response = await improvementView(id)
         setImprovement(response.data.RET_DATA)
-        // console.log(improvement)
+         console.log(improvement)
         if (response.data.RET_DATA.actionBeforeId) {
             const responseFileInfoBefore = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.actionBeforeId), fileSn: 1 })
             setFilePathBefore(responseFileInfoBefore.data.RET_DATA.filePath + "/" + responseFileInfoBefore.data.RET_DATA.saveFileName)
@@ -389,6 +391,7 @@ const Registration = () => {
     //     console.log(response)
     // }
 
+    
     async function handleDialogFileDownload(id) {
         if (id) {
             window.location = `${BASE_URL}/file/fileDown?atchFileId=${id}&fileSn=1`;
@@ -481,10 +484,20 @@ const Registration = () => {
                                 <div className={classes.rowInfo}>
                                     {(improvement?.statusCd === "001" && "요청중") || (improvement?.statusCd === "002" && "접수") || (improvement?.statusCd === "003" && "진행중") || (improvement?.statusCd === "004" && "조치완료")}
                                 </div>
+
+
+                                <div className={classes.rowTitle}>완료일</div>
+                                <div className={classes.rowContent}>
+                                    <div className={classes.rowInfo}>
+                                        {improvement && improvement.completeDate}
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
+
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>조치구분</div>
+                            <div className={classes.rowTitle}>조치내용</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
                                     {improvement && improvement.actionCn}
@@ -492,7 +505,7 @@ const Registration = () => {
                             </div>
                         </div>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>조치내용</div>
+                            <div className={classes.rowTitle}>첨부파일</div>
                             <div className={classes.rowContent}>
                                 <div>
                                     <div>조치 전</div>

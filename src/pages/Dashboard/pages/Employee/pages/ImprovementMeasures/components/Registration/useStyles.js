@@ -117,6 +117,12 @@ const useStyles = makeStyles(() => ({
             height: 'auto'
         },
         '& $boxRow $rowContent $rowInfo': {
+            width: '63%'
+        },
+        '& $boxRow:first-of-type $rowContent $rowTitle': {
+            width: '175px',
+        },
+        '& $boxRow $rowContent $rowInfo:last-of-type': {
             width: '100%'
         },
         '& $boxRow:last-of-type $rowContent': {

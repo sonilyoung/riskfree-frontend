@@ -815,16 +815,15 @@ const SystemAdministrator = () => {
     }
 
     const handleInputValidation = (subscriberData, callback, type) => {
-        console.log(subscriberData);
+        //console.log(subscriberData);
         let emptyInputFields = [];
         let validation = false;
         for (const subscriberDataProperty in subscriberData) {
             if (subscriberData[subscriberDataProperty] === null || subscriberData[subscriberDataProperty] === undefined) {
-                console.log(subscriberDataProperty + " : " + subscriberData[subscriberDataProperty] + " false vrednosti");
+                //console.log(subscriberDataProperty + " : " + subscriberData[subscriberDataProperty] + " false vrednosti");
                 emptyInputFields.push(subscriberDataProperty);
             }
         }
-
         emptyInputFields = emptyInputFields?.map(emptyInputField => {
             if (type === "update") {
                 if (emptyInputField === "managerTel" && managerTel?.firstInput && managerTel?.secondeInput && managerTel?.thirdInput) {
@@ -856,15 +855,16 @@ const SystemAdministrator = () => {
                     return validation = false;
                 }
             }
+
         })?.filter(emptyInputFieldChecked => emptyInputFieldChecked === false);
 
         if (emptyInputFields.length === 0) {
             callback();
         } else {
-            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다");
+            setOkayPopupMessage("입력정보에 오류가 있습니다");
             setOkayPopupShow(true);
         }
-        console.log(emptyInputFields);
+        //console.log(emptyInputFields);
     }
 
     const handleRedirect = async (workplaceId, userId) => {
@@ -956,36 +956,43 @@ const SystemAdministrator = () => {
     }
 
     const handleSubscribersInsert = async () => {
-        const response = await subscribersInsert({
-            "companyName": subscriberInsert.companyName,
-            "contractAmount": subscriberInsert.contractAmount,
-            "contractEndDate": subscriberInsert.contractEndDate,
-            "contractFileId": subscriberInsert.contractFileId,
-            "contractStartDate": subscriberInsert.contractStartDate,
-            "loginId": subscriberInsert.loginId,
-            "managerEmail": subscriberInsertEmailBeforeSign + '@' + subscriberInsertEmailAfterSign,
-            "managerName": subscriberInsert.managerName,
-            "managerRoleCd": subscriberInsert.managerRoleCd,
-            "managerTel": subscriberInsert.managerTel,
-            "registNo": subscriberInsert.registNo,
-            "scaleCd": subscriberInsert.scaleCd,
-            "sectorCd": subscriberInsert.sectorCd,
-            "statusCd": subscriberInsert.statusCd,
-            "workplaceName": subscriberInsert.workplaceName
-        });
-        console.log('REG----------------------');
-        console.log(response);
-        if (response?.data?.RET_CODE === "0000") {
-            fetchSubscribersList();
-            setOkayPopupMessage("등록 되었습니다.");
-            setOkayPopupShow(true);
-            handleRegisterInitialValue();
-            setFilePath({ ...filePath, "contractFileId": "" });
-            setRegMemberPop(false);
+
+        if (subscriberInsert.contractStartDate < subscriberInsert.contractEndDate) {
+            const response = await subscribersInsert({
+                "companyName": subscriberInsert.companyName,
+                "contractAmount": subscriberInsert.contractAmount,
+                "contractEndDate": subscriberInsert.contractEndDate,
+                "contractFileId": subscriberInsert.contractFileId,
+                "contractStartDate": subscriberInsert.contractStartDate,
+                "loginId": subscriberInsert.loginId,
+                "managerEmail": subscriberInsertEmailBeforeSign + '@' + subscriberInsertEmailAfterSign,
+                "managerName": subscriberInsert.managerName,
+                "managerRoleCd": subscriberInsert.managerRoleCd,
+                "managerTel": subscriberInsert.managerTel,
+                "registNo": subscriberInsert.registNo,
+                "scaleCd": subscriberInsert.scaleCd,
+                "sectorCd": subscriberInsert.sectorCd,
+                "statusCd": subscriberInsert.statusCd,
+                "workplaceName": subscriberInsert.workplaceName
+            });
+            //console.log('REG----------------------');
+            //console.log(response);
+            if (response?.data?.RET_CODE === "0000") {
+                fetchSubscribersList();
+                setOkayPopupMessage("등록 되었습니다.");
+                setOkayPopupShow(true);
+                handleRegisterInitialValue();
+                setFilePath({ ...filePath, "contractFileId": "" });
+                setRegMemberPop(false);
+            } else {
+                setOkayPopupMessage("입력정보에 오류가 있습니다");
+                setOkayPopupShow(true);
+            }
         } else {
-            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다");
+            setOkayPopupMessage("계약기간을 확인해주세요.");
             setOkayPopupShow(true);
-        }
+        }      
+
     }
 
     const handleSubscribersUpdate = async () => {
@@ -1350,9 +1357,11 @@ const SystemAdministrator = () => {
                                                 inputFormat="YYYY-MM-DD"
                                                 value={subscriberInsert.contractStartDate}
                                                 onChange={(newDate) => {
-                                                    const date = new Date(newDate.$d)
+                                                    const date = new Date(newDate.$d) 
                                                     setSubscriberInsert({ ...subscriberInsert, "contractStartDate": moment(date).format("YYYY-MM-DD") })
                                                 }}
+                                                isClearable selectsStart
+                                                from={Date.parse(subscriberInsert.contractStartDate)} to={Date.parse(subscriberInsert.contractEndDate)}
                                                 renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                             />
                                         </LocalizationProvider>
@@ -1367,6 +1376,8 @@ const SystemAdministrator = () => {
                                                     const date = new Date(newDate.$d)
                                                     setSubscriberInsert({ ...subscriberInsert, "contractEndDate": moment(date).format("YYYY-MM-DD") })
                                                 }}
+                                                isClearable selectsEnd
+                                                from={Date.parse(subscriberInsert.contractStartDate)} to={Date.parse(subscriberInsert.contractEndDate)} minDate={Date.parse(subscriberInsert.contractStartDate)}
                                                 renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                             />
                                         </LocalizationProvider>
@@ -1476,8 +1487,12 @@ const SystemAdministrator = () => {
                                             <TextField
                                                 variant="outlined"
                                                 className={classes.tableTextField}
+                                                style={{backgroundColor: "#d4d9e1"}}
                                                 value={subscriberView.loginId}
                                                 onChange={(event) => setSubscriberView({ ...subscriberView, "loginId": event.target.value })}
+                                                InputProps={{
+                                                    readOnly: true,
+                                                  }}
                                             />
                                         </div>
                                         <div className={classes.dataNest}>

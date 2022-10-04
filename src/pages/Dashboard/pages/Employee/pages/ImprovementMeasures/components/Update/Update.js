@@ -159,6 +159,12 @@ const useStyles = makeStyles(() => ({
             height: 'auto'
         },
         '& $boxRow $rowContent $rowInfo': {
+            width: '63%'
+        },
+        '& $boxRow:first-of-type $rowContent $rowTitle': {
+            width: '175px',
+        },
+        '& $boxRow $rowContent $rowInfo:last-of-type': {
             width: '100%'
         },
         '& $boxRow:last-of-type $rowContent': {
@@ -346,6 +352,7 @@ const Registration = () => {
             "reqFileId": null,
             "reqUserCd": reqUserCd,
             "statusCd": "",
+            "completeDate": "",
             "updateId": null,
             "workplaceId": workplaceSelect
         }
@@ -433,7 +440,8 @@ const Registration = () => {
                 "reqFileId": parseInt(improvement.reqFileId),
                 "reqUserCd": improvement.reqUserCd,
                 "statusCd": improvement.statusCd,
-                "updateId": null,
+                "completeDate": improvement.completeDate,
+                "updateId": improvement.improveId,
                 "workplaceId": improvement.workplaceId
             }
         );
@@ -533,17 +541,16 @@ const Registration = () => {
                                 </div>
                                 <div className={classes.rowTitle}>요청자</div>
                                 <div className={classes.rowInfo}>
-                                    {/* <Select
-                                        sx={{ width: 200 }}
-                                        className={classes.selectMenu}
-                                        value={improvement && improvement.reqUserCd}
-                                        onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
-                                        displayEmpty
-                                    >
-                                        <MenuItem value="001">대표이사</MenuItem>
-                                        <MenuItem value="002">안전책임자</MenuItem>안전책임자
-                                        <MenuItem value="003">안전실무자</MenuItem>
-                                    </Select> */}
+                                    <Select
+                                            sx={{ width: 200 }}
+                                            className={classes.selectMenu}
+                                            value={improvement.reqUserCd}
+                                            onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
+                                        >
+                                            <MenuItem value="001">대표이사</MenuItem>
+                                            <MenuItem value="002">안전책임자</MenuItem>
+                                            <MenuItem value="003">안전실무자</MenuItem>
+                                        </Select>
                                 </div>
                                 <div className={classes.rowTitle}>완료요청일</div>
                                 <div className={classes.rowInfo}>
@@ -637,10 +644,27 @@ const Registration = () => {
                                         </RadioGroup>
                                     </FormControl>
                                 </div>
+
+                                <div className={classes.rowTitle}>완료일</div>
+                                <div className={classes.rowInfo}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                        <DesktopDatePicker
+                                            className={classes.selectMenuDate}
+                                            label=" "
+                                            inputFormat="YYYY-MM-DD"
+                                            value={improvement.completeDate}
+                                            onChange={(newDate) => {
+                                                const date = new Date(newDate.$d)
+                                                setImprovement({ ...improvement, "completeDate": moment(date).format("YYYY-MM-DD") })
+                                            }}
+                                            renderInput={(params) => <TextField {...params} sx={{ width: 200 }} />}
+                                        />
+                                    </LocalizationProvider>
+                                </div>
                             </div>
                         </div>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>조치구분</div>
+                            <div className={classes.rowTitle}>조치내용</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
                                     <TextField
@@ -652,10 +676,11 @@ const Registration = () => {
                                         onChange={(event) => setImprovement({ ...improvement, "actionCn": event.target.value })}
                                     />
                                 </div>
+                                
                             </div>
                         </div>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>조치내용</div>
+                            <div className={classes.rowTitle}>첨부파일</div>
                             <div className={classes.rowContent}>
                                 <div>
                                     <div>조치 전</div>

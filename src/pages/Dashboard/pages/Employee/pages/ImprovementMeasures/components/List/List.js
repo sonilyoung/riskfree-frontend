@@ -328,7 +328,6 @@ function List() {
     const [page, setPage] = useState(1)
     const todaysDate = moment().utcOffset("+09:00").format("YYYY-MM-DD");
 
-
     const handleWorkplaceSelect = (event) => {
         setWorkplaceSelect(event.target.value);
     };
