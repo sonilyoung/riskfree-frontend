@@ -35,7 +35,7 @@ import checkIcon from '../../../../../../../../assets/images/ic_chk3.png';
 import checkIconOn from '../../../../../../../../assets/images/ic_chk3_on.png';
 
 import { useAccidentSelectMutation, useAccidentOccurPlaceSelectMutation } from '../../../../../../../../hooks/api/AccidentManagement/AccidentManagement';
-import { useGetWorkplaceListMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
+import { useGetWorkplaceListMutation, useGetLoginInfoMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -524,8 +524,16 @@ const List = () => {
         setPage(value)
     }
 
+    /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
+    const [loginInfos, setLoginInfos] = useState({});
+    const [getLoginInfo] = useGetLoginInfoMutation()
+    const fetchLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfos(response.data.RET_DATA)
+    }
 
     useEffect(() => {
+        fetchLoginInfo()
         fetchAccidentsList()
         fetchWorkplaceList()
         fetchAccidentOccurPlacesList()
@@ -544,15 +552,27 @@ const List = () => {
                         <div className={classes.searchInfo}>
                             <div>
                                 <div className={classes.infoTitle}>사업장</div>
-                                <Select
-                                    className={classes.selectMenu}
-                                    sx={{ width: 204 }}
-                                    value={workplaceSelect}
-                                    onChange={(e) => setWorkplaceSelect(e.target.value)}
-                                    displayEmpty
-                                >
-                                    {workplaceList && workplaceList.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
-                                </Select>
+                                {loginInfos.roleCd === '001' ?
+                                    <Select
+                                        className={classes.selectMenu}
+                                        sx={{ width: 204 }}
+                                        value={workplaceSelect}
+                                        onChange={(e) => setWorkplaceSelect(e.target.value)}
+                                        displayEmpty
+                                    >
+                                        {workplaceList && workplaceList.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
+                                    </Select>
+                                :
+                                    <Select
+                                        className={classes.selectMenu}
+                                        sx={{ width: 204 }}
+                                        value={loginInfos.workplaceId}
+                                        defaultValue={loginInfos.workplaceId}
+                                        displayEmpty
+                                    >
+                                        <MenuItem value={loginInfos.workplaceId}>{loginInfos.workplaceName}</MenuItem>
+                                    </Select>
+                                }
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>재해유형</div>

@@ -415,7 +415,7 @@ const Director = () => {
     }
 
     const handleSlickCircleColor = (percentage) => {
-        if (!percentage && percentage != '%') {
+        if (!percentage && percentage !== '%') {
             return ' red';
         } else {
             const percentageNumber = percentage && parseFloat(percentage?.split('%')[0])
@@ -428,6 +428,7 @@ const Director = () => {
     }
 
     const handleEssentailRateMeasure = () => {
+        console.log(essentialRateList)
         const essentialRateMeasureScore = essentialRateList?.RET_DATA?.topScore;
 
         if (essentialRateMeasureScore === 'danger') return 75;
@@ -440,7 +441,7 @@ const Director = () => {
     const fetchBaselineList = async () => {
         const response = await getBaselineList({});
         setBaselineList(response.data.RET_DATA);
-        console.log(response.data);
+        //console.log(response.data);
     }
 
     const fetchBaseline = async () => {
@@ -546,7 +547,7 @@ const Director = () => {
             "condition": condition
         });
         setReportTitle(response.data.RET_DATA);
-        console.log(response);
+        //console.log(response);
     }
 
     const fetchBaseLineReportList = async () => {
@@ -555,7 +556,7 @@ const Director = () => {
             "condition": condition
         });
         setReportList(response.data.RET_DATA);
-        console.log(response);
+        //console.log(response);
     }
 
     const refreshClock = () => {
@@ -681,7 +682,7 @@ const Director = () => {
         if (window.sessionStorage.getItem('firstLoad') === null) {
             fetchNoticeHotList();
             window.sessionStorage.setItem('firstLoad', 1);
-            console.log('firstLoad');
+            //console.log('firstLoad');
         }
 
         navigator.geolocation.getCurrentPosition(position => {
@@ -883,7 +884,7 @@ const Director = () => {
                         </div>
                         <div className={classes.navSlider}>
                             <Slider {...headerSlider}>
-                                {workplaceList?.length != 0 && workplaceList?.length != 1
+                                {workplaceList?.length !== 0 && workplaceList?.length !== 1
                                     && <div>
                                         <MainNavButton className={currentWorkplaceId === null ? "active" : ""} onClick={
                                             () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })

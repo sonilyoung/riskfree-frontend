@@ -47,6 +47,7 @@ const Registration = () => {
     const [reqUserCd, setReqUserCd] = useState("")
     const [reqDate, setReqDate] = useState(null)
     const [finDate, setFinDate] = useState(null)
+    const [completeDate, setcompleteDate] = useState(null)
     const [openDialog, setOpenDialog] = useState(false)
     const [openDialogAfterId, setOpenDialogAfterId] = useState(false)
     const [openDialogBeforeId, setOpenDialogBeforeId] = useState(false)
@@ -98,6 +99,7 @@ const Registration = () => {
             "reqFileId": atchFileId,
             "reqUserCd": reqUserCd,
             "statusCd": "",
+            "completeDate": completeDate,
             "updateId": null,
             "workplaceId": parseInt(workplaceSelect)
         }
@@ -172,7 +174,7 @@ const Registration = () => {
     }, [])
 
     useEffect(() => {
-        console.log(improvement)
+        //console.log(improvement)
     }, [filePath.reqFileId, filePath.actionBeforeId, filePath.actionAfterId])
 
     return (
@@ -273,12 +275,11 @@ const Registration = () => {
                                     <Select
                                         sx={{ width: 200 }}
                                         className={classes.selectMenu}
-                                        value={(improvement.reqUserCd === null || improvement.reqUserCd === '') ? (loginInfos.roleCd || "") : (improvement.reqUserCd || "")}
+                                        value={(improvement.reqUserCd === null || improvement.reqUserCd === '') ? loginInfos.roleCd : improvement.reqUserCd}
                                         onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
-                                        displayEmpty
                                     >
                                         <MenuItem value="001">대표이사</MenuItem>
-                                        <MenuItem value="002">안전책임자</MenuItem>안전책임자
+                                        <MenuItem value="002">안전책임자</MenuItem>
                                         <MenuItem value="003">안전실무자</MenuItem>
                                     </Select>
                                 </div>
@@ -303,7 +304,6 @@ const Registration = () => {
                                     <TextField
                                         id="standard-basic"
                                         variant="outlined"
-                                        // placeholder="여수공장 시정조치요청 파일.hwp"
                                         value={filePath.reqFileId ?? ""}
                                         sx={{ width: 390 }}
                                         className={classes.selectMenu}
@@ -326,7 +326,7 @@ const Registration = () => {
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
                                     <FormControl className={classes.searchRadio} onChange={(event) => setImprovement({ ...improvement, "statusCd": event.target.value })}>
-                                        <RadioGroup row>
+                                        <RadioGroup row defaultValue="001">
                                             <FormControlLabel
                                                 value="001"
                                                 label="요청중"
@@ -334,7 +334,7 @@ const Registration = () => {
                                                     <Radio
                                                         icon={<img src={radioIcon} alt="radio icon" />}
                                                         checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                        value={"001"} checked
+                                                        value={"001"}
                                                     />
                                                 }
                                             />
@@ -374,10 +374,28 @@ const Registration = () => {
                                         </RadioGroup>
                                     </FormControl>
                                 </div>
+
+                                <div className={classes.rowTitle}>완료일</div>
+                                <div className={classes.rowInfo}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                        <DesktopDatePicker
+                                            className={classes.selectMenuDate}
+                                            label=" "
+                                            inputFormat="YYYY-MM-DD"
+                                            value={improvement.completeDate}
+                                            onChange={(newDate) => {
+                                                const date = new Date(newDate.$d)
+                                                setImprovement({ ...improvement, "completeDate": moment(date).format("YYYY-MM-DD") })
+                                            }}
+                                            renderInput={(params) => <TextField {...params} sx={{ width: 200 }} />}
+                                        />
+                                    </LocalizationProvider>
+                                </div>
+
                             </div>
                         </div>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>조치구분</div>
+                            <div className={classes.rowTitle}>조치내용</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
                                     <TextField
@@ -391,7 +409,7 @@ const Registration = () => {
                             </div>
                         </div>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>조치내용</div>
+                            <div className={classes.rowTitle}>첨부파일</div>
                             <div className={classes.rowContent}>
                                 <div>
                                     <div>조치 전</div>
