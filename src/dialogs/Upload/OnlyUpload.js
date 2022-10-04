@@ -190,7 +190,12 @@ function OnlyUpload({ open, onClose, onInputChange, onUpload, label, selectedFil
     const inputRef = useRef(null);
 
     const handleChooseFile = () => {
+        inputRef.current.value = null;
         inputRef.current.click();
+    }
+
+    const handleRealChooseFile = () => {
+        inputRef.current.value = null;
     }
 
     return (
@@ -205,10 +210,13 @@ function OnlyUpload({ open, onClose, onInputChange, onUpload, label, selectedFil
                         <div className={classes.onlyUploadSearch}>
                             <TextField
                                 id="standard-basic"
+                                inputRef={inputRef}
                                 variant="outlined"
                                 className={[classes.popupTextField, classes.zeroOpacity]}
                                 type="file"
+                                onClick={handleRealChooseFile}
                                 onChange={onInputChange}
+                                onClick={handleRealChooseFile}
                             />
                             <TextField
                                 id="upload-field-real"

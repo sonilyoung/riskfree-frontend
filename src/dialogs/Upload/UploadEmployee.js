@@ -75,7 +75,12 @@ function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDown
     const inputRef = useRef(null);
 
     const handleChooseFile = () => {
+        inputRef.current.value = null;
         inputRef.current.click();
+    }
+
+    const handleRealChooseFile = () => {
+        inputRef.current.value = null;
     }
 
     return (
@@ -103,6 +108,7 @@ function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDown
                             className={[classes.popupTextField, classes.zeroOpacity]}
                             type="file"
                             onChange={onInputChange}
+                            onClick={handleRealChooseFile}
                         />
                         <TextField
                             id="upload-field-real"

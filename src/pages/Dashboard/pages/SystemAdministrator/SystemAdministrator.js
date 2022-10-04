@@ -814,15 +814,57 @@ const SystemAdministrator = () => {
         return activeClass.clicked;
     }
 
-    const handleInputValidation = (data, callback, number) => {
-        const arrayOfObjectValues = Object.values(data);
-        const emptyInputFields = arrayOfObjectValues?.filter(item => item === "" || item === null);
-        if (emptyInputFields?.length === number) {
+    const handleInputValidation = (subscriberData, callback, type) => {
+        console.log(subscriberData);
+        let emptyInputFields = [];
+        let validation = false;
+        for (const subscriberDataProperty in subscriberData) {
+            if (subscriberData[subscriberDataProperty] === null || subscriberData[subscriberDataProperty] === undefined) {
+                console.log(subscriberDataProperty + " : " + subscriberData[subscriberDataProperty] + " false vrednosti");
+                emptyInputFields.push(subscriberDataProperty);
+            }
+        }
+
+        emptyInputFields = emptyInputFields?.map(emptyInputField => {
+            if (type === "update") {
+                if (emptyInputField === "managerTel" && managerTel?.firstInput && managerTel?.secondeInput && managerTel?.thirdInput) {
+                    return validation = true;
+
+                } else if (emptyInputField === "managerEmail" && managerEmail?.firstInput && managerEmail?.secondeInput) {
+                    return validation = true;
+
+                } else if (emptyInputField === "contractStartDate" && contractStartDate) {
+                    return validation = true;
+
+                } else if (emptyInputField === "contractEndDate" && contractEndDate) {
+                    return validation = true;
+
+                } else if (emptyInputField === "contractDate" || emptyInputField === "contractFileYn") {
+                    return validation = true;
+
+                } else {
+                    return validation = false;
+                }
+            } else if (type === "insert") {
+                if (emptyInputField === "managerEmail" && subscriberInsertEmailBeforeSign && subscriberInsertEmailAfterSign) {
+                    return validation = true;
+
+                } else if (emptyInputField === "contractDate" || emptyInputField === "contractFileYn") {
+                    return validation = true;
+
+                } else {
+                    return validation = false;
+                }
+            }
+        })?.filter(emptyInputFieldChecked => emptyInputFieldChecked === false);
+
+        if (emptyInputFields.length === 0) {
             callback();
         } else {
             setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다");
             setOkayPopupShow(true);
         }
+        console.log(emptyInputFields);
     }
 
     const handleRedirect = async (workplaceId, userId) => {
@@ -883,9 +925,12 @@ const SystemAdministrator = () => {
         setContractStartDate(response.data.RET_DATA?.contractStartDate);
         setContractEndDate(response.data.RET_DATA?.contractEndDate);
         setSubscriberView(response?.data?.RET_DATA);
-        let fileInfo = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA["contractFileId"]), fileSn: 1 })
-        filePathMain["contractFileId"] = fileInfo.data.RET_DATA.originalFileName
-        setFilePath(filePathMain)
+
+        if (response?.data?.RET_DATA?.contractFileId) {
+            let fileInfo = await getFileInfo({ atchFileId: parseInt(response?.data?.RET_DATA["contractFileId"]), fileSn: 1 })
+            filePathMain["contractFileId"] = fileInfo?.data?.RET_DATA?.originalFileName
+            setFilePath(filePathMain);
+        }
     }
 
     const handleRegisterInitialValue = () => {
@@ -928,7 +973,8 @@ const SystemAdministrator = () => {
             "statusCd": subscriberInsert.statusCd,
             "workplaceName": subscriberInsert.workplaceName
         });
-
+        console.log('REG----------------------');
+        console.log(response);
         if (response?.data?.RET_CODE === "0000") {
             fetchSubscribersList();
             setOkayPopupMessage("등록 되었습니다.");
@@ -963,7 +1009,8 @@ const SystemAdministrator = () => {
             "workplaceId": subscriberView.workplaceId,
             "workplaceName": subscriberView.workplaceName
         });
-
+        console.log('UPDATE----------------------');
+        console.log(response);
         if (response?.data?.RET_CODE === "0000") {
             fetchSubscribersList();
             setOkayPopupMessage("등록 되었습니다.");
@@ -1353,7 +1400,7 @@ const SystemAdministrator = () => {
                                 </div>
                             </div>
                             <div className={classes.popButtons}>
-                                <YesButton onClick={() => handleInputValidation(subscriberInsert, handleSubscribersInsert, 0)}>등록</YesButton>
+                                <YesButton onClick={() => handleInputValidation(subscriberInsert, handleSubscribersInsert, "insert")}>등록</YesButton>
                                 <NoButton onClick={() => { handleRegisterInitialValue(); setRegMemberPop(false); setFilePath({ ...filePath, "contractFileId": "" }) }}>취소</NoButton>
                             </div>
                         </div>
@@ -1568,7 +1615,7 @@ const SystemAdministrator = () => {
                                 </div>
                             </div>
                             <div className={classes.popButtons}>
-                                <YesButton onClick={() => handleInputValidation(subscriberView, handleSubscribersUpdate, 2)}>수정</YesButton>
+                                <YesButton onClick={() => handleInputValidation(subscriberView, handleSubscribersUpdate, "update")}>수정</YesButton>
                                 <NoButton onClick={() => { setUserInfoPop(false); setFilePath({ ...filePath, "contractFileId": "" }) }}>취소</NoButton>
                             </div>
                         </div>

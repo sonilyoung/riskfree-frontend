@@ -928,7 +928,11 @@ const Default = ({ children }) => {
     const handleInsertBaseLineDataUpdate = async () => {
         const response = await insertBaseLineDataUpdate({});
         setYesNoPopupShow(false);
-        setOkayPopupMessage(response.data.RET_DESC);
+        if (response?.data?.RET_CODE === "0000") {
+            setOkayPopupMessage(`업데이트가 완료 되었습니다. ( ${response?.data?.RET_CODE} )`);
+        } else {
+            setOkayPopupMessage(`업데이트에 실패하였습니다. ( ${response?.data?.RET_CODE} )`);
+        }
         setOkayPopupShow(true);
     }
 
@@ -1025,7 +1029,7 @@ const Default = ({ children }) => {
                                                 <TextField
                                                     id="standard-basic"
                                                     placeholder='안전보건 목표 등록 (띄어쓰기 포함 16자 이내)'
-                                                    value={companyInfo.shGoal}
+                                                    value={companyInfo?.shGoal}
                                                     variant="outlined"
                                                     sx={{ width: 370 }}
                                                     className={classes.popupTextField}
@@ -1034,7 +1038,7 @@ const Default = ({ children }) => {
                                                 <TextField
                                                     id="standard-basic"
                                                     placeholder='경영방침 등록 (띄어쓰기 포함 16자 이내)'
-                                                    value={companyInfo.missionStatements}
+                                                    value={companyInfo?.missionStatements}
                                                     onChange={(event) => setCompanyInfo({ ...companyInfo, "missionStatements": event.target.value })}
                                                     variant="outlined"
                                                     sx={{ width: 370 }}
