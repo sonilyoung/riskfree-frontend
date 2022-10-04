@@ -2141,9 +2141,6 @@ const Employee = () => {
         fetchBaselineList();
         setBaselineInfo({ "baselineName": "", "baselineStart": null, "baselineEnd": null })
         const responseSaferyFile = await updateSafetyFile({ "attachFileId": employeeFiles.safetyFileUpload, })
-        //console.log("responseSaferyFile=" + responseSaferyFile)
-        //console.log(employeeFiles.safetyFileUpload)
-
     }
 
     const handleInsertBaseLineDataCopy = async () => {
@@ -2224,7 +2221,7 @@ const Employee = () => {
         const response = await getBaseline({
             "baselineId": baselineId
         })
-        setBaselineData(!!response.data.RET_DATA && response.data.RET_DATA)
+        setBaselineData(!!response.data.RET_DATA && response.data.RET_DATA)        
     }
 
     const fetchCompanyInfo = async () => {
@@ -2243,7 +2240,6 @@ const Employee = () => {
         setAccidentTotal(response?.data?.RET_DATA);
     }
 
-    // 안전작업허가 공사내역
     const fetchSafeWorkHistoryList = async () => {
         const response = await getSafeWorkHistoryList({
             "baselineId": currentBaselineId,
@@ -3064,7 +3060,10 @@ const Employee = () => {
                         </div>
                     </div>
                     <div className={evaluationPopup ? classes.uploadedPopup : classes.uploadedPopupClose}>
-                        <FormControl className={classes.searchRadio} onChange={(e) => setEvaluation(e.target.value)}>
+                        <FormControl className={classes.searchRadio} onChange={(e) => {
+                                                                                        setEvaluation(e.target.value)
+                                                                                        fetchEssentialRates()
+                                                                                      }}>
                             <RadioGroup row value={evaluation ?? ""}>
                                 <FormControlLabel
                                     value="10"
@@ -3181,7 +3180,7 @@ const Employee = () => {
                                     <ul className={classes.menuList}>
                                         {inspectionsDocs?.map((inspection) => (
                                             <li>
-                                                <Link className={classes.listLink} to={"#none"} onDoubleClick={() => navigate("/dashboard/employee/improvement-measures/list")} underline="none">{inspection?.shGoal}</Link>
+                                                <Link className={classes.listLink} to={"#none"} underline="none">{inspection?.shGoal}</Link>
                                             </li>
                                         ))}
                                     </ul>
@@ -3232,7 +3231,7 @@ const Employee = () => {
                                             <>
                                                 <li>{((checkBtn.managerChecked === "0" || checkBtn.managerChecked == null || checkBtn.managerChecked === "null" || checkBtn.managerChecked === "") &&
                                                     (<Link className={classes.listLink + ' check'} to={"#none"} underline="none" onClick={() => handleManagerChecked(checkBtn.managerChecked, index, checkBtn.articleNo)}></Link>)) || ((checkBtn.managerChecked === "1") &&
-                                                        (<Link className={classes.listLink + ' check-blue'} to={"#none"} underline="none" onClick={(e) => handleManagerChecked(checkBtn.managerChecked, index, checkBtn.articleNo)}></Link>))}
+                                                        (<Link className={classes.listLink + ' check-blue'} to={"#none"} underline="none" onClick={(e) => handleManagerChecked(checkBtn.managerChecked, index, checkBtn.articleNo)} onDoubleClick={() => navigate("/dashboard/employee/improvement-measures/list")}></Link>))}
                                                 </li>
                                             </>
                                         ))}
@@ -3387,10 +3386,6 @@ const Employee = () => {
                                         <div>
                                             <div>고소</div>
                                             <div><strong>{safeWorkHistoryList && safeWorkHistoryList?.sue}</strong>건</div>
-                                        </div>
-                                        <div>
-                                            <div>중장비</div>
-                                            <div><strong>{safeWorkHistoryList && safeWorkHistoryList?.heavy}</strong>건</div>
                                         </div>
                                     </div>
                                 </Grid>
