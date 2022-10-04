@@ -32,7 +32,7 @@ import pagePrev from '../../../../../../../../assets/images/btn_pre.png';
 
 import checkIcon from '../../../../../../../../assets/images/ic_chk3.png';
 import checkIconOn from '../../../../../../../../assets/images/ic_chk3_on.png';
-import { useGetWorkplaceListMutation } from "../../../../../../../../hooks/api/MainManagement/MainManagement";
+import { useGetWorkplaceListMutation, useGetLoginInfoMutation } from "../../../../../../../../hooks/api/MainManagement/MainManagement";
 import {
     useLawIssueReassonSelectMutation,
     useLawSelectMutation,
@@ -458,13 +458,21 @@ const List = () => {
         setLawList(response.data.RET_DATA);
     };
 
-    const [locale] = React.useState('ko');
 
+    /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
+    const [loginInfos, setLoginInfos] = useState({});
+    const [getLoginInfo] = useGetLoginInfoMutation()
+    const fetchLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfos(response.data.RET_DATA)
+    }
+
+    const [locale] = React.useState('ko');
     useEffect(() => {
+        fetchLoginInfo();
         fetchWorkplaceList();
         fetchIssueReasson();
         fetchLawList();
-       
     }, []);
 
     return (
@@ -490,12 +498,6 @@ const List = () => {
                                         sx={{ width: 204 }}
                                         value={lawImprovements.workplaceId}
                                         onChange={handleChange("workplaceId")}
-                                        // onChange={(event) =>
-                                        //   setLawImprovements({
-                                        //     ...lawImprovements,
-                                        //     workplaceId: event.target.value,
-                                        //   })
-                                        // }
                                         displayEmpty
                                     >
                                         {workplaceList &&
