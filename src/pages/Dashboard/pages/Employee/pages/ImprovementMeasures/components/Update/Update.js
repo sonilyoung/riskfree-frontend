@@ -127,7 +127,8 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center',
+        //alignItems: 'center',
+        textAlign: 'center',
         width: '100px',
         height: '100%',
         background: '#bdcbe9',
@@ -137,6 +138,14 @@ const useStyles = makeStyles(() => ({
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%'
+        },
+        '& text': {
+            position: 'absolute',
+            marginTop: '5px',
+            marginLeft: '8px',
+            textAlign: 'left',
+            color: '#fc4b07',
+            zoom: '1.1'
         }
     },
     rowContent: {
@@ -478,7 +487,7 @@ const Registration = () => {
                     </div>
                     <div className={classes.boxContent}>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>사업장</div>
+                            <div className={classes.rowTitle}><text>*</text>사업장</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
                                     <Select
@@ -490,7 +499,7 @@ const Registration = () => {
                                         {workplaces?.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
                                     </Select>
                                 </div>
-                                <div className={classes.rowTitle}>개선조치 NO</div>
+                                <div className={classes.rowTitle}><text>*</text>개선조치 NO</div>
                                 <div className={classes.rowInfo}>
                                     <TextField
                                         id="standard-basic"
@@ -505,6 +514,7 @@ const Registration = () => {
                         </div>
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>
+                                <text>*</text>
                                 <span>개선.조치 </span>
                                 <span>내용</span>
                             </div>
@@ -522,7 +532,7 @@ const Registration = () => {
                             </div>
                         </div>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>요청일자</div>
+                            <div className={classes.rowTitle}><text>*</text>요청일자</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
@@ -539,7 +549,7 @@ const Registration = () => {
                                         />
                                     </LocalizationProvider>
                                 </div>
-                                <div className={classes.rowTitle}>요청자</div>
+                                <div className={classes.rowTitle}><text>*</text>요청자</div>
                                 <div className={classes.rowInfo}>
                                     <Select
                                             sx={{ width: 200 }}
@@ -552,7 +562,7 @@ const Registration = () => {
                                             <MenuItem value="003">안전실무자</MenuItem>
                                         </Select>
                                 </div>
-                                <div className={classes.rowTitle}>완료요청일</div>
+                                <div className={classes.rowTitle}><text>*</text>완료요청일</div>
                                 <div className={classes.rowInfo}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                                         <DesktopDatePicker

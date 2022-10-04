@@ -124,7 +124,8 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center',
+        //alignItems: 'center',
+        textAlign: 'center',
         width: '100px',
         height: '100%',
         background: '#bdcbe9',
@@ -134,6 +135,14 @@ const useStyles = makeStyles(() => ({
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%'
+        },
+        '& text': {
+            position: 'absolute',
+            marginTop: '5px',
+            marginLeft: '8px',
+            textAlign: 'left',
+            color: '#fc4b07',
+            zoom: '1.1'
         }
     },
     rowContent: {
@@ -459,12 +468,12 @@ const Registration = () => {
                     </div>
                     <div className={classes.boxContent}>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>접수일자</div>
+                            <div className={classes.rowTitle}><text>*</text>접수일자</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>{todaysDate}</div>
-                                <div className={classes.rowTitle}>접수자</div>
+                                <div className={classes.rowTitle}><text>*</text>접수자</div>
                                 <div className={classes.rowInfo}>{loginInfo?.name}</div>
-                                <div className={classes.rowTitle}>접수형태</div>
+                                <div className={classes.rowTitle}><text>*</text>접수형태</div>
                                 <div className={classes.rowInfo}>
                                     <FormControl
                                         className={classes.searchRadio}
@@ -515,7 +524,7 @@ const Registration = () => {
                                         </RadioGroup>
                                     </FormControl>
                                 </div>
-                                <div className={classes.rowTitle}>명령구분</div>
+                                <div className={classes.rowTitle}><text>*</text>명령구분</div>
                                 <div className={classes.rowInfo}>
                                     <FormControl className={classes.searchRadio}>
                                         <RadioGroup row>
@@ -597,6 +606,7 @@ const Registration = () => {
                         </div>
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>
+                                <text>*</text>
                                 <span>개선.조치 </span>
                                 <span>지적내용</span>
                             </div>
@@ -611,7 +621,7 @@ const Registration = () => {
                                         onChange={(e) => setLaw({ ...law, "improveCn": e.target.value })}
                                     />
                                 </div>
-                                <div className={classes.rowTitle}>구분</div>
+                                <div className={classes.rowTitle}><text>*</text>구분</div>
                                 <div className={classes.rowInfo}>
                                     <Select
                                         sx={{ width: 180 }}
@@ -624,7 +634,7 @@ const Registration = () => {
                                         <MenuItem value="002">조치</MenuItem>
                                     </Select>
                                 </div>
-                                <div className={classes.rowTitle}>지적일자</div>
+                                <div className={classes.rowTitle}><text>*</text>지적일자</div>
                                 <div className={classes.rowInfo}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                                         <DesktopDatePicker
@@ -640,7 +650,7 @@ const Registration = () => {
                                         />
                                     </LocalizationProvider>
                                 </div>
-                                <div className={classes.rowTitle}>완료요청일</div>
+                                <div className={classes.rowTitle}><text>*</text>완료요청일</div>
                                 <div className={classes.rowInfo}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                                         <DesktopDatePicker

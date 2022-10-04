@@ -192,7 +192,7 @@ const Registration = () => {
                     </div>
                     <div className={classes.boxContent}>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>사업장</div>
+                            <div className={classes.rowTitle}><text>*</text>사업장</div>
                             <div className={classes.rowContent}>
                                 { /* === Data: 2022.10.03 author:Jimmy edit: 실무자일 경우 본인 속한 사업장만 표시 value === */}
                                 <div className={classes.rowInfo}>
@@ -220,7 +220,7 @@ const Registration = () => {
                                             </Select>
                                     }
                                 </div>
-                                <div className={classes.rowTitle}>개선조치 NO</div>
+                                <div className={classes.rowTitle}><text>*</text>개선조치 NO</div>
                                 <div className={classes.rowInfo}>
                                     <TextField
                                         id="standard-basic"
@@ -235,6 +235,7 @@ const Registration = () => {
                         </div>
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>
+                                <text>*</text>
                                 <span>개선.조치 </span>
                                 <span>내용</span>
                             </div>
@@ -251,7 +252,7 @@ const Registration = () => {
                             </div>
                         </div>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>요청일자</div>
+                            <div className={classes.rowTitle}><text>*</text>요청일자</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
@@ -269,7 +270,7 @@ const Registration = () => {
                                         />
                                     </LocalizationProvider>
                                 </div>
-                                <div className={classes.rowTitle}>요청자</div>
+                                <div className={classes.rowTitle}><text>*</text>요청자</div>
                                 <div className={classes.rowInfo}>
                                     { /* === Data: 2022.10.03 author:Jimmy edit: value === */}
                                     <Select
@@ -283,7 +284,7 @@ const Registration = () => {
                                         <MenuItem value="003">안전실무자</MenuItem>
                                     </Select>
                                 </div>
-                                <div className={classes.rowTitle}>완료요청일</div>
+                                <div className={classes.rowTitle}><text>*</text>완료요청일</div>
                                 <div className={classes.rowInfo}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                                         <DesktopDatePicker

@@ -2243,6 +2243,7 @@ const Employee = () => {
         setAccidentTotal(response?.data?.RET_DATA);
     }
 
+    // 안전작업허가 공사내역
     const fetchSafeWorkHistoryList = async () => {
         const response = await getSafeWorkHistoryList({
             "baselineId": currentBaselineId,
@@ -3386,6 +3387,10 @@ const Employee = () => {
                                         <div>
                                             <div>고소</div>
                                             <div><strong>{safeWorkHistoryList && safeWorkHistoryList?.sue}</strong>건</div>
+                                        </div>
+                                        <div>
+                                            <div>중장비</div>
+                                            <div><strong>{safeWorkHistoryList && safeWorkHistoryList?.heavy}</strong>건</div>
                                         </div>
                                     </div>
                                 </Grid>

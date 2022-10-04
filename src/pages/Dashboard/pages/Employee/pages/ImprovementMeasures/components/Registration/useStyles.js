@@ -85,7 +85,8 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center',
+        //alignItems: 'center',
+        textAlign: 'center',
         width: '100px',
         height: '100%',
         background: '#bdcbe9',
@@ -95,6 +96,14 @@ const useStyles = makeStyles(() => ({
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%'
+        },
+        '& text': {
+            position: 'absolute',
+            marginTop: '5px',
+            marginLeft: '8px',
+            textAlign: 'left',
+            color: '#fc4b07',
+            zoom: '1.1'
         }
     },
     rowContent: {

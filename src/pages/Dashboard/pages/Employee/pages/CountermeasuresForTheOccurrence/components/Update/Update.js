@@ -119,7 +119,8 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center',
+        //alignItems: 'center',
+        textAlign: 'center',
         width: '100px',
         height: '100%',
         background: '#bdcbe9',
@@ -129,6 +130,14 @@ const useStyles = makeStyles(() => ({
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%'
+        },
+        '& text': {
+            position: 'absolute',
+            marginTop: '5px',
+            marginLeft: '8px',
+            textAlign: 'left',
+            color: '#fc4b07',
+            zoom: '1.1'
         }
     },
     rowContent: {
@@ -517,12 +526,12 @@ const Update = () => {
                     <div className={classes.boxTitle}>사고접수</div>
                     <div className={classes.boxContent}>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>접수일자</div>
+                            <div className={classes.rowTitle}><text>*</text>접수일자</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>{accident && accident.recvDate}</div>
-                                <div className={classes.rowTitle}>접수자</div>
+                                <div className={classes.rowTitle}><text>*</text>접수자</div>
                                 <div className={classes.rowInfo}>{accident && accident.recvUserName}</div>
-                                <div className={classes.rowTitle}>접수형태</div>
+                                <div className={classes.rowTitle}><text>*</text>접수형태</div>
                                 <div className={classes.rowInfo}>
                                     <FormControl className={classes.searchRadio} onChange={(e) => setAccident({ ...accident, "recvFormCd": e.target.value })}>
                                         <RadioGroup row value={accident && accident.recvFormCd}>
@@ -562,7 +571,7 @@ const Update = () => {
                                         </RadioGroup>
                                     </FormControl>
                                 </div>
-                                <div className={classes.rowTitle}>접수유형</div>
+                                <div className={classes.rowTitle}><text>*</text>접수유형</div>
                                 <div className={classes.rowInfo}>
                                     <FormControl className={classes.searchRadio}>
                                         <RadioGroup row>
@@ -645,6 +654,7 @@ const Update = () => {
                         </div>
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>
+                                <text>*</text>
                                 <span>사고조치 </span>
                                 <span>내용</span>
                             </div>

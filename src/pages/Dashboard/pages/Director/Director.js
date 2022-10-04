@@ -1162,6 +1162,10 @@ const Director = () => {
                                         <div>고소</div>
                                         <div><strong>{safeWorkHistoryList ? safeWorkHistoryList?.sue : 0}</strong>건</div>
                                     </div>
+                                    <div>
+                                        <div>중장비</div>
+                                        <div><strong>{safeWorkHistoryList ? safeWorkHistoryList?.heavy : 0}</strong>건</div>
+                                    </div>
                                 </div>
                             </Grid>
                         </Grid>

@@ -996,7 +996,8 @@ const Default = ({ children }) => {
 
                     <Grid className={classes.mainHeader} item xs={12}>
                         <Grid className={classes.mainLogo} item xs={3}>
-                            <Link to={(loginInfo?.roleCd === "001" && "/dashboard/director") || (loginInfo?.roleCd === "002" ? "/dashboard/employee" : "#none")}>
+                            {/* <Link to={(loginInfo?.roleCd === "001" && "/dashboard/director") || (loginInfo?.roleCd === "002" ? "/dashboard/employee" : "#none")}> */}
+                            <Link to={(loginInfo?.roleCd === "001") ? "/dashboard/director" : "/dashboard/employee"}>
                                 <img src={logo} alt="logo" />
                             </Link>
                         </Grid>

@@ -447,6 +447,16 @@ const useStyles = makeStyles(() => ({
                 borderBottom: '1px solid #c8ddf2',
             },
         },
+        '& ex': {
+
+            width: '15px',
+            marginTop: '5px',
+            position: 'absolute',
+            float: 'left',
+            color: '#fc4b07',
+
+            zoom: '1.1'
+        }
     },
     popupData: {
         display: 'flex',
@@ -463,6 +473,13 @@ const useStyles = makeStyles(() => ({
             borderBottom: '1px solid #fff',
             justifyContent: 'center'
         },
+        '& text': {
+            marginRight: '6px',
+            marginTop: '5px',
+            color: '#fc4b07',
+            zoom: '1.1'
+        }
+
     },
     dataNest: {
         width: '100%',
@@ -1216,7 +1233,7 @@ const SystemAdministrator = () => {
                             </div>
                             <div className={classes.popupTable}>
                                 <div className={classes.popupRow}>
-                                    <div className={classes.popupData + ' data_head'}>회사명</div>
+                                    <div className={classes.popupData + ' data_head'}><text>*</text>회사명</div>
                                     <div className={classes.popupData}>
                                         <TextField
                                             variant="outlined"
@@ -1230,12 +1247,12 @@ const SystemAdministrator = () => {
                                     <div className={classes.popupData + ' data_head'}>
                                         <div className={classes.headNest}>사용자</div>
                                         <div className={classes.headNest}>
-                                            <div className={classes.dataNest}>사업장명</div>
-                                            <div className={classes.dataNest}>사업자등록번호</div>
+                                            <div className={classes.dataNest}><text>*</text>사업장명</div>
+                                            <div className={classes.dataNest}><text>*</text>사업자등록번호</div>
                                             <div className={classes.dataNest}>업종</div>
                                             <div className={classes.dataNest}>규모</div>
-                                            <div className={classes.dataNest}>ID</div>
-                                            <div className={classes.dataNest}>담당자명</div>
+                                            <div className={classes.dataNest}><text>*</text>ID</div>
+                                            <div className={classes.dataNest}><text>*</text>담당자명</div>
                                             <div className={classes.dataNest}>이메일</div>
                                         </div>
                                     </div>
@@ -1283,7 +1300,7 @@ const SystemAdministrator = () => {
                                                     onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "loginId": e.target.value })}
                                                 />
                                             </div>
-                                            <div>사용자권한</div>
+                                            <div><text>*</text>사용자권한</div>
                                             <div>
                                                 <Select
                                                     className={classes.tableTextField}
@@ -1303,7 +1320,7 @@ const SystemAdministrator = () => {
                                                     onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "managerName": e.target.value })}
                                                 />
                                             </div>
-                                            <div style={{ borderBottom: 'none' }}>연락처</div>
+                                            <div style={{ borderBottom: 'none' }}><text>*</text>연락처</div>
                                             <div>
                                                 <TextField
                                                     variant="outlined"
@@ -1384,7 +1401,7 @@ const SystemAdministrator = () => {
                                     </div>
                                 </div>
                                 <div className={classes.popupRow}>
-                                    <div className={classes.popupData + ' data_head'}>상태</div>
+                                    <div className={classes.popupData + ' data_head'}><text>*</text>상태</div>
                                     <div className={classes.popupData}>
                                         <Select
                                             className={classes.tableTextField}
@@ -1423,7 +1440,7 @@ const SystemAdministrator = () => {
                             </div>
                             <div className={classes.popupTable}>
                                 <div className={classes.popupRow}>
-                                    <div className={classes.popupData + ' data_head'}>회사명</div>
+                                    <div className={classes.popupData + ' data_head'}><text>*</text>회사명</div>
                                     <div className={classes.popupData}>
                                         <TextField
                                             variant="outlined"
@@ -1437,13 +1454,13 @@ const SystemAdministrator = () => {
                                     <div className={classes.popupData + ' data_head'}>
                                         <div className={classes.headNest}>사용자</div>
                                         <div className={classes.headNest}>
-                                            <div className={classes.dataNest}>사업장명</div>
-                                            <div className={classes.dataNest}>사업자등록번호</div>
+                                            <div className={classes.dataNest}><text>*</text>사업장명</div>
+                                            <div className={classes.dataNest}><text>*</text>사업자등록번호</div>
                                             <div className={classes.dataNest}>업종</div>
                                             <div className={classes.dataNest}>규모</div>
-                                            <div className={classes.dataNest}>ID</div>
-                                            <div className={classes.dataNest}>사용자권한</div>
-                                            <div className={classes.dataNest}>담당자명</div>
+                                            <div className={classes.dataNest}><text>*</text>ID</div>
+                                            <div className={classes.dataNest}><text>*</text>사용자권한</div>
+                                            <div className={classes.dataNest}><text>*</text>담당자명</div>
                                             <div className={classes.dataNest}>연락처</div>
                                             <div className={classes.dataNest}>이메일</div>
                                         </div>
@@ -1602,7 +1619,7 @@ const SystemAdministrator = () => {
                                     </div>
                                 </div>
                                 <div className={classes.popupRow}>
-                                    <div className={classes.popupData + ' data_head'}>상태</div>
+                                    <div className={classes.popupData + ' data_head'}><text>*</text>상태</div>
                                     <div className={classes.popupData}>
                                         <Select
                                             className={classes.tableTextField}
