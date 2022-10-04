@@ -37,6 +37,7 @@ import {
     useLawIssueReassonSelectMutation,
     useLawSelectMutation,
 } from "../../../../../../../../hooks/api/LawImprovementsManagement/LawImprovementsManagement";
+
 import { DefaultLayout } from "../../../../../../../../layouts/Default";
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -463,6 +464,7 @@ const List = () => {
         fetchWorkplaceList();
         fetchIssueReasson();
         fetchLawList();
+       
     }, []);
 
     return (
@@ -483,26 +485,26 @@ const List = () => {
                         <div className={classes.searchInfo}>
                             <div>
                                 <div className={classes.infoTitle}>사업장</div>
-                                <Select
-                                    className={classes.selectMenu}
-                                    sx={{ width: 204 }}
-                                    value={lawImprovements.workplaceId}
-                                    onChange={handleChange("workplaceId")}
-                                    // onChange={(event) =>
-                                    //   setLawImprovements({
-                                    //     ...lawImprovements,
-                                    //     workplaceId: event.target.value,
-                                    //   })
-                                    // }
-                                    displayEmpty
-                                >
-                                    {workplaceList &&
-                                        workplaceList.map((workplace) => (
-                                            <MenuItem value={workplace.workplaceId}>
-                                                {workplace.workplaceName}
-                                            </MenuItem>
-                                        ))}
-                                </Select>
+                                    <Select
+                                        className={classes.selectMenu}
+                                        sx={{ width: 204 }}
+                                        value={lawImprovements.workplaceId}
+                                        onChange={handleChange("workplaceId")}
+                                        // onChange={(event) =>
+                                        //   setLawImprovements({
+                                        //     ...lawImprovements,
+                                        //     workplaceId: event.target.value,
+                                        //   })
+                                        // }
+                                        displayEmpty
+                                    >
+                                        {workplaceList &&
+                                            workplaceList.map((workplace) => (
+                                                <MenuItem value={workplace.workplaceId}>
+                                                    {workplace.workplaceName}
+                                                </MenuItem>
+                                            ))}
+                                    </Select>
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>조치요청 명령구분</div>
