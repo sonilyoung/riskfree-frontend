@@ -51,6 +51,7 @@ import { UploadDialog, UploadEmployeeDialog } from '../../dialogs/Upload';
 import { useExcelUploadMutation } from '../../hooks/api/ExcelController/ExcelController';
 
 import { useGetEssentialDutyVersionMutation } from '../../hooks/api/MainManagement/MainManagement';
+import { ExitToApp } from '@mui/icons-material';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -734,7 +735,7 @@ const DefaultLight = ({ children }) => {
     const [selectedFile, setSelectedFile] = useState(null)
 
     const [okPopupShow, setOkPopupShow] = useState(false);
-    const [okPopupMessage, setOkPopupMessage] = useState(null);
+    const [okPopupMessage, setOkPopupMessage] = useState({});
     const [selectedFileName, setSelectedFileName] = useState("")
 
     const dispatch = useDispatch();
@@ -767,29 +768,29 @@ const DefaultLight = ({ children }) => {
     const fetchEssentialDutyVerision = async () => {
         const response = await getEssentialDutyVersion()
         setEssentialDutyFileId(response?.data?.RET_DATA?.attachFileId)
-        console.log(response, "------essentialFileId")
+        //console.log(response, "------essentialFileId")
     }
 
     const handleDialogOpen = (event) => {
         setSelectedFileName("");
         setOpenDialog(true);
         setDialogId(event.target.id);
-        console.log(event.target.id)
+        //console.log(event.target.id)
     }
 
     const handleDialogClose = () => {
         setOpenDialog(false);
     }
 
+    // 파일 업로드
     const handleDialogFileUpload = async (file) => {
         let formData = new FormData();
         formData.append("excelFile", selectedFile)
         handleDialogClose()
+        
         const response = await excelUpload(formData)
-        const fileId = response.data.RET_DATA[0].atchFileId
-        setExcel({ ...excel, [dialogId]: parseInt(fileId) })
+        setExcel({ ...excel })
         setOkPopupMessage(response.data);
-        handleDialogClose(false);
         setOkPopupShow(true);
     }
 
@@ -902,7 +903,7 @@ const DefaultLight = ({ children }) => {
             <Overlay show={okPopupShow}>
                 <Ok
                     show={okPopupShow}
-                    message={{ RET_CODE: "0201", RET_DESC: "저장성공" }}
+                    message={okPopupMessage}
                     onConfirm={() => setOkPopupShow(false)} />
             </Overlay>
             {/* <BackButton onClick={() => handleRedirect()}></BackButton> */}

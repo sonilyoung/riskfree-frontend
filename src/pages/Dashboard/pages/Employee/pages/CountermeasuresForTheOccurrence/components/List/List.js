@@ -473,10 +473,6 @@ const List = () => {
 
     const [num, setNum] = useState('');
 
-    const handleChange = (event) => {
-        setNum(event.target.value);
-    };
-
     const handleRedirect = () => {
         navigate("/dashboard/employee/accident-countermeasures-implementation/registration")
     }
@@ -538,6 +534,8 @@ const List = () => {
         fetchWorkplaceList()
         fetchAccidentOccurPlacesList()
     }, [page])
+
+    console.log(loginInfos)
 
     return (
         <DefaultLayout>
