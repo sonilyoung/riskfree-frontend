@@ -330,8 +330,7 @@ const Director = () => {
             chart: {
                 type: 'bar',
                 height: '100%',
-                width: '100%',
-                stackType: 'normal'
+                width: '100%'
             },
             plotOptions: {
                 bar: {
@@ -351,6 +350,7 @@ const Director = () => {
             xaxis: {
                 type: 'category',
                 categories: [],
+                tickPlacement: 'on',
                 position: 'bottom',
                 labels: {
                     show: true,

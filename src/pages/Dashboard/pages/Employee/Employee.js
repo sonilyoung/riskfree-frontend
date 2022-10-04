@@ -2224,7 +2224,7 @@ const Employee = () => {
         const response = await getBaseline({
             "baselineId": baselineId
         })
-        setBaselineData(!!response.data.RET_DATA && response.data.RET_DATA)        
+        setBaselineData(!!response.data.RET_DATA && response.data.RET_DATA)
     }
 
     const fetchCompanyInfo = async () => {
@@ -3063,10 +3063,7 @@ const Employee = () => {
                         </div>
                     </div>
                     <div className={evaluationPopup ? classes.uploadedPopup : classes.uploadedPopupClose}>
-                        <FormControl className={classes.searchRadio} onChange={(e) => {
-                                                                                        setEvaluation(e.target.value)
-                                                                                        fetchEssentialRates()
-                                                                                      }}>
+                        <FormControl className={classes.searchRadio} onChange={(e) => setEvaluation(e.target.value)}>
                             <RadioGroup row value={evaluation ?? ""}>
                                 <FormControlLabel
                                     value="10"
