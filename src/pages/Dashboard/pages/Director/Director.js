@@ -46,7 +46,7 @@ import Slider from 'react-slick';
 
 import { remove } from '../../../../services/core/User/Token';
 import { useGetAccidentsPreventionMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetImprovementLawOrderMutation, useGetLoginInfoMutation, useGetNoticeListMutation, useGetRelatedLawRateMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useGetBaseLineReportMutation, useGetTitleReportMutation, useGetAccidentsPreventionReportMutation, useGetImprovemetLawOrderReportMutation, useGetBaseLineReportGraphMutation } from '../../../../hooks/api/MainManagement/MainManagement';
-import { useGetLeaderImprovementListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetLeaderImprovementListMutation,  useGetImprovementListMutation} from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetAccidentTotalMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useGetSafeWorkHistoryListMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import moment from 'moment'
@@ -295,6 +295,9 @@ const Director = () => {
     const [loginInfo, setLoginInfo] = useState({})
     const [num, setNum] = React.useState('');
     const [getLeaderImprovementList] = useGetLeaderImprovementListMutation()
+    const [getImprovementList] = useGetImprovementListMutation()
+    
+    
     const [leadersImproveList, setLeadersImproveList] = useState([])
     const [getAccidentTotal] = useGetAccidentTotalMutation()
     const [accidentTotal, setAccidentTotal] = useState({})
@@ -502,7 +505,7 @@ const Director = () => {
     }
 
     const fetchLeadersImproveList = async () => {
-        const response = await getLeaderImprovementList({
+        const response = await getImprovementList({
             "baselineId": currentBaselineId,
             "companyId": userCompanyId,
             "instruction": 1,
