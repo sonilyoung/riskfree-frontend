@@ -915,9 +915,7 @@ const Default = ({ children }) => {
         fetchBaselineList();
         setBaselineInfo({ "baselineName": "", "baselineStart": null, "baselineEnd": null })
         const responseSaferyFile = await updateSafetyFile({ "attachFileId": employeeFiles.safetyFileUpload, })
-        // window.localStorage.setItem("safetyFileId", responseSaferyFile.data.RET_DATA.attachFileId)
-        alert(1);
-        window.location.reload();
+        // window.localStorage.setItem("safetyFileId", responseSaferyFile.data.RET_DATA.attachFileId)        
     }
 
     const handleInsertBaseLineDataCopy = async () => {
