@@ -735,7 +735,7 @@ const Registration = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.boxRegistration}>
-                    <div className={classes.boxTitle}>사고접수</div>
+                    <div className={classes.boxTitle}>사고처리</div>
                     <div className={classes.boxContent}>
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>발생일자</div>
