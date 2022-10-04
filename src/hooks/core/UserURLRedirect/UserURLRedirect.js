@@ -14,6 +14,9 @@ function useUserURLRedirect(props) {
 
             case userRoleCodes.employee:
                 return '/dashboard/employee';
+
+            case userRoleCodes.worker:
+                return '/dashboard/employee';                
         }
 
         return false;
