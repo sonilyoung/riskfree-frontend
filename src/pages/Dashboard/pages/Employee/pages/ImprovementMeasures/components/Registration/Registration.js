@@ -76,14 +76,6 @@ const Registration = () => {
     const [getGenerateKey] = useGetGenerateKeyMutation()
     const [generatedKey, setGeneratedKey] = useState("")
 
-    /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
-    const [loginInfos, setLoginInfos] = useState({});
-    const [getLoginInfo] = useGetLoginInfoMutation()
-    const fetchLoginInfo = async () => {
-        const response = await getLoginInfo()
-        setLoginInfos(response.data.RET_DATA)
-    }
-
     const [improvement, setImprovement] = useState(
         {
             "actionAfterId": actionAfterId,
@@ -97,7 +89,7 @@ const Registration = () => {
             "insertId": null,
             "reqDate": moment(new Date()),
             "reqFileId": atchFileId,
-            "reqUserCd": reqUserCd,
+            "reqUserCd": "",
             "statusCd": "",
             "completeDate": completeDate,
             "updateId": null,
@@ -165,6 +157,15 @@ const Registration = () => {
         setImprovement({ ...improvement, "improveNo": response?.data?.RET_DATA?.improveKey })
     }
 
+    /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
+    const [loginInfo, setLoginInfo] = useState({});
+    const [getLoginInfo] = useGetLoginInfoMutation()
+    const fetchLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfo(response.data.RET_DATA)
+        console.log(response.data.RET_DATA)
+        setImprovement({ ...improvement, "reqUserCd": response.data.RET_DATA.roleCd })
+    }    
 
     const [locale] = React.useState('ko');
     useEffect(() => {
@@ -197,22 +198,22 @@ const Registration = () => {
                                 { /* === Data: 2022.10.03 author:Jimmy edit: 실무자일 경우 본인 속한 사업장만 표시 value === */}
                                 <div className={classes.rowInfo}>
                                     {
-                                        loginInfos.roleCd === "003"
+                                        loginInfo.roleCd === "003"
                                             ?
                                             <Select
                                                 sx={{ width: 200 }}
                                                 className={classes.selectMenu}
-                                                value={loginInfos.workplaceId}
+                                                value={loginInfo.workplaceId}
                                                 onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
                                                 displayEmpty
                                             >
-                                                <MenuItem value={loginInfos.workplaceId}>{loginInfos.workplaceName}</MenuItem>
+                                                <MenuItem value={loginInfo.workplaceId}>{loginInfo.workplaceName}</MenuItem>
                                             </Select>
                                             :
                                             <Select
                                                 sx={{ width: 200 }}
                                                 className={classes.selectMenu}
-                                                value={improvement.workplaceId === '' ? loginInfos.workplaceId : improvement.workplaceId}
+                                                value={improvement.workplaceId === '' ? loginInfo.workplaceId : improvement.workplaceId}
                                                 onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
                                                 displayEmpty
                                             >
@@ -270,13 +271,13 @@ const Registration = () => {
                                         />
                                     </LocalizationProvider>
                                 </div>
-                                <div className={classes.rowTitle}><text>*</text>요청자</div>
+                                <div className={classes.rowTitle}><text>*</text>요청자{improvement.reqUserCd}</div>
                                 <div className={classes.rowInfo}>
                                     { /* === Data: 2022.10.03 author:Jimmy edit: value === */}
                                     <Select
                                         sx={{ width: 200 }}
                                         className={classes.selectMenu}
-                                        value={(improvement.reqUserCd === null || improvement.reqUserCd === '') ? loginInfos.roleCd : improvement.reqUserCd}
+                                        value={improvement.reqUserCd}
                                         onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
                                     >
                                         <MenuItem value="001">대표이사</MenuItem>

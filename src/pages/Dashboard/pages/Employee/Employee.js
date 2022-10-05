@@ -1920,6 +1920,8 @@ const Employee = () => {
 
     const navigate = useNavigate();
 
+    const [defaultPage, setDefaultPage] = useState("0101");
+
     const [num, setNum] = React.useState("");
     const [userPopup, setUserPopup] = useState(false)
     const [settingsPopup, setSettingsPopup] = useState(false)
@@ -2136,9 +2138,19 @@ const Employee = () => {
         setYesNoPopupShow(true);
     }
     
+    
     const handleInsertBaseline = async () => {
         const response = await insertBaseline(baselineInfo);
-        fetchBaselineList();
+        if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
+            setYesNoPopupShow(false);
+            setOkayPopupMessage('신규차수를 등록하였습니다.');
+            setOkayPopupShow(true);
+            setDefaultPage(response?.data?.RET_CODE);
+        } else {
+            setOkayPopupMessage(`${response?.data?.RET_DESC}` `${response?.data?.RET_CODE}`);
+            setOkayPopupShow(true);
+        }
+        fetchBaselineList();        
         setBaselineInfo({ "baselineName": "", "baselineStart": null, "baselineEnd": null })
         const responseSaferyFile = await updateSafetyFile({ "attachFileId": employeeFiles.safetyFileUpload, })
     }
@@ -2152,17 +2164,34 @@ const Employee = () => {
         setOkayPopupShow(true);
     }
 
-    const handleInsertBaseLineDataUpdate = async () => {
-        const response = await insertBaseLineDataUpdate({"baselineId" : currentBaselineId});
+    //관리차수 마감처리
+    const handlecloseUpdate = async () => {
+        const response = await close({"baselineId" : currentBaselineId});
         if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
             setYesNoPopupShow(false);
             setOkayPopupMessage('선택한 해당차수의 마감을 처리하였습니다.');
             setOkayPopupShow(true);
+            setDefaultPage(response?.data?.RET_CODE);
         } else {
             setOkayPopupMessage(`${response?.data?.RET_DESC}` `${response?.data?.RET_CODE}`);
             setOkayPopupShow(true);
-            }
+        }
     }
+
+    //안전보건관리체계의 구축 및 이행 항목 업데이트
+    const handleInsertBaseLineDataUpdate = async () => {
+        const response = await insertBaseLineDataUpdate({"baselineId" : currentBaselineId});
+        if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
+            setYesNoPopupShow(false);
+            setOkayPopupMessage('업데이트를 완료하였습니다.');
+            setOkayPopupShow(true);
+            setDefaultPage(response?.data?.RET_CODE);
+
+        } else {
+            setOkayPopupMessage(`${response?.data?.RET_DESC}` `${response?.data?.RET_CODE}`);
+            setOkayPopupShow(true);
+        }
+    }    
 
     const handleUpdateUserCompany = async () => {
         const response = await updateUserCompany({
@@ -2218,7 +2247,7 @@ const Employee = () => {
     }
 
     const fetchBaseline = async (baselineId) => {
-        dispatch(setBaselineId(baselineId))
+        //dispatch(setBaselineId(baselineId))
         const response = await getBaseline({
             "baselineId": baselineId
         })
@@ -2615,7 +2644,8 @@ const Employee = () => {
         fetchDutyAssigned()
         fetchRelatedArticle()
         fetchGuideLine()
-    }, [baselineIdForSelect, baselineData]);
+        
+    }, [baselineIdForSelect, baselineData, defaultPage]);
 
     useEffect(() => {
         if (toggleGrid) {
@@ -2766,6 +2796,8 @@ const Employee = () => {
                                     <div>계약기간 : {companyInfo?.contractStartDate} ~ {companyInfo?.contractEndDate}</div>
                                 </div>
                                 <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
+
+                                {/* 설정 팝업창 */}
                                 <SettingsButton className={classes.mainMenuButton} onClick={() => setSettingsPopup(true)}></SettingsButton>
                                 <div className={settingsPopup ? (classes.headerPopup + ' settings_popup') : (classes.headerPopup + ' settings_popupClose')}>
                                     <div className={classes.popHeader}>
@@ -3485,6 +3517,18 @@ const Employee = () => {
                     title={okayPopupTitle}
                     onConfirm={() => setOkayPopupShow(false) } />
             </Overlay>
+            
+            
+            {/* 관리차수 마감 처리 */}
+            <Overlay show={yesNoPopupShow}>
+                <YesNo
+                    show={yesNoPopupShow}
+                    message={yesNoPopupMessage}
+                    onConfirmYes={handlecloseUpdate}
+                    onConfirmNo={() => setYesNoPopupShow(false)}
+                />
+            </Overlay>
+
             <Overlay show={yesNoPopupShow}>
                 <YesNo
                     show={yesNoPopupShow}
@@ -3493,6 +3537,7 @@ const Employee = () => {
                     onConfirmNo={() => setYesNoPopupShow(false)}
                 />
             </Overlay>
+
         </WideLayout >
     );
 };
