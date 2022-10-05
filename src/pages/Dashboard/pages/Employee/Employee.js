@@ -3387,6 +3387,10 @@ const Employee = () => {
                                             <div>고소</div>
                                             <div><strong>{safeWorkHistoryList && safeWorkHistoryList?.sue}</strong>건</div>
                                         </div>
+                                        <div>
+                                            <div>중장비</div>
+                                            <div><strong>{safeWorkHistoryList && safeWorkHistoryList?.heavy}</strong>건</div>
+                                        </div>
                                     </div>
                                 </Grid>
                             </Grid>
