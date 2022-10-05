@@ -971,7 +971,7 @@ const MeasureToManageThePerformance = () => {
                     </div> */}
                     <div className={popupPlusButton ? classes.uploadPlusPopup : classes.uploadPopupHide} >
                         <ClosePopupButton2 onClick={() => setPopupPlusButton(false)}></ClosePopupButton2>
-                        <h3>의무조치별 상세 점검</h3>
+                        <h3>법령명생성</h3>
                         <div className={classes.uploadSearch}>
                             <TextField
                                 id="standard-basic"
@@ -981,7 +981,7 @@ const MeasureToManageThePerformance = () => {
                                 className={classes.popupTextField}
                                 onChange={(event) => setLawName(event.target.value)}
                             />
-                            <UnknownButton1 onClick={() => fetchInsertDutyButton()}>전체사업장</UnknownButton1>
+                            <UnknownButton1 onClick={() => fetchInsertDutyButton()}>확인</UnknownButton1>
                         </div>
                     </div>
                 </Grid>
