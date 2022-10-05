@@ -105,7 +105,6 @@ import Okay from '../../../../components/MessageBox/Okay';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
         backgroundColor: '#33374f',
@@ -2130,12 +2129,13 @@ const Employee = () => {
         setNoticeHotList(notificationPopupList);
     }
 
+    //관리차수 마감
     const handleClose = async () => {
         const response = await close({});
-        setOkayPopupMessage("등록 되었습니다.");
-        setOkayPopupShow(true);
+        setYesNoPopupMessage(`${currentBaselineId}차의 해당차수를 마감하시겠습니까?`);
+        setYesNoPopupShow(true);
     }
-
+    
     const handleInsertBaseline = async () => {
         const response = await insertBaseline(baselineInfo);
         fetchBaselineList();
@@ -2153,13 +2153,14 @@ const Employee = () => {
     }
 
     const handleInsertBaseLineDataUpdate = async () => {
-        const response = await insertBaseLineDataUpdate({});
-        setYesNoPopupShow(false);
-        if (response?.data?.RET_CODE === "0000") {
-            setOkayPopupMessage(`업데이트가 완료 되었습니다. ( ${response?.data?.RET_CODE} )`);
+        const response = await insertBaseLineDataUpdate({"baselineId" : currentBaselineId});
+
+        if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
+            setYesNoPopupShow(false);
         } else {
-            setOkayPopupMessage(`업데이트에 실패하였습니다. ( ${response?.data?.RET_CODE} )`);
         }
+        setOkayPopupMessage(`${response?.data?.RET_DESC}` `${response?.data?.RET_CODE}`);
+        okayPopupShow(`${currentBaselineId}차의 마감을 처리하였습니다.`);
         setOkayPopupShow(true);
     }
 
@@ -2794,7 +2795,6 @@ const Employee = () => {
                                                     <DesktopDatePicker
                                                         className={classes.selectMenuDate}
                                                         label=' '
-                                                        // placeholder='관리차수'
                                                         inputFormat="YYYY-MM-DD"
                                                         value={baselineInfo.baselineStart}
                                                         onChange={(newDate) => {
@@ -3479,7 +3479,7 @@ const Employee = () => {
                     show={okayPopupShow}
                     message={okayPopupMessage}
                     title={okayPopupTitle}
-                    onConfirm={() => setOkayPopupShow(false)} />
+                    onConfirm={() => setOkayPopupShow(false) } />
             </Overlay>
             <Overlay show={yesNoPopupShow}>
                 <YesNo
