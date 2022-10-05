@@ -2131,8 +2131,8 @@ const Employee = () => {
 
     //관리차수 마감
     const handleClose = async () => {
-        const response = await close({});
-        setYesNoPopupMessage(`${currentBaselineId}차의 해당차수를 마감하시겠습니까?`);
+        //const response = await close({});
+        setYesNoPopupMessage('선택한 해당차수를 마감 하시겠습니까?');
         setYesNoPopupShow(true);
     }
     
@@ -2154,14 +2154,14 @@ const Employee = () => {
 
     const handleInsertBaseLineDataUpdate = async () => {
         const response = await insertBaseLineDataUpdate({"baselineId" : currentBaselineId});
-
         if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
             setYesNoPopupShow(false);
+            setOkayPopupMessage('선택한 해당차수의 마감을 처리하였습니다.');
+            setOkayPopupShow(true);
         } else {
-        }
-        setOkayPopupMessage(`${response?.data?.RET_DESC}` `${response?.data?.RET_CODE}`);
-        okayPopupShow(`${currentBaselineId}차의 마감을 처리하였습니다.`);
-        setOkayPopupShow(true);
+            setOkayPopupMessage(`${response?.data?.RET_DESC}` `${response?.data?.RET_CODE}`);
+            setOkayPopupShow(true);
+            }
     }
 
     const handleUpdateUserCompany = async () => {
