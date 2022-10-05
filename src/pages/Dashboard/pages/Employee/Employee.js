@@ -2117,13 +2117,7 @@ const Employee = () => {
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
 
     const handleChartCategoriesDisplay = (chartCategories) => {
-        const changedChartCategories = chartCategories?.map(chartCategory => {
-            if (chartCategory?.includes(" ")) {
-                return chartCategory.split(" ");
-            }
-            return chartCategory;
-        });
-        setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: changedChartCategories } } });
+        setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories } } });
     }
 
     const handleNotificationPopupsShow = (notificationIndex) => {
