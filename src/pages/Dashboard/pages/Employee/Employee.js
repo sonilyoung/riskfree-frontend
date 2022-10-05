@@ -2015,6 +2015,7 @@ const Employee = () => {
     const [getNoticeHotList] = useGetNoticeHotListMutation();
 
     const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
+    const [yesNoPopupShowClose, setYesNoPopupShowClose] = useState(false);
     const [yesNoPopupMessage, setYesNoPopupMessage] = useState("");
     const [openDialog, setOpenDialog] = useState(false)
     const [openDialogEmployee, setOpenDialogEmployee] = useState(false)
@@ -2135,7 +2136,7 @@ const Employee = () => {
     const handleClose = async () => {
         //const response = await close({});
         setYesNoPopupMessage('선택한 해당차수를 마감 하시겠습니까?');
-        setYesNoPopupShow(true);
+        setYesNoPopupShowClose(true);
     }
     
     
@@ -2168,7 +2169,7 @@ const Employee = () => {
     const handlecloseUpdate = async () => {
         const response = await close({"baselineId" : currentBaselineId});
         if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
-            setYesNoPopupShow(false);
+            setYesNoPopupShowClose(false);
             setOkayPopupMessage('선택한 해당차수의 마감을 처리하였습니다.');
             setOkayPopupShow(true);
             setDefaultPage(response?.data?.RET_CODE);
@@ -2898,7 +2899,7 @@ const Employee = () => {
                                                         를 현재 차수에 복사 하시겠습니까
                                                     </Alert>
                                                     <PromptButtonBlue onClick={() => handleInsertBaseLineDataCopy()}>예</PromptButtonBlue>
-                                                    <PromptButtonWhite>예</PromptButtonWhite>
+                                                    <PromptButtonWhite onClick={() => ()}>아니오</PromptButtonWhite>
                                                 </div>
                                             </AccordionDetails>
                                         </Accordion>
@@ -3520,9 +3521,9 @@ const Employee = () => {
             
             
             {/* 관리차수 마감 처리 */}
-            <Overlay show={yesNoPopupShow}>
+            <Overlay show={yesNoPopupShowClose}>
                 <YesNo
-                    show={yesNoPopupShow}
+                    show={yesNoPopupShowClose}
                     message={yesNoPopupMessage}
                     onConfirmYes={handlecloseUpdate}
                     onConfirmNo={() => setYesNoPopupShow(false)}
