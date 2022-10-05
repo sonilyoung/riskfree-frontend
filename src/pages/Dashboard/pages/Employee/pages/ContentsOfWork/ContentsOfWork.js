@@ -892,6 +892,7 @@ const WorkHistoryList = () => {
         const response = await safeWorkExcelUpload(formData)
         handleDialogClose()
         handleDialogCloseOnly()
+        fetchSafeWorkList()
     }
 
     console.log(safeWorkFileList)
