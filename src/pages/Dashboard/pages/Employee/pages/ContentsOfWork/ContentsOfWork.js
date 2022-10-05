@@ -56,6 +56,7 @@ import { Overlay } from '../../../../../../components/Overlay';
 import { useSafeWorkExcelUploadMutation } from '../../../../../../hooks/api/ExcelController/ExcelController';
 import { useSelector, useDispatch } from 'react-redux';
 import {selectBaselineId} from '../../../../../../slices/selections/MainSelection';
+//import { useFileDownMutation } from '../../../../../../hooks/api/FileManagement/FIleManagement';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -798,7 +799,14 @@ const WorkHistoryList = () => {
         const responseForDelete = await deleteSafeWork({ "atchFileId": fileIdForDelete })
         setPromptPopupShow(false);
         setHide(true)
+        fetchSafeWorkList()
     }
+
+    async function getFileDownload(fileId) {        
+        if (!!fileId) {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        }
+    }    
 
     async function handleDialogFileDownload() {
         if (!!attachFileId) {
@@ -1031,12 +1039,14 @@ const WorkHistoryList = () => {
                                     <div className={classes.tableRow}>{file.fileName}</div>
                                     <div className={classes.tableRow}>
                                         <RowButton>
-                                            <FileDownloadIcon sx={{ color: '#333' }} onClick={() => handleDialogOpen(file.attachId)}></FileDownloadIcon>
+                                            <FileDownloadIcon sx={{ color: '#333' }} onClick={() => {
+                                                getFileDownload(file.attachId)                                                
+                                            }}></FileDownloadIcon>
                                         </RowButton>
                                         <RowButton>
                                             <CloseIcon sx={{ color: '#333' }} onClick={() => {
                                                 setPromptPopupShow(true)
-                                                setFileIdForDelete(file.attachId)
+                                                setFileIdForDelete(file.attachId)                                                
                                             }}></CloseIcon>
                                         </RowButton>
                                     </div>
