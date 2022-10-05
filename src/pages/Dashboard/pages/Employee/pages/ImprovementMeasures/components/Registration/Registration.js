@@ -154,7 +154,7 @@ const Registration = () => {
     const getGeneratedKey = async () => {
         const response = await getGenerateKey()
         setGeneratedKey(response?.data?.RET_DATA?.improveKey)
-        setImprovement({ ...improvement, "improveNo": response?.data?.RET_DATA?.improveKey })
+        //setImprovement({ ...improvement, "improveNo": response?.data?.RET_DATA?.improveKey })
     }
 
     /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
@@ -163,8 +163,9 @@ const Registration = () => {
     const fetchLoginInfo = async () => {
         const response = await getLoginInfo()
         setLoginInfo(response.data.RET_DATA)
-        console.log(response.data.RET_DATA)
+        //console.log(response.data.RET_DATA)
         setImprovement({ ...improvement, "reqUserCd": response.data.RET_DATA.roleCd })
+
     }    
 
     const [locale] = React.useState('ko');
@@ -271,14 +272,17 @@ const Registration = () => {
                                         />
                                     </LocalizationProvider>
                                 </div>
-                                <div className={classes.rowTitle}><text>*</text>요청자{improvement.reqUserCd}</div>
+                                <div className={classes.rowTitle}><text>*</text>요청자</div>
                                 <div className={classes.rowInfo}>
                                     { /* === Data: 2022.10.03 author:Jimmy edit: value === */}
                                     <Select
                                         sx={{ width: 200 }}
                                         className={classes.selectMenu}
                                         value={improvement.reqUserCd}
+                                        defaultValue={improvement.reqUserCd}
+                                        key={improvement.reqUserCd}
                                         onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
+                                        displayEmpty
                                     >
                                         <MenuItem value="001">대표이사</MenuItem>
                                         <MenuItem value="002">안전책임자</MenuItem>

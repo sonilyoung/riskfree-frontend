@@ -165,7 +165,7 @@ const useStyles = makeStyles(() => ({
             '&:last-of-type': {
                 borderRight: '0',
             },
-            '&:nth-of-type(8), &:nth-of-type(9)': {
+            '&:nth-of-type(11), &:nth-of-type(12)': {
                 justifyContent: 'flex-start',
             },
         },
@@ -190,13 +190,13 @@ const useStyles = makeStyles(() => ({
         '&:nth-of-type(2)': {
             minWidth: '148px'
         },
-        '&:nth-of-type(3), &:nth-of-type(4), &:nth-of-type(5)': {
-            minWidth: '120px'
+        '&:nth-of-type(3), &:nth-of-type(4), &:nth-of-type(5), &:nth-of-type(6), &:nth-of-type(7), &:nth-of-type(8)': {
+            minWidth: '107px'
         },
-        '&:nth-of-type(6)': {
+        '&:nth-of-type(9)': {
             minWidth: '240px'
         },
-        '&:nth-of-type(7)': {
+        '&:nth-of-type(10)': {
             minWidth: '122px'
         },
     },
@@ -454,7 +454,7 @@ const List = () => {
             setAccTypeFifth(true)
             setAccTypeSixth(true)
         }
-        console.log(accTypeFirst, accTypeSecond, accTypeThird, accTypeFourth, accTypeFifth, accTypeSixth)
+        //console.log(accTypeFirst, accTypeSecond, accTypeThird, accTypeFourth, accTypeFifth, accTypeSixth)
     };
 
     const handleClick = e => {
@@ -464,12 +464,22 @@ const List = () => {
         if (!checked) {
             setIsCheck(isCheck.filter(item => item !== id));
         }
-        console.log(accTypeFirst, accTypeSecond, accTypeThird, accTypeFourth, accTypeFifth, accTypeSixth)
+        //console.log(accTypeFirst, accTypeSecond, accTypeThird, accTypeFourth, accTypeFifth, accTypeSixth)
     };
 
+    /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
+    const [loginInfos, setLoginInfos] = useState({});
+    const [getLoginInfo] = useGetLoginInfoMutation()
+    const fetchLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfos(response.data.RET_DATA)
+        
+    }
+    
     useEffect(() => {
+        fetchLoginInfo()
         setList(checkList);
-    }, [list]);
+    }, []); //list 삭제(무한반복됨!)
 
     const [num, setNum] = useState('');
 
@@ -499,7 +509,7 @@ const List = () => {
             "workplaceId": workplaceSelect
         })
         setAccidents(response.data.RET_DATA)
-        console.log(response);
+        //console.log(response);
     }
 
     const fetchWorkplaceList = async () => {
@@ -520,22 +530,12 @@ const List = () => {
         setPage(value)
     }
 
-    /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
-    const [loginInfos, setLoginInfos] = useState({});
-    const [getLoginInfo] = useGetLoginInfoMutation()
-    const fetchLoginInfo = async () => {
-        const response = await getLoginInfo()
-        setLoginInfos(response.data.RET_DATA)
-    }
-
     useEffect(() => {
-        fetchLoginInfo()
+        
         fetchAccidentsList()
         fetchWorkplaceList()
         fetchAccidentOccurPlacesList()
     }, [page])
-
-    console.log(loginInfos)
 
     return (
         <DefaultLayout>
@@ -555,6 +555,7 @@ const List = () => {
                                         className={classes.selectMenu}
                                         sx={{ width: 204 }}
                                         value={workplaceSelect}
+                                        key={workplaceSelect}
                                         onChange={(e) => setWorkplaceSelect(e.target.value)}
                                         displayEmpty
                                     >
@@ -566,6 +567,7 @@ const List = () => {
                                         sx={{ width: 204 }}
                                         value={loginInfos.workplaceId}
                                         defaultValue={loginInfos.workplaceId}
+                                        key={loginInfos.workplaceId}
                                         displayEmpty
                                     >
                                         <MenuItem value={loginInfos.workplaceId}>{loginInfos.workplaceName}</MenuItem>
@@ -674,13 +676,17 @@ const List = () => {
                                     sx={{ width: 204 }}
                                     value={occurPlaceSelect}
                                     onChange={(e) => setOccurPlaceSelect(e.target.value)}
+                                    key=""
                                     displayEmpty
                                 >
-                                    {occurPlacesList && occurPlacesList.map((occurPlace) => (<MenuItem value={occurPlace.occurplace}>{occurPlace.occurplace}</MenuItem>))}
+                                    <MenuItem value="">전체</MenuItem>
+                                    {occurPlacesList.map((occurPlace) => (
+                                        <MenuItem value={occurPlace.occurplace}>{occurPlace.occurplace}</MenuItem>
+                                    ))}
                                 </Select>
                             </div>
                             <div>
-                                <div className={classes.infoTitle}>발행일자</div>
+                                <div className={classes.infoTitle}>발생일자</div>
                                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                                     <DesktopDatePicker
                                         className={classes.selectMenuDate}
@@ -772,11 +778,14 @@ const List = () => {
                         <div className={classes.tableRow}>발생일자</div>
                         <div className={classes.tableRow}>재해종류</div>
                         <div className={classes.tableRow}>사고등급</div>
+                        <div className={classes.tableRow}>사망</div>
+                        <div className={classes.tableRow}>동일사고유형</div>
+                        <div className={classes.tableRow}>직업성질환</div>
                         <div className={classes.tableRow}>발생장소</div>
                         <div className={classes.tableRow}>현장책임자</div>
                         <div className={classes.tableRow}>발생원인</div>
                         <div className={classes.tableRow}>재해발생대책</div>
-                        <div className={classes.tableRow}>이행실적</div>
+                        {/* <div className={classes.tableRow}>이행실적</div> */}
                     </div>
                     <>
                         {accidents && accidents?.map((accident) => (<div className={classes.tableBody} onDoubleClick={() => navigate(`/dashboard/employee/accident-countermeasures-implementation/view/${accident.accidentId}`)}>
@@ -785,11 +794,14 @@ const List = () => {
                             <div className={classes.tableRow}>{accident.occurDate}</div>
                             <div className={classes.tableRow}>{accident.accType001 || accident.accType002 || accident.accType003 || accident.accType004 || accident.accType005 || accident.accType006}</div>
                             <div className={classes.tableRow}>{accident.accLevel}</div>
+                            <div className={classes.tableRow}>{accident.deathToll === 0 ? "" : accident.deathToll}</div>
+                            <div className={classes.tableRow}>{accident.sameAccidentInjury === 0 ? "" : accident.sameAccidentInjury}</div>
+                            <div className={classes.tableRow}>{accident.jobDeseaseToll === 0 ? "" : accident.jobDeseaseToll}</div>
                             <div className={classes.tableRow}>{accident.occurPlace}</div>
                             <div className={classes.tableRow}>{accident.managerName}</div>
                             <div className={classes.tableRow}>{accident.occurReason}</div>
                             <div className={classes.tableRow}>{accident.preventCn}</div>
-                            <div className={classes.tableRow}>&nbsp;</div>
+                            {/* <div className={classes.tableRow}>&nbsp;</div> */}
                         </div>))}
                     </>
                 </Grid>
