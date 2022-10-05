@@ -887,7 +887,7 @@ const Director = () => {
                         </div>
                         <div className={classes.navSlider}>
                             <Slider {...headerSlider}>
-                                {workplaceList?.length !== 0 && workplaceList?.length !== 1
+                                {workplaceList?.length < 1 && workplaceList?.length > 1
                                     && <div>
                                         <MainNavButton className={currentWorkplaceId === null ? "active" : ""} onClick={
                                             () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })

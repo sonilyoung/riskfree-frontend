@@ -797,10 +797,6 @@ const MeasureToManageThePerformance = () => {
         middleLabel: "등록된 데이터를 엑셀로 다운로드 합니다."
     }
 
-    /* === Data: 2022.10.03 author:Jimmy add === */
-    const [EventlawId, setEventlawId] = useState("")
-    /* ========================================= */
-
     const [selectedFile, setSelectedFile] = useState(null);
     const [openDialog, setOpenDialog] = useState(false)
     const [uploadFlag, setUploadFlag] = useState(false);
@@ -826,17 +822,12 @@ const MeasureToManageThePerformance = () => {
         const lawButtonId = { lawButtonId: dialogId }
         formData.append('lawButtonId', new Blob([JSON.stringify(lawButtonId)], { type: 'application/json' }))
         const response = await relatedRawExcelUpload(formData)
-        // console.log(response)
-        // const fileId = response.data.RET_DATA[0].atchFileId
-        handleDialogClose()
+        handleDialogClose();
         setOkayPopupMessage("등록 되었습니다.");
-        setEventlawId(lawButtonId.lawButtonId);
-        setLawId(lawButtonId.lawButtonId)
         setOkayPopupShow(true);
         setseccerrCode(response.data.RET_CODE);
-        // setFiles({ ...files, [dialogId]: parseInt(fileId) })
-        // setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
-        setUploadFlag(!uploadFlag)
+        setUploadFlag(!uploadFlag);
+        setLawId(lawButtonId.lawButtonId);
     }
 
     const handleDialogOpen = (id) => {
@@ -859,16 +850,14 @@ const MeasureToManageThePerformance = () => {
         setPage(value)
     }
 
-    const fetchRelatedRawList = async (lawId) => {
+    const fetchRelatedRawList = async (ClicklawId) => {
+        setLawId(ClicklawId);
         const response = await getRelatedRaw({
-            "lawId": lawId,
+            "lawId": ClicklawId,
             "baselineId": currentBaseline,
             "countPerPage": 10,
             "pageNum": page
         });
-        /* === Data: 2022.10.03 author:Jimmy add === */
-        setEventlawId(lawId)
-        /* ========================================= */
 
         setRelatedRawList(response.data.RET_DATA);
         const currentUpdateList = response.data?.RET_DATA?.map(relatedRawItem => {
@@ -885,7 +874,6 @@ const MeasureToManageThePerformance = () => {
         setRelatedRawButtonList(response.data.RET_DATA);
         setLawId(response.data.RET_DATA[0].lawButtonId);
         fetchRelatedRawList(response.data.RET_DATA[0].lawButtonId);
-
     }
 
     const fetchInsertDutyButton = async () => {
@@ -903,7 +891,7 @@ const MeasureToManageThePerformance = () => {
             setseccerrCode(response?.data?.RET_CODE);
             setOkayPopupMessage("등록 되었습니다.");
             setOkayPopupShow(true);
-            //fetchRelatedRawList(lawId)
+            fetchRelatedRawList(lawId)
         } else {
             setseccerrCode(response?.data?.RET_CODE);
             setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다 ");
@@ -919,7 +907,7 @@ const MeasureToManageThePerformance = () => {
     }
 
     useEffect(() => {
-        fetchRelatedRawButtonList();
+        //fetchRelatedRawButtonList();
     }, [uploadFlag])
 
     useEffect(() => {
@@ -938,7 +926,7 @@ const MeasureToManageThePerformance = () => {
                     {!!relatedRawButtonList && relatedRawButtonList.length > 0 && relatedRawButtonList.map(relatedRawButtonItem =>
                     
                     /* === Data: 2022.10.03 author:Jimmy add === */
-                    (<Link to="#" className={EventlawId === relatedRawButtonItem.lawButtonId ? classes.buttonLinkactive : classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)} onDoubleClick={() => handleDialogOpen(relatedRawButtonItem.lawButtonId)}>
+                    (<Link to="#" className={lawId === relatedRawButtonItem.lawButtonId ? classes.buttonLinkactive : classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)} onDoubleClick={() => handleDialogOpen(relatedRawButtonItem.lawButtonId)}>
                     {/* ========================================= */}
                     
                         <span>{relatedRawButtonItem?.lawName}</span>
@@ -1135,13 +1123,11 @@ const MeasureToManageThePerformance = () => {
                     show={okayPopupShow}
                     message={okayPopupMessage}
                     title={okayPopupTitle}
-                    //onConfirm={() => setOkayPopupShow(false)}
-                    
                     onConfirm={() => {
                         if (seccerrCode === "0201" || seccerrCode === "0000") {
                             setOkayPopupShow(false);
-                            fetchRelatedRawList(EventlawId);
                             setseccerrCode("");
+                            fetchRelatedRawList(lawId);
                         } else {
                             setOkayPopupShow(false);
                         }
