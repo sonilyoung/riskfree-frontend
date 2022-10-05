@@ -202,23 +202,20 @@ const useStyles = makeStyles(() => ({
                     },
                 }
             },
-            '&:first-of-type': {
-                width: '60px'
+            '&:nth-of-type(1)': {
+                width: '130px'
             },
             '&:nth-of-type(2)': {
-                width: '120px'
+                width: '190px'
             },
             '&:nth-of-type(3)': {
-                width: '180px'
-            },
-            '&:nth-of-type(4)': {
                 width: '285px'
             },
-            '&:nth-of-type(5)': {
-                width: '160px'
+            '&:nth-of-type(4)': {
+                width: '170px'
             },
-            '&:nth-of-type(6)': {
-                width: '989px'
+            '&:nth-of-type(5)': {
+                width: '1019px'
             },
         }
     },
@@ -237,25 +234,22 @@ const useStyles = makeStyles(() => ({
                 borderRight: '0',
                 width: '128px !important',
             },
-            '&:nth-of-type(6), &:nth-of-type(7), &:nth-of-type(8)': {
+            '&:nth-of-type(5), &:nth-of-type(6), &:nth-of-type(7)': {
                 // justifyContent: 'flex-start',
             },
-            '&:first-of-type': {
-                width: '60px'
+            '&:nth-of-type(1)': {
+                width: '130px'
             },
             '&:nth-of-type(2)': {
-                width: '120px'
+                width: '190px'
             },
             '&:nth-of-type(3)': {
-                width: '180px'
-            },
-            '&:nth-of-type(4)': {
                 width: '285px'
             },
-            '&:nth-of-type(5)': {
-                width: '160px'
+            '&:nth-of-type(4)': {
+                width: '170px'
             },
-            '&:nth-of-type(n + 6)': {
+            '&:nth-of-type(n + 5)': {
                 width: '123px'
             },
         },
@@ -957,7 +951,7 @@ const WorkHistoryList = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.dataTable}>
                     <div className={classes.tableHead}>
-                        <div className={classes.tableRow}></div>
+                        {/* <div className={classes.tableRow}></div> */}
                         <div className={classes.tableRow}>No</div>
                         <div className={classes.tableRow}>사업장</div>
                         <div className={classes.tableRow}>등록일시</div>
@@ -978,7 +972,7 @@ const WorkHistoryList = () => {
                     </div>
                     {safeWorkList?.length > 0 && safeWorkList.map((safeWorkItem, index) =>
                     (<div className={classes.tableBody}>
-                        <div className={classes.tableRow}>
+                        {/* <div className={classes.tableRow}>
                             <FormControlLabel
                                 control={
                                     <Checkbox
@@ -987,7 +981,7 @@ const WorkHistoryList = () => {
                                     />
                                 }
                             />
-                        </div>
+                        </div> */}
                         <div className={classes.tableRow}>{index + 1}</div>
                         <div className={classes.tableRow}>{safeWorkItem.workplaceName}</div>
                         <div className={classes.tableRow}>{safeWorkItem.insertDate}</div>

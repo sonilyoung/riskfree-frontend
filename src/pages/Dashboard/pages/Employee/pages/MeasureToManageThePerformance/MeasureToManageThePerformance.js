@@ -848,10 +848,15 @@ const MeasureToManageThePerformance = () => {
 
     const handlePageChange = (event, value) => {
         setPage(value)
+        fetchRelatedRawList(lawId)
     }
 
     const fetchRelatedRawList = async (ClicklawId) => {
+        if(ClicklawId !== lawId){
+            setPage(1)
+        }
         setLawId(ClicklawId);
+
         const response = await getRelatedRaw({
             "lawId": ClicklawId,
             "baselineId": currentBaseline,
@@ -912,7 +917,7 @@ const MeasureToManageThePerformance = () => {
 
     useEffect(() => {
         fetchRelatedRawButtonList();
-    }, [page]);
+    }, []);
 
     return (
         <DefaultLayout>
@@ -924,11 +929,7 @@ const MeasureToManageThePerformance = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.headerButtons}>
                     {!!relatedRawButtonList && relatedRawButtonList.length > 0 && relatedRawButtonList.map(relatedRawButtonItem =>
-                    
-                    /* === Data: 2022.10.03 author:Jimmy add === */
-                    (<Link to="#" className={lawId === relatedRawButtonItem.lawButtonId ? classes.buttonLinkactive : classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)} onDoubleClick={() => handleDialogOpen(relatedRawButtonItem.lawButtonId)}>
-                    {/* ========================================= */}
-                    
+                        (<Link to="#" className={lawId === relatedRawButtonItem.lawButtonId ? classes.buttonLinkactive : classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)} onDoubleClick={() => handleDialogOpen(relatedRawButtonItem.lawButtonId)}>
                         <span>{relatedRawButtonItem?.lawName}</span>
                     </Link>)
                     )}

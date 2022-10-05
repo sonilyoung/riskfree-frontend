@@ -887,12 +887,13 @@ const Director = () => {
                         </div>
                         <div className={classes.navSlider}>
                             <Slider {...headerSlider}>
-                                {workplaceList?.length < 1 && workplaceList?.length > 1
-                                    && <div>
+                                {workplaceList.length === 1 ? "" :                                
+                                    <div>
                                         <MainNavButton className={currentWorkplaceId === null ? "active" : ""} onClick={
                                             () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })
                                         }>전체사업장</MainNavButton>
-                                    </div>}
+                                    </div>
+                                }
                                 {workplaceList?.length != 0 && workplaceList?.RET_DATA?.map(workplaceItem =>
                                     <div>
                                         <MainNavButton
