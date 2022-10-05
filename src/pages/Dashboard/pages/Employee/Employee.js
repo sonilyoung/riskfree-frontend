@@ -2241,8 +2241,12 @@ const Employee = () => {
         setBaselineStart(!!response.data.RET_DATA && response.data.RET_DATA.baselineStart)
     }
 
+    // 이동 처리
     const fetchBaseline = async (baselineId) => {
-        //dispatch(setBaselineId(baselineId))
+        if(baselineId.length < 1) {
+            dispatch(setBaselineId(baselineId))
+        }
+
         const response = await getBaseline({
             "baselineId": baselineId
         })
