@@ -2893,7 +2893,7 @@ const Employee = () => {
                                                         를 현재 차수에 복사 하시겠습니까
                                                     </Alert>
                                                     <PromptButtonBlue onClick={() => handleInsertBaseLineDataCopy()}>예</PromptButtonBlue>
-                                                    <PromptButtonWhite onClick={() => ()}>아니오</PromptButtonWhite>
+                                                    <PromptButtonWhite>아니오</PromptButtonWhite>
                                                 </div>
                                             </AccordionDetails>
                                         </Accordion>
