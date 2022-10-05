@@ -54,6 +54,8 @@ import { useDeleteFileMutation, useFileUploadMutation } from '../../../../../../
 import { OnlyUploadDialog, UploadDialog } from '../../../../../../dialogs/Upload';
 import { Overlay } from '../../../../../../components/Overlay';
 import { useSafeWorkExcelUploadMutation } from '../../../../../../hooks/api/ExcelController/ExcelController';
+import { useSelector, useDispatch } from 'react-redux';
+import {selectBaselineId} from '../../../../../../slices/selections/MainSelection';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -777,6 +779,7 @@ const WorkHistoryList = () => {
     const [fileUpload] = useFileUploadMutation()
     const [safeWorkExcelUpload] = useSafeWorkExcelUploadMutation()
     const [deleteSafeWork] = useDeleteSafeWorkMutation()
+    const currentBaselineId = useSelector(selectBaselineId)
 
     const [labelObject, setLabelObject] = useState({
         upperLabel: "공사허가서 등록",
@@ -837,6 +840,7 @@ const WorkHistoryList = () => {
 
     const fetchSafeWorkList = async () => {
         const response = await getSafeWork({
+            "baselineId": currentBaselineId,
             "workplaceId": workplaceId,
             "insertDate": insertDate,
             "userName": username
@@ -1008,7 +1012,7 @@ const WorkHistoryList = () => {
                                     <div><strong>{!!safeWorkFileTopinfo && !!safeWorkFileTopinfo?.workplaceName && safeWorkFileTopinfo?.workplaceName}</strong></div>
                                 </div>
                                 <div>
-                                    <div>자이그브</div>
+                                    <div>작업구분</div>
                                     <div><strong>{!!safeWorkFileTopinfo && !!safeWorkFileTopinfo?.constructionName && safeWorkFileTopinfo?.constructionName}</strong></div>
                                 </div>
                                 <div>
