@@ -773,7 +773,7 @@ const MeasureToManageThePerformance = () => {
     const [relatedRawButtonList, setRelatedRawButtonList] = useState([]);
     const [updateList, setUpdateList] = useState([]);
     const [lawName, setLawName] = useState("");
-    const [lawId, setLawId] = useState(1);
+    const [lawId, setLawId] = useState("0");
     const [popupButton, setPopupButton] = useState(false);
     const [popupPlusButton, setPopupPlusButton] = useState(false);
     const [page, setPage] = useState(1);
@@ -883,6 +883,9 @@ const MeasureToManageThePerformance = () => {
     const fetchRelatedRawButtonList = async () => {
         const response = await getRelatedRawButton({});
         setRelatedRawButtonList(response.data.RET_DATA);
+        setLawId(response.data.RET_DATA[0].lawButtonId);
+        fetchRelatedRawList(response.data.RET_DATA[0].lawButtonId);
+
     }
 
     const fetchInsertDutyButton = async () => {
@@ -890,7 +893,7 @@ const MeasureToManageThePerformance = () => {
             "lawName": lawName
         });
         setPopupPlusButton(false);
-        fetchRelatedRawButtonList();
+        fetchRelatedRawButtonList(lawId);
     }
 
     const handleUpdateRelatedRawList = async () => {
@@ -916,12 +919,10 @@ const MeasureToManageThePerformance = () => {
     }
 
     useEffect(() => {
-        fetchRelatedRawList(lawId);
         fetchRelatedRawButtonList();
     }, [uploadFlag])
 
     useEffect(() => {
-        fetchRelatedRawList(lawId);
         fetchRelatedRawButtonList();
     }, [page]);
 
