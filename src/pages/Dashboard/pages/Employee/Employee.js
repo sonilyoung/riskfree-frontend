@@ -3378,15 +3378,15 @@ const Employee = () => {
                                         </div>
                                         <div>
                                             <div>추락</div>
-                                            <div><strong>{(accidentTotal && accidentTotal?.caughtCnt) ?? "0"}</strong>건</div>
+                                            <div><strong>{(accidentTotal && accidentTotal?.fallCnt) ?? "0"}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>끼임</div>
-                                            <div><strong>{(accidentTotal && accidentTotal?.fireCnt) ?? "0"}</strong>건</div>
+                                            <div><strong>{(accidentTotal && accidentTotal?.caughtCnt) ?? "0"}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>화재</div>
-                                            <div><strong>{(accidentTotal && accidentTotal?.fallCnt) ?? "0"}</strong>건</div>
+                                            <div><strong>{(accidentTotal && accidentTotal?.fireCnt) ?? "0"}</strong>건</div>
                                         </div>
                                         <div>
                                             <div>전기</div>
