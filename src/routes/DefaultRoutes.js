@@ -55,6 +55,7 @@ const DefaultRoutes = () => (
         </Route>
         <Route element={<PrivateRoute />}>
             <Route path="/dashboard/employee" element={<DashboardEmployeePage />} />
+            <Route path="/dashboard/employee/:MainKey" element={<DashboardEmployeePage />} />
             <Route path="/dashboard/employee/notifications/*" element={<NotificationsPage />} />
             <Route path="/dashboard/employee/improvement-measures/*" element={<ImprovementMeasuresPage />} />
             <Route path="/dashboard/employee/accident-countermeasures-implementation/*" element={<CountermeasuresForTheOccurrencePage />} />

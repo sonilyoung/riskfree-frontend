@@ -846,23 +846,29 @@ const MeasureToManageThePerformance = () => {
         setSelectedFileName(file.name)
     }
 
+    //페이지번호 클릭시 이벤트
     const handlePageChange = (event, value) => {
-        setPage(value)
-        fetchRelatedRawList(lawId)
+        setPage(parseInt(value));
+        fetchRelatedRawList(lawId);
     }
 
     const fetchRelatedRawList = async (ClicklawId) => {
-        if(ClicklawId !== lawId){
-            setPage(1)
-        }
-        setLawId(ClicklawId);
+        // console.log("ClicklawId : " + ClicklawId)
+        // console.log("lawId : " + lawId)
+        
+        // if(ClicklawId && lawId){
+        //     setPage(1);
+        // }
 
         const response = await getRelatedRaw({
             "lawId": ClicklawId,
             "baselineId": currentBaseline,
             "countPerPage": 10,
-            "pageNum": page
+            "pageNum": ClicklawId && lawId ? parseInt(1) : page
         });
+        console.log(response);
+        console.log(page);
+        setLawId(ClicklawId);
 
         setRelatedRawList(response.data.RET_DATA);
         const currentUpdateList = response.data?.RET_DATA?.map(relatedRawItem => {
@@ -877,8 +883,9 @@ const MeasureToManageThePerformance = () => {
     const fetchRelatedRawButtonList = async () => {
         const response = await getRelatedRawButton({});
         setRelatedRawButtonList(response.data.RET_DATA);
-        setLawId(response.data.RET_DATA[0].lawButtonId);
         fetchRelatedRawList(response.data.RET_DATA[0].lawButtonId);
+        //setLawId(response.data.RET_DATA[0].lawButtonId);
+
     }
 
     const fetchInsertDutyButton = async () => {
@@ -917,7 +924,7 @@ const MeasureToManageThePerformance = () => {
 
     useEffect(() => {
         fetchRelatedRawButtonList();
-    }, [page]);
+    }, []);
 
     return (
         <DefaultLayout>
@@ -1098,8 +1105,8 @@ const MeasureToManageThePerformance = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
                     <div>총 게시글 <strong>{relatedRawList?.length > 0 && relatedRawList[0]?.totalCount}</strong> 건</div>
-                    <Stack spacing={2}>
-                        <Pagination count={relatedRawList?.length && Math.ceil(relatedRawList[0]?.totalCount / 10)} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />
+                    <Stack spacing={2} >
+                        <Pagination count={relatedRawList?.length && Math.ceil(relatedRawList[0]?.totalCount / 10)} boundaryCount={3} shape="rounded" onChange={handlePageChange} showFirstButton showLastButton />
                     </Stack>
                     <div>
                         {/* <ExcelButton>엑셀 다운로드</ExcelButton> */}

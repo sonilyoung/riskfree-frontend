@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { WideLayout } from '../../../../layouts/Wide';
 import { makeStyles } from '@mui/styles';
 import Grid from '@mui/material/Grid';
@@ -1921,6 +1921,8 @@ const Employee = () => {
     const navigate = useNavigate();
 
     const [defaultPage, setDefaultPage] = useState("0101");
+    
+    const { MainKey } = useParams(1)
 
     const [num, setNum] = React.useState("");
     const [userPopup, setUserPopup] = useState(false)
@@ -2243,9 +2245,14 @@ const Employee = () => {
 
     // 이동 처리
     const fetchBaseline = async (baselineId) => {
-        if(baselineId.length < 1) {
+        if(baselineId === null) {
             dispatch(setBaselineId(baselineId))
         }
+
+        //if(baselineId.length < 1) {
+            //dispatch(setBaselineId(baselineId))
+            //console.log("baselineId 체크:", baselineId===null);
+        //}
 
         const response = await getBaseline({
             "baselineId": baselineId
@@ -2680,6 +2687,13 @@ const Employee = () => {
 
     useEffect(() => {
 
+        //대표이사 메인 버튼클릭시 해당 항목으로 이동 및 선택
+        if(MainKey) {
+            setClickedEssentialRateForClass(`rate${MainKey}`)
+            setClickedEssentialRate(MainKey)
+        }
+
+
         if (window.sessionStorage.getItem('firstLoad') === null) {
             fetchNoticeHotList();
             window.sessionStorage.setItem('firstLoad', 1);
@@ -2690,9 +2704,6 @@ const Employee = () => {
             setLongitude(position.coords.longitude)
         })
     }, []);
-
-    // console.log(chartCategories);
-    //console.log(guideLine)
 
     return (
         <WideLayout>
