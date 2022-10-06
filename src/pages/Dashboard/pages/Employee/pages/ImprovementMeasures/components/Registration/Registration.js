@@ -154,7 +154,7 @@ const Registration = () => {
     const getGeneratedKey = async () => {
         const response = await getGenerateKey()
         setGeneratedKey(response?.data?.RET_DATA?.improveKey)
-        //setImprovement({ ...improvement, "improveNo": response?.data?.RET_DATA?.improveKey })
+        setImprovement({ ...improvement, "improveNo": response?.data?.RET_DATA?.improveKey })
     }
 
     /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
@@ -284,9 +284,7 @@ const Registration = () => {
                                         onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
                                         displayEmpty
                                     >
-                                        <MenuItem value="001">대표이사</MenuItem>
-                                        <MenuItem value="002">안전책임자</MenuItem>
-                                        <MenuItem value="003">안전실무자</MenuItem>
+                                        <MenuItem value={loginInfo?.roleCd}>{loginInfo?.roleName}</MenuItem>                                                                                
                                     </Select>
                                 </div>
                                 <div className={classes.rowTitle}><text>*</text>완료요청일</div>
