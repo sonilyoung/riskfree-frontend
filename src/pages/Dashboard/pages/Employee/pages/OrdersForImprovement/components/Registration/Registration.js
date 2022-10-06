@@ -385,7 +385,7 @@ const Registration = () => {
         occurPlace: "1층작업실",
         pageNum: 0,
         recvCd: "",
-        recvDate: todaysDate,
+        recvDate: "",
         recvUserName: recvUserName,
     });
 
@@ -700,18 +700,18 @@ const Registration = () => {
                             <div className={classes.rowTitle}>완료일</div>
                             <div className={classes.rowInfo}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-                                    <DesktopDatePicker
-                                        className={classes.selectMenuDate}
-                                        label=" "
-                                        inputFormat="YYYY-MM-DD"
-                                        value={law.recvDate}
-                                        onChange={(newDate) => {
-                                            const date = new Date(newDate.$d)
-                                            setLaw({ ...law, "recvDate": moment(date).format("YYYY-MM-DD") })
-                                        }}
-                                        renderInput={(params) => <TextField {...params} sx={{ width: 180 }} />}
-                                    />
-                                </LocalizationProvider>
+                                        <DesktopDatePicker
+                                            className={classes.selectMenuDate}
+                                            label=" "
+                                            inputFormat="YYYY-MM-DD"
+                                            value={law.recvDate}
+                                            onChange={(newDate) => {
+                                                const date = new Date(newDate.$d)
+                                                setLaw({ ...law, "recvDate": moment(date).format("YYYY-MM-DD") })
+                                            }}
+                                            renderInput={(params) => <TextField {...params} sx={{ width: 180 }} />}
+                                        />
+                                    </LocalizationProvider>
                             </div>
                             { /* ====================================================== */ }
 

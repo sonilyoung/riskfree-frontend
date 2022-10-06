@@ -892,7 +892,7 @@ const MeasureToManageThePerformance = () => {
     const handleUpdateRelatedRawList = async () => {
         const response = await updateRelatedRaw({ "updateList": updateList });
         //console.log(response?.data?.RET_CODE)
-        if (response?.data?.RET_CODE === "0000") {
+        if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
             setseccerrCode(response?.data?.RET_CODE);
             setOkayPopupMessage("등록 되었습니다.");
             setOkayPopupShow(true);
@@ -917,7 +917,7 @@ const MeasureToManageThePerformance = () => {
 
     useEffect(() => {
         fetchRelatedRawButtonList();
-    }, []);
+    }, [page]);
 
     return (
         <DefaultLayout>
@@ -1010,7 +1010,9 @@ const MeasureToManageThePerformance = () => {
                                 </div>
                             </div>
                             {toggleList === 'one'
-                                ? <><div className={classes.tableDataOne}>중대재해처벌법 <br />시행령</div>
+                                ?
+                                <>
+                                    <div className={classes.tableDataOne}>중대재해처벌법 <br />시행령</div>
                                     <div className={classes.tableDataOne}>위반법조항</div>
                                     <div className={classes.tableDataOne}>위반행위</div>
                                     <div className={classes.tableDataOne}>세부내용 -1</div>
