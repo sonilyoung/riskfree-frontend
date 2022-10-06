@@ -1786,14 +1786,14 @@ const UploadImageButton = styled(ButtonUnstyled)`
 `;
 
 const PromptButtonBlue = styled(ButtonUnstyled)`
-    width: 80px;
+    width: 90px;
     height: 34px;
     background: #3f4c72;
     padding: 0 20px;
     box-sizing: border-box;
     border-radius: 5px;
     color: #fff;
-    font-size: 16px;
+    font-size: 14px;
     border: none;
     cursor: pointer;
     transition: background .2s;
@@ -1803,14 +1803,14 @@ const PromptButtonBlue = styled(ButtonUnstyled)`
 `;
 
 const PromptButtonWhite = styled(ButtonUnstyled)`
-    width: 80px;
+    width: 90px;
     height: 34px;
     background: #fff;
     padding: 0 20px;
     box-sizing: border-box;
     border-radius: 5px;
     color: #6e7884;
-    font-size: 16px;
+    font-size: 14px;
     border: none;
     cursor: pointer;
     border: 1px solid #6e7884;
@@ -2905,7 +2905,7 @@ const Employee = () => {
                                                     <Alert
                                                         icon={<img src={alertIcon} alt="alert icon" />}
                                                         severity="error">
-                                                        <strong>2차 차수의 DATA</strong>
+                                                        <strong>선택한 차수의 DATA</strong>
                                                         를 현재 차수에 복사 하시겠습니까
                                                     </Alert>
                                                     <PromptButtonBlue onClick={() => handleInsertBaseLineDataCopy()}>예</PromptButtonBlue>
