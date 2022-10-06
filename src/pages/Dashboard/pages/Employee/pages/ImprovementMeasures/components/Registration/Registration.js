@@ -380,7 +380,6 @@ const Registration = () => {
                                         </RadioGroup>
                                     </FormControl>
                                 </div>
-
                                 <div className={classes.rowTitle}>완료일</div>
                                 <div className={classes.rowInfo}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
