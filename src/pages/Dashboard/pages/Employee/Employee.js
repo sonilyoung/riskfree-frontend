@@ -2351,8 +2351,7 @@ const Employee = () => {
             "groupId": clickedEssentialRate,
             "workplaceId": userWorkplaceId
         })
-
-        console.log("리스트", response);
+        
         setDutyDetailList(response?.data?.RET_DATA)
         setClickedDuty(!!(response.data.RET_DATA) && !!(response.data.RET_DATA) && response?.data?.RET_DATA[0]?.articleNo)
 
