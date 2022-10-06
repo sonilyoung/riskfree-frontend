@@ -2142,7 +2142,7 @@ const Employee = () => {
             setOkayPopupShow(true);
             setDefaultPage(response?.data?.RET_CODE);
         } else {
-            setOkayPopupMessage(`${response?.data?.RET_DESC}` `${response?.data?.RET_CODE}`);
+            setOkayPopupMessage(`${response?.data?.RET_DESC}`);
             setOkayPopupShow(true);
         }
         fetchBaselineList();        
@@ -2168,7 +2168,7 @@ const Employee = () => {
             setOkayPopupShow(true);
             setDefaultPage(response?.data?.RET_CODE);
         } else {
-            setOkayPopupMessage(`${response?.data?.RET_DESC}` `${response?.data?.RET_CODE}`);
+            setOkayPopupMessage(`${response?.data?.RET_DESC}`);
             setOkayPopupShow(true);
         }
     }
@@ -2692,6 +2692,7 @@ const Employee = () => {
     }, []);
 
     // console.log(chartCategories);
+    //console.log(guideLine)
 
     return (
         <WideLayout>
@@ -3275,11 +3276,10 @@ const Employee = () => {
                                 <div className={classes.listTitle}>현장 작동성 평가 작성 지침서</div>
                                 <ul className={classes.menuList + ' fourthList'}>
                                     {guideLine?.map((guideline) => (
-                                        <li>
+                                        <li style={{"white-space": "pre-line"}}>
                                             {guideline.guideline}
                                         </li>
                                     ))}
-
                                     {/* <li>
                                         <div className={'bulletList'}>이행 참고사항</div>
                                         <ol>
