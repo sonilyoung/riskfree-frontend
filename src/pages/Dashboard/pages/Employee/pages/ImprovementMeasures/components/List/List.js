@@ -441,9 +441,9 @@ function List() {
                                 onChange={handleReqUserSelect}
                                 displayEmpty
                             >
-                                <MenuItem value="002">대표이사</MenuItem>
-                                <MenuItem value="003">안전책임자</MenuItem>안전책임자
-                                <MenuItem value="004">안전실무자</MenuItem>
+                                <MenuItem value="001">대표이사</MenuItem>
+                                <MenuItem value="002">안전책임자</MenuItem>안전책임자
+                                <MenuItem value="003">안전실무자</MenuItem>
                             </Select>
                         </div>
                         <div>

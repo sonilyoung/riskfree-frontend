@@ -2245,7 +2245,7 @@ const Employee = () => {
 
     // 이동 처리
     const fetchBaseline = async (baselineId) => {
-        if(baselineId === null) {
+        if(baselineId != null) {
             dispatch(setBaselineId(baselineId))
         }
 
