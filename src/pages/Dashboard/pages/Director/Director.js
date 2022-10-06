@@ -66,7 +66,7 @@ import popupClose2 from '../../../../assets/images/btn_popClose2.png';
 import Chart from 'react-apexcharts';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
+const BASE_URL_FRONT = process.env.REACT_APP_API_BASE_URL_FRONT
 
 const UserButton = styled(ButtonUnstyled)`
     background: transparent url(${userIcon});
@@ -434,13 +434,14 @@ const Director = () => {
 
     }
 
-    
+    //실무자 메인페이지로 이동
     function DashboardLinkShow(MainKey) {
-        //console.log(MainKey)
-        if(MainKey === "12"){
-            window.open('/dashboard/employee/order-for-improvement-and-correction-under-related-law/list', '_blank')
+        if(MainKey === "12") {
+            //navigate('/dashboard/employee/order-for-improvement-and-correction-under-related-law/list');
+            window.open(`${BASE_URL_FRONT}dashboard/employee/order-for-improvement-and-correction-under-related-law/list`, '_blank')
         } else {
-            window.open(`/dashboard/employee/${MainKey}`, '_blank')
+            //navigate(`/dashboard/employee/${MainKey}`);
+            window.open(`${BASE_URL_FRONT}dashboard/employee/${MainKey}`, '_blank')
         }
     }
 
