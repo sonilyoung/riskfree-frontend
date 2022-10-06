@@ -1934,6 +1934,8 @@ const Employee = () => {
     const [clickedEssentialRate, setClickedEssentialRate] = useState(1)
     const [clickedEssentialRateForClass, setClickedEssentialRateForClass] = useState("rate1")
     const [clickedDuty, setClickedDuty] = useState(null)
+    //하위목록초기화
+    const [SubEventExe, setSubEventExe] = useState(null)
     const [getBaselineList] = useGetBaselineListMutation()
     const [getBaseline] = useGetBaselineMutation()
     const [baselineList, setBaselineList] = useState([])
@@ -2246,7 +2248,7 @@ const Employee = () => {
     // 이동 처리
     const fetchBaseline = async (baselineId) => {
         if(baselineId != null) {
-            dispatch(setBaselineId(baselineId))
+            dispatch(setBaselineId(baselineId))        
         }
 
         //if(baselineId.length < 1) {
@@ -2257,7 +2259,7 @@ const Employee = () => {
         const response = await getBaseline({
             "baselineId": baselineId
         })
-        setBaselineData(!!response.data.RET_DATA && response.data.RET_DATA)        
+        setBaselineData(!!response.data.RET_DATA && response.data.RET_DATA)                
     }
 
     const fetchCompanyInfo = async () => {
@@ -2349,8 +2351,16 @@ const Employee = () => {
             "groupId": clickedEssentialRate,
             "workplaceId": userWorkplaceId
         })
+
+        console.log("리스트", response);
         setDutyDetailList(response?.data?.RET_DATA)
         setClickedDuty(!!(response.data.RET_DATA) && !!(response.data.RET_DATA) && response?.data?.RET_DATA[0]?.articleNo)
+
+        if(response?.data?.RET_DATA?.length > 0){
+            setSubEventExe(true)    
+        }else{
+            setSubEventExe(false)
+        }        
     }
 
     const handleEssentailRateMeasure = () => {
@@ -2363,47 +2373,57 @@ const Employee = () => {
     }
 
     const fetchInspectionDocs = async () => {
-        if (clickedDuty) {
+        if (clickedDuty && setSubEventExe) {
             const response = await getInspectionsDocs({
                 "articleNo": clickedDuty
             })
             setInspectionsDocs(response?.data?.RET_DATA)
+        }else{
+            setInspectionsDocs(null)
         }
     }
 
     const fetchDutyCycle = async () => {
-        if (clickedDuty) {
+        if (clickedDuty && setSubEventExe) {
             const response = await getDutyCycle({
                 'articleNo': clickedDuty
             })
             setDutyCycle(response?.data?.RET_DATA)
+        }else{
+            setDutyCycle(null)
         }
     }
 
     const fetchDutyAssigned = async () => {
-        if (clickedDuty) {
+        if (clickedDuty && setSubEventExe) {
             const response = await getDutyAssigned({
                 'articleNo': clickedDuty
             })
             setDutyAssigned(response?.data?.RET_DATA)
+        }else{
+            setDutyAssigned(null)
         }
     }
 
     const fetchRelatedArticle = async () => {
-        if (clickedDuty) {
+        if (clickedDuty && setSubEventExe) {
             const response = await getRelatedArticle({
                 'articleNo': clickedDuty
             })
             setRelatedArticle(response?.data?.RET_DATA)
+        }else{
+            setRelatedArticle(null)
         }
     }
 
     const fetchGuideLine = async () => {
-        if (clickedDuty) {
+        if (clickedDuty && setSubEventExe) {
             const response = await getGuideLine({
                 'articleNo': clickedDuty
             })
             setGuideLine(response?.data?.RET_DATA)
+        }else{
+            setGuideLine(null)
         }
     }
 
@@ -2645,12 +2665,7 @@ const Employee = () => {
         fetchNoticeList();
         fetchImprovementList();
         fetchDutyDetailList()
-        fetchInspectionDocs()
-        fetchDutyCycle()
-        fetchDutyAssigned()
-        fetchRelatedArticle()
-        fetchGuideLine()
-        
+
     }, [baselineIdForSelect, baselineData, defaultPage]);
 
     useEffect(() => {
