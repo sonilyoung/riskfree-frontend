@@ -240,10 +240,10 @@ const Registration = () => {
     const [fileUpload] = useFileUploadMutation()
     const [dialogId, setDialogId] = useState("")
     const [notice, setNotice] = useState({})
-    const [selectedFileName, setSelectedFileName] = useState("")
     const [filePath, setFilePath] = useState({
         "attachId": ""
     })
+    const [selectedFileName, setSelectedFileName] = useState("")
     const labelObject = {
         upperLabel: "첨부파일 등록",
         middleLabel: "등록할 파일을 업로드 합니다.",
