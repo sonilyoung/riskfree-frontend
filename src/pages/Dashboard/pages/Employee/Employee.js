@@ -2130,6 +2130,17 @@ const Employee = () => {
         setNoticeHotList(notificationPopupList);
     }
 
+    //설정창 아코디언 선언
+    const [expanded, setExpanded] = React.useState('');
+
+    const panelhandleChange = (panel) => (event, newExpanded) => {
+      if(panel === 'panel3') {
+        setTargetBaselineId('');
+      }
+      setExpanded(newExpanded ? panel : false);
+    };
+    
+    
     //관리차수 마감
     const handleClose = async () => {
         //const response = await close({});
@@ -2139,6 +2150,24 @@ const Employee = () => {
     
     
     const handleInsertBaseline = async () => {
+        if (baselineInfo.baselineName.length <= 0) {
+            setOkayPopupMessage("'관리차수'를 입력해주세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+
+        if (baselineInfo.baselineStart === null || baselineInfo.baselineStart.length <= 0) {
+            setOkayPopupMessage("'관리차수 시작일자'를 선택하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+
+        if (baselineInfo.baselineEnd === null || baselineInfo.baselineEnd.length <= 0) {
+            setOkayPopupMessage("'관리차수 종료일자'를 선택하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+
         const response = await insertBaseline(baselineInfo);
         if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
             setYesNoPopupShow(false);
@@ -2155,12 +2184,24 @@ const Employee = () => {
     }
 
     const handleInsertBaseLineDataCopy = async () => {
-        const response = await insertBaseLineDataCopy({
-            "baselineId": targetBaselineId,
-            "targetBaselineId": currentBaselineId
-        });
-        setOkayPopupMessage(response.data.RET_DESC);
-        setOkayPopupShow(true);
+        if((targetBaselineId === '') || (targetBaselineId === null)){
+            setOkayPopupMessage("'복사할 관리차수'를 선택하세요.");
+            setOkayPopupShow(true);
+        } else {
+            const response = await insertBaseLineDataCopy({
+                "baselineId": targetBaselineId,
+                "targetBaselineId": currentBaselineId
+            });
+            
+            if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
+                setOkayPopupMessage("'차수 복사'가 완료되었습니다");
+                setOkayPopupShow(true);
+                setDefaultPage(response?.data?.RET_CODE);
+            } else {
+                setOkayPopupMessage(`${response?.data?.RET_DESC}`);
+                setOkayPopupShow(true);
+            }
+        }
     }
 
     //관리차수 마감처리
@@ -2830,13 +2871,13 @@ const Employee = () => {
                                         <ButtonClosePop onClick={() => setSettingsPopup(false)}></ButtonClosePop>
                                     </div>
                                     <div className={classes.headerPopList}>
-                                        <Accordion className={classes.popupAccord}>
+                                        <Accordion expanded={expanded === 'panel1'} onChange={panelhandleChange('panel1')} className={classes.popupAccord}>
                                             <AccordionSummary
                                                 expandIcon={<img src={arrowDown} alt="arrow down" />}
                                                 aria-controls="panel1a-content"
                                                 id="panel1a-header"
                                             >
-                                                <Typography>관리차수 신규등록</Typography>
+                                            <Typography>관리차수 신규등록</Typography>
                                             </AccordionSummary>
                                             <AccordionDetails style={{ alignItems: 'center' }}>
                                                 <TextField
@@ -2866,7 +2907,6 @@ const Employee = () => {
                                                     <DesktopDatePicker
                                                         className={classes.selectMenuDate}
                                                         label=" "
-                                                        // placeholder='점검기간'
                                                         inputFormat="YYYY-MM-DD"
                                                         value={baselineInfo.baselineEnd}
                                                         onChange={(newDate) => {
@@ -2876,9 +2916,16 @@ const Employee = () => {
                                                         renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                     />
                                                 </LocalizationProvider>
+
+                                               {/* <div style={{width: '100%', height: '70px'}}>
+                                                    <div className={classes.headerPopFooter} >
+                                                        <PopupFootButton onClick={() => handleInsertBaseline()}>저장하기</PopupFootButton>
+                                                    </div>
+                                                </div> */}
+
                                             </AccordionDetails>
                                         </Accordion>
-                                        <Accordion className={classes.popupAccord}>
+                                        <Accordion className={classes.popupAccord} expanded={expanded === 'panel2'} onChange={panelhandleChange('panel2')}>
                                             <AccordionSummary
                                                 expandIcon={<img src={arrowDown} alt="arrow down" />}
                                                 aria-controls="panel1a-content"
@@ -2894,7 +2941,7 @@ const Employee = () => {
                                                 </div>
                                             </AccordionDetails>
                                         </Accordion>
-                                        <Accordion className={classes.popupAccord}>
+                                        <Accordion className={classes.popupAccord} expanded={expanded === 'panel3'} onChange={panelhandleChange('panel3')}>
                                             <AccordionSummary
                                                 expandIcon={<img src={arrowDown} alt="arrow down" />}
                                                 aria-controls="panel1a-content"
@@ -2923,7 +2970,7 @@ const Employee = () => {
                                                         를 현재 차수에 복사 하시겠습니까
                                                     </Alert>
                                                     <PromptButtonBlue onClick={() => handleInsertBaseLineDataCopy()}>예</PromptButtonBlue>
-                                                    <PromptButtonWhite>아니오</PromptButtonWhite>
+                                                    <PromptButtonWhite onClick={panelhandleChange('panel3')}>아니오</PromptButtonWhite>
                                                 </div>
                                             </AccordionDetails>
                                         </Accordion>
@@ -3549,7 +3596,7 @@ const Employee = () => {
                     show={yesNoPopupShowClose}
                     message={yesNoPopupMessage}
                     onConfirmYes={handlecloseUpdate}
-                    onConfirmNo={() => setYesNoPopupShow(false)}
+                    onConfirmNo={() => setYesNoPopupShowClose(false)}
                 />
             </Overlay>
 

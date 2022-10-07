@@ -835,16 +835,63 @@ const SystemAdministrator = () => {
         //console.log(subscriberData);
         let emptyInputFields = [];
         let validation = false;
-        for (const subscriberDataProperty in subscriberData) {
-            if (subscriberData[subscriberDataProperty] === null || subscriberData[subscriberDataProperty] === undefined) {
-                //console.log(subscriberDataProperty + " : " + subscriberData[subscriberDataProperty] + " false vrednosti");
-                emptyInputFields.push(subscriberDataProperty);
+        //for (const subscriberDataProperty in subscriberData) {
+        //    if (subscriberData[subscriberDataProperty] === null || subscriberData[subscriberDataProperty] === undefined) {
+        //        //console.log(subscriberDataProperty + " : " + subscriberData[subscriberDataProperty] + " false vrednosti");
+        //        emptyInputFields.push(subscriberDataProperty);
+        //    }
+        //}
+        //if (emptyInputFields.length === 0) {
+        //    callback();
+        //} else {
+           
+            if (subscriberData.companyName.length <= 0) {
+                setOkayPopupMessage("필수항목 '회사명'을 입력하세요.");
+                setOkayPopupShow(true);
+                return validation = false;
             }
-        }
-        emptyInputFields = emptyInputFields?.map(emptyInputField => {
+            if (subscriberData.workplaceName.length <= 0) {
+                setOkayPopupMessage("필수항목 '사업장명'을 입력하세요.");
+                setOkayPopupShow(true);                    
+                return validation = false;
+            }
+            if (subscriberData.registNo.length <= 0) {
+                setOkayPopupMessage("필수항목 '사업자등록번호'를 입력하세요.");
+                setOkayPopupShow(true);                    
+                return validation = false;
+            }
+            if (subscriberData.loginId.length <= 0) {
+                setOkayPopupMessage("필수항목 'ID'를 입력하세요.");
+                setOkayPopupShow(true);                    
+                return validation = false;
+            }
+            if (subscriberData.managerRoleCd.length <= 0) {
+                setOkayPopupMessage("필수항목 '사용자권한' 선택하세요.");
+                setOkayPopupShow(true);                    
+                return validation = false;
+            }
+            if (subscriberData.managerName.length <= 0) {
+                setOkayPopupMessage("필수항목 '담당자명'을 입력하세요.");
+                setOkayPopupShow(true);                    
+                return validation = false;
+            }
+            if (subscriberData.managerTel.length <= 0) {
+                setOkayPopupMessage("필수항목 '연락처'를 입력하세요.");
+                setOkayPopupShow(true);                    
+                return validation = false;
+            }
+            if (subscriberData.statusCd.length <= 0) {
+                setOkayPopupMessage("필수항목 '상태'를 선택하세요.");
+                setOkayPopupShow(true);                    
+                return validation = false;
+            }
+        //}
+        //emptyInputFields = emptyInputFields?.map(emptyInputField => {
+        emptyInputFields?.map(emptyInputField => {
             if (type === "update") {
+                console.log(emptyInputField);
                 if (emptyInputField === "managerTel" && managerTel?.firstInput && managerTel?.secondeInput && managerTel?.thirdInput) {
-                    return validation = true;
+                    return validation = true;                   
 
                 } else if (emptyInputField === "managerEmail" && managerEmail?.firstInput && managerEmail?.secondeInput) {
                     return validation = true;
@@ -861,6 +908,7 @@ const SystemAdministrator = () => {
                 } else {
                     return validation = false;
                 }
+                
             } else if (type === "insert") {
                 if (emptyInputField === "managerEmail" && subscriberInsertEmailBeforeSign && subscriberInsertEmailAfterSign) {
                     return validation = true;
@@ -872,16 +920,8 @@ const SystemAdministrator = () => {
                     return validation = false;
                 }
             }
-
         })?.filter(emptyInputFieldChecked => emptyInputFieldChecked === false);
-
-        if (emptyInputFields.length === 0) {
-            callback();
-        } else {
-            setOkayPopupMessage("입력정보에 오류가 있습니다");
-            setOkayPopupShow(true);
-        }
-        //console.log(emptyInputFields);
+        callback();
     }
 
     const handleRedirect = async (workplaceId, userId) => {
@@ -973,43 +1013,36 @@ const SystemAdministrator = () => {
     }
 
     const handleSubscribersInsert = async () => {
-
-        if (subscriberInsert.contractStartDate < subscriberInsert.contractEndDate) {
-            const response = await subscribersInsert({
-                "companyName": subscriberInsert.companyName,
-                "contractAmount": subscriberInsert.contractAmount,
-                "contractEndDate": subscriberInsert.contractEndDate,
-                "contractFileId": subscriberInsert.contractFileId,
-                "contractStartDate": subscriberInsert.contractStartDate,
-                "loginId": subscriberInsert.loginId,
-                "managerEmail": subscriberInsertEmailBeforeSign + '@' + subscriberInsertEmailAfterSign,
-                "managerName": subscriberInsert.managerName,
-                "managerRoleCd": subscriberInsert.managerRoleCd,
-                "managerTel": subscriberInsert.managerTel,
-                "registNo": subscriberInsert.registNo,
-                "scaleCd": subscriberInsert.scaleCd,
-                "sectorCd": subscriberInsert.sectorCd,
-                "statusCd": subscriberInsert.statusCd,
-                "workplaceName": subscriberInsert.workplaceName
-            });
-            //console.log('REG----------------------');
-            //console.log(response);
-            if (response?.data?.RET_CODE === "0000") {
-                fetchSubscribersList();
-                setOkayPopupMessage("등록 되었습니다.");
-                setOkayPopupShow(true);
-                handleRegisterInitialValue();
-                setFilePath({ ...filePath, "contractFileId": "" });
-                setRegMemberPop(false);
-            } else {
-                setOkayPopupMessage("입력정보에 오류가 있습니다");
-                setOkayPopupShow(true);
-            }
-        } else {
-            setOkayPopupMessage("계약기간을 확인해주세요.");
+        const response = await subscribersInsert({
+            "companyName": subscriberInsert.companyName,
+            "contractAmount": subscriberInsert.contractAmount,
+            "contractEndDate": subscriberInsert.contractEndDate,
+            "contractFileId": subscriberInsert.contractFileId,
+            "contractStartDate": subscriberInsert.contractStartDate,
+            "loginId": subscriberInsert.loginId,
+            "managerEmail": subscriberInsertEmailBeforeSign + '@' + subscriberInsertEmailAfterSign,
+            "managerName": subscriberInsert.managerName,
+            "managerRoleCd": subscriberInsert.managerRoleCd,
+            "managerTel": subscriberInsert.managerTel,
+            "registNo": subscriberInsert.registNo,
+            "scaleCd": subscriberInsert.scaleCd,
+            "sectorCd": subscriberInsert.sectorCd,
+            "statusCd": subscriberInsert.statusCd,
+            "workplaceName": subscriberInsert.workplaceName
+        });
+        //console.log('REG----------------------');
+        //console.log(response);
+        if (response?.data?.RET_CODE === "0000") {
+            fetchSubscribersList();
+            setOkayPopupMessage("등록 되었습니다.");
             setOkayPopupShow(true);
-        }      
-
+            handleRegisterInitialValue();
+            setFilePath({ ...filePath, "contractFileId": "" });
+            setRegMemberPop(false);
+        } else {
+            setOkayPopupMessage("입력정보에 오류가 있습니다");
+            setOkayPopupShow(true);
+        }
     }
 
     const handleSubscribersUpdate = async () => {
@@ -1033,11 +1066,11 @@ const SystemAdministrator = () => {
             "workplaceId": subscriberView.workplaceId,
             "workplaceName": subscriberView.workplaceName
         });
-        console.log('UPDATE----------------------');
-        console.log(response);
+        //console.log('UPDATE----------------------');
+        //console.log(response);
         if (response?.data?.RET_CODE === "0000") {
             fetchSubscribersList();
-            setOkayPopupMessage("등록 되었습니다.");
+            setOkayPopupMessage("수정 되었습니다.");
             setOkayPopupShow(true);
             setFilePath({ ...filePath, "contractFileId": "" });
             setUserInfoPop(false);

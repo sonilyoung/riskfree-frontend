@@ -74,14 +74,7 @@ const Login = () => {
     // === Data: 2022.10.03 author:Jimmy add ===
     const [saveIDFlag, setSaveIDFlag] = useState(false);
     
-    const dataRuleCheckForID = (ch) => {
-        let ascii = ch.charCodeAt(0);
-        if (48 /* 0 */ <= ascii && ascii <= 57 /* 9 */) return true;
-        if (65 /* A */ <= ascii && ascii <= 90 /* Z */) return true;
-        if (97 /* a */ <= ascii && ascii <= 122 /* z */) return true;
-        if (ch === ".") return true;
-        return false;
-    };
+
     // =========================================
 
     const handleChange = (prop) => (event) => {
@@ -91,16 +84,15 @@ const Login = () => {
         });
         
         // === Data: 2022.10.03 author:Jimmy add ===
-        if (event.target.value === "") {
-            setValues({...values, id: { ...values.id, value: event.target.value }})
-        };
+        // if (event.target.value === "") {
+        //     setValues({...values, id: { ...values.id, value: event.target.value }})
+        // };
       
-        if (dataRuleCheckForID(event.target.value.length - 1) === false) return;
+        if (dataRuleCheckForID(event.target.value.length - 1) === false) ;
             setValues({...values, id: { ...values.id, value: event.target.value }})
         // =========================================
     };
 
-    
     const handleFirstLogin = () => {
         navigate(redirectPath);
         setWelcomePopupShow(false);
@@ -130,7 +122,7 @@ const Login = () => {
             }
             //console.log(redirectPath, userLoginCount);
 
-            if (userLoginCount < 2) {
+            if (userLoginCount === 0 || userLoginCount === 1) {
                 setWelcomePopupShow(true);
             } else {
                 setWelcomePopupShow(false);
@@ -142,14 +134,22 @@ const Login = () => {
                 if (saveIDFlag) localStorage.setItem(LS_KEY_ID, values.id.value);
             } 
             // =========================================
-
         } else {
-            setWrongCredentialsPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다");
+            setWrongCredentialsPopupMessage("등록되지 않은 계정입니다.");
             setWrongCredentialsPopup(true);
         }
 
 
     }
+
+    const dataRuleCheckForID = (ch) => {
+        let ascii = ch.charCodeAt(0);
+        if (48 /* 0 */ <= ascii && ascii <= 57 /* 9 */) return true;
+        if (65 /* A */ <= ascii && ascii <= 90 /* Z */) return true;
+        if (97 /* a */ <= ascii && ascii <= 122 /* z */) return true;
+        if (ch === ".") return true;
+        return false;
+    };
 
     useEffect(() => {
         // === Data: 2022.10.03 author:Jimmy add ===

@@ -378,6 +378,7 @@ function List() {
         handleFetchList()
     }, [page])
 
+    console.log(workplaceSelect)
     return (
         <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
@@ -395,10 +396,10 @@ function List() {
                                 sx={{ width: 204 }}
                                 onChange={handleWorkplaceSelect}
                                 value={workplaceSelect}
+                                key={workplaceSelect}
                                 displayEmpty
+
                             >
-                                { /* === Data: 2022.10.03 author:Jimmy add: 전체 === */ }
-                                <MenuItem value=''>전체</MenuItem>
                                 {workplaces?.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
                             </Select>
                         </div>

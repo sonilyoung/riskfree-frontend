@@ -982,13 +982,13 @@ const Director = () => {
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(improvementLawOrderRate?.RET_DATA?.improvemetRate)}>
-                                <Link to="/dashboard/employee/improvement-measures/list" className={classes.slickLink} underline="none">
+                                <Link to="/dashboard/employee/order-for-improvement-and-correction-under-related-law/list" className={classes.slickLink} underline="none">
                                     <div><strong>{improvementLawOrderRate?.RET_DATA?.improvemetRate ? improvementLawOrderRate?.RET_DATA?.improvemetRate : "0%"}</strong></div>
                                     <div>개선/시정<br /> 명령</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor('0%')}>
-                                <Link to="/dashboard/employee/order-for-improvement-and-correction-under-related-law/list" className={classes.slickLink} underline="none">
+                                <Link to="/dashboard/employee/measure-to-manage-performance-od-duties-law/list" className={classes.slickLink} underline="none">
                                     <div><strong>{relatedLawRate?.RET_DATA?.relatedLawRate ? relatedLawRate?.RET_DATA?.relatedLawRate : "0%"}</strong></div>
                                     <div>관계법령에 따른<br /> 의무이행</div>
                                 </Link>
