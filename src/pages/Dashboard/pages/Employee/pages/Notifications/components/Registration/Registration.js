@@ -240,7 +240,6 @@ const Registration = () => {
     const [fileUpload] = useFileUploadMutation()
     const [dialogId, setDialogId] = useState("")
     const [notice, setNotice] = useState({})
-    const [selectedFileName, setSelectedFileName] = useState("")
     const [filePath, setFilePath] = useState({
         "attachId": ""
     })
@@ -263,36 +262,17 @@ const Registration = () => {
 
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
-        if((selectedFileName === "") || (selectedFileName === null)) {
-            setOkayPopupMessage("업로드할 파일을 선택하세요.");
-            setOkayPopupShow(true);   
-        } else {
-
-            formData.append("files", selectedFile)
-            const response = await fileUpload(formData)
-            if(response.data.RET_CODE === "0000"){
-                setOkayPopupMessage("'파일'을 등록 하였습니다.");
-                setOkayPopupShow(true);
-                handleDialogClose();
-                const fileId = response.data.RET_DATA[0].atchFileId
-                setNotice({ ...notice, [dialogId]: fileId })
-                setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
-            } else if(response.data.RET_CODE === '0433'){
-                setOkayPopupMessage("파일확장자 오류");
-                setOkayPopupShow(true);
-            } else {
-                setOkayPopupMessage("시스템 오류");
-                setOkayPopupShow(true);
-            }
-        setSelectedFileName("");
-
-        }
+        formData.append("files", selectedFile)
+        const response = await fileUpload(formData)
+        handleDialogClose()
+        const fileId = response.data.RET_DATA[0].atchFileId
+        setNotice({ ...notice, [dialogId]: fileId })
+        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
     }
 
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
-        setSelectedFileName(file.name);
     }
 
 
@@ -438,9 +418,7 @@ const Registration = () => {
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
                 label={labelObject}
-                selectedFileName={selectedFileName}
             />
-
             <Overlay show={okayPopupShow}>
                 <Okay
                     show={okayPopupShow}

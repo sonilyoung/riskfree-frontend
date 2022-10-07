@@ -56,7 +56,6 @@ import { Overlay } from '../../../../../../components/Overlay';
 import { useSafeWorkExcelUploadMutation } from '../../../../../../hooks/api/ExcelController/ExcelController';
 import { useSelector, useDispatch } from 'react-redux';
 import {selectBaselineId} from '../../../../../../slices/selections/MainSelection';
-import Okay from '../../../../../../components/MessageBox/Okay';
 //import { useFileDownMutation } from '../../../../../../hooks/api/FileManagement/FIleManagement';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -749,7 +748,7 @@ const WorkHistoryList = () => {
     const [getSafeWorkFile] = useGetSafeWorkFileMutation();
     const [deleteFile] = useDeleteFileMutation();
     const getInitialWorkplaceId = useUserInitialWorkplaceId();
-    //console.log(getInitialWorkplaceId());
+    console.log(getInitialWorkplaceId());
 
     const [locale] = React.useState('ko');
     const [hide, setHide] = useState(true);
@@ -782,11 +781,6 @@ const WorkHistoryList = () => {
     const [safeWorkExcelUpload] = useSafeWorkExcelUploadMutation()
     const [deleteSafeWork] = useDeleteSafeWorkMutation()
     const currentBaselineId = useSelector(selectBaselineId)
-
-    const [okayPopupMessage, setOkayPopupMessage] = useState("");
-    const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
-
-    const [okayPopupShow, setOkayPopupShow] = useState(false);
 
     const [labelObject, setLabelObject] = useState({
         upperLabel: "공사허가서 등록",
@@ -859,7 +853,7 @@ const WorkHistoryList = () => {
             "insertDate": insertDate,
             "userName": username
         });
-        //console.log(response);
+        console.log(response);
         setSafeWorkList(response.data.RET_DATA);
     }
 
@@ -877,7 +871,7 @@ const WorkHistoryList = () => {
             "insertDate": insertDate
         });
         setSafeWorkFileList(response.data.RET_DATA);
-        //console.log(response, workplaceId);
+        console.log(response, workplaceId);
 
     }
     const handleFileInfo = async (id, constructionType, insertDate) => {
@@ -894,29 +888,14 @@ const WorkHistoryList = () => {
 
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
-        if((selectedFileName === "") || (selectedFileName === null)) {
-            setOkayPopupMessage("업로드할 파일을 선택하세요.");
-            setOkayPopupShow(true);   
-        } else {
-            formData.append("excelFile", selectedFile)
-            const response = await safeWorkExcelUpload(formData)
-            if(response.data.RET_CODE === "0000"){
-                setOkayPopupMessage("'파일'을 등록 하였습니다.");
-                setOkayPopupShow(true);
-                handleDialogClose();
-                handleDialogCloseOnly();
-                fetchSafeWorkList();
-            } else if(response.data.RET_CODE === '0433'){
-                setOkayPopupMessage("파일확장자 오류");
-                setOkayPopupShow(true);
-            } else {
-                setOkayPopupMessage("시스템 오류");
-                setOkayPopupShow(true);
-            }
-            setSelectedFileName("");
-        }
+        formData.append("excelFile", selectedFile)
+        const response = await safeWorkExcelUpload(formData)
+        handleDialogClose()
+        handleDialogCloseOnly()
+        fetchSafeWorkList()
     }
-    //console.log(safeWorkFileList)
+
+    console.log(safeWorkFileList)
 
     useEffect(() => {
         fetchWorkplaceList();
@@ -1092,7 +1071,6 @@ const WorkHistoryList = () => {
                     </Stack>
                 </Grid>
             </Grid>
-            {/* 공사허가서 파일 등록 폼 */}
             <OnlyUploadDialog
                 open={openDialogOnly}
                 onClose={handleDialogCloseOnly}
@@ -1102,15 +1080,6 @@ const WorkHistoryList = () => {
                 label={labelObject}
                 selectedFileName={selectedFileName}
             />
-
-            <Overlay show={okayPopupShow}>
-                <Okay
-                    show={okayPopupShow}
-                    message={okayPopupMessage}
-                    title={okayPopupTitle}
-                    onConfirm={() => setOkayPopupShow(false) } />
-            </Overlay>
-
             <UploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
