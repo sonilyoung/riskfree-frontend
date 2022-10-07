@@ -371,6 +371,14 @@ function List() {
         setImprovements(response.data.RET_DATA)
     }
 
+    const DateChange = name => (date) => {
+        if(name === 'startDate') {
+            setStartDate(date);
+        } else {
+            setEndDate(date);
+        }
+    };
+
     const [locale] = React.useState('ko');
 
     useEffect(() => {
@@ -378,7 +386,7 @@ function List() {
         handleFetchList()
     }, [page])
 
-    console.log(workplaceSelect)
+    //console.log(workplaceSelect)
     return (
         <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
@@ -411,10 +419,12 @@ function List() {
                                     label=" "
                                     inputFormat="YYYY-MM-DD"
                                     value={startDate}
-                                    onChange={(newDate) => {
-                                        const date = new Date(newDate.$d)
-                                        setStartDate(moment(date).format("YYYY-MM-DD"))
-                                    }}
+                                    isClearable
+                                    onChange={DateChange('startDate')}
+                                    // onChange={(newDate) => {
+                                    //     const date = new Date(newDate.$d)
+                                    //     setStartDate(moment(date).format("YYYY-MM-DD"))
+                                    // }}
                                     renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                 />
                             </LocalizationProvider>
@@ -425,10 +435,12 @@ function List() {
                                     label=" "
                                     inputFormat="YYYY-MM-DD"
                                     value={endDate}
-                                    onChange={(newDate) => {
-                                        const date = new Date(newDate.$d)
-                                        setEndDate(moment(date).format("YYYY-MM-DD"))
-                                    }}
+                                    isClearable
+                                    onChange={DateChange('endDate')}
+                                    // onChange={(newDate) => {
+                                    //     const date = new Date(newDate.$d)
+                                    //     setEndDate(moment(date).format("YYYY-MM-DD"))
+                                    // }}
                                     renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                 />
                             </LocalizationProvider>

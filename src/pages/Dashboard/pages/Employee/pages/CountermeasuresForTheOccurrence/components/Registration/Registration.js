@@ -748,7 +748,7 @@ const Registration = () => {
                                             inputFormat="YYYY-MM-DD"
                                             value={accident && accident.occurDate}
                                             onChange={(newDate) => {
-                                                const date = new Date(newDate.$d)
+                                                const date = new Date()
                                                 setAccident({ ...accident, "occurDate": moment(date).format("YYYY-MM-DD") })
                                             }}
                                             renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
@@ -952,7 +952,7 @@ const Registration = () => {
                                         }
                                         displayEmpty
                                     >
-                                        <MenuItem value="001">지사</MenuItem>
+                                        <MenuItem value="001">자사</MenuItem>
                                         <MenuItem value="002">도급</MenuItem>
                                         <MenuItem value="003">기타</MenuItem>
                                     </Select>

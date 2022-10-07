@@ -168,6 +168,16 @@ const Registration = () => {
 
     }    
 
+    const DateChange = name => (date) => {
+        if(name === 'finDate') {
+            setImprovement({ ...improvement, "finDate": date});
+        } else if(name === 'completeDate') {
+            setImprovement({ ...improvement, "completeDate": date});
+        } else if(name === 'reqDate') {
+            setImprovement({ ...improvement, "reqDate": date});
+        }
+    };
+
     const [locale] = React.useState('ko');
     useEffect(() => {
         fetchLoginInfo()
@@ -264,10 +274,12 @@ const Registration = () => {
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
                                             value={improvement?.reqDate}
-                                            onChange={(newDate) => {
-                                                const date = new Date(newDate.$d)
-                                                setImprovement({ ...improvement, "reqDate": moment(date).format("YYYY-MM-DD") })
-                                            }}
+                                            isClearable
+                                            onChange={DateChange('reqDate')}
+                                            // onChange={(newDate) => {
+                                            //     const date = new Date(newDate.$d)
+                                            //     setImprovement({ ...improvement, "reqDate": moment(date).format("YYYY-MM-DD") })
+                                            // }}
                                             renderInput={(params) => <TextField {...params} sx={{ width: 200 }} />}
                                         />
                                     </LocalizationProvider>
@@ -279,7 +291,6 @@ const Registration = () => {
                                         sx={{ width: 200 }}
                                         className={classes.selectMenu}
                                         value={improvement.reqUserCd}
-                                        defaultValue={improvement.reqUserCd}
                                         key={improvement.reqUserCd}
                                         onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
                                         displayEmpty
@@ -295,10 +306,12 @@ const Registration = () => {
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
                                             value={improvement.finDate}
-                                            onChange={(newDate) => {
-                                                const date = new Date(newDate.$d)
-                                                setImprovement({ ...improvement, "finDate": moment(date).format("YYYY-MM-DD") })
-                                            }}
+                                            isClearable
+                                            onChange={DateChange('finDate')}
+                                            // onChange={(newDate) => {
+                                            //     const date = new Date(newDate.$d)
+                                            //     setImprovement({ ...improvement, "finDate": moment(date).format("YYYY-MM-DD") })
+                                            // }}
                                             renderInput={(params) => <TextField {...params} sx={{ width: 200 }} />}
                                         />
                                     </LocalizationProvider>
@@ -386,10 +399,12 @@ const Registration = () => {
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
                                             value={improvement.completeDate}
-                                            onChange={(newDate) => {
-                                                const date = new Date(newDate.$d)
-                                                setImprovement({ ...improvement, "completeDate": moment(date).format("YYYY-MM-DD") })
-                                            }}
+                                            isClearable
+                                            onChange={DateChange('completeDate')}
+                                            // onChange={(newDate) => {
+                                            //     const date = new Date(newDate.$d)
+                                            //     setImprovement({ ...improvement, "completeDate": moment(date).format("YYYY-MM-DD") })
+                                            // }}
                                             renderInput={(params) => <TextField {...params} sx={{ width: 200 }} />}
                                         />
                                     </LocalizationProvider>

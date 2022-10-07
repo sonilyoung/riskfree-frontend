@@ -435,8 +435,9 @@ const Registration = () => {
         }
     };
 
-    const [date1, setDate1] = React.useState(null),
-        [date2, setDate2] = React.useState(null);
+    const DateChange = name => (date) => {
+        setLaw({ ...law, [name] : date });
+    };
 
     const [locale] = React.useState('ko');
 
@@ -642,10 +643,11 @@ const Registration = () => {
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
                                             value={law.orderDate}
-                                            onChange={(newDate) => {
-                                                const date = new Date(newDate.$d)
-                                                setLaw({ ...law, "orderDate": moment(date).format("YYYY-MM-DD") })
-                                            }}
+                                            onChange={DateChange('orderDate')}
+                                            // onChange={(newDate) => {
+                                            //     const date = new Date(newDate)
+                                            //     setLaw({ ...law, "orderDate": moment(date).format("YYYY-MM-DD") })
+                                            // }}
                                             renderInput={(params) => <TextField {...params} sx={{ width: 180 }} />}
                                         />
                                     </LocalizationProvider>
@@ -658,10 +660,12 @@ const Registration = () => {
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
                                             value={law.dueDate}
-                                            onChange={(newDate) => {
-                                                const date = new Date(newDate.$d)
-                                                setLaw({ ...law, "dueDate": moment(date).format("YYYY-MM-DD") })
-                                            }}
+                                            isClearable
+                                            onChange={DateChange('dueDate')}
+                                            // onChange={(newDate) => {
+                                            //     const date = new Date()
+                                            //     setLaw({ ...law, "dueDate": moment(date).format("YYYY-MM-DD") })
+                                            // }}
                                             renderInput={(params) => <TextField {...params} sx={{ width: 180 }} />}
                                         />
                                     </LocalizationProvider>
@@ -686,6 +690,7 @@ const Registration = () => {
                                         multiline
                                         rows={4}
                                         value={law.issueReason}
+                                        isClearable
                                         onChange={(event) =>
                                             setLaw({
                                                 ...law,
@@ -705,10 +710,12 @@ const Registration = () => {
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
                                             value={law.recvDate}
-                                            onChange={(newDate) => {
-                                                const date = new Date(newDate.$d)
-                                                setLaw({ ...law, "recvDate": moment(date).format("YYYY-MM-DD") })
-                                            }}
+                                            isClearable
+                                            onChange={DateChange('recvDate')}
+                                            // onChange={(newDate) => {
+                                            //     const date = new Date(newDate)
+                                            //     setLaw({ ...law, "recvDate": moment(new Date(newDate)).format("YYYY-MM-DD") })
+                                            // }}
                                             renderInput={(params) => <TextField {...params} sx={{ width: 180 }} />}
                                         />
                                     </LocalizationProvider>

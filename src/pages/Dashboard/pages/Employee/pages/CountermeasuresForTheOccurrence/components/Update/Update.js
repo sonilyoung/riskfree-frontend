@@ -823,12 +823,9 @@ const Update = () => {
                                         onChange={(e) => setAccident({ ...accident, "accidentTypeCd": e.target.value })}
                                         displayEmpty
                                     >
-                                        <MenuItem value="001">추락</MenuItem>
-                                        <MenuItem value="002">끼임</MenuItem>
-                                        <MenuItem value="003">화재</MenuItem>
-                                        <MenuItem value="004">전기</MenuItem>
-                                        <MenuItem value="005">밀폐</MenuItem>
-                                        <MenuItem value="006">중량물</MenuItem>
+                                        <MenuItem value="001">자사</MenuItem>
+                                        <MenuItem value="002">도급</MenuItem>
+                                        <MenuItem value="003">기타</MenuItem>
                                     </Select>
                                 </div>
                                 <div className={classes.rowTitle}>사고분류</div>
