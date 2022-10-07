@@ -409,13 +409,29 @@ const Registration = () => {
 
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
-        formData.append("files", selectedFile)
-        handleDialogClose()
-        const response = await fileUpload(formData)
-        const fileId = response.data.RET_DATA[0].atchFileId
-        setLaw({ ...law, [dialogId]: fileId })
-        handleDialogClose()
-        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0]?.originalFileName })
+        if((selectedFileName === "") || (selectedFileName === null)) {
+            setOkayPopupMessage("업로드할 파일을 선택하세요.");
+            setOkayPopupShow(true);   
+        } else {
+
+            formData.append("files", selectedFile)
+            const response = await fileUpload(formData)
+            if(response.data.RET_CODE === "0000"){
+                setOkayPopupMessage("'파일'을 등록 하였습니다.");
+                setOkayPopupShow(true);
+                handleDialogClose();
+                const fileId = response.data.RET_DATA[0].atchFileId
+                setLaw({ ...law, [dialogId]: fileId })
+                setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0]?.originalFileName })
+            } else if(response.data.RET_CODE === '0433'){
+                setOkayPopupMessage("파일확장자 오류");
+                setOkayPopupShow(true);
+            } else {
+                setOkayPopupMessage("시스템 오류");
+                setOkayPopupShow(true);
+            }
+        setSelectedFileName("");
+        }
     }
 
     const handleRedirect = () => {
@@ -425,6 +441,37 @@ const Registration = () => {
     };
 
     const handleLawInsert = async () => {
+        if (law.recvCd.length <= 0) {
+            setOkayPopupMessage("필수항목 '접수형태'를 선택하세요.");
+            setOkayPopupShow(true);
+            return false;
+        }
+        if (law.cmmdOrgCd001.length <= 0) {
+            setOkayPopupMessage("필수항목 '명령구분'을 선택하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+        if (law.improveCn.length <= 0) {
+            setOkayPopupMessage("필수항목 '개선.조치 지적내용'을 입력하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+        if (law.improveTypeCd.length <= 0) {
+            setOkayPopupMessage("필수항목 '구분'을 선택하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+        if (law.orderDate.length <= 0) {
+            setOkayPopupMessage("필수항목 '지적일자'를 입력하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+        if (law.dueDate.length <= 0) {
+            setOkayPopupMessage("필수항목 '완료요청일'을 입력하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+        
         const response = await lawInsert(law);
         if (response?.data?.RET_CODE === "0000") {
             setOkayPopupMessage("등록 되었습니다.");

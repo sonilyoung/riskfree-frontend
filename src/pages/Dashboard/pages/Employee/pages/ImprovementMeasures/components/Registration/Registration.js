@@ -117,12 +117,29 @@ const Registration = () => {
 
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
-        formData.append("files", selectedFile)
-        handleDialogClose()
-        const response = await fileUpload(formData)
-        const fileId = response.data.RET_DATA[0].atchFileId
-        setImprovement({ ...improvement, [dialogId]: fileId })
-        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+        if((selectedFileName === "") || (selectedFileName === null)) {
+            setOkayPopupMessage("업로드할 파일을 선택하세요.");
+            setOkayPopupShow(true);   
+        } else {
+
+            formData.append("files", selectedFile)
+            const response = await fileUpload(formData)
+            if(response.data.RET_CODE === "0000"){
+                setOkayPopupMessage("'파일'을 등록 하였습니다.");
+                setOkayPopupShow(true);
+                handleDialogClose();
+                const fileId = response.data.RET_DATA[0].atchFileId
+                setImprovement({ ...improvement, [dialogId]: fileId })
+                setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+            } else if(response.data.RET_CODE === '0433'){
+                setOkayPopupMessage("파일확장자 오류");
+                setOkayPopupShow(true);
+            } else {
+                setOkayPopupMessage("시스템 오류");
+                setOkayPopupShow(true);
+            }
+        setSelectedFileName("");
+        }
     }
 
     const handleDialogInputChange = (event) => {
@@ -141,6 +158,29 @@ const Registration = () => {
     }
 
     const handleImprovementInsert = async () => {
+           
+
+        if (improvement.improveCn.length <= 0) {
+            setOkayPopupMessage("필수항목 '개선.조치 내용'을 입력하세요.");
+            setOkayPopupShow(true);
+            return false;
+        }
+        if (improvement.reqDate.length <= 0) {
+            setOkayPopupMessage("필수항목 '요청일자'를 입력하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+        if (improvement.reqUserCd.length <= 0) {
+            setOkayPopupMessage("필수항목 '요청자'를 입력하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+        if (improvement.finDate === null) {
+            setOkayPopupMessage("필수항목 '완료요청일'을 입력하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+
         const response = await improvementInsert(improvement);
         if (response?.data?.RET_CODE === "0000") {
             setOkayPopupMessage("등록 되었습니다.");

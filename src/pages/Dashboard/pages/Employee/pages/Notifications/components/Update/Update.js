@@ -265,6 +265,8 @@ const Update = () => {
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
+    const [selectedFileName, setSelectedFileName] = useState("")
+
     const [fileUpload] = useFileUploadMutation()
     const [getFileInfo] = useGetFileInfoMutation()
 
@@ -276,7 +278,7 @@ const Update = () => {
 
     const handleFetchView = async () => {
         const response = await noticesView(updateid)
-        console.log(response)
+        //console.log(response)
         setNotice(response.data.RET_DATA)
         let fileInfo = await getFileInfo({ atchFileId: parseInt(response?.data?.RET_DATA["attachId"]), fileSn: 1 })
         setFileName({ ...fileName, "attachId": fileInfo.data.RET_DATA.originalFileName })
@@ -284,12 +286,29 @@ const Update = () => {
 
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
-        formData.append("files", selectedFile)
-        const response = await fileUpload(formData)
-        const fileId = response.data.RET_DATA[0].atchFileId
-        handleDialogClose()
-        setNotice({ ...notice, "attachId": parseInt(fileId) })
-        setFileName({ ...fileName, "attachId": response.data.RET_DATA[0].originalFileName })
+        if((selectedFileName === "") || (selectedFileName === null)) {
+            setOkayPopupMessage("업로드할 파일을 선택하세요.");
+            setOkayPopupShow(true);   
+        } else {
+
+            formData.append("files", selectedFile)
+            const response = await fileUpload(formData)
+            if(response.data.RET_CODE === "0000"){
+                setOkayPopupMessage("'파일'을 등록 하였습니다.");
+                setOkayPopupShow(true);
+                handleDialogClose();
+                const fileId = response.data.RET_DATA[0].atchFileId
+                setNotice({ ...notice, "attachId": parseInt(fileId) })
+                setFileName({ ...fileName, "attachId": response.data.RET_DATA[0].originalFileName })
+            } else if(response.data.RET_CODE === '0433'){
+                setOkayPopupMessage("파일확장자 오류");
+                setOkayPopupShow(true);
+            } else {
+                setOkayPopupMessage("시스템 오류");
+                setOkayPopupShow(true);
+            }
+        setSelectedFileName("");
+        }
     }
 
     async function handleDialogFileDownload() {
@@ -311,8 +330,8 @@ const Update = () => {
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        setSelectedFileName(file.name);
     }
-
 
     const handleUpdate = async () => {
         const response = await noticesUpdate({
@@ -448,13 +467,16 @@ const Update = () => {
                     <WhiteButton className={'button-cancelation'} onClick={() => handleRedirect()}>취소</WhiteButton>
                 </Grid>
             </Grid>
+
             <OnlyUploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
                 label={labelObject}
+                selectedFileName={selectedFileName}
             />
+
             <Overlay show={okayPopupShow}>
                 <Okay
                     show={okayPopupShow}

@@ -408,7 +408,7 @@ const Update = () => {
     const [okayPopupShow, setOkayPopupShow] = useState(false);
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
-
+    const [selectedFileName, setSelectedFileName] = useState("")
     const [locale] = React.useState('ko');
 
     const handleDialogClose = () => {
@@ -418,6 +418,7 @@ const Update = () => {
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        setSelectedFileName(file.name)
     }
 
 
@@ -439,12 +440,30 @@ const Update = () => {
 
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
-        formData.append("files", selectedFile)
-        handleDialogClose()
-        const response = await fileUpload(formData)
-        const fileId = response.data.RET_DATA[0].atchFileId
-        setAccident({ ...accident, [dialogId]: parseInt(fileId) })
-        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+        if((selectedFileName === "") || (selectedFileName === null)) {
+            setOkayPopupMessage("업로드할 파일을 선택하세요.");
+            setOkayPopupShow(true);   
+        } else {
+
+            formData.append("files", selectedFile)
+            const response = await fileUpload(formData)
+            if(response.data.RET_CODE === "0000"){
+                setOkayPopupMessage("'파일'을 등록 하였습니다.");
+                setOkayPopupShow(true);
+                handleDialogClose();
+                const fileId = response.data.RET_DATA[0].atchFileId
+                setAccident({ ...accident, [dialogId]: parseInt(fileId) })
+                setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+
+            } else if(response.data.RET_CODE === '0433'){
+                setOkayPopupMessage("파일확장자 오류");
+                setOkayPopupShow(true);
+            } else {
+                setOkayPopupMessage("시스템 오류");
+                setOkayPopupShow(true);
+            }
+        setSelectedFileName("");
+        }
     }
 
     async function handleDialogFileDownload(id) {
@@ -955,6 +974,7 @@ const Update = () => {
                 onUpload={handleDialogFileUpload}
                 enableDownload={true}
                 onDownload={handleDialogFileDownload}
+                selectedFileName={selectedFileName}
             />
             <Overlay show={okayPopupShow}>
                 <Okay

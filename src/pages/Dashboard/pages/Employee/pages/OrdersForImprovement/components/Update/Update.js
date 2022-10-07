@@ -38,7 +38,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 
 import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
-import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+import { OnlyUploadDialog, UploadDialog } from '../../../../../../../../dialogs/Upload';
 import { Overlay } from '../../../../../../../../components/Overlay';
 import Okay from '../../../../../../../../components/MessageBox/Okay';
 
@@ -351,10 +351,15 @@ const Update = () => {
         "performBeforeId": "",
         "performAfterId": ""
     });
+    const [selectedFileName, setSelectedFileName] = useState("")
+    const labelObject = {
+        upperLabel: "이미지 등록",
+        middleLabel: "등록할 파일을 업로드 합니다."
+    }
     const [okayPopupShow, setOkayPopupShow] = useState(false);
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
-
+    
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
         setLoginInfo(response.data.RET_DATA)
@@ -444,12 +449,29 @@ const Update = () => {
 
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
-        formData.append("files", selectedFile)
-        const response = await fileUpload(formData)
-        const fileId = response.data.RET_DATA[0].atchFileId
-        setLaw({ ...law, [dialogId]: fileId })
-        handleDialogClose()
-        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0]?.originalFileName })
+        if((selectedFileName === "") || (selectedFileName === null)) {
+            setOkayPopupMessage("업로드할 파일을 선택하세요.");
+            setOkayPopupShow(true);   
+        } else {
+
+            formData.append("files", selectedFile)
+            const response = await fileUpload(formData)
+            if(response.data.RET_CODE === "0000"){
+                setOkayPopupMessage("'파일'을 등록 하였습니다.");
+                setOkayPopupShow(true);
+                handleDialogClose();
+                const fileId = response.data.RET_DATA[0].atchFileId
+                setLaw({ ...law, [dialogId]: fileId })
+                setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0]?.originalFileName })
+            } else if(response.data.RET_CODE === '0433'){
+                setOkayPopupMessage("파일확장자 오류");
+                setOkayPopupShow(true);
+            } else {
+                setOkayPopupMessage("시스템 오류");
+                setOkayPopupShow(true);
+            }
+        setSelectedFileName("");
+        }
     }
 
     async function handleDialogFileDownload() {
@@ -462,6 +484,7 @@ const Update = () => {
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
+        setSelectedFileName(file.name)
     }
 
     const handleDialogOpen = (event) => {
@@ -577,7 +600,7 @@ const Update = () => {
                                                                 "cmmdOrgCd001": law.cmmdOrgCd001 ? "" : "001",
                                                             })
                                                         }
-                                                        checked={!!law.cmmdOrgCd001}
+                                                        checked={law.cmmdOrgCd001.trim() === "" ? false : true}
                                                     />
                                                 }
                                             />
@@ -596,7 +619,7 @@ const Update = () => {
                                                                 "cmmdOrgCd002": law.cmmdOrgCd002 ? "" : "002",
                                                             })
                                                         }
-                                                        checked={!!law.cmmdOrgCd002}
+                                                        checked={law.cmmdOrgCd002.trim() === "" ? false : true}
                                                     />
                                                 }
                                             />
@@ -615,7 +638,7 @@ const Update = () => {
                                                                 "cmmdOrgCd003": law.cmmdOrgCd003 ? "" : "003",
                                                             })
                                                         }
-                                                        checked={!!law.cmmdOrgCd003}
+                                                        checked={law.cmmdOrgCd003.trim() === "" ? false : true}
                                                     />
                                                 }
                                             />
@@ -633,7 +656,7 @@ const Update = () => {
                                                             "cmmdOrgCd004": law.cmmdOrgCd004 ? "" : "004",
                                                         })
                                                     }
-                                                    checked={!!law.cmmdOrgCd004}
+                                                    checked={law.cmmdOrgCd004.trim() === "" ? false : true}
                                                 />
                                                 }
                                             />
@@ -784,7 +807,7 @@ const Update = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value={filePath.performBeforeId ?? ""}
+                                            value={filePath.performBeforeId}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                         />
@@ -800,7 +823,7 @@ const Update = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value={filePath.performAfterId ?? ""}
+                                            value={filePath.performAfterId}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                         />
@@ -824,14 +847,16 @@ const Update = () => {
                     </WhiteButton>
                 </Grid>
             </Grid>
-            <UploadDialog
+
+            <OnlyUploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
-                enableDownload={true}
-                onDownload={handleDialogFileDownload}
+                label={labelObject}
+                selectedFileName={selectedFileName}
             />
+                        
             <Overlay show={okayPopupShow}>
                 <Okay
                     show={okayPopupShow}
