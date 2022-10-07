@@ -214,9 +214,9 @@ function OnlyUpload({ open, onClose, onInputChange, onUpload, label, selectedFil
                                 variant="outlined"
                                 className={[classes.popupTextField, classes.zeroOpacity]}
                                 type="file"
-                                onClick={handleRealChooseFile}
                                 onChange={onInputChange}
                                 onClick={handleRealChooseFile}
+                                accept=".xlsx, .xls"
                             />
                             <TextField
                                 id="upload-field-real"

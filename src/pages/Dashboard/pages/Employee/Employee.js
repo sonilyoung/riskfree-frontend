@@ -1919,9 +1919,7 @@ const Employee = () => {
     const classes = useStyles();
 
     const navigate = useNavigate();
-
     const [defaultPage, setDefaultPage] = useState("0101");
-    
     const { MainKey } = useParams(1)
 
     const [num, setNum] = React.useState("");
@@ -2494,49 +2492,79 @@ const Employee = () => {
 
     const handleDialogFileUpload = async () => {
         if (dialogId === "logoImgUpload" || dialogId === "documentFileUpload" || dialogId === "safetyFileUpload") {
-            let formData = new FormData();
-            formData.append("files", selectedFile)
-            handleDialogClose()
-            handleDialogCloseOnly()
-            handleDialogCloseEmployee()
-            const response = await fileUpload(formData);
-            setOkayPopupMessage("등록 되었습니다.");
-            setOkayPopupShow(true);
-            const fileId = response.data.RET_DATA[0].atchFileId
-            setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
-            if (dialogId === "logoImgUpload") {
-                setFilePath({ ...filePath, [dialogId]: (response.data.RET_DATA[0].filePath + "/" + response.data.RET_DATA[0].saveFileName) })
+            if((selectedFileName === "") || (selectedFileName === null) || (selectedFile === "")) {
+                setOkayPopupMessage("업로드할 파일을 선택하세요.");
+                setOkayPopupShow(true);   
             } else {
-                setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+                let formData = new FormData();
+                formData.append("files", selectedFile)
+                handleDialogClose()
+                handleDialogCloseOnly()
+                handleDialogCloseEmployee()
+                const response = await fileUpload(formData);
+                if(response.data.RET_CODE === "0000") {
+                    setOkayPopupMessage("등록 되었습니다.");
+                    setOkayPopupShow(true);
+
+                    const fileId = response.data.RET_DATA[0].atchFileId
+                    setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
+                    if (dialogId === "logoImgUpload") {
+                        setFilePath({ ...filePath, [dialogId]: (response.data.RET_DATA[0].filePath + "/" + response.data.RET_DATA[0].saveFileName) })
+                    } else {
+                        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+                    }
+                } else if(response.data.RET_CODE === '0433'){
+                    setOkayPopupMessage("파일확장자 오류");
+                    setOkayPopupShow(true);
+                } else {
+                    setOkayPopupMessage("시스템 오류");
+                    setOkayPopupShow(true);
+                }
             }
         } else if (dialogId === "inspectionFile") {
-            let formData = new FormData();
-            formData.append("files", selectedFile)
-            handleDialogClose()
-            handleDialogCloseEmployee()
-            const response = await fileUpload(formData)
-            const fileId = response.data.RET_DATA[0].atchFileId
-            setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
-            setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
-            const deepCopyObj = JSON.parse(JSON.stringify(inspectionsDocs))
-            const updatedArray = deepCopyObj.map((obj, index) => {
-                if (index === inspectionIndex) {
-                    return { "fileId": fileId }
+            if((selectedFileName === "") || (selectedFileName === null) || (selectedFile === "")) {
+                setOkayPopupMessage("업로드할 파일을 선택하세요.");
+                setOkayPopupShow(true);
+            } else {
+                let formData = new FormData();
+                formData.append("files", selectedFile)
+                handleDialogClose()
+                handleDialogCloseEmployee()
+                const response = await fileUpload(formData)
+                if(response.data.RET_CODE === "0000") {
+                    setOkayPopupMessage("등록 되었습니다.");
+                    setOkayPopupShow(true);
+                    
+                    const fileId = response.data.RET_DATA[0].atchFileId
+                    setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
+                    setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+                    const deepCopyObj = JSON.parse(JSON.stringify(inspectionsDocs))
+                    const updatedArray = deepCopyObj.map((obj, index) => {
+                        if (index === inspectionIndex) {
+                            return { "fileId": fileId }
+                        } else {
+                            return {
+                                fileId: obj["fileId"]
+                            }
+                        }
+                    })
+                    const responseDocumentFile = await updateDocumentFileId({
+                        "updateList": updatedArray,
+                        "articleNo": articleNoForInspection
+                    })
+                    setUploadFlag(!uploadFlag)
+                } else if(response.data.RET_CODE === '0433'){
+                    setOkayPopupMessage("파일확장자 오류");
+                    setOkayPopupShow(true);
                 } else {
-                    return {
-                        fileId: obj["fileId"]
-                    }
+                    setOkayPopupMessage("시스템 오류");
+                    setOkayPopupShow(true);
                 }
-            })
-            const responseDocumentFile = await updateDocumentFileId(
-                {
-                    "updateList": updatedArray,
-                    "articleNo": articleNoForInspection
-                })
-            setUploadFlag(!uploadFlag)
+            }
+        setSelectedFileName("");
         }
     }
-
+    
     async function handleDialogFileDownload() {
         const fileId = employeeFiles[dialogId]
         if (fileId || inspectionFileId) {
@@ -3293,7 +3321,10 @@ const Employee = () => {
                                     <div className={classes.listTitle}><strong>{!!(inspectionsDocs) && inspectionsDocs[0]?.fileCount}</strong>건 /{!!(inspectionsDocs) && !!(inspectionsDocs.length) && inspectionsDocs[0].totalCount}건</div>
                                     <ul className={classes.menuList + ' buttonList'}>
                                         {inspectionsDocs?.map((inspection, index) => (<><li>
-                                            <div>{(inspection.fileId === null || inspection.fileId === "null" || inspection.fileId === "") ? <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone> : <FileButtonExis id={"inspectionFile"} onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>}
+                                            <div>{(inspection.fileId === null || inspection.fileId === "null" || inspection.fileId === "") ? 
+                                                    <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone> 
+                                                : 
+                                                    <FileButtonExis id={"inspectionFile"} onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>}
                                                 {inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}
                                                     onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>상</span>) || (inspection.evaluation === "7" && <span className={'orange'}
                                                         onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>중</span>) || (inspection.evaluation === "5" && <span className={'red'}

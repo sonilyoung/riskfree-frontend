@@ -55,7 +55,7 @@ const useStyles = makeStyles(() => ({
     boxReception: {
         display: 'flex',
         marginBottom: '16px !important',
-        height: '160px',
+        height: '120px',
         '& $boxRow:first-of-type $rowInfo:first-of-type': {
             width: '160px',
         },
@@ -448,9 +448,7 @@ const View = () => {
                                 <div className={classes.rowTitle}>접수자</div>
                                 <div className={classes.rowInfo}>{accident && accident.recvUserName}</div>
                                 <div className={classes.rowTitle}>접수형태</div>
-                                <div className={classes.rowInfo}>
-                                    {accident && accident.recvForm}
-                                </div>
+                                <div className={classes.rowInfo}>{accident && accident.recvForm}</div>
                                 <div className={classes.rowTitle}>접수유형</div>
                                 <div className={classes.rowInfo}>
                                     {accident && Object.keys(accident).map(recvType => {

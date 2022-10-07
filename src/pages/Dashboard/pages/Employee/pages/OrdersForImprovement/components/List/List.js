@@ -458,6 +458,13 @@ const List = () => {
         setLawList(response.data.RET_DATA);
     };
 
+    const DateChange = name => (date) => {
+        if(name === 'startDate') {
+            setStartDate(date);
+        } else {
+            setEndDate(date);
+        }
+    };
 
     /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
     const [loginInfos, setLoginInfos] = useState({});
@@ -699,17 +706,19 @@ const List = () => {
                                 />
                             </div>
                             <div>
-                                <div className={classes.infoTitle}>발행일자</div>
+                                <div className={classes.infoTitle}>발생일자</div>
                                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                                     <DesktopDatePicker
                                         className={classes.selectMenuDate}
                                         label=" "
                                         inputFormat="YYYY-MM-DD"
                                         value={startDate}
-                                        onChange={(newDate) => {
-                                            const date = new Date(newDate.$d)
-                                            setStartDate(moment(date).format("YYYY-MM-DD"))
-                                        }}
+                                        isClearable
+                                        onChange={DateChange('startDate')}
+                                        // onChange={(newDate) => {
+                                        //     const date = new Date(newDate.$d)
+                                        //     setStartDate(moment(date).format("YYYY-MM-DD"))
+                                        // }}
                                         renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                     />
                                 </LocalizationProvider>
@@ -720,10 +729,12 @@ const List = () => {
                                         label=" "
                                         inputFormat="YYYY-MM-DD"
                                         value={endDate}
-                                        onChange={(newDate) => {
-                                            const date = new Date(newDate.$d)
-                                            setEndDate(moment(date).format("YYYY-MM-DD"))
-                                        }}
+                                        isClearable
+                                        onChange={DateChange('endDate')}
+                                        // onChange={(newDate) => {
+                                        //     const date = new Date(newDate.$d)
+                                        //     setEndDate(moment(date).format("YYYY-MM-DD"))
+                                        // }}
                                         renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                     />
                                 </LocalizationProvider>

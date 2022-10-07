@@ -9,8 +9,6 @@ import popupClose2 from '../../assets/images/btn_popClose2.png';
 import { useStyles } from './useStyles';
 import { Overlay } from '../../components/Overlay';
 
-
-
 const ClosePopupButton2 = styled(ButtonUnstyled)`
     width: 60px;
     height: 60px;

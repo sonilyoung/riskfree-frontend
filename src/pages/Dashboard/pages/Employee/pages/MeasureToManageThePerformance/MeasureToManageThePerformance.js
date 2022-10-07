@@ -906,10 +906,10 @@ const MeasureToManageThePerformance = () => {
             fetchRelatedRawList(lawId)
         } else {
             setseccerrCode(response?.data?.RET_CODE);
-            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다 ");
+            setOkayPopupMessage("입력정보가 없습니다 ");
             setOkayPopupShow(true);
         }
-        //console.log(response);
+        console.log(response);
     }
     async function handleDialogFileDownload() {
         const fileId = files[dialogId]
@@ -1115,7 +1115,7 @@ const MeasureToManageThePerformance = () => {
                 {toggleList === "three"
                     && <Grid item xs={12} className={classes.footerButtons}>
                         <BlueButton className={'button-registration'} onClick={() => handleUpdateRelatedRawList()}>등록</BlueButton>
-                        <WhiteButton className={'button-cancelation'} >취소</WhiteButton>
+                        {/* <WhiteButton className={'button-cancelation'} >취소</WhiteButton> */}
                     </Grid>}
             </Grid>
             <UploadEmployeeDialog
