@@ -403,9 +403,15 @@ const Director = () => {
     };
 
     const handleChartCategoriesDisplay = (chartCategories) => {
-        setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories } } });
+        
+        if(condition==="5" || condition==="6"){            
+            setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories } , yaxis: {title: {text: ''}}, tooltip: {y: {formatter: function (val) {return val + ""}}}} });    
+        }else{            
+            setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories } , yaxis: {title: {text: '% rate'}}, tooltip: {y: {formatter: function (val) {return val + "% rate"}}}} });    
+        }
+        
     }
-
+    
     const handleNotificationPopupsShow = (notificationIndex) => {
         const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex != index);
         setNoticeHotList(notificationPopupList);
@@ -636,8 +642,14 @@ const Director = () => {
             "baselineId": currentBaselineId,
             "condition": condition
         });
-        handleChartCategoriesDisplay(response?.data?.RET_DATA?.categories);
-        setChartSeries(response?.data?.RET_DATA?.series);
+        
+        if(response?.data?.RET_DATA?.series!=null){
+            handleChartCategoriesDisplay(response?.data?.RET_DATA?.categories);
+            setChartSeries(response?.data?.RET_DATA?.series);
+        }else{
+            handleChartCategoriesDisplay(null);
+            setChartSeries(null);            
+        }
     }
 
 
@@ -830,7 +842,7 @@ const Director = () => {
                                 <div className={toggleGrid ? classes.graphImageNone : classes.graphImage}>
                                     <Chart options={chartInfo.options} series={chartSeries} type="bar" />
                                 </div>
-                                <Grid item xs={12} className={toggleGrid ? classes.boxTable : classes.boxTableNone}>
+                                <Grid item xs={12} className={toggleGrid ? classes.boxTableGrid : classes.boxTableNone}>
                                     <div className={classes.tableHead}>
                                         <div className={classes.tableRow}>
                                             <div className={classes.tableData}>구분</div>
