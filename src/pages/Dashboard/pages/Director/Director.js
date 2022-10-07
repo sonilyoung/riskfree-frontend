@@ -631,12 +631,12 @@ const Director = () => {
             "condition": condition
         });
         
-        if(response?.data?.RET_DATA?.series!=null){
+        if(response?.data?.RET_DATA?.series.length>0){
             handleChartCategoriesDisplay(response?.data?.RET_DATA?.categories);
             setChartSeries(response?.data?.RET_DATA?.series);
         }else{
-            handleChartCategoriesDisplay(null);
-            setChartSeries(null);            
+            handleChartCategoriesDisplay([]);
+            setChartSeries([]);            
         }
     }
 

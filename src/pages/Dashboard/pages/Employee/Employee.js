@@ -2710,12 +2710,14 @@ const Employee = () => {
             "condition": condition
         });
 
-        if(response?.data?.RET_DATA?.series!=null){
+        console.log("response?.data?.RET_DATA:", response?.data?.RET_DATA)
+
+        if(response?.data?.RET_DATA?.series.length>0){
             handleChartCategoriesDisplay(response?.data?.RET_DATA?.categories);
             setChartSeries(response?.data?.RET_DATA?.series);
         }else{
-            handleChartCategoriesDisplay(null);
-            setChartSeries(null);            
+            handleChartCategoriesDisplay([]);
+            setChartSeries([]);            
         }
     }
 
