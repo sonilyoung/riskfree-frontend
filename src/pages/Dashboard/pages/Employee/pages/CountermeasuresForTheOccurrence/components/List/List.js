@@ -530,6 +530,14 @@ const List = () => {
         setPage(value)
     }
 
+    const DateChange = name => (date) => {
+        if(name === 'startDate') {
+            setStartDate(date);
+        } else {
+            setFinishDate(date);
+        }
+    };
+    
     useEffect(() => {
         
         fetchAccidentsList()
@@ -693,10 +701,12 @@ const List = () => {
                                         label=" "
                                         inputFormat="YYYY-MM-DD"
                                         value={startDate}
-                                        onChange={(newDate) => {
-                                            const date = new Date(newDate.$d)
-                                            setStartDate(moment(date).format("YYYY-MM-DD"))
-                                        }}
+                                        isClearable
+                                        onChange={DateChange('startDate')}
+                                        // onChange={(newDate) => {
+                                        //     const date = new Date(newDate.$d)
+                                        //     setStartDate(moment(date).format("YYYY-MM-DD"))
+                                        // }}
                                         renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                     />
                                 </LocalizationProvider>
@@ -707,10 +717,12 @@ const List = () => {
                                         label=" "
                                         inputFormat="YYYY-MM-DD"
                                         value={finishDate}
-                                        onChange={(newDate) => {
-                                            const date = new Date(newDate.$d)
-                                            setFinishDate(moment(date).format("YYYY-MM-DD"))
-                                        }}
+                                        isClearable
+                                        onChange={DateChange('finishDate')}
+                                        // onChange={(newDate) => {
+                                        //     const date = new Date(newDate.$d)
+                                        //     setFinishDate(moment(date).format("YYYY-MM-DD"))
+                                        // }}
                                         renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                     />
                                 </LocalizationProvider>

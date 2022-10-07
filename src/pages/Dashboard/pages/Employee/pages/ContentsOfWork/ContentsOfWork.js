@@ -918,6 +918,10 @@ const WorkHistoryList = () => {
     }
     //console.log(safeWorkFileList)
 
+    const DateChange = name => (date) => {
+        setInsertDate(date);
+    };
+
     useEffect(() => {
         fetchWorkplaceList();
         fetchSafeWorkList();
@@ -958,10 +962,12 @@ const WorkHistoryList = () => {
                                         label=" "
                                         inputFormat="YYYY-MM-DD"
                                         value={insertDate}
-                                        onChange={(newDate) => {
-                                            const date = new Date(newDate.$d);
-                                            setInsertDate(moment(date).format("YYYY-MM-DD"))
-                                        }}
+                                        isClearable
+                                        onChange={DateChange('insertDate')}
+                                        // onChange={(newDate) => {
+                                        //     const date = new Date(newDate.$d);
+                                        //     setInsertDate(moment(date).format("YYYY-MM-DD"))
+                                        // }}
                                         renderInput={(params) => <TextField {...params} sx={{ width: 180 }} />}
                                     />
                                 </LocalizationProvider>

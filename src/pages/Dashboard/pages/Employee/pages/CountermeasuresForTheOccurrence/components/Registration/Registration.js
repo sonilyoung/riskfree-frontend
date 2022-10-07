@@ -503,6 +503,11 @@ const Registration = () => {
 
     const [locale] = React.useState('ko');
 
+    //발생일자
+    const DateChange = name => (date) => {
+        setAccident({ ...accident, "occurDate": date});
+    };
+
     useEffect(() => {
         handleLoginInfo()
     }, [])
@@ -747,10 +752,12 @@ const Registration = () => {
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
                                             value={accident && accident.occurDate}
-                                            onChange={(newDate) => {
-                                                const date = new Date()
-                                                setAccident({ ...accident, "occurDate": moment(date).format("YYYY-MM-DD") })
-                                            }}
+                                            isClearable
+                                            onChange={DateChange('occurDate')}
+                                            // onChange={(newDate) => {
+                                            //     const date = new Date()
+                                            //     setAccident({ ...accident, "occurDate": moment(date).format("YYYY-MM-DD") })
+                                            // }}
                                             renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                         />
                                     </LocalizationProvider>
