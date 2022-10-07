@@ -1416,6 +1416,17 @@ const useStyles = makeStyles(() => ({
             wordBreak: 'keep-all'
         }
     },
+    boxTableHeader: {
+        borderRadius: '6px',
+        overflow: 'hidden',
+        boxShadow: '0 0 12px rgb(189 203 203 / 50%)',
+        background: '#fff',
+        padding: '34px',
+        '& *': {
+            boxSizing: 'border-box',
+            letterSpacing: '-1.08px'
+        }
+    },    
     boxTableNone: {
         display: "none !important"
     },
@@ -2079,21 +2090,9 @@ const Employee = () => {
                     rotate: 0,
                 },
             },
-            yaxis: {
-                title: {
-                    text: '% rate'
-                }
-            },
             fill: {
                 opacity: 1
-            },
-            tooltip: {
-                y: {
-                    formatter: function (val) {
-                        return val + "% rate"
-                    }
-                }
-            }
+            },          
         },
 
     });
@@ -2120,9 +2119,14 @@ const Employee = () => {
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
 
     const handleChartCategoriesDisplay = (chartCategories) => {
-        setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories } } });
+        
+        if(condition==="5" || condition==="6"){            
+            setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories } , yaxis: {title: {text: ''}}, tooltip: {y: {formatter: function (val) {return val + ""}}}} });    
+        }else{            
+            setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories } , yaxis: {title: {text: '% rate'}}, tooltip: {y: {formatter: function (val) {return val + "% rate"}}}} });    
+        }
+        
     }
-
     const handleNotificationPopupsShow = (notificationIndex) => {
         const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex != index);
         setNoticeHotList(notificationPopupList);
@@ -2705,8 +2709,14 @@ const Employee = () => {
             "baselineId": currentBaselineId,
             "condition": condition
         });
-        handleChartCategoriesDisplay(response?.data?.RET_DATA?.categories);
-        setChartSeries(response?.data?.RET_DATA?.series);
+
+        if(response?.data?.RET_DATA?.series!=null){
+            handleChartCategoriesDisplay(response?.data?.RET_DATA?.categories);
+            setChartSeries(response?.data?.RET_DATA?.series);
+        }else{
+            handleChartCategoriesDisplay(null);
+            setChartSeries(null);            
+        }
     }
 
     useEffect(() => {
@@ -3090,7 +3100,7 @@ const Employee = () => {
                                 <div className={toggleGrid ? classes.graphImageNone : classes.graphImage}>
                                     <Chart options={chartInfo.options} series={chartSeries} type="bar" />
                                 </div>
-                                <Grid item xs={12} className={toggleGrid ? classes.boxTable : classes.boxTableNone}>
+                                <Grid item xs={12} className={toggleGrid ? classes.boxTableHeader : classes.boxTableNone}>
                                     <div className={classes.tableHead}>
                                         <div className={classes.tableRow}>
                                             <div className={classes.tableData}>구분</div>
@@ -3106,7 +3116,7 @@ const Employee = () => {
                                                     <div className={classes.tableData}>{reportItem[0]?.menuTitle}</div>
                                                     {reportTitle?.map((reportTitleItem) => {
                                                         const element = reportItem?.find(item => item.workplaceId === parseFloat(reportTitleItem.groupId));
-                                                        return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}%` : "0%"}</div>;
+                                                        return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}` : "0"}</div>;
                                                     })}
                                                 </div>)
                                             : !!reportList && !!(reportList?.length) && condition === "5"
@@ -3115,12 +3125,12 @@ const Employee = () => {
                                                     {reportItem?.map((item) =>
                                                         <>
                                                             <div className={classes.tableData}>{item?.workplaceName}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType001}%` : "0%"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType002}%` : "0%"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType003}%` : "0%"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType004}%` : "0%"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType005}%` : "0%"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType006}%` : "0%"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType001}%` : "0"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType002}%` : "0"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType003}%` : "0"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType004}%` : "0"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType005}%` : "0"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType006}%` : "0"}</div>
                                                         </>
                                                     )}
                                                 </div>))
@@ -3130,10 +3140,10 @@ const Employee = () => {
                                                         {reportItem?.map((item) =>
                                                             <>
                                                                 <div className={classes.tableData}>{item?.workplaceName}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd001}%` : "0%"}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd002}%` : "0%"}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd003}%` : "0%"}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd004}%` : "0%"}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd001}` : "0"}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd002}` : "0"}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd003}` : "0"}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd004}` : "0"}</div>
                                                             </>
                                                         )}
                                                     </div>))
@@ -3142,7 +3152,7 @@ const Employee = () => {
                                                         <div className={classes.tableData}>{reportItem[0]?.workplaceName}</div>
                                                         {reportTitle?.map((reportTitleItem) => {
                                                             const element = reportItem?.find(item => item.groupId === reportTitleItem.groupId);
-                                                            return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}%` : "0%"}</div>;
+                                                            return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}` : "0"}</div>;
                                                         })}
                                                     </div>))
                                         }

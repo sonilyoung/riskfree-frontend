@@ -357,24 +357,12 @@ const Director = () => {
                 position: 'bottom',
                 labels: {
                     show: true,
-                    rotate: 0,
+                    rotate: -45,
                 },
-            },
-            yaxis: {
-                title: {
-                    text: '% rate'
-                }
             },
             fill: {
                 opacity: 1
             },
-            tooltip: {
-                y: {
-                    formatter: function (val) {
-                        return val + "% rate"
-                    }
-                }
-            }
         },
 
     });
@@ -858,7 +846,7 @@ const Director = () => {
                                                     <div className={classes.tableData}>{reportItem[0]?.menuTitle}</div>
                                                     {reportTitle?.map((reportTitleItem) => {
                                                         const element = reportItem?.find(item => item.workplaceId === parseFloat(reportTitleItem.groupId));
-                                                        return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}%` : "0%"}</div>;
+                                                        return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}` : "0"}</div>;
                                                     })}
                                                 </div>)
                                             : !!reportList && !!(reportList?.length) && condition === "5"
@@ -867,12 +855,12 @@ const Director = () => {
                                                     {reportItem?.map((item) =>
                                                         <>
                                                             <div className={classes.tableData}>{item?.workplaceName}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType001}%` : "0%"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType002}%` : "0%"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType003}%` : "0%"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType004}%` : "0%"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType005}%` : "0%"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType006}%` : "0%"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType001}` : "0"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType002}` : "0"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType003}` : "0"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType004}` : "0"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType005}` : "0"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType006}` : "0"}</div>
                                                         </>
                                                     )}
                                                 </div>))
@@ -882,10 +870,10 @@ const Director = () => {
                                                         {reportItem?.map((item) =>
                                                             <>
                                                                 <div className={classes.tableData}>{item?.workplaceName}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd001}%` : "0%"}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd002}%` : "0%"}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd003}%` : "0%"}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd004}%` : "0%"}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd001}` : "0"}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd002}` : "0"}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd003}` : "0"}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd004}` : "0"}</div>
                                                             </>
                                                         )}
                                                     </div>))
@@ -894,7 +882,7 @@ const Director = () => {
                                                         <div className={classes.tableData}>{reportItem[0]?.workplaceName}</div>
                                                         {reportTitle?.map((reportTitleItem) => {
                                                             const element = reportItem?.find(item => item.groupId === reportTitleItem.groupId);
-                                                            return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}%` : "0%"}</div>;
+                                                            return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}` : "0"}</div>;
                                                         })}
                                                     </div>))
                                         }
