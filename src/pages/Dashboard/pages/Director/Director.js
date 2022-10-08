@@ -892,17 +892,17 @@ const Director = () => {
                         </div>
                         <div className={classes.navSlider}>
                             <Slider {...headerSlider}>
-                                {workplaceList.length === 1 ? "" :                                
+                                {workplaceList?.RET_DATA?.length <= 1 ? "" :                                
                                     <div>
                                         <MainNavButton className={currentWorkplaceId === null ? "active" : ""} onClick={
                                             () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })
                                         }>전체사업장</MainNavButton>
                                     </div>
                                 }
-                                {workplaceList?.length != 0 && workplaceList?.RET_DATA?.map(workplaceItem =>
+                                {workplaceList && workplaceList?.RET_DATA?.map(workplaceItem =>
                                     <div>
                                         <MainNavButton
-                                            className={currentWorkplaceId === workplaceItem.workplaceId ? "active" : workplaceIdFromToken === workplaceItem.workplaceId ? "current" : ""}
+                                            className={currentWorkplaceId === workplaceItem.workplaceId ? "active" : workplaceList?.RET_DATA?.length <= 1 ? "active" : workplaceIdFromToken === workplaceItem.workplaceId ? "current" : ""}
                                             // className={(currentWorkplaceId === workplaceItem.workplaceId && currentWorkplaceId === workplaceIdFromToken) || currentWorkplaceId === workplaceItem.workplaceId ? "active" : workplaceIdFromToken === workplaceItem.workplaceId ? "current" : ""}
                                             onClick={() => handleFactoryChange({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}
                                         >
