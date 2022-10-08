@@ -503,8 +503,24 @@ const Registration = () => {
             "/dashboard/employee/accident-countermeasures-implementation/list"
         );
     };
-
+      
     const handleAccidentInsert = async () => {
+        if (accident.recvFormCd.length <= 0) {
+            setOkayPopupMessage("필수항목 '접수형태'을 입력하세요.");
+            setOkayPopupShow(true);
+            return false;
+        }
+        if (accident.recvTypeCd001.length <= 0) {
+            setOkayPopupMessage("필수항목 '접수유형'를 선택하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+        if (accident.accdntCn.length <= 0) {
+            setOkayPopupMessage("필수항목 '사고조치 내용'을 입력하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+
         const response = await accidentInsert(accident);
         if (response?.data?.RET_CODE === "0000") {
             setOkayPopupMessage("등록 되었습니다.");

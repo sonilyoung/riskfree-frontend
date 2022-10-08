@@ -480,6 +480,23 @@ const Update = () => {
     }
 
     const handleUpdate = async () => {
+
+        if (accident.recvFormCd.length <= 0) {
+            setOkayPopupMessage("필수항목 '접수형태'을 입력하세요.");
+            setOkayPopupShow(true);
+            return false;
+        }
+        if (accident.recvTypeCd001.length <= 0) {
+            setOkayPopupMessage("필수항목 '접수유형'를 선택하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+        if (accident.accdntCn.length <= 0) {
+            setOkayPopupMessage("필수항목 '사고조치 내용'을 입력하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+
         const response = await accidentUpdate(
             {
                 "accLevelCd": "001",
@@ -519,7 +536,7 @@ const Update = () => {
             setOkayPopupMessage("등록 되었습니다.");
             setOkayPopupShow(true);
         } else {
-            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다 ");
+            setOkayPopupMessage("입력정보에 오류가 있습니다 ");
             setOkayPopupShow(true);
         }
     }

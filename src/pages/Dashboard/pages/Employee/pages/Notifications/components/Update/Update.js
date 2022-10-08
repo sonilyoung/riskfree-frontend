@@ -334,6 +334,21 @@ const Update = () => {
     }
 
     const handleUpdate = async () => {
+        if (notice.title.length <= 0) {
+            setOkayPopupMessage("필수항목 '제목'을 입력하세요.");
+            setOkayPopupShow(true);
+            return false;
+        }
+        if (notice.importCd.length <= 0) {
+            setOkayPopupMessage("필수항목 '중요공지여부'를 선택하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+        if (notice.content.length <= 0) {
+            setOkayPopupMessage("필수항목 '내용'을 입력하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
         const response = await noticesUpdate({
             "attachId": notice.attachId,
             "companyId": notice.companyId,

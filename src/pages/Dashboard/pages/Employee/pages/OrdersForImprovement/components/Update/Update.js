@@ -411,6 +411,36 @@ const Update = () => {
     };
 
     const handleLawUpdate = async () => {
+        if (law.recvCd.length <= 0) {
+            setOkayPopupMessage("필수항목 '접수형태'를 선택하세요.");
+            setOkayPopupShow(true);
+            return false;
+        }
+        if (law.cmmdOrgCd001.length <= 0) {
+            setOkayPopupMessage("필수항목 '명령구분'을 선택하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+        if (law.improveCn.length <= 0) {
+            setOkayPopupMessage("필수항목 '개선.조치 지적내용'을 입력하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+        if (law.improveTypeCd === null) {
+            setOkayPopupMessage("필수항목 '구분'을 선택하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+        if (law.orderDate === null) {
+            setOkayPopupMessage("필수항목 '지적일자'를 입력하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+        if (law.dueDate === null) {
+            setOkayPopupMessage("필수항목 '완료요청일'을 입력하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
         const response = await lawUpdate({
             "cmmdOrgCd001": law.cmmdOrgCd001,
             "cmmdOrgCd002": law.cmmdOrgCd002,
@@ -436,7 +466,7 @@ const Update = () => {
             setOkayPopupMessage("등록 되었습니다.");
             setOkayPopupShow(true);
         } else {
-            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다 ");
+            setOkayPopupMessage("입력정보에 오류가 있습니다 ");
             setOkayPopupShow(true);
         }
     }
@@ -492,6 +522,10 @@ const Update = () => {
         setDialogId(event.target.id);
         console.log(event.target.id)
     }
+
+    const DateChange = name => (date) => {
+        setLaw({ ...law, [name] : date });
+    };
 
     const [locale] = React.useState('ko');
 
@@ -678,7 +712,8 @@ const Update = () => {
                                         id="outlined-multiline-static"
                                         multiline
                                         rows={4}
-                                        defaultValue="작업 감독자 미배치로 인한 지적"
+                                        value={law.improveCn}
+                                        onChange={(e) => setLaw({ ...law, "improveCn": e.target.value })}
                                     />
                                 </div>
                                 <div className={classes.rowTitle}><text>*</text>구 분</div>
@@ -686,12 +721,15 @@ const Update = () => {
                                     <Select
                                         sx={{ width: 180 }}
                                         className={classes.selectMenu}
-                                        value={num}
-                                        onChange={handleChange}
+                                        value={law.improveTypeCd}
+                                        key={law.improveTypeCd}
+                                        onChange={(e) => setLaw({ ...law, "improveTypeCd": e.target.value })}
                                         displayEmpty
                                     >
-                                        <MenuItem value="">개선</MenuItem>
+                                        <MenuItem value="001">개선</MenuItem>
+                                        <MenuItem value="002">조치</MenuItem>
                                     </Select>
+
                                 </div>
                                 <div className={classes.rowTitle}><text>*</text>지적일자</div>
                                 <div className={classes.rowInfo}>
@@ -701,10 +739,11 @@ const Update = () => {
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
                                             value={law.orderDate}
-                                            onChange={(newDate) => {
-                                                const date = new Date(newDate.$d)
-                                                setLaw({ ...law, "orderDate": moment(date).format("YYYY-MM-DD") })
-                                            }}
+                                            onChange={DateChange('orderDate')}
+                                            // onChange={(newDate) => {
+                                            //     const date = new Date(newDate.$d)
+                                            //     setLaw({ ...law, "orderDate": moment(date).format("YYYY-MM-DD") })
+                                            // }}
                                             renderInput={(params) => <TextField {...params} sx={{ width: 180 }} />}
                                         />
                                     </LocalizationProvider>
@@ -717,10 +756,11 @@ const Update = () => {
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
                                             value={law.dueDate}
-                                            onChange={(newDate) => {
-                                                const date = new Date(newDate.$d)
-                                                setLaw({ ...law, "dueDate": moment(date).format("YYYY-MM-DD") })
-                                            }}
+                                            onChange={DateChange('dueDate')}
+                                            // onChange={(newDate) => {
+                                            //     const date = new Date(newDate.$d)
+                                            //     setLaw({ ...law, "dueDate": moment(date).format("YYYY-MM-DD") })
+                                            // }}
                                             renderInput={(params) => <TextField {...params} sx={{ width: 180 }} />}
                                         />
                                     </LocalizationProvider>
@@ -764,10 +804,11 @@ const Update = () => {
                                         label=" "
                                         inputFormat="YYYY-MM-DD"
                                         value={law.recvDate}
-                                        onChange={(newDate) => {
-                                            const date = new Date(newDate.$d)
-                                            setLaw({ ...law, "recvDate": moment(date).format("YYYY-MM-DD") })
-                                        }}
+                                        onChange={DateChange('recvDate')}
+                                        // onChange={(newDate) => {
+                                        //     const date = new Date(newDate.$d)
+                                        //     setLaw({ ...law, "recvDate": moment(date).format("YYYY-MM-DD") })
+                                        // }}
                                         renderInput={(params) => <TextField {...params} sx={{ width: 180 }} />}
                                     />
                                 </LocalizationProvider>

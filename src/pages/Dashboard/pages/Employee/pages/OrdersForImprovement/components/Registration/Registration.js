@@ -477,7 +477,7 @@ const Registration = () => {
             setOkayPopupMessage("등록 되었습니다.");
             setOkayPopupShow(true);
         } else {
-            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다 ");
+            setOkayPopupMessage("입력정보에 오류가 있습니다 ");
             setOkayPopupShow(true);
         }
     };

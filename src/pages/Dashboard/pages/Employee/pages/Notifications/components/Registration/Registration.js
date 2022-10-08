@@ -299,9 +299,25 @@ const Registration = () => {
     const navigate = useNavigate()
     const handleRedirect = () => {
         navigate("/dashboard/director/notifications/list")
-    }
+    } 
 
     const handlePost = async () => {
+        if (title.length <= 0) {
+            setOkayPopupMessage("필수항목 '제목'을 입력하세요.");
+            setOkayPopupShow(true);
+            return false;
+        }
+        if (important.length <= 0) {
+            setOkayPopupMessage("필수항목 '중요공지여부'를 선택하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+        if (content.length <= 0) {
+            setOkayPopupMessage("필수항목 '내용'을 입력하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+        
         const response = await noticesInsert({
             "attachId": notice.attachId,
             "companyId": 1,
@@ -323,7 +339,7 @@ const Registration = () => {
 
     const handleSelect = (event) => {
         setImportant(event.target.value);
-        console.log(important)
+        //console.log(important)
     };
 
     return (
