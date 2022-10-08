@@ -441,6 +441,8 @@ const Registration = () => {
     };
 
     const handleLawInsert = async () => {
+
+        setLaw({ ...law, "recvDate": todaysDate})          
         if (law.recvCd.length <= 0) {
             setOkayPopupMessage("필수항목 '접수형태'를 선택하세요.");
             setOkayPopupShow(true);
@@ -489,7 +491,7 @@ const Registration = () => {
     const [locale] = React.useState('ko');
 
     useEffect(() => {
-        handleLoginInfo()
+        handleLoginInfo()      
     }, [])
 
     useEffect(() => {
