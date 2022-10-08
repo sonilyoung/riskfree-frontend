@@ -69,7 +69,8 @@ const SearchButton = styled(ButtonUnstyled)`
     }   
 `;
 
-function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDownload, selectedFileName }) {
+    
+function Upload({ open, onClose, onInputChange, onUpload, onDownload, enableDownload, selectedFileName}) {
     const classes = useStyles();
     const inputRef = useRef(null);
 
@@ -88,8 +89,8 @@ function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDown
                 <div className={classes.uploadPopup}>
                     <ClosePopupButton2 onClick={() => onClose('openDialog')}></ClosePopupButton2>
                     <div className={classes.uploadInfo}>
-                        <img src={alertIcon} alt="alert icon" />
-                        <span>재해예방과 쾌적한 작업환경을 조성함으로써 근로자 및 이해관계자의 안전과 보건을 유지.</span>
+                        <span className={classes.topSpan}>안전보건 점검 항목 관리</span>
+                        <span className={classes.middleSpan}>등록된 파일을 다운로드 합니다.</span>
                         <UnknownButton2 onClick={() => {
                             if (enableDownload) {
                                 onDownload()

@@ -900,11 +900,12 @@ const WorkHistoryList = () => {
         } else {
             formData.append("excelFile", selectedFile)
             const response = await safeWorkExcelUpload(formData)
-            if(response.data.RET_CODE === "0000"){
+            if((response.data.RET_CODE === "0000") || (response.data.RET_CODE === "0201")){
                 setOkayPopupMessage("'파일'을 등록 하였습니다.");
                 setOkayPopupShow(true);
                 handleDialogClose();
                 handleDialogCloseOnly();
+                fetchWorkplaceList();
                 fetchSafeWorkList();
             } else if(response.data.RET_CODE === '0433'){
                 setOkayPopupMessage("파일확장자 오류");

@@ -33,19 +33,13 @@ import popupClose from '../../assets/images/btn_popClose.png';
 import searchIcon from '../../assets/images/ic_search.png';
 import popupClose2 from '../../assets/images/btn_popClose2.png';
 
-import TextField from '@mui/material/TextField';
-import Alert from '@mui/material/Alert';
-import alertIcon from '../../assets/images/ic_refer.png';
-
-import arrowDown from '../../assets/images/ic_down.png';
-
 import { useSelector, useDispatch } from 'react-redux';
 import { selectBaselineId, setBaselineId } from '../../slices/selections/MainSelection';
 import { useLocalStorage } from '../../hooks/misc/LocalStorage';
 
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Overlay } from '../../components/Overlay';
-import Ok from '../../components/MessageBox/Ok';
+import Okay from '../../components/MessageBox/Okay';
 import { useFileUploadMutation } from '../../hooks/api/FileManagement/FIleManagement';
 import { UploadDialog, UploadEmployeeDialog } from '../../dialogs/Upload';
 import { useExcelUploadMutation } from '../../hooks/api/ExcelController/ExcelController';
@@ -735,7 +729,7 @@ const DefaultLight = ({ children }) => {
     const [selectedFile, setSelectedFile] = useState(null)
 
     const [okPopupShow, setOkPopupShow] = useState(false);
-    const [okPopupMessage, setOkPopupMessage] = useState({});
+    const [okPopupMessage, setOkPopupMessage] = useState("");
     const [selectedFileName, setSelectedFileName] = useState("")
 
     const dispatch = useDispatch();
@@ -751,17 +745,13 @@ const DefaultLight = ({ children }) => {
     const [fileUpload] = useFileUploadMutation()
 
     const [dialogId, setDialogId] = useState("")
-    const [filePath, setFilePath] = useState({
-        "excelFileId": "",
-    })
+    
     const [excel, setExcel] = useState({
         "excelFileId": "",
     })
 
-    const labelObject = {
-        upperLabel: "안전보건 점검 항목 관리",
-        middleLabel: "등록된 파일을 다운로드 합니다."
-    }
+    const [labelObject, setLabelObject] = useState("")
+    
     const [essentialDutyFileId, setEssentialDutyFileId] = useState(null)
 
     const [getEssentialDutyVersion] = useGetEssentialDutyVersionMutation()
@@ -775,7 +765,12 @@ const DefaultLight = ({ children }) => {
         setSelectedFileName("");
         setOpenDialog(true);
         setDialogId(event.target.id);
-        //console.log(event.target.id)
+        
+        setLabelObject({
+            ...labelObject,
+            upperLabel: "안전작업허가서 양식 관리",
+            middleLabel: "등록된 양식을 다운로드 합니다.",
+        })
     }
 
     const handleDialogClose = () => {
@@ -783,15 +778,28 @@ const DefaultLight = ({ children }) => {
     }
 
     // 파일 업로드
-    const handleDialogFileUpload = async (file) => {
-        let formData = new FormData();
-        formData.append("excelFile", selectedFile)
-        handleDialogClose()
-        
-        const response = await excelUpload(formData)
-        setExcel({ ...excel })
-        setOkPopupMessage(response.data);
-        setOkPopupShow(true);
+    const handleDialogFileUpload = async () => {
+        if((selectedFileName === "") || (selectedFileName === null)) {
+            setOkPopupMessage("업로드할 파일을 선택하세요.");
+            setOkPopupShow(true);   
+        } else {
+            let formData = new FormData();
+            formData.append("excelFile", selectedFile)
+            const response = await excelUpload(formData)
+            if((response.data.RET_CODE === "0000") || (response.data.RET_CODE === "0201")){
+                setExcel({ ...excel })
+                setOkPopupMessage("'파일'을 등록 하였습니다.");
+                setOkPopupShow(true);
+                handleDialogClose();
+            } else if(response.data.RET_CODE === '0433'){
+                setOkPopupMessage("파일확장자 오류");
+                setOkPopupShow(true);
+            } else {
+                setOkPopupMessage("시스템 오류");
+                setOkPopupShow(true);
+            }
+            setSelectedFileName("");
+        }
     }
 
     async function handleDialogFileDownload() {
@@ -891,7 +899,7 @@ const DefaultLight = ({ children }) => {
                 </Grid>
 
             </Grid>
-            <UploadEmployeeDialog
+            <UploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
@@ -899,13 +907,14 @@ const DefaultLight = ({ children }) => {
                 onDownload={handleDialogFileDownload}
                 enableDownload={true}
                 selectedFileName={selectedFileName}
-                label={labelObject}
             />
+
             <Overlay show={okPopupShow}>
-                <Ok
+                <Okay
                     show={okPopupShow}
                     message={okPopupMessage}
-                    onConfirm={() => setOkPopupShow(false)} />
+                    title="알림"
+                    onConfirm={() => setOkPopupShow(false) } />
             </Overlay>
             {/* <BackButton onClick={() => handleRedirect()}></BackButton> */}
             <div className={classes.pageOverlay}></div>

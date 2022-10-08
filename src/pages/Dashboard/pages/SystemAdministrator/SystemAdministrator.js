@@ -1075,7 +1075,7 @@ const SystemAdministrator = () => {
             setFilePath({ ...filePath, "contractFileId": "" });
             setUserInfoPop(false);
         } else {
-            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다");
+            setOkayPopupMessage("입력정보에 오류가 있습니다");
             setOkayPopupShow(true);
         }
 
@@ -1731,12 +1731,15 @@ const SystemAdministrator = () => {
                 label={labelObjectOnly}
                 selectedFileName={selectedFileName}
             />
+
+            {/* 파일다운로드 */}
             <DownloadDialog
                 open={downloadDialogShow}
                 onClose={() => setDownloadDialogShow(false)}
                 onDownload={handleDialogFileDownload}
                 enableDownload={true}
             />
+
             <Overlay show={okayPopupShow}>
                 <Okay
                     show={okayPopupShow}
