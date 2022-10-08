@@ -2721,6 +2721,10 @@ const Employee = () => {
         }
     }
 
+    const DateChange = name => (date) => {
+        setBaselineInfo({ ...baselineInfo, [name]: date});
+    };
+        
     useEffect(() => {
         fetchBaseline(baselineIdForSelect);
     }, [currentBaselineId])
@@ -2935,10 +2939,11 @@ const Employee = () => {
                                                         label=' '
                                                         inputFormat="YYYY-MM-DD"
                                                         value={baselineInfo.baselineStart}
-                                                        onChange={(newDate) => {
-                                                            const date = new Date(newDate.$d);
-                                                            setBaselineInfo({ ...baselineInfo, "baselineStart": moment(date).format("YYYY-MM-DD") })
-                                                        }}
+                                                        onChange={DateChange('baselineStart')}
+                                                        // onChange={(newDate) => {
+                                                        //     const date = new Date(newDate.$d);
+                                                        //     setBaselineInfo({ ...baselineInfo, "baselineStart": moment(date).format("YYYY-MM-DD") })
+                                                        // }}
                                                         renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                     />
                                                 </LocalizationProvider>
@@ -2949,10 +2954,11 @@ const Employee = () => {
                                                         label=" "
                                                         inputFormat="YYYY-MM-DD"
                                                         value={baselineInfo.baselineEnd}
-                                                        onChange={(newDate) => {
-                                                            const date = new Date(newDate.$d);
-                                                            setBaselineInfo({ ...baselineInfo, "baselineEnd": moment(date).format("YYYY-MM-DD") })
-                                                        }}
+                                                        onChange={DateChange('baselineEnd')}
+                                                        // onChange={(newDate) => {
+                                                        //     const date = new Date(newDate.$d);
+                                                        //     setBaselineInfo({ ...baselineInfo, "baselineEnd": moment(date).format("YYYY-MM-DD") })
+                                                        // }}
                                                         renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                     />
                                                 </LocalizationProvider>

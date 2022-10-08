@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Link, useNavigate } from 'react-router-dom'
+import { useLocation, Link, useNavigate, useParams } from 'react-router-dom'
 
 import { makeStyles } from '@mui/styles';
 import Grid from '@mui/material/Grid';
@@ -675,14 +675,14 @@ const PromptButtonBlue = styled(ButtonUnstyled)`
 `;
 
 const PromptButtonWhite = styled(ButtonUnstyled)`
-    width: 80px;
+    width: 90px;
     height: 34px;
     background: #fff;
     padding: 0 20px;
     box-sizing: border-box;
     border-radius: 5px;
     color: #6e7884;
-    font-size: 16px;
+    font-size: 14px;
     border: none;
     cursor: pointer;
     border: 1px solid #6e7884;
@@ -755,6 +755,9 @@ const Default = ({ children }) => {
     const location = useLocation()
     const navigate = useNavigate()
 
+    const [defaultPage, setDefaultPage] = useState("0101");
+    const { MainKey } = useParams(1)
+
     const [userToken] = useUserToken()
     const [getWeather] = useGetWeatherMutation()
     const [getLoginInfo] = useGetLoginInfoMutation();
@@ -797,7 +800,7 @@ const Default = ({ children }) => {
 
     const [okayPopupShow, setOkayPopupShow] = useState(false);
     const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
-
+    const [yesNoPopupShowClose, setYesNoPopupShowClose] = useState(false);
     const [yesNoPopupMessage, setYesNoPopupMessage] = useState("")
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
@@ -809,6 +812,11 @@ const Default = ({ children }) => {
         upperLabel: "로고 등록",
         middleLabel: "등록할 파일을 업로드 합니다."
     }
+    
+    const [labelObject, setLabelObject] = useState({
+        upperLabel: "이미지 등록",
+        middleLabel: "등록할 파일을 업로드 합니다.",
+    })
 
     const [employeeFiles, setEmployeeFiles] = useState({
         "safetyFileUpload": "",
@@ -826,6 +834,15 @@ const Default = ({ children }) => {
     const [getFileInfo] = useGetFileInfoMutation();
     const [updateSafetyFile] = useUpdateSafetyFileMutation();
 
+    //설정창 아코디언 선언
+    const [expanded, setExpanded] = React.useState('');
+
+    const panelhandleChange = (panel) => (event, newExpanded) => {
+      if(panel === 'panel3') {
+        setTargetBaselineId('');
+      }
+      setExpanded(newExpanded ? panel : false);
+    };
 
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
@@ -904,37 +921,124 @@ const Default = ({ children }) => {
         navigate(-1)
     }
 
-    const handleClose = async () => {
-        const response = await close({});
-        setOkayPopupMessage("등록 되었습니다.");
-        setOkayPopupShow(true);
-    }
-
     const handleInsertBaseline = async () => {
+        if (baselineInfo.baselineName.length <= 0) {
+            setOkayPopupMessage("'관리차수'를 입력해주세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+
+        if (baselineInfo.baselineStart === null || baselineInfo.baselineStart.length <= 0) {
+            setOkayPopupMessage("'관리차수 시작일자'를 선택하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+
+        if (baselineInfo.baselineEnd === null || baselineInfo.baselineEnd.length <= 0) {
+            setOkayPopupMessage("'관리차수 종료일자'를 선택하세요.");
+            setOkayPopupShow(true);                    
+            return false;
+        }
+
         const response = await insertBaseline(baselineInfo);
+        if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
+            setYesNoPopupShow(false);
+            setOkayPopupMessage('신규차수를 등록하였습니다.');
+            setOkayPopupShow(true);
+            setDefaultPage(response?.data?.RET_CODE);
+        } else {
+            setOkayPopupMessage(`${response?.data?.RET_DESC}`);
+            setOkayPopupShow(true);
+        }
         fetchBaselineList();
         setBaselineInfo({ "baselineName": "", "baselineStart": null, "baselineEnd": null })
         const responseSaferyFile = await updateSafetyFile({ "attachFileId": employeeFiles.safetyFileUpload, })
         // window.localStorage.setItem("safetyFileId", responseSaferyFile.data.RET_DATA.attachFileId)        
     }
 
+    const [openDialogEmployee, setOpenDialogEmployee] = useState(false)
+    const [articleNoForInspection, setArticleNoForInspection] = useState(null)
+    const [inspectionFileId, setInspectionFileId] = useState(null)
+    const [inspectionIndex, setInspectionIndex] = useState(null)
+
+    const handleDialogOpenEmployee = (event, articleNo, fileId, index) => {
+        setOpenDialogEmployee(true);
+        setDialogId((event.target.id).toString());
+        setArticleNoForInspection(articleNo)
+        setInspectionFileId(fileId)
+        setInspectionIndex(index)
+        setSelectedFileName("");
+        if (event.target.id === "safetyFileUpload") {
+            setLabelObject({
+                ...labelObject,
+                upperLabel: "안전작업허가서 양식 관리",
+                middleLabel: "등록된 양식을 다운로드 합니다.",
+            })
+        } else if (event.target.id === "inspectionFile") {
+            setLabelObject({
+                ...labelObject,
+                upperLabel: "보고서",
+                middleLabel: "등록된 양식을 다운로드 합니다.",
+            })
+        }
+    }    
+
     const handleInsertBaseLineDataCopy = async () => {
-        const response = await insertBaseLineDataCopy({
-            "baselineId": targetBaselineId,
-            "targetBaselineId": currentBaselineId
-        });
+        if((targetBaselineId === '') || (targetBaselineId === null)){
+            setOkayPopupMessage("'복사할 관리차수'를 선택하세요.");
+            setOkayPopupShow(true);
+        } else {
+            const response = await insertBaseLineDataCopy({
+                "baselineId": targetBaselineId,
+                "targetBaselineId": currentBaselineId
+            });
+            
+            if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
+                setOkayPopupMessage("'차수 복사'가 완료되었습니다");
+                setOkayPopupShow(true);
+                setDefaultPage(response?.data?.RET_CODE);
+            } else {
+                setOkayPopupMessage(`${response?.data?.RET_DESC}`);
+                setOkayPopupShow(true);
+            }
+        }
     }
 
-    const handleInsertBaseLineDataUpdate = async () => {
-        const response = await insertBaseLineDataUpdate({});
-        setYesNoPopupShow(false);
-        if (response?.data?.RET_CODE === "0000") {
-            setOkayPopupMessage(`업데이트에 실패하였습니다. ( ${response?.data?.RET_CODE} )`);
-        } else {
-            setOkayPopupMessage(`업데이트가 완료 되었습니다. ( ${response?.data?.RET_CODE} )`);
-        }
-        setOkayPopupShow(true);
+    //관리차수 마감
+    const handleClose = async () => {
+        //const response = await close({});
+        setYesNoPopupMessage('선택한 해당차수를 마감 하시겠습니까?');
+        setYesNoPopupShowClose(true);
     }
+
+    //관리차수 마감처리
+    const handlecloseUpdate = async () => {
+        const response = await close({"baselineId" : currentBaselineId});
+        if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
+            setYesNoPopupShowClose(false);
+            setOkayPopupMessage('선택한 해당차수의 마감을 처리하였습니다.');
+            setOkayPopupShow(true);
+            setDefaultPage(response?.data?.RET_CODE);
+        } else {
+            setOkayPopupMessage(`${response?.data?.RET_DESC}`);
+            setOkayPopupShow(true);
+        }
+    }
+
+    //안전보건관리체계의 구축 및 이행 항목 업데이트
+    const handleInsertBaseLineDataUpdate = async () => {
+        const response = await insertBaseLineDataUpdate({"baselineId" : currentBaselineId});
+        if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
+            setYesNoPopupShow(false);
+            setOkayPopupMessage('업데이트를 완료하였습니다.');
+            setOkayPopupShow(true);
+            setDefaultPage(response?.data?.RET_CODE);
+
+        } else {
+            setOkayPopupMessage(`${response?.data?.RET_DESC}` `${response?.data?.RET_CODE}`);
+            setOkayPopupShow(true);
+        }
+    }    
 
     const handleUpdateUserCompany = async () => {
         const response = await updateUserCompany({
@@ -968,6 +1072,10 @@ const Default = ({ children }) => {
         })
         setWeatherData(response.data.RET_DATA)
     }
+
+    const DateChange = name => (date) => {
+        setBaselineInfo({ ...baselineInfo, [name]: date});
+    };
 
     useEffect(() => {
         if (currentBaselineId === null) {
@@ -1099,6 +1207,7 @@ const Default = ({ children }) => {
                                     <div>계약기간 : {companyInfo?.contractStartDate} ~ {companyInfo?.contractEndDate}</div>
                                 </div>
                                 <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
+                                {/* 설정 팝업창 */}
                                 {roleCd === '001'
                                     ? <SettingsButtonInactive className={classes.mainMenuButton}></SettingsButtonInactive>
                                     : (<>
@@ -1109,7 +1218,7 @@ const Default = ({ children }) => {
                                                 <ButtonClosePop onClick={() => setSettingsPopup(false)}></ButtonClosePop>
                                             </div>
                                             <div className={classes.headerPopList}>
-                                                <Accordion className={classes.popupAccord}>
+                                                <Accordion expanded={expanded === 'panel1'} onChange={panelhandleChange('panel1')} className={classes.popupAccord}>
                                                     <AccordionSummary
                                                         expandIcon={<img src={arrowDown} alt="arrow down" />}
                                                         aria-controls="panel1a-content"
@@ -1133,10 +1242,11 @@ const Default = ({ children }) => {
                                                                 label=" "
                                                                 inputFormat="YYYY-MM-DD"
                                                                 value={baselineInfo.baselineStart}
-                                                                onChange={(newDate) => {
-                                                                    const date = new Date(newDate.$d);
-                                                                    setBaselineInfo({ ...baselineInfo, "baselineStart": moment(date).format("YYYY-MM-DD") })
-                                                                }}
+                                                                onChange={DateChange('baselineStart')}
+                                                                // onChange={(newDate) => {
+                                                                //     const date = new Date(newDate.$d);
+                                                                //     setBaselineInfo({ ...baselineInfo, "baselineStart": moment(date).format("YYYY-MM-DD") })
+                                                                // }}
                                                                 renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                             />
                                                         </LocalizationProvider>
@@ -1147,16 +1257,17 @@ const Default = ({ children }) => {
                                                                 label=" "
                                                                 inputFormat="YYYY-MM-DD"
                                                                 value={baselineInfo.baselineEnd}
-                                                                onChange={(newDate) => {
-                                                                    const date = new Date(newDate.$d);
-                                                                    setBaselineInfo({ ...baselineInfo, "baselineEnd": moment(date).format("YYYY-MM-DD") })
-                                                                }}
+                                                                onChange={DateChange('baselineEnd')}
+                                                                // onChange={(newDate) => {
+                                                                //     const date = new Date(newDate.$d);
+                                                                //     setBaselineInfo({ ...baselineInfo, "baselineEnd": moment(date).format("YYYY-MM-DD") })
+                                                                // }}
                                                                 renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                             />
                                                         </LocalizationProvider>
                                                     </AccordionDetails>
                                                 </Accordion>
-                                                <Accordion className={classes.popupAccord}>
+                                                <Accordion expanded={expanded === 'panel2'} onChange={panelhandleChange('panel2')} className={classes.popupAccord}>
                                                     <AccordionSummary
                                                         expandIcon={<img src={arrowDown} alt="arrow down" />}
                                                         aria-controls="panel1a-content"
@@ -1172,13 +1283,13 @@ const Default = ({ children }) => {
                                                         </div>
                                                     </AccordionDetails>
                                                 </Accordion>
-                                                <Accordion className={classes.popupAccord}>
+                                                <Accordion expanded={expanded === 'panel3'} onChange={panelhandleChange('panel3')} className={classes.popupAccord}>
                                                     <AccordionSummary
                                                         expandIcon={<img src={arrowDown} alt="arrow down" />}
                                                         aria-controls="panel1a-content"
                                                         id="panel1a-header"
                                                     >
-                                                        <Typography>관리차수 복사</Typography>
+                                                    <Typography>관리차수 복사</Typography>
                                                     </AccordionSummary>
                                                     <AccordionDetails>
                                                         <Select
@@ -1197,22 +1308,22 @@ const Default = ({ children }) => {
                                                             <Alert
                                                                 icon={<img src={alertIcon} alt="alert icon" />}
                                                                 severity="error">
-                                                                <strong>2차 차수의 DATA</strong>
+                                                                <strong>선택한 차수의 DATA</strong>
                                                                 를 현재 차수에 복사 하시겠습니까
                                                             </Alert>
                                                             <PromptButtonBlue onClick={() => handleInsertBaseLineDataCopy()}>예</PromptButtonBlue>
-                                                            <PromptButtonWhite>예</PromptButtonWhite>
+                                                            <PromptButtonWhite onClick={panelhandleChange('panel3')}>아니오</PromptButtonWhite>
                                                         </div>
                                                     </AccordionDetails>
                                                 </Accordion>
                                                 <span></span>
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
                                                 <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
-                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" id="safetyFileUpload" onClick={handleDialogOpen}>안전작업허가서 양식 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
-                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => { setYesNoPopupShow(true); setYesNoPopupMessage("업데이트 하시겠습니까?") }}>안전보건관리체계의 구축 및 이행 항목 업데이트<img src={arrowDown} alt="arrow down" /></Link>
+                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" id="safetyFileUpload" onClick={handleDialogOpenEmployee}>안전작업허가서 양식 업/다운로드​<img src={arrowDown} alt="arrow down" /></Link>
+                                                <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => { setYesNoPopupShow(true); setYesNoPopupMessage("업데이트 하시겠습니까?") }}>안전보건관리체계의 구축 및 이행 항목 업데이트​<img src={arrowDown} alt="arrow down" /></Link>
                                             </div>
                                             <div className={classes.headerPopFooter}>
-                                                <PopupFootButton onClick={handleInsertBaseline}>저장하기</PopupFootButton>
+                                            <PopupFootButton onClick={() => handleInsertBaseline()}>저장하기</PopupFootButton>
                                             </div>
                                         </div>
                                     </>)
@@ -1231,7 +1342,6 @@ const Default = ({ children }) => {
                                     <div className={classes.uploadSearch}>
                                         <TextField
                                             id="standard-basic"
-                                            placeholder="여수공장 시정조치요청 파일.hwp"
                                             variant="outlined"
                                             sx={{ width: 250 }}
                                             className={classes.popupTextField}
@@ -1281,6 +1391,17 @@ const Default = ({ children }) => {
                     title={okayPopupTitle}
                     onConfirm={() => setOkayPopupShow(false)} />
             </Overlay>
+
+            {/* 관리차수 마감 처리 */}
+            <Overlay show={yesNoPopupShowClose}>
+                <YesNo
+                    show={yesNoPopupShowClose}
+                    message={yesNoPopupMessage}
+                    onConfirmYes={handlecloseUpdate}
+                    onConfirmNo={() => setYesNoPopupShowClose(false)}
+                />
+            </Overlay>
+
             <Overlay show={yesNoPopupShow}>
                 <YesNo
                     show={yesNoPopupShow}
