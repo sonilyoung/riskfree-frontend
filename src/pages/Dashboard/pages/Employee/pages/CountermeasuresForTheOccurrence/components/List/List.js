@@ -679,19 +679,26 @@ const List = () => {
                         <div className={classes.searchInfo}>
                             <div>
                                 <div className={classes.infoTitle}>발생장소</div>
-                                <Select
+                                <TextField
+                                    id="standard-basic"
+                                    variant="outlined"
+                                    sx={{ width: 205 }}
+                                    className={classes.selectMenu}
+                                    value={occurPlaceSelect}
+                                    onChange={(e) => setOccurPlaceSelect(e.target.value)}
+                                />
+                                {/* <Select
                                     className={classes.selectMenu}
                                     sx={{ width: 204 }}
                                     value={occurPlaceSelect}
                                     onChange={(e) => setOccurPlaceSelect(e.target.value)}
-                                    key=""
+                                    
                                     displayEmpty
                                 >
-                                    <MenuItem value="">전체</MenuItem>
                                     {occurPlacesList.map((occurPlace) => (
                                         <MenuItem value={occurPlace.occurplace}>{occurPlace.occurplace}</MenuItem>
                                     ))}
-                                </Select>
+                                </Select> */}
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>발생일자</div>

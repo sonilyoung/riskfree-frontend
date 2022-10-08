@@ -389,9 +389,12 @@ const Registration = () => {
         "performAfterId": ""
     })
     const [selectedFileName, setSelectedFileName] = useState("")
-
+    const [accTypeCd, setAccTypeCd] = useState("")
+    const [recvTypeCd, setRecvTypeCd] = useState("")
+    
     const [accident, setAccident] = useState({
         accLevelCd: "",
+        
         accTypeCd001: "",
         accTypeCd002: "",
         accTypeCd003: "",
@@ -414,6 +417,7 @@ const Registration = () => {
         preventCn: "",
         recvDate: todayDate,
         recvFormCd: "",
+       
         recvTypeCd001: "",
         recvTypeCd002: "",
         recvTypeCd003: "",
@@ -504,17 +508,20 @@ const Registration = () => {
         );
     };
       
-    const handleAccidentInsert = async () => {
+    const handleAccidentInsert = async (e) => {
+        
         if (accident.recvFormCd.length <= 0) {
             setOkayPopupMessage("필수항목 '접수형태'을 입력하세요.");
             setOkayPopupShow(true);
             return false;
         }
-        if (accident.recvTypeCd001.length <= 0) {
+
+        if (accident.recvTypeCd001 + accident.recvTypeCd002 + accident.recvTypeCd003 + accident.recvTypeCd004 + accident.recvTypeCd005 + accident.recvTypeCd006.length <= 0) {
             setOkayPopupMessage("필수항목 '접수유형'를 선택하세요.");
             setOkayPopupShow(true);                    
             return false;
         }
+
         if (accident.accdntCn.length <= 0) {
             setOkayPopupMessage("필수항목 '사고조치 내용'을 입력하세요.");
             setOkayPopupShow(true);                    
@@ -526,7 +533,7 @@ const Registration = () => {
             setOkayPopupMessage("등록 되었습니다.");
             setOkayPopupShow(true);
         } else {
-            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다 ");
+            setOkayPopupMessage("입력정보에 오류가 있습니다 ");
             setOkayPopupShow(true);
         }
     };
@@ -539,6 +546,15 @@ const Registration = () => {
     const DateChange = name => (date) => {
         setAccident({ ...accident, "occurDate": date});
     };
+
+    // const handlerecvType = (checkCd, checkVl) => (e) => {
+    //     const{ checked } = e.target;
+    //     if (checked === true) {
+    //         setAccident({ ...accident, [checkCd] : [checkVl] })
+    //     } else {
+    //         setAccident({ ...accident, [checkCd] : "" })
+    //     }
+    // }
 
     useEffect(() => {
         handleLoginInfo()
@@ -632,12 +648,13 @@ const Registration = () => {
                                                         checkedIcon={
                                                             <img src={checkIconOn} alt="check icon on" />
                                                         }
+                                                        //onChange={handlerecvType('recvTypeCd001','001')}
                                                         onChange={() =>
                                                             setAccident({
                                                                 ...accident,
                                                                 "recvTypeCd001": accident.recvTypeCd001
                                                                     ? ""
-                                                                    : "001",
+                                                                    : "001"
                                                             })
                                                         }
                                                     />
@@ -652,12 +669,13 @@ const Registration = () => {
                                                         checkedIcon={
                                                             <img src={checkIconOn} alt="check icon on" />
                                                         }
+                                                        //onChange={handlerecvType('recvTypeCd002','002')}
                                                         onChange={() =>
                                                             setAccident({
                                                                 ...accident,
                                                                 "recvTypeCd002": accident.recvTypeCd002
                                                                     ? ""
-                                                                    : "002",
+                                                                    : "002"
                                                             })
                                                         }
                                                     />

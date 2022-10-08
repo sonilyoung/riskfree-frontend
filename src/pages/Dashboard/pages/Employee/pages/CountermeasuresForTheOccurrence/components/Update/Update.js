@@ -486,7 +486,7 @@ const Update = () => {
             setOkayPopupShow(true);
             return false;
         }
-        if (accident.recvTypeCd001.length <= 0) {
+        if (accident.recvTypeCd001 + accident.recvTypeCd002 + accident.recvTypeCd003 + accident.recvTypeCd004 + accident.recvTypeCd005 + accident.recvTypeCd006.length <= 0) {
             setOkayPopupMessage("필수항목 '접수유형'를 선택하세요.");
             setOkayPopupShow(true);                    
             return false;
