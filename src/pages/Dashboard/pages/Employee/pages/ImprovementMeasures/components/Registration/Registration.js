@@ -98,7 +98,7 @@ const Registration = () => {
     )
 
     const labelObject = {
-        upperLabel: "이미지 등록",
+        upperLabel: "첨부파일 등록",
         middleLabel: "등록할 파일을 업로드 합니다."
     }
     const [okayPopupShow, setOkayPopupShow] = useState(false);

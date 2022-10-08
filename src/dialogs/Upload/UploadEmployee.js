@@ -82,7 +82,6 @@ function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDown
     const handleRealChooseFile = () => {
         inputRef.current.value = null;
     }
-
     return (
         <Overlay show={open}>
             <div className={open ? classes.uploadPopup : classes.popupClose}>

@@ -817,17 +817,33 @@ const MeasureToManageThePerformance = () => {
     const currentBaseline = useSelector(selectBaselineId);
 
     const handleDialogFileUpload = async () => {
-        let formData = new FormData();
-        formData.append("excelFile", selectedFile)
-        const lawButtonId = { lawButtonId: dialogId }
-        formData.append('lawButtonId', new Blob([JSON.stringify(lawButtonId)], { type: 'application/json' }))
-        const response = await relatedRawExcelUpload(formData)
-        handleDialogClose();
-        setOkayPopupMessage("등록 되었습니다.");
-        setOkayPopupShow(true);
-        setseccerrCode(response.data.RET_CODE);
-        setUploadFlag(!uploadFlag);
-        setLawId(lawButtonId.lawButtonId);
+        if((selectedFileName === "") || (selectedFileName === null)) {
+            setOkayPopupMessage("업로드할 파일을 선택하세요.");
+            setOkayPopupShow(true);   
+        } else {
+            let formData = new FormData();
+            formData.append("excelFile", selectedFile)
+            const lawButtonId = { lawButtonId: dialogId }
+            formData.append('lawButtonId', new Blob([JSON.stringify(lawButtonId)], { type: 'application/json' }))
+            const response = await relatedRawExcelUpload(formData)
+
+            if((response.data.RET_CODE === "0000") || (response.data.RET_CODE === "0201")){
+
+                handleDialogClose();
+                setOkayPopupMessage("'파일'을 등록 하였습니다.");
+                setOkayPopupShow(true);
+                setseccerrCode(response.data.RET_CODE);
+                setUploadFlag(!uploadFlag);
+                setLawId(lawButtonId.lawButtonId);
+            } else if(response.data.RET_CODE === '0433'){
+                setOkayPopupMessage("파일확장자 오류");
+                setOkayPopupShow(true);
+            } else {
+                setOkayPopupMessage("시스템 오류");
+                setOkayPopupShow(true);
+            }
+        setSelectedFileName("");
+        }
     }
 
     const handleDialogOpen = (id) => {
@@ -866,9 +882,9 @@ const MeasureToManageThePerformance = () => {
             "countPerPage": 10,
             "pageNum": ClicklawId && lawId ? parseInt(1) : page
         });
-        console.log(response);
-        console.log(page);
-        setLawId(ClicklawId);
+        //console.log(response);
+        //console.log(page);
+        //setLawId(ClicklawId);
 
         setRelatedRawList(response.data.RET_DATA);
         const currentUpdateList = response.data?.RET_DATA?.map(relatedRawItem => {
@@ -892,6 +908,7 @@ const MeasureToManageThePerformance = () => {
         await insertDutyButton({
             "lawName": lawName
         });
+        setLawName("");
         setPopupPlusButton(false);
         fetchRelatedRawButtonList(lawId);
     }
@@ -909,10 +926,12 @@ const MeasureToManageThePerformance = () => {
             setOkayPopupMessage("입력정보가 없습니다 ");
             setOkayPopupShow(true);
         }
-        console.log(response);
+        //console.log(response);
     }
+    
     async function handleDialogFileDownload() {
         const fileId = files[dialogId]
+        console.log(fileId)
         if (fileId) {
             window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
         }
@@ -1123,10 +1142,10 @@ const MeasureToManageThePerformance = () => {
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
+                enableDownload={true}
                 onDownload={handleDialogFileDownload}
-                enableDownload={false}
-                label={labelObject}
                 selectedFileName={selectedFileName}
+                label={labelObject}
             />
             <Overlay show={okayPopupShow}>
                 <Okay

@@ -416,7 +416,7 @@ const Update = () => {
             setOkayPopupShow(true);
             return false;
         }
-        if (law.cmmdOrgCd001.length <= 0) {
+        if (law.cmmdOrgCd001+law.cmmdOrgCd002+law.cmmdOrgCd003+law.cmmdOrgCd004.length <= 0) {
             setOkayPopupMessage("필수항목 '명령구분'을 선택하세요.");
             setOkayPopupShow(true);                    
             return false;
