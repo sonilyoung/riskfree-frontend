@@ -44,7 +44,7 @@ const DefaultRoutes = () => (
         </Route>
         <Route element={<PrivateRoute />}>
             <Route path="/dashboard/director" element={<DashboardDirectorPage />} />
-            <Route path="/dashboard/director" element={<DashboardDirectorPage />} />
+            {/* <Route path="/dashboard/director" element={<DashboardDirectorPage />} /> */}
             <Route path="/dashboard/director/notifications/*" element={<NotificationsPage />} />
             <Route path="/dashboard/director/improvement-measures/*" element={<ImprovementMeasuresPage />} />
             <Route path="/dashboard/director/notifications/*" element={<NotificationsPage />} />

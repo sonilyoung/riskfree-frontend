@@ -50,6 +50,8 @@ import { useFileUploadMutation, useFileDownMutation, useGetFileInfoMutation } fr
 import { DownloadDialog, OnlyUploadDialog, UploadDialog } from '../../../../dialogs/Upload';
 import { Overlay } from '../../../../components/Overlay';
 import Okay from '../../../../components/MessageBox/Okay';
+import { useLoginMutation } from '../../../../hooks/api/LoginManagement/LoginManagement';
+
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -719,6 +721,7 @@ const SearchUserButton = styled(ButtonUnstyled)`
 `;
 
 const SystemAdministrator = () => {
+    const [login] = useLoginMutation();
     const classes = useStyles();
     const navigate = useNavigate();
     const [locale] = React.useState('ko');
@@ -924,10 +927,26 @@ const SystemAdministrator = () => {
         callback();
     }
 
+    //모니터
     const handleRedirect = async (workplaceId, userId) => {
+        //console.log(workplaceId+" / "+ userId)
         const response = await subscribersView(`${workplaceId}&userId=${userId}`);
         const redirectPath = getPath(response.data?.RET_DATA?.managerRoleCd);
-        navigate(redirectPath);
+        
+        //사업장 로그인 정보
+        const userLoginResponse = await login({
+            loginId: "CCC111",
+            loginPw: "test"
+        });
+        
+        
+        if (userLoginResponse.data.RET_CODE === '0000') {
+            const jwtToken = userLoginResponse.data.RET_DATA.accessToken;
+            sessionStorage.setItem("MonitorView", jwtToken)
+        }
+        
+        //navigate(redirectPath);
+        window.open(`${redirectPath}`, '_blank')
     }
 
     const fetchSubscribersList = async () => {
@@ -1230,7 +1249,11 @@ const SystemAdministrator = () => {
                                         ? <div className={classes.tableData} style={{ cursor: "pointer" }} onDoubleClick={() => handleDialogFileDownload(subscriber.contractFileId)}>{subscriber.contractFileYn}</div>
                                         : <div className={classes.tableData} style={{ cursor: "pointer" }}>{subscriber.contractFileYn}</div>
                                     }
-                                    <div className={classes.tableData} /*onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}*/>{subscriber?.statusCd ? <img src={monitor} alt="monitor" /> : null}</div>
+                                    <div className={classes.tableData} onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}>{console.log(subscriber)}{subscriber?.status ? <img src={monitor} alt="monitor" /> : null}</div>
+                                    {/* 2022.10.09 Jimmy Moniter View 작업중!
+                                        로그인처리 후 세션에 토큰값 설정 후 페이지 이동시 정보 가져오는 것까지 처리함!.(문제는 관리자 페이지에서 새로고침시 계정이 대표이사 계정으로 변경되는 문제)
+                                     <div className={classes.tableData} onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}>{console.log(subscriber)}{subscriber?.status ? <img src={monitor} alt="monitor" /> : null}</div> 
+                                     */}
                                 </div>
                                 {!!subscribersWorkplaceSelectList && !!subscribersWorkplaceSelectList?.length && subscribersWorkplaceSelectList?.map((subscribersWorkplaceItem, subscribersWorkplaceItemIndex) => {
                                     if (index + 1 === plusButtonId) {

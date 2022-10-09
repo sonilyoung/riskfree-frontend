@@ -91,7 +91,6 @@ const useStyles = makeStyles(() => ({
             padding: '0 20px'
         }
     },
-    /* === Data: 2022.10.03 author:Jimmy add === */
     buttonLinkactive: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -103,9 +102,6 @@ const useStyles = makeStyles(() => ({
         marginLeft: '10px !important',
         borderRadius: '5px',
         letterSpacing: '-1.08px',
-        '&:first-of-type': {
-            marginLeft: '0 !important'
-        },
         backgroundImage: 'linear-gradient(#04b9fb, #017dfa)',
         '& span': {
             width: '100%',
@@ -115,8 +111,7 @@ const useStyles = makeStyles(() => ({
             color: '#fff',
             padding: '0 20px'
         }
-    },
-    /* ========================================= */
+    },    
     buttonPlus: {
         width: '45px',
         height: '45px',
@@ -129,7 +124,7 @@ const useStyles = makeStyles(() => ({
         border: 'none',
         '&:hover': {
             backgroundImage: 'linear-gradient(#04b9fb, #017dfa)',
-        },
+        }
     },
     boxTable: {
         borderRadius: '6px',
@@ -643,8 +638,7 @@ const useStyles = makeStyles(() => ({
             boxSizing: 'border-box',
             background: '#eff2f9',
         }
-    },
-
+    }
 }));
 
 const ClosePopupButton2 = styled(ButtonUnstyled)`
@@ -849,13 +843,17 @@ const MeasureToManageThePerformance = () => {
     //페이지 이동
     const handlePageChange = (pagelawId) => (event) => {
         setPage(parseInt(event.target.innerText))
+        //fetchRelatedRawList(lawId);
+        //setToggleList(toggleList);
+        //setUpdateList(currentBaseline);
+        //fetchRelatedRawList(lawId);        
     }
 
     const fetchRelatedRawList = async (ClicklawId) => {
         setLawId(ClicklawId);
         if(ClicklawId !== lawId) {
             setPage(parseInt(1))
-            setToggleList('one')
+            //setToggleList('one')
         }
         const response = await getRelatedRaw({
             "lawId": ClicklawId,
@@ -1018,18 +1016,20 @@ const MeasureToManageThePerformance = () => {
                                     <span>항목</span>
                                 </div>
                             </div>
-                            <div className={classes.tableDataOne}>중대재해처벌법 <br />시행령</div>
-                            <div className={classes.tableDataOne}>위반법조항</div>
-                            <div className={classes.tableDataOne}>위반행위</div>
-                            <div className={classes.tableDataOne}>세부내용 -1</div>
                             {toggleList === 'one'
-                                ? 
-                                <>
+                                ? <><div className={classes.tableDataOne}>중대재해처벌법 <br />시행령</div>
+                                    <div className={classes.tableDataOne}>위반법조항</div>
+                                    <div className={classes.tableDataOne}>위반행위</div>
+                                    <div className={classes.tableDataOne}>세부내용 -1</div>
                                     <div className={classes.tableDataOne}>세부내용 -2</div>
                                     <div className={classes.tableDataOne}>근거법조문</div>
                                 </>
                                 : toggleList === 'two'
                                     ? <>
+                                        <div className={classes.tableDataTwo}>중대재해처벌법 <br />시행령</div>
+                                        <div className={classes.tableDataTwo}>위반법조항</div>
+                                        <div className={classes.tableDataTwo}>위반행위</div>
+                                        <div className={classes.tableDataTwo}>세부내용 -1</div>
                                         <div className={classes.tableDataTwo}>
                                             <div>처벌사항 및 과태료 금액 (만원)</div>
                                             <div>
@@ -1040,6 +1040,10 @@ const MeasureToManageThePerformance = () => {
                                         </div>
                                     </>
                                     : <>
+                                        <div className={classes.tableDataThree}>중대재해처벌법 <br />시행령</div>
+                                        <div className={classes.tableDataThree}>위반법조항</div>
+                                        <div className={classes.tableDataThree}>위반행위</div>
+                                        <div className={classes.tableDataThree}>세부내용 -1</div>
                                         <div className={classes.tableDataThree}>관리상의 조치 내역</div>
                                     </>
                             }
@@ -1048,12 +1052,11 @@ const MeasureToManageThePerformance = () => {
                     <div className={classes.tableBody}>
                         {!!relatedRawList && relatedRawList?.length > 0 && relatedRawList.map((relatedRawItem, index) =>
                         (<div className={classes.tableRow}>
-                                    <div className={classes.tableDataOne}>{relatedRawItem.relatedArticle}</div>
+                            {toggleList === 'one'
+                                ? <><div className={classes.tableDataOne}>{relatedRawItem.relatedArticle}</div>
                                     <div className={classes.tableDataOne}>{relatedRawItem.articleItem}<span></span></div>
                                     <div className={classes.tableDataOne}>{relatedRawItem.seriousAccdntDecree} <span></span></div>
                                     <div className={classes.tableDataOne}>{relatedRawItem.violatedArticle}</div>
-                            {toggleList === 'one'
-                                ? <>
                                     <div className={classes.tableDataOne}>{relatedRawItem.violatedActivity}</div>
                                     <div className={classes.tableDataOne}>{relatedRawItem.violationDetail1}</div>
                                     <div className={classes.tableDataOne}>{relatedRawItem.violationDetail2}</div>
@@ -1061,6 +1064,10 @@ const MeasureToManageThePerformance = () => {
                                 </>
                                 : toggleList === 'two'
                                     ? <>
+                                        <div className={classes.tableDataTwo}>{relatedRawItem.relatedArticle}</div>
+                                        <div className={classes.tableDataTwo}>{relatedRawItem.articleItem}<span></span></div>
+                                        <div className={classes.tableDataTwo}>{relatedRawItem.seriousAccdntDecree} <span></span></div>
+                                        <div className={classes.tableDataTwo}>{relatedRawItem.violatedArticle}</div>
                                         <div className={classes.tableDataTwo}>{relatedRawItem.violatedActivity}</div>
                                         <div className={classes.tableDataTwo}>{relatedRawItem.violationDetail1}</div>
                                         <div className={classes.tableDataTwo}>{relatedRawItem.stPenalty1}</div>
@@ -1068,6 +1075,10 @@ const MeasureToManageThePerformance = () => {
                                         <div className={classes.tableDataTwo}>{relatedRawItem.stPenalty3}</div>
                                     </>
                                     : <>
+                                        <div className={classes.tableDataThree}>{relatedRawItem.relatedArticle}</div>
+                                        <div className={classes.tableDataThree}>{relatedRawItem.articleItem}<span></span></div>
+                                        <div className={classes.tableDataThree}>{relatedRawItem.seriousAccdntDecree} <span></span></div>
+                                        <div className={classes.tableDataThree}>{relatedRawItem.violatedArticle}</div>
                                         <div className={classes.tableDataThree}>{relatedRawItem.violatedActivity}</div>
                                         <div className={classes.tableDataThree}>{relatedRawItem.violationDetail1}</div>
                                         <div className={classes.tableDataThree}>
@@ -1077,7 +1088,7 @@ const MeasureToManageThePerformance = () => {
                                                     id="outlined-multiline-static"
                                                     multiline
                                                     rows={3}
-                                                    value={updateList[index]?.acctionCn}
+                                                    value={updateList[index]?.acctionCn === null ? "" : updateList[index]?.acctionCn}
                                                     onChange={(event) => {
                                                         const changedUpdateList = updateList.map((updateItem, i) => i === index ? { ...updateItem, "acctionCn": event.target.value } : updateItem);
                                                         setUpdateList(changedUpdateList);

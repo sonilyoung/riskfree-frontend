@@ -7,10 +7,15 @@ export const mainManagement = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: `${BASE_URL}`,
         prepareHeaders: (headers) => {
+            const MonitorView = sessionStorage.getItem('MonitorView');
             const jwtToken = localStorage.getItem('userToken');
-
-            if (jwtToken) {
-                headers.set('authorization', `Bearer ${jwtToken}`)
+            
+            if (MonitorView){
+                headers.set('authorization', `Bearer ${MonitorView}`)
+            } else {
+                if (jwtToken) {
+                    headers.set('authorization', `Bearer ${jwtToken}`)
+                }
             }
 
             return headers

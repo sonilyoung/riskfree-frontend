@@ -795,7 +795,7 @@ const DefaultLight = ({ children }) => {
                 setOkPopupMessage("파일확장자 오류");
                 setOkPopupShow(true);
             } else {
-                setOkPopupMessage("시스템 오류");
+                setOkPopupMessage("업로드 양식에 오류가 있습니다.");
                 setOkPopupShow(true);
             }
             setSelectedFileName("");

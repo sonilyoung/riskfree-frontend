@@ -834,6 +834,10 @@ const Default = ({ children }) => {
     const [getFileInfo] = useGetFileInfoMutation();
     const [updateSafetyFile] = useUpdateSafetyFileMutation();
 
+
+
+
+
     //설정창 아코디언 선언
     const [expanded, setExpanded] = React.useState('');
 
@@ -902,6 +906,7 @@ const Default = ({ children }) => {
     }
 
     const handleLoginInfo = async () => {
+        
         const response = await getLoginInfo()
         setLoginInfo(response.data.RET_DATA)
     }
@@ -1084,6 +1089,7 @@ const Default = ({ children }) => {
         handleLoginInfo();
         fetchCompanyInfo();
         fetchBaselineList();
+
     }, []);
 
     useEffect(() => {
