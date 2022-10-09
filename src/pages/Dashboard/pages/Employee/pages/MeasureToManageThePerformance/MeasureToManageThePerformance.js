@@ -817,33 +817,17 @@ const MeasureToManageThePerformance = () => {
     const currentBaseline = useSelector(selectBaselineId);
 
     const handleDialogFileUpload = async () => {
-        if((selectedFileName === "") || (selectedFileName === null)) {
-            setOkayPopupMessage("업로드할 파일을 선택하세요.");
-            setOkayPopupShow(true);   
-        } else {
-            let formData = new FormData();
-            formData.append("excelFile", selectedFile)
-            const lawButtonId = { lawButtonId: dialogId }
-            formData.append('lawButtonId', new Blob([JSON.stringify(lawButtonId)], { type: 'application/json' }))
-            const response = await relatedRawExcelUpload(formData)
-
-            if((response.data.RET_CODE === "0000") || (response.data.RET_CODE === "0201")){
-
-                handleDialogClose();
-                setOkayPopupMessage("'파일'을 등록 하였습니다.");
-                setOkayPopupShow(true);
-                setseccerrCode(response.data.RET_CODE);
-                setUploadFlag(!uploadFlag);
-                setLawId(lawButtonId.lawButtonId);
-            } else if(response.data.RET_CODE === '0433'){
-                setOkayPopupMessage("파일확장자 오류");
-                setOkayPopupShow(true);
-            } else {
-                setOkayPopupMessage("시스템 오류");
-                setOkayPopupShow(true);
-            }
-        setSelectedFileName("");
-        }
+        let formData = new FormData();
+        formData.append("excelFile", selectedFile)
+        const lawButtonId = { lawButtonId: dialogId }
+        formData.append('lawButtonId', new Blob([JSON.stringify(lawButtonId)], { type: 'application/json' }))
+        const response = await relatedRawExcelUpload(formData)
+        handleDialogClose();
+        setOkayPopupMessage("등록 되었습니다.");
+        setOkayPopupShow(true);
+        setseccerrCode(response.data.RET_CODE);
+        setUploadFlag(!uploadFlag);
+        setLawId(lawButtonId.lawButtonId);
     }
 
     const handleDialogOpen = (id) => {
@@ -861,31 +845,25 @@ const MeasureToManageThePerformance = () => {
         setSelectedFile(file);
         setSelectedFileName(file.name)
     }
-
-    //페이지번호 클릭시 이벤트
-    const handlePageChange = (event, value) => {
-        setPage(parseInt(value));
-        fetchRelatedRawList(lawId);
+    
+    //페이지 이동
+    const handlePageChange = (pagelawId) => (event) => {
+        setPage(parseInt(event.target.innerText))
     }
 
     const fetchRelatedRawList = async (ClicklawId) => {
-        // console.log("ClicklawId : " + ClicklawId)
-        // console.log("lawId : " + lawId)
-        
-        // if(ClicklawId && lawId){
-        //     setPage(1);
-        // }
-
+        setLawId(ClicklawId);
+        if(ClicklawId !== lawId) {
+            setPage(parseInt(1))
+            setToggleList('one')
+        }
         const response = await getRelatedRaw({
             "lawId": ClicklawId,
             "baselineId": currentBaseline,
             "countPerPage": 10,
-            "pageNum": ClicklawId && lawId ? parseInt(1) : page
+            "pageNum": page
         });
-        //console.log(response);
-        //console.log(page);
-        //setLawId(ClicklawId);
-
+        
         setRelatedRawList(response.data.RET_DATA);
         const currentUpdateList = response.data?.RET_DATA?.map(relatedRawItem => {
             return {
@@ -899,16 +877,19 @@ const MeasureToManageThePerformance = () => {
     const fetchRelatedRawButtonList = async () => {
         const response = await getRelatedRawButton({});
         setRelatedRawButtonList(response.data.RET_DATA);
-        fetchRelatedRawList(response.data.RET_DATA[0].lawButtonId);
-        //setLawId(response.data.RET_DATA[0].lawButtonId);
-
+        if((lawId === "") || (lawId === null) || (lawId === "0")) {
+            setLawId(response.data.RET_DATA[0].lawButtonId);
+            fetchRelatedRawList(response.data.RET_DATA[0].lawButtonId);
+        } else {
+            setLawId(lawId);
+            fetchRelatedRawList(lawId);
+        }
     }
 
     const fetchInsertDutyButton = async () => {
         await insertDutyButton({
             "lawName": lawName
         });
-        setLawName("");
         setPopupPlusButton(false);
         fetchRelatedRawButtonList(lawId);
     }
@@ -916,22 +897,20 @@ const MeasureToManageThePerformance = () => {
     const handleUpdateRelatedRawList = async () => {
         const response = await updateRelatedRaw({ "updateList": updateList });
         //console.log(response?.data?.RET_CODE)
-        if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
+        if ((response?.data?.RET_CODE === "0000") ||(response?.data?.RET_CODE === "0201")) {
             setseccerrCode(response?.data?.RET_CODE);
             setOkayPopupMessage("등록 되었습니다.");
             setOkayPopupShow(true);
             fetchRelatedRawList(lawId)
         } else {
             setseccerrCode(response?.data?.RET_CODE);
-            setOkayPopupMessage("입력정보가 없습니다 ");
+            setOkayPopupMessage("입력정보에 오류가 있습니다 ");
             setOkayPopupShow(true);
         }
         //console.log(response);
     }
-    
     async function handleDialogFileDownload() {
         const fileId = files[dialogId]
-        console.log(fileId)
         if (fileId) {
             window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
         }
@@ -943,7 +922,7 @@ const MeasureToManageThePerformance = () => {
 
     useEffect(() => {
         fetchRelatedRawButtonList();
-    }, []);
+    }, [page]);
 
     return (
         <DefaultLayout>
@@ -955,7 +934,11 @@ const MeasureToManageThePerformance = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.headerButtons}>
                     {!!relatedRawButtonList && relatedRawButtonList.length > 0 && relatedRawButtonList.map(relatedRawButtonItem =>
-                        (<Link to="#" className={lawId === relatedRawButtonItem.lawButtonId ? classes.buttonLinkactive : classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)} onDoubleClick={() => handleDialogOpen(relatedRawButtonItem.lawButtonId)}>
+                    
+                    /* === Data: 2022.10.03 author:Jimmy add === */
+                    (<Link to="#" className={lawId === relatedRawButtonItem.lawButtonId ? classes.buttonLinkactive : classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)} onDoubleClick={() => handleDialogOpen(relatedRawButtonItem.lawButtonId)}>
+                    {/* ========================================= */}
+                    
                         <span>{relatedRawButtonItem?.lawName}</span>
                     </Link>)
                     )}
@@ -1035,22 +1018,18 @@ const MeasureToManageThePerformance = () => {
                                     <span>항목</span>
                                 </div>
                             </div>
+                            <div className={classes.tableDataOne}>중대재해처벌법 <br />시행령</div>
+                            <div className={classes.tableDataOne}>위반법조항</div>
+                            <div className={classes.tableDataOne}>위반행위</div>
+                            <div className={classes.tableDataOne}>세부내용 -1</div>
                             {toggleList === 'one'
-                                ?
+                                ? 
                                 <>
-                                    <div className={classes.tableDataOne}>중대재해처벌법 <br />시행령</div>
-                                    <div className={classes.tableDataOne}>위반법조항</div>
-                                    <div className={classes.tableDataOne}>위반행위</div>
-                                    <div className={classes.tableDataOne}>세부내용 -1</div>
                                     <div className={classes.tableDataOne}>세부내용 -2</div>
                                     <div className={classes.tableDataOne}>근거법조문</div>
                                 </>
                                 : toggleList === 'two'
                                     ? <>
-                                        <div className={classes.tableDataTwo}>중대재해처벌법 <br />시행령</div>
-                                        <div className={classes.tableDataTwo}>위반법조항</div>
-                                        <div className={classes.tableDataTwo}>위반행위</div>
-                                        <div className={classes.tableDataTwo}>세부내용 -1</div>
                                         <div className={classes.tableDataTwo}>
                                             <div>처벌사항 및 과태료 금액 (만원)</div>
                                             <div>
@@ -1061,10 +1040,6 @@ const MeasureToManageThePerformance = () => {
                                         </div>
                                     </>
                                     : <>
-                                        <div className={classes.tableDataThree}>중대재해처벌법 <br />시행령</div>
-                                        <div className={classes.tableDataThree}>위반법조항</div>
-                                        <div className={classes.tableDataThree}>위반행위</div>
-                                        <div className={classes.tableDataThree}>세부내용 -1</div>
                                         <div className={classes.tableDataThree}>관리상의 조치 내역</div>
                                     </>
                             }
@@ -1073,12 +1048,12 @@ const MeasureToManageThePerformance = () => {
                     <div className={classes.tableBody}>
                         {!!relatedRawList && relatedRawList?.length > 0 && relatedRawList.map((relatedRawItem, index) =>
                         (<div className={classes.tableRow}>
-                            {toggleList === 'one'
-                                ? <>
                                     <div className={classes.tableDataOne}>{relatedRawItem.relatedArticle}</div>
                                     <div className={classes.tableDataOne}>{relatedRawItem.articleItem}<span></span></div>
                                     <div className={classes.tableDataOne}>{relatedRawItem.seriousAccdntDecree} <span></span></div>
                                     <div className={classes.tableDataOne}>{relatedRawItem.violatedArticle}</div>
+                            {toggleList === 'one'
+                                ? <>
                                     <div className={classes.tableDataOne}>{relatedRawItem.violatedActivity}</div>
                                     <div className={classes.tableDataOne}>{relatedRawItem.violationDetail1}</div>
                                     <div className={classes.tableDataOne}>{relatedRawItem.violationDetail2}</div>
@@ -1086,10 +1061,6 @@ const MeasureToManageThePerformance = () => {
                                 </>
                                 : toggleList === 'two'
                                     ? <>
-                                        <div className={classes.tableDataTwo}>{relatedRawItem.relatedArticle}</div>
-                                        <div className={classes.tableDataTwo}>{relatedRawItem.articleItem}<span></span></div>
-                                        <div className={classes.tableDataTwo}>{relatedRawItem.seriousAccdntDecree} <span></span></div>
-                                        <div className={classes.tableDataTwo}>{relatedRawItem.violatedArticle}</div>
                                         <div className={classes.tableDataTwo}>{relatedRawItem.violatedActivity}</div>
                                         <div className={classes.tableDataTwo}>{relatedRawItem.violationDetail1}</div>
                                         <div className={classes.tableDataTwo}>{relatedRawItem.stPenalty1}</div>
@@ -1097,10 +1068,6 @@ const MeasureToManageThePerformance = () => {
                                         <div className={classes.tableDataTwo}>{relatedRawItem.stPenalty3}</div>
                                     </>
                                     : <>
-                                        <div className={classes.tableDataThree}>{relatedRawItem.relatedArticle}</div>
-                                        <div className={classes.tableDataThree}>{relatedRawItem.articleItem}<span></span></div>
-                                        <div className={classes.tableDataThree}>{relatedRawItem.seriousAccdntDecree} <span></span></div>
-                                        <div className={classes.tableDataThree}>{relatedRawItem.violatedArticle}</div>
                                         <div className={classes.tableDataThree}>{relatedRawItem.violatedActivity}</div>
                                         <div className={classes.tableDataThree}>{relatedRawItem.violationDetail1}</div>
                                         <div className={classes.tableDataThree}>
@@ -1124,8 +1091,8 @@ const MeasureToManageThePerformance = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
                     <div>총 게시글 <strong>{relatedRawList?.length > 0 && relatedRawList[0]?.totalCount}</strong> 건</div>
-                    <Stack spacing={2} >
-                        <Pagination count={relatedRawList?.length && Math.ceil(relatedRawList[0]?.totalCount / 10)} boundaryCount={3} shape="rounded" onChange={handlePageChange} showFirstButton showLastButton />
+                    <Stack spacing={2}>
+                        <Pagination count={relatedRawList?.length && Math.ceil(relatedRawList[0]?.totalCount / 10)} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange(lawId)} showFirstButton showLastButton />
                     </Stack>
                     <div>
                         {/* <ExcelButton>엑셀 다운로드</ExcelButton> */}
@@ -1134,7 +1101,7 @@ const MeasureToManageThePerformance = () => {
                 {toggleList === "three"
                     && <Grid item xs={12} className={classes.footerButtons}>
                         <BlueButton className={'button-registration'} onClick={() => handleUpdateRelatedRawList()}>등록</BlueButton>
-                        {/* <WhiteButton className={'button-cancelation'} >취소</WhiteButton> */}
+                        <WhiteButton className={'button-cancelation'} >취소</WhiteButton>
                     </Grid>}
             </Grid>
             <UploadEmployeeDialog
@@ -1142,10 +1109,10 @@ const MeasureToManageThePerformance = () => {
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
-                enableDownload={true}
                 onDownload={handleDialogFileDownload}
-                selectedFileName={selectedFileName}
+                enableDownload={false}
                 label={labelObject}
+                selectedFileName={selectedFileName}
             />
             <Overlay show={okayPopupShow}>
                 <Okay

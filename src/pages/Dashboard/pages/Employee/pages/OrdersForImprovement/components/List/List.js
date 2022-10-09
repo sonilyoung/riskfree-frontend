@@ -182,7 +182,7 @@ const useStyles = makeStyles(() => ({
                 borderRight: '0',
             },
             /* === Data: 2022.10.03 author:Jimmy edit: &:nth-of-type(9) === */
-            '&:nth-of-type(6), &:nth-of-type(7), &:nth-of-type(9)': {
+            '&:nth-of-type(6), &:nth-of-type(8)': {
                 justifyContent: 'flex-start',
             },
         },
@@ -208,14 +208,14 @@ const useStyles = makeStyles(() => ({
             minWidth: '150px'
         },
         /* === Data: 2022.10.03 author:Jimmy add: &:nth-of-type(8) === */
-        '&:nth-of-type(3), &:nth-of-type(4), &:nth-of-type(8)': {
-            minWidth: '120px'
+        '&:nth-of-type(3), &:nth-of-type(4)': {
+            minWidth: '140px'
         },
-        '&:nth-of-type(5), &:nth-of-type(6)': {
-            minWidth: '240px'
+        '&:nth-of-type(5), &:nth-of-type(7)': {
+            minWidth: '230px'
         },
-        '&:nth-of-type(7), &:nth-of-type(9)': {
-            minWidth: '420px'
+        '&:nth-of-type(6), &:nth-of-type(8)': {
+            minWidth: '410px'
         },
     },
     pagingBox: {
@@ -811,7 +811,7 @@ const List = () => {
                         <div className={classes.tableRow}>조치상태</div>
                         <div className={classes.tableRow}>지적일자</div>
                         <div className={classes.tableRow}>조치명령 기관</div>
-                        <div className={classes.tableRow}>발생장소</div>
+                        {/* <div className={classes.tableRow}>발생장소</div> */}
                         <div className={classes.tableRow}>조치명령 원인</div>
                         <div className={classes.tableRow}>완료요청일</div> { /* === Data: 2022.10.03 author:Jimmy add: 완료요청일 === */ }
                         <div className={classes.tableRow}>개선조치 내용</div>
@@ -839,7 +839,7 @@ const List = () => {
                                     {lawItem.cmmdOrgName003 && lawItem.cmmdOrgName003}&nbsp;
                                     {lawItem.cmmdOrgName004 && lawItem.cmmdOrgName004}
                                 </div>
-                                <div className={classes.tableRow}>{lawItem.occurPlace}</div>
+                                {/* <div className={classes.tableRow}>{lawItem.occurPlace}</div> */}
                                 <div className={classes.tableRow}>{lawItem.issueReason}</div>
                                 <div className={classes.tableRow}>{lawItem.dueDate}</div> { /* === Data: 2022.10.03 author:Jimmy add: 완료요청일 === */ }
                                 <div className={classes.tableRow}>{lawItem.preventCn}</div>

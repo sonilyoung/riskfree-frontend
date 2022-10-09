@@ -385,7 +385,8 @@ const Registration = () => {
         occurPlace: "1층작업실",
         pageNum: 0,
         recvCd: "",
-        recvDate: "",
+        recvDate: todaysDate,
+        completeDate : "",
         recvUserName: recvUserName,
     });
 
@@ -758,12 +759,12 @@ const Registration = () => {
                                             className={classes.selectMenuDate}
                                             label=" "
                                             inputFormat="YYYY-MM-DD"
-                                            value={law.recvDate}
+                                            value={law.completeDate}
                                             isClearable
-                                            onChange={DateChange('recvDate')}
+                                            onChange={DateChange('completeDate')}
                                             // onChange={(newDate) => {
                                             //     const date = new Date(newDate)
-                                            //     setLaw({ ...law, "recvDate": moment(new Date(newDate)).format("YYYY-MM-DD") })
+                                            //     setLaw({ ...law, "completeDate": moment(new Date(newDate)).format("YYYY-MM-DD") })
                                             // }}
                                             renderInput={(params) => <TextField {...params} sx={{ width: 180 }} />}
                                         />

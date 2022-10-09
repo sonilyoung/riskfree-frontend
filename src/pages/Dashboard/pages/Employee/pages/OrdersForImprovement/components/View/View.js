@@ -386,10 +386,10 @@ const View = () => {
         const response = await lawDelete(id);
         setYesNoPopupShow(false);
         if (response?.data?.RET_CODE === "0000") {
-            setOkayPopupMessage("등록 되었습니다.");
+            setOkayPopupMessage("삭제 되었습니다.");
             setOkayPopupShow(true);
         } else {
-            setOkayPopupMessage("등록이 실패하였습니다.");
+            setOkayPopupMessage("삭제에 실패하였습니다.");
             setOkayPopupShow(true);
         }
     }
@@ -541,12 +541,7 @@ const View = () => {
                 <Grid item xs={12} className={classes.footerButtons}>
                     <BlueButton className={"button-correction"} onClick={() => navigate(`/dashboard/employee/order-for-improvement-and-correction-under-related-law/update/${law.lawImproveId}`)}>수정</BlueButton>
                     <WhiteButton className={"button-delete"} onClick={() => setYesNoPopupShow(true)}>삭제</WhiteButton>
-                    <WhiteButton
-                        className={"button-list"}
-                        onClick={() => handleRedirect()}
-                    >
-                        목록
-                    </WhiteButton>
+                    <WhiteButton className={"button-list"} onClick={() => handleRedirect()} >목록</WhiteButton>
                 </Grid>
             </Grid>
             <Overlay show={yesNoPopupShow}>
@@ -562,14 +557,7 @@ const View = () => {
                     show={okayPopupShow}
                     message={okayPopupMessage}
                     title={okayPopupTitle}
-                    onConfirm={() => {
-                        if (okayPopupMessage === "등록 되었습니다.") {
-                            setOkayPopupShow(false);
-                            handleRedirect();
-                        } else {
-                            setOkayPopupShow(false);
-                        }
-                    }} />
+                    onConfirm={() => {handleRedirect()}} />
             </Overlay>
         </DefaultLayout>
     );

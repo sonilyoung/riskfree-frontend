@@ -402,10 +402,10 @@ const Registration = () => {
         const response = await improvemetnDelete(id);
         setYesNoPopupShow(false);
         if (response?.data?.RET_CODE === "0000") {
-            setOkayPopupMessage("등록 되었습니다.");
+            setOkayPopupMessage("삭제 되었습니다.");
             setOkayPopupShow(true);
         } else {
-            setOkayPopupMessage("등록이 실패하였습니다.");
+            setOkayPopupMessage("삭제에 실패하였습니다.");
             setOkayPopupShow(true);
         }
     }
@@ -542,14 +542,7 @@ const Registration = () => {
                     show={okayPopupShow}
                     message={okayPopupMessage}
                     title={okayPopupTitle}
-                    onConfirm={() => {
-                        if (okayPopupMessage === "등록 되었습니다.") {
-                            setOkayPopupShow(false);
-                            handleRedirect();
-                        } else {
-                            setOkayPopupShow(false);
-                        }
-                    }} />
+                    onConfirm={() => {handleRedirect()}} />
             </Overlay>
         </DefaultLayout>
     );

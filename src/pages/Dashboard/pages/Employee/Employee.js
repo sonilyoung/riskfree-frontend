@@ -2118,6 +2118,8 @@ const Employee = () => {
 
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
 
+    const [wrongCredentialsPopup, setWrongCredentialsPopup] = useState(false);
+    
     const handleChartCategoriesDisplay = (chartCategories) => {
         
         if(condition==="5" || condition==="6"){            
@@ -2571,8 +2573,11 @@ const Employee = () => {
     
     async function handleDialogFileDownload() {
         const fileId = employeeFiles[dialogId]
-        if (fileId || inspectionFileId) {
-            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId || inspectionFileId}&fileSn=1`;
+
+        if (inspectionFileId === "") {
+            setWrongCredentialsPopup(true);
+        } else {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${inspectionFileId}&fileSn=1`;
         }
     }
 
@@ -2724,7 +2729,7 @@ const Employee = () => {
     const DateChange = name => (date) => {
         setBaselineInfo({ ...baselineInfo, [name]: date});
     };
-        
+
     useEffect(() => {
         fetchBaseline(baselineIdForSelect);
     }, [currentBaselineId])
@@ -3340,7 +3345,7 @@ const Employee = () => {
                                     <ul className={classes.menuList + ' buttonList'}>
                                         {inspectionsDocs?.map((inspection, index) => (<><li>
                                             <div>{(inspection.fileId === null || inspection.fileId === "null" || inspection.fileId === "") ? 
-                                                    <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone> 
+                                                    <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone>
                                                 : 
                                                     <FileButtonExis id={"inspectionFile"} onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>}
                                                 {inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}
@@ -3654,7 +3659,8 @@ const Employee = () => {
                     show={yesNoPopupShow}
                     message={yesNoPopupMessage}
                     onConfirmYes={handleInsertBaseLineDataUpdate}
-                    onConfirmNo={() => setYesNoPopupShow(false)}
+                    //onConfirmNo={() => setYesNoPopupShow(false)}
+                    onConfirm={() => setWrongCredentialsPopup(false)} />
                 />
             </Overlay>
 
