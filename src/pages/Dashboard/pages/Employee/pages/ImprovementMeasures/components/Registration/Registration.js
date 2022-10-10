@@ -36,7 +36,13 @@ import { OnlyUploadDialog, UploadDialog } from '../../../../../../../../dialogs/
 import { Overlay } from '../../../../../../../../components/Overlay';
 import Okay from '../../../../../../../../components/MessageBox/Okay';
 
+import useUserToken from '../../../../../../../../hooks/core/UserToken/UserToken';
+
+
 const Registration = () => {
+    const [getUseUserToken] = useUserToken();
+    const [getroleCd, setGetroleCd] = useState(getUseUserToken.getUserRoleCd());
+
     const classes = useStyles();
     const navigate = useNavigate()
     const getInitialWorkplaceId = useUserInitialWorkplaceId();
@@ -89,7 +95,7 @@ const Registration = () => {
             "insertId": null,
             "reqDate": moment(new Date()),
             "reqFileId": atchFileId,
-            "reqUserCd": "",
+            "reqUserCd": getroleCd,
             "statusCd": "",
             "completeDate": completeDate,
             "updateId": null,
@@ -159,7 +165,6 @@ const Registration = () => {
 
     const handleImprovementInsert = async () => {
            
-console.log(improvement)
         if (improvement.improveCn.length <= 0) {
             setOkayPopupMessage("필수항목 '개선.조치 내용'을 입력하세요.");
             setOkayPopupShow(true);
@@ -197,18 +202,6 @@ console.log(improvement)
         setImprovement({ ...improvement, "improveNo": response?.data?.RET_DATA?.improveKey })
     }
 
-    /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
-    const [loginInfo, setLoginInfo] = useState({});
-    const [getLoginInfo] = useGetLoginInfoMutation()
-    const fetchLoginInfo = async () => {
-        const response = await getLoginInfo()
-        setLoginInfo(response.data.RET_DATA)
-        //console.log(response.data.RET_DATA)
-        setImprovement({ ...improvement, "reqUserCd": response.data.RET_DATA.roleCd })
-
-
-    }    
-
     const DateChange = name => (date) => {
         if(name === 'finDate') {
             setImprovement({ ...improvement, "finDate": date});
@@ -223,7 +216,6 @@ console.log(improvement)
     useEffect(() => {
         fetchComapanyWorkplace()
         getGeneratedKey()
-        fetchLoginInfo()
     }, [])
 
     useEffect(() => {
@@ -250,22 +242,22 @@ console.log(improvement)
                                 { /* === Data: 2022.10.03 author:Jimmy edit: 실무자일 경우 본인 속한 사업장만 표시 value === */}
                                 <div className={classes.rowInfo}>
                                     {
-                                        loginInfo.roleCd === "003"
+                                        reqUserCd === "003"
                                             ?
                                             <Select
                                                 sx={{ width: 200 }}
                                                 className={classes.selectMenu}
-                                                value={loginInfo.workplaceId}
+                                                value={improvement.workplaceId}
                                                 onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
                                                 displayEmpty
                                             >
-                                                <MenuItem value={loginInfo.workplaceId}>{loginInfo.workplaceName}</MenuItem>
+                                                <MenuItem value={improvement.workplaceId}>{improvement.workplaceName}</MenuItem>
                                             </Select>
                                             :
                                             <Select
                                                 sx={{ width: 200 }}
                                                 className={classes.selectMenu}
-                                                value={improvement.workplaceId === '' ? loginInfo.workplaceId : improvement.workplaceId}
+                                                value={improvement.workplaceId}
                                                 onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
                                                 displayEmpty
                                             >
@@ -331,12 +323,14 @@ console.log(improvement)
                                     <Select
                                         sx={{ width: 200 }}
                                         className={classes.selectMenu}
-                                        value={loginInfo.roleCd}
-                                        key={loginInfo.roleCd}
-                                        onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
+                                        value={improvement.reqUserCd}
+                                        key={improvement.reqUserCd}
+                                        //onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
                                         displayEmpty
                                     >
-                                        <MenuItem value={loginInfo?.roleCd}>{loginInfo?.roleName}</MenuItem>                                                                                
+                                        <MenuItem value="001">대표이사</MenuItem>
+                                        <MenuItem value="002">안전책임자</MenuItem>
+                                        <MenuItem value="003">안전실무자</MenuItem>
                                     </Select>
                                 </div>
                                 <div className={classes.rowTitle}><text>*</text>완료요청일</div>
