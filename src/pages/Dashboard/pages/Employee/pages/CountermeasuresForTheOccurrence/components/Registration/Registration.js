@@ -394,7 +394,6 @@ const Registration = () => {
     
     const [accident, setAccident] = useState({
         accLevelCd: "",
-        
         accTypeCd001: "",
         accTypeCd002: "",
         accTypeCd003: "",
@@ -417,7 +416,6 @@ const Registration = () => {
         preventCn: "",
         recvDate: todayDate,
         recvFormCd: "",
-       
         recvTypeCd001: "",
         recvTypeCd002: "",
         recvTypeCd003: "",
@@ -494,13 +492,11 @@ const Registration = () => {
         }
     }
 
-
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
         setLoginInfo(response.data.RET_DATA)
         setAccident({ ...accident, "recvUserName": response?.data?.RET_DATA?.name })
     }
-
 
     const handleRedirect = () => {
         navigate(
@@ -509,25 +505,21 @@ const Registration = () => {
     };
       
     const handleAccidentInsert = async (e) => {
-        
         if (accident.recvFormCd.length <= 0) {
             setOkayPopupMessage("필수항목 '접수형태'을 입력하세요.");
             setOkayPopupShow(true);
             return false;
         }
-
         if (accident.recvTypeCd001 + accident.recvTypeCd002 + accident.recvTypeCd003 + accident.recvTypeCd004 + accident.recvTypeCd005 + accident.recvTypeCd006.length <= 0) {
             setOkayPopupMessage("필수항목 '접수유형'를 선택하세요.");
             setOkayPopupShow(true);                    
             return false;
         }
-
         if (accident.accdntCn.length <= 0) {
             setOkayPopupMessage("필수항목 '사고조치 내용'을 입력하세요.");
             setOkayPopupShow(true);                    
             return false;
         }
-
         const response = await accidentInsert(accident);
         if (response?.data?.RET_CODE === "0000") {
             setOkayPopupMessage("등록 되었습니다.");
@@ -537,9 +529,7 @@ const Registration = () => {
             setOkayPopupShow(true);
         }
     };
-
     const [date, setDate] = React.useState(null);
-
     const [locale] = React.useState('ko');
 
     //발생일자
@@ -547,19 +537,9 @@ const Registration = () => {
         setAccident({ ...accident, "occurDate": date});
     };
 
-    // const handlerecvType = (checkCd, checkVl) => (e) => {
-    //     const{ checked } = e.target;
-    //     if (checked === true) {
-    //         setAccident({ ...accident, [checkCd] : [checkVl] })
-    //     } else {
-    //         setAccident({ ...accident, [checkCd] : "" })
-    //     }
-    // }
-
     useEffect(() => {
         handleLoginInfo()
     }, [])
-    console.log(accident)
     return (
         <DefaultLayout>
             <Grid

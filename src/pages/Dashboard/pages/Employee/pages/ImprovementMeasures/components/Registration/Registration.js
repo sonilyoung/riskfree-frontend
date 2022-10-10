@@ -80,27 +80,49 @@ const Registration = () => {
     const [getGenerateKey] = useGetGenerateKeyMutation()
     const [generatedKey, setGeneratedKey] = useState("")
     const [getLoginInfo] = useGetLoginInfoMutation()
+    const [improvement, setImprovement] = useState({
+        actionAfterId: actionAfterId,
+        actionBeforeId: actionBeforeId,
+        actionCn: "",
+        companyId: "",
+        finDate: finDate,
+        improveCn: "",
+        improveId: null,
+        improveNo: generatedKey,
+        insertId: null,
+        reqDate: moment(new Date()),
+        reqFileId: atchFileId,
+        reqUserCd: "",
+        statusCd: "",
+        completeDate: "",
+        updateId: null,
+        workplaceId: ""
+    })
+   
+    //로그인정보
+    const handleLoginInfo = async () => {
+        const response = await getLoginInfo();
+        setLoginInfo(response.data.RET_DATA);
+        setImprovement({ ...improvement, "reqUserCd": response.data.RET_DATA.roleCd });
+    }
 
-    const [improvement, setImprovement] = useState(
-        {
-            "actionAfterId": actionAfterId,
-            "actionBeforeId": actionBeforeId,
-            "actionCn": "",
-            "companyId": "",
-            "finDate": finDate,
-            "improveCn": "",
-            "improveId": null,
-            "improveNo": generatedKey,
-            "insertId": null,
-            "reqDate": moment(new Date()),
-            "reqFileId": atchFileId,
-            "reqUserCd": "",
-            "statusCd": "",
-            "completeDate": completeDate,
-            "updateId": null,
-            "workplaceId": ""
-        }
-    )
+    const fetchComapanyWorkplace = async () => {
+        const response = await getWorkplaceList({});
+        setWorkplaces(response.data.RET_DATA);
+    //console.log(response.data.RET_DATA)
+    //console.log(response.data.RET_DATA.map((item) => item.workplaceId === 125 ? item.workplaceId : null) )
+    //response.data.RET_DATA.map((item,i) => i === index ? { ...item, [name] : parseInt(value) } : item )
+    //setImprovement({ ...improvement, workplaceId: response.data.RET_DATA.map((item) => item.workplaceId === 125 ? item.workplaceId : null) })
+        //setImprovement({ ...improvement, "reqUserCd": response.data.RET_DATA.roleCd });
+    }
+
+    
+    
+    const getGeneratedKey = async () => {
+        const response = await getGenerateKey()
+        setGeneratedKey(response?.data?.RET_DATA?.improveKey);
+        setImprovement({ ...improvement, "improveNo": (response?.data?.RET_DATA?.improveKey) });
+    }
 
     const labelObject = {
         upperLabel: "첨부파일 등록",
@@ -117,7 +139,7 @@ const Registration = () => {
     }
 
     const handleDialogClose = () => {
-        setOpenDialog(false)
+        setOpenDialog(false);
     }
 
     const handleDialogFileUpload = async () => {
@@ -127,15 +149,15 @@ const Registration = () => {
             setOkayPopupShow(true);   
         } else {
 
-            formData.append("files", selectedFile)
-            const response = await fileUpload(formData)
+            formData.append("files", selectedFile);
+            const response = await fileUpload(formData);
             if(response.data.RET_CODE === "0000"){
                 setOkayPopupMessage("'파일'을 등록 하였습니다.");
                 setOkayPopupShow(true);
                 handleDialogClose();
-                const fileId = response.data.RET_DATA[0].atchFileId
-                setImprovement({ ...improvement, [dialogId]: fileId })
-                setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+                const fileId = response.data.RET_DATA[0].atchFileId;
+                setImprovement({ ...improvement, [dialogId]: fileId });
+                setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName });
             } else if(response.data.RET_CODE === '0433'){
                 setOkayPopupMessage("파일확장자 오류");
                 setOkayPopupShow(true);
@@ -147,33 +169,20 @@ const Registration = () => {
         }
     }
 
-    const handleLoginInfo = async () => {
-        const response = await getLoginInfo()
-        setLoginInfo(response.data.RET_DATA)
-        setImprovement({...improvement, "reqUserCd" : response.data.RET_DATA.roleCd})
-        setImprovement({...improvement, "workplaceId" : response.data.RET_DATA.workplaceId})
-    }
-
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
         setSelectedFileName(file.name);
     }
 
+    //목록 이동
     const handleRedirect = () => {
-        navigate("/dashboard/employee/improvement-measures/list")
+        navigate("/dashboard/employee/improvement-measures/list");
     }
 
-    const fetchComapanyWorkplace = async () => {
-        const response = await getWorkplaceList({})
-        setWorkplaces(response.data.RET_DATA)
-    }
-
+    //게시물 등록
     const handleImprovementInsert = async () => {
-
-        console.log(improvement.workplaceId)
-        console.log(improvement.reqUserCd)
-
+        console.log(improvement)
         if (improvement.improveCn.length <= 0) {
             setOkayPopupMessage("필수항목 '개선.조치 내용'을 입력하세요.");
             setOkayPopupShow(true);
@@ -204,13 +213,7 @@ const Registration = () => {
         }
     }
 
-    const getGeneratedKey = async () => {
-        const response = await getGenerateKey()
-        setGeneratedKey(response?.data?.RET_DATA?.improveKey)
-        setImprovement({ ...improvement, "improveNo": response?.data?.RET_DATA?.improveKey })
-    }
-
-
+    //요청일, 완료요청일, 완료일
     const DateChange = name => (date) => {
         if(name === 'finDate') {
             setImprovement({ ...improvement, "finDate": date});
@@ -222,15 +225,14 @@ const Registration = () => {
     };
 
     useEffect(() => {
-        handleLoginInfo()
-        fetchComapanyWorkplace()
-        getGeneratedKey()
-    }, [])
+        fetchComapanyWorkplace();
+        getGeneratedKey();
+        handleLoginInfo();
+    }, []);
 
     useEffect(() => {
         //console.log(improvement)
-    }, [filePath.reqFileId, filePath.actionBeforeId, filePath.actionAfterId])
-
+    }, [filePath.reqFileId, filePath.actionBeforeId, filePath.actionAfterId]);
     return (
         <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
@@ -246,19 +248,20 @@ const Registration = () => {
                     </div>
                     <div className={classes.boxContent}>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}><text>*</text>사업장</div>
+                            <div className={classes.rowTitle}><text>*</text>사업장{improvement.workplaceId}</div>
                             <div className={classes.rowContent}>
                                 { /* === Data: 2022.10.03 author:Jimmy edit: 실무자일 경우 본인 속한 사업장만 표시 value === */}
                                 <div className={classes.rowInfo}>
                                     <Select
                                         sx={{ width: 200 }}
-                                        className={classes.selectMenu} 
-                                        value={loginInfo.workplaceId}
-                                        key={loginInfo.workplaceId}
-                                        //onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
+                                        className={classes.selectMenu}
+                                        value={improvement.workplaceId}
+                                        key={improvement.workplaceId}
+                                        onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
                                         displayEmpty
                                     >
-                                        <MenuItem value={loginInfo.workplaceId}>{loginInfo.workplaceName}</MenuItem>
+                                        {/* <MenuItem value={improvement.workplaceId}>{loginInfo.workplaceName}</MenuItem> */}
+                                        {workplaces?.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
                                     </Select>
                                 </div>
                                 <div className={classes.rowTitle}><text>*</text>개선조치 NO</div>
@@ -318,12 +321,12 @@ const Registration = () => {
                                     <Select
                                         sx={{ width: 200 }}
                                         className={classes.selectMenu}
-                                        value={loginInfo.roleCd}
-                                        key={loginInfo.roleCd}
+                                        value={improvement.reqUserCd}
+                                        key={improvement.reqUserCd}
                                         //onChange={() => setImprovement({ ...improvement, "reqUserCd": loginInfo.roleCd })}
                                         displayEmpty
                                     >
-                                        <MenuItem value={loginInfo.roleCd}>{loginInfo.roleName}</MenuItem>
+                                        <MenuItem value={improvement.reqUserCd}>{loginInfo.roleName}</MenuItem>
                                     </Select>
                                 </div>
                                 <div className={classes.rowTitle}><text>*</text>완료요청일</div>
@@ -371,10 +374,10 @@ const Registration = () => {
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
                                     <FormControl className={classes.searchRadio} onChange={(event) => setImprovement({ ...improvement, "statusCd": event.target.value })}>
-                                        <RadioGroup row defaultValue="001">
+                                        <RadioGroup row>
                                             <FormControlLabel
                                                 value="001"
-                                                key="001"
+                                                // key="001"
                                                 label="요청중"
                                                 control={
                                                     <Radio
