@@ -122,7 +122,7 @@ const Login = () => {
             }
             //console.log(redirectPath, userLoginCount);
 
-            if (userLoginCount === 0 || userLoginCount === 1) {
+            if (userLoginCount === '0') {
                 setWelcomePopupShow(true);
             } else {
                 setWelcomePopupShow(false);
