@@ -781,6 +781,7 @@ const MeasureToManageThePerformance = () => {
     })
 
     const [dialogId, setDialogId] = useState("")
+    const [attachId, setAttachId] = useState("")
     const [filePath, setFilePath] = useState({
         "performBeforeId": "",
         "performAfterId": ""
@@ -824,10 +825,12 @@ const MeasureToManageThePerformance = () => {
         setLawId(lawButtonId.lawButtonId);
     }
 
-    const handleDialogOpen = (id) => {
+    const handleDialogOpen = (id, attachId) => {
+        console.log("파일아이디", attachId);
         setSelectedFileName("");
         setOpenDialog(true);
         setDialogId(id);
+        setAttachId(attachId);
     }
 
     const handleDialogClose = () => {
@@ -915,9 +918,9 @@ const MeasureToManageThePerformance = () => {
         //console.log(response);
     }
     async function handleDialogFileDownload() {
-        const fileId = files[dialogId]
-        if (fileId) {
-            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        //const fileId = files[dialogId]
+        if (attachId) {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${attachId}&fileSn=1`;
         }
     }
 
@@ -941,7 +944,7 @@ const MeasureToManageThePerformance = () => {
                     {!!relatedRawButtonList && relatedRawButtonList.length > 0 && relatedRawButtonList.map(relatedRawButtonItem =>
                     
                     /* === Data: 2022.10.03 author:Jimmy add === */
-                    (<Link to="#" className={lawId === relatedRawButtonItem.lawButtonId ? classes.buttonLinkactive : classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)} onDoubleClick={() => handleDialogOpen(relatedRawButtonItem.lawButtonId)}>
+                    (<Link to="#" className={lawId === relatedRawButtonItem.lawButtonId ? classes.buttonLinkactive : classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)} onDoubleClick={() => handleDialogOpen(relatedRawButtonItem.lawButtonId, relatedRawButtonItem.attachId)}>
                     {/* ========================================= */}
                     
                         <span>{relatedRawButtonItem?.lawName}</span>
@@ -1128,7 +1131,7 @@ const MeasureToManageThePerformance = () => {
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
                 onDownload={handleDialogFileDownload}
-                enableDownload={false}
+                enableDownload={true}
                 label={labelObject}
                 selectedFileName={selectedFileName}
             />

@@ -749,7 +749,7 @@ const WorkHistoryList = () => {
     const [getSafeWorkFile] = useGetSafeWorkFileMutation();
     const [deleteFile] = useDeleteFileMutation();
     const getInitialWorkplaceId = useUserInitialWorkplaceId();
-    //console.log(getInitialWorkplaceId());
+
 
     const [locale] = React.useState('ko');
     const [hide, setHide] = useState(true);
@@ -792,7 +792,6 @@ const WorkHistoryList = () => {
         upperLabel: "공사허가서 등록",
         middleLabel: "공사허가서 파일을 업로드 합니다.",
     })
-
 
     const handleAllPopupClose = () => {
         setHide(true);
@@ -861,11 +860,15 @@ const WorkHistoryList = () => {
         });
         //console.log(response);
         setSafeWorkList(response.data.RET_DATA);
+        if(getInitialWorkplaceId()===null || getInitialWorkplaceId()===""){
+            setWorkplaceId(response.data.RET_DATA?.[0].workplaceId)
+        }          
     }
 
     const fetchSafeWorkFileTopInfo = async (constructionType) => {
         const response = await getSafeWorkFileTopInfo({
-            "constructionType": constructionType
+            "constructionType": constructionType,
+            "workplaceId": workplaceId
         });
         setSafeWorkFileTopinfo(response.data.RET_DATA);
     }
