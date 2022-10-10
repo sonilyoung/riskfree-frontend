@@ -489,7 +489,7 @@ const useStyles = makeStyles(() => ({
     },
     uploadPlusPopup: {
         position: 'absolute',
-        zIndex: '1000',
+        zIndex: '1',
         top: '0',
         left: '50%',
         transform: 'translateX(-50%)',
@@ -885,11 +885,18 @@ const MeasureToManageThePerformance = () => {
     }
 
     const fetchInsertDutyButton = async () => {
-        await insertDutyButton({
-            "lawName": lawName
-        });
-        setPopupPlusButton(false);
-        fetchRelatedRawButtonList(lawId);
+        if(lawName === ""){
+            setOkayPopupMessage("법령명을 입력해주세요.");
+            setOkayPopupShow(true);
+            //setPopupPlusButton(false);
+        } else {
+            await insertDutyButton({
+                "lawName": lawName
+            });
+            setPopupPlusButton(false);
+            fetchRelatedRawButtonList(lawId);
+            setLawName('');
+        }
     }
 
     const handleUpdateRelatedRawList = async () => {
@@ -942,7 +949,7 @@ const MeasureToManageThePerformance = () => {
                     )}
                     <button className={classes.buttonPlus} onClick={() => setPopupPlusButton(true)}>+</button>
                 </Grid>
-                <Grid className={classes.pageBody} item xs={10.7}>
+                <Grid className={classes.pageBody} item xs={10.7} >
                     {/* <div className={popupButton ? classes.uploadPopup : classes.uploadPopupHide} >
                         <ClosePopupButton2 onClick={() => setPopupButton(false)}></ClosePopupButton2>
                         <div className={classes.uploadInfo}>
@@ -965,7 +972,7 @@ const MeasureToManageThePerformance = () => {
                             <UnknownButton1>전체사업장</UnknownButton1>
                         </div>
                     </div> */}
-                    <div className={popupPlusButton ? classes.uploadPlusPopup : classes.uploadPopupHide} >
+                    <div className={popupPlusButton ? classes.uploadPlusPopup : classes.uploadPopupHide}>
                         <ClosePopupButton2 onClick={() => setPopupPlusButton(false)}></ClosePopupButton2>
                         <h3>법령명생성</h3>
                         <div className={classes.uploadSearch}>

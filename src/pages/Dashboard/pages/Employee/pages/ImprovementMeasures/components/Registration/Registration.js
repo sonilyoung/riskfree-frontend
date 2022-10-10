@@ -37,14 +37,15 @@ import { Overlay } from '../../../../../../../../components/Overlay';
 import Okay from '../../../../../../../../components/MessageBox/Okay';
 
 const Registration = () => {
+    const [locale] = React.useState('ko');
     const classes = useStyles();
     const navigate = useNavigate()
     const getInitialWorkplaceId = useUserInitialWorkplaceId();
     const [getWorkplaceList] = useGetWorkplaceListMutation()
     const [improvementInsert] = useImprovementInsertMutation()
+    const [loginInfo, setLoginInfo] = useState({})
     const [workplaces, setWorkplaces] = useState([])
     const [workplaceSelect, setWorkplaceSelect] = useState(getInitialWorkplaceId())
-    const [reqUserCd, setReqUserCd] = useState("")
     const [reqDate, setReqDate] = useState(null)
     const [finDate, setFinDate] = useState(null)
     const [completeDate, setcompleteDate] = useState(null)
@@ -66,6 +67,9 @@ const Registration = () => {
     const [actionBeforeLink, setActionBeforeLink] = useState("")
     const [actionAfterLink, setActionAfterLink] = useState("")
     const [dialogId, setDialogId] = useState("")
+
+
+    
     const [filePath, setFilePath] = useState({
         "reqFileId": "",
         "actionBeforeId": "",
@@ -75,13 +79,14 @@ const Registration = () => {
     const [fileDown] = useFileDownMutation()
     const [getGenerateKey] = useGetGenerateKeyMutation()
     const [generatedKey, setGeneratedKey] = useState("")
+    const [getLoginInfo] = useGetLoginInfoMutation()
 
     const [improvement, setImprovement] = useState(
         {
             "actionAfterId": actionAfterId,
             "actionBeforeId": actionBeforeId,
             "actionCn": "",
-            "companyId": 1,
+            "companyId": "",
             "finDate": finDate,
             "improveCn": "",
             "improveId": null,
@@ -93,7 +98,7 @@ const Registration = () => {
             "statusCd": "",
             "completeDate": completeDate,
             "updateId": null,
-            "workplaceId": parseInt(workplaceSelect)
+            "workplaceId": ""
         }
     )
 
@@ -142,6 +147,13 @@ const Registration = () => {
         }
     }
 
+    const handleLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfo(response.data.RET_DATA)
+        setImprovement({...improvement, "reqUserCd" : response.data.RET_DATA.roleCd})
+        setImprovement({...improvement, "workplaceId" : response.data.RET_DATA.workplaceId})
+    }
+
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
@@ -158,7 +170,9 @@ const Registration = () => {
     }
 
     const handleImprovementInsert = async () => {
-           
+
+        console.log(improvement.workplaceId)
+        console.log(improvement.reqUserCd)
 
         if (improvement.improveCn.length <= 0) {
             setOkayPopupMessage("필수항목 '개선.조치 내용'을 입력하세요.");
@@ -169,7 +183,7 @@ const Registration = () => {
             setOkayPopupMessage("필수항목 '요청일자'를 입력하세요.");
             setOkayPopupShow(true);                    
             return false;
-        }
+        }        
         if (improvement.reqUserCd.length <= 0) {
             setOkayPopupMessage("필수항목 '요청자'를 입력하세요.");
             setOkayPopupShow(true);                    
@@ -180,7 +194,6 @@ const Registration = () => {
             setOkayPopupShow(true);                    
             return false;
         }
-
         const response = await improvementInsert(improvement);
         if (response?.data?.RET_CODE === "0000") {
             setOkayPopupMessage("등록 되었습니다.");
@@ -197,16 +210,6 @@ const Registration = () => {
         setImprovement({ ...improvement, "improveNo": response?.data?.RET_DATA?.improveKey })
     }
 
-    /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
-    const [loginInfo, setLoginInfo] = useState({});
-    const [getLoginInfo] = useGetLoginInfoMutation()
-    const fetchLoginInfo = async () => {
-        const response = await getLoginInfo()
-        setLoginInfo(response.data.RET_DATA)
-        //console.log(response.data.RET_DATA)
-        setImprovement({ ...improvement, "reqUserCd": response.data.RET_DATA.roleCd })
-
-    }    
 
     const DateChange = name => (date) => {
         if(name === 'finDate') {
@@ -218,9 +221,8 @@ const Registration = () => {
         }
     };
 
-    const [locale] = React.useState('ko');
     useEffect(() => {
-        fetchLoginInfo()
+        handleLoginInfo()
         fetchComapanyWorkplace()
         getGeneratedKey()
     }, [])
@@ -248,29 +250,16 @@ const Registration = () => {
                             <div className={classes.rowContent}>
                                 { /* === Data: 2022.10.03 author:Jimmy edit: 실무자일 경우 본인 속한 사업장만 표시 value === */}
                                 <div className={classes.rowInfo}>
-                                    {
-                                        loginInfo.roleCd === "003"
-                                            ?
-                                            <Select
-                                                sx={{ width: 200 }}
-                                                className={classes.selectMenu}
-                                                value={loginInfo.workplaceId}
-                                                onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
-                                                displayEmpty
-                                            >
-                                                <MenuItem value={loginInfo.workplaceId}>{loginInfo.workplaceName}</MenuItem>
-                                            </Select>
-                                            :
-                                            <Select
-                                                sx={{ width: 200 }}
-                                                className={classes.selectMenu}
-                                                value={improvement.workplaceId === '' ? loginInfo.workplaceId : improvement.workplaceId}
-                                                onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
-                                                displayEmpty
-                                            >
-                                                {workplaces?.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
-                                            </Select>
-                                    }
+                                    <Select
+                                        sx={{ width: 200 }}
+                                        className={classes.selectMenu} 
+                                        value={loginInfo.workplaceId}
+                                        key={loginInfo.workplaceId}
+                                        //onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
+                                        displayEmpty
+                                    >
+                                        <MenuItem value={loginInfo.workplaceId}>{loginInfo.workplaceName}</MenuItem>
+                                    </Select>
                                 </div>
                                 <div className={classes.rowTitle}><text>*</text>개선조치 NO</div>
                                 <div className={classes.rowInfo}>
@@ -326,16 +315,15 @@ const Registration = () => {
                                 </div>
                                 <div className={classes.rowTitle}><text>*</text>요청자</div>
                                 <div className={classes.rowInfo}>
-                                    { /* === Data: 2022.10.03 author:Jimmy edit: value === */}
                                     <Select
                                         sx={{ width: 200 }}
                                         className={classes.selectMenu}
-                                        value={improvement.reqUserCd}
-                                        key={improvement.reqUserCd}
-                                        onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
+                                        value={loginInfo.roleCd}
+                                        key={loginInfo.roleCd}
+                                        //onChange={() => setImprovement({ ...improvement, "reqUserCd": loginInfo.roleCd })}
                                         displayEmpty
                                     >
-                                        <MenuItem value={loginInfo?.roleCd}>{loginInfo?.roleName}</MenuItem>                                                                                
+                                        <MenuItem value={loginInfo.roleCd}>{loginInfo.roleName}</MenuItem>
                                     </Select>
                                 </div>
                                 <div className={classes.rowTitle}><text>*</text>완료요청일</div>
@@ -386,6 +374,7 @@ const Registration = () => {
                                         <RadioGroup row defaultValue="001">
                                             <FormControlLabel
                                                 value="001"
+                                                key="001"
                                                 label="요청중"
                                                 control={
                                                     <Radio
