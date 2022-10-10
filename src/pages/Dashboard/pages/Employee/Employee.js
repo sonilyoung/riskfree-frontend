@@ -2087,7 +2087,7 @@ const Employee = () => {
                 position: 'bottom',
                 labels: {
                     show: true,
-                    rotate: -45,
+                    rotate: 0,
                 },
             },
             fill: {
@@ -2122,7 +2122,9 @@ const Employee = () => {
         
         if(condition==="5" || condition==="6"){            
             setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories } , yaxis: {title: {text: '발생건수'}}, tooltip: {y: {formatter: function (val) {return val + "건"}}}} });    
-        }else{            
+        }else if(condition==="3"){                     
+            setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories ,labels: {show: true,rotate: -45}} , yaxis: {title: {text: '발생건수'}}, tooltip: {y: {formatter: function (val) {return val + "건"}}}} });
+        }else{    
             setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories } , yaxis: {title: {text: '% rate'}}, tooltip: {y: {formatter: function (val) {return val + "% rate"}}}} });    
         }
         
