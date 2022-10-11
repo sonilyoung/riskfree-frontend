@@ -2123,9 +2123,11 @@ const Employee = () => {
     const handleChartCategoriesDisplay = (chartCategories) => {
         
         if(condition==="5" || condition==="6"){            
-            setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories } , yaxis: {title: {text: ''}}, tooltip: {y: {formatter: function (val) {return val + ""}}}} });    
-        }else{            
-            setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories } , yaxis: {title: {text: '% rate'}}, tooltip: {y: {formatter: function (val) {return val + "% rate"}}}} });    
+            setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories ,labels: {show: true,rotate: 0}} , yaxis: {title: {text: '발생건수'}}, tooltip: {y: {formatter: function (val) {return val + "건"}}}} });    
+        }else if(condition==="3"){                     
+            setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories ,labels: {show: true,rotate: -45}} , yaxis: {title: {text: '% rate'}}, tooltip: {y: {formatter: function (val) {return val + "% rate"}}}} });
+        }else{    
+            setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories ,labels: {show: true,rotate: 0}} , yaxis: {title: {text: '% rate'}}, tooltip: {y: {formatter: function (val) {return val + "% rate"}}}} });    
         }
         
     }
@@ -3123,27 +3125,27 @@ const Employee = () => {
                                         </div>
                                     </div>
                                     <div className={classes.tableBody}>
-                                        {!!reportList && !!(reportList?.length) && (condition === "1" || condition === "3")
+                                        {!!reportList && !!(reportList?.length) && (condition === "1" || condition === "2"|| condition === "3"|| condition === "4")
                                             ? reportList?.map((reportItem) =>
-                                                <div className={classes.tableRow}>
-                                                    <div className={classes.tableData}>{reportItem[0]?.menuTitle}</div>
-                                                    {reportTitle?.map((reportTitleItem) => {
-                                                        const element = reportItem?.find(item => item.workplaceId === parseFloat(reportTitleItem.groupId));
-                                                        return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}` : "0"}</div>;
-                                                    })}
-                                                </div>)
+                                            (<div className={classes.tableRow}>
+                                                <div className={classes.tableData}>{reportItem[0]?.workplaceName}</div>
+                                                {reportTitle?.map((reportTitleItem) => {
+                                                    const element = reportItem?.find(item => item.groupId === reportTitleItem.groupId);
+                                                    return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}%` : "0%"}</div>;
+                                                })}
+                                            </div>))
                                             : !!reportList && !!(reportList?.length) && condition === "5"
                                                 ? reportList?.map((reportItem) =>
                                                 (<div className={classes.tableRow}>
                                                     {reportItem?.map((item) =>
                                                         <>
                                                             <div className={classes.tableData}>{item?.workplaceName}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType001}%` : "0"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType002}%` : "0"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType003}%` : "0"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType004}%` : "0"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType005}%` : "0"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType006}%` : "0"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType001}건` : "0건"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType002}건` : "0건"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType003}건` : "0건"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType004}건` : "0건"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType005}건` : "0건"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType006}건` : "0건"}</div>
                                                         </>
                                                     )}
                                                 </div>))
@@ -3153,10 +3155,10 @@ const Employee = () => {
                                                         {reportItem?.map((item) =>
                                                             <>
                                                                 <div className={classes.tableData}>{item?.workplaceName}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd001}` : "0"}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd002}` : "0"}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd003}` : "0"}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd004}` : "0"}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd001}건` : "0건"}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd002}건` : "0건"}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd003}건` : "0건"}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd004}건` : "0건"}</div>
                                                             </>
                                                         )}
                                                     </div>))
@@ -3165,10 +3167,10 @@ const Employee = () => {
                                                         <div className={classes.tableData}>{reportItem[0]?.workplaceName}</div>
                                                         {reportTitle?.map((reportTitleItem) => {
                                                             const element = reportItem?.find(item => item.groupId === reportTitleItem.groupId);
-                                                            return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}` : "0"}</div>;
+                                                            return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}건` : "0건"}</div>;
                                                         })}
                                                     </div>))
-                                        }
+                                        }                                    
                                     </div>
                                 </Grid>
                             </div>
@@ -3667,7 +3669,7 @@ const Employee = () => {
                     message={yesNoPopupMessage}
                     onConfirmYes={handleInsertBaseLineDataUpdate}
                     //onConfirmNo={() => setYesNoPopupShow(false)}
-                    onConfirm={() => setWrongCredentialsPopup(false)} />
+                    onConfirm={() => setWrongCredentialsPopup(false)}
                 />
             </Overlay>
 
