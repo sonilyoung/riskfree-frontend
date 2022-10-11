@@ -402,11 +402,14 @@ const Update = () => {
     const fetchLawView = async () => {
         let filePathMain = {}
         const response = await lawView(updateid)
+
+        console.log("파일확인:", response.data.RET_DATA);
+
         setLaw(response.data.RET_DATA)
         for (const path in filePath) {
-            let fileInfo = await getFileInfo({ atchFileId: updateid, fileSn: 1 })
+            let fileInfo = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA[path]), fileSn: 1 })
             filePathMain[path] = fileInfo.data.RET_DATA.originalFileName
-        }
+        }        
         setFilePath(filePathMain)
     };
 
