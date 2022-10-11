@@ -97,7 +97,7 @@ import icoFile from '../../../../assets/images/ic_file.png';
 import { OnlyUploadDialog, UploadDialog, UploadEmployeeDialog } from '../../../../dialogs/Upload';
 import { Overlay } from '../../../../components/Overlay';
 import Ok from '../../../../components/MessageBox/Ok';
-import { useFileUploadMutation, useGetFileInfoMutation, useUpdateDocumentFileIdMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
+import { useFileUploadMutation, useGetFileInfoMutation, useUpdateDocumentFileIdMutation, useGetSafetyFileIdMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
 
 import Chart from 'react-apexcharts';
 import YesNo from '../../../../components/MessageBox/YesNo';
@@ -2136,6 +2136,16 @@ const Employee = () => {
         setNoticeHotList(notificationPopupList);
     }
 
+    const [getSafetyFileId] = useGetSafetyFileIdMutation()
+    const [safetyFileId, setSafetyFileId] = useState("");  
+
+    const getSafetyFile = async () => {
+        const response = await getSafetyFileId({});
+		console.log("데이터확인:" , response.data.RET_DATA?.safetyPermitFileId);
+        setSafetyFileId(response.data.RET_DATA?.safetyPermitFileId);
+    }
+
+
     //설정창 아코디언 선언
     const [expanded, setExpanded] = React.useState('');
 
@@ -2573,6 +2583,17 @@ const Employee = () => {
         }
     }
     
+    async function handleSafetyFileId() {
+
+        console.log("test:", safetyFileId);
+        return;
+        if (safetyFileId  === "") {
+            setWrongCredentialsPopup(true);
+        } else {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${safetyFileId}&fileSn=1`;
+        }
+    }    
+
     async function handleDialogFileDownload() {
         const fileId = employeeFiles[dialogId]
 
@@ -2584,6 +2605,7 @@ const Employee = () => {
     }
 
     const handleDialogOpen = (event, articleNo, fileId, index) => {
+
         setOpenDialog(true);
         setDialogId((event.target.id).toString());
         setArticleNoForInspection(articleNo)
@@ -2742,6 +2764,7 @@ const Employee = () => {
     }, [baselineData])
 
     useEffect(() => {
+        getSafetyFile();
         fetchLoginInfo();
         fetchCompanyInfo()
         fetchWorkplaceList();
@@ -3631,7 +3654,7 @@ const Employee = () => {
                 onClose={handleDialogCloseEmployee}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
-                onDownload={handleDialogFileDownload}
+                onDownload={handleSafetyFileId}
                 enableDownload={true}
                 label={labelObject}
                 selectedFileName={selectedFileName}
