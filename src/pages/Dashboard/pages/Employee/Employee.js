@@ -2586,7 +2586,6 @@ const Employee = () => {
     async function handleSafetyFileId() {
 
         console.log("test:", safetyFileId);
-        return;
         if (safetyFileId  === "") {
             setWrongCredentialsPopup(true);
         } else {

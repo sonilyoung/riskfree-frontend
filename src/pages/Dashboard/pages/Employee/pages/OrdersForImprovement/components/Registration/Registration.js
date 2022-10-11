@@ -378,8 +378,8 @@ const Registration = () => {
         dueDate: "",
         issueReason: "",
         preventCn: "",
-        performBeforeId: "",
-        performAfterId: "",
+        performBeforeId: 2,
+        performAfterId: 1,
         countPerPage: 0,
         lawImproveId: 1,
         occurPlace: "1층작업실",
@@ -486,7 +486,7 @@ const Registration = () => {
     };
 
     const DateChange = name => (date) => {
-        setLaw({ ...law, [name] : date });
+        setLaw({ ...law, [name] : date.format("YYYY-MM-DD") });
     };
 
     const [locale] = React.useState('ko');
