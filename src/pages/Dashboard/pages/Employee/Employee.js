@@ -2118,14 +2118,14 @@ const Employee = () => {
 
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
 
+    const [wrongCredentialsPopup, setWrongCredentialsPopup] = useState(false);
+
     const handleChartCategoriesDisplay = (chartCategories) => {
         
         if(condition==="5" || condition==="6"){            
-            setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories ,labels: {show: true,rotate: 0}} , yaxis: {title: {text: '발생건수'}}, tooltip: {y: {formatter: function (val) {return val + "건"}}}} });    
-        }else if(condition==="3"){                     
-            setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories ,labels: {show: true,rotate: -45}} , yaxis: {title: {text: '발생건수'}}, tooltip: {y: {formatter: function (val) {return val + "% rate"}}}} });
-        }else{    
-            setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories ,labels: {show: true,rotate: 0}} , yaxis: {title: {text: '% rate'}}, tooltip: {y: {formatter: function (val) {return val + "% rate"}}}} });    
+            setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories } , yaxis: {title: {text: ''}}, tooltip: {y: {formatter: function (val) {return val + ""}}}} });    
+        }else{            
+            setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories } , yaxis: {title: {text: '% rate'}}, tooltip: {y: {formatter: function (val) {return val + "% rate"}}}} });    
         }
         
     }
@@ -2573,8 +2573,11 @@ const Employee = () => {
     
     async function handleDialogFileDownload() {
         const fileId = employeeFiles[dialogId]
-        if (fileId || inspectionFileId) {
-            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId || inspectionFileId}&fileSn=1`;
+
+        if (inspectionFileId === "") {
+            setWrongCredentialsPopup(true);
+        } else {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${inspectionFileId}&fileSn=1`;
         }
     }
 
@@ -2712,6 +2715,8 @@ const Employee = () => {
             "condition": condition
         });
 
+        console.log("response?.data?.RET_DATA:", response?.data?.RET_DATA)
+
         if(response?.data?.RET_DATA?.series.length>0){
             handleChartCategoriesDisplay(response?.data?.RET_DATA?.categories);
             setChartSeries(response?.data?.RET_DATA?.series);
@@ -2720,6 +2725,10 @@ const Employee = () => {
             setChartSeries([]);            
         }
     }
+
+    const DateChange = name => (date) => {
+        setBaselineInfo({ ...baselineInfo, [name]: date});
+    };
 
     useEffect(() => {
         fetchBaseline(baselineIdForSelect);
@@ -2935,10 +2944,11 @@ const Employee = () => {
                                                         label=' '
                                                         inputFormat="YYYY-MM-DD"
                                                         value={baselineInfo.baselineStart}
-                                                        onChange={(newDate) => {
-                                                            const date = new Date(newDate.$d);
-                                                            setBaselineInfo({ ...baselineInfo, "baselineStart": moment(date).format("YYYY-MM-DD") })
-                                                        }}
+                                                        onChange={DateChange('baselineStart')}
+                                                        // onChange={(newDate) => {
+                                                        //     const date = new Date(newDate.$d);
+                                                        //     setBaselineInfo({ ...baselineInfo, "baselineStart": moment(date).format("YYYY-MM-DD") })
+                                                        // }}
                                                         renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                     />
                                                 </LocalizationProvider>
@@ -2949,10 +2959,11 @@ const Employee = () => {
                                                         label=" "
                                                         inputFormat="YYYY-MM-DD"
                                                         value={baselineInfo.baselineEnd}
-                                                        onChange={(newDate) => {
-                                                            const date = new Date(newDate.$d);
-                                                            setBaselineInfo({ ...baselineInfo, "baselineEnd": moment(date).format("YYYY-MM-DD") })
-                                                        }}
+                                                        onChange={DateChange('baselineEnd')}
+                                                        // onChange={(newDate) => {
+                                                        //     const date = new Date(newDate.$d);
+                                                        //     setBaselineInfo({ ...baselineInfo, "baselineEnd": moment(date).format("YYYY-MM-DD") })
+                                                        // }}
                                                         renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                     />
                                                 </LocalizationProvider>
@@ -3112,27 +3123,27 @@ const Employee = () => {
                                         </div>
                                     </div>
                                     <div className={classes.tableBody}>
-                                    {!!reportList && !!(reportList?.length) && (condition === "1" || condition === "2"|| condition === "3"|| condition === "4")
+                                        {!!reportList && !!(reportList?.length) && (condition === "1" || condition === "3")
                                             ? reportList?.map((reportItem) =>
-                                            (<div className={classes.tableRow}>
-                                                <div className={classes.tableData}>{reportItem[0]?.workplaceName}</div>
-                                                {reportTitle?.map((reportTitleItem) => {
-                                                    const element = reportItem?.find(item => item.groupId === reportTitleItem.groupId);
-                                                    return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}%` : "0%"}</div>;
-                                                })}
-                                            </div>))
+                                                <div className={classes.tableRow}>
+                                                    <div className={classes.tableData}>{reportItem[0]?.menuTitle}</div>
+                                                    {reportTitle?.map((reportTitleItem) => {
+                                                        const element = reportItem?.find(item => item.workplaceId === parseFloat(reportTitleItem.groupId));
+                                                        return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}` : "0"}</div>;
+                                                    })}
+                                                </div>)
                                             : !!reportList && !!(reportList?.length) && condition === "5"
                                                 ? reportList?.map((reportItem) =>
                                                 (<div className={classes.tableRow}>
                                                     {reportItem?.map((item) =>
                                                         <>
                                                             <div className={classes.tableData}>{item?.workplaceName}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType001}건` : "0건"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType002}건` : "0건"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType003}건` : "0건"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType004}건` : "0건"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType005}건` : "0건"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType006}건` : "0건"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType001}%` : "0"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType002}%` : "0"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType003}%` : "0"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType004}%` : "0"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType005}%` : "0"}</div>
+                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType006}%` : "0"}</div>
                                                         </>
                                                     )}
                                                 </div>))
@@ -3142,10 +3153,10 @@ const Employee = () => {
                                                         {reportItem?.map((item) =>
                                                             <>
                                                                 <div className={classes.tableData}>{item?.workplaceName}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd001}건` : "0건"}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd002}건` : "0건"}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd003}건` : "0건"}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd004}건` : "0건"}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd001}` : "0"}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd002}` : "0"}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd003}` : "0"}</div>
+                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd004}` : "0"}</div>
                                                             </>
                                                         )}
                                                     </div>))
@@ -3154,7 +3165,7 @@ const Employee = () => {
                                                         <div className={classes.tableData}>{reportItem[0]?.workplaceName}</div>
                                                         {reportTitle?.map((reportTitleItem) => {
                                                             const element = reportItem?.find(item => item.groupId === reportTitleItem.groupId);
-                                                            return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}건` : "0건"}</div>;
+                                                            return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}` : "0"}</div>;
                                                         })}
                                                     </div>))
                                         }
@@ -3334,14 +3345,21 @@ const Employee = () => {
                                     <ul className={classes.menuList + ' buttonList'}>
                                         {inspectionsDocs?.map((inspection, index) => (<><li>
                                             <div>{(inspection.fileId === null || inspection.fileId === "null" || inspection.fileId === "") ? 
-                                                    <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone> 
-                                                : 
-                                                    <FileButtonExis id={"inspectionFile"} onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>}
-                                                {inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}
-                                                    onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>상</span>) || (inspection.evaluation === "7" && <span className={'orange'}
-                                                        onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>중</span>) || (inspection.evaluation === "5" && <span className={'red'}
-                                                            onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>하</span>) || ((inspection.evaluation === null || inspection.evaluation === "0" || inspection.evaluation === "null" || inspection.evaluation === "") && <span className={'empty'}
-                                                                onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}></span>))}
+                                                    <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone>
+                                                    : 
+                                                    <FileButtonExis id={"inspectionFile"} onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>
+                                                }
+                                                {(loginInfo.roleCd === "003") ?
+                                                    inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}>상</span>) 
+                                                        || (inspection.evaluation === "7" && <span className={'orange'}>중</span>) 
+                                                            || (inspection.evaluation === "5" && <span className={'red'}>하</span>))
+                                                    :
+                                                    inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}
+                                                        onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>상</span>) || (inspection.evaluation === "7" && <span className={'orange'}
+                                                            onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>중</span>) || (inspection.evaluation === "5" && <span className={'red'}
+                                                                onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>하</span>) || ((inspection.evaluation === null || inspection.evaluation === "0" || inspection.evaluation === "null" || inspection.evaluation === "") && <span className={'empty'}
+                                                                    onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}></span>))
+                                                }
                                             </div>
                                         </li>
                                         </>))}
@@ -3648,7 +3666,8 @@ const Employee = () => {
                     show={yesNoPopupShow}
                     message={yesNoPopupMessage}
                     onConfirmYes={handleInsertBaseLineDataUpdate}
-                    onConfirmNo={() => setYesNoPopupShow(false)}
+                    //onConfirmNo={() => setYesNoPopupShow(false)}
+                    onConfirm={() => setWrongCredentialsPopup(false)} />
                 />
             </Overlay>
 
