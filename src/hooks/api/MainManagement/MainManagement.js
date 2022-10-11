@@ -1,15 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
 export const mainManagement = createApi({
     reducerPath: 'mainManagement',
     baseQuery: fetchBaseQuery({
         baseUrl: `${BASE_URL}`,
         prepareHeaders: (headers) => {
-            const MonitorView = sessionStorage.getItem('MonitorView');
+            const MonitorView = window.sessionStorage.getItem('MonitorView');
             const jwtToken = localStorage.getItem('userToken');
-            
             if (MonitorView){
                 headers.set('authorization', `Bearer ${MonitorView}`)
             } else {
@@ -17,7 +14,6 @@ export const mainManagement = createApi({
                     headers.set('authorization', `Bearer ${jwtToken}`)
                 }
             }
-
             return headers
         },
     }),

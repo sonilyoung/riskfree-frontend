@@ -49,8 +49,8 @@ export const subscribersManagement = createApi({
                 url: `subscribers/workplace/select?companyId=${body}`,
                 method: 'POST'
             })
-        }),
+        })
     }),
 });
 
-export const { useSubscribersViewMutation, useSubscribersUpdateMutation, useSubscribersSelectMutation, useSubscribersInsertMutation, useSubscribersWorkplaceSelectMutation } = subscribersManagement;
+export const { useSubscribersViewMutation, useSubscribersUpdateMutation, useSubscribersSelectMutation, useSubscribersInsertMutation, useSubscribersWorkplaceSelectMutation} = subscribersManagement;

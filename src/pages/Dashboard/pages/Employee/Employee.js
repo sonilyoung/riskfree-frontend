@@ -3691,8 +3691,8 @@ const Employee = () => {
                     show={yesNoPopupShow}
                     message={yesNoPopupMessage}
                     onConfirmYes={handleInsertBaseLineDataUpdate}
-                    //onConfirmNo={() => setYesNoPopupShow(false)}
-                    onConfirm={() => setWrongCredentialsPopup(false)}
+                    onConfirmNo={() => setYesNoPopupShow(false)}
+                    //onConfirm={() => setWrongCredentialsPopup(false)}
                 />
             </Overlay>
 

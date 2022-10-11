@@ -791,6 +791,7 @@ const DefaultLight = ({ children }) => {
                 setOkPopupMessage("'파일'을 등록 하였습니다.");
                 setOkPopupShow(true);
                 handleDialogClose();
+                fetchEssentialDutyVerision();
             } else if(response.data.RET_CODE === '0433'){
                 setOkPopupMessage("파일확장자 오류");
                 setOkPopupShow(true);
