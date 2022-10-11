@@ -391,6 +391,7 @@ const Update = () => {
         lawImproveId: 1,
         occurPlace: "1층작업실",
         pageNum: 0,
+        completeDate:"",
     });
 
     const handleRedirect = () => {
@@ -463,7 +464,8 @@ const Update = () => {
             "preventCn": law.preventCn,
             "recvCd": law.recvCd,
             "recvDate": law.recvDate,
-            "recvUserName": law.recvUserName
+            "recvUserName": law.recvUserName,
+            "completeDate": law.completeDate
         });
         if (response?.data?.RET_CODE === "0000") {
             setOkayPopupMessage("등록 되었습니다.");
@@ -804,7 +806,6 @@ const Update = () => {
                                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                                     <DesktopDatePicker
                                         className={classes.selectMenuDate}
-                                        label=" "
                                         inputFormat="YYYY-MM-DD"
                                         value={law.completeDate}
                                         onChange={DateChange('completeDate')}

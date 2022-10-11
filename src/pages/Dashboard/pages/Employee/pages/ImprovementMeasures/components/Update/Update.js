@@ -337,6 +337,8 @@ const Registration = () => {
     const [reqUserCd, setReqUserCd] = useState("")
     const [openDialog, setOpenDialog] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
+    const [actionAfterId, setActionAfterId] = useState(null)
+    const [actionBeforeId, setActionBeforeId] = useState(null)
     const [fileUpload] = useFileUploadMutation()
     const [getFileInfo] = useGetFileInfoMutation()
     const [dialogId, setDialogId] = useState("")
@@ -345,11 +347,12 @@ const Registration = () => {
         "actionBeforeId": "",
         "actionAfterId": ""
     })
+    const [selectedFileName, setSelectedFileName] = useState("")
     const [fileDown] = useFileDownMutation()
     const [improvement, setImprovement] = useState(
         {
-            "actionAfterId": null,
-            "actionBeforeId": null,
+            "actionAfterId": actionAfterId,
+            "actionBeforeId": actionBeforeId,
             "actionCn": "",
             "companyId": 1,
             "finDate": null,
@@ -403,13 +406,47 @@ const Registration = () => {
         // }
     }
 
+    const handleDialogOpen = (event) => {
+        setOpenDialog(true);
+        setDialogId(event.target.id);
+        setSelectedFileName("");
+    }
+    
+    const handleDialogClose = () => {
+        setOpenDialog(false);
+    }
+
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
-        formData.append("files", selectedFile)
-        const response = await fileUpload(formData)
-        const fileId = response.data.RET_DATA[0].atchFileId
-        setImprovement({ ...improvement, [dialogId]: parseInt(fileId) })
-        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+        if((selectedFileName === "") || (selectedFileName === null)) {
+            setOkayPopupMessage("업로드할 파일을 선택하세요.");
+            setOkayPopupShow(true);   
+        } else {
+            formData.append("files", selectedFile)
+            const response = await fileUpload(formData)
+            if(response.data.RET_CODE === "0000"){
+                setOkayPopupMessage("'파일'을 등록 하였습니다.");
+                setOkayPopupShow(true);
+                handleDialogClose();
+                const fileId = response.data.RET_DATA[0].atchFileId
+                setImprovement({ ...improvement, [dialogId]: parseInt(fileId) })
+                setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+            } else if(response.data.RET_CODE === '0433'){
+                setOkayPopupMessage("파일확장자 오류");
+                setOkayPopupShow(true);
+            } else {
+                setOkayPopupMessage("시스템 오류");
+                setOkayPopupShow(true);
+            }
+        setSelectedFileName("");
+        }
+            
+    }
+
+    const handleDialogInputChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+        setSelectedFileName(file.name);
     }
 
     async function handleDialogFileDownload(id) {
@@ -417,20 +454,6 @@ const Registration = () => {
         if (fileId || id) {
             window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId || id}&fileSn=1`;
         }
-    }
-
-    const handleDialogClose = () => {
-        setOpenDialog(false);
-    }
-
-    const handleDialogOpen = (event) => {
-        setOpenDialog(true);
-        setDialogId(event.target.id);
-    }
-
-    const handleDialogInputChange = (event) => {
-        const file = event.target.files[0];
-        setSelectedFile(file);
     }
 
     const handleUpdateImprovement = async () => {
@@ -746,6 +769,7 @@ const Registration = () => {
                 onUpload={handleDialogFileUpload}
                 enableDownload={true}
                 onDownload={handleDialogFileDownload}
+                selectedFileName={selectedFileName}
             />
             <Overlay show={okayPopupShow}>
                 <Okay

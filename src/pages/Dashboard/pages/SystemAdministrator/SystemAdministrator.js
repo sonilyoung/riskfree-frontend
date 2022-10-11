@@ -40,7 +40,7 @@ import monitor from '../../../../assets/images/admin_monitor.png'
 
 import Stack from '@mui/material/Stack';
 
-import { useSubscribersSelectMutation, useSubscribersInsertMutation, useSubscribersViewMutation, useSubscribersUpdateMutation, useSubscribersWorkplaceSelectMutation } from '../../../../hooks/api/SubscribersManagement/SubscribersManagement';
+import { useSubscribersSelectMutation, useSubscribersInsertMutation, useSubscribersViewMutation, useSubscribersUpdateMutation, useSubscribersWorkplaceSelectMutation, userGetPasswordSearch  } from '../../../../hooks/api/SubscribersManagement/SubscribersManagement';
 import { useGetCommCodeListMutation } from '../../../../hooks/api/CommCodeManagement/CommCodeManagement';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
@@ -50,7 +50,7 @@ import { useFileUploadMutation, useFileDownMutation, useGetFileInfoMutation } fr
 import { DownloadDialog, OnlyUploadDialog, UploadDialog } from '../../../../dialogs/Upload';
 import { Overlay } from '../../../../components/Overlay';
 import Okay from '../../../../components/MessageBox/Okay';
-import { useLoginMutation } from '../../../../hooks/api/LoginManagement/LoginManagement';
+import { useLoginMutation, useGetPwdInfoMutation } from '../../../../hooks/api/LoginManagement/LoginManagement';
 
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -722,6 +722,11 @@ const SearchUserButton = styled(ButtonUnstyled)`
 
 const SystemAdministrator = () => {
     const [login] = useLoginMutation();
+    const [getPwdInfo] = useGetPwdInfoMutation();
+
+    
+    const [passSearch, setPassSearch] = useState('');
+
     const classes = useStyles();
     const navigate = useNavigate();
     const [locale] = React.useState('ko');
@@ -810,7 +815,7 @@ const SystemAdministrator = () => {
         upperLabel: "계약서 등록",
         middleLabel: "등록할 파일을 업로드 합니다."
     }
-
+    
     const handlePlusButtonClick = (buttonId, companyId) => {
         const plusButtonsChangedState = plusButtons?.map(button => {
 
@@ -892,7 +897,6 @@ const SystemAdministrator = () => {
         //emptyInputFields = emptyInputFields?.map(emptyInputField => {
         emptyInputFields?.map(emptyInputField => {
             if (type === "update") {
-                console.log(emptyInputField);
                 if (emptyInputField === "managerTel" && managerTel?.firstInput && managerTel?.secondeInput && managerTel?.thirdInput) {
                     return validation = true;                   
 
@@ -915,10 +919,8 @@ const SystemAdministrator = () => {
             } else if (type === "insert") {
                 if (emptyInputField === "managerEmail" && subscriberInsertEmailBeforeSign && subscriberInsertEmailAfterSign) {
                     return validation = true;
-
                 } else if (emptyInputField === "contractDate" || emptyInputField === "contractFileYn") {
                     return validation = true;
-
                 } else {
                     return validation = false;
                 }
@@ -926,27 +928,39 @@ const SystemAdministrator = () => {
         })?.filter(emptyInputFieldChecked => emptyInputFieldChecked === false);
         callback();
     }
-
+    
     //모니터
-    const handleRedirect = async (workplaceId, userId) => {
-        //console.log(workplaceId+" / "+ userId)
+    const handleRedirect = async (workplaceId, userId, loginId) => {
         const response = await subscribersView(`${workplaceId}&userId=${userId}`);
         const redirectPath = getPath(response.data?.RET_DATA?.managerRoleCd);
-        
+
+
+        //const decryptedBuffer = getdecrypt("WkaOhqSK03Z1pSuPOdc03w==");
+        //bytes.toString(CryptoJS.enc.Utf8);
+        //console.log(decryptedBuffer)
+    
+    
+        //console.log(passResponse.data)
+
         //사업장 로그인 정보
         const userLoginResponse = await login({
-            loginId: "CCC111",
+            // loginId: loginId,
+            // loginPw: passSearch
+            loginId: "KKK222",
             loginPw: "test"
         });
-        
         
         if (userLoginResponse.data.RET_CODE === '0000') {
             const jwtToken = userLoginResponse.data.RET_DATA.accessToken;
             sessionStorage.setItem("MonitorView", jwtToken)
+            const www_path = window.location.href.split("/")[2];
+            window.open(`http://${www_path}${redirectPath}`,'Moniter_View', 'width=1024, height=750, location=no, status=no, scrollbars=yes, _blank')
+        } else {
+            setOkayPopupMessage("회원정보를 가져올수가 없습니다.");
+            setOkayPopupShow(true);
         }
-        
-        //navigate(redirectPath);
-        window.open(`${redirectPath}`, '_blank')
+        sessionStorage.clear();
+
     }
 
     const fetchSubscribersList = async () => {
@@ -1266,10 +1280,10 @@ const SystemAdministrator = () => {
                                         ? <div className={classes.tableData} style={{ cursor: "pointer" }} onDoubleClick={() => handleDialogFileDownload(subscriber.contractFileId)}>{subscriber.contractFileYn}</div>
                                         : <div className={classes.tableData} style={{ cursor: "pointer" }}>{subscriber.contractFileYn}</div>
                                     }
-                                    <div className={classes.tableData} onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}>{console.log(subscriber)}{subscriber?.status ? <img src={monitor} alt="monitor" /> : null}</div>
+                                    <div className={classes.tableData} onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId, subscriber.loginId)}>{subscriber?.status ? <img src={monitor} alt="monitor" /> : null}</div>
                                     {/* 2022.10.09 Jimmy Moniter View 작업중!
                                         로그인처리 후 세션에 토큰값 설정 후 페이지 이동시 정보 가져오는 것까지 처리함!.(문제는 관리자 페이지에서 새로고침시 계정이 대표이사 계정으로 변경되는 문제)
-                                     <div className={classes.tableData} onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}>{console.log(subscriber)}{subscriber?.status ? <img src={monitor} alt="monitor" /> : null}</div> 
+                                     <div className={classes.tableData} onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}>{subscriber?.status ? <img src={monitor} alt="monitor" /> : null}</div> 
                                      */}
                                 </div>
                                 {!!subscribersWorkplaceSelectList && !!subscribersWorkplaceSelectList?.length && subscribersWorkplaceSelectList?.map((subscribersWorkplaceItem, subscribersWorkplaceItemIndex) => {

@@ -29,8 +29,17 @@ export const loginManagement = createApi({
                 method: 'POST',
                 body: body
             })
-        })
+        }),
+        getPwdInfo: builder.mutation({
+            query: (body) => ({
+                url: 'main/getPwdInfo',
+                method: 'POST',
+                body: body,
+            }),
+        }),
     }),
 });
 
-export const { useLoginMutation, usePasswordConfirmMutation, usePasswordResetMutation } = loginManagement;
+
+
+export const { useLoginMutation, usePasswordConfirmMutation, usePasswordResetMutation, useGetPwdInfoMutation } = loginManagement;
