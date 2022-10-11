@@ -2141,7 +2141,6 @@ const Employee = () => {
 
     const getSafetyFile = async () => {
         const response = await getSafetyFileId({});
-		console.log("데이터확인:" , response.data.RET_DATA?.safetyPermitFileId);
         setSafetyFileId(response.data.RET_DATA?.safetyPermitFileId);
     }
 
@@ -2530,6 +2529,12 @@ const Employee = () => {
                         setFilePath({ ...filePath, [dialogId]: (response.data.RET_DATA[0].filePath + "/" + response.data.RET_DATA[0].saveFileName) })
                     } else {
                         setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+                    }
+
+                    if(dialogId === "safetyFileUpload"){
+                        const responseSaferyFile = await updateSafetyFile({ "attachFileId": fileId, });
+                        //console.log("responseSaferyFile:", responseSaferyFile);
+                        setSafetyFileId(fileId);
                     }
                 } else if(response.data.RET_CODE === '0433'){
                     setOkayPopupMessage("파일확장자 오류");
