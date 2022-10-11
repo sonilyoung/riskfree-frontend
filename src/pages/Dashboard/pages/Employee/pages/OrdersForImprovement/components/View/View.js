@@ -480,7 +480,7 @@ const View = () => {
                             <div className={classes.rowTitle}>완료일</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
-                                    {law && law.recvDate}
+                                    {law && law.completeDate}
                                 </div>
                             </div>
                             { /* ========================================= */ }

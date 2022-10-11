@@ -803,8 +803,8 @@ const Update = () => {
                                         className={classes.selectMenuDate}
                                         label=" "
                                         inputFormat="YYYY-MM-DD"
-                                        value={law.recvDate}
-                                        onChange={DateChange('recvDate')}
+                                        value={law.completeDate}
+                                        onChange={DateChange('completeDate')}
                                         // onChange={(newDate) => {
                                         //     const date = new Date(newDate.$d)
                                         //     setLaw({ ...law, "recvDate": moment(date).format("YYYY-MM-DD") })
