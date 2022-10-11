@@ -523,9 +523,10 @@ const Update = () => {
     }
 
     const handleDialogOpen = (event) => {
+        setSelectedFileName("");
         setOpenDialog(true);
         setDialogId(event.target.id);
-        console.log(event.target.id)
+        //console.log(event.target.id)
     }
 
     const DateChange = name => (date) => {
