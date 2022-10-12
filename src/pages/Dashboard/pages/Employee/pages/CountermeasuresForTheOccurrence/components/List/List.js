@@ -539,7 +539,6 @@ const List = () => {
     };
     
     useEffect(() => {
-        
         fetchAccidentsList()
         fetchWorkplaceList()
         fetchAccidentOccurPlacesList()
