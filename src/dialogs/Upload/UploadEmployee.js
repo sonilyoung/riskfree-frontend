@@ -71,7 +71,6 @@ const SearchButton = styled(ButtonUnstyled)`
 `;
 
 function Upload({ open, onClose, onInputChange, onUpload, enableDownload, onDownload, selectedFileName, label }) {
-console.log("다운로드:", enableDownload)
 
     const classes = useStyles();
     const inputRef = useRef(null);

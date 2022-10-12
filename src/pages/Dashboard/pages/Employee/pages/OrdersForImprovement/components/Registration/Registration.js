@@ -486,7 +486,7 @@ const Registration = () => {
     };
 
     const DateChange = name => (date) => {
-        setLaw({ ...law, [name] : date });
+        setLaw({ ...law, [name] : date.format("YYYY-MM-DD") });
     };
 
     const [locale] = React.useState('ko');

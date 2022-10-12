@@ -97,7 +97,7 @@ import icoFile from '../../../../assets/images/ic_file.png';
 import { OnlyUploadDialog, UploadDialog, UploadEmployeeDialog } from '../../../../dialogs/Upload';
 import { Overlay } from '../../../../components/Overlay';
 import Ok from '../../../../components/MessageBox/Ok';
-import { useFileUploadMutation, useGetFileInfoMutation, useUpdateDocumentFileIdMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
+import { useFileUploadMutation, useGetFileInfoMutation, useUpdateDocumentFileIdMutation, useGetSafetyFileIdMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
 
 import Chart from 'react-apexcharts';
 import YesNo from '../../../../components/MessageBox/YesNo';
@@ -2136,6 +2136,15 @@ const Employee = () => {
         setNoticeHotList(notificationPopupList);
     }
 
+    const [getSafetyFileId] = useGetSafetyFileIdMutation()
+    const [safetyFileId, setSafetyFileId] = useState("");  
+
+    const getSafetyFile = async () => {
+        const response = await getSafetyFileId({});
+        setSafetyFileId(response.data.RET_DATA?.safetyPermitFileId);
+    }
+
+
     //설정창 아코디언 선언
     const [expanded, setExpanded] = React.useState('');
 
@@ -2521,6 +2530,12 @@ const Employee = () => {
                     } else {
                         setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
                     }
+
+                    if(dialogId === "safetyFileUpload"){
+                        const responseSaferyFile = await updateSafetyFile({ "attachFileId": fileId, });
+                        //console.log("responseSaferyFile:", responseSaferyFile);
+                        setSafetyFileId(fileId);
+                    }
                 } else if(response.data.RET_CODE === '0433'){
                     setOkayPopupMessage("파일확장자 오류");
                     setOkayPopupShow(true);
@@ -2573,6 +2588,16 @@ const Employee = () => {
         }
     }
     
+    async function handleSafetyFileId() {
+
+        console.log("test:", safetyFileId);
+        if (safetyFileId  === "") {
+            setWrongCredentialsPopup(true);
+        } else {
+            window.location = `${BASE_URL}/file/fileDown?atchFileId=${safetyFileId}&fileSn=1`;
+        }
+    }    
+
     async function handleDialogFileDownload() {
         const fileId = employeeFiles[dialogId]
 
@@ -2584,6 +2609,7 @@ const Employee = () => {
     }
 
     const handleDialogOpen = (event, articleNo, fileId, index) => {
+
         setOpenDialog(true);
         setDialogId((event.target.id).toString());
         setArticleNoForInspection(articleNo)
@@ -2742,6 +2768,7 @@ const Employee = () => {
     }, [baselineData])
 
     useEffect(() => {
+        getSafetyFile();
         fetchLoginInfo();
         fetchCompanyInfo()
         fetchWorkplaceList();
@@ -3631,7 +3658,7 @@ const Employee = () => {
                 onClose={handleDialogCloseEmployee}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
-                onDownload={handleDialogFileDownload}
+                onDownload={handleSafetyFileId}
                 enableDownload={true}
                 label={labelObject}
                 selectedFileName={selectedFileName}
