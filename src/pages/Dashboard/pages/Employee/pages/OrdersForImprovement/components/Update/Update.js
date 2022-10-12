@@ -372,17 +372,17 @@ const Update = () => {
     };
 
     const [law, setLaw] = useState({
-        recvDate: todaysDate,
-        recvUserName: loginInfo.name,
-        recvCd: "",
+        recvDate: todaysDate,       // 접수일자
+        recvUserName: loginInfo.name,       // 접수자
+        recvCd: "",        
         cmmdOrgCd001: "",
         cmmdOrgCd002: "",
         cmmdOrgCd003: "",
         cmmdOrgCd004: "",
         improveCn: "",
         improveTypeCd: "",
-        orderDate: "",
-        dueDate: "",
+        orderDate: "",      // 지적일자
+        dueDate: "",        // 완료요청일
         issueReason: "",
         preventCn: "",
         performBeforeId: "",
@@ -391,7 +391,7 @@ const Update = () => {
         lawImproveId: 1,
         occurPlace: "1층작업실",
         pageNum: 0,
-        completeDate:"",
+        completeDate:"",        // 완료일
     });
 
     const handleRedirect = () => {
@@ -451,21 +451,21 @@ const Update = () => {
             "cmmdOrgCd003": law.cmmdOrgCd003,
             "cmmdOrgCd004": law.cmmdOrgCd004,
             "countPerPage": 0,
-            "dueDate": law.dueDate,
+            "dueDate": law.dueDate,     // 완료요청일
             "improveCn": law.improveCn,
             "improveTypeCd": law.improveTypeCd,
             "issueReason": law.issueReason,
             "lawImproveId": updateid,
             "occurPlace": law.occurPlace,
-            "orderDate": law.orderDate,
+            "orderDate": law.orderDate,     // 지적일자
             "pageNum": 0,
             "performAfterId": law.performAfterId,
             "performBeforeId": law.performBeforeId,
             "preventCn": law.preventCn,
             "recvCd": law.recvCd,
-            "recvDate": law.recvDate,
+            "recvDate": law.recvDate,          // 접수일자
             "recvUserName": law.recvUserName,
-            "completeDate": law.completeDate
+            "completeDate": law.completeDate        // 완료일
         });
         if (response?.data?.RET_CODE === "0000") {
             setOkayPopupMessage("등록 되었습니다.");
@@ -808,7 +808,7 @@ const Update = () => {
                                     <DesktopDatePicker
                                         className={classes.selectMenuDate}
                                         inputFormat="YYYY-MM-DD"
-                                        value={law.completeDate}
+                                        value={law.completeDate === "" ? "" : law.completeDate}
                                         onChange={DateChange('completeDate')}
                                         // onChange={(newDate) => {
                                         //     const date = new Date(newDate.$d)
