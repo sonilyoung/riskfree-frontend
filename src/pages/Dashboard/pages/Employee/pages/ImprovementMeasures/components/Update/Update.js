@@ -387,11 +387,7 @@ const Registration = () => {
         let filePathMain = {}
         const response = await improvementView(updateid)
         setImprovement(response?.data?.RET_DATA)
-        for (const path in filePath) {
-            let fileInfo = await getFileInfo({ atchFileId: parseInt(response?.data?.RET_DATA[path]), fileSn: 1 })
-            filePathMain[path] = fileInfo.data.RET_DATA.originalFileName
-        }
-        setFilePath(filePathMain)
+        
         // if (response.data.RET_DATA.actionBeforeId) {
         //     const responseFileInfoBefore = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.actionBeforeId), fileSn: 1 })
         //     setFilePath({ ...filePath, "actionBeforeId": responseFileInfoBefore.data.RET_DATA.originalFileName ?? "" })
@@ -404,6 +400,14 @@ const Registration = () => {
         //     const responseFileInfoExel = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.reqFileId), fileSn: 1 })
         //     setFilePath({ ...filePath, "reqFileId": responseFileInfoExel.data.RET_DATA.originalFileName ?? "" })
         // }
+
+
+        for (const path in filePath) {
+            let fileInfo = await getFileInfo({ atchFileId: parseInt(response?.data?.RET_DATA[path]), fileSn: 1 })
+            filePathMain[path] = fileInfo.data.RET_DATA.originalFileName
+        }
+        // console.log(filePathMain)
+        setFilePath(filePathMain)
     }
 
     const handleDialogOpen = (event) => {
@@ -492,7 +496,7 @@ const Registration = () => {
     }, [])
 
     useEffect(() => {
-        console.log(improvement)
+        //console.log(improvement)
     }, [filePath])
 
     return (

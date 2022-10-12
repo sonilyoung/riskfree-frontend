@@ -85,12 +85,16 @@ const StepTwo = () => {
             confirmPwd: values.confirmPwd.value,
             userId: userId
         });
-
-        if (response.data.RET_CODE === '0000') {
-            setOkayPopupMessage("등록 되었습니다.");
-            setOkayPopupShow(true);
+        if(values.changePwd.value === values.confirmPwd.value) {
+            if (response.data.RET_CODE === '0000') {
+                setOkayPopupMessage("등록 되었습니다.");
+                setOkayPopupShow(true);
+            } else {
+                setOkayPopupMessage("입력정보에 오류가 있습니다");
+                setOkayPopupShow(true);
+            }
         } else {
-            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다");
+            setOkayPopupMessage("비밀번호가 맞지 않습니다");
             setOkayPopupShow(true);
         }
     }

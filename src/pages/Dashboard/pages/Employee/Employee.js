@@ -2051,8 +2051,8 @@ const Employee = () => {
     }
     const [selectedFileName, setSelectedFileName] = useState("")
     const [labelObject, setLabelObject] = useState({
-        upperLabel: "이미지 등록",
-        middleLabel: "등록할 파일을 업로드 합니다.",
+        upperLabel: "",
+        middleLabel: "",
     })
     const [reportList, setReportList] = useState([]);
     const [reportTitle, setReportTitle] = useState([]);
@@ -2590,19 +2590,22 @@ const Employee = () => {
     
     async function handleSafetyFileId() {
 
-        console.log("test:", safetyFileId);
-        if (safetyFileId  === "") {
+        if ((safetyFileId === "") || (safetyFileId === undefined)) {
             setWrongCredentialsPopup(true);
+            setOkayPopupMessage("업로드된 파일이 없습니다");
+            setOkayPopupShow(true);
         } else {
             window.location = `${BASE_URL}/file/fileDown?atchFileId=${safetyFileId}&fileSn=1`;
         }
-    }    
+    }
 
     async function handleDialogFileDownload() {
         const fileId = employeeFiles[dialogId]
 
-        if (inspectionFileId === "") {
+        if ((inspectionFileId === "") || (inspectionFileId === undefined)) {
             setWrongCredentialsPopup(true);
+            setWrongCredentialsPopup(true);
+            setOkayPopupMessage("업로드된 파일이 없습니다");
         } else {
             window.location = `${BASE_URL}/file/fileDown?atchFileId=${inspectionFileId}&fileSn=1`;
         }
@@ -2655,6 +2658,7 @@ const Employee = () => {
         setOpenDialogEmployee(false);
     }
 
+    // 점검서류 등록, 안전작업허가서 양식
     const handleDialogOpenEmployee = (event, articleNo, fileId, index) => {
         setOpenDialogEmployee(true);
         setDialogId((event.target.id).toString());
@@ -3374,9 +3378,9 @@ const Employee = () => {
                                     <ul className={classes.menuList + ' buttonList'}>
                                         {inspectionsDocs?.map((inspection, index) => (<><li>
                                             <div>{(inspection.fileId === null || inspection.fileId === "null" || inspection.fileId === "") ? 
-                                                    <FileButtonNone id={"inspectionFile"} onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone>
+                                                    <FileButtonNone id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone>
                                                     : 
-                                                    <FileButtonExis id={"inspectionFile"} onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>
+                                                    <FileButtonExis id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>
                                                 }
                                                 {(loginInfo.roleCd === "003") ?
                                                     inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}>상</span>) 

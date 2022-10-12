@@ -530,7 +530,11 @@ const Update = () => {
     }
 
     const DateChange = name => (date) => {
-        setLaw({ ...law, [name] : date.format("YYYY-MM-DD") });
+        if(date === ''){
+            setLaw('');
+        } else {
+            setLaw({ ...law, [name] : date.format("YYYY-MM-DD") });
+        }
     };
 
     const [locale] = React.useState('ko');
