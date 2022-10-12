@@ -21,29 +21,21 @@ import { styled } from '@mui/system';
 import { makeStyles } from '@mui/styles';
 
 import searchIcon from '../../../../../../assets/images/ic_search.png';
-import radioIcon from '../../../../../../assets/images/ic_radio.png';
-import radioIconOn from '../../../../../../assets/images/ic_radio_on.png';
-import excelIcon from '../../../../../../assets/images/ic_excel.png';
-
 import pageFirst from '../../../../../../assets/images/btn_first.png';
 import pageLast from '../../../../../../assets/images/btn_last.png';
 import pageNext from '../../../../../../assets/images/btn_nxt.png';
 import pagePrev from '../../../../../../assets/images/btn_pre.png';
 
-import checkIcon from '../../../../../../assets/images/ic_chk3.png';
-import checkIconOn from '../../../../../../assets/images/ic_chk3_on.png';
 
 import popupClose from '../../../../../../assets/images/btn_popClose.png';
 import popupClose2 from '../../../../../../assets/images/btn_popClose2.png';
 
-import Alert from '@mui/material/Alert';
-import alertIcon from '../../../../../../assets/images/ic_refer.png';
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
-import { useGetWorkplaceListMutation } from '../../../../../../hooks/api/MainManagement/MainManagement';
+import { useGetWorkplaceListMutation, useGetLoginInfoMutation } from '../../../../../../hooks/api/MainManagement/MainManagement';
 import moment from 'moment';
 import { useDeleteSafeWork, useDeleteSafeWorkMutation, useGetSafeWorkFileMutation, useGetSafeWorkFileTopInfoMutation, useGetSafeWorkMutation } from '../../../../../../hooks/api/SafeWorkManagement/SafeWorkManagement';
 import useUserInitialWorkplaceId from '../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
@@ -926,7 +918,17 @@ const WorkHistoryList = () => {
         setInsertDate(date);
     };
 
+    /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
+    const [loginInfos, setLoginInfos] = useState({});
+    const [getLoginInfo] = useGetLoginInfoMutation()
+    const fetchLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfos(response.data.RET_DATA)
+        
+    }
+
     useEffect(() => {
+        fetchLoginInfo();
         fetchWorkplaceList();
         fetchSafeWorkList();
     }, []);
@@ -947,16 +949,27 @@ const WorkHistoryList = () => {
                         <div className={classes.searchInfo}>
                             <div>
                                 <div className={classes.infoTitle}>사업장</div>
-                                <Select
-                                    className={classes.selectMenu}
-                                    sx={{ width: 210 }}
-                                    value={workplaceId}
-                                    onChange={(e) => setWorkplaceId(e.target.value)}
-                                    displayEmpty
-                                >
-                                    {workplaceList?.length > 0 && workplaceList?.map(workplace =>
-                                        <MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>)}
-                                </Select>
+                                {loginInfos.roleCd === '001' ?
+                                    <Select
+                                        className={classes.selectMenu}
+                                        sx={{ width: 210 }}
+                                        value={workplaceId}
+                                        onChange={(e) => setWorkplaceId(e.target.value)}
+                                        displayEmpty
+                                    >
+                                        {workplaceList?.length > 0 && workplaceList?.map(workplace =>
+                                            <MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>)}
+                                    </Select>
+                                :
+                                    <Select
+                                        className={classes.selectMenu}
+                                        sx={{ width: 210 }}
+                                        value={workplaceId}
+                                        displayEmpty
+                                    >
+                                        <MenuItem value={loginInfos.workplaceId}>{loginInfos.workplaceName}</MenuItem>
+                                    </Select>
+                                }
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>등록일</div>

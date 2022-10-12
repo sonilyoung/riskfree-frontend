@@ -400,6 +400,7 @@ const List = () => {
         statusCd: "",
         workplaceId: workplaceId
     });
+
     const [lawList, setLawList] = useState([]);
     const [checked, setChecked] = useState(false);
 
@@ -472,6 +473,7 @@ const List = () => {
     const fetchLoginInfo = async () => {
         const response = await getLoginInfo()
         setLoginInfos(response.data.RET_DATA)
+        setLawImprovements({ ...lawImprovements, "workplaceId": response.data.RET_DATA.workplaceId })
     }
 
     const [locale] = React.useState('ko');
@@ -500,6 +502,7 @@ const List = () => {
                         <div className={classes.searchInfo}>
                             <div>
                                 <div className={classes.infoTitle}>사업장</div>
+                                {loginInfos.roleCd === "001" ?
                                     <Select
                                         className={classes.selectMenu}
                                         sx={{ width: 204 }}
@@ -509,11 +512,19 @@ const List = () => {
                                     >
                                         {workplaceList &&
                                             workplaceList.map((workplace) => (
-                                                <MenuItem value={workplace.workplaceId}>
-                                                    {workplace.workplaceName}
-                                                </MenuItem>
+                                                <MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>
                                             ))}
                                     </Select>
+                                :
+                                    <Select
+                                    className={classes.selectMenu}
+                                    sx={{ width: 204 }}
+                                    value={lawImprovements.workplaceId}
+                                    displayEmpty
+                                >
+                                        <MenuItem value={loginInfos.workplaceId}>{loginInfos.workplaceName}</MenuItem>
+                                </Select>
+                            }
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>조치요청 명령구분</div>

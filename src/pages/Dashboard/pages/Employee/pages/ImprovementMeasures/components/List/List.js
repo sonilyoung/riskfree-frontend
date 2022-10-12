@@ -31,8 +31,9 @@ import pageLast from '../../../../../../../../assets/images/btn_last.png';
 import pageNext from '../../../../../../../../assets/images/btn_nxt.png';
 import pagePrev from '../../../../../../../../assets/images/btn_pre.png';
 
-import { useGetWorkplaceListMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
+import { useGetWorkplaceListMutation, useGetLoginInfoMutation } from "../../../../../../../../hooks/api/MainManagement/MainManagement";
 import { useImprovementSelectMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement';
+
 import { selectBaselineId, selectWorkplaceId, setBaselineId } from '../../../../../../../../slices/selections/MainSelection';
 import moment from "moment";
 
@@ -379,14 +380,24 @@ function List() {
         }
     };
 
+
     const [locale] = React.useState('ko');
 
+    console.log(workplaceSelect)
+    /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
+    const [loginInfos, setLoginInfos] = useState({});
+    const [getLoginInfo] = useGetLoginInfoMutation()
+    const fetchLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfos(response.data.RET_DATA)
+    }
+
     useEffect(() => {
+        fetchLoginInfo();
         handleComapanyWorkplace()
         handleFetchList()
     }, [page])
 
-    //console.log(workplaceSelect)
     return (
         <DefaultLayout>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
@@ -399,17 +410,31 @@ function List() {
                     <div className={classes.searchInfo}>
                         <div>
                             <div className={classes.infoTitle}>사업장</div>
-                            <Select
+                            {loginInfos.roleCd === "001" ?
+                                <Select
+                                    className={classes.selectMenu}
+                                    sx={{ width: 204 }}
+                                    value={workplaceSelect}
+                                    key={workplaceSelect}
+                                    onChange={handleWorkplaceSelect}
+                                    displayEmpty
+                                >
+                                    {workplaces &&
+                                        workplaces.map((workplace) => (
+                                            <MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>
+                                        ))}
+                                </Select>
+
+                            :
+                                <Select
                                 className={classes.selectMenu}
                                 sx={{ width: 204 }}
-                                onChange={handleWorkplaceSelect}
                                 value={workplaceSelect}
-                                key={workplaceSelect}
                                 displayEmpty
-
                             >
-                                {workplaces?.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
-                            </Select>
+                                <MenuItem value={loginInfos.workplaceId}>{loginInfos.workplaceName}</MenuItem>
+                                </Select>
+                            }
                         </div>
                         <div>
                             <div className={classes.infoTitle}>요청일자</div>
