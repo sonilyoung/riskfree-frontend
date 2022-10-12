@@ -342,6 +342,11 @@ const Registration = () => {
     const [fileUpload] = useFileUploadMutation()
     const [getFileInfo] = useGetFileInfoMutation()
     const [dialogId, setDialogId] = useState("")
+
+    const [filePathBefore, setFilePathBefore] = useState("")
+    const [filePathAfter, setFilePathAfter] = useState("")
+    const [fileReq, setFileReq] = useState("")
+
     const [filePath, setFilePath] = useState({
         "reqFileId": "",
         "actionBeforeId": "",
@@ -351,8 +356,8 @@ const Registration = () => {
     const [fileDown] = useFileDownMutation()
     const [improvement, setImprovement] = useState(
         {
-            "actionAfterId": actionAfterId,
-            "actionBeforeId": actionBeforeId,
+            "actionAfterId": filePathAfter,
+            "actionBeforeId": filePathBefore,
             "actionCn": "",
             "companyId": 1,
             "finDate": null,
@@ -362,7 +367,7 @@ const Registration = () => {
             "insertId": null,
             "reqDate": null,
             "reqFileId": null,
-            "reqUserCd": reqUserCd,
+            "reqUserCd": fileReq,
             "statusCd": "",
             "completeDate": "",
             "updateId": null,
@@ -383,31 +388,23 @@ const Registration = () => {
         setWorkplaces(response.data.RET_DATA)
     }
 
+    
     const fetchImprovementView = async () => {
-        let filePathMain = {}
         const response = await improvementView(updateid)
         setImprovement(response?.data?.RET_DATA)
-        
-        // if (response.data.RET_DATA.actionBeforeId) {
-        //     const responseFileInfoBefore = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.actionBeforeId), fileSn: 1 })
-        //     setFilePath({ ...filePath, "actionBeforeId": responseFileInfoBefore.data.RET_DATA.originalFileName ?? "" })
-        // }
-        // if (response.data.RET_DATA.actionAfterId) {
-        //     const responseFileInfoAfter = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.actionAfterId), fileSn: 1 })
-        //     setFilePath({ ...filePath, "actionAfterId": responseFileInfoAfter.data.RET_DATA.originalFileName ?? "" })
-        // }
-        // if (response.data.RET_DATA.reqFileId) {
-        //     const responseFileInfoExel = await getFileInfo({ atchFileId: parseInt(response.data.RET_DATA.reqFileId), fileSn: 1 })
-        //     setFilePath({ ...filePath, "reqFileId": responseFileInfoExel.data.RET_DATA.originalFileName ?? "" })
-        // }
 
-
-        for (const path in filePath) {
-            let fileInfo = await getFileInfo({ atchFileId: parseInt(response?.data?.RET_DATA[path]), fileSn: 1 })
-            filePathMain[path] = fileInfo.data.RET_DATA.originalFileName
+        if (response.data.RET_DATA.actionBeforeId) {
+             const responseFileInfoBefore = await getFileInfo({ atchFileId: parseInt(response?.data?.RET_DATA?.actionBeforeId), fileSn: 1 })
+             setFilePathBefore(responseFileInfoBefore?.data?.RET_DATA?.originalFileName)
         }
-        // console.log(filePathMain)
-        setFilePath(filePathMain)
+        if (response.data.RET_DATA.actionAfterId) {
+             const responseFileInfoAfter = await getFileInfo({ atchFileId: parseInt(response?.data?.RET_DATA?.actionAfterId), fileSn: 1 })
+             setFilePathAfter(responseFileInfoAfter.data.RET_DATA.originalFileName)
+        }
+        if (response.data.RET_DATA.reqFileId) {
+            const responseFileInfoExel = await getFileInfo({ atchFileId: parseInt(response?.data?.RET_DATA?.reqFileId), fileSn: 1 })
+            setFileReq(responseFileInfoExel.data.RET_DATA.originalFileName)
+        }
     }
 
     const handleDialogOpen = (event) => {
@@ -444,7 +441,6 @@ const Registration = () => {
             }
         setSelectedFileName("");
         }
-            
     }
 
     const handleDialogInputChange = (event) => {
@@ -459,7 +455,7 @@ const Registration = () => {
             window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId || id}&fileSn=1`;
         }
     }
-
+    
     const handleUpdateImprovement = async () => {
         const response = await improvementUpdate(
             {
@@ -610,7 +606,7 @@ const Registration = () => {
                                     <TextField
                                         id="standard-basic"
                                         variant="outlined"
-                                        value={filePath.reqFileId ?? ""}
+                                        value={fileReq ?? ""}
                                         sx={{ width: 390 }}
                                         className={classes.selectMenu}
                                         style={{ cursor: "pointer" }}
@@ -725,7 +721,7 @@ const Registration = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value={filePath.actionBeforeId ?? ""}
+                                            value={filePathBefore ?? ""}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             style={{ cursor: "pointer" }}
@@ -744,7 +740,7 @@ const Registration = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value={filePath.actionAfterId ?? ""}
+                                            value={filePathAfter ?? ""}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             style={{ cursor: "pointer" }}
