@@ -2032,6 +2032,7 @@ const Employee = () => {
     const [yesNoPopupMessage, setYesNoPopupMessage] = useState("");
     const [openDialog, setOpenDialog] = useState(false)
     const [openDialogEmployee, setOpenDialogEmployee] = useState(false)
+    const [openSafetyDialog, setOpenSafetyDialog] = useState(false)
     const [okayPopupShow, setOkayPopupShow] = useState(false);
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
@@ -2508,7 +2509,7 @@ const Employee = () => {
     const [inspectionIndex, setInspectionIndex] = useState(null)
 
     const handleDialogFileUpload = async () => {
-        if (dialogId === "logoImgUpload" || dialogId === "documentFileUpload" || dialogId === "safetyFileUpload") {
+        if (dialogId === "logoImgUpload" || dialogId === "documentFileUpload") {
             if((selectedFileName === "") || (selectedFileName === null) || (selectedFile === "")) {
                 setOkayPopupMessage("업로드할 파일을 선택하세요.");
                 setOkayPopupShow(true);   
@@ -2531,11 +2532,39 @@ const Employee = () => {
                         setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
                     }
 
-                    if(dialogId === "safetyFileUpload"){
-                        const responseSaferyFile = await updateSafetyFile({ "attachFileId": fileId, });
-                        //console.log("responseSaferyFile:", responseSaferyFile);
-                        setSafetyFileId(fileId);
+                } else if(response.data.RET_CODE === '0433'){
+                    setOkayPopupMessage("파일확장자 오류");
+                    setOkayPopupShow(true);
+                } else {
+                    setOkayPopupMessage("시스템 오류");
+                    setOkayPopupShow(true);
+                }
+            }
+        } else if (dialogId === "safetyFileUpload") {
+            if((selectedFileName === "") || (selectedFileName === null) || (selectedFile === "")) {
+                setOkayPopupMessage("업로드할 파일을 선택하세요.");
+                setOkayPopupShow(true);   
+            } else {
+                let formData = new FormData();
+                formData.append("files", selectedFile)
+                //handleDialogCloseSf()
+                handleDialogCloseSafety()
+                const response = await fileUpload(formData);
+                if(response.data.RET_CODE === "0000") {
+                    setOkayPopupMessage("등록 되었습니다.");
+                    setOkayPopupShow(true);
+
+                    const fileId = response.data.RET_DATA[0].atchFileId
+                    setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
+                    if (dialogId === "logoImgUpload") {
+                        setFilePath({ ...filePath, [dialogId]: (response.data.RET_DATA[0].filePath + "/" + response.data.RET_DATA[0].saveFileName) })
+                    } else {
+                        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
                     }
+
+                    const responseSaferyFile = await updateSafetyFile({ "attachFileId": fileId, });
+                    console.log("responseSaferyFile:", responseSaferyFile);
+                    setSafetyFileId(fileId);
                 } else if(response.data.RET_CODE === '0433'){
                     setOkayPopupMessage("파일확장자 오류");
                     setOkayPopupShow(true);
@@ -2589,7 +2618,7 @@ const Employee = () => {
     }
     
     async function handleSafetyFileId() {
-
+        console.log('안전작업허가서')
         if ((safetyFileId === "") || (safetyFileId === undefined)) {
             setWrongCredentialsPopup(true);
             setOkayPopupMessage("업로드된 파일이 없습니다");
@@ -2603,7 +2632,6 @@ const Employee = () => {
         const fileId = employeeFiles[dialogId]
 
         if ((inspectionFileId === "") || (inspectionFileId === undefined)) {
-            setWrongCredentialsPopup(true);
             setWrongCredentialsPopup(true);
             setOkayPopupMessage("업로드된 파일이 없습니다");
         } else {
@@ -2638,6 +2666,10 @@ const Employee = () => {
         setOpenDialog(false);
     }
 
+    const handleDialogCloseSf = () => {
+        setOpenSafetyDialog(false);
+    }    
+
     const handleDialogInputChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
@@ -2658,21 +2690,27 @@ const Employee = () => {
         setOpenDialogEmployee(false);
     }
 
+    const handleDialogCloseSafety = () => {
+        setOpenSafetyDialog(false);
+    }    
+
     // 점검서류 등록, 안전작업허가서 양식
     const handleDialogOpenEmployee = (event, articleNo, fileId, index) => {
-        setOpenDialogEmployee(true);
+        
         setDialogId((event.target.id).toString());
         setArticleNoForInspection(articleNo)
         setInspectionFileId(fileId)
         setInspectionIndex(index)
         setSelectedFileName("");
         if (event.target.id === "safetyFileUpload") {
+            setOpenSafetyDialog(true);
             setLabelObject({
                 ...labelObject,
                 upperLabel: "안전작업허가서 양식 관리",
                 middleLabel: "등록된 양식을 다운로드 합니다.",
             })
         } else if (event.target.id === "inspectionFile") {
+            setOpenDialogEmployee(true);
             setLabelObject({
                 ...labelObject,
                 upperLabel: "보고서",
@@ -3660,6 +3698,16 @@ const Employee = () => {
             <UploadEmployeeDialog
                 open={openDialogEmployee}
                 onClose={handleDialogCloseEmployee}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+                onDownload={handleDialogFileDownload}
+                enableDownload={true}
+                label={labelObject}
+                selectedFileName={selectedFileName}
+            />            
+            <UploadEmployeeDialog
+                open={openSafetyDialog}
+                onClose={handleDialogCloseSf}
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
                 onDownload={handleSafetyFileId}

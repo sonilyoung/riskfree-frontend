@@ -1073,7 +1073,8 @@ const SystemAdministrator = () => {
             setFilePath({ ...filePath, "contractFileId": "" });
             setRegMemberPop(false);
         } else {
-            setOkayPopupMessage("입력정보에 오류가 있습니다");
+            //setOkayPopupMessage("입력정보에 오류가 있습니다");
+            setOkayPopupMessage(response?.data?.RET_DESC);
             setOkayPopupShow(true);
         }
     }
@@ -1108,7 +1109,8 @@ const SystemAdministrator = () => {
             setFilePath({ ...filePath, "contractFileId": "" });
             setUserInfoPop(false);
         } else {
-            setOkayPopupMessage("입력정보에 오류가 있습니다");
+            //setOkayPopupMessage("입력정보에 오류가 있습니다");
+            setOkayPopupMessage(response?.data?.RET_DESC);
             setOkayPopupShow(true);
         }
 
