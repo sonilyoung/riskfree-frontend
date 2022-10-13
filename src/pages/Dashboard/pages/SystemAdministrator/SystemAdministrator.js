@@ -946,7 +946,7 @@ const SystemAdministrator = () => {
         const userLoginResponse = await login({
             // loginId: loginId,
             // loginPw: passSearch
-            loginId: "KKK222",
+            loginId: "B2",
             loginPw: "test"
         });
         
