@@ -1019,7 +1019,7 @@ const SystemAdministrator = () => {
             firstInput: response.data.RET_DATA?.managerEmail.split('@')[0],
             secondeInput: response.data.RET_DATA?.managerEmail.split('@')[1],
         });
-        setContractStartDate(response.data.RET_DATA?.contractStartDay);
+        setContractDay(response.data.RET_DATA?.contractDay);
         setContractStartDate(response.data.RET_DATA?.contractStartDate);
         setContractEndDate(response.data.RET_DATA?.contractEndDate);
         setSubscriberView(response?.data?.RET_DATA);
