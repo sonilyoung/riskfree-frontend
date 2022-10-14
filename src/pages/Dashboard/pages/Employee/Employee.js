@@ -2647,7 +2647,7 @@ const Employee = () => {
     
     async function handleSafetyFileId() {
         console.log('안전작업허가서')
-        if ((safetyFileId === "") || (safetyFileId === undefined)) {
+        if ((safetyFileId === "") || (safetyFileId === undefined) || (safetyFileId === null)) {
             setWrongCredentialsPopup(true);
             setOkayPopupMessage("업로드된 파일이 없습니다");
             setOkayPopupShow(true);
@@ -2659,7 +2659,7 @@ const Employee = () => {
     async function handleDialogFileDownload() {
         const fileId = employeeFiles[dialogId]
 
-        if ((inspectionFileId === "") || (inspectionFileId === undefined)) {
+        if ((inspectionFileId === "") || (inspectionFileId === undefined) || (inspectionFileId === null)) {
             setWrongCredentialsPopup(true);
             setOkayPopupMessage("업로드된 파일이 없습니다");
         } else {
@@ -2790,6 +2790,7 @@ const Employee = () => {
             "articleNo": articleNo
         })
         setUploadFlag(!uploadFlag)
+        navigate("/dashboard/employee/improvement-measures/list");
     }
 
     const fetchTitleReport = async () => {
@@ -3447,7 +3448,7 @@ const Employee = () => {
                                     <ul className={classes.menuList}>
                                         {inspectionsDocs?.map((inspection) => (
                                             <li>
-                                                <Link className={classes.listLink} to={"#none"} onDoubleClick={() => navigate("/dashboard/employee/improvement-measures/list")} underline="none">{inspection?.shGoal}</Link>
+                                                <Link className={classes.listLink} to={"#none"} underline="none">{inspection?.shGoal}</Link>
                                             </li>
                                         ))}
                                     </ul>
@@ -3464,13 +3465,18 @@ const Employee = () => {
                                                 {(loginInfo.roleCd === "003") ?
                                                     inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}>상</span>) 
                                                         || (inspection.evaluation === "7" && <span className={'orange'}>중</span>) 
-                                                            || (inspection.evaluation === "5" && <span className={'red'}>하</span>))
+                                                            || (inspection.evaluation === "5" && <span className={'red'}>하</span>)
+                                                            || (inspection.evaluation === "" && <span>평가</span>))
                                                     :
                                                     inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}
-                                                        onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>상</span>) || (inspection.evaluation === "7" && <span className={'orange'}
-                                                            onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>중</span>) || (inspection.evaluation === "5" && <span className={'red'}
-                                                                onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>하</span>) || ((inspection.evaluation === null || inspection.evaluation === "0" || inspection.evaluation === "null" || inspection.evaluation === "") && <span className={'empty'}
-                                                                    onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}></span>))
+                                                        onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>상</span>) 
+                                                        || (inspection.evaluation === "7" && <span className={'orange'}
+                                                            onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>중</span>) 
+                                                            || (inspection.evaluation === "5" && <span className={'red'}
+                                                                onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>하</span>) 
+                                                                || ((inspection.evaluation === null || inspection.evaluation === "0" || inspection.evaluation === "null" || inspection.evaluation === "") 
+                                                                    && <span className={'empty'}
+                                                                    onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>평가</span>))
                                                 }
                                             </div>
                                         </li>
