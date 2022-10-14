@@ -333,7 +333,8 @@ const Director = () => {
             chart: {
                 type: 'bar',
                 height: '100%',
-                width: '100%'
+                width: '100%',
+                stackType: 'normal'
             },
             plotOptions: {
                 bar: {
