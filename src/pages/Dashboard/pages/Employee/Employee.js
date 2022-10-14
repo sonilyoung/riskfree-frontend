@@ -602,7 +602,7 @@ const useStyles = makeStyles(() => ({
         justifyContent: 'space-between',
         padding: '0 20px',
         lineHeight: '40px',
-        fontSize: '17px',
+        fontSize: '14px',
         fontWeight: '500',
         color: '#e7e7e9',
         background: '#3f4d72',
@@ -2256,6 +2256,21 @@ const Employee = () => {
     }    
 
     const handleUpdateUserCompany = async () => {
+
+        if(companyInfo?.missionStatements.length > 16){ 
+            setYesNoPopupShow(false);
+            setOkayPopupMessage('경영방침은 16자 이내입니다.');
+            setOkayPopupShow(true);
+            return false;
+        }
+        
+        if(companyInfo?.shGoal.length > 16){
+            setYesNoPopupShow(false);
+            setOkayPopupMessage('안전보건목표는 16자 이내입니다.');
+            setOkayPopupShow(true);
+            return false;
+        }
+        
         const response = await updateUserCompany({
             "attachFileId": employeeFiles.logoImgUpload,
             "missionStatements": companyInfo?.missionStatements,
