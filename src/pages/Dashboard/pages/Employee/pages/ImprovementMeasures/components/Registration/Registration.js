@@ -272,7 +272,6 @@ const Registration = () => {
                                         sx={{ width: 200 }}
                                         value={generatedKey ?? ""}
                                         className={classes.selectMenu}
-                                    // onChange={(event) => setImprovement({ ...improvement, "improveNo": event.target.value })}
                                     />
                                 </div>
                             </div>
