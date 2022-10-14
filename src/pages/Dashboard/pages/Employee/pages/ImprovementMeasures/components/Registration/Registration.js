@@ -38,7 +38,6 @@ import Okay from '../../../../../../../../components/MessageBox/Okay';
 
 import useUserToken from '../../../../../../../../hooks/core/UserToken/UserToken';
 
-
 const Registration = () => {
     const [getUseUserToken] = useUserToken();
     const [getroleCd, setGetroleCd] = useState(getUseUserToken.getUserRoleCd());
@@ -320,7 +319,7 @@ const Registration = () => {
                                 <div className={classes.rowTitle}><text>*</text>요청자</div>
                                 <div className={classes.rowInfo}>
                                     { /* === Data: 2022.10.03 author:Jimmy edit: value === */}
-                                    <Select
+                                    {/* <Select
                                         sx={{ width: 200 }}
                                         className={classes.selectMenu}
                                         value={improvement.reqUserCd}
@@ -331,7 +330,16 @@ const Registration = () => {
                                         <MenuItem value="001">대표이사</MenuItem>
                                         <MenuItem value="002">안전책임자</MenuItem>
                                         <MenuItem value="003">안전실무자</MenuItem>
-                                    </Select>
+                                    </Select> */}
+                                    {
+                                    improvement.reqUserCd === "001" ? 
+                                        <span>대표이사</span>
+                                    :
+                                        improvement.reqUserCd === "002" ?
+                                        <span>안전책임자</span>
+                                    :
+                                        <span>안전실무자</span>
+                                    }
                                 </div>
                                 <div className={classes.rowTitle}><text>*</text>완료요청일</div>
                                 <div className={classes.rowInfo}>
@@ -367,6 +375,8 @@ const Registration = () => {
                         </div>
                     </div>
                 </Grid>
+
+{/*                 
                 <Grid item xs={12} className={classes.boxSecond}>
                     <div className={classes.boxTitle}>
                         <span>개선.조치 </span>
@@ -476,9 +486,6 @@ const Registration = () => {
                                             disabled
                                         />
                                         <UploadButton id="actionBeforeId" onClick={handleDialogOpen}>찾아보기</UploadButton>
-                                        {/* <div className={classes.imgPreview}>
-                                            <img src={imgPrev} alt="uploaded image" />
-                                        </div> */}
                                     </div>
                                 </div>
                                 <div>
@@ -493,15 +500,13 @@ const Registration = () => {
                                             disabled
                                         />
                                         <UploadButton id="actionAfterId" onClick={handleDialogOpen}>찾아보기</UploadButton>
-                                        {/* <div className={classes.imgPreview}>
-                                            <img src={imgPrev2} alt="preview image" />
-                                        </div> */}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </Grid>
+                </Grid> 
+*/}
                 <Grid item xs={12} className={classes.footerButtons}>
                     <BlueButton className={'button-registration'} onClick={handleImprovementInsert}>등록</BlueButton>
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>

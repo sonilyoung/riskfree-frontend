@@ -555,15 +555,6 @@ const List = () => {
                                                         <img src={checkIconOn} alt="check icon on" />
                                                     }
                                                     onChange={handleChange("cmmdOrgCd001")}
-                                                    // onChange={() => {
-                                                    //   setLawImprovements({
-                                                    //     ...lawImprovements,
-                                                    //     cmmdOrgCd001: lawImprovements.cmmdOrgCd001
-                                                    //       ? ""
-                                                    //       : "001",
-                                                    //   });
-                                                    //   setChecked(false);
-                                                    // }}
                                                     checked={lawImprovements.cmmdOrgCd001 ? true : false}
                                                 />
                                             }
@@ -578,15 +569,6 @@ const List = () => {
                                                         <img src={checkIconOn} alt="check icon on" />
                                                     }
                                                     onChange={handleChange("cmmdOrgCd002")}
-                                                    // onChange={() => {
-                                                    //   setLawImprovements({
-                                                    //     ...lawImprovements,
-                                                    //     cmmdOrgCd002: lawImprovements.cmmdOrgCd002
-                                                    //       ? ""
-                                                    //       : "002",
-                                                    //   });
-                                                    //   setChecked(false);
-                                                    // }}
                                                     checked={lawImprovements.cmmdOrgCd002 ? true : false}
                                                 />
                                             }
@@ -601,15 +583,6 @@ const List = () => {
                                                         <img src={checkIconOn} alt="check icon on" />
                                                     }
                                                     onChange={handleChange("cmmdOrgCd003")}
-                                                    // onChange={() => {
-                                                    //   setLawImprovements({
-                                                    //     ...lawImprovements,
-                                                    //     cmmdOrgCd003: lawImprovements.cmmdOrgCd003
-                                                    //       ? ""
-                                                    //       : "003",
-                                                    //   });
-                                                    //   setChecked(false);
-                                                    // }}
                                                     checked={lawImprovements.cmmdOrgCd003 ? true : false}
                                                 />
                                             }
@@ -624,15 +597,6 @@ const List = () => {
                                                         <img src={checkIconOn} alt="check icon on" />
                                                     }
                                                     onChange={handleChange("cmmdOrgCd004")}
-                                                    // onChange={() => {
-                                                    //   setLawImprovements({
-                                                    //     ...lawImprovements,
-                                                    //     cmmdOrgCd004: lawImprovements.cmmdOrgCd004
-                                                    //       ? ""
-                                                    //       : "004",
-                                                    //   });
-                                                    //   setChecked(false);
-                                                    // }}
                                                     checked={lawImprovements.cmmdOrgCd004 ? true : false}
                                                 />
                                             }
@@ -645,14 +609,20 @@ const List = () => {
                                 <FormControl
                                     className={classes.searchRadio}
                                     onChange={handleChange("improveTypeCd")}
-                                // onChange={(event) =>
-                                //   setLawImprovements({
-                                //     ...lawImprovements,
-                                //     improveTypeCd: event.target.value,
-                                //   })
-                                // }
                                 >
-                                    <RadioGroup row>
+                                    <RadioGroup row value={lawImprovements.improveTypeCd === "" ? "" : lawImprovements.improveTypeCd}>
+                                        <FormControlLabel
+                                            value=""
+                                            label="전체"
+                                            control={
+                                                <Radio
+                                                    icon={<img src={radioIcon} alt="check icon" />}
+                                                    checkedIcon={
+                                                        <img src={radioIconOn} alt="check icon on" />
+                                                    }
+                                                />
+                                            }
+                                        />
                                         <FormControlLabel
                                             value="001"
                                             label="개선"
@@ -726,10 +696,6 @@ const List = () => {
                                         value={startDate}
                                         isClearable
                                         onChange={DateChange('startDate')}
-                                        // onChange={(newDate) => {
-                                        //     const date = new Date(newDate.$d)
-                                        //     setStartDate(moment(date).format("YYYY-MM-DD"))
-                                        // }}
                                         renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                     />
                                 </LocalizationProvider>
@@ -742,10 +708,6 @@ const List = () => {
                                         value={endDate}
                                         isClearable
                                         onChange={DateChange('endDate')}
-                                        // onChange={(newDate) => {
-                                        //     const date = new Date(newDate.$d)
-                                        //     setEndDate(moment(date).format("YYYY-MM-DD"))
-                                        // }}
                                         renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                     />
                                 </LocalizationProvider>
@@ -755,14 +717,8 @@ const List = () => {
                                 <FormControl
                                     className={classes.searchRadio}
                                     onChange={handleChange("statusCd")}
-                                // onChange={(event) =>
-                                //   setLawImprovements({
-                                //     ...lawImprovements,
-                                //     statusCd: event.target.value,
-                                //   })
-                                // }
                                 >
-                                    <RadioGroup row>
+                                    <RadioGroup row value={lawImprovements.statusCd === "" ? "" : lawImprovements.statusCd}>
                                         {/* BOTH VALUES */}
                                         <FormControlLabel
                                             value=""
