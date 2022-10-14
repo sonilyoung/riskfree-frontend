@@ -139,7 +139,7 @@ const useStyles = makeStyles(() => ({
                     justifyContent: 'center',
                     alignItems: 'center',
                     height: '40px',
-                    width: '120px',
+                    width: '116px',
                     background: '#c8ddf2',
                     '&:first-of-type': {
                         width: '100%',
@@ -150,13 +150,13 @@ const useStyles = makeStyles(() => ({
                         borderRight: '1px solid #fff'
                     },
                     '&:nth-of-type(2)': {
-                        width: '100px',
+                        width: '94px',
                     },
                     '&:nth-of-type(3)': {
-                        width: '130px',
+                        width: '128px',
                     },
                     '&:last-of-type': {
-                        width: '130px',
+                        width: '128px',
                         borderRight: 'none'
                     },
                 }
@@ -165,13 +165,16 @@ const useStyles = makeStyles(() => ({
                 width: '110px'
             },
             '&:nth-of-type(5)': {
-                width: '266px'
+                width: '110px'
             },
             '&:nth-of-type(6)': {
-                width: '108px'
+                width: '220px'
             },
             '&:nth-of-type(7)': {
-                width: '65px'
+                width: '108px'
+            },
+            '&:nth-of-type(8)': {
+                width: '59px'
             }
         }
     },
@@ -238,9 +241,12 @@ const useStyles = makeStyles(() => ({
             width: '110px'
         },
         '&:nth-of-type(12)': {
-            width: '266px'
+            width: '110px'
         },
         '&:nth-of-type(13)': {
+            width: '220px'
+        },
+        '&:nth-of-type(14)': {
             width: '110px'
         },
         '&:last-of-type': {
@@ -758,6 +764,7 @@ const SystemAdministrator = () => {
         "contractAmount": "",
         "contractEndDate": null,
         "contractFileId": "",
+        "contractDay": null,
         "contractStartDate": null,
         "loginId": "",
         "managerEmail": subscriberInsertEmailBeforeSign + '@' + subscriberInsertEmailAfterSign,
@@ -779,6 +786,7 @@ const SystemAdministrator = () => {
         secondeInput: '',
         thirdInput: ''
     });
+    const [contractDay, setContractDay] = useState(null);
     const [contractStartDate, setContractStartDate] = useState(null);
     const [contractEndDate, setContractEndDate] = useState(null);
     const [subscriberView, setSubscriberView] = useState({
@@ -786,6 +794,7 @@ const SystemAdministrator = () => {
         "contractAmount": "",
         "contractEndDate": null,
         "contractFileId": "",
+        "contractDay": "",
         "contractStartDate": null,
         "loginId": "",
         "managerEmail": "",
@@ -898,6 +907,9 @@ const SystemAdministrator = () => {
                 } else if (emptyInputField === "managerEmail" && managerEmail?.firstInput && managerEmail?.secondeInput) {
                     return validation = true;
 
+                } else if (emptyInputField === "contractDay" && contractDay) {
+                    return validation = true;
+
                 } else if (emptyInputField === "contractStartDate" && contractStartDate) {
                     return validation = true;
 
@@ -1007,6 +1019,7 @@ const SystemAdministrator = () => {
             firstInput: response.data.RET_DATA?.managerEmail.split('@')[0],
             secondeInput: response.data.RET_DATA?.managerEmail.split('@')[1],
         });
+        setContractStartDate(response.data.RET_DATA?.contractStartDay);
         setContractStartDate(response.data.RET_DATA?.contractStartDate);
         setContractEndDate(response.data.RET_DATA?.contractEndDate);
         setSubscriberView(response?.data?.RET_DATA);
@@ -1024,6 +1037,7 @@ const SystemAdministrator = () => {
         setSubscriberInsert({
             "companyName": "",
             "contractAmount": "",
+            "contractDay": null,            
             "contractEndDate": null,
             "contractFileId": "",
             "contractStartDate": null,
@@ -1044,6 +1058,7 @@ const SystemAdministrator = () => {
         const response = await subscribersInsert({
             "companyName": subscriberInsert.companyName,
             "contractAmount": subscriberInsert.contractAmount,
+            "contractDay": subscriberInsert.contractDay,
             "contractEndDate": subscriberInsert.contractEndDate,
             "contractFileId": subscriberInsert.contractFileId,
             "contractStartDate": subscriberInsert.contractStartDate,
@@ -1079,6 +1094,7 @@ const SystemAdministrator = () => {
             "companyId": subscriberView.companyId,
             "companyName": subscriberView.companyName,
             "contractAmount": subscriberView.contractAmount,
+            "contractDay": contractDay,
             "contractEndDate": contractEndDate,
             "contractFileId": subscriberView.contractFileId,
             "contractStartDate": contractStartDate,
@@ -1275,6 +1291,7 @@ const SystemAdministrator = () => {
                                 <div>연락처</div>
                             </div>
                             <div className={classes.tableData}>계약금액</div>
+                            <div className={classes.tableData}>계약일</div>
                             <div className={classes.tableData}>계약기간</div>
                             <div className={classes.tableData}>상태</div>
                             <div className={classes.tableData}>계약서</div>
@@ -1303,6 +1320,9 @@ const SystemAdministrator = () => {
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.managerName}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.managerTel}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.contractAmount && parseFloat(subscriber.contractAmount).toLocaleString()}</div>
+                                    
+                                    <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.contractDay}</div>
+                                    
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.contractDate}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.status}</div>
                                     {subscriber?.contractFileYn === "O"
@@ -1325,6 +1345,9 @@ const SystemAdministrator = () => {
                                             <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.managerName}</div>
                                             <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.managerTel}</div>
                                             <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.contractAmount && parseFloat(subscribersWorkplaceItem.contractAmount).toLocaleString()}</div>
+                                            
+                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.contractDay}</div>
+
                                             <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.contractDate}</div>
                                             <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.status}</div>
                                             {subscribersWorkplaceItem?.contractFileYn === "O"
@@ -1338,6 +1361,8 @@ const SystemAdministrator = () => {
                             </>
                         ))}
                     </div>
+
+                    {/* 가입자 등록 폼 */}
                     <Overlay show={regMemberPop}>
                         <div className={regMemberPop ? (classes.adminPopup + ' regMember') : (classes.adminPopup + ' regMemberClose')}>
                             <div className={classes.popHeader}>
@@ -1479,6 +1504,27 @@ const SystemAdministrator = () => {
                                         &nbsp;원
                                     </div>
                                 </div>
+
+                                <div className={classes.popupRow}>
+                                    <div className={classes.popupData + ' data_head'}>계약일</div>
+                                    <div className={classes.popupData}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                            <DesktopDatePicker
+                                                className={classes.selectMenuDate}
+                                                label=" "
+                                                inputFormat="YYYY-MM-DD"
+                                                value={subscriberInsert.contractDay}
+                                                onChange={(newDate) => {
+                                                    const date = new Date(newDate === null ? "" : newDate.$d)
+                                                    setSubscriberInsert({ ...subscriberInsert, "contractDay": moment(date).format("YYYY-MM-DD") })
+                                                }}
+                                                isClearable                                                
+                                                renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
+                                            />
+                                        </LocalizationProvider>
+                                    </div>
+                                </div>
+
                                 <div className={classes.popupRow}>
                                     <div className={classes.popupData + ' data_head'}>계약기간</div>
                                     <div className={classes.popupData}>
@@ -1489,7 +1535,7 @@ const SystemAdministrator = () => {
                                                 inputFormat="YYYY-MM-DD"
                                                 value={subscriberInsert.contractStartDate}
                                                 onChange={(newDate) => {
-                                                    const date = new Date(newDate.$d) 
+                                                    const date = new Date(newDate === null ? "" : newDate.$d) 
                                                     setSubscriberInsert({ ...subscriberInsert, "contractStartDate": moment(date).format("YYYY-MM-DD") })
                                                 }}
                                                 isClearable selectsStart
@@ -1505,7 +1551,7 @@ const SystemAdministrator = () => {
                                                 inputFormat="YYYY-MM-DD"
                                                 value={subscriberInsert.contractEndDate}
                                                 onChange={(newDate) => {
-                                                    const date = new Date(newDate.$d)
+                                                    const date = new Date(newDate === null ? "" : newDate.$d)
                                                     setSubscriberInsert({ ...subscriberInsert, "contractEndDate": moment(date).format("YYYY-MM-DD") })
                                                 }}
                                                 isClearable selectsEnd
@@ -1548,6 +1594,8 @@ const SystemAdministrator = () => {
                             </div>
                         </div>
                     </Overlay>
+
+                    {/* 가입자 정보 수정 폼 */}
                     <Overlay show={userInfoPop}>
                         <div className={userInfoPop ? (classes.adminPopup + ' infoMember') : (classes.adminPopup + ' infoMemberClose')}>
                             <div className={classes.popHeader}>
@@ -1701,6 +1749,27 @@ const SystemAdministrator = () => {
                                         &nbsp;원
                                     </div>
                                 </div>
+
+                                <div className={classes.popupRow}>
+                                    <div className={classes.popupData + ' data_head'}>계약일</div>
+                                    <div className={classes.popupData}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                            <DesktopDatePicker
+                                                className={classes.selectMenuDate}
+                                                label=" "
+                                                inputFormat="YYYY-MM-DD"
+                                                value={contractDay}
+                                                onChange={(newDate) => {
+                                                    const date = new Date(newDate === null ? "" : newDate.$d)
+                                                    setContractDay(moment(date).format("YYYY-MM-DD"))
+                                                }}
+                                                renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
+                                            />
+                                        </LocalizationProvider>
+                                    </div>
+                                </div>
+
+                               
                                 <div className={classes.popupRow}>
                                     <div className={classes.popupData + ' data_head'}>계약기간</div>
                                     <div className={classes.popupData}>
@@ -1711,7 +1780,7 @@ const SystemAdministrator = () => {
                                                 inputFormat="YYYY-MM-DD"
                                                 value={contractStartDate}
                                                 onChange={(newDate) => {
-                                                    const date = new Date(newDate.$d)
+                                                    const date = new Date(newDate === null ? "" : newDate.$d)
                                                     setContractStartDate(moment(date).format("YYYY-MM-DD"))
                                                 }}
                                                 renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
@@ -1725,7 +1794,7 @@ const SystemAdministrator = () => {
                                                 inputFormat="YYYY-MM-DD"
                                                 value={contractEndDate}
                                                 onChange={(newDate) => {
-                                                    const date = new Date(newDate.$d)
+                                                    const date = new Date(newDate === null ? "" : newDate.$d)
                                                     setContractEndDate(moment(date).format("YYYY-MM-DD"))
                                                 }}
                                                 renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
