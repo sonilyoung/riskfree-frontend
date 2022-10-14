@@ -37,6 +37,7 @@ import { UploadDialog, UploadEmployeeDialog } from '../../../../../../dialogs/Up
 import { useRelatedRawExcelUploadMutation } from '../../../../../../hooks/api/ExcelController/ExcelController';
 import Okay from '../../../../../../components/MessageBox/Okay';
 import { Overlay } from '../../../../../../components/Overlay';
+import Loading from '../../../../../../pages/Loading';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -792,6 +793,8 @@ const MeasureToManageThePerformance = () => {
         middleLabel: "등록된 데이터를 엑셀로 다운로드 합니다."
     }
 
+    //로딩바추가
+    const [loading, setLoading] = useState(true);    
     const [selectedFile, setSelectedFile] = useState(null);
     const [openDialog, setOpenDialog] = useState(false)
     const [uploadFlag, setUploadFlag] = useState(false);
@@ -812,11 +815,13 @@ const MeasureToManageThePerformance = () => {
     const currentBaseline = useSelector(selectBaselineId);
 
     const handleDialogFileUpload = async () => {
+        setLoading(true);
         let formData = new FormData();
         formData.append("excelFile", selectedFile)
         const lawButtonId = { lawButtonId: dialogId }
         formData.append('lawButtonId', new Blob([JSON.stringify(lawButtonId)], { type: 'application/json' }))
         const response = await relatedRawExcelUpload(formData)
+        setLoading(false);
         handleDialogClose();
         setOkayPopupMessage("등록 되었습니다.");
         setOkayPopupShow(true);
@@ -903,7 +908,9 @@ const MeasureToManageThePerformance = () => {
     }
 
     const handleUpdateRelatedRawList = async () => {
+        setLoading(true);
         const response = await updateRelatedRaw({ "updateList": updateList });
+        setLoading(false);
         //console.log(response?.data?.RET_CODE)
         if ((response?.data?.RET_CODE === "0000") ||(response?.data?.RET_CODE === "0201")) {
             setseccerrCode(response?.data?.RET_CODE);
@@ -929,7 +936,9 @@ const MeasureToManageThePerformance = () => {
     }, [uploadFlag])
 
     useEffect(() => {
+        setLoading(true);
         fetchRelatedRawButtonList();
+        setLoading(false);
     }, [page]);
 
     return (
@@ -1151,6 +1160,7 @@ const MeasureToManageThePerformance = () => {
                     }}
                     />
             </Overlay>
+            {loading && <Loading/>}
         </DefaultLayout >
     );
 };
