@@ -42,7 +42,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 import useUserInitialWorkplaceId from '../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
-
+import useUserToken from '../../../../../../../../hooks/core/UserToken/UserToken';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -319,22 +319,22 @@ function List() {
     const getInitialWorkplaceId = useUserInitialWorkplaceId();
     const [getWorkplaceList] = useGetWorkplaceListMutation()
     const [improvementSelect] = useImprovementSelectMutation()
+    const [getUseUserToken] = useUserToken();
     const [workplaces, setWorkplaces] = useState([])
     const [workplaceSelect, setWorkplaceSelect] = useState(getInitialWorkplaceId())
-    const [reqUser, setReqUser] = useState("")
+    const [getroleCd, setGetroleCd] = useState(getUseUserToken.getUserRoleCd());
     const [statusCd, setStatusCd] = useState("")
     const [improvements, setImprovements] = useState([])
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null)
     const [page, setPage] = useState(1)
-    const todaysDate = moment().utcOffset("+09:00").format("YYYY-MM-DD");
 
     const handleWorkplaceSelect = (event) => {
         setWorkplaceSelect(event.target.value);
     };
 
     const handleReqUserSelect = (event) => {
-        setReqUser(event.target.value);
+        setGetroleCd(event.target.value);
     };
 
     const handleStatusCd = (event) => {
@@ -363,7 +363,7 @@ function List() {
                 "countPerPage": 10,
                 "endDate": endDate,
                 "pageNum": page,
-                "reqUserCd": reqUser,
+                "reqUserCd": getroleCd,
                 "startDate": startDate,
                 "statusCd": statusCd,
                 "workplaceId": workplaceSelect
@@ -380,10 +380,8 @@ function List() {
         }
     };
 
-
     const [locale] = React.useState('ko');
 
-    console.log(workplaceSelect)
     /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
     const [loginInfos, setLoginInfos] = useState({});
     const [getLoginInfo] = useGetLoginInfoMutation()
@@ -410,7 +408,7 @@ function List() {
                     <div className={classes.searchInfo}>
                         <div>
                             <div className={classes.infoTitle}>사업장</div>
-                            {loginInfos.roleCd === "001" ?
+                            {getroleCd === "001" ?
                                 <Select
                                     className={classes.selectMenu}
                                     sx={{ width: 204 }}
@@ -424,7 +422,6 @@ function List() {
                                             <MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>
                                         ))}
                                 </Select>
-
                             :
                                 <Select
                                 className={classes.selectMenu}
@@ -475,19 +472,31 @@ function List() {
                             <Select
                                 sx={{ width: 160 }}
                                 className={classes.selectMenu}
-                                value={reqUser}
+                                value={getroleCd}
+                                key={getroleCd}
                                 onChange={handleReqUserSelect}
                                 displayEmpty
                             >
                                 <MenuItem value="001">대표이사</MenuItem>
-                                <MenuItem value="002">안전책임자</MenuItem>안전책임자
+                                <MenuItem value="002">안전책임자</MenuItem>
                                 <MenuItem value="003">안전실무자</MenuItem>
                             </Select>
                         </div>
                         <div>
                             <div className={classes.infoTitle}>조치상태</div>
                             <FormControl className={classes.searchRadio} onChange={handleStatusCd}>
-                                <RadioGroup row >
+                                <RadioGroup row value={statusCd === "" ? "" : statusCd}>
+                                    <FormControlLabel
+                                        value=""
+                                        label="전체"
+                                        control={
+                                            <Radio
+                                                icon={<img src={radioIcon} alt="check icon" />}
+                                                checkedIcon={<img src={radioIconOn} alt="check icon on" />}
+                                                value=""
+                                            />
+                                        }
+                                    />
                                     <FormControlLabel
                                         value="001"
                                         label="요청중"

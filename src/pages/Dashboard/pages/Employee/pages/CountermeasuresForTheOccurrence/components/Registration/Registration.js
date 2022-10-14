@@ -94,7 +94,7 @@ const useStyles = makeStyles(() => ({
         flexWrap: 'wrap',
         width: 'calc(100% - 100px)',
         '& $boxRow:first-of-type': {
-            height: '60px',
+            height: '100px',
             '& $rowContent': {
                 borderTop: 'none'
             },
@@ -244,7 +244,7 @@ const useStyles = makeStyles(() => ({
     },
     textArea: {
         '& .MuiOutlinedInput-root textarea': {
-            height: '49px !important',
+            height: '150px !important',
             fontSize: '16px',
         }
     },
@@ -769,6 +769,8 @@ const Registration = () => {
                         </div>
                     </div>
                 </Grid>
+
+{/*                 
                 <Grid item xs={12} className={classes.boxRegistration}>
                     <div className={classes.boxTitle}>사고처리</div>
                     <div className={classes.boxContent}>
@@ -1112,9 +1114,6 @@ const Registration = () => {
                                             disabled
                                         />
                                         <UploadButton id="performBeforeId" onClick={handleDialogOpen}>찾아보기</UploadButton>
-                                        {/* <div className={classes.imgPreview}>
-                                            <img src={imgPrev} alt="uploaded image" />
-                                        </div> */}
                                     </div>
                                 </div>
                                 <div>
@@ -1129,15 +1128,13 @@ const Registration = () => {
                                             disabled
                                         />
                                         <UploadButton id="performAfterId" onClick={handleDialogOpen}>찾아보기</UploadButton>
-                                        {/* <div className={classes.imgPreview}>
-                                            <img src={noImg} alt="no image" />
-                                        </div> */}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </Grid>
+ */}
                 <Grid item xs={12} className={classes.footerButtons}>
                     {/* <BlueButton className={"button-correction"}>수정</BlueButton> */}
                     <BlueButton className={"button-registration"} onClick={handleAccidentInsert}>등록</BlueButton>

@@ -74,7 +74,7 @@ const useStyles = makeStyles(() => ({
             }
         },
         '& >div:first-of-type $searchRadio': {
-            width: '610px',
+            width: '585px',
         },
         '& >div:first-of-type $searchInfo >div': {
             '&:nth-of-type(2) >div +div, &:nth-of-type(4) >div +div': {
@@ -82,8 +82,7 @@ const useStyles = makeStyles(() => ({
                 borderRadius: '6px',
             },
             '&:nth-of-type(4)': {
-                marginLeft: '86px',
-                width: '437px',
+                width: '515px',
             },
         },
         '& >div:last-of-type $searchInfo >div': {
@@ -385,6 +384,8 @@ const List = () => {
     const [isCheck, setIsCheck] = useState([]);
     const [list, setList] = useState([]);
 
+    const [typeCheckAll, setTypeCheckAll] = useState(false);
+    
     const checkList = [
         {
             id: "01",
@@ -421,17 +422,17 @@ const List = () => {
     const setterFunction = (id) => {
         switch (id) {
             case "01": setAccTypeFirst(!accTypeFirst)
-                break
+                break;
             case "02": setAccTypeSecond(!accTypeSecond)
-                break
+                break;
             case "03": setAccTypeThird(!accTypeThird)
-                break
+                break;
             case "04": setAccTypeFourth(!accTypeFourth)
-                break
+                break;
             case "05": setAccTypeFifth(!accTypeFifth)
-                break
+                break;
             case "06": setAccTypeSixth(!accTypeSixth)
-                break
+                break;
         }
     }
 
@@ -457,6 +458,19 @@ const List = () => {
         //console.log(accTypeFirst, accTypeSecond, accTypeThird, accTypeFourth, accTypeFifth, accTypeSixth)
     };
 
+    const handleTypeAll = e => {
+        setTypeCheckAll(!typeCheckAll)
+        if (typeCheckAll) {
+            setDeath(false);
+            setJob(false);
+            setSame(false);
+        } else {
+            setDeath(true);
+            setJob(true);
+            setSame(true);
+        }
+    }
+
     const handleClick = e => {
         const { id, checked } = e.target;
         setIsCheck([...isCheck, id]);
@@ -473,14 +487,13 @@ const List = () => {
     const fetchLoginInfo = async () => {
         const response = await getLoginInfo()
         setLoginInfos(response.data.RET_DATA)
-        
     }
     
     useEffect(() => {
         fetchLoginInfo()
         setList(checkList);
-    }, []); //list 삭제(무한반복됨!)
-
+    }, []);
+    
     const [num, setNum] = useState('');
 
     const handleRedirect = () => {
@@ -536,8 +549,8 @@ const List = () => {
         } else {
             setFinishDate(date);
         }
-    };
-    
+    };    
+
     useEffect(() => {
         fetchAccidentsList()
         fetchWorkplaceList()
@@ -586,7 +599,7 @@ const List = () => {
                                 <FormControl className={classes.searchRadio}>
                                     <RadioGroup row>
                                         <FormControlLabel
-                                            value="전체"
+                                            value=""
                                             label="전체"
                                             control={
                                                 <Checkbox
@@ -621,10 +634,11 @@ const List = () => {
                                 <Select
                                     sx={{ width: 100 }}
                                     className={classes.selectMenu}
-                                    value={accLevelCd}
+                                    value={accLevelCd === "" ? "" : accLevelCd }
                                     onChange={(e) => setAccLeveCd(e.target.value)}
                                     displayEmpty
                                 >
+                                    <MenuItem value="">전체</MenuItem>
                                     <MenuItem value="001">1급</MenuItem>
                                     <MenuItem value="002">2급</MenuItem>
                                     <MenuItem value="003">3급</MenuItem>
@@ -637,12 +651,26 @@ const List = () => {
                                 <FormControl className={classes.searchRadio}>
                                     <RadioGroup row>
                                         <FormControlLabel
+                                            value=""
+                                            label="전체"
+                                            control={
+                                                <Checkbox
+                                                    icon={<img src={checkIcon} alt="check icon" />}
+                                                    checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                    onChange={handleTypeAll}
+                                                    checked={typeCheckAll}
+                                                />
+                                            }
+                                        />
+
+                                        <FormControlLabel
                                             value="Y"
                                             label="사망"
                                             control={
                                                 <Checkbox
                                                     icon={<img src={checkIcon} alt="check icon" />}
                                                     checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                    checked={death}
                                                     onChange={() => setDeath(!death)}
                                                 />
                                             }
@@ -654,6 +682,7 @@ const List = () => {
                                                 <Checkbox
                                                     icon={<img src={checkIcon} alt="check icon" />}
                                                     checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                    checked={job}
                                                     onChange={() => setJob(!job)}
                                                 />
                                             }
@@ -665,6 +694,7 @@ const List = () => {
                                                 <Checkbox
                                                     icon={<img src={checkIcon} alt="check icon" />}
                                                     checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                    checked={same}
                                                     onChange={() => setSame(!same)}
                                                 />
                                             }

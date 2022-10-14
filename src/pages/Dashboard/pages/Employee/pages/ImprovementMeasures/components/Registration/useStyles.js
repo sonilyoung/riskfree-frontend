@@ -76,7 +76,7 @@ const useStyles = makeStyles(() => ({
     boxRow: {
         display: 'flex',
         width: '100%',
-        minHeight: '60px',
+        minHeight: '90px',
         '& $rowTitle': {
             borderBottom: 'none'
         }
@@ -181,7 +181,7 @@ const useStyles = makeStyles(() => ({
     },
     textArea: {
         '& .MuiOutlinedInput-root textarea': {
-            height: '49px !important',
+            height: '150px !important',
             fontSize: '16px'
         }
     },

@@ -277,7 +277,8 @@ const useStyles = makeStyles(() => ({
         }
     },
     activeReportBtn: {
-        backgroundColor: "#989898 !important",
+        backgroundColor: "#8977ad !important",
+        color: "#ffffff",
         '&:hover': {
             backgroundColor: "#7b7b7b !important",
         }
@@ -294,7 +295,8 @@ const AccidentReportButton = styled(ButtonUnstyled)`
     transition: background .2s;
     cursor: pointer;
     &:hover {
-        background: #d2dcf3;
+        background: #c4c2c2
+        ;
     }
 `;
 
