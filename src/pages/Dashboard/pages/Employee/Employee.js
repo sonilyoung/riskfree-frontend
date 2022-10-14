@@ -102,6 +102,7 @@ import { useFileUploadMutation, useGetFileInfoMutation, useUpdateDocumentFileIdM
 import Chart from 'react-apexcharts';
 import YesNo from '../../../../components/MessageBox/YesNo';
 import Okay from '../../../../components/MessageBox/Okay';
+import Loading from '../../../../pages/Loading';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -2145,6 +2146,8 @@ const Employee = () => {
         setSafetyFileId(response.data.RET_DATA?.safetyPermitFileId);
     }
 
+    //로딩바추가
+    const [loading, setLoading] = useState(true);
 
     //설정창 아코디언 선언
     const [expanded, setExpanded] = React.useState('');
@@ -2204,11 +2207,12 @@ const Employee = () => {
             setOkayPopupMessage("'복사할 관리차수'를 선택하세요.");
             setOkayPopupShow(true);
         } else {
+            setLoading(true);
             const response = await insertBaseLineDataCopy({
                 "baselineId": targetBaselineId,
                 "targetBaselineId": currentBaselineId
             });
-            
+            setLoading(false);
             if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
                 setOkayPopupMessage("'차수 복사'가 완료되었습니다");
                 setOkayPopupShow(true);
@@ -2236,7 +2240,9 @@ const Employee = () => {
 
     //안전보건관리체계의 구축 및 이행 항목 업데이트
     const handleInsertBaseLineDataUpdate = async () => {
+        setLoading(true);
         const response = await insertBaseLineDataUpdate({"baselineId" : currentBaselineId});
+        setLoading(false);
         if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
             setYesNoPopupShow(false);
             setOkayPopupMessage('업데이트를 완료하였습니다.');
@@ -2514,12 +2520,14 @@ const Employee = () => {
                 setOkayPopupMessage("업로드할 파일을 선택하세요.");
                 setOkayPopupShow(true);   
             } else {
+                setLoading(true);
                 let formData = new FormData();
                 formData.append("files", selectedFile)
                 handleDialogClose()
                 handleDialogCloseOnly()
                 handleDialogCloseEmployee()
                 const response = await fileUpload(formData);
+                setLoading(false);
                 if(response.data.RET_CODE === "0000") {
                     setOkayPopupMessage("등록 되었습니다.");
                     setOkayPopupShow(true);
@@ -2539,17 +2547,20 @@ const Employee = () => {
                     setOkayPopupMessage("시스템 오류");
                     setOkayPopupShow(true);
                 }
+                
             }
         } else if (dialogId === "safetyFileUpload") {
             if((selectedFileName === "") || (selectedFileName === null) || (selectedFile === "")) {
                 setOkayPopupMessage("업로드할 파일을 선택하세요.");
                 setOkayPopupShow(true);   
             } else {
+                setLoading(true);
                 let formData = new FormData();
                 formData.append("files", selectedFile)
                 //handleDialogCloseSf()
                 handleDialogCloseSafety()
                 const response = await fileUpload(formData);
+                setLoading(false);
                 if(response.data.RET_CODE === "0000") {
                     setOkayPopupMessage("등록 되었습니다.");
                     setOkayPopupShow(true);
@@ -2578,11 +2589,13 @@ const Employee = () => {
                 setOkayPopupMessage("업로드할 파일을 선택하세요.");
                 setOkayPopupShow(true);
             } else {
+                setLoading(true);
                 let formData = new FormData();
                 formData.append("files", selectedFile)
                 handleDialogClose()
                 handleDialogCloseEmployee()
                 const response = await fileUpload(formData)
+                setLoading(false);
                 if(response.data.RET_CODE === "0000") {
                     setOkayPopupMessage("등록 되었습니다.");
                     setOkayPopupShow(true);
@@ -2801,15 +2814,20 @@ const Employee = () => {
     };
 
     useEffect(() => {
+        setLoading(true);
         fetchBaseline(baselineIdForSelect);
+        setLoading(false);
     }, [currentBaselineId])
 
     useEffect(() => {
+        setLoading(true);
         fetchDayInfo()
         fetchWeather()
+        setLoading(false);
     }, [baselineData])
 
     useEffect(() => {
+        setLoading(true);
         getSafetyFile();
         fetchLoginInfo();
         fetchCompanyInfo()
@@ -2824,33 +2842,41 @@ const Employee = () => {
         fetchAccidentsPreventionPercentage()
         fetchNoticeList();
         fetchImprovementList();
-        fetchDutyDetailList()
-
+        fetchDutyDetailList();
+        setLoading(false);    
     }, [baselineIdForSelect, baselineData, defaultPage]);
 
     useEffect(() => {
+        setLoading(true);
         if (toggleGrid) {
             fetchTitleReport();
             fetchBaseLineReportList();
         } else {
             fetchBaseLineReportGraph();
         }
+        setLoading(false);
     }, [condition, currentBaselineId, toggleGrid]);
 
     useEffect(() => {
+        setLoading(true);
         fetchDutyDetailList()
+        setLoading(false);
     }, [clickedEssentialRate])
 
     useEffect(() => {
+        setLoading(true);
         fetchInspectionDocs()
         fetchDutyCycle()
         fetchDutyAssigned()
         fetchRelatedArticle()
         fetchGuideLine()
+        setLoading(false);
     }, [clickedDuty])
 
     useEffect(() => {
+        setLoading(true);
         fetchInspectionDocs()
+        setLoading(false);
     }, [uploadFlag])
 
     useEffect(() => {
@@ -3751,8 +3777,9 @@ const Employee = () => {
                     //onConfirm={() => setWrongCredentialsPopup(false)}
                 />
             </Overlay>
-
+            {loading && <Loading/>}
         </WideLayout >
+        
     );
 };
 
