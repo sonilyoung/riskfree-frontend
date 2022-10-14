@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DefaultLightLayout } from '../../../../layouts/DefaultLight';
 
 import Grid from '@mui/material/Grid';
@@ -130,7 +130,7 @@ const useStyles = makeStyles(() => ({
                 width: '180px'
             },
             '&:nth-of-type(3)': {
-                width: '910px',
+                width: '970px',
                 padding: '0',
                 justifyContent: 'flex-start',
                 background: '#c8ddf2',
@@ -139,7 +139,7 @@ const useStyles = makeStyles(() => ({
                     justifyContent: 'center',
                     alignItems: 'center',
                     height: '40px',
-                    width: '110px',
+                    width: '120px',
                     background: '#c8ddf2',
                     '&:first-of-type': {
                         width: '100%',
@@ -156,7 +156,7 @@ const useStyles = makeStyles(() => ({
                         width: '130px',
                     },
                     '&:last-of-type': {
-                        width: '128px',
+                        width: '130px',
                         borderRight: 'none'
                     },
                 }
@@ -168,13 +168,10 @@ const useStyles = makeStyles(() => ({
                 width: '266px'
             },
             '&:nth-of-type(6)': {
-                width: '94px'
+                width: '108px'
             },
             '&:nth-of-type(7)': {
-                width: '80px'
-            },
-            '&:nth-of-type(8)': {
-                width: '60px',
+                width: '65px'
             }
         }
     },
@@ -211,11 +208,7 @@ const useStyles = makeStyles(() => ({
         alignContent: 'center',
         flexWrap: 'wrap',
         padding: '13px 12px',
-        minHeight: '40px',
-        '& >img': {
-            height: '20px',
-            cursor: 'pointer',
-        },
+        minHeight: '40px',        
         '& >button': {
             width: '20px',
             height: '20px',
@@ -233,19 +226,22 @@ const useStyles = makeStyles(() => ({
             width: '180px'
         },
         '&:nth-of-type(n+4)': {
-            width: '110px'
+            width: '120px'
         },
-        '&:nth-of-type(4), &:nth-of-type(10)': {
+        '&:nth-of-type(4)': {
             width: '130px'
+        },
+        '&:nth-of-type(10)': {
+            width: '140px'
+        },
+        '&:nth-of-type(11)': {
+            width: '110px'
         },
         '&:nth-of-type(12)': {
             width: '266px'
         },
-        '&:nth-of-type(n+13)': {
-            width: '80px'
-        },
         '&:nth-of-type(13)': {
-            width: '94px'
+            width: '110px'
         },
         '&:last-of-type': {
             width: '60px',
@@ -316,7 +312,8 @@ const useStyles = makeStyles(() => ({
             top: '0',
             left: '0',
             '& strong': {
-                color: '#018de7'
+                color: '#018de7',
+                padding:'0 3px'
             }
         },
         '& >div:last-of-type': {
@@ -723,10 +720,8 @@ const SearchUserButton = styled(ButtonUnstyled)`
 const SystemAdministrator = () => {
     const [login] = useLoginMutation();
     const [getPwdInfo] = useGetPwdInfoMutation();
-
-    
+    const registNoRef = useRef();    
     const [passSearch, setPassSearch] = useState('');
-
     const classes = useStyles();
     const navigate = useNavigate();
     const [locale] = React.useState('ko');
@@ -930,38 +925,38 @@ const SystemAdministrator = () => {
     }
     
     //모니터
-    const handleRedirect = async (workplaceId, userId, loginId) => {
-        const response = await subscribersView(`${workplaceId}&userId=${userId}`);
-        const redirectPath = getPath(response.data?.RET_DATA?.managerRoleCd);
+    // const handleRedirect = async (workplaceId, userId, loginId) => {
+    //     const response = await subscribersView(`${workplaceId}&userId=${userId}`);
+    //     const redirectPath = getPath(response.data?.RET_DATA?.managerRoleCd);
 
 
-        //const decryptedBuffer = getdecrypt("WkaOhqSK03Z1pSuPOdc03w==");
-        //bytes.toString(CryptoJS.enc.Utf8);
-        //console.log(decryptedBuffer)
+    //     //const decryptedBuffer = getdecrypt("WkaOhqSK03Z1pSuPOdc03w==");
+    //     //bytes.toString(CryptoJS.enc.Utf8);
+    //     //console.log(decryptedBuffer)
     
     
-        //console.log(passResponse.data)
+    //     //console.log(passResponse.data)
 
-        //사업장 로그인 정보
-        const userLoginResponse = await login({
-            // loginId: loginId,
-            // loginPw: passSearch
-            loginId: "B2",
-            loginPw: "test"
-        });
+    //     //사업장 로그인 정보
+    //     const userLoginResponse = await login({
+    //         // loginId: loginId,
+    //         // loginPw: passSearch
+    //         loginId: "B2",
+    //         loginPw: "test"
+    //     });
         
-        if (userLoginResponse.data.RET_CODE === '0000') {
-            const jwtToken = userLoginResponse.data.RET_DATA.accessToken;
-            sessionStorage.setItem("MonitorView", jwtToken)
-            const www_path = window.location.href.split("/")[2];
-            window.open(`http://${www_path}${redirectPath}`,'Moniter_View', 'width=1024, height=750, location=no, status=no, scrollbars=yes, _blank')
-        } else {
-            setOkayPopupMessage("회원정보를 가져올수가 없습니다.");
-            setOkayPopupShow(true);
-        }
-        sessionStorage.clear();
+    //     if (userLoginResponse.data.RET_CODE === '0000') {
+    //         const jwtToken = userLoginResponse.data.RET_DATA.accessToken;
+    //         sessionStorage.setItem("MonitorView", jwtToken)
+    //         const www_path = window.location.href.split("/")[2];
+    //         window.open(`http://${www_path}${redirectPath}`,'Moniter_View', 'width=1024, height=750, location=no, status=no, scrollbars=yes, _blank')
+    //     } else {
+    //         setOkayPopupMessage("회원정보를 가져올수가 없습니다.");
+    //         setOkayPopupShow(true);
+    //     }
+    //     sessionStorage.clear();
 
-    }
+    // }
 
     const fetchSubscribersList = async () => {
         const response = await subscribersSelect({
@@ -1184,6 +1179,29 @@ const SystemAdministrator = () => {
     //     setSelectedFileName(file.name);
     // }
 
+    //사업자 번호 정규식 유효성 검사 수행
+    const handleRegistNo = (e) => {
+        const value = e.target.value.replace(/\D+/g, "");
+        const numberLength = 10;
+
+        let resultNo = "";  
+
+        for (let i = 0; i < value.length && i < numberLength; i++) {
+        switch (i) {
+            case 3:
+                resultNo += "-";
+            break;
+            case 5:
+                resultNo += "-";
+            break;
+            default:
+            break;
+        }
+        resultNo += value[i];
+        }
+        e.target.value = resultNo;
+        setSubscriberInsert({...subscriberInsert, "registNo": e.target.value}); 
+    }
     useEffect(() => {
         fetchSubscribersList();
         fetchCommCodeListGroup1();
@@ -1191,8 +1209,16 @@ const SystemAdministrator = () => {
         fetchCommCodeListGroup3();
     }, []);
 
+    
     // useEffect(() => {
-    // }, [filePath])
+    //     if (subscriberInsert.registNo.length <= 10) {
+    //         //setValues({registNo: registNo.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3')});
+    //         setSubscriberInsert({ ...subscriberInsert, "registNo": subscriberInsert.registNo.replace(/-/g, "").replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3') })
+    //     } else {
+
+    //     }
+    // }, [subscriberInsert.registNo]);
+    
 
     return (
         <DefaultLightLayout>
@@ -1208,7 +1234,8 @@ const SystemAdministrator = () => {
                             <Select
                                 sx={{ width: 200 }}
                                 className={classes.selectMenu}
-                                value={col}
+                                value={col === "" ? "all" : col}
+                                key="all"
                                 onChange={(e) => setCol(e.target.value)}
                             >
                                 <MenuItem value="all">전체</MenuItem>
@@ -1235,7 +1262,7 @@ const SystemAdministrator = () => {
                     <div className={classes.tableHead}>
                         <div className={classes.tableRow}>
                             <div className={classes.tableData}>No</div>
-                            <div className={classes.tableData}>|회사명</div>
+                            <div className={classes.tableData}>회사명</div>
                             <div className={classes.tableData}>
                                 <div>사용자</div>
                                 <div>사업장명</div>
@@ -1251,7 +1278,7 @@ const SystemAdministrator = () => {
                             <div className={classes.tableData}>계약기간</div>
                             <div className={classes.tableData}>상태</div>
                             <div className={classes.tableData}>계약서</div>
-                            <div className={classes.tableData}>화면</div>
+                            {/* <div className={classes.tableData}>화면</div> */}
                         </div>
                     </div>
                     <div className={classes.tableBody}>
@@ -1282,11 +1309,7 @@ const SystemAdministrator = () => {
                                         ? <div className={classes.tableData} style={{ cursor: "pointer" }} onDoubleClick={() => handleDialogFileDownload(subscriber.contractFileId)}>{subscriber.contractFileYn}</div>
                                         : <div className={classes.tableData} style={{ cursor: "pointer" }}>{subscriber.contractFileYn}</div>
                                     }
-                                    <div className={classes.tableData} onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId, subscriber.loginId)}>{subscriber?.status ? <img src={monitor} alt="monitor" /> : null}</div>
-                                    {/* 2022.10.09 Jimmy Moniter View 작업중!
-                                        로그인처리 후 세션에 토큰값 설정 후 페이지 이동시 정보 가져오는 것까지 처리함!.(문제는 관리자 페이지에서 새로고침시 계정이 대표이사 계정으로 변경되는 문제)
-                                     <div className={classes.tableData} onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId)}>{subscriber?.status ? <img src={monitor} alt="monitor" /> : null}</div> 
-                                     */}
+                                    {/* <div className={classes.tableData} onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId, subscriber.loginId)}>{subscriber?.status ? <img src={monitor} alt="monitor" /> : null}</div> */}
                                 </div>
                                 {!!subscribersWorkplaceSelectList && !!subscribersWorkplaceSelectList?.length && subscribersWorkplaceSelectList?.map((subscribersWorkplaceItem, subscribersWorkplaceItemIndex) => {
                                     if (index + 1 === plusButtonId) {
@@ -1308,7 +1331,7 @@ const SystemAdministrator = () => {
                                                 ? <div className={classes.tableData} style={{ cursor: "pointer" }} onDoubleClick={() => { handleDialogFileDownload(subscribersWorkplaceItem.contractFileId) }}>{subscribersWorkplaceItem.contractFileYn}</div>
                                                 : <div className={classes.tableData} style={{ cursor: "pointer" }}>{subscribersWorkplaceItem.contractFileYn}</div>
                                             }
-                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem?.statusCd ? <img src={monitor} alt="monitor" /> : null}</div>
+                                            {/* <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem?.statusCd ? <img src={monitor} alt="monitor" /> : null}</div> */}
                                         </div>);
                                     }
                                 })}
@@ -1354,12 +1377,15 @@ const SystemAdministrator = () => {
                                                 onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "workplaceName": e.target.value })}
                                             />
                                         </div>
+                                        {/* 사업자 번호 */}
                                         <div className={classes.dataNest}>
                                             <TextField
                                                 variant="outlined"
+                                                ref={registNoRef}
                                                 value={subscriberInsert.registNo}
                                                 className={classes.tableTextField}
-                                                onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "registNo": e.target.value })}
+                                                onChange={handleRegistNo}
+                                                //onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "registNo": e.target.value })}
                                             />
                                         </div>
                                         <div className={classes.dataNest}>
@@ -1765,7 +1791,7 @@ const SystemAdministrator = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
-                    <div>총 게시글 <strong>{!!(subscribersList) && !!(subscribersList.length) && subscribersList[0]?.totalCount}</strong> 건</div>
+                    <div>총 가입고객사 <strong>{parseFloat(!!(subscribersList) && !!(subscribersList.length) && subscribersList[0]?.totalCount).toLocaleString()}</strong> 개</div>
                     <Stack spacing={2}>
                     </Stack>
                 </Grid>

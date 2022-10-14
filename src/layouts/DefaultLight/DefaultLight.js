@@ -4,7 +4,8 @@ import { useLocation, Link, useNavigate } from 'react-router-dom'
 import { makeStyles } from '@mui/styles';
 import Grid from '@mui/material/Grid';
 
-import logo from '../../assets/images/logo.png';
+//import logo from '../../assets/images/logo.png';
+import logo from '../../assets/images/logo_login.png';
 import userIcon from '../../assets/images/btn_user.png';
 import userIconHover from '../../assets/images/btn_user_ov.png';
 import logIcon from '../../assets/images/btn_log.png';
@@ -84,7 +85,8 @@ const useStyles = makeStyles(() => ({
     },
     mainLogo: {
         '& img': {
-            transform: 'translate(20px, 15px)'
+            transform: 'translate(20px, 10px)',
+            width: "30%"
         }
     },
     mainMenu: {
