@@ -40,7 +40,7 @@ import monitor from '../../../../assets/images/admin_monitor.png'
 
 import Stack from '@mui/material/Stack';
 
-import { useSubscribersSelectMutation, useSubscribersInsertMutation, useSubscribersViewMutation, useSubscribersUpdateMutation, useSubscribersWorkplaceSelectMutation, userGetPasswordSearch  } from '../../../../hooks/api/SubscribersManagement/SubscribersManagement';
+import { useSubscribersSelectMutation, useSubscribersInsertMutation, useSubscribersViewMutation, useSubscribersUpdateMutation, useSubscribersWorkplaceSelectMutation, useSubscribersDeleteMutation  } from '../../../../hooks/api/SubscribersManagement/SubscribersManagement';
 import { useGetCommCodeListMutation } from '../../../../hooks/api/CommCodeManagement/CommCodeManagement';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
@@ -50,6 +50,7 @@ import { useFileUploadMutation, useFileDownMutation, useGetFileInfoMutation } fr
 import { DownloadDialog, OnlyUploadDialog, UploadDialog } from '../../../../dialogs/Upload';
 import { Overlay } from '../../../../components/Overlay';
 import Okay from '../../../../components/MessageBox/Okay';
+import YesNo from '../../../../components/MessageBox/YesNo';
 import { useLoginMutation, useGetPwdInfoMutation } from '../../../../hooks/api/LoginManagement/LoginManagement';
 
 
@@ -425,6 +426,9 @@ const useStyles = makeStyles(() => ({
         marginBottom: '25px',
         '& button:last-of-type': {
             marginLeft: '10px'
+        },
+        '& button:first-of-type': {
+            marginRight: '10px'
         }
     },
     popupTable: {
@@ -649,6 +653,10 @@ const YesButton = styled(ButtonUnstyled)`
     height: 40px;
     background: #0355b0;
     color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
     border: none;
     border-radius: 5px;
     font-size: 16px;
@@ -664,6 +672,10 @@ const NoButton = styled(ButtonUnstyled)`
     height: 40px;
     background: #fff;
     color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
     border: 2px solid #0355b0;
     border-radius: 5px;
     font-size: 16px;
@@ -673,6 +685,26 @@ const NoButton = styled(ButtonUnstyled)`
         background: #018de7;
         color: #fff;
         border-color: #018de7;
+    }
+`;
+
+const WhiteButton = styled(ButtonUnstyled)`
+    border: none;
+    width: 100px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 2px solid #CC3333;
+    background: #fff;
+    color: #CC3333;
+    cursor: pointer;
+    transition: background.2s;
+    &:hover {
+        background: #ffdddd;
     }
 `;
 
@@ -738,6 +770,7 @@ const SystemAdministrator = () => {
     const [subscribersSelect] = useSubscribersSelectMutation();
     const [subscribersInsert] = useSubscribersInsertMutation();
     const [subscribersUpdate] = useSubscribersUpdateMutation();
+    const [subscribersDelete] = useSubscribersDeleteMutation();
     const [subscribersWorkplaceSelect] = useSubscribersWorkplaceSelectMutation();
     const [subscribersList, setSubscribersList] = useState([]);
     const [getCommCodeList] = useGetCommCodeListMutation();
@@ -750,6 +783,8 @@ const SystemAdministrator = () => {
     const [okayPopupShow, setOkayPopupShow] = useState(false);
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
+    const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
+    const [yesNoPopupMessage, setYesNoPopupMessage] = useState("삭제 하시겠습니까?");
     const [filePath, setFilePath] = useState({
         "contractFileId": ""
     });
@@ -1125,6 +1160,24 @@ const SystemAdministrator = () => {
             setOkayPopupShow(true);
         }
 
+    }
+
+    //가입자 정보 삭제
+    const handleSubscribersDelete = async () => {
+        const response = await subscribersDelete({
+            "loginId" : subscriberView.loginId
+        })
+        setYesNoPopupShow(false);
+        if (response?.data?.RET_CODE === "0434") {
+            setOkayPopupMessage("삭제 되었습니다.");
+            setOkayPopupShow(true);
+            setUserInfoPop(false)
+            setFilePath({ ...filePath, "contractFileId": "" });
+            fetchSubscribersList();
+        } else {
+            setOkayPopupMessage("삭제에 실패하였습니다.");
+            setOkayPopupShow(true);
+        }        
     }
 
     const handleDialogClose = () => {
@@ -1832,6 +1885,7 @@ const SystemAdministrator = () => {
                             </div>
                             <div className={classes.popButtons}>
                                 <YesButton onClick={() => handleInputValidation(subscriberView, handleSubscribersUpdate, "update")}>수정</YesButton>
+                                <WhiteButton className={"button-delete"} onClick={() => setYesNoPopupShow(true)}>삭제</WhiteButton>
                                 <NoButton onClick={() => { setUserInfoPop(false); setFilePath({ ...filePath, "contractFileId": "" }) }}>취소</NoButton>
                             </div>
                         </div>
@@ -1890,6 +1944,16 @@ const SystemAdministrator = () => {
                 onDownload={handleDialogFileDownload}
                 enableDownload={true}
             />
+
+            {/* 가입자 회원 삭제 */}
+            <Overlay show={yesNoPopupShow}>
+                <YesNo
+                    show={yesNoPopupShow}
+                    message={yesNoPopupMessage}
+                    onConfirmYes={handleSubscribersDelete}
+                    onConfirmNo={() => setYesNoPopupShow(false)}
+                />
+            </Overlay>
 
             <Overlay show={okayPopupShow}>
                 <Okay

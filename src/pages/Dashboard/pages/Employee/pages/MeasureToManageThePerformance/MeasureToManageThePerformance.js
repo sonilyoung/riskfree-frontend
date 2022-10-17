@@ -29,14 +29,17 @@ import iconTabOn from '../../../../../../assets/images/ic_tab_on.png';
 import popupClose2 from '../../../../../../assets/images/btn_popClose2.png';
 import searchIcon from '../../../../../../assets/images/ic_search.png';
 import DefaultLayout from '../../../../../../layouts/Default/Default';
-import { useGetRelatedRawButtonMutation, useGetRelatedRawMutation, useInsertDutyButtonMutation, useUpdateRelatedRawMutation } from '../../../../../../hooks/api/RelatedLawManagement/RelatedLawManagement';
+import { useGetRelatedRawButtonMutation, useGetRelatedRawMutation, useInsertDutyButtonMutation, useUpdateRelatedRawMutation, useDeleteDutyButtonMutation } from '../../../../../../hooks/api/RelatedLawManagement/RelatedLawManagement';
 import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../../hooks/api/FileManagement/FIleManagement';
+import { useGetLoginInfoMutation } from "../../../../../../hooks/api/MainManagement/MainManagement";
+
 import { selectBaselineId } from '../../../../../../slices/selections/MainSelection';
 import { useSelector } from 'react-redux';
 import { UploadDialog, UploadEmployeeDialog } from '../../../../../../dialogs/Upload';
 import { useRelatedRawExcelUploadMutation } from '../../../../../../hooks/api/ExcelController/ExcelController';
 import Okay from '../../../../../../components/MessageBox/Okay';
 import { Overlay } from '../../../../../../components/Overlay';
+import YesNo from '../../../../../../components/MessageBox/YesNo';
 import Loading from '../../../../../../pages/Loading';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -763,14 +766,18 @@ const WhiteButton = styled(ButtonUnstyled)`
 
 const MeasureToManageThePerformance = () => {
     const classes = useStyles();
-
+    const [loginInfos, setLoginInfos] = useState({});
+    const [getLoginInfo] = useGetLoginInfoMutation();
     const [relatedRawList, setRelatedRawList] = useState([]);
     const [relatedRawButtonList, setRelatedRawButtonList] = useState([]);
     const [updateList, setUpdateList] = useState([]);
     const [lawName, setLawName] = useState("");
     const [lawId, setLawId] = useState("0");
     const [popupButton, setPopupButton] = useState(false);
+
     const [popupPlusButton, setPopupPlusButton] = useState(false);
+    const [popupMinusButton, setPopupMinusButton] = useState(false);
+    
     const [page, setPage] = useState(1);
     const [toggleList, setToggleList] = useState('one');
     const [selectedFileName, setSelectedFileName] = useState("")
@@ -801,13 +808,16 @@ const MeasureToManageThePerformance = () => {
     const [okayPopupShow, setOkayPopupShow] = useState(false);
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [seccerrCode, setseccerrCode] = useState("");
-
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
+    const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
+    const [yesNoPopupMessage, setYesNoPopupMessage] = useState("삭제 하시겠습니까?");
+
     const [getRelatedRaw] = useGetRelatedRawMutation();
-    const [insertDutyButton] = useInsertDutyButtonMutation();
+    const [insertDutyButton] = useInsertDutyButtonMutation();           // 법령버튼 생성
     const [getRelatedRawButton] = useGetRelatedRawButtonMutation();
     const [updateRelatedRaw] = useUpdateRelatedRawMutation();
+    const [subscribersDeleteButton] = useDeleteDutyButtonMutation();    // 법령버튼 삭제(내용포함)
     const [fileUpload] = useFileUploadMutation();
     const [getFileInfo] = useGetFileInfoMutation()
     const [relatedRawExcelUpload] = useRelatedRawExcelUploadMutation()
@@ -924,6 +934,26 @@ const MeasureToManageThePerformance = () => {
         }
         //console.log(response);
     }
+
+    // 관계법령 삭제
+    const handleSubscribersDelete = async () => {
+        const response = await subscribersDeleteButton({
+            "lawButtonId" : parseInt(lawId),
+            "companyId" : parseInt(loginInfos.companyId),
+            "workplaceId" : parseInt(loginInfos.workplaceId),
+            "baselineId" : parseInt(currentBaseline)
+        })
+        setYesNoPopupShow(false);
+        if (response?.data?.RET_CODE === "0434") {
+            setOkayPopupMessage("삭제 되었습니다.");
+            setOkayPopupShow(true);
+            fetchRelatedRawButtonList();
+        } else {
+            setOkayPopupMessage("삭제에 실패하였습니다.");
+            setOkayPopupShow(true);
+        }
+    }
+
     async function handleDialogFileDownload() {
         //const fileId = files[dialogId]
         if (attachId) {
@@ -931,11 +961,17 @@ const MeasureToManageThePerformance = () => {
         }
     }
 
+    const fetchLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfos(response.data.RET_DATA)
+    }
+
     useEffect(() => {
         //fetchRelatedRawButtonList();
     }, [uploadFlag])
 
     useEffect(() => {
+        fetchLoginInfo();
         setLoading(true);
         fetchRelatedRawButtonList();
         setLoading(false);
@@ -955,11 +991,11 @@ const MeasureToManageThePerformance = () => {
                     /* === Data: 2022.10.03 author:Jimmy add === */
                     (<Link to="#" className={lawId === relatedRawButtonItem.lawButtonId ? classes.buttonLinkactive : classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)} onDoubleClick={() => handleDialogOpen(relatedRawButtonItem.lawButtonId, relatedRawButtonItem.attachId)}>
                     {/* ========================================= */}
-                    
                         <span>{relatedRawButtonItem?.lawName}</span>
                     </Link>)
                     )}
                     <button className={classes.buttonPlus} onClick={() => setPopupPlusButton(true)}>+</button>
+                    <button className={classes.buttonPlus} onClick={() => setYesNoPopupShow(true)}>-</button>
                 </Grid>
                 <Grid className={classes.pageBody} item xs={10.7} >
                     {/* <div className={popupButton ? classes.uploadPopup : classes.uploadPopupHide} >
@@ -1160,6 +1196,17 @@ const MeasureToManageThePerformance = () => {
                     }}
                     />
             </Overlay>
+            
+            {/* 관계법령 삭제 */}
+            <Overlay show={yesNoPopupShow}>
+                <YesNo
+                    show={yesNoPopupShow}
+                    message={yesNoPopupMessage}
+                    onConfirmYes={handleSubscribersDelete}
+                    onConfirmNo={() => setYesNoPopupShow(false)}
+                />
+            </Overlay>
+
             {loading && <Loading/>}
         </DefaultLayout >
     );

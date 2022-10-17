@@ -45,8 +45,15 @@ export const relatedLawManagement = createApi({
                 body: body,
             })
         }),
+        deleteDutyButton: builder.mutation({
+            query: (body) => ({
+                url: 'relatedlaw/deleteButton',
+                method: 'POST',
+                body: body,
+            })
+        })
 
     })
 });
 
-export const { useGetRelatedRawMutation, useGetRelatedRawButtonMutation, useUpdateRelatedRawMutation, useInsertDutyButtonMutation } = relatedLawManagement;
+export const { useGetRelatedRawMutation, useGetRelatedRawButtonMutation, useUpdateRelatedRawMutation, useInsertDutyButtonMutation, useDeleteDutyButtonMutation } = relatedLawManagement;

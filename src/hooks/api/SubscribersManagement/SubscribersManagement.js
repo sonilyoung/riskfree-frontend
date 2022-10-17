@@ -49,8 +49,15 @@ export const subscribersManagement = createApi({
                 url: `subscribers/workplace/select?companyId=${body}`,
                 method: 'POST'
             })
+        }),
+        subscribersDelete : builder.mutation({
+            query: (body) => ({
+                url: 'subscribers/deleteUser',
+                method: 'POST',
+                body: body
+            })
         })
     }),
 });
 
-export const { useSubscribersViewMutation, useSubscribersUpdateMutation, useSubscribersSelectMutation, useSubscribersInsertMutation, useSubscribersWorkplaceSelectMutation} = subscribersManagement;
+export const { useSubscribersViewMutation, useSubscribersUpdateMutation, useSubscribersSelectMutation, useSubscribersInsertMutation, useSubscribersWorkplaceSelectMutation, useSubscribersDeleteMutation} = subscribersManagement;
