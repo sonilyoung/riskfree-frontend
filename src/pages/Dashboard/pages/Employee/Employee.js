@@ -2963,6 +2963,7 @@ const Employee = () => {
                                             sx={{ width: 370 }}
                                             className={classes.popupTextField}
                                             onChange={(event) => setCompanyInfo({ ...companyInfo, "shGoal": event.target.value })}
+                                            inputProps={{ maxLength: 16 }}
                                         />
                                         <TextField
                                             id="standard-basic"
@@ -2972,6 +2973,7 @@ const Employee = () => {
                                             variant="outlined"
                                             sx={{ width: 370 }}
                                             className={classes.popupTextField}
+                                            inputProps={{ maxLength: 16 }}                                          
                                         />
                                         <div className={classes.preFootPop}>
                                             <div>
