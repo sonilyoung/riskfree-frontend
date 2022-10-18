@@ -25,7 +25,7 @@ import fileNone from '../../assets/images/file_none.png';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
-import { useGetEssentialDutyVersionMutation, useGetEssentialRateMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetLoginInfoMutation, useGetCompanyInfoMutation, useGetDutyDetailListMutation, useGetWeatherMutation, useGetInspectiondocsMutation } from '../../hooks/api/MainManagement/MainManagement';
+import { useGetEssentialDutyVersionMutation, useGetEssentialRateMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetLoginInfoMutation, useUpdateSafetyFileMutation, useGetCompanyInfoMutation, useGetDutyDetailListMutation, useGetWeatherMutation, useGetInspectiondocsMutation } from '../../hooks/api/MainManagement/MainManagement';
 import { remove } from '../../services/core/User/Token';
 import { useUserToken } from '../../hooks/core/UserToken';
 
@@ -44,7 +44,7 @@ import { useLocalStorage } from '../../hooks/misc/LocalStorage';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Overlay } from '../../components/Overlay';
 import Okay from '../../components/MessageBox/Okay';
-import { useFileUploadMutation } from '../../hooks/api/FileManagement/FIleManagement';
+import { useFileUploadMutation, useUpdateDocumentFileIdMutation } from '../../hooks/api/FileManagement/FIleManagement';
 import { UploadDialog, UploadEmployeeDialog } from '../../dialogs/Upload';
 import { useExcelUploadMutation } from '../../hooks/api/ExcelController/ExcelController';
 
@@ -230,10 +230,10 @@ const useStyles = makeStyles(() => ({
         },
         '&.fileupload_popup': {
             backgroundColor: '#ffffff',
-            width: '1024px',
+            width: '1224px',
             height: '550px',
             top: '80px',
-            left: '-1024px'
+            left: '-1124px'
         },
         '&.fileupload_popupClose': {
             display: "none"
@@ -660,7 +660,7 @@ const useStyles = makeStyles(() => ({
                 display: 'flex',
                 flexWrap: 'nowrap',
                 alignItems: 'center',
-                height: '29px',
+                height: '38px',
                 '& span': {
                     fontSize: '16px',
                     marginLeft: '25px',
@@ -728,6 +728,9 @@ const useStyles = makeStyles(() => ({
             }
         },
     },
+    listdoteLine: {
+        borderBottom : '1px dotted #17191c'
+    }
 }));
 
 const UserButton = styled(ButtonUnstyled)`
@@ -981,6 +984,17 @@ const DefaultLight = ({ children }) => {
     const [clickedEssentialRate, setClickedEssentialRate] = useState(1)
     const [clickedEssentialRateForClass, setClickedEssentialRateForClass] = useState("rate1")
     const [getDutyDetailList] = useGetDutyDetailListMutation()
+    const [articleNoForInspection, setArticleNoForInspection] = useState(null)
+    const [inspectionFileId, setInspectionFileId] = useState(null)
+    const [openSafetyDialog, setOpenSafetyDialog] = useState(false)
+    const [openDialogEmployee, setOpenDialogEmployee] = useState(false)
+    const [updateSafetyFile] = useUpdateSafetyFileMutation()
+    const [updateDocumentFileId] = useUpdateDocumentFileIdMutation()
+    const [uploadFlag, setUploadFlag] = useState(false)
+    const [okayPopupShow, setOkayPopupShow] = useState(false);
+    const [okayPopupMessage, setOkayPopupMessage] = useState("");
+    const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
+    const [openDialogOnly, setOpenDialogOnly] = useState(false);
 
     const [nId, setNId] = useState(1);
 
@@ -999,11 +1013,22 @@ const DefaultLight = ({ children }) => {
 
     const [excelUpload] = useExcelUploadMutation();
     const [fileUpload] = useFileUploadMutation();
-
+    const [safetyFileId, setSafetyFileId] = useState("");  
     const [dialogId, setDialogId] = useState("");
     
     const [excel, setExcel] = useState({
         "excelFileId": "",
+    })
+
+    const [filePath, setFilePath] = useState({
+        "performBeforeId": "",
+        "performAfterId": ""
+    })
+    const [employeeFiles, setEmployeeFiles] = useState({
+        "safetyFileUpload": "",
+        "logoImgUpload": "",
+        "documentFileUpload": "",
+        "inspectionFile": ""
     })
 
     const [labelObject, setLabelObject] = useState("");
@@ -1012,7 +1037,19 @@ const DefaultLight = ({ children }) => {
     
     //로딩바추가
     const [loading, setLoading] = useState(true);
-    
+
+    const handleDialogCloseOnly = () => {
+        setOpenDialogOnly(false);
+    }
+
+    const handleDialogCloseEmployee = () => {
+        setOpenDialogEmployee(false);
+    }
+
+    const handleDialogCloseSafety = () => {
+        setOpenSafetyDialog(false);
+    }    
+
     const [getEssentialDutyVersion] = useGetEssentialDutyVersionMutation();
     const fetchEssentialDutyVerision = async () => {
         const response = await getEssentialDutyVersion()
@@ -1028,6 +1065,7 @@ const DefaultLight = ({ children }) => {
 
     // 의무조치별 상세 점검 항목 호출
     const fetchDutyDetailList = async () => {
+        console.log(clickedEssentialRate)
         const response = await getDutyDetailList({
             "groupId": clickedEssentialRate
         })
@@ -1041,6 +1079,149 @@ const DefaultLight = ({ children }) => {
             setSubEventExe(false)
         }        
     }    
+
+    // 점검서류 등록, 안전작업허가서 양식
+    const handleDialogOpenEmployee = (event, articleNo, fileId, index) => {
+            
+        setDialogId((event.target.id).toString());
+        setArticleNoForInspection(articleNo)
+        setInspectionFileId(fileId)
+        setInspectionIndex(index)
+        setSelectedFileName("");
+        if (event.target.id === "safetyFileUpload") {
+            setOpenSafetyDialog(true);
+            setLabelObject({
+                ...labelObject,
+                upperLabel: "안전작업허가서 양식 관리",
+                middleLabel: "등록된 양식을 다운로드 합니다.",
+            })
+        } else if (event.target.id === "inspectionFile") {
+            setOpenDialogEmployee(true);
+            setLabelObject({
+                ...labelObject,
+                upperLabel: "보고서",
+                middleLabel: "등록된 양식을 다운로드 합니다.",
+            })
+        }
+    }
+
+    const [inspectionIndex, setInspectionIndex] = useState(null)
+
+    const handleDialogFileUploadDocs = async () => {
+        if (dialogId === "logoImgUpload" || dialogId === "documentFileUpload") {
+            if((selectedFileName === "") || (selectedFileName === null) || (selectedFile === "")) {
+                setOkayPopupMessage("업로드할 파일을 선택하세요.");
+                setOkayPopupShow(true);   
+            } else {
+                setLoading(true);
+                let formData = new FormData();
+                formData.append("files", selectedFile)
+                handleDialogClose()
+                handleDialogCloseOnly()
+                handleDialogCloseEmployee()
+                const response = await fileUpload(formData);
+                setLoading(false);
+                if(response.data.RET_CODE === "0000") {
+                    setOkayPopupMessage("등록 되었습니다.");
+                    setOkayPopupShow(true);
+
+                    const fileId = response.data.RET_DATA[0].atchFileId
+                    setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
+                    if (dialogId === "logoImgUpload") {
+                        setFilePath({ ...filePath, [dialogId]: (response.data.RET_DATA[0].filePath + "/" + response.data.RET_DATA[0].saveFileName) })
+                    } else {
+                        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+                    }
+
+                } else if(response.data.RET_CODE === '0433'){
+                    setOkayPopupMessage("파일확장자 오류");
+                    setOkayPopupShow(true);
+                } else {
+                    setOkayPopupMessage("시스템 오류");
+                    setOkayPopupShow(true);
+                }
+                
+            }
+        } else if (dialogId === "safetyFileUpload") {
+            if((selectedFileName === "") || (selectedFileName === null) || (selectedFile === "")) {
+                setOkayPopupMessage("업로드할 파일을 선택하세요.");
+                setOkayPopupShow(true);   
+            } else {
+                setLoading(true);
+                let formData = new FormData();
+                formData.append("files", selectedFile)
+                //handleDialogCloseSf()
+                handleDialogCloseSafety()
+                const response = await fileUpload(formData);
+                setLoading(false);
+                if(response.data.RET_CODE === "0000") {
+                    setOkayPopupMessage("등록 되었습니다.");
+                    setOkayPopupShow(true);
+
+                    const fileId = response.data.RET_DATA[0].atchFileId
+                    setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
+                    if (dialogId === "logoImgUpload") {
+                        setFilePath({ ...filePath, [dialogId]: (response.data.RET_DATA[0].filePath + "/" + response.data.RET_DATA[0].saveFileName) })
+                    } else {
+                        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+                    }
+
+                    const responseSaferyFile = await updateSafetyFile({ "attachFileId": fileId, });
+                    console.log("responseSaferyFile:", responseSaferyFile);
+                    setSafetyFileId(fileId);
+                } else if(response.data.RET_CODE === '0433'){
+                    setOkayPopupMessage("파일확장자 오류");
+                    setOkayPopupShow(true);
+                } else {
+                    setOkayPopupMessage("시스템 오류");
+                    setOkayPopupShow(true);
+                }
+            }
+        } else if (dialogId === "inspectionFile") {
+            if((selectedFileName === "") || (selectedFileName === null) || (selectedFile === "")) {
+                setOkayPopupMessage("업로드할 파일을 선택하세요.");
+                setOkayPopupShow(true);
+            } else {
+                setLoading(true);
+                let formData = new FormData();
+                formData.append("files", selectedFile)
+                handleDialogClose()
+                handleDialogCloseEmployee()
+                const response = await fileUpload(formData)
+                setLoading(false);
+                if(response.data.RET_CODE === "0000") {
+                    setOkayPopupMessage("등록 되었습니다.");
+                    setOkayPopupShow(true);
+                    
+                    const fileId = response.data.RET_DATA[0].atchFileId
+                    setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
+                    setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
+                    const deepCopyObj = JSON.parse(JSON.stringify(inspectionsDocs))
+                    const updatedArray = deepCopyObj.map((obj, index) => {
+                        if (index === inspectionIndex) {
+                            return { "fileId": fileId }
+                        } else {
+                            return {
+                                fileId: obj["fileId"]
+                            }
+                        }
+                    })
+                    const responseDocumentFile = await updateDocumentFileId({
+                        "updateList": updatedArray,
+                        "articleNo": articleNoForInspection
+                    })
+                    setUploadFlag(!uploadFlag)
+                } else if(response.data.RET_CODE === '0433'){
+                    setOkayPopupMessage("파일확장자 오류");
+                    setOkayPopupShow(true);
+                } else {
+                    setOkayPopupMessage("시스템 오류");
+                    setOkayPopupShow(true);
+                }
+            }
+        setSelectedFileName("");
+        }
+    }
 
     const fetchInspectionDocs = async () => {
         if (clickedDuty && setSubEventExe) {
@@ -1095,6 +1276,7 @@ const DefaultLight = ({ children }) => {
         }
     }
 
+    // 파일 다운로드
     async function handleDialogFileDownload() {
         const fileId = excel[dialogId]
         if (fileId || essentialDutyFileId) {
@@ -1108,12 +1290,13 @@ const DefaultLight = ({ children }) => {
         setSelectedFileName(file.name)
     }
 
-
+    // 회원 정보 호출
     const handleLoginInfo = async () => {
         const response = await getLoginInfo()
         setLoginInfo(response.data.RET_DATA)
     }
 
+    // 로그아웃
     const handleLogOut = () => {
         remove();
         navigate('/');
@@ -1130,7 +1313,7 @@ const DefaultLight = ({ children }) => {
         setCompanyInfo(response.data.RET_DATA)
     }
 
-    // 
+    // 날씨 및 지역주소 가져오기
     const fetchWeather = async () => {
         const response = await getWeather({
             "latitude": latitude,
@@ -1139,16 +1322,19 @@ const DefaultLight = ({ children }) => {
         setWeatherData(response.data.RET_DATA)
     }
 
+    // 공지사항 상세페이지 호출
     const handelSetNoticeView = (Id) => {
         setNId(Id);
         setNotifiCenterPage("View");
     }
 
+    // 공지사항 수정페이지 호출
     const handelSetNoticeUpdate = (Id) => {
         setNId(Id);
         setNotifiCenterPage("Update");
     }
 
+    // 분류별 팝업 호출
     const handelNotifiPopup = (popupType) => {
         setNotifiCenterPage(popupType);
         setAdminCenterPopup(true);
@@ -1156,6 +1342,7 @@ const DefaultLight = ({ children }) => {
     }
 
     useEffect(() => {
+        setLoading(true);
         if (currentBaseline === null) {
             dispatch(setBaselineId(localStorage.getDefaultBaselineId()));
         }
@@ -1167,18 +1354,21 @@ const DefaultLight = ({ children }) => {
         handleLoginInfo()
         fetchCompanyInfo()
         fetchEssentialDutyVerision()
+        setLoading(false);
     }, [])
 
     useEffect(() => {
+        setLoading(true);
         fetchWeather()
         fetchEssentialDutyVerision()
+        setLoading(false);
     }, [loginInfo])
 
     useEffect(() => {
         setLoading(true);
         fetchInspectionDocs()
         setLoading(false);
-    }, [clickedDuty])
+    }, [clickedDuty, uploadFlag])
 
     useEffect(() => {
         setLoading(true);
@@ -1235,7 +1425,7 @@ const DefaultLight = ({ children }) => {
                                             <ButtonClosePop onClick={() => setFileUploadPopup(false)}></ButtonClosePop>
                                         </div>
                                         <Grid className={classes.pageContent} item container rowSpacing={0} columnSpacing={1}>
-                                            <Grid item container xs={4.5} >
+                                            <Grid item container xs={3.6} >
                                                 <Grid item xs={12}>
                                                     <div className={classes.contentList}>
                                                         <div className={classes.listTitle}>안전보건관리체계의 구축 및 이행</div>
@@ -1245,7 +1435,7 @@ const DefaultLight = ({ children }) => {
                                                                 {essentialRates && Object.entries(essentialRates).length > 0 && Object.keys(essentialRates)?.map(function (property) {
                                                                     if (property.includes("rate")) {
                                                                         return (
-                                                                            <><li>
+                                                                            <><li className={classes.listdoteLine}>
                                                                         <Link className={(clickedEssentialRateForClass == property ? classes.listLinkClicked : classes.listLink)} onClick={() => {
                                                                                     setClickedEssentialRateForClass(property)
                                                                                     setClickedEssentialRate(!!essentialRates[property].groupId && essentialRates[property].groupId)
@@ -1260,14 +1450,14 @@ const DefaultLight = ({ children }) => {
                                                     </div>
                                                 </Grid>
                                             </Grid>
-                                            <Grid item xs={3.8}>
+                                            <Grid item xs={4.2}>
                                                 <Grid item xs={12}>
                                                     <div className={classes.contentList}>
                                                         <div className={classes.listTitle}>의무조치별 상세 점검 항목</div>
                                                         <ul className={classes.menuList + ' secondList'}>
                                                         {dutyDetailList?.map((element) => {
                                                         return (
-                                                            <li>
+                                                            <li className={classes.listdoteLine}>
                                                                 <Link className={clickedDuty !== element.articleNo ? classes.listLink : classes.listLinkClicked} to={"#none"} underline="none" onClick={() => setClickedDuty(element.articleNo)}>{element.detailedItems}</Link>
                                                             </li>
                                                             )
@@ -1276,23 +1466,31 @@ const DefaultLight = ({ children }) => {
                                                     </div>
                                                 </Grid>
                                             </Grid>
-                                            <Grid item container xs={3.7}>
+                                            <Grid item container xs={4.15}>
                                                 <Grid item xs={12}>
                                                     <div className={classes.contentList}>
                                                         <div className={classes.listTitle}>점검서류 등 목록</div>
                                                         <div className={classes.contentList + ' moreContent'}>
                                                             <div>
                                                                 <ul className={classes.menuList}>
-                                                                    <li><Link className={classes.listLinkClicked} to={"#none"} underline="none">test1</Link></li>
-                                                                    <li><Link className={classes.listLink} to={"#none"} underline="none">test2</Link></li>
-                                                                    <li><Link className={classes.listLink} to={"#none"} underline="none">test3</Link></li>
+                                                                {inspectionsDocs?.map((inspection) => (
+                                                                    <li className={classes.listdoteLine}>
+                                                                        <Link className={classes.listLink} to={"#none"} underline="none">{inspection?.shGoal}</Link>
+                                                                    </li>
+                                                                ))}
                                                                 </ul>
                                                             </div>
                                                             <div>
                                                                 <ul className={classes.menuList + ' buttonList'}>
-                                                                    <li><div><FileButtonNone id="inspectionFile"></FileButtonNone></div></li>
-                                                                    <li><div><FileButtonExis id="inspectionFile"></FileButtonExis></div></li>
-                                                                    <li><div><FileButtonExis id="inspectionFile"></FileButtonExis></div></li>
+                                                                {inspectionsDocs?.map((inspection, index) => (<><li className={classes.listdoteLine}>
+                                                                    <div>{(inspection.fileId === null || inspection.fileId === "null" || inspection.fileId === "") ? 
+                                                                        <FileButtonNone id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone>
+                                                                        : 
+                                                                        <FileButtonExis id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>
+                                                                    }
+                                                                    </div>
+                                                                    </li></>)
+                                                                )}
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -1342,6 +1540,18 @@ const DefaultLight = ({ children }) => {
                 </Grid>
 
             </Grid>
+
+            <UploadEmployeeDialog
+                open={openDialogEmployee}
+                onClose={handleDialogCloseEmployee}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUploadDocs}
+                onDownload={handleDialogFileDownload}
+                enableDownload={true}
+                label={labelObject}
+                selectedFileName={selectedFileName}
+            />
+
             <UploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
