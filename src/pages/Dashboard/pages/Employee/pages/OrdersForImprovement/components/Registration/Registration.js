@@ -75,7 +75,7 @@ const useStyles = makeStyles(() => ({
             }
         },
         '& $boxContent $boxRow:first-of-type': {
-            height: '60px'
+            height: '110px'
         },
         '& $boxContent $boxRow:nth-of-type(2) $rowTitle': {
             borderTop: 'none'
@@ -331,7 +331,6 @@ const WhiteButton = styled(ButtonUnstyled)`
 const Registration = () => {
     const classes = useStyles();
     const navigate = useNavigate();
-
     const [lawInsert] = useLawInsertMutation();
     const todaysDate = moment().format("YYYY-MM-DD")
     const [getLoginInfo] = useGetLoginInfoMutation()
@@ -724,7 +723,8 @@ const Registration = () => {
                         </div>
                     </div>
                 </Grid>
-                <Grid item xs={12} className={classes.boxRegistration}>
+
+                {/* <Grid item xs={12} className={classes.boxRegistration}>
                     <div className={classes.boxTitle}>
                         <span>개선.조치 </span>
                         <span>대응내역</span>
@@ -751,7 +751,7 @@ const Registration = () => {
                                 </div>
                             </div>
                             
-                            { /* === Data: 2022.10.03 author:Jimmy add, edit === */ }
+                            
                             <div className={classes.rowTitle}>완료일</div>
                             <div className={classes.rowInfo}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
@@ -762,15 +762,11 @@ const Registration = () => {
                                             value={law.completeDate}
                                             isClearable
                                             onChange={DateChange('completeDate')}
-                                            // onChange={(newDate) => {
-                                            //     const date = new Date(newDate)
-                                            //     setLaw({ ...law, "completeDate": moment(new Date(newDate)).format("YYYY-MM-DD") })
-                                            // }}
+
                                             renderInput={(params) => <TextField {...params} sx={{ width: 180 }} />}
                                         />
                                     </LocalizationProvider>
                             </div>
-                            { /* ====================================================== */ }
 
                         </div>
 
@@ -813,9 +809,6 @@ const Registration = () => {
                                             disabled
                                         />
                                         <UploadButton id="performBeforeId" onClick={handleDialogOpen}>찾아보기</UploadButton>
-                                        {/* <div className={classes.imgPreview}>
-                                            <img src={imgPrev} alt="uploaded image" />
-                                        </div> */}
                                     </div>
                                 </div>
                                 <div>
@@ -830,15 +823,12 @@ const Registration = () => {
                                             disabled
                                         />
                                         <UploadButton id="performAfterId" onClick={handleDialogOpen}>찾아보기</UploadButton>
-                                        {/* <div className={classes.imgPreview}>
-                                            <img src={noImg} alt="no image" />
-                                        </div> */}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12} className={classes.footerButtons}>
                     <BlueButton className={"button-registration"} onClick={handleLawInsert}>등록</BlueButton>
                     <WhiteButton className={"button-list"} onClick={() => handleRedirect()}>목록</WhiteButton>
