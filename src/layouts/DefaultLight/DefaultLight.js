@@ -1017,22 +1017,19 @@ const DefaultLight = ({ children }) => {
     const fetchEssentialDutyVerision = async () => {
         const response = await getEssentialDutyVersion()
         setEssentialDutyFileId(response?.data?.RET_DATA?.attachFileId)
-        //console.log(response, "------essentialFileId")
     }
 
+    // 안전보건관리체계의 구축 및 이행 항목 호출
     const fetchEssentialRates = async () => {
         const response = await getEssentialRate({
-            "baselineId": currentBaselineId,
-            "workplaceId": userWorkplaceId
         })
         setEssentialRates(response?.data?.RET_DATA)
     }
 
+    // 의무조치별 상세 점검 항목 호출
     const fetchDutyDetailList = async () => {
         const response = await getDutyDetailList({
-            "baselineId": currentBaselineId,
-            "groupId": clickedEssentialRate,
-            "workplaceId": userWorkplaceId
+            "groupId": clickedEssentialRate
         })
         
         setDutyDetailList(response?.data?.RET_DATA)

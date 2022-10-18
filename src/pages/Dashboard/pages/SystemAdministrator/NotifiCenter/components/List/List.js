@@ -137,6 +137,7 @@ const useStyles = makeStyles(() => ({
     pagingBox: {
         position: 'relative',
         height: '40px',
+        color: '#333333',
         '& .MuiPagination-root': {
             display: 'flex',
             justifyContent: 'center'
@@ -291,7 +292,6 @@ function List(props) {
 
     const currentWorkplaceId = useSelector(selectWorkplaceId);
 
-
     const HOT = "001"
 
     const handleSelect = (event) => {
@@ -300,13 +300,11 @@ function List(props) {
 
     // 등록페이지 호출
     const handleRedirect = () => {
-        //navigate("./registration/registration")
         props.onCallback("Registration");
     }
 
     // 상세페이지 호출
     const handelView = (noticeId) => {
-        //navigate(`/dashboard/director/notifications/view/${notice.noticeId}`)
         props.onDoubleClickView(noticeId);
     }
 
@@ -319,7 +317,6 @@ function List(props) {
             "workplaceId": currentWorkplaceId
         })
         setNoticesList(response?.data?.RET_DATA)
-        //console.log(response);
     }
     const handleSearch = () => {
         handleFetchList()
@@ -420,7 +417,7 @@ function List(props) {
                     </>
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
-                    <div>총 게시글 <strong>{noticesList && noticesList[0]?.totalCount}</strong> 건</div>
+                    <div>총 게시글&nbsp;<strong>{noticesList && noticesList[0]?.totalCount}</strong>&nbsp;건</div>
                     <Stack spacing={2}>
                         {!!noticesForCount?.data?.RET_DATA && <Pagination count={!!noticesForCount?.data?.RET_DATA && (Math.floor(noticesForCount?.data?.RET_DATA[0]?.totalCount / 10))} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />}
                     </Stack>

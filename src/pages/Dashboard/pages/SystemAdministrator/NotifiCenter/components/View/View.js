@@ -13,7 +13,8 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
-        padding: '15px'
+        padding: '15px',
+        fontSize: '16px',
     },
     listTitle: {
         height: '33px',
@@ -53,7 +54,7 @@ const useStyles = makeStyles(() => ({
         width: '100px',
         background: '#bdcbe9',
         borderBottom: '1px solid #fff',
-        fontSize: '17px',
+        
         fontWeight: '500',
         '&:last-of-type': {
             borderBottom: 'none'

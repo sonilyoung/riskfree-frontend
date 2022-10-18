@@ -429,15 +429,10 @@ const Registration = (props) => {
                     <div className={classes.boxRow}>
                         <div className={classes.rowTitle}>첨부파일</div>
                         <div className={classes.rowInfo}>
-                            {/* <div className={classes.uploadedFile}>
-                                <span>개선조치 관련 내부 점검 파일.hwp</span>
-                                <RemoveButton></RemoveButton>
-                            </div> */}
                             <div className={classes.uploadAction}>
                                 <TextField
                                     className={classes.textArea}
                                     id="outlined-basic"
-                                    // placeholder="개선조치 관련 내부 점검 파일_수정20220701.hwp"
                                     value={filePath.attachId}
                                     disabled
                                 />

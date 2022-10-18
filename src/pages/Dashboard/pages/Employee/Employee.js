@@ -2930,7 +2930,9 @@ const Employee = () => {
 
                     <Grid className={classes.mainHeader} item xs={12}>
                         <Grid className={classes.mainLogo} item xs={3}>
-                            <img src={logo} alt="logo" onClick={() => navigate("/dashboard/employee")} />
+                            <Link to={(loginInfo?.roleCd === "001") ? "/dashboard/director" : (loginInfo?.roleCd === "002") ? "/dashboard/employee" : (loginInfo?.roleCd === "003") ? "/dashboard/employee" : "/"}>
+                                <img src={logo} alt="logo" />
+                            </Link>                            
                         </Grid>
                         <Grid className={classes.mainMenu} item xs={6.3}>
                             <div className={classes.leftMenu}>
