@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom'
-
 import { makeStyles } from '@mui/styles';
 import Grid from '@mui/material/Grid';
 
@@ -21,12 +20,16 @@ import backButton from '../../assets/images/btn_back.png';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import fileExis from '../../assets/images/file_exis.png';
+import fileNone from '../../assets/images/file_none.png';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
-import { useGetLoginInfoMutation, useGetCompanyInfoMutation, useGetWeatherMutation } from '../../hooks/api/MainManagement/MainManagement';
+import { useGetEssentialDutyVersionMutation, useGetEssentialRateMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetLoginInfoMutation, useGetCompanyInfoMutation, useGetDutyDetailListMutation, useGetWeatherMutation, useGetInspectiondocsMutation } from '../../hooks/api/MainManagement/MainManagement';
 import { remove } from '../../services/core/User/Token';
 import { useUserToken } from '../../hooks/core/UserToken';
+
+import arrowDown from '../../assets/images/ic_down.png';
 
 import '../../assets/fonts/Pretendard-Regular.otf';
 import proba from '../../assets/fonts/Pretendard-Regular.otf';
@@ -45,8 +48,13 @@ import { useFileUploadMutation } from '../../hooks/api/FileManagement/FIleManage
 import { UploadDialog, UploadEmployeeDialog } from '../../dialogs/Upload';
 import { useExcelUploadMutation } from '../../hooks/api/ExcelController/ExcelController';
 
-import { useGetEssentialDutyVersionMutation } from '../../hooks/api/MainManagement/MainManagement';
 import { ExitToApp } from '@mui/icons-material';
+
+import { default as NotifiCenterList } from '../../pages/Dashboard/pages/SystemAdministrator/NotifiCenter/components/List/List'
+import { default as NotifiCenterRegistration } from '../../pages/Dashboard/pages/SystemAdministrator/NotifiCenter/components/Registration/Registration'
+import { default as NotifiCenterView } from '../../pages/Dashboard/pages/SystemAdministrator/NotifiCenter/components/View/View'
+import { default as NotifiCenterUpdate } from '../../pages/Dashboard/pages/SystemAdministrator/NotifiCenter/components/Update/Update'
+import Loading from '../../pages/Loading';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -199,7 +207,7 @@ const useStyles = makeStyles(() => ({
         top: '0px',
         left: '0px',
         width: '397px',
-        height: '700px',
+        height: '280px',
         border: '2px solid #018de7',
         borderRadius: '5px',
         background: '#eeeff7',
@@ -207,7 +215,7 @@ const useStyles = makeStyles(() => ({
         '&.user_popup': {
             top: '70px',
             left: '5px',
-            height: '535px'
+            height: '435px'
         },
         '&.user_popupClose': {
             display: "none"
@@ -217,6 +225,27 @@ const useStyles = makeStyles(() => ({
             left: '-195px'
         },
         '&.settings_popupClose': {
+            display: "none"
+        
+        },
+        '&.fileupload_popup': {
+            backgroundColor: '#ffffff',
+            width: '1024px',
+            height: '550px',
+            top: '80px',
+            left: '-1024px'
+        },
+        '&.fileupload_popupClose': {
+            display: "none"
+        
+        },
+        '&.admincenter_popup': {
+            width: '1024px',
+            height: '700px',
+            top: '80px',
+            left: '-1024px'
+        },
+        '&.admincenter_popupClose': {
             display: "none"
         },
         '& $popupAccord': {
@@ -239,7 +268,6 @@ const useStyles = makeStyles(() => ({
                 '& $popupTextField': {
                     marginBottom: '0 !important'
                 }
-
             },
             '& p': {
                 fontSize: '16px'
@@ -385,9 +413,10 @@ const useStyles = makeStyles(() => ({
             right: '-65px'
         }
     },
-    // uploadPopupClose: {
-    //     display: 'none',
-    // },
+    buttonCenter: {
+        width: '100%',
+        justifyContent: 'center',
+    },
     uploadInfo: {
         display: 'flex',
         flexWrap: 'wrap',
@@ -510,15 +539,15 @@ const useStyles = makeStyles(() => ({
     listLink: {
         display: 'flex',
         alignItems: 'center',
-        color: '#fff',
+        color: '#333333',
         textDecoration: "none"
     },
     listLinkClicked: {
         display: 'flex',
         alignItems: 'center',
-        color: '#fff',
+        color: '#333333',
         textDecoration: "none",
-        backgroundColor: "grey"
+        backgroundColor: "#d5ddf0"
     },
     selectMenuDate: {
         height: '40px',
@@ -541,10 +570,163 @@ const useStyles = makeStyles(() => ({
         top: '0px',
         left: '0px',
         width: '100vw',
-        height: '100vh',
+        height: '100vw',
         background: 'rgba(0, 0, 0, .5)',
         zIndex: '1',
         display: 'none',
+    },
+    pageContent: {
+        display: 'flex',
+        height: '430px',
+        padding: '5px',
+        
+        background: '#ffffff',
+        '& >.MuiGrid-root': {
+            height: '100%'
+        }
+    },
+    listTitle: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: '0 20px',
+        lineHeight: '50px',
+        fontSize: '17px',
+        fontWeight: '500',
+        color: '#ffffff',
+        background: '#9cb1de',
+        '& strong': {
+            color: '#00adef'
+        }
+
+    },
+    menuList: {
+        width: '100%',
+        overflow: 'hidden auto',
+        padding: '0',
+        margin: '0',
+        listStyle: 'none',
+        color: '#333333',
+        letterSpacing: '-1.08px',
+        '& li': {
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            width: '100%',
+            wordBreak: 'keep-all',
+            lineHeight: '38px',
+            '& p, & a': {
+                width: 'calc(100% - 10px)',
+                paddingLeft: '10px',
+                margin: '0'
+            },
+        },
+        '& .nestedList li': {
+            padding: '0'
+        },
+        '&.secondList': {
+            padding: '0px',
+            boxSizing: 'border-box',
+            '& li': {
+                marginRight: '10px',
+                //borderBottom: '1px solid #363c4c',
+                '& a': {
+                    //padding: '22px',
+                    lineHeight: '38px',
+                    width: '100%'
+                },
+                '&.activeLink': {
+                    background: '#2e3b65'
+                }
+            },
+        },
+        '& .bulletList': {
+            position: 'relative',
+            paddingLeft: '10px',
+            display: 'flex',
+            alignItems: 'center',
+            '&:before': {
+                content: '""',
+                position: 'absolute',
+                left: '0',
+                width: '4px',
+                height: '4px',
+                background: '#d4d4d6'
+            }
+        },
+        '&.buttonList': {
+            '& li': {
+                paddingLeft: '20px',
+                display: 'flex',
+                flexWrap: 'nowrap',
+                alignItems: 'center',
+                height: '29px',
+                '& span': {
+                    fontSize: '16px',
+                    marginLeft: '25px',
+                    cursor: "pointer",
+                    '&.green': {
+                        color: '#22e004'
+                    },
+                    '&.orange': {
+                        color: '#fe9c05'
+                    },
+                    '&.red': {
+                        color: '#fc4b07'
+                    },
+                    '&.empty': {
+                        width: "40px",
+                        height: "20px"
+                    },
+
+                },
+                '& >div': {
+                    display: "flex",
+                    alignItems: "center"
+                }
+            }
+        },
+        '&::-webkit-scrollbar': {
+            width: '6px',
+            height: '6px',
+            border: '6px solid #1e2132'
+        },
+        '&::-webkit-scrollbar-track': {
+            background: '#1e2132',
+            borderRadius: '0px',
+            boxShadow: 'inset 0 0 4px rgb(0 0 0 / 20%)'
+        },
+        '&::-webkit-scrollbar-thumb': {
+            height: '50px',
+            width: '6px',
+            background: '#3f4d72',
+            borderRadius: '8px',
+            boxShadow: 'inset 0px 10px 0px 0px #1e2132, inset 0px -10px 0px 0px #1e2132'
+        },
+    },
+    contentList: {
+        background: '#ffffff',
+        height: '400px',
+        border: '1px solid #1e2132',
+        color: '#333333',
+        overflow: 'hidden',
+        '&.moreContent': {
+            display: 'flex',
+            border: '0px',
+            '& $listTitle': {
+                justifyContent: 'flex-start',
+                borderRight: '1px solid #17191c'
+            },
+            '& :last-of-type $listTitle': {
+                borderRight: 'none'
+            },
+            '& >div:first-of-type': {
+                width: '80%'
+            },
+            '& >div:nth-of-type(2)': {
+                width: '20%'
+            }
+        },
     },
 }));
 
@@ -600,6 +782,26 @@ const BackButton = styled(ButtonUnstyled)`
     border: none;
     background: transparent url(${backButton});
     cursor: pointer;
+`;
+
+const WhiteButton = styled(ButtonUnstyled)`
+    border: none;
+    width: 140px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    font-size: 17px;
+    border-radius: 5px;
+    border: 2px solid #018de7;
+    background: #fff;
+    color: #018de7;
+    cursor: pointer;
+    transition: background.2s;
+    &:hover {
+        background: #d2dcf3;
+}
 `;
 
 const ButtonClosePop = styled(ButtonUnstyled)`
@@ -717,50 +919,141 @@ const ClosePopupButton2 = styled(ButtonUnstyled)`
     transition: background .2s; 
 `;
 
+const FileButtonExis = styled(ButtonUnstyled)`
+    width: 16px;
+    height: 21px;
+    background: url(${fileExis}) no-repeat 50% 50%;
+    transition: background .3s;
+    border: none;
+    cursor: pointer;
+`;
+
+const FileButtonNone = styled(ButtonUnstyled)`
+    width: 16px;
+    height: 21px;
+    background: url(${fileNone}) no-repeat 50% 50%;
+    transition: background .3s;
+    border: none;
+    cursor: pointer;
+`;
+
 const DefaultLight = ({ children }) => {
+
+    //console.log(notifiCenterPage)
+
     const classes = useStyles();
-    const location = useLocation()
-    const navigate = useNavigate()
-    const [getLoginInfo] = useGetLoginInfoMutation()
-    const [loginInfo, setLoginInfo] = useState({})
-    const [userToken] = useUserToken()
-    const [companyInfo, setCompanyInfo] = useState({})
-    const companyId = userToken.getUserCompanyId()
-    const [getCompanyInfo] = useGetCompanyInfoMutation()
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [getLoginInfo] = useGetLoginInfoMutation();
+    const [loginInfo, setLoginInfo] = useState({});
+    const [userToken] = useUserToken();
+    
+    const userRoleCode = userToken.getUserRoleCd();
+    const userWorkplaceId = userToken.getUserWorkplaceId();
+    const [companyInfo, setCompanyInfo] = useState({});
+    const companyId = userToken.getUserCompanyId();
+    const [getCompanyInfo] = useGetCompanyInfoMutation();
     const [openDialog, setOpenDialog] = useState(false);
-    const [selectedFile, setSelectedFile] = useState(null)
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    // 세팅팝업
+    const [settingsPopup, setSettingsPopup] = useState(false);
+    const [fileUploadPopup, setFileUploadPopup] = useState(false);
+    const [adminCenterPopup, setAdminCenterPopup] = useState(false);
+
+    const [notifiCenterPage, setNotifiCenterPage] = useState("");
+    
+
+    const [SubEventExe, setSubEventExe] = useState(null)
+    const [getBaselineList] = useGetBaselineListMutation() 
+    const [getBaseline] = useGetBaselineMutation()
+    const [baselineList, setBaselineList] = useState([])
+    const [getInspectionsDocs] = useGetInspectiondocsMutation()
+    const [inspectionsDocs, setInspectionsDocs] = useState([])
+
+    const [clickedDuty, setClickedDuty] = useState(null)
+    const [dutyDetailList, setDutyDetailList] = useState([])
+    const [essentialRates, setEssentialRates] = useState([])
+    const [baselineStart, setBaselineStart] = useState("")
+    const currentBaselineId = useSelector(selectBaselineId);
+    const [baselineIdForSelect, setBaselineIdForSelect] = useState(currentBaselineId)
+    const [getEssentialRate] = useGetEssentialRateMutation()
+    const [clickedEssentialRate, setClickedEssentialRate] = useState(1)
+    const [clickedEssentialRateForClass, setClickedEssentialRateForClass] = useState("rate1")
+    const [getDutyDetailList] = useGetDutyDetailListMutation()
+
+    const [nId, setNId] = useState(1);
 
     const [okPopupShow, setOkPopupShow] = useState(false);
     const [okPopupMessage, setOkPopupMessage] = useState("");
-    const [selectedFileName, setSelectedFileName] = useState("")
+    const [selectedFileName, setSelectedFileName] = useState("");
 
     const dispatch = useDispatch();
     const localStorage = useLocalStorage();
     const currentBaseline = useSelector(selectBaselineId);
 
-    const [latitude, setLatitude] = useState("")
-    const [longitude, setLongitude] = useState("")
-    const [getWeather] = useGetWeatherMutation()
-    const [weatherData, setWeatherData] = useState({})
+    const [latitude, setLatitude] = useState("");
+    const [longitude, setLongitude] = useState("");
+    const [getWeather] = useGetWeatherMutation();
+    const [weatherData, setWeatherData] = useState({});
 
-    const [excelUpload] = useExcelUploadMutation()
-    const [fileUpload] = useFileUploadMutation()
+    const [excelUpload] = useExcelUploadMutation();
+    const [fileUpload] = useFileUploadMutation();
 
-    const [dialogId, setDialogId] = useState("")
+    const [dialogId, setDialogId] = useState("");
     
     const [excel, setExcel] = useState({
         "excelFileId": "",
     })
 
-    const [labelObject, setLabelObject] = useState("")
+    const [labelObject, setLabelObject] = useState("");
     
-    const [essentialDutyFileId, setEssentialDutyFileId] = useState(null)
-
-    const [getEssentialDutyVersion] = useGetEssentialDutyVersionMutation()
+    const [essentialDutyFileId, setEssentialDutyFileId] = useState(null);
+    
+    //로딩바추가
+    const [loading, setLoading] = useState(true);
+    
+    const [getEssentialDutyVersion] = useGetEssentialDutyVersionMutation();
     const fetchEssentialDutyVerision = async () => {
         const response = await getEssentialDutyVersion()
         setEssentialDutyFileId(response?.data?.RET_DATA?.attachFileId)
         //console.log(response, "------essentialFileId")
+    }
+
+    const fetchEssentialRates = async () => {
+        const response = await getEssentialRate({
+            "baselineId": currentBaselineId,
+            "workplaceId": userWorkplaceId
+        })
+        setEssentialRates(response?.data?.RET_DATA)
+    }
+
+    const fetchDutyDetailList = async () => {
+        const response = await getDutyDetailList({
+            "baselineId": currentBaselineId,
+            "groupId": clickedEssentialRate,
+            "workplaceId": userWorkplaceId
+        })
+        
+        setDutyDetailList(response?.data?.RET_DATA)
+        setClickedDuty(!!(response.data.RET_DATA) && !!(response.data.RET_DATA) && response?.data?.RET_DATA[0]?.articleNo)
+
+        if(response?.data?.RET_DATA?.length > 0){
+            setSubEventExe(true)    
+        }else{
+            setSubEventExe(false)
+        }        
+    }    
+
+    const fetchInspectionDocs = async () => {
+        if (clickedDuty && setSubEventExe) {
+            const response = await getInspectionsDocs({
+                "articleNo": clickedDuty
+            })
+            setInspectionsDocs(response?.data?.RET_DATA)
+        }else{
+            setInspectionsDocs(null)
+        }
     }
 
     const handleDialogOpen = (event) => {
@@ -840,6 +1133,7 @@ const DefaultLight = ({ children }) => {
         setCompanyInfo(response.data.RET_DATA)
     }
 
+    // 
     const fetchWeather = async () => {
         const response = await getWeather({
             "latitude": latitude,
@@ -848,10 +1142,31 @@ const DefaultLight = ({ children }) => {
         setWeatherData(response.data.RET_DATA)
     }
 
+    const handelSetNoticeView = (Id) => {
+        setNId(Id);
+        setNotifiCenterPage("View");
+    }
+
+    const handelSetNoticeUpdate = (Id) => {
+        setNId(Id);
+        setNotifiCenterPage("Update");
+    }
+
+    const handelNotifiPopup = (popupType) => {
+        setNotifiCenterPage(popupType);
+        setAdminCenterPopup(true);
+        setSettingsPopup(false);
+    }
+
     useEffect(() => {
         if (currentBaseline === null) {
             dispatch(setBaselineId(localStorage.getDefaultBaselineId()));
         }
+        navigator.geolocation.getCurrentPosition(position => {
+            setLatitude(position.coords.latitude)
+            setLongitude(position.coords.longitude)
+        })
+        fetchEssentialRates()
         handleLoginInfo()
         fetchCompanyInfo()
         fetchEssentialDutyVerision()
@@ -863,11 +1178,16 @@ const DefaultLight = ({ children }) => {
     }, [loginInfo])
 
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition(position => {
-            setLatitude(position.coords.latitude)
-            setLongitude(position.coords.longitude)
-        })
-    }, [])
+        setLoading(true);
+        fetchInspectionDocs()
+        setLoading(false);
+    }, [clickedDuty])
+
+    useEffect(() => {
+        setLoading(true);
+        fetchDutyDetailList()
+        setLoading(false);
+    }, [clickedEssentialRate])
 
     return (
         <div className={classes.bodyWrap}>
@@ -887,8 +1207,131 @@ const DefaultLight = ({ children }) => {
                             <div className={classes.rightMenu}></div>
                         </Grid>
                         <Grid className={classes.mainAsside} item xs={3}>
-                            <SettingsButton className={classes.mainMenuButton} id={"excelFileId"} onClick={handleDialogOpen}></SettingsButton>
-                            <AdminButton className={classes.mainMenuButton}></AdminButton>
+                            {/* 세팅 팝업 Start */}
+                            {/* <SettingsButton className={classes.mainMenuButton} id={"excelFileId"} onClick={handleDialogOpen}></SettingsButton> */}
+                            <SettingsButton className={classes.mainMenuButton} onClick={() => setSettingsPopup(true)}></SettingsButton>
+                                <div className={settingsPopup ? (classes.headerPopup + ' settings_popup') : (classes.headerPopup + ' settings_popupClose')}>
+                                    <div className={classes.popHeader}>
+                                        <ButtonClosePop onClick={() => setSettingsPopup(false)}></ButtonClosePop>
+                                    </div>
+                                    <div className={classes.headerPopList}>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => 
+                                            handleDialogOpen()
+                                        }>안전보건관리체계의 구축 및 이행 항목 등록/업데이트<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => 
+                                        { 
+                                            setFileUploadPopup(true) 
+                                            setSettingsPopup(false) 
+                                        }
+                                        }>안전보건관리체계의 구축 및 이행 서류 양식 등록<img src={arrowDown} alt="arrow down" /></Link>
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => 
+                                            handelNotifiPopup("List")
+                                        }>가입고객 통합 공지센터​<img src={arrowDown} alt="arrow down" /></Link>
+                                    </div>
+                                </div>
+                                {/* 세팅 팝업 End */}
+                                
+                                {/* 파일 업로드 Start*/}
+                                    <div className={fileUploadPopup ? (classes.headerPopup + ' fileupload_popup') : (classes.headerPopup + ' fileupload_popupClose')}>
+                                        <div className={classes.popHeader}>
+                                            <div>안전보건관리체계의 구축 및 이행 서류 양식 등록</div>
+                                            <ButtonClosePop onClick={() => setFileUploadPopup(false)}></ButtonClosePop>
+                                        </div>
+                                        <Grid className={classes.pageContent} item container rowSpacing={0} columnSpacing={1}>
+                                            <Grid item container xs={4.5} >
+                                                <Grid item xs={12}>
+                                                    <div className={classes.contentList}>
+                                                        <div className={classes.listTitle}>안전보건관리체계의 구축 및 이행</div>
+                                                        <ul className={classes.menuList + ' parentList'}>
+                                                            <li>
+                                                                <ul className={classes.menuList + ' nestedList'}>
+                                                                {essentialRates && Object.entries(essentialRates).length > 0 && Object.keys(essentialRates)?.map(function (property) {
+                                                                    if (property.includes("rate")) {
+                                                                        return (
+                                                                            <><li>
+                                                                        <Link className={(clickedEssentialRateForClass == property ? classes.listLinkClicked : classes.listLink)} onClick={() => {
+                                                                                    setClickedEssentialRateForClass(property)
+                                                                                    setClickedEssentialRate(!!essentialRates[property].groupId && essentialRates[property].groupId)
+                                                                                }} to={"#none"} underline="none">{!!essentialRates[property].title && essentialRates[property].title}</Link>
+                                                                    </li></>
+                                                                        )
+                                                                    }
+                                                                })}
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid item xs={3.8}>
+                                                <Grid item xs={12}>
+                                                    <div className={classes.contentList}>
+                                                        <div className={classes.listTitle}>의무조치별 상세 점검 항목</div>
+                                                        <ul className={classes.menuList + ' secondList'}>
+                                                        {dutyDetailList?.map((element) => {
+                                                        return (
+                                                            <li>
+                                                                <Link className={clickedDuty !== element.articleNo ? classes.listLink : classes.listLinkClicked} to={"#none"} underline="none" onClick={() => setClickedDuty(element.articleNo)}>{element.detailedItems}</Link>
+                                                            </li>
+                                                            )
+                                                        })}
+                                                        </ul>
+                                                    </div>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid item container xs={3.7}>
+                                                <Grid item xs={12}>
+                                                    <div className={classes.contentList}>
+                                                        <div className={classes.listTitle}>점검서류 등 목록</div>
+                                                        <div className={classes.contentList + ' moreContent'}>
+                                                            <div>
+                                                                <ul className={classes.menuList}>
+                                                                    <li><Link className={classes.listLinkClicked} to={"#none"} underline="none">test1</Link></li>
+                                                                    <li><Link className={classes.listLink} to={"#none"} underline="none">test2</Link></li>
+                                                                    <li><Link className={classes.listLink} to={"#none"} underline="none">test3</Link></li>
+                                                                </ul>
+                                                            </div>
+                                                            <div>
+                                                                <ul className={classes.menuList + ' buttonList'}>
+                                                                    <li><div><FileButtonNone id="inspectionFile"></FileButtonNone></div></li>
+                                                                    <li><div><FileButtonExis id="inspectionFile"></FileButtonExis></div></li>
+                                                                    <li><div><FileButtonExis id="inspectionFile"></FileButtonExis></div></li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid item className={classes.buttonCenter} container xs={12}>
+                                                <WhiteButton className={'button-cancelation'} onClick={() => setFileUploadPopup(false)}>닫기</WhiteButton>
+                                            </Grid>
+                                        </Grid>                                        
+                
+                                    </div>
+                                {/* 파일 업로드 End */}
+
+                                {/* Admin Center Start */}
+                                    <div className={adminCenterPopup ? (classes.headerPopup + ' admincenter_popup') : (classes.headerPopup + ' admincenter_popupClose')}>
+                                        <div className={classes.popHeader}>
+                                            <ButtonClosePop onClick={() => setAdminCenterPopup(false) }></ButtonClosePop>
+                                        </ div>
+                                        {
+                                            notifiCenterPage === 'List' ?
+                                                <NotifiCenterList notifiCenterPage="List" onDoubleClickView={handelSetNoticeView} onCallback={handelNotifiPopup}></NotifiCenterList>
+                                            :
+                                            notifiCenterPage === 'Registration' ?
+                                                <NotifiCenterRegistration notifiCenterPage="Registration" onCallback={handelNotifiPopup}></NotifiCenterRegistration>
+                                            :
+                                            notifiCenterPage === 'View' ?
+                                                <NotifiCenterView notifiCenterPage="View" nId={nId} onDoubleClickUpdate={handelSetNoticeUpdate} onCallback={handelNotifiPopup}></NotifiCenterView>
+                                            :
+                                            notifiCenterPage === 'Update' ?
+                                                <NotifiCenterUpdate  notifiCenterPage="Update" nId={nId} onCallback={handelNotifiPopup}></NotifiCenterUpdate>
+                                            : `${notifiCenterPage}`
+                                        }
+                                    </div>
+                                {/* Admin Center End */}
+                            <AdminButton className={classes.mainMenuButton}></AdminButton> 
                             <div className={classes.userInformation}>
                                 <div>{loginInfo?.loginId} / <span>{loginInfo?.roleName}</span></div>
                             </div>
@@ -919,6 +1362,7 @@ const DefaultLight = ({ children }) => {
                     title="알림"
                     onConfirm={() => setOkPopupShow(false) } />
             </Overlay>
+            {loading && <Loading/>}
             {/* <BackButton onClick={() => handleRedirect()}></BackButton> */}
             <div className={classes.pageOverlay}></div>
             <div className={classes.sectionWrap}>

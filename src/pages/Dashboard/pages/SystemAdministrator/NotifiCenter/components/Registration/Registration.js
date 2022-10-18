@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
@@ -13,24 +13,26 @@ import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
 
 import { makeStyles } from '@mui/styles';
-import { DefaultLayout } from '../../../../../../../../layouts/Default';
-import radioIcon from '../../../../../../../../assets/images/ic_radio.png';
-import radioIconOn from '../../../../../../../../assets/images/ic_radio_on.png';
-import deleteButton from '../../../../../../../../assets/images/btn_del.png';
 
-import { useNoticesUpdateMutation, useNoticesViewMutation } from '../../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
+import radioIcon from '../../../../../../../assets/images/ic_radio.png';
+import radioIconOn from '../../../../../../../assets/images/ic_radio_on.png';
+import deleteButton from '../../../../../../../assets/images/btn_del.png';
 
-import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
-import { OnlyUploadDialog, UploadDialog } from '../../../../../../../../dialogs/Upload';
-import { Overlay } from '../../../../../../../../components/Overlay';
-import Okay from '../../../../../../../../components/MessageBox/Okay';
+import { useNoticesInsertMutation } from '../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
+import { useFileUploadMutation } from '../../../../../../../hooks/api/FileManagement/FIleManagement';
+import { DownloadDialog, OnlyUploadDialog, UploadDialog } from '../../../../../../../dialogs/Upload';
+import { Overlay } from '../../../../../../../components/Overlay';
+import Okay from '../../../../../../../components/MessageBox/Okay';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
-
+        padding: '15px'
+    },
+    listTitle: {
+        height: '33px',
+        marginBottom: '20px !important',
+        color: '#111',
     },
     boxTable: {
         display: 'flex',
@@ -44,9 +46,10 @@ const useStyles = makeStyles(() => ({
     boxRow: {
         display: 'flex',
         width: '100%',
+        color: '#333333',
         minHeight: '60px',
         '&:nth-last-of-type(2)': {
-            height: '460px',
+            height: '240px',
             borderBottom: 'none',
             '& >span': {
                 width: '100%'
@@ -224,7 +227,7 @@ const WhiteButton = styled(ButtonUnstyled)`
     border-radius: 5px;
     border: 2px solid #018de7;
     background: #fff;
-    color: inherit;
+    color: #018de7;
     cursor: pointer;
     transition: background.2s;
     &:hover {
@@ -232,31 +235,21 @@ const WhiteButton = styled(ButtonUnstyled)`
 }
 `;
 
-const Update = () => {
+const Registration = (props) => {
     const classes = useStyles();
-    const { updateid } = useParams()
-    const [noticesUpdate] = useNoticesUpdateMutation()
-    const [noticesView] = useNoticesViewMutation()
+    const [noticesInsert] = useNoticesInsertMutation()
+    const [title, setTitle] = useState("")
+    const [important, setImportant] = useState("")
+    const [content, setContent] = useState("")
     const [openDialog, setOpenDialog] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null)
-    const [notice, setNotice] = useState({
-        "attachId": 0,
-        "companyId": 1,
-        "content": "",
-        "importCd": "",
-        "insertId": 0,
-        "noticeId": 0,
-        "title": "",
-        "updateId": 0
-    })
+    const [fileUpload] = useFileUploadMutation()
     const [dialogId, setDialogId] = useState("")
-    const [fileName, setFileName] = useState({
+    const [notice, setNotice] = useState({})
+    const [filePath, setFilePath] = useState({
         "attachId": ""
     })
-
-    const HOT = "001"
-    const NOT_HOT = "002"
-
+    const [selectedFileName, setSelectedFileName] = useState("")
     const labelObject = {
         upperLabel: "첨부파일 등록",
         middleLabel: "등록할 파일을 업로드 합니다.",
@@ -265,23 +258,13 @@ const Update = () => {
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
-    const [selectedFileName, setSelectedFileName] = useState("")
-
-    const [fileUpload] = useFileUploadMutation()
-    const [getFileInfo] = useGetFileInfoMutation()
-
-
-    const navigate = useNavigate()
-    const handleRedirect = () => {
-        navigate("/dashboard/director/notifications/list")
+    const handleDialogOpen = (event) => {
+        setOpenDialog(true);
+        setDialogId(event.target.id);
     }
 
-    const handleFetchView = async () => {
-        const response = await noticesView(updateid)
-        //console.log(response)
-        setNotice(response.data.RET_DATA)
-        let fileInfo = await getFileInfo({ atchFileId: parseInt(response?.data?.RET_DATA["attachId"]), fileSn: 1 })
-        setFileName({ ...fileName, "attachId": fileInfo.data.RET_DATA.originalFileName })
+    const handleDialogClose = () => {
+        setOpenDialog(false)
     }
 
     const handleDialogFileUpload = async () => {
@@ -298,8 +281,8 @@ const Update = () => {
                 setOkayPopupShow(true);
                 handleDialogClose();
                 const fileId = response.data.RET_DATA[0].atchFileId
-                setNotice({ ...notice, "attachId": parseInt(fileId) })
-                setFileName({ ...fileName, "attachId": response.data.RET_DATA[0].originalFileName })
+                setNotice({ ...notice, [dialogId]: fileId })
+                setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
             } else if(response.data.RET_CODE === '0433'){
                 setOkayPopupMessage("파일확장자 오류");
                 setOkayPopupShow(true);
@@ -308,23 +291,8 @@ const Update = () => {
                 setOkayPopupShow(true);
             }
         setSelectedFileName("");
+
         }
-    }
-
-    async function handleDialogFileDownload() {
-        const fileId = notice["attachId"]
-        if (fileId) {
-            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
-        }
-    }
-
-    const handleDialogClose = () => {
-        setOpenDialog(false);
-    }
-
-    const handleDialogOpen = (event) => {
-        setOpenDialog(true);
-        setDialogId(event.target.id);
     }
 
     const handleDialogInputChange = (event) => {
@@ -333,33 +301,40 @@ const Update = () => {
         setSelectedFileName(file.name);
     }
 
-    const handleUpdate = async () => {
-        if (notice.title.length <= 0) {
+
+    const navigate = useNavigate()
+    const handleRedirect = () => {
+        //navigate("/dashboard/director/notifications/list")
+        props.onCallback("List");
+    } 
+
+    const handlePost = async () => {
+        if (title.length <= 0) {
             setOkayPopupMessage("필수항목 '제목'을 입력하세요.");
             setOkayPopupShow(true);
             return false;
         }
-        if (notice.importCd.length <= 0) {
+        if (important.length <= 0) {
             setOkayPopupMessage("필수항목 '중요공지여부'를 선택하세요.");
             setOkayPopupShow(true);                    
             return false;
         }
-        if (notice.content.length <= 0) {
+        if (content.length <= 0) {
             setOkayPopupMessage("필수항목 '내용'을 입력하세요.");
             setOkayPopupShow(true);                    
             return false;
         }
-        const response = await noticesUpdate({
+        
+        const response = await noticesInsert({
             "attachId": notice.attachId,
-            "companyId": notice.companyId,
-            "content": notice.content,
-            "importCd": notice.importCd,
-            "insertId": notice.insertId,
-            "noticeId": updateid,
-            "title": notice.title,
-            "updateId": notice.updateId
-        });
-        console.log(response);
+            "companyId": 1,
+            "content": content,
+            "importCd": important || "002",
+            "insertId": 0,
+            "noticeId": 0,
+            "title": title,
+            "updateId": 0
+        })
         if (response?.data?.RET_CODE === "0000") {
             setOkayPopupMessage("등록 되었습니다.");
             setOkayPopupShow(true);
@@ -369,18 +344,13 @@ const Update = () => {
         }
     }
 
-    const handleSelect = (e) => {
-        setNotice({ ...notice, "importCd": e.target.value });
+    const handleSelect = (event) => {
+        setImportant(event.target.value);
+        //console.log(important)
     };
 
-    useEffect(() => {
-        handleFetchView()
-    }, [])
-
-    console.log(notice)
-
     return (
-        <DefaultLayout>
+        <>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
                 <Grid item xs={12} className={classes.listTitle}>
                     <Typography variant="headline2" component="div" gutterBottom>
@@ -398,8 +368,8 @@ const Update = () => {
                                 className={classes.textArea}
                                 id="outlined-basic"
                                 placeholder="제목을 입력하세요"
-                                value={notice.title}
-                                onChange={(e) => setNotice({ ...notice, "title": e.target.value })}
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
                             />
                         </div>
                     </div>
@@ -409,10 +379,10 @@ const Update = () => {
                             중요공지여부
                         </div>
                         <div className={classes.rowInfo}>
-                            <FormControl className={classes.radioSelect} onChange={handleSelect} >
-                                <RadioGroup row value={notice.importCd}>
+                            <FormControl className={classes.radioSelect} onChange={handleSelect}>
+                                <RadioGroup row >
                                     <FormControlLabel
-                                        value={HOT}
+                                        value="001"
                                         label="중요"
                                         control={
                                             <Radio
@@ -424,7 +394,7 @@ const Update = () => {
                                         }
                                     />
                                     <FormControlLabel
-                                        value={NOT_HOT}
+                                        value="002"
                                         label="일반"
                                         control={
                                             <Radio
@@ -449,10 +419,11 @@ const Update = () => {
                                 className={classes.textArea}
                                 id="outlined-multiline-static"
                                 multiline
-                                rows={14}
+                                rows={7}
                                 placeholder="내용을 입력하세요"
-                                value={notice.content}
-                                onChange={(e) => setNotice({ ...notice, "content": e.target.value })} />
+                                value={content}
+                                onChange={(e) => setContent(e.target.value)}
+                            />
                         </div>
                     </div>
                     <div className={classes.boxRow}>
@@ -466,9 +437,11 @@ const Update = () => {
                                 <TextField
                                     className={classes.textArea}
                                     id="outlined-basic"
-                                    value={fileName.attachId ?? ""}
+                                    // placeholder="개선조치 관련 내부 점검 파일_수정20220701.hwp"
+                                    value={filePath.attachId}
+                                    disabled
                                 />
-                                <UploadButton onClick={e => setOpenDialog(true)}>찾아보기</UploadButton>
+                                <UploadButton id={"attachId"} onClick={handleDialogOpen}>찾아보기</UploadButton>
                             </div>
                         </div>
                     </div>
@@ -478,11 +451,10 @@ const Update = () => {
                     표시는 필수 입력 항목입니다.
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
-                    <BlueButton className={'button-registration'} onClick={handleUpdate}>수정</BlueButton>
+                    <BlueButton className={'button-registration'} onClick={handlePost}>등록</BlueButton>
                     <WhiteButton className={'button-cancelation'} onClick={() => handleRedirect()}>취소</WhiteButton>
                 </Grid>
             </Grid>
-
             <OnlyUploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
@@ -506,9 +478,9 @@ const Update = () => {
                         }
                     }} />
             </Overlay>
-        </DefaultLayout>
+        </>
 
     );
 };
 
-export default Update;
+export default Registration;

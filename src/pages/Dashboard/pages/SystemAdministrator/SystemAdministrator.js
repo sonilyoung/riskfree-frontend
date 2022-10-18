@@ -34,7 +34,6 @@ import pagePrev from '../../../../assets/images/btn_pre.png';
 
 import Alert from '@mui/material/Alert';
 import alertIcon from '../../../../assets/images/ic_refer.png';
-import monitor from '../../../../assets/images/admin_monitor.png'
 
 // import popupClose from '../../../assets/images/btn_popClose.png';
 
@@ -52,7 +51,6 @@ import { Overlay } from '../../../../components/Overlay';
 import Okay from '../../../../components/MessageBox/Okay';
 import YesNo from '../../../../components/MessageBox/YesNo';
 import { useLoginMutation, useGetPwdInfoMutation } from '../../../../hooks/api/LoginManagement/LoginManagement';
-
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 

@@ -811,7 +811,7 @@ const MeasureToManageThePerformance = () => {
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
     const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
-    const [yesNoPopupMessage, setYesNoPopupMessage] = useState("삭제 하시겠습니까?");
+    const [yesNoPopupMessage, setYesNoPopupMessage] = useState("");
 
     const [getRelatedRaw] = useGetRelatedRawMutation();
     const [insertDutyButton] = useInsertDutyButtonMutation();           // 법령버튼 생성
@@ -945,7 +945,7 @@ const MeasureToManageThePerformance = () => {
         })
         setYesNoPopupShow(false);
         if (response?.data?.RET_CODE === "0434") {
-            setOkayPopupMessage("삭제 되었습니다.");
+            setOkayPopupMessage("관계법령을 삭제 하였습니다.");
             setOkayPopupShow(true);
             fetchRelatedRawButtonList();
         } else {
@@ -1201,7 +1201,7 @@ const MeasureToManageThePerformance = () => {
             <Overlay show={yesNoPopupShow}>
                 <YesNo
                     show={yesNoPopupShow}
-                    message={yesNoPopupMessage}
+                    message="선택한 해당 관계법령을 삭제 하시겠습니까?"
                     onConfirmYes={handleSubscribersDelete}
                     onConfirmNo={() => setYesNoPopupShow(false)}
                 />

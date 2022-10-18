@@ -13,24 +13,29 @@ import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
 
 import { makeStyles } from '@mui/styles';
-import { DefaultLayout } from '../../../../../../../../layouts/Default';
-import radioIcon from '../../../../../../../../assets/images/ic_radio.png';
-import radioIconOn from '../../../../../../../../assets/images/ic_radio_on.png';
-import deleteButton from '../../../../../../../../assets/images/btn_del.png';
 
-import { useNoticesUpdateMutation, useNoticesViewMutation } from '../../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
+import radioIcon from '../../../../../../../assets/images/ic_radio.png';
+import radioIconOn from '../../../../../../../assets/images/ic_radio_on.png';
+import deleteButton from '../../../../../../../assets/images/btn_del.png';
 
-import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
-import { OnlyUploadDialog, UploadDialog } from '../../../../../../../../dialogs/Upload';
-import { Overlay } from '../../../../../../../../components/Overlay';
-import Okay from '../../../../../../../../components/MessageBox/Okay';
+import { useNoticesUpdateMutation, useNoticesViewMutation } from '../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
+
+import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../../../hooks/api/FileManagement/FIleManagement';
+import { OnlyUploadDialog, UploadDialog } from '../../../../../../../dialogs/Upload';
+import { Overlay } from '../../../../../../../components/Overlay';
+import Okay from '../../../../../../../components/MessageBox/Okay';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
-
+        padding: '15px'
+    },
+    listTitle: {
+        height: '33px',
+        marginBottom: '20px !important',
+        color: '#111',
     },
     boxTable: {
         display: 'flex',
@@ -45,8 +50,9 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         width: '100%',
         minHeight: '60px',
+        color: '#333333',
         '&:nth-last-of-type(2)': {
-            height: '460px',
+            height: '230px',
             borderBottom: 'none',
             '& >span': {
                 width: '100%'
@@ -224,7 +230,7 @@ const WhiteButton = styled(ButtonUnstyled)`
     border-radius: 5px;
     border: 2px solid #018de7;
     background: #fff;
-    color: inherit;
+    color: #018de7;
     cursor: pointer;
     transition: background.2s;
     &:hover {
@@ -232,9 +238,10 @@ const WhiteButton = styled(ButtonUnstyled)`
 }
 `;
 
-const Update = () => {
+const Update = (props) => {
     const classes = useStyles();
-    const { updateid } = useParams()
+    //const { updateid } = useParams()
+    const [updateid, setUpdateid] = useState(props.nId)
     const [noticesUpdate] = useNoticesUpdateMutation()
     const [noticesView] = useNoticesViewMutation()
     const [openDialog, setOpenDialog] = useState(false)
@@ -273,12 +280,13 @@ const Update = () => {
 
     const navigate = useNavigate()
     const handleRedirect = () => {
-        navigate("/dashboard/director/notifications/list")
+        //navigate("/dashboard/director/notifications/list")
+        props.onCallback("View");
     }
 
     const handleFetchView = async () => {
         const response = await noticesView(updateid)
-        //console.log(response)
+        console.log(updateid)
         setNotice(response.data.RET_DATA)
         let fileInfo = await getFileInfo({ atchFileId: parseInt(response?.data?.RET_DATA["attachId"]), fileSn: 1 })
         setFileName({ ...fileName, "attachId": fileInfo.data.RET_DATA.originalFileName })
@@ -359,9 +367,9 @@ const Update = () => {
             "title": notice.title,
             "updateId": notice.updateId
         });
-        console.log(response);
+        //console.log(response);
         if (response?.data?.RET_CODE === "0000") {
-            setOkayPopupMessage("등록 되었습니다.");
+            setOkayPopupMessage("수정 되었습니다.");
             setOkayPopupShow(true);
         } else {
             setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다 ");
@@ -377,10 +385,10 @@ const Update = () => {
         handleFetchView()
     }, [])
 
-    console.log(notice)
+    //console.log(notice)
 
     return (
-        <DefaultLayout>
+        <>
             <Grid className={classes.pageWrap} container rowSpacing={0} columnSpacing={0}>
                 <Grid item xs={12} className={classes.listTitle}>
                     <Typography variant="headline2" component="div" gutterBottom>
@@ -449,7 +457,7 @@ const Update = () => {
                                 className={classes.textArea}
                                 id="outlined-multiline-static"
                                 multiline
-                                rows={14}
+                                rows={7}
                                 placeholder="내용을 입력하세요"
                                 value={notice.content}
                                 onChange={(e) => setNotice({ ...notice, "content": e.target.value })} />
@@ -506,7 +514,7 @@ const Update = () => {
                         }
                     }} />
             </Overlay>
-        </DefaultLayout>
+        </>
 
     );
 };
