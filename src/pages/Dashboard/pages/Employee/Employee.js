@@ -2120,6 +2120,8 @@ const Employee = () => {
 
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
 
+    const [ workplaceChange, setWorkplaceChange] = useState(false);
+
     const [wrongCredentialsPopup, setWrongCredentialsPopup] = useState(false);
 
     const handleChartCategoriesDisplay = (chartCategories) => {
@@ -2512,6 +2514,7 @@ const Employee = () => {
     function handleFactoryChange(props) {
         setUserInfo(props);
         dispatch(setWorkplaceId(props.userWorkplaceId));
+        setWorkplaceChange(true);
     }
 
     const fetchWeather = async () => {
@@ -2859,8 +2862,9 @@ const Employee = () => {
         fetchNoticeList();
         fetchImprovementList();
         fetchDutyDetailList();
-        setLoading(false);    
-    }, [baselineIdForSelect, baselineData, defaultPage]);
+        setWorkplaceChange(false);
+        setLoading(false);
+    }, [baselineIdForSelect, baselineData, defaultPage, workplaceChange]);
 
     useEffect(() => {
         setLoading(true);
@@ -3298,6 +3302,10 @@ const Employee = () => {
 
                                 { /* Data: 2022.10.03 author:Jimmy Edit */}
                                 {!!(workplaceList) && workplaceList?.map((workplaceItem, index) => (
+                                    userRoleCode === "001" ?
+                                    <MainNavButton key={index} className={workplaceItem.workplaceId === parseFloat(userWorkplaceId) ? "active" : ""}
+                                    onClick={() => handleFactoryChange({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}>{workplaceItem.workplaceName}</MainNavButton>
+                                    :
                                     <MainNavButton key={index} className={workplaceItem.workplaceId === parseFloat(userWorkplaceId) ? "active" : ""}>{workplaceItem.workplaceName}</MainNavButton>
                                 ))}
                             </Slider>
