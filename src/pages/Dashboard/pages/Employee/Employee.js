@@ -90,7 +90,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 
-import { setWorkplaceId, selectWorkplaceId, selectBaselineId, setBaselineId } from '../../../../slices/selections/MainSelection';
+import { setWorkplaceId, selectWorkplaceId, selectBaselineId, selectIsClose, setBaselineId, setIsClose } from '../../../../slices/selections/MainSelection';
 import { useDispatch, useSelector } from 'react-redux';
 
 import icoFile from '../../../../assets/images/ic_file.png';
@@ -1944,6 +1944,7 @@ const Employee = () => {
     const [clickedEssentialRate, setClickedEssentialRate] = useState(1)
     const [clickedEssentialRateForClass, setClickedEssentialRateForClass] = useState("rate1")
     const [clickedDuty, setClickedDuty] = useState(null)
+
     //하위목록초기화
     const [SubEventExe, setSubEventExe] = useState(null)
     const [getBaselineList] = useGetBaselineListMutation()
@@ -1996,6 +1997,8 @@ const Employee = () => {
     // const currentWorkplaceId = useSelector(selectWorkplaceId);
     const [baselineStart, setBaselineStart] = useState("")
     const currentBaselineId = useSelector(selectBaselineId);
+    const currentIsClose = useSelector(selectIsClose);
+
     const [baselineIdForSelect, setBaselineIdForSelect] = useState(currentBaselineId)
     const [latitude, setLatitude] = useState("")
     const [longitude, setLongitude] = useState("")
@@ -2160,35 +2163,31 @@ const Employee = () => {
       }
       setExpanded(newExpanded ? panel : false);
     };
-    
-    
+        
     //관리차수 마감
     const handleClose = async () => {
         //const response = await close({});
-        setYesNoPopupMessage('선택한 해당차수를 마감 하시겠습니까?');
+        //console.log(baselineData?.baselineName)
+        setYesNoPopupMessage(`선택한 "${baselineData?.baselineName}수"를 마감 하시겠습니까?`);
         setYesNoPopupShowClose(true);
     }
-    
-    
+        
     const handleInsertBaseline = async () => {
         if (baselineInfo.baselineName.length <= 0) {
             setOkayPopupMessage("'관리차수'를 입력해주세요.");
             setOkayPopupShow(true);                    
             return false;
         }
-
         if (baselineInfo.baselineStart === null || baselineInfo.baselineStart.length <= 0) {
             setOkayPopupMessage("'관리차수 시작일자'를 선택하세요.");
             setOkayPopupShow(true);                    
             return false;
         }
-
         if (baselineInfo.baselineEnd === null || baselineInfo.baselineEnd.length <= 0) {
             setOkayPopupMessage("'관리차수 종료일자'를 선택하세요.");
             setOkayPopupShow(true);                    
             return false;
         }
-
         const response = await insertBaseline(baselineInfo);
         if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
             setYesNoPopupShow(false);
@@ -2250,7 +2249,6 @@ const Employee = () => {
             setOkayPopupMessage('업데이트를 완료하였습니다.');
             setOkayPopupShow(true);
             setDefaultPage(response?.data?.RET_CODE);
-
         } else {
             setOkayPopupMessage(`${response?.data?.RET_DESC}` `${response?.data?.RET_CODE}`);
             setOkayPopupShow(true);
@@ -2258,21 +2256,18 @@ const Employee = () => {
     }    
 
     const handleUpdateUserCompany = async () => {
-
         if(companyInfo?.missionStatements.length > 16){ 
             setYesNoPopupShow(false);
             setOkayPopupMessage('경영방침은 16자 이내입니다.');
             setOkayPopupShow(true);
             return false;
         }
-        
         if(companyInfo?.shGoal.length > 16){
             setYesNoPopupShow(false);
             setOkayPopupMessage('안전보건목표는 16자 이내입니다.');
             setOkayPopupShow(true);
             return false;
         }
-        
         const response = await updateUserCompany({
             "attachFileId": employeeFiles.logoImgUpload,
             "missionStatements": companyInfo?.missionStatements,
@@ -2331,15 +2326,11 @@ const Employee = () => {
             dispatch(setBaselineId(baselineId))        
         }
 
-        //if(baselineId.length < 1) {
-            //dispatch(setBaselineId(baselineId))
-            //console.log("baselineId 체크:", baselineId===null);
-        //}
-
         const response = await getBaseline({
             "baselineId": baselineId
         })
-        setBaselineData(!!response.data.RET_DATA && response.data.RET_DATA)                
+        setBaselineData(!!response.data.RET_DATA && response.data.RET_DATA)
+        dispatch(setIsClose(response.data.RET_DATA.isClose))   
     }
 
     const fetchCompanyInfo = async () => {
@@ -2394,7 +2385,6 @@ const Employee = () => {
             return ' risk';
         } else {
             const percentageNumber = percentage && parseFloat(percentage?.split('%')[0])
-
             if (percentageNumber < 70) return ' risk';
             else if (percentageNumber >= 70 && percentageNumber <= 79) return ' warning';
             else if (percentageNumber >= 80 && percentageNumber < 90) return ' caution';
@@ -2444,7 +2434,6 @@ const Employee = () => {
 
     const handleEssentailRateMeasure = () => {
         const essentialRateMeasureScore = essentialRates?.topScore;
-
         if (essentialRateMeasureScore === 'danger') return 75;
         else if (essentialRateMeasureScore === 'warning') return 25;
         else if (essentialRateMeasureScore === 'caution') return -25;
@@ -2592,7 +2581,7 @@ const Employee = () => {
                     }
 
                     const responseSaferyFile = await updateSafetyFile({ "attachFileId": fileId, });
-                    console.log("responseSaferyFile:", responseSaferyFile);
+                    //console.log("responseSaferyFile:", responseSaferyFile);
                     setSafetyFileId(fileId);
                 } else if(response.data.RET_CODE === '0433'){
                     setOkayPopupMessage("파일확장자 오류");
@@ -2649,7 +2638,6 @@ const Employee = () => {
     }
     
     async function handleSafetyFileId() {
-        console.log('안전작업허가서')
         if ((safetyFileId === "") || (safetyFileId === undefined) || (safetyFileId === null)) {
             setWrongCredentialsPopup(true);
             setOkayPopupMessage("업로드된 파일이 없습니다");
@@ -2661,7 +2649,6 @@ const Employee = () => {
 
     async function handleDialogFileDownload() {
         const fileId = employeeFiles[dialogId]
-
         if ((inspectionFileId === "") || (inspectionFileId === undefined) || (inspectionFileId === null)) {
             setWrongCredentialsPopup(true);
             setOkayPopupMessage("업로드된 파일이 없습니다");
@@ -2671,7 +2658,6 @@ const Employee = () => {
     }
 
     const handleDialogOpen = (event, articleNo, fileId, index) => {
-
         setOpenDialog(true);
         setDialogId((event.target.id).toString());
         setArticleNoForInspection(articleNo)
@@ -2727,7 +2713,6 @@ const Employee = () => {
 
     // 점검서류 등록, 안전작업허가서 양식
     const handleDialogOpenEmployee = (event, articleNo, fileId, index) => {
-        
         setDialogId((event.target.id).toString());
         setArticleNoForInspection(articleNo)
         setInspectionFileId(fileId)
@@ -2816,9 +2801,7 @@ const Employee = () => {
             "baselineId": currentBaselineId,
             "condition": condition
         });
-
-        console.log("response?.data?.RET_DATA:", response?.data?.RET_DATA)
-
+        //console.log("response?.data?.RET_DATA:", response?.data?.RET_DATA)
         if(response?.data?.RET_DATA?.series.length>0){
             handleChartCategoriesDisplay(response?.data?.RET_DATA?.categories);
             setChartSeries(response?.data?.RET_DATA?.series);
@@ -2907,19 +2890,15 @@ const Employee = () => {
     }, [])
 
     useEffect(() => {
-
         //대표이사 메인 버튼클릭시 해당 항목으로 이동 및 선택
         if(MainKey) {
             setClickedEssentialRateForClass(`rate${MainKey}`)
             setClickedEssentialRate(MainKey)
         }
-
-
         if (window.sessionStorage.getItem('firstLoad') === null) {
             fetchNoticeHotList();
             window.sessionStorage.setItem('firstLoad', 1);
         }
-
         navigator.geolocation.getCurrentPosition(position => {
             setLatitude(position.coords.latitude)
             setLongitude(position.coords.longitude)
@@ -2928,10 +2907,8 @@ const Employee = () => {
 
     return (
         <WideLayout>
-
             <Grid className={classes.dashboardWrap} container rowSpacing={0} columnSpacing={0}>
                 <Grid className={classes.pageHeader} item xs={12}>
-
                     <Grid className={classes.mainHeader} item xs={12}>
                         <Grid className={classes.mainLogo} item xs={3}>
                             <Link to={(loginInfo?.roleCd === "001") ? "/dashboard/director" : (loginInfo?.roleCd === "002") ? "/dashboard/employee" : (loginInfo?.roleCd === "003") ? "/dashboard/employee" : "/"}>
@@ -2992,7 +2969,7 @@ const Employee = () => {
                                                     severity="error">
                                                     사이즈 83px*67px
                                                     <br />
-                                                    (   gif, jpg, png 파일허용)
+                                                    (gif, jpg, png 파일허용)
                                                 </Alert>
                                             </div>
                                         </div>
@@ -3032,7 +3009,6 @@ const Employee = () => {
                                     <div>계약기간 : {companyInfo?.contractStartDate} ~ {companyInfo?.contractEndDate}</div>
                                 </div>
                                 <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
-
                                 {/* 설정 팝업창 */}
                                 <SettingsButton className={classes.mainMenuButton} onClick={() => setSettingsPopup(true)}></SettingsButton>
                                 <div className={settingsPopup ? (classes.headerPopup + ' settings_popup') : (classes.headerPopup + ' settings_popupClose')}>
@@ -3066,10 +3042,6 @@ const Employee = () => {
                                                         inputFormat="YYYY-MM-DD"
                                                         value={baselineInfo.baselineStart}
                                                         onChange={DateChange('baselineStart')}
-                                                        // onChange={(newDate) => {
-                                                        //     const date = new Date(newDate.$d);
-                                                        //     setBaselineInfo({ ...baselineInfo, "baselineStart": moment(date).format("YYYY-MM-DD") })
-                                                        // }}
                                                         renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                     />
                                                 </LocalizationProvider>
@@ -3081,20 +3053,9 @@ const Employee = () => {
                                                         inputFormat="YYYY-MM-DD"
                                                         value={baselineInfo.baselineEnd}
                                                         onChange={DateChange('baselineEnd')}
-                                                        // onChange={(newDate) => {
-                                                        //     const date = new Date(newDate.$d);
-                                                        //     setBaselineInfo({ ...baselineInfo, "baselineEnd": moment(date).format("YYYY-MM-DD") })
-                                                        // }}
                                                         renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                     />
                                                 </LocalizationProvider>
-
-                                               {/* <div style={{width: '100%', height: '70px'}}>
-                                                    <div className={classes.headerPopFooter} >
-                                                        <PopupFootButton onClick={() => handleInsertBaseline()}>저장하기</PopupFootButton>
-                                                    </div>
-                                                </div> */}
-
                                             </AccordionDetails>
                                         </Accordion>
                                         <Accordion className={classes.popupAccord} expanded={expanded === 'panel2'} onChange={panelhandleChange('panel2')}>
@@ -3296,11 +3257,7 @@ const Employee = () => {
                         </div>
                         <div className={classes.navSlider}>
                             <Slider {...headerSlider}>
-                                {/* {/* <MainNavButton className={currentWorkplaceId === null ? "active" : ""} onClick={
-                                    () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })
-                                }>전체사업장</MainNavButton> */}
-
-                                { /* Data: 2022.10.03 author:Jimmy Edit */}
+                                { /* 사업장 */}
                                 {!!(workplaceList) && workplaceList?.map((workplaceItem, index) => (
                                     userRoleCode === "001" ?
                                     <MainNavButton key={index} className={workplaceItem.workplaceId === parseFloat(userWorkplaceId) ? "active" : ""}
@@ -3311,11 +3268,8 @@ const Employee = () => {
                             </Slider>
                         </div>
                     </Grid>
-
                 </Grid>
-
                 <div className={userRoleCode === '000' ? classes.pageOverlay : classes.pageOverlayInactive}></div>
-
                 <Grid className={classes.pageBody} item xs={10.7}>
                     <div className={showUploadPopup ? classes.uploadPopup : classes.uploadPopupClose}>
                         <ClosePopupButton2 onClick={() => setShowUploadPopup(false)}></ClosePopupButton2>
@@ -3341,9 +3295,9 @@ const Employee = () => {
                     </div>
                     <div className={evaluationPopup ? classes.uploadedPopup : classes.uploadedPopupClose}>
                         <FormControl className={classes.searchRadio} onChange={(e) => {
-                                                                                        setEvaluation(e.target.value)
-                                                                                        fetchEssentialRates()
-                                                                                      }}>
+                            setEvaluation(e.target.value)
+                            fetchEssentialRates()
+                            }}>
                             <RadioGroup row value={evaluation ?? ""}>
                                 <FormControlLabel
                                     value="10"
@@ -3398,7 +3352,6 @@ const Employee = () => {
                         <div><PageSideButton onClick={() => fetchBaseline(baselineIdForSelect)}>이동</PageSideButton></div>
                     </div>
                 </Grid>
-
                 <Grid className={classes.pageContent} item container rowSpacing={0} columnSpacing={1} xs={12}>
                     <Grid item xs={2.7}>
                         <div className={classes.contentList}>
@@ -3469,26 +3422,42 @@ const Employee = () => {
                                     <div className={classes.listTitle}><strong>{!!(inspectionsDocs) && inspectionsDocs[0]?.fileCount}</strong>건 /{!!(inspectionsDocs) && !!(inspectionsDocs.length) && inspectionsDocs[0].totalCount}건</div>
                                     <ul className={classes.menuList + ' buttonList'}>
                                         {inspectionsDocs?.map((inspection, index) => (<><li>
-                                            <div>{(inspection.fileId === null || inspection.fileId === "null" || inspection.fileId === "") ? 
-                                                    <FileButtonNone id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone>
-                                                    : 
-                                                    <FileButtonExis id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>
-                                                }
-                                                {(loginInfo.roleCd === "003") ?
-                                                    inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}>상</span>) 
-                                                        || (inspection.evaluation === "7" && <span className={'orange'}>중</span>) 
-                                                            || (inspection.evaluation === "5" && <span className={'red'}>하</span>)
-                                                            || (inspection.evaluation === "" && <span>평가</span>))
-                                                    :
-                                                    inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}
-                                                        onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>상</span>) 
-                                                        || (inspection.evaluation === "7" && <span className={'orange'}
-                                                            onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>중</span>) 
-                                                            || (inspection.evaluation === "5" && <span className={'red'}
-                                                                onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>하</span>) 
-                                                                || ((inspection.evaluation === null || inspection.evaluation === "0" || inspection.evaluation === "null" || inspection.evaluation === "") 
-                                                                    && <span className={'empty'}
-                                                                    onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>평가</span>))
+                                            <div>
+                                                {
+                                                    currentIsClose === "1" ?
+                                                        (inspection.fileId === null || inspection.fileId === "null" || inspection.fileId === "") ? 
+                                                            <FileButtonNone></FileButtonNone>
+                                                        : 
+                                                            <>
+                                                            <FileButtonExis></FileButtonExis>
+                                                        {((inspection.evaluation === "10" && <span className={'green'}>상</span>) 
+                                                            || (inspection.evaluation === "7" && <span className={'orange'}>중</span>) 
+                                                                || (inspection.evaluation === "5" && <span className={'red'}>하</span>)
+                                                                    || (inspection.evaluation === "" && <span>평가</span>))}
+                                                            </>
+                                                :                                            
+                                                    (inspection.fileId === null || inspection.fileId === "null" || inspection.fileId === "") ? 
+                                                        <FileButtonNone id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone>
+                                                        : 
+                                                        <>
+                                                        <FileButtonExis id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>
+                                                        {(loginInfo.roleCd === "003") ?
+                                                            inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}>상</span>) 
+                                                                || (inspection.evaluation === "7" && <span className={'orange'}>중</span>) 
+                                                                    || (inspection.evaluation === "5" && <span className={'red'}>하</span>)
+                                                                    || (inspection.evaluation === "" && <span>평가</span>))
+                                                            :
+                                                            inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}
+                                                                onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>상</span>) 
+                                                                || (inspection.evaluation === "7" && <span className={'orange'}
+                                                                    onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>중</span>) 
+                                                                    || (inspection.evaluation === "5" && <span className={'red'}
+                                                                        onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>하</span>) 
+                                                                        || ((inspection.evaluation === null || inspection.evaluation === "0" || inspection.evaluation === "null" || inspection.evaluation === "") 
+                                                                            && <span className={'empty'}
+                                                                            onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>평가</span>))
+                                                        }
+                                                        </>
                                                 }
                                             </div>
                                         </li>
@@ -3523,6 +3492,14 @@ const Employee = () => {
                                     <div className={classes.listTitle}>Check</div>
                                     <ul className={classes.menuList + ' checkList'}>
                                         {inspectionsDocs?.map((checkBtn, index) => (
+                                            currentIsClose === "1" ?
+                                            <>
+                                                <li>{((checkBtn.managerChecked === "0" || checkBtn.managerChecked == null || checkBtn.managerChecked === "null" || checkBtn.managerChecked === "") &&
+                                                    (<Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>)) || ((checkBtn.managerChecked === "1") &&
+                                                        (<Link className={classes.listLink + ' check-blue'} to={"#none"} underline="none" ></Link>))}
+                                                </li>
+                                            </>
+                                            :
                                             <>
                                                 <li>{((checkBtn.managerChecked === "0" || checkBtn.managerChecked == null || checkBtn.managerChecked === "null" || checkBtn.managerChecked === "") &&
                                                     (<Link className={classes.listLink + ' check'} to={"#none"} underline="none" onClick={() => handleManagerChecked(checkBtn.managerChecked, index, checkBtn.articleNo)}></Link>)) || ((checkBtn.managerChecked === "1") &&
@@ -3543,18 +3520,11 @@ const Employee = () => {
                                             {guideline.guideline}
                                         </li>
                                     ))}
-                                    {/* <li>
-                                        <div className={'bulletList'}>이행 참고사항</div>
-                                        <ol>
-                                            <li>① 사업장 안전보건 확보를 위한 충분한 인력이 있는지 확인하고, 부족한 경우 추가 확보</li>
-                                        </ol>
-                                    </li> */}
                                 </ul>
                             </div>
                         </Grid>
                     </Grid>
                 </Grid>
-
                 <Grid className={classes.lowerDashboard} container item xs={12}>
                     <div className={classes.dashTrigger} >
                         <DashTrigButton onMouseOver={() => setHoverContainer(!hoverContainer)}></DashTrigButton>
@@ -3566,9 +3536,7 @@ const Employee = () => {
                                 <div className={classes.gageState}></div>
                             </div>
                         </Grid>
-
                         <Grid className={classes.boxWrap} item xs={10}>
-
                             <Grid container item xs={12}>
                                 <Grid className={classes.footBox + ' boxUp multiBox'} item xs={3.7}>
                                     <div className={classes.tiltBox}>
@@ -3688,7 +3656,6 @@ const Employee = () => {
                                     </div>
                                 </Grid>
                             </Grid>
-
                             <Grid container item xs={12} sx={{ marginBottom: '3px' }}>
                                 <Grid className={classes.footBox + ' boxDown'} item xs={8.75}>
                                     <Slider className={classes.footSlider} {...footerSlider}>
@@ -3707,10 +3674,6 @@ const Employee = () => {
                                         <div>DAY</div>
                                         <div className={classes.dayNums}>
                                             {!!dayInfo && dayInfo.day}
-                                            {/* <div><img src={numThree} alt="number three" /></div>
-                                            <div><img src={numTwo} alt="number two" /></div>
-                                            <div><img src={numFour} alt="number four" /></div>
-                                            <div><img src={numFive} alt="number five" /></div> */}
                                         </div>
                                     </div>
                                     <div className={classes.footTime + ' dateBox'}>
@@ -3725,11 +3688,8 @@ const Employee = () => {
                                     </div>
                                 </Grid>
                             </Grid>
-
                         </Grid>
-
                     </Grid>
-
                 </Grid>
                 {/* NOTIFICATION POPUP */}
                 {!!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
@@ -3789,8 +3749,7 @@ const Employee = () => {
                     title={okayPopupTitle}
                     onConfirm={() => setOkayPopupShow(false) } />
             </Overlay>
-            
-            
+                        
             {/* 관리차수 마감 처리 */}
             <Overlay show={yesNoPopupShowClose}>
                 <YesNo
@@ -3800,7 +3759,6 @@ const Employee = () => {
                     onConfirmNo={() => setYesNoPopupShowClose(false)}
                 />
             </Overlay>
-
             <Overlay show={yesNoPopupShow}>
                 <YesNo
                     show={yesNoPopupShow}
@@ -3811,9 +3769,7 @@ const Employee = () => {
                 />
             </Overlay>
             {loading && <Loading/>}
-        </WideLayout >
-        
+        </WideLayout >        
     );
 };
-
 export default Employee;

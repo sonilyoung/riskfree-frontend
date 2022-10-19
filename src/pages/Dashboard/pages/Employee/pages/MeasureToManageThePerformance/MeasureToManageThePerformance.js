@@ -33,7 +33,7 @@ import { useGetRelatedRawButtonMutation, useGetRelatedRawMutation, useInsertDuty
 import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../../hooks/api/FileManagement/FIleManagement';
 import { useGetLoginInfoMutation } from "../../../../../../hooks/api/MainManagement/MainManagement";
 
-import { selectBaselineId } from '../../../../../../slices/selections/MainSelection';
+import { selectBaselineId, selectIsClose } from '../../../../../../slices/selections/MainSelection';
 import { useSelector } from 'react-redux';
 import { UploadDialog, UploadEmployeeDialog } from '../../../../../../dialogs/Upload';
 import { useRelatedRawExcelUploadMutation } from '../../../../../../hooks/api/ExcelController/ExcelController';
@@ -823,6 +823,7 @@ const MeasureToManageThePerformance = () => {
     const [relatedRawExcelUpload] = useRelatedRawExcelUploadMutation()
 
     const currentBaseline = useSelector(selectBaselineId);
+    const currentIsClose = useSelector(selectIsClose);
 
     const handleDialogFileUpload = async () => {
         setLoading(true);
@@ -987,15 +988,26 @@ const MeasureToManageThePerformance = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.headerButtons}>
                     {!!relatedRawButtonList && relatedRawButtonList.length > 0 && relatedRawButtonList.map(relatedRawButtonItem =>
-                    
-                    /* === Data: 2022.10.03 author:Jimmy add === */
-                    (<Link to="#" className={lawId === relatedRawButtonItem.lawButtonId ? classes.buttonLinkactive : classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)} onDoubleClick={() => handleDialogOpen(relatedRawButtonItem.lawButtonId, relatedRawButtonItem.attachId)}>
-                    {/* ========================================= */}
+                     currentIsClose === "1" ? 
+                        (<Link to="#" className={lawId === relatedRawButtonItem.lawButtonId ? classes.buttonLinkactive : classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)}>
                         <span>{relatedRawButtonItem?.lawName}</span>
-                    </Link>)
+                        </Link>)
+                    :
+                        (<Link to="#" className={lawId === relatedRawButtonItem.lawButtonId ? classes.buttonLinkactive : classes.buttonLink} onClick={() => fetchRelatedRawList(relatedRawButtonItem.lawButtonId)} onDoubleClick={() => handleDialogOpen(relatedRawButtonItem.lawButtonId, relatedRawButtonItem.attachId)}>
+                        <span>{relatedRawButtonItem?.lawName}</span>
+                        </Link>)
                     )}
-                    <button className={classes.buttonPlus} onClick={() => setPopupPlusButton(true)}>+</button>
-                    <button className={classes.buttonPlus} onClick={() => setYesNoPopupShow(true)}>-</button>
+                    { currentIsClose === "1" ? 
+                        <>
+                        <button className={classes.buttonPlus}>+</button>
+                        <button className={classes.buttonPlus}>-</button>
+                        </>
+                    :
+                        <>
+                        <button className={classes.buttonPlus} onClick={() => setPopupPlusButton(true)}>+</button>
+                        <button className={classes.buttonPlus} onClick={() => setYesNoPopupShow(true)}>-</button>
+                        </>
+                    }
                 </Grid>
                 <Grid className={classes.pageBody} item xs={10.7} >
                     {/* <div className={popupButton ? classes.uploadPopup : classes.uploadPopupHide} >

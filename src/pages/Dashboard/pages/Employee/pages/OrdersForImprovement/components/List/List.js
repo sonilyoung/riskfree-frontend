@@ -46,7 +46,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 import moment from "moment"
 import { useSelector } from "react-redux";
-import { selectBaselineId, selectWorkplaceId } from "../../../../../../../../slices/selections/MainSelection";
+import { selectBaselineId, selectWorkplaceId, selectIsClose } from "../../../../../../../../slices/selections/MainSelection";
 import useUserInitialWorkplaceId from "../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId";
 
 const useStyles = makeStyles(() => ({
@@ -372,6 +372,10 @@ const List = () => {
     const classes = useStyles();
 
     const currentBaselineId = useSelector(selectBaselineId);
+    const currentIsClose = useSelector(selectIsClose);
+
+    console.log(currentBaselineId)
+    console.log(currentIsClose)
 
     const getInitialWorkplaceId = useUserInitialWorkplaceId();
     const [lawSelect] = useLawSelectMutation();
@@ -762,12 +766,11 @@ const List = () => {
                         </div>
                         <div className={classes.searchButtons}>
                             <SearchButton onClick={fetchLawList}>조회</SearchButton>
-                            <RegisterButton
-                                sx={{ marginLeft: "10px" }}
-                                onClick={() => handleRedirect()}
-                            >
-                                등록
-                            </RegisterButton>
+                            {currentIsClose === "1" ?
+                                <RegisterButton sx={{ marginLeft: "10px" }}>등록</RegisterButton>
+                            :
+                                <RegisterButton sx={{ marginLeft: "10px" }} onClick={() => handleRedirect()}>등록</RegisterButton>
+                            }
                         </div>
                     </div>
                 </Grid>

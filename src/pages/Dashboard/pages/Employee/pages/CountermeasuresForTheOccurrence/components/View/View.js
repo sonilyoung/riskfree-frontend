@@ -28,6 +28,9 @@ import noImg from '../../../../../../../../assets/images/ic_no_image.png';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
+import { selectBaselineId, selectIsClose, selectWorkplaceId } from '../../../../../../../../slices/selections/MainSelection';
+import { useSelector } from 'react-redux';
+
 import { useAccidentViewMutation, useAccidentDeleteMutation } from '../../../../../../../../hooks/api/AccidentManagement/AccidentManagement';
 import { useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 import { Overlay } from '../../../../../../../../components/Overlay';
@@ -388,6 +391,8 @@ const View = () => {
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
+    const currentIsClose = useSelector(selectIsClose);
+
     const handleRedirect = () => {
         navigate("/dashboard/employee/accident-countermeasures-implementation/list")
     }
@@ -625,9 +630,18 @@ const View = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
-                    <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/employee/accident-countermeasures-implementation/update/${accident.accidentId}`)}>수정</BlueButton>
-                    <WhiteButton className={'button-delete'} onClick={() => setYesNoPopupShow(true)}>삭제</WhiteButton>
-                    <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
+                    {currentIsClose === "1" ?
+                        <>
+                        <BlueButton className={'button-correction'}>수정</BlueButton>
+                        <WhiteButton className={'button-delete'}>삭제</WhiteButton>
+                        </>
+                    :
+                        <>
+                        <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/employee/accident-countermeasures-implementation/update/${accident.accidentId}`)}>수정</BlueButton>
+                        <WhiteButton className={'button-delete'} onClick={() => setYesNoPopupShow(true)}>삭제</WhiteButton>
+                        </>
+                    }
+                        <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
             </Grid>
             <Overlay show={yesNoPopupShow}>

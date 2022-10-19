@@ -42,11 +42,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 import moment from "moment"
-import { selectBaselineId, selectWorkplaceId } from '../../../../../../../../slices/selections/MainSelection';
+import { selectBaselineId, selectIsClose, selectWorkplaceId } from '../../../../../../../../slices/selections/MainSelection';
 import { useSelector } from 'react-redux';
 import useUserInitialWorkplaceId from '../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
-
-
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -379,6 +377,7 @@ const List = () => {
     const [locale] = React.useState('ko');
 
     const currentBaseline = useSelector(selectBaselineId);
+    const currentIsClose = useSelector(selectIsClose);
 
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [isCheck, setIsCheck] = useState([]);
@@ -815,7 +814,12 @@ const List = () => {
                         </div>
                         <div className={classes.searchButtons}>
                             <SearchButton onClick={fetchAccidentsList}>조회</SearchButton>
-                            <RegisterButton sx={{ marginLeft: '10px' }} onClick={() => handleRedirect()}>등록</RegisterButton>
+                            {currentIsClose === "1" ?
+                                <RegisterButton sx={{ marginLeft: '10px' }}>등록</RegisterButton>
+                            :
+                                <RegisterButton sx={{ marginLeft: '10px' }} onClick={() => handleRedirect()}>등록</RegisterButton>
+                            }
+
                         </div>
                     </div>
                 </Grid>

@@ -47,7 +47,7 @@ import { OnlyUploadDialog, UploadDialog } from '../../../../../../dialogs/Upload
 import { Overlay } from '../../../../../../components/Overlay';
 import { useSafeWorkExcelUploadMutation } from '../../../../../../hooks/api/ExcelController/ExcelController';
 import { useSelector, useDispatch } from 'react-redux';
-import {selectBaselineId} from '../../../../../../slices/selections/MainSelection';
+import {selectBaselineId, selectIsClose} from '../../../../../../slices/selections/MainSelection';
 import Okay from '../../../../../../components/MessageBox/Okay';
 //import { useFileDownMutation } from '../../../../../../hooks/api/FileManagement/FIleManagement';
 
@@ -774,6 +774,7 @@ const WorkHistoryList = () => {
     const [safeWorkExcelUpload] = useSafeWorkExcelUploadMutation()
     const [deleteSafeWork] = useDeleteSafeWorkMutation()
     const currentBaselineId = useSelector(selectBaselineId)
+    const currentIsClose =  useSelector(selectIsClose)
 
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
@@ -1002,7 +1003,11 @@ const WorkHistoryList = () => {
                         </div>
                         <div className={classes.searchButtons}>
                             <SearchButton onClick={() => fetchSafeWorkList()}>조회</SearchButton>
-                            <RegisterButton sx={{ marginLeft: '10px' }} id={"excelFileUpload"} onClick={(e) => handleDialogOpenOnly(e.target.id)}>등록</RegisterButton>
+                            {currentIsClose === "1" ?
+                                <RegisterButton sx={{ marginLeft: '10px' }}>등록</RegisterButton>
+                            :
+                                <RegisterButton sx={{ marginLeft: '10px' }} id={"excelFileUpload"} onClick={(e) => handleDialogOpenOnly(e.target.id)}>등록</RegisterButton>
+                            }
                         </div>
                     </div>
                 </Grid>

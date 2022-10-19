@@ -1,4 +1,5 @@
 const DEFAULT_BASELINE_ID = 'defaultBaselineId';
+const DEFAULT_ISCLOSE = 'defaultIsClose';
 
 function useLocalStorage(props) {
 
@@ -14,11 +15,20 @@ function useLocalStorage(props) {
         setItem(DEFAULT_BASELINE_ID, defaultBaselineId);
     }
 
+    const setDefaultIsClose = (defaultIsClose) => {
+        setItem(DEFAULT_ISCLOSE, defaultIsClose);
+    }
+
     const getDefaultBaselineId = () => {
         return getItem(DEFAULT_BASELINE_ID);
     }
 
-    return { setItem, getItem, setDefaultBaselineId, getDefaultBaselineId };
+    const getDefaultIsClose = () => {
+        return getItem(DEFAULT_ISCLOSE);
+    }
+
+
+    return { setItem, getItem, setDefaultBaselineId, getDefaultBaselineId, setDefaultIsClose, getDefaultIsClose };
 }
 
 export default useLocalStorage;

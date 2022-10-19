@@ -34,7 +34,7 @@ import pagePrev from '../../../../../../../../assets/images/btn_pre.png';
 import { useGetWorkplaceListMutation, useGetLoginInfoMutation } from "../../../../../../../../hooks/api/MainManagement/MainManagement";
 import { useImprovementSelectMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement';
 
-import { selectBaselineId, selectWorkplaceId, setBaselineId } from '../../../../../../../../slices/selections/MainSelection';
+import { selectBaselineId, selectIsClose, selectWorkplaceId, setBaselineId, setIsClose } from '../../../../../../../../slices/selections/MainSelection';
 import moment from "moment";
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -354,6 +354,7 @@ function List() {
     }
 
     const currentBaseline = useSelector(selectBaselineId);
+    const currentIsClose = useSelector(selectIsClose);
 
     const handleFetchList = async () => {
         const response = await improvementSelect(
@@ -389,7 +390,7 @@ function List() {
         const response = await getLoginInfo()
         setLoginInfos(response.data.RET_DATA)
     }
-
+    
     useEffect(() => {
         fetchLoginInfo();
         handleComapanyWorkplace()
@@ -547,7 +548,11 @@ function List() {
                     </div>
                     <div className={classes.searchButtons}>
                         <SearchButton onClick={handleFetchList}>조회</SearchButton>
-                        <RegisterButton sx={{ marginLeft: '10px' }} onClick={() => handleRedirect()}>등록</RegisterButton>
+                        {currentIsClose === "1" ?
+                            <RegisterButton sx={{ marginLeft: '10px' }}>등록</RegisterButton>
+                        :
+                            <RegisterButton sx={{ marginLeft: '10px' }} onClick={() => handleRedirect()}>등록</RegisterButton>
+                        }
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.dataTable}>
@@ -590,5 +595,4 @@ function List() {
 
     )
 }
-
-export default List
+export default List;

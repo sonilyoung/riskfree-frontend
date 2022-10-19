@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
-import { selectBaselineId, selectWorkplaceId, setBaselineId } from '../../slices/selections/MainSelection';
+import { selectBaselineId, selectWorkplaceId, setBaselineId, setIsClose } from '../../slices/selections/MainSelection';
 import { useLoginMutation } from '../../hooks/api/LoginManagement/LoginManagement';
 import { useLocalStorage } from '../../hooks/misc/LocalStorage';
 import { useGetBaselineMutation } from '../../hooks/api/MainManagement/MainManagement';
@@ -117,8 +117,11 @@ const Login = () => {
                 const defaultBaselineResponse = await getBaseline({});
                 //console.log(defaultBaselineResponse);
                 const defaultBaselineId = defaultBaselineResponse.data?.RET_DATA?.baselineId;
+                const defaultIsClose = defaultBaselineResponse.data?.RET_DATA?.isClose;
                 dispatch(setBaselineId(defaultBaselineId));
+                dispatch(setIsClose(defaultIsClose));
                 localStorage.setDefaultBaselineId(defaultBaselineId);
+                localStorage.setDefaultIsClose(defaultIsClose);
             }
             //console.log(redirectPath, userLoginCount);
 

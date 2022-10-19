@@ -19,6 +19,10 @@ import { makeStyles } from '@mui/styles';
 import radioIcon from '../../../../../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../../../../../assets/images/ic_radio_on.png';
 
+
+import { useSelector } from 'react-redux';
+import { selectBaselineId, selectIsClose, selectWorkplaceId } from '../../../../../../../../slices/selections/MainSelection';
+
 import checkIcon from '../../../../../../../../assets/images/ic_chk3.png';
 import checkIconOn from '../../../../../../../../assets/images/ic_chk3_on.png';
 import imgPrev from '../../../../../../../../assets/images/prw_photo.jpg';
@@ -363,6 +367,8 @@ const View = () => {
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
+    const currentIsClose = useSelector(selectIsClose);
+        
     const handleRedirect = () => {
         navigate(
             "/dashboard/employee/order-for-improvement-and-correction-under-related-law/list"
@@ -539,8 +545,17 @@ const View = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
+                {currentIsClose === "1" ?
+                    <>
+                    <BlueButton className={"button-correction"}>수정</BlueButton>
+                    <WhiteButton className={"button-delete"}>삭제</WhiteButton>
+                    </>
+                :
+                    <>
                     <BlueButton className={"button-correction"} onClick={() => navigate(`/dashboard/employee/order-for-improvement-and-correction-under-related-law/update/${law.lawImproveId}`)}>수정</BlueButton>
                     <WhiteButton className={"button-delete"} onClick={() => setYesNoPopupShow(true)}>삭제</WhiteButton>
+                    </>
+                }
                     <WhiteButton className={"button-list"} onClick={() => handleRedirect()} >목록</WhiteButton>
                 </Grid>
             </Grid>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from "react-router-dom"
+import { useSelector, useDispatch } from 'react-redux';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
@@ -18,7 +19,7 @@ import { styled } from '@mui/system';
 import { makeStyles } from '@mui/styles';
 import { DefaultLayout } from '../../../../../../../../layouts/Default';
 
-
+import { selectBaselineId, selectIsClose, selectWorkplaceId, setBaselineId, setIsClose } from '../../../../../../../../slices/selections/MainSelection';
 
 import radioIcon from '../../../../../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../../../../../assets/images/ic_radio_on.png';
@@ -391,6 +392,7 @@ const Registration = () => {
     //     console.log(response)
     // }
 
+    const currentIsClose = useSelector(selectIsClose);
     
     async function handleDialogFileDownload(id) {
         if (id) {
@@ -524,8 +526,17 @@ const Registration = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
+                {currentIsClose === "1" ?
+                    <>
+                    <BlueButton className={'button-correction'}>수정</BlueButton>
+                    <WhiteButton className={'button-delete'}>삭제</WhiteButton>
+                    </>
+                    :
+                    <>
                     <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/employee/improvement-measures/update/${improvement.improveId}`)}>수정</BlueButton>
                     <WhiteButton className={'button-delete'} onClick={() => setYesNoPopupShow(true)}>삭제</WhiteButton>
+                    </>
+                }
                     <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
                 </Grid>
             </Grid>
