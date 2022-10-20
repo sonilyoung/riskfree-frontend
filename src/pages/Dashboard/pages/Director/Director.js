@@ -431,22 +431,9 @@ const Director = () => {
 
     }
 
-    //실무자 메인페이지로 이동
-    // function DashboardLinkShow(MainKey) {
-    //     if(MainKey === "12") {
-    //         //navigate('/dashboard/employee/order-for-improvement-and-correction-under-related-law/list');
-    //         //window.open(`dashboard/employee/order-for-improvement-and-correction-under-related-law/list`, '_blank')
-    //     } else {
-    //         //navigate(`/dashboard/employee/${MainKey}`);
-    //         //window.open(`dashboard/employee/${MainKey}`, '_blank')
-    //     }
-    // }
-    
-
     const fetchBaselineList = async () => {
         const response = await getBaselineList({});
         setBaselineList(response.data.RET_DATA);
-        //console.log(response.data);
     }
 
     const fetchBaseline = async () => {
@@ -552,7 +539,6 @@ const Director = () => {
             "condition": condition
         });
         setReportTitle(response.data.RET_DATA);
-        //console.log(response);
     }
 
     const fetchBaseLineReportList = async () => {
@@ -561,7 +547,6 @@ const Director = () => {
             "condition": condition
         });
         setReportList(response.data.RET_DATA);
-        //console.log(response);
     }
 
     const refreshClock = () => {
@@ -644,8 +629,6 @@ const Director = () => {
         }
     }
 
-
-
     useEffect(() => {
         fetchDayInfo()
         fetchWeather()
@@ -653,7 +636,6 @@ const Director = () => {
 
     useEffect(() => {
         fetchBaseline();
-        // fetchCompanyInfo();
         fetchEssentialRateList();
         fetchImprovementLawOrderRate();
         fetchRelatedLawRate();
@@ -661,7 +643,6 @@ const Director = () => {
         fetchAccidentTotal();
         fetchSafeWorkHistoryList();
         fetchAccidentsPrevention()
-        // fetchDayInfo();
     }, [currentBaselineId, userWorkplaceId]);
 
     useEffect(() => {
@@ -690,11 +671,9 @@ const Director = () => {
     }, []);
 
     useEffect(() => {
-
         if (window.sessionStorage.getItem('firstLoad') === null) {
             fetchNoticeHotList();
             window.sessionStorage.setItem('firstLoad', 1);
-            //console.log('firstLoad');
         }
 
         navigator.geolocation.getCurrentPosition(position => {
@@ -1219,29 +1198,24 @@ const Director = () => {
                                 </div>
                             </Grid>
                         </Grid>
-
                     </Grid>
-
                 </Grid>
                 {
-                    !!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
-                        <div className={classes.notificationPopup}>
-                            <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)}></ClosePopupButton2>
-                            <div><span className={classes.slideLabelHot}>HOT</span> {noticeHotItem.title}</div>
-                            <div className={classes.popNews}>
-                                <p>
-                                    {noticeHotItem.content}
-                                </p>
-                            </div>
-                            <div>{noticeHotItem.attachId ? <img src={icoFile} alt="file icon" /> : null}{noticeHotItem.fileName}</div>
+                !!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
+                    <div className={classes.notificationPopup}>
+                        <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)}></ClosePopupButton2>
+                        <div><span className={classes.slideLabelHot}>HOT</span> {noticeHotItem.title}</div>
+                        <div className={classes.popNews}>
+                            <p>
+                                {noticeHotItem.content}
+                            </p>
                         </div>
-                    </>))
+                        <div>{noticeHotItem.attachId ? <img src={icoFile} alt="file icon" /> : null}{noticeHotItem.fileName}</div>
+                    </div>
+                </>))
                 }
-
             </Grid >
-
         </WideLayout >
     );
 };
-
 export default Director;

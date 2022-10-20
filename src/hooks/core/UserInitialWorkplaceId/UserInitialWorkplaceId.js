@@ -12,18 +12,12 @@ const useUserInitialWorkplaceId = () => {
     const currentWorkplaceId = useSelector(selectWorkplaceId);
 
     const getInitialWorkplaceId = () => {
-        switch (userRoleCd) {
-            case userRoleCodes.employee:
-                return userWorkplaceId;
-
-            case userRoleCodes.director:
-                return currentWorkplaceId;
+        switch(userRoleCd) {
+            case userRoleCodes.employee : return userWorkplaceId
+            case userRoleCodes.director : return currentWorkplaceId
         }
-
         return "";
     }
-
     return getInitialWorkplaceId;
 }
-
 export default useUserInitialWorkplaceId;

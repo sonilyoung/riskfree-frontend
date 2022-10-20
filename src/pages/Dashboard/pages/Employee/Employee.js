@@ -7,7 +7,6 @@ import Grid from '@mui/material/Grid';
 import logo from '../../../../assets/images/logo.png';
 import dashboardPattern from '../../../../assets/images/dashboard_pattern.png';
 import workplaceBackground from '../../../../assets/images/bg_workplace.png';
-import adminLogo from '../../../../assets/images/admin_logo.png';
 import userIcon from '../../../../assets/images/btn_user.png';
 import userIconHover from '../../../../assets/images/btn_user_ov.png';
 import logIcon from '../../../../assets/images/btn_log.png';
@@ -16,7 +15,6 @@ import setIcon from '../../../../assets/images/btn_set.png';
 import setIconHover from '../../../../assets/images/btn_set_ov.png';
 import adminIcon from '../../../../assets/images/btn_admin.png';
 import adminIconHover from '../../../../assets/images/btn_admin_ov.png';
-import weatherIcon from '../../../../assets/images/weather_icon.png';
 import chartIcon from '../../../../assets/images/btn_chart.png';
 import orderBackground from '../../../../assets/images/bg_body_order.png';
 import dashBtnUp from '../../../../assets/images/btn_up.png';
@@ -42,14 +40,6 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import alertIcon from '../../../../assets/images/ic_refer.png';
-
-import numOne from '../../../../assets/images/num1.png';
-import numTwo from '../../../../assets/images/num2.png';
-import numThree from '../../../../assets/images/num3.png';
-import numFour from '../../../../assets/images/num4.png';
-import numFive from '../../../../assets/images/num5.png';
-import numNine from '../../../../assets/images/num9.png';
-
 import btnNext from '../../../../assets/images/btn_next.png';
 import btnPrev from '../../../../assets/images/btn_prev.png';
 import arrowUp from '../../../../assets/images/ic_up.png';
@@ -63,7 +53,6 @@ import searchIcon from '../../../../assets/images/ic_search.png';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-// import Link from '@mui/material/Link';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
@@ -72,24 +61,19 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 import Slider from 'react-slick';
-
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-
 import radioIcon from '../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../assets/images/ic_radio_on.png';
-
 import { remove } from '../../../../services/core/User/Token';
 import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation, useGetTitleReportMutation, useGetBaseLineReportMutation, useUpdateSafetyFileMutation, useUpdateScoreMutation, useUpdateRelatedArticleMutation, useGetBaseLineReportGraphMutation } from '../../../../hooks/api/MainManagement/MainManagement';
 import { useUserToken } from '../../../../hooks/core/UserToken';
 import moment from 'moment'
-
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
-
 import { setWorkplaceId, selectWorkplaceId, selectBaselineId, selectIsClose, setBaselineId, setIsClose } from '../../../../slices/selections/MainSelection';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -98,7 +82,6 @@ import { OnlyUploadDialog, UploadDialog, UploadEmployeeDialog } from '../../../.
 import { Overlay } from '../../../../components/Overlay';
 import Ok from '../../../../components/MessageBox/Ok';
 import { useFileUploadMutation, useGetFileInfoMutation, useUpdateDocumentFileIdMutation, useGetSafetyFileIdMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
-
 import Chart from 'react-apexcharts';
 import YesNo from '../../../../components/MessageBox/YesNo';
 import Okay from '../../../../components/MessageBox/Okay';
@@ -1905,7 +1888,6 @@ const SubmitButton = styled(ButtonUnstyled)`
     }   
 `;
 
-
 const headerSlider = {
     dots: false,
     infinite: false,
@@ -1933,7 +1915,6 @@ const Employee = () => {
     const navigate = useNavigate();
     const [defaultPage, setDefaultPage] = useState("0101");
     const { MainKey } = useParams(1)
-
     const [num, setNum] = React.useState("");
     const [userPopup, setUserPopup] = useState(false)
     const [settingsPopup, setSettingsPopup] = useState(false)
@@ -1994,7 +1975,6 @@ const Employee = () => {
     const [guideLine, setGuideLine] = useState([])
     const [getWorkplaceList] = useGetWorkplaceListMutation()
     const [workplaceList, setWorkplaceList] = useState([])
-    // const currentWorkplaceId = useSelector(selectWorkplaceId);
     const [baselineStart, setBaselineStart] = useState("")
     const currentBaselineId = useSelector(selectBaselineId);
     const currentIsClose = useSelector(selectIsClose);
@@ -2120,15 +2100,13 @@ const Employee = () => {
     const [updateScore] = useUpdateScoreMutation()
     const [evaluationIndex, setEvaluationIndex] = useState(null)
     const [updateRelatedArticle] = useUpdateRelatedArticleMutation()
-
     const { userCompanyId, userWorkplaceId, userRoleCode } = userInfo;
-
     const [ workplaceChange, setWorkplaceChange] = useState(false);
-
     const [wrongCredentialsPopup, setWrongCredentialsPopup] = useState(false);
+    const [getSafetyFileId] = useGetSafetyFileIdMutation()
+    const [safetyFileId, setSafetyFileId] = useState("");
 
     const handleChartCategoriesDisplay = (chartCategories) => {
-        
         if(condition==="5" || condition==="6"){            
             setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories ,labels: {show: true,rotate: 0}} , yaxis: {title: {text: '발생건수'}}, tooltip: {y: {formatter: function (val) {return val + "건"}}}} });    
         }else if(condition==="3"){                     
@@ -2136,15 +2114,12 @@ const Employee = () => {
         }else{    
             setChartInfo({ ...chartInfo, options: { ...chartInfo.options, xaxis: { categories: chartCategories ,labels: {show: true,rotate: 0}} , yaxis: {title: {text: '% rate'}}, tooltip: {y: {formatter: function (val) {return val + "% rate"}}}} });    
         }
-        
     }
+
     const handleNotificationPopupsShow = (notificationIndex) => {
         const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex != index);
         setNoticeHotList(notificationPopupList);
     }
-
-    const [getSafetyFileId] = useGetSafetyFileIdMutation()
-    const [safetyFileId, setSafetyFileId] = useState("");  
 
     const getSafetyFile = async () => {
         const response = await getSafetyFileId({});
@@ -2166,8 +2141,6 @@ const Employee = () => {
         
     //관리차수 마감
     const handleClose = async () => {
-        //const response = await close({});
-        //console.log(baselineData?.baselineName)
         setYesNoPopupMessage(`선택한 "${baselineData?.baselineName}수"를 마감 하시겠습니까?`);
         setYesNoPopupShowClose(true);
     }
@@ -2581,7 +2554,6 @@ const Employee = () => {
                     }
 
                     const responseSaferyFile = await updateSafetyFile({ "attachFileId": fileId, });
-                    //console.log("responseSaferyFile:", responseSaferyFile);
                     setSafetyFileId(fileId);
                 } else if(response.data.RET_CODE === '0433'){
                     setOkayPopupMessage("파일확장자 오류");
@@ -2801,7 +2773,6 @@ const Employee = () => {
             "baselineId": currentBaselineId,
             "condition": condition
         });
-        //console.log("response?.data?.RET_DATA:", response?.data?.RET_DATA)
         if(response?.data?.RET_DATA?.series.length>0){
             handleChartCategoriesDisplay(response?.data?.RET_DATA?.categories);
             setChartSeries(response?.data?.RET_DATA?.series);

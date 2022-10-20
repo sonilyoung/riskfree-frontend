@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { WideLayout } from '../../layouts/Wide';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
-import { selectBaselineId, selectWorkplaceId, setBaselineId, setIsClose } from '../../slices/selections/MainSelection';
+import { setBaselineId, setIsClose } from '../../slices/selections/MainSelection';
 import { useLoginMutation } from '../../hooks/api/LoginManagement/LoginManagement';
 import { useLocalStorage } from '../../hooks/misc/LocalStorage';
 import { useGetBaselineMutation } from '../../hooks/api/MainManagement/MainManagement';
-
 import logoLogin from '../../assets/images/logo_login.png';
 import checkIcon from '../../assets/images/ic_chk2.png';
 import checkIconOn from '../../assets/images/ic_chk2_on.png';
 import welcomeImg from '../../assets/images/img_first.png';
 import popupClose2 from '../../assets/images/btn_popClose2.png';
-
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
 import useUserURLRedirect from '../../hooks/core/UserURLRedirect/UserURLRedirect';
@@ -27,11 +25,9 @@ import { RoleService } from '../../services/core/User';
 import { Overlay } from '../../components/Overlay';
 import Okey from '../../components/MessageBox/Okay';
 
-// === Data: 2022.10.03 author:Jimmy add ===
 // 아이디 저장 및 체크 
 const LS_KEY_ID = "LS_KEY_ID";
 const LS_KEY_SAVE_ID_FLAG = "LS_KEY_SAVE_ID_FLAG";
-// =========================================
 
 const ClosePopupButton2 = styled(ButtonUnstyled)`
     width: 60px;
@@ -57,10 +53,8 @@ const Login = () => {
         },
     });
 
-
     const [getBaseline] = useGetBaselineMutation();
     const navigate = useNavigate();
-
     const [userToken] = useUserToken();
     const localStorage = useLocalStorage();
     const [login] = useLoginMutation();
@@ -69,28 +63,14 @@ const Login = () => {
     const [redirectPath, setRedirectPath] = useState("");
     const [wrongCredentialsPopup, setWrongCredentialsPopup] = useState(false);
     const [wrongCredentialsPopupMessage, setWrongCredentialsPopupMessage] = useState("");
-    const [wrongCredentialsPopupTitle, setWrongCredentialsPopupTitle] = useState("알림");
-
-    // === Data: 2022.10.03 author:Jimmy add ===
+    const [wrongCredentialsPopupTitle] = useState("알림");
     const [saveIDFlag, setSaveIDFlag] = useState(false);
-    
-
-    // =========================================
 
     const handleChange = (prop) => (event) => {
         setValues({
             ...values,
             [prop]: { ...values[prop], value: event.target.value }
         });
-        
-        // === Data: 2022.10.03 author:Jimmy add ===
-        // if (event.target.value === "") {
-        //     setValues({...values, id: { ...values.id, value: event.target.value }})
-        // };
-      
-        if (dataRuleCheckForID(event.target.value.length - 1) === false) ;
-            setValues({...values, id: { ...values.id, value: event.target.value }})
-        // =========================================
     };
 
     const handleFirstLogin = () => {
@@ -115,7 +95,6 @@ const Login = () => {
 
             if (userLoggedInRoleCd !== RoleService.ROLE_CODE_ADMIN) {
                 const defaultBaselineResponse = await getBaseline({});
-                //console.log(defaultBaselineResponse);
                 const defaultBaselineId = defaultBaselineResponse.data?.RET_DATA?.baselineId;
                 const defaultIsClose = defaultBaselineResponse.data?.RET_DATA?.isClose;
                 dispatch(setBaselineId(defaultBaselineId));
@@ -123,7 +102,6 @@ const Login = () => {
                 localStorage.setDefaultBaselineId(defaultBaselineId);
                 localStorage.setDefaultIsClose(defaultIsClose);
             }
-            //console.log(redirectPath, userLoginCount);
 
             if (userLoginCount === '0') {
                 setWelcomePopupShow(true);
@@ -132,44 +110,25 @@ const Login = () => {
                 navigate(userRedirectPath);
             }
 
-            // === Data: 2022.10.03 author:Jimmy add ===
-            if (true /* login success */) {
+            if (true) {
                 if (saveIDFlag) localStorage.setItem(LS_KEY_ID, values.id.value);
             } 
-            // =========================================
         } else {
             setWrongCredentialsPopupMessage("등록되지 않은 계정입니다.");
             setWrongCredentialsPopup(true);
         }
-
-
     }
 
-    const dataRuleCheckForID = (ch) => {
-        let ascii = ch.charCodeAt(0);
-        if (48 /* 0 */ <= ascii && ascii <= 57 /* 9 */) return true;
-        if (65 /* A */ <= ascii && ascii <= 90 /* Z */) return true;
-        if (97 /* a */ <= ascii && ascii <= 122 /* z */) return true;
-        if (ch === ".") return true;
-        return false;
-    };
-
     useEffect(() => {
-        // === Data: 2022.10.03 author:Jimmy add ===
-        // 최초 페이지 진입시 name input에 focus
         document.getElementById("id").focus()
-
         let idFlag = JSON.parse(localStorage.getItem(LS_KEY_SAVE_ID_FLAG));
         if (idFlag !== null) setSaveIDFlag(idFlag);
         if (idFlag === false) localStorage.setItem(LS_KEY_ID, "");
-      
         let data = localStorage.getItem(LS_KEY_ID);
         if (data !== null) setValues({...values, id: { ...values.id, value: data }
         });
-        // =========================================
     }, [])
 
-    // === Data: 2022.10.03 author:Jimmy add ===
     // Enter시 input으로 focus
     const handleNextInput = (e) => {
         if (e.key === "Enter") {
@@ -189,7 +148,6 @@ const Login = () => {
         localStorage.setItem(LS_KEY_SAVE_ID_FLAG, !saveIDFlag);
         setSaveIDFlag(!saveIDFlag);
     };
-// =========================================
 
     return (
         <WideLayout>
@@ -205,13 +163,8 @@ const Login = () => {
                         <img src={logoLogin} alt="login logo" />
                     </div>
                     <div className={classes.loginInput}>
-                        { /* 
-                            Data: 2022.10.03 author:Jimmy 
-                            add: onKeyPress, value
-                        */ }
                         <TextField id="id" onChange={handleChange("id")} placeholder="아이디" onKeyPress={handleNextInput} value={values.id.value}/>
                         <TextField id="pawwword" type="password" onChange={handleChange("password")} onKeyPress={handleChangeSubmit} placeholder="비밀번호" variant="outlined" />
-                        { /* ====================================================== */ }
                     </div>
                     <div className={classes.loginOptions}>
                         <FormControlLabel
@@ -220,12 +173,10 @@ const Login = () => {
                                 <Checkbox
                                     icon={<img src={checkIcon} alt="check icon" />}
                                     checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                    /* === Data: 2022.10.03 author:Jimmy add === */
                                     name="saveId"
                                     id="saveId"
                                     checked={saveIDFlag}
                                     onChange={handleSaveIDFlag}
-                                    /* ========================================= */
                                 />
                             }
                         />
@@ -244,5 +195,4 @@ const Login = () => {
         </WideLayout>
     );
 };
-
 export default Login;
