@@ -2912,7 +2912,7 @@ const Employee = () => {
                                         <TextField
                                             id="standard-basic"
                                             placeholder='안전보건 목표 등록 (띄어쓰기 포함 16자 이내)'
-                                            value={companyInfo?.shGoal}
+                                            value={companyInfo?.shGoal || ""}
                                             variant="outlined"
                                             sx={{ width: 370 }}
                                             className={classes.popupTextField}
@@ -2922,7 +2922,7 @@ const Employee = () => {
                                         <TextField
                                             id="standard-basic"
                                             placeholder='경영방침 등록 (띄어쓰기 포함 16자 이내)'
-                                            value={companyInfo?.missionStatements}
+                                            value={companyInfo?.missionStatements || ""}
                                             onChange={(event) => setCompanyInfo({ ...companyInfo, "missionStatements": event.target.value })}
                                             variant="outlined"
                                             sx={{ width: 370 }}
@@ -2952,25 +2952,25 @@ const Employee = () => {
                                 <FormControl sx={{ width: 180 }} className={classes.dropMenu}>
                                     <Select
                                         className={classes.selectMenu}
-                                        value={num}
+                                        value={num || ""}
                                         onChange={handleChange}
                                         displayEmpty
                                         inputProps={{ 'aria-label': 'Without label' }}
                                         disabled
                                     >
-                                        <MenuItem value="">{companyInfo?.scale}</MenuItem>
+                                        <MenuItem>{companyInfo?.scale}</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl sx={{ width: 150, marginLeft: '8px' }} className={classes.dropMenu}>
                                     <Select
                                         className={classes.selectMenu}
-                                        value={num}
+                                        value={num || ""}
                                         onChange={handleChange}
                                         displayEmpty
                                         inputProps={{ 'aria-label': 'Without label' }}
                                         disabled
                                     >
-                                        <MenuItem value="">{companyInfo?.sector}</MenuItem>
+                                        <MenuItem>{companyInfo?.sector}</MenuItem>
                                     </Select>
                                 </FormControl>
                             </div>
@@ -3000,7 +3000,7 @@ const Employee = () => {
                                                 <TextField
                                                     id="standard-basic"
                                                     placeholder="관리차수"
-                                                    value={baselineInfo.baselineName}
+                                                    value={baselineInfo.baselineName || ""}
                                                     variant="outlined"
                                                     sx={{ width: 80 }}
                                                     className={classes.popupTextField}
@@ -3011,7 +3011,7 @@ const Employee = () => {
                                                         className={classes.selectMenuDate}
                                                         label=' '
                                                         inputFormat="YYYY-MM-DD"
-                                                        value={baselineInfo.baselineStart}
+                                                        value={baselineInfo.baselineStart || ""}
                                                         onChange={DateChange('baselineStart')}
                                                         renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                     />
@@ -3022,7 +3022,7 @@ const Employee = () => {
                                                         className={classes.selectMenuDate}
                                                         label=" "
                                                         inputFormat="YYYY-MM-DD"
-                                                        value={baselineInfo.baselineEnd}
+                                                        value={baselineInfo.baselineEnd || ""}
                                                         onChange={DateChange('baselineEnd')}
                                                         renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
                                                     />
@@ -3057,11 +3057,11 @@ const Employee = () => {
                                                 <Select
                                                     className={classes.popupTextField}
                                                     sx={{ width: 150, marginBottom: '25px !important' }}
-                                                    value={targetBaselineId}
+                                                    value={targetBaselineId || ""}
                                                     onChange={(event) => setTargetBaselineId(event.target.value)}
                                                 >
                                                     {!!baselineList && !!baselineList?.length && baselineList?.map(baselineItem =>
-                                                        <MenuItem value={baselineItem.baselineId}>{baselineItem.baselineName}</MenuItem>)}
+                                                        <MenuItem value={baselineItem.baselineId || ""}>{baselineItem.baselineName}</MenuItem>)}
                                                 </Select>
                                                 {!!baselineList && !!baselineList?.length
                                                     && baselineList?.filter(baselineItem => baselineItem.baselineId === targetBaselineId)
@@ -3269,7 +3269,7 @@ const Employee = () => {
                             setEvaluation(e.target.value)
                             fetchEssentialRates()
                             }}>
-                            <RadioGroup row value={evaluation ?? ""}>
+                            <RadioGroup row value={evaluation || ""}>
                                 <FormControlLabel
                                     value="10"
                                     label="상"
