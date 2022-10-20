@@ -27,8 +27,6 @@ function useLocalStorage(props) {
         return getItem(DEFAULT_ISCLOSE);
     }
 
-
     return { setItem, getItem, setDefaultBaselineId, getDefaultBaselineId, setDefaultIsClose, getDefaultIsClose };
 }
-
 export default useLocalStorage;
