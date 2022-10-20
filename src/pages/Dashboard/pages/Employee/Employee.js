@@ -81,7 +81,7 @@ import radioIcon from '../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation, useGetTitleReportMutation, useGetBaseLineReportMutation, useUpdateSafetyFileMutation, useUpdateScoreMutation, useUpdateRelatedArticleMutation, useGetBaseLineReportGraphMutation } from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation, useGetTitleReportMutation, useGetBaseLineReportMutation, useUpdateSafetyFileMutation, useUpdateScoreMutation, useUpdateRelatedArticleMutation, useGetBaseLineReportGraphMutation ,useGetUserDutyUploadMutation} from '../../../../hooks/api/MainManagement/MainManagement';
 import { useUserToken } from '../../../../hooks/core/UserToken';
 import moment from 'moment'
 
@@ -103,6 +103,8 @@ import Chart from 'react-apexcharts';
 import YesNo from '../../../../components/MessageBox/YesNo';
 import Okay from '../../../../components/MessageBox/Okay';
 import Loading from '../../../../pages/Loading';
+import * as Cookie from '../../../../pages/Cookie';
+
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -2021,6 +2023,7 @@ const Employee = () => {
     // treba da se menja
     const [attachedFileId, setAttachedFileId] = useState(1);
     const [targetBaselineId, setTargetBaselineId] = useState("");
+    const [targetBaselineName, setTargetBaselineName] = useState("");
     const dispatch = useDispatch();
 
     const [userInfo, setUserInfo] = useState({
@@ -2037,6 +2040,7 @@ const Employee = () => {
     const [openDialog, setOpenDialog] = useState(false)
     const [openDialogEmployee, setOpenDialogEmployee] = useState(false)
     const [openSafetyDialog, setOpenSafetyDialog] = useState(false)
+    const [openDutyDialog, setOpenDutyDialog] = useState(false)
     const [okayPopupShow, setOkayPopupShow] = useState(false);
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
@@ -2116,6 +2120,8 @@ const Employee = () => {
     const [fileUpload] = useFileUploadMutation();
     const [getFileInfo] = useGetFileInfoMutation()
     const [updateSafetyFile] = useUpdateSafetyFileMutation()
+    const [getUserDutyUpload] = useGetUserDutyUploadMutation()
+    
     const [updateDocumentFileId] = useUpdateDocumentFileIdMutation()
     const [updateScore] = useUpdateScoreMutation()
     const [evaluationIndex, setEvaluationIndex] = useState(null)
@@ -2160,6 +2166,7 @@ const Employee = () => {
     const panelhandleChange = (panel) => (event, newExpanded) => {
       if(panel === 'panel3') {
         setTargetBaselineId('');
+        setTargetBaselineName('');
       }
       setExpanded(newExpanded ? panel : false);
     };
@@ -2188,7 +2195,9 @@ const Employee = () => {
             setOkayPopupShow(true);                    
             return false;
         }
+        setLoading(true);
         const response = await insertBaseline(baselineInfo);
+        setLoading(false);
         if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
             setYesNoPopupShow(false);
             setOkayPopupMessage('신규차수를 등록하였습니다.');
@@ -2210,8 +2219,8 @@ const Employee = () => {
         } else {
             setLoading(true);
             const response = await insertBaseLineDataCopy({
-                "baselineId": targetBaselineId,
-                "targetBaselineId": currentBaselineId
+                "baselineId": currentBaselineId,
+                "targetBaselineId": targetBaselineId
             });
             setLoading(false);
             if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
@@ -2520,8 +2529,15 @@ const Employee = () => {
     }
 
     const [inspectionIndex, setInspectionIndex] = useState(null)
+    
 
     const handleDialogFileUpload = async () => {
+        if(baselineData.isClose==='1'){
+            setOkayPopupMessage("마감된 차수는 업로드를 할 수 없습니다.");
+            setOkayPopupShow(true);               
+            return false;
+        }
+
         if (dialogId === "logoImgUpload" || dialogId === "documentFileUpload") {
             if((selectedFileName === "") || (selectedFileName === null) || (selectedFile === "")) {
                 setOkayPopupMessage("업로드할 파일을 선택하세요.");
@@ -2574,11 +2590,7 @@ const Employee = () => {
 
                     const fileId = response.data.RET_DATA[0].atchFileId
                     setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
-                    if (dialogId === "logoImgUpload") {
-                        setFilePath({ ...filePath, [dialogId]: (response.data.RET_DATA[0].filePath + "/" + response.data.RET_DATA[0].saveFileName) })
-                    } else {
-                        setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
-                    }
+                    setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
 
                     const responseSaferyFile = await updateSafetyFile({ "attachFileId": fileId, });
                     //console.log("responseSaferyFile:", responseSaferyFile);
@@ -2588,6 +2600,33 @@ const Employee = () => {
                     setOkayPopupShow(true);
                 } else {
                     setOkayPopupMessage("시스템 오류");
+                    setOkayPopupShow(true);
+                }
+            }
+        } else if (dialogId === "userDutyExcelUpload") {
+            if((selectedFileName === "") || (selectedFileName === null) || (selectedFile === "")) {
+                setOkayPopupMessage("업로드할 파일을 선택하세요.");
+                setOkayPopupShow(true);   
+            } else {
+                setLoading(true);
+                let formData = new FormData();
+                formData.append("excelFile", selectedFile)
+                console.log("userWorkplaceId:"+userWorkplaceId)
+                console.log("currentBaselineId:"+currentBaselineId)
+                const params = { workplaceId: userWorkplaceId, baselineId: currentBaselineId }
+                formData.append('params', new Blob([JSON.stringify(params)], { type: 'application/json' }))                
+                const response = await getUserDutyUpload(formData);                
+
+                handleDialogCloseDuty()
+                setLoading(false);
+                if(response.data.RET_CODE === "0000") {
+                    setOkayPopupMessage("등록 되었습니다.");
+                    setOkayPopupShow(true);
+                } else if(response.data.RET_CODE === '0433'){
+                    setOkayPopupMessage("파일확장자 오류");
+                    setOkayPopupShow(true);
+                } else {
+                    setOkayPopupMessage(response.data.RET_DESC);
                     setOkayPopupShow(true);
                 }
             }
@@ -2657,6 +2696,21 @@ const Employee = () => {
         }
     }
 
+    function handleDutyExcelDownload() {
+        setLoading(true);
+        window.location = `${BASE_URL}/common/excel/getUserDutyExcel?workplaceId=${userWorkplaceId}&baselineId=${currentBaselineId}`;
+        const FILEDOWNLOAD_INTERVAL = setInterval(function() {
+            var donToken = Cookie.getCookie('fileDownloadToken');
+            if (donToken === 'Y') { 
+                clearInterval(FILEDOWNLOAD_INTERVAL);
+                setLoading(false);
+                Cookie.setCookie('fileDownloadToken', 'N');
+                setOkayPopupShow(true); 
+                setOkayPopupMessage('파일다운로드가 완료되었습니다.');
+            }
+        }, 500);            
+    }    
+
     const handleDialogOpen = (event, articleNo, fileId, index) => {
         setOpenDialog(true);
         setDialogId((event.target.id).toString());
@@ -2711,6 +2765,10 @@ const Employee = () => {
         setOpenSafetyDialog(false);
     }    
 
+    const handleDialogCloseDuty = () => {
+        setOpenDutyDialog(false);
+    }    
+
     // 점검서류 등록, 안전작업허가서 양식
     const handleDialogOpenEmployee = (event, articleNo, fileId, index) => {
         setDialogId((event.target.id).toString());
@@ -2731,6 +2789,13 @@ const Employee = () => {
                 ...labelObject,
                 upperLabel: "보고서",
                 middleLabel: "등록된 양식을 다운로드 합니다.",
+            })
+        } else if (event.target.id === "userDutyExcelUpload") {
+            setOpenDutyDialog(true);
+            setLabelObject({
+                ...labelObject,
+                upperLabel: "안전보건 이행항목 관리",
+                middleLabel: "엑셀양식의 안전보건관리체계의 구축 및 이행항목 데이터를 업/다운로드 합니다.",
             })
         }
     }
@@ -3083,14 +3148,24 @@ const Employee = () => {
                                                 <Typography>관리차수 복사</Typography>
                                             </AccordionSummary>
                                             <AccordionDetails>
+                                                {baselineData.isClose === "1" ? <span style={{color:'red'}}>※ 마감된 차수는 복사할 수 없습니다.</span>
+                                                :
+                                                <>
                                                 <Select
                                                     className={classes.popupTextField}
                                                     sx={{ width: 150, marginBottom: '25px !important' }}
-                                                    value={targetBaselineId}
-                                                    onChange={(event) => setTargetBaselineId(event.target.value)}
+                                                    value={targetBaselineId+'/'+targetBaselineName}                                                    
+                                                    onChange={(event) => {
+                                                        setTargetBaselineName(event.target.value.split("/")[1])
+                                                        setTargetBaselineId(event.target.value.split("/")[0])
+                                                    }}
                                                 >
-                                                    {!!baselineList && !!baselineList?.length && baselineList?.map(baselineItem =>
-                                                        <MenuItem value={baselineItem.baselineId}>{baselineItem.baselineName}</MenuItem>)}
+                                                    {baselineList?.map(baselineItem => 
+                                                        parseInt(currentBaselineId) === baselineItem.baselineId ? 
+                                                            <></>
+                                                         :
+                                                            <MenuItem value={baselineItem.baselineId+'/'+baselineItem.baselineName}>{baselineItem.baselineName}</MenuItem>
+                                                        )}
                                                 </Select>
                                                 {!!baselineList && !!baselineList?.length
                                                     && baselineList?.filter(baselineItem => baselineItem.baselineId === targetBaselineId)
@@ -3099,19 +3174,30 @@ const Employee = () => {
                                                     <Alert
                                                         icon={<img src={alertIcon} alt="alert icon" />}
                                                         severity="error">
-                                                        <strong>선택한 차수의 DATA</strong>
-                                                        를 현재 차수에 복사 하시겠습니까
+                                                        <div style={{letterSpacing: '-0.1px', justifyContent: 'center'}}>
+                                                            <strong>"{targetBaselineName}"</strong>의 DATA를
+                                                            <strong>"{baselineData.baselineName}"</strong>에 복사 하시겠습니까?
+                                                        </div>
                                                     </Alert>
                                                     <PromptButtonBlue onClick={() => handleInsertBaseLineDataCopy()}>예</PromptButtonBlue>
                                                     <PromptButtonWhite onClick={panelhandleChange('panel3')}>아니오</PromptButtonWhite>
                                                 </div>
+                                                </>
+                                                }
                                             </AccordionDetails>
                                         </Accordion>
                                         <span></span>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" id="safetyFileUpload" onClick={handleDialogOpenEmployee}>안전작업허가서 양식 업/다운로드​<img src={arrowDown} alt="arrow down" /></Link>
-                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => { setYesNoPopupShow(true); setYesNoPopupMessage("업데이트 하시겠습니까?") }}>안전보건관리체계의 구축 및 이행 항목 업데이트​<img src={arrowDown} alt="arrow down" /></Link>
+                                        
+                                        {baselineData.isClose==='1' ? 
+                                            <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => {setOkayPopupShow(true); setOkayPopupMessage('마감된 차수는 업데이트할 수 없습니다.')}}>안전보건관리체계의 구축 및 이행 항목 업데이트​<img src={arrowDown} alt="arrow down" /></Link>
+                                        :
+                                            <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => {setYesNoPopupShow(true); setYesNoPopupMessage("업데이트 하시겠습니까?") }}>안전보건관리체계의 구축 및 이행 항목 업데이트​<img src={arrowDown} alt="arrow down" /></Link>
+                                        }
+                                        <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" id="userDutyExcelUpload" onClick={handleDialogOpenEmployee}>안전보건관리체계의 구축 및 이행 항목 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
+
                                     </div>
                                     <div className={classes.headerPopFooter}>
                                         <PopupFootButton onClick={() => handleInsertBaseline()}>저장하기</PopupFootButton>
@@ -3730,6 +3816,16 @@ const Employee = () => {
                 onInputChange={handleDialogInputChange}
                 onUpload={handleDialogFileUpload}
                 onDownload={handleSafetyFileId}
+                enableDownload={true}
+                label={labelObject}
+                selectedFileName={selectedFileName}
+            />
+            <UploadEmployeeDialog
+                open={openDutyDialog}
+                onClose={handleDialogCloseDuty}
+                onInputChange={handleDialogInputChange}
+                onUpload={handleDialogFileUpload}
+                onDownload={handleDutyExcelDownload}
                 enableDownload={true}
                 label={labelObject}
                 selectedFileName={selectedFileName}

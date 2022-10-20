@@ -1055,7 +1055,7 @@ const WorkHistoryList = () => {
                         <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 5, safeWorkItem.insertDate)}>{safeWorkItem.radiation}</div>
                         <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 6, safeWorkItem.insertDate)}>{safeWorkItem.sue}</div>
                         <div className={classes.tableRow} onClick={() => handleFileInfo(safeWorkItem.noticeId, 7, safeWorkItem.insertDate)}>{safeWorkItem.heavy}</div>
-                        <div className={classes.tableRow}>{safeWorkItem.totalCount}건</div>
+                        <div className={classes.tableRow}>{safeWorkItem.totalSum}건</div>
                     </div>)
                     )}
                     <div className={hide ? classes.popupHide : classes.headerPopup}>

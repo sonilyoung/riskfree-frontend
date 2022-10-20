@@ -994,8 +994,8 @@ const Default = ({ children }) => {
             setOkayPopupShow(true);
         } else {
             const response = await insertBaseLineDataCopy({
-                "baselineId": targetBaselineId,
-                "targetBaselineId": currentBaselineId
+                "baselineId": currentBaselineId,
+                "targetBaselineId": targetBaselineId
             });
             
             if (response?.data?.RET_CODE === "0000" || response?.data?.RET_CODE === "0201") {
