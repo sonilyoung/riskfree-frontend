@@ -75,7 +75,7 @@ const footerSlider = {
 const Employee = () => {
     const classes = useStyles();
     const navigate = useNavigate();
-    const [defaultPage, setDefaultPage] = useState("0101");
+    const [defaultPage, setDefaultPage] = useState("");
     const { MainKey } = useParams(1)
     const [num, setNum] = React.useState("");
     const [userPopup, setUserPopup] = useState(false)
@@ -194,7 +194,7 @@ const Employee = () => {
     const [getBaseLineReport] = useGetBaseLineReportMutation();
     const [condition, setCondition] = useState("1");
     const [openDialogOnly, setOpenDialogOnly] = useState(false);
-    const [rdom, setRdom] = useState("")
+    //const [rdom, setRdom] = useState("")
     const labelObjectOnly = {
         upperLabel: "로고 등록",
         middleLabel: "등록할 파일을 업로드 합니다."
@@ -425,6 +425,7 @@ const Employee = () => {
     const fetchLoginInfo = async () => {
         const response = await getLoginInfo()
         setLoginInfo(response.data.RET_DATA)
+        setDefaultPage("");
     }
     const handleLogOut = () => {
         remove();
@@ -755,9 +756,9 @@ const Employee = () => {
                 if(response.data.RET_CODE === "0000" || response.data.RET_CODE === "0201") {
                     setOkayPopupMessage("등록 되었습니다.");
                     setOkayPopupShow(true);
-                    const getRandom = () => Math.random();
-                    setRdom(getRandom);
-                    //setDefaultPage(response?.data?.RET_CODE);
+                    //const getRandom = () => Math.random();
+                    //setRdom(getRandom);
+                    setDefaultPage(response?.data?.RET_CODE);
                 } else if(response.data.RET_CODE === '0433'){
                     setOkayPopupMessage("파일확장자 오류");
                     setOkayPopupShow(true);
@@ -1047,7 +1048,7 @@ const Employee = () => {
         fetchDutyDetailList();
         setWorkplaceChange(false);
         setLoading(false);
-    }, [baselineIdForSelect, baselineData, defaultPage, workplaceChange, rdom]);
+    }, [baselineIdForSelect, baselineData, defaultPage, workplaceChange]);
 
     useEffect(() => {
         setLoading(true);
