@@ -1184,7 +1184,7 @@ const Employee = () => {
                                         inputProps={{ 'aria-label': 'Without label' }}
                                         disabled
                                     >
-                                        <MenuItem>{companyInfo?.scale}</MenuItem>
+                                        <MenuItem value=""> {companyInfo?.scale} 이하</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl sx={{ width: 150, marginLeft: '8px' }} className={classes.dropMenu}>
@@ -1196,7 +1196,7 @@ const Employee = () => {
                                         inputProps={{ 'aria-label': 'Without label' }}
                                         disabled
                                     >
-                                        <MenuItem>{companyInfo?.sector}</MenuItem>
+                                        <MenuItem value=""> {companyInfo?.sector}</MenuItem>
                                     </Select>
                                 </FormControl>
                             </div>
