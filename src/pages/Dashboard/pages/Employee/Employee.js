@@ -3125,11 +3125,18 @@ const Employee = () => {
                                                 <Select
                                                     className={classes.popupTextField}
                                                     sx={{ width: 150, marginBottom: '25px !important' }}
-                                                    value={targetBaselineId}
-                                                    onChange={(event) => setTargetBaselineId(event.target.value)}
+                                                    value={targetBaselineId+'/'+targetBaselineName}                                                    
+                                                    onChange={(event) => {
+                                                        setTargetBaselineName(event.target.value.split("/")[1])
+                                                        setTargetBaselineId(event.target.value.split("/")[0])
+                                                    }}
                                                 >
-                                                    {!!baselineList && !!baselineList?.length && baselineList?.map(baselineItem =>
-                                                        <MenuItem value={baselineItem.baselineId}>{baselineItem.baselineName}</MenuItem>)}
+                                                    {baselineList?.map(baselineItem => 
+                                                        parseInt(currentBaselineId) === baselineItem.baselineId ? 
+                                                            <></>
+                                                         :
+                                                            <MenuItem value={baselineItem.baselineId+'/'+baselineItem.baselineName}>{baselineItem.baselineName}</MenuItem>
+                                                        )}
                                                 </Select>
                                                 {!!baselineList && !!baselineList?.length
                                                     && baselineList?.filter(baselineItem => baselineItem.baselineId === targetBaselineId)
