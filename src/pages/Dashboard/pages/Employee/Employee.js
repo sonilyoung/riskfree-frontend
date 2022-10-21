@@ -751,9 +751,10 @@ const Employee = () => {
 
                 handleDialogCloseDuty()
                 setLoading(false);
-                if(response.data.RET_CODE === "0000") {
+                if(response.data.RET_CODE === "0000" || response.data.RET_CODE === "0201") {
                     setOkayPopupMessage("등록 되었습니다.");
                     setOkayPopupShow(true);
+                    setDefaultPage(response?.data?.RET_CODE);
                 } else if(response.data.RET_CODE === '0433'){
                     setOkayPopupMessage("파일확장자 오류");
                     setOkayPopupShow(true);
