@@ -1,6 +1,8 @@
 import { makeStyles } from '@mui/styles';
-import { styled } from '@mui/system';
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
+
+
+import { styled } from '@mui/system';
 
 const useStyles = makeStyles(() => ({
     pageWrap: {
@@ -17,28 +19,32 @@ const useStyles = makeStyles(() => ({
         marginBottom: '20px !important',
         color: '#111',
     },
-    boxFirst: {
+    boxReception: {
         display: 'flex',
         marginBottom: '16px !important',
         '& $boxRow:first-of-type $rowInfo:first-of-type': {
-            width: '580px',
+            width: '160px',
         },
-        '& $boxRow:first-of-type $rowContent $rowTitle': {
-            width: '110px',
+        '& $boxRow:first-of-type $rowInfo': {
+            width: '306px'
         },
-        '& $boxRow:nth-of-type(2) $rowInfo': {
-            width: '100%'
+        '& $boxRow:first-of-type $rowInfo:last-of-type': {
+            width: 'auto'
         },
         '& $boxRow:last-of-type $rowInfo': {
-            width: '240px',
-            '&:last-of-type': {
-                width: '560px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                '& .Mui-disabled input': {
-                    '-webkit-text-fill-color': '#333'
-                }
+            width: 'auto',
+            '&:first-of-type': {
+                width: '672px',
             }
+        },
+        '& $boxContent $boxRow:first-of-type': {
+            height: '60px'
+        },
+        '& $boxContent $boxRow:nth-of-type(2) $rowTitle': {
+            borderTop: 'none'
+        },
+        '& $boxContent $boxRow:nth-of-type(2) $rowTitle:first-of-type': {
+            borderTop: '1px solid #fff'
         }
     },
     boxTitle: {
@@ -69,16 +75,10 @@ const useStyles = makeStyles(() => ({
                 borderTop: 'none'
             }
         },
-        '& $boxRow:last-of-type': {
-            '& $rowTitle:not(:first-of-type)': {
-                borderTop: 'none'
-            }
-        },
     },
     boxRow: {
         display: 'flex',
         width: '100%',
-        minHeight: '90px',
         '& $rowTitle': {
             borderBottom: 'none'
         }
@@ -123,23 +123,30 @@ const useStyles = makeStyles(() => ({
         padding: '10px',
         boxSizing: 'border-box',
     },
-    boxSecond: {
-        '& $boxRow:last-of-type': {
-            height: 'auto'
+    /* === Data: 2022.10.03 author:Jimmy add, edit === */
+    boxRegistration: {
+        height: '100%',
+        '& $boxRow:first-of-type $rowTitle': {
+            width: '125px'
+        },
+        '& $boxRow:first-of-type $rowInfo:last-of-type': {
+            width: '272px',
+        },
+
+        '& $boxRow:first-of-type $rowContent $rowInfo': {
+            width: '100%',
+            height: '100px'
         },
         '& $boxRow $rowContent $rowInfo': {
-            width: '63%'
+            width: '100%',
+            height: '100px'
         },
-        '& $boxRow:first-of-type $rowContent $rowTitle': {
-            width: '175px',
-        },
-        '& $boxRow $rowContent $rowInfo:last-of-type': {
-            width: '100%'
-        },
+        /* ============================================= */
+
         '& $boxRow:last-of-type $rowContent': {
             display: 'flex',
             '& >div': {
-                width: '50%',
+                width: '100%',
                 borderLeft: '1px solid #d5dae2',
                 '& >div': {
                     display: 'flex',
@@ -183,7 +190,7 @@ const useStyles = makeStyles(() => ({
     },
     textArea: {
         '& .MuiOutlinedInput-root textarea': {
-            height: '150px !important',
+            height: '49px !important',
             fontSize: '16px'
         }
     },
@@ -231,6 +238,20 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
+const UploadButton = styled(ButtonUnstyled)`
+    width: 140px;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #6e7884;
+    background: #e8ebf4;
+    transition: background .2s;
+    cursor: pointer;
+    &:hover {
+        background: #d2dcf3;
+    }
+`;
+
 const BlueButton = styled(ButtonUnstyled)`
     border: none;
     width: 140px;
@@ -247,20 +268,6 @@ const BlueButton = styled(ButtonUnstyled)`
     transition: background.2s;
     &:hover {
         background: #0355b0;
-    }
-`;
-
-const UploadButton = styled(ButtonUnstyled)`
-    width: 140px;
-    height: 40px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #6e7884;
-    background: #e8ebf4;
-    transition: background .2s;
-    cursor: pointer;
-    &:hover {
-        background: #d2dcf3;
     }
 `;
 
@@ -283,6 +290,4 @@ const WhiteButton = styled(ButtonUnstyled)`
         background: #d2dcf3;
 }
 `;
-
-
-export { useStyles, UploadButton, WhiteButton, BlueButton};
+export { useStyles, UploadButton, BlueButton, WhiteButton };

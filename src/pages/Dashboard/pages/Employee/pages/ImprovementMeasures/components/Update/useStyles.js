@@ -78,7 +78,7 @@ const useStyles = makeStyles(() => ({
     boxRow: {
         display: 'flex',
         width: '100%',
-        minHeight: '90px',
+        minHeight: '60px',
         '& $rowTitle': {
             borderBottom: 'none'
         }
@@ -183,7 +183,7 @@ const useStyles = makeStyles(() => ({
     },
     textArea: {
         '& .MuiOutlinedInput-root textarea': {
-            height: '150px !important',
+            height: '49px !important',
             fontSize: '16px'
         }
     },
@@ -231,6 +231,20 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
+const UploadButton = styled(ButtonUnstyled)`
+    width: 140px;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #6e7884;
+    background: #e8ebf4;
+    transition: background .2s;
+    cursor: pointer;
+    &:hover {
+        background: #d2dcf3;
+    }
+`;
+
 const BlueButton = styled(ButtonUnstyled)`
     border: none;
     width: 140px;
@@ -247,20 +261,6 @@ const BlueButton = styled(ButtonUnstyled)`
     transition: background.2s;
     &:hover {
         background: #0355b0;
-    }
-`;
-
-const UploadButton = styled(ButtonUnstyled)`
-    width: 140px;
-    height: 40px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #6e7884;
-    background: #e8ebf4;
-    transition: background .2s;
-    cursor: pointer;
-    &:hover {
-        background: #d2dcf3;
     }
 `;
 
@@ -284,5 +284,4 @@ const WhiteButton = styled(ButtonUnstyled)`
 }
 `;
 
-
-export { useStyles, UploadButton, WhiteButton, BlueButton};
+export { useStyles, UploadButton, BlueButton, WhiteButton };

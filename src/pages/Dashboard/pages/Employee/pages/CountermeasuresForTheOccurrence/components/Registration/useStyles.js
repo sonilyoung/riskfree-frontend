@@ -1,7 +1,8 @@
 import { makeStyles } from '@mui/styles';
-import { styled } from '@mui/system';
+
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 
+import { styled } from '@mui/system';
 const useStyles = makeStyles(() => ({
     pageWrap: {
         '& >div:not($listTitle, $footerButtons)': {
@@ -17,29 +18,21 @@ const useStyles = makeStyles(() => ({
         marginBottom: '20px !important',
         color: '#111',
     },
-    boxFirst: {
+    boxReception: {
         display: 'flex',
         marginBottom: '16px !important',
         '& $boxRow:first-of-type $rowInfo:first-of-type': {
-            width: '580px',
+            width: '160px',
         },
-        '& $boxRow:first-of-type $rowContent $rowTitle': {
-            width: '110px',
+        '& $boxRow:first-of-type $rowInfo': {
+            width: '306px'
         },
-        '& $boxRow:nth-of-type(2) $rowInfo': {
-            width: '100%'
+        '& $boxRow:first-of-type $rowInfo:last-of-type': {
+            width: 'auto'
         },
         '& $boxRow:last-of-type $rowInfo': {
-            width: '240px',
-            '&:last-of-type': {
-                width: '560px',
-                display: 'flex',
-                justifyContent: 'space-between',
-                '& .Mui-disabled input': {
-                    '-webkit-text-fill-color': '#333'
-                }
-            }
-        }
+            width: '100%',
+        },
     },
     boxTitle: {
         display: 'flex',
@@ -62,6 +55,7 @@ const useStyles = makeStyles(() => ({
         flexWrap: 'wrap',
         width: 'calc(100% - 100px)',
         '& $boxRow:first-of-type': {
+            height: '100px',
             '& $rowContent': {
                 borderTop: 'none'
             },
@@ -69,16 +63,27 @@ const useStyles = makeStyles(() => ({
                 borderTop: 'none'
             }
         },
-        '& $boxRow:last-of-type': {
-            '& $rowTitle:not(:first-of-type)': {
+        '& $boxRow:nth-of-type(2) $rowContent': {
+            '& $rowInfo:first-of-type': {
+                marginRight: '334px'
+            },
+            
+            '& $rowInfo:last-of-type': {
+                marginRight: '0px'
+            },
+
+            '& $rowInfo:nth-of-type(3)': {
+                marginRight: '66px'
+            },
+            '& $rowTitle': {
                 borderTop: 'none'
             }
-        },
+        }
     },
     boxRow: {
         display: 'flex',
         width: '100%',
-        minHeight: '90px',
+        minHeight: '60px',
         '& $rowTitle': {
             borderBottom: 'none'
         }
@@ -87,7 +92,7 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        //alignItems: 'center',
+//        alignItems: 'center',
         textAlign: 'center',
         width: '100px',
         height: '100%',
@@ -115,25 +120,42 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         '& >div[class=*row]': {
             height: '100%'
-        },
+        }
     },
     rowInfo: {
         display: 'flex',
         alignItems: 'center',
         padding: '10px',
-        boxSizing: 'border-box',
+        boxSizing: 'border-box'
     },
-    boxSecond: {
-        '& $boxRow:last-of-type': {
-            height: 'auto'
+    boxRegistration: {
+        '& $boxRow': {
+            '&:nth-of-type(2)': {
+                height: '60px'
+            },
+            '&:last-of-type': {
+                height: 'auto'
+            },
         },
-        '& $boxRow $rowContent $rowInfo': {
-            width: '63%'
+        '& $boxRow:first-of-type $rowInfo:first-of-type': {
+            width: '160px',
         },
-        '& $boxRow:first-of-type $rowContent $rowTitle': {
-            width: '175px',
+        '& $boxRow:first-of-type $rowInfo': {
+            width: '340px'
         },
-        '& $boxRow $rowContent $rowInfo:last-of-type': {
+        '& $boxRow:first-of-type $rowContent $rowInfo:nth-of-type(5)': {
+            width: '260px'
+        },
+        '& $boxRow:first-of-type $rowContent $rowInfo:nth-of-type(3)': {
+            width: '520px'
+        },
+        '& $boxRow:nth-of-type(3) $rowContent $rowInfo:first-of-type': {
+            width: '100%'
+        },
+        '& $boxRow:nth-of-type(3) $rowContent $rowInfo:last-of-type': {
+            paddingLeft: '0px'
+        },
+        '& $boxRow:nth-of-type(4) $rowContent $rowInfo': {
             width: '100%'
         },
         '& $boxRow:last-of-type $rowContent': {
@@ -184,7 +206,7 @@ const useStyles = makeStyles(() => ({
     textArea: {
         '& .MuiOutlinedInput-root textarea': {
             height: '150px !important',
-            fontSize: '16px'
+            fontSize: '16px',
         }
     },
     selectMenu: {
@@ -229,7 +251,41 @@ const useStyles = makeStyles(() => ({
             paddingLeft: '0',
         }
     },
+    activeReportBtn: {
+        backgroundColor: "#989898 !important",
+        '&:hover': {
+            backgroundColor: "#7b7b7b !important",
+        }
+    }
 }));
+
+const AccidentReportButton = styled(ButtonUnstyled)`
+    width: 90px;
+    height: 80px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #6e7884;
+    background: #e8ebf4;
+    transition: background .2s;
+    cursor: pointer;
+    &:hover {
+        background: #d2dcf3;
+    }
+`;
+
+const UploadButton = styled(ButtonUnstyled)`
+    width: 140px;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #6e7884;
+    background: #e8ebf4;
+    transition: background .2s;
+    cursor: pointer;
+    &:hover {
+        background: #d2dcf3;
+    }
+`;
 
 const BlueButton = styled(ButtonUnstyled)`
     border: none;
@@ -247,20 +303,6 @@ const BlueButton = styled(ButtonUnstyled)`
     transition: background.2s;
     &:hover {
         background: #0355b0;
-    }
-`;
-
-const UploadButton = styled(ButtonUnstyled)`
-    width: 140px;
-    height: 40px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #6e7884;
-    background: #e8ebf4;
-    transition: background .2s;
-    cursor: pointer;
-    &:hover {
-        background: #d2dcf3;
     }
 `;
 
@@ -284,5 +326,4 @@ const WhiteButton = styled(ButtonUnstyled)`
 }
 `;
 
-
-export { useStyles, UploadButton, WhiteButton, BlueButton};
+export { useStyles, AccidentReportButton, UploadButton, BlueButton, WhiteButton };
