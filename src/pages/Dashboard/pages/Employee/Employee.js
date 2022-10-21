@@ -1043,6 +1043,7 @@ const Employee = () => {
         fetchAccidentTotalList();
         fetchSafeWorkHistoryList();
         fetchAccidentsPreventionPercentage()
+        fetchInspectionDocs();
         fetchNoticeList();
         fetchImprovementList();
         fetchDutyDetailList();
