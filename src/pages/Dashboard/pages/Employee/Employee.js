@@ -837,7 +837,7 @@ const Employee = () => {
             if (donToken === 'Y') { 
                 clearInterval(FILEDOWNLOAD_INTERVAL);
                 setLoading(false);
-                Cookie.setCookie('fileDownloadToken', 'N');
+                Cookie.deleteCookie('fileDownloadToken');                
                 setOkayPopupShow(true); 
                 setOkayPopupMessage('파일다운로드가 완료되었습니다.');
             }
