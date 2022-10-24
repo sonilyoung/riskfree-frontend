@@ -384,7 +384,7 @@ const useStyles = makeStyles(() => ({
         },
         '&.infoMember': {
             position: 'fixed',
-            top: '90px',
+            top: '40px',
             left: '560px',
             '& $headNest $dataNest': {
                 background: '#c8ddf2'
