@@ -309,7 +309,7 @@ const Employee = () => {
         
     //관리차수 마감
     const handleClose = async () => {
-        setYesNoPopupMessage(`선택한 "${baselineData?.baselineName}수"를 마감 하시겠습니까?`);
+        setYesNoPopupMessage(`선택한 "${baselineData?.baselineName}"를 마감 하시겠습니까?`);
         setYesNoPopupShowClose(true);
     }
         
@@ -1013,7 +1013,11 @@ const Employee = () => {
     }
 
     const DateChange = name => (date) => {
-        setBaselineInfo({ ...baselineInfo, [name]: date});
+        if((date === "") || (date === null)){
+            setBaselineInfo({ ...baselineInfo, [name]: null})
+        } else {
+            setBaselineInfo({ ...baselineInfo, [name]: date.format('YYYY-MM-DD')});
+        }
     };
 
     useEffect(() => {
