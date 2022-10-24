@@ -602,7 +602,18 @@ const useStyles = makeStyles(() => ({
             paddingLeft: '0',
         }
     },
-
+    slideLabelHot: {
+        width: '14px',
+        height: '18px',
+        lineHeight: '18px',
+        marginRight: '10px',
+        textAlign: 'center',
+        color: '#fff',
+        fontSize: '12px',
+        background: '#fd4b05',
+        borderRadius: '2px',
+        fontWeight: '500'
+    },
 }));
 
 const SearchButton = styled(ButtonUnstyled)`
@@ -753,6 +764,7 @@ const SearchUserButton = styled(ButtonUnstyled)`
     }
 `;
 
+
 const SystemAdministrator = () => {
     const [login] = useLoginMutation();
     const [getPwdInfo] = useGetPwdInfoMutation();
@@ -797,7 +809,7 @@ const SystemAdministrator = () => {
         "contractAmount": "",
         "contractEndDate": null,
         "contractFileId": "",
-        "contractDay": null,
+        "contractDay": "",
         "contractStartDate": null,
         "loginId": "",
         "managerEmail": subscriberInsertEmailBeforeSign + '@' + subscriberInsertEmailAfterSign,
@@ -808,7 +820,8 @@ const SystemAdministrator = () => {
         "scaleCd": "",
         "sectorCd": "",
         "statusCd": "",
-        "workplaceName": ""
+        "workplaceName": "",
+        "newYn": ""
     });
     const [managerEmail, setManagerEmail] = useState({
         firstInput: '',
@@ -819,7 +832,7 @@ const SystemAdministrator = () => {
         secondeInput: '',
         thirdInput: ''
     });
-    const [contractDay, setContractDay] = useState(null);
+    const [contractDay, setContractDay] = useState("");
     const [contractStartDate, setContractStartDate] = useState(null);
     const [contractEndDate, setContractEndDate] = useState(null);
     const [subscriberView, setSubscriberView] = useState({
@@ -838,7 +851,8 @@ const SystemAdministrator = () => {
         "scaleCd": "",
         "sectorCd": "",
         "statusCd": "",
-        "workplaceName": ""
+        "workplaceName": "",
+        "newYn": ""
     });
     const [codeGroup1, setCodeGroup1] = useState([]);
     const [codeGroup2, setCodeGroup2] = useState([]);
@@ -1070,7 +1084,7 @@ const SystemAdministrator = () => {
         setSubscriberInsert({
             "companyName": "",
             "contractAmount": "",
-            "contractDay": null,            
+            "contractDay": "",            
             "contractEndDate": null,
             "contractFileId": "",
             "contractStartDate": null,
@@ -1247,7 +1261,7 @@ const SystemAdministrator = () => {
     // }
 
     //사업자 번호 정규식 유효성 검사 수행
-    const handleRegistNo = (e) => {
+    const handleRegistNoI = (e) => {
         const value = e.target.value.replace(/\D+/g, "");
         const numberLength = 10;
 
@@ -1269,6 +1283,50 @@ const SystemAdministrator = () => {
         e.target.value = resultNo;
         setSubscriberInsert({...subscriberInsert, "registNo": e.target.value}); 
     }
+
+        //사업자 번호 정규식 유효성 검사 수행
+        const handleRegistNoD = (e) => {
+            const value = e.target.value.replace(/\D+/g, "");
+            const numberLength = 10;
+    
+            let resultNo = "";  
+    
+            for (let i = 0; i < value.length && i < numberLength; i++) {
+            switch (i) {
+                case 3:
+                    resultNo += "-";
+                break;
+                case 5:
+                    resultNo += "-";
+                break;
+                default:
+                break;
+            }
+            resultNo += value[i];
+            }
+            e.target.value = resultNo;
+            setSubscriberView({ ...subscriberView, "registNo": e.target.value });
+        }
+
+    const DateChangeI = name => (date) => {
+        if((date === "") || (date === null)){
+            setSubscriberInsert({ ...subscriberInsert, [name] : "" })
+        } else {
+            setSubscriberInsert({ ...subscriberInsert, [name] : date.format("YYYY-MM-DD") })
+        }
+    };
+    
+    const DateChangeD = (date) => {
+        //Invalid date
+        if((date === "") || (date === null)){
+            setContractDay("")
+        } else {
+            setContractDay(date.format("YYYY-MM-DD"))
+        }
+    };
+
+    
+
     useEffect(() => {
         fetchSubscribersList();
         fetchCommCodeListGroup1();
@@ -1359,9 +1417,11 @@ const SystemAdministrator = () => {
                                             return <div className={classes.tableData}><button onClick={() => handlePlusButtonClick(button.id, subscriber.companyId)}>{button.plus ? "+" : "–"}</button>{index + 1}</div>
                                         } else if (btnIndex === 1 && subscriber.rowCount === 1) {
                                             return <div className={classes.tableData}>{index + 1}</div>
+                                        } else if (subscribersList.length <= 1) {
+                                            return <div className={classes.tableData}>{index + 1}</div>
                                         }
                                     })}
-                                    <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.companyName}</div>
+                                    <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.newYn === "Y" ? <span className={classes.slideLabelHot}>n</span> : ""}{subscriber.companyName}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.workplaceName}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.registNo}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.sector}</div>
@@ -1386,7 +1446,7 @@ const SystemAdministrator = () => {
                                     if (index + 1 === plusButtonId) {
                                         return (<div className={handleTableRowClasses() ? classes.tableRow : classes.tableRowClose} >
                                             <div className={classes.tableData}></div>
-                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.companyName}</div>
+                                            <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.newYn === "Y" ? <span className={classes.slideLabelHot}>n</span> : ""}{subscribersWorkplaceItem.companyName}</div>
                                             <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.workplaceName}</div>
                                             <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.registNo}</div>
                                             <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.sector}</div>
@@ -1460,7 +1520,7 @@ const SystemAdministrator = () => {
                                                 ref={registNoRef}
                                                 value={subscriberInsert.registNo}
                                                 className={classes.tableTextField}
-                                                onChange={handleRegistNo}
+                                                onChange={handleRegistNoI}
                                                 //onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "registNo": e.target.value })}
                                             />
                                         </div>
@@ -1565,10 +1625,7 @@ const SystemAdministrator = () => {
                                                 label=" "
                                                 inputFormat="YYYY-MM-DD"
                                                 value={subscriberInsert.contractDay}
-                                                onChange={(newDate) => {
-                                                    const date = new Date(newDate === null ? "" : newDate.$d)
-                                                    setSubscriberInsert({ ...subscriberInsert, "contractDay": moment(date).format("YYYY-MM-DD") })
-                                                }}
+                                                onChange={DateChangeI('contractDay')}
                                                 isClearable                                                
                                                 renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                             />
@@ -1693,7 +1750,8 @@ const SystemAdministrator = () => {
                                                 variant="outlined"
                                                 value={subscriberView.registNo}
                                                 className={classes.tableTextField}
-                                                onChange={(event) => setSubscriberView({ ...subscriberView, "registNo": event.target.value })}
+                                                onChange={handleRegistNoD}
+                                                //onChange={(event) => setSubscriberView({ ...subscriberView, "registNo": event.target.value })}
                                             />
                                         </div>
                                         <div className={classes.dataNest}>
@@ -1810,10 +1868,7 @@ const SystemAdministrator = () => {
                                                 label=" "
                                                 inputFormat="YYYY-MM-DD"
                                                 value={contractDay}
-                                                onChange={(newDate) => {
-                                                    const date = new Date(newDate === null ? "" : newDate.$d)
-                                                    setContractDay(moment(date).format("YYYY-MM-DD"))
-                                                }}
+                                                onChange={DateChangeD}
                                                 renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                             />
                                         </LocalizationProvider>
