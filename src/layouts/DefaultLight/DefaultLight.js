@@ -722,10 +722,12 @@ const DefaultLight = ({ children }) => {
                                         }>안전보건관리체계의 구축 및 이행 항목 등록/업데이트<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => 
                                         { 
+                                            fetchEssentialRates()
+                                            fetchEssentialDutyVerision()
+                                            fetchInspectionDocs()
+                                            fetchDutyDetailList()
                                             setFileUploadPopup(true)
                                             setSettingsPopup(false)
-                                            fetchEssentialRates()
-                                            fetchEssentialDutyVerision()                                            
                                         }
                                         }>안전보건관리체계의 구축 및 이행 서류 양식 등록<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => 
