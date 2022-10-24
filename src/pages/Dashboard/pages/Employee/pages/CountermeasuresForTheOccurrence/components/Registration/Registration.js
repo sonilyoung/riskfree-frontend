@@ -172,9 +172,7 @@ const Registration = () => {
     }
 
     const handleRedirect = () => {
-        navigate(
-            "/dashboard/employee/accident-countermeasures-implementation/list"
-        );
+        navigate("/dashboard/employee/accident-countermeasures-implementation/list");
     };
       
     const handleAccidentInsert = async (e) => {

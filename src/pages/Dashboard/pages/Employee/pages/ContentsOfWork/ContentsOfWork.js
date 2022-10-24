@@ -742,7 +742,6 @@ const WorkHistoryList = () => {
     const [deleteFile] = useDeleteFileMutation();
     const getInitialWorkplaceId = useUserInitialWorkplaceId();
 
-
     const [locale] = React.useState('ko');
     const [hide, setHide] = useState(true);
     const [workplaceList, setWorkplaceList] = useState([]);
@@ -802,13 +801,13 @@ const WorkHistoryList = () => {
 
     async function getFileDownload(fileId) {        
         if (!!fileId) {
-            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+            window.location = `${BASE_URL}file/fileDown?atchFileId=${fileId}&fileSn=1`;
         }
     }    
 
     async function handleDialogFileDownload() {
         if (!!attachFileId) {
-            window.location = `${BASE_URL}/file/fileDown?atchFileId=${attachFileId}&fileSn=1`;
+            window.location = `${BASE_URL}file/fileDown?atchFileId=${attachFileId}&fileSn=1`;
         }
     }
 

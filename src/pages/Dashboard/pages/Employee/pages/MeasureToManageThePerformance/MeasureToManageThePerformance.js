@@ -199,7 +199,7 @@ const MeasureToManageThePerformance = () => {
 
     async function handleDialogFileDownload() {
         if (attachId) {
-            window.location = `${BASE_URL}/file/fileDown?atchFileId=${attachId}&fileSn=1`;
+            window.location = `${BASE_URL}file/fileDown?atchFileId=${attachId}&fileSn=1`;
         }
     }
 

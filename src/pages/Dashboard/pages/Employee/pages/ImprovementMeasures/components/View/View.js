@@ -396,7 +396,7 @@ const Registration = () => {
     
     async function handleDialogFileDownload(id) {
         if (id) {
-            window.location = `${BASE_URL}/file/fileDown?atchFileId=${id}&fileSn=1`;
+            window.location = `${BASE_URL}file/fileDown?atchFileId=${id}&fileSn=1`;
         }
     }
 

@@ -331,7 +331,7 @@ function List() {
     }
 
     const handleFileDownload = (fileId) => {
-        window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+        window.location = `${BASE_URL}file/fileDown?atchFileId=${fileId}&fileSn=1`;
     }
 
     console.log(noticesList)

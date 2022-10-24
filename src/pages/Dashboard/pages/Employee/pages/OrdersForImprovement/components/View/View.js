@@ -13,6 +13,8 @@ import { Overlay } from '../../../../../../../../components/Overlay';
 import YesNo from '../../../../../../../../components/MessageBox/YesNo';
 import Okay from '../../../../../../../../components/MessageBox/Okay';
 
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 const View = () => {
     const classes = useStyles();
     const navigate = useNavigate();
@@ -166,7 +168,7 @@ const View = () => {
                                     <div>조치 전</div>
                                     <div>
                                         <div className={classes.imgPreview}>
-                                            {filePathBefore && <img height={350} src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${filePathBefore}`} alt="beforeImg" />}
+                                            {filePathBefore && <img height={350} src={`${BASE_URL}file/getImg?imgPath=${filePathBefore}`} alt="beforeImg" />}
                                         </div>
                                     </div>
                                 </div>
@@ -174,7 +176,7 @@ const View = () => {
                                     <div>조치 후</div>
                                     <div>
                                         <div className={classes.imgPreview}>
-                                            {filePathAfter && <img height={350} src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${filePathAfter}`} alt="AfterImg" />}
+                                            {filePathAfter && <img height={350} src={`${BASE_URL}file/getImg?imgPath=${filePathAfter}`} alt="AfterImg" />}
                                         </div>
                                     </div>
                                 </div>

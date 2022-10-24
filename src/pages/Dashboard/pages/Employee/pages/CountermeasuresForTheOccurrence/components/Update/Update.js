@@ -155,7 +155,7 @@ const Update = () => {
     async function handleDialogFileDownload(id) {
         const fileId = accident[dialogId]
         if (fileId || id) {
-            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId || id}&fileSn=1`;
+            window.location = `${BASE_URL}file/fileDown?atchFileId=${fileId || id}&fileSn=1`;
         }
     }
 

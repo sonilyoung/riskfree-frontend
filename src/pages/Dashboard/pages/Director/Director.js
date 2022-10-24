@@ -66,7 +66,6 @@ import popupClose2 from '../../../../assets/images/btn_popClose2.png';
 import Chart from 'react-apexcharts';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-const BASE_URL_FRONT = process.env.REACT_APP_API_BASE_URL_FRONT
 
 const UserButton = styled(ButtonUnstyled)`
     background: transparent url(${userIcon});
@@ -736,7 +735,7 @@ const Director = () => {
                             <AdminButton className={classes.mainMenuButton} style={{ display: 'none' }}></AdminButton>
                             <div className={classes.weatherSection}>
                                 <span>
-                                    <img src={`${BASE_URL}/file/getImg?imgPath=${weatherData?.weatherImgUrl}`} alt="weather icon" />
+                                    <img src={`${BASE_URL}file/getImg?imgPath=${weatherData?.weatherImgUrl}`} alt="weather icon" />
                                 </span>
                                 <span>{weatherData?.temperature} °</span>
                                 <span>{weatherData?.address}</span>

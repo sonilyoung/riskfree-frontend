@@ -55,7 +55,7 @@ const View = () => {
 
     async function handleDialogFileDownload(id) {
         if (id) {
-            window.location = `${BASE_URL}/file/fileDown?atchFileId=${id}&fileSn=1`;
+            window.location = `${BASE_URL}file/fileDown?atchFileId=${id}&fileSn=1`;
         }
     }
 
@@ -234,7 +234,7 @@ const View = () => {
                                     <div>조치 전</div>
                                     <div>
                                         <div className={classes.imgPreview}>
-                                            {filePathBefore && <img height={350} src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${filePathBefore}`} alt="beforeImg" />}
+                                            {filePathBefore && <img height={350} src={`${BASE_URL}file/getImg?imgPath=${filePathBefore}`} alt="beforeImg" />}
                                         </div>
                                     </div>
                                 </div>
@@ -242,7 +242,7 @@ const View = () => {
                                     <div>조치 후</div>
                                     <div>
                                         <div className={classes.imgPreview}>
-                                            {filePathAfter && <img height={350} src={`http://tbs-a.thebridgesoft.com:8102/riskfree-backend/file/getImg?imgPath=${filePathAfter}`} alt="AfterImg" />}
+                                            {filePathAfter && <img height={350} src={`${BASE_URL}file/getImg?imgPath=${filePathAfter}`} alt="AfterImg" />}
                                         </div>
                                     </div>
                                 </div>

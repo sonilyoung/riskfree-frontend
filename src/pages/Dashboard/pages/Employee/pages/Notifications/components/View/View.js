@@ -224,7 +224,7 @@ const View = (props) => {
     }
 
     const handleFileDownload = (fileId) => {
-        window.location = `${BASE_URL}/file/fileDown?atchFileId=${notice?.data?.RET_DATA?.attachId}&fileSn=1`;
+        window.location = `${BASE_URL}file/fileDown?atchFileId=${notice?.data?.RET_DATA?.attachId}&fileSn=1`;
     }
 
     useEffect(() => {

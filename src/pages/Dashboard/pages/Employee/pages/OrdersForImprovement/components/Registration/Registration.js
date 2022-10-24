@@ -140,9 +140,7 @@ const Registration = () => {
     }
 
     const handleRedirect = () => {
-        navigate(
-            "/dashboard/employee/order-for-improvement-and-correction-under-related-law/list"
-        );
+        navigate("/dashboard/employee/order-for-improvement-and-correction-under-related-law/list");
     };
 
     const handleLawInsert = async () => {

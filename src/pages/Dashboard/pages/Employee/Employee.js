@@ -819,7 +819,7 @@ const Employee = () => {
             setOkayPopupMessage("업로드된 파일이 없습니다");
             setOkayPopupShow(true);
         } else {
-            window.location = `${BASE_URL}/file/fileDown?atchFileId=${safetyFileId}&fileSn=1`;
+            window.location = `${BASE_URL}file/fileDown?atchFileId=${safetyFileId}&fileSn=1`;
         }
     }
 
@@ -829,13 +829,13 @@ const Employee = () => {
             setWrongCredentialsPopup(true);
             setOkayPopupMessage("업로드된 파일이 없습니다");
         } else {
-            window.location = `${BASE_URL}/file/fileDown?atchFileId=${inspectionFileId}&fileSn=1`;
+            window.location = `${BASE_URL}file/fileDown?atchFileId=${inspectionFileId}&fileSn=1`;
         }
     }
 
     function handleDutyExcelDownload() {
         setLoading(true);
-        window.location = `${BASE_URL}/common/excel/getUserDutyExcel?workplaceId=${userWorkplaceId}&baselineId=${currentBaselineId}`;
+        window.location = `${BASE_URL}common/excel/getUserDutyExcel?workplaceId=${userWorkplaceId}&baselineId=${currentBaselineId}`;
         const FILEDOWNLOAD_INTERVAL = setInterval(function() {
             var donToken = Cookie.getCookie('fileDownloadToken');
             if (donToken === 'Y') { 
@@ -1128,7 +1128,7 @@ const Employee = () => {
                                     <div className={classes.headerPopList}>
                                         <div className={classes.userTab}>
                                             <div className={classes.userImage}>
-                                                {!!(companyInfo) && !!companyInfo.logoImg && (<img height={50} src={`${BASE_URL}/file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
+                                                {!!(companyInfo) && !!companyInfo.logoImg && (<img height={50} src={`${BASE_URL}file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
                                             </div>
                                             <div className={classes.userName}>
                                                 {companyInfo?.companyName}
@@ -1162,7 +1162,7 @@ const Employee = () => {
                                         />
                                         <div className={classes.preFootPop}>
                                             <div>
-                                                {filePath.logoImgUpload ? (<img height={60} src={`${BASE_URL}/file/getImg?imgPath=${filePath.logoImgUpload}`} alt="logo" />) : (<span>로고등록</span>)}
+                                                {filePath.logoImgUpload ? (<img height={60} src={`${BASE_URL}file/getImg?imgPath=${filePath.logoImgUpload}`} alt="logo" />) : (<span>로고등록</span>)}
                                             </div>
                                             <div>
                                                 <UploadImageButton id={"logoImgUpload"} onClick={handleDialogOpenOnly}>찾아보기</UploadImageButton>
@@ -1346,7 +1346,7 @@ const Employee = () => {
                             <AdminButton className={classes.mainMenuButton} style={{ display: 'none' }}></AdminButton>
                             <div className={classes.weatherSection}>
                                 <span>
-                                    <img src={`${BASE_URL}/file/getImg?imgPath=${weatherData?.weatherImgUrl}`} alt="weather icon" />
+                                    <img src={`${BASE_URL}file/getImg?imgPath=${weatherData?.weatherImgUrl}`} alt="weather icon" />
                                 </span>
                                 <span>{weatherData?.temperature} °</span>
                                 <span>{weatherData?.address}</span>
@@ -1360,7 +1360,7 @@ const Employee = () => {
                             <div className={classes.adminFieldText}>{companyInfo?.shGoal}</div>
                         </div>
                         <div className={classes.adminLogo}>
-                            {!!(companyInfo) && !!companyInfo.logoImg && (<img height={60} src={`${BASE_URL}/file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
+                            {!!(companyInfo) && !!companyInfo.logoImg && (<img height={60} src={`${BASE_URL}file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
                         </div>
                         <div className={classes.adminField + ' ' + classes.adminFieldRight}>
                             <div className={classes.adminFieldText}>경영방침</div>

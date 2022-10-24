@@ -97,9 +97,7 @@ const Update = () => {
     });
 
     const handleRedirect = () => {
-        navigate(
-            "/dashboard/employee/order-for-improvement-and-correction-under-related-law/list"
-        );
+        navigate("/dashboard/employee/order-for-improvement-and-correction-under-related-law/list");
     };
 
     const fetchLawView = async () => {
@@ -212,7 +210,7 @@ const Update = () => {
     async function handleDialogFileDownload() {
         const fileId = law[dialogId]
         if (fileId) {
-            window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId}&fileSn=1`;
+            window.location = `${BASE_URL}file/fileDown?atchFileId=${fileId}&fileSn=1`;
         }
     }
 
