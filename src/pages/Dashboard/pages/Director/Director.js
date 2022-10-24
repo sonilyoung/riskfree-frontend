@@ -904,31 +904,31 @@ const Director = () => {
                     <Slider className={classes.dashSlider} {...dashboardSlider} >
                         <div className={classes.dashboardSlide}>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate1?.score)}>
-                                <Link to="/dashboard/employee/1" className={classes.slickLink} underline="none">
+                                <Link to="/dashboard/employee/4" className={classes.slickLink} underline="none">
                                     <div><strong>{essentialRateList?.RET_DATA?.rate1?.score ? essentialRateList?.RET_DATA?.rate1?.score : "0%"}</strong></div>
                                     <div>안전보건 목표 및<br /> 경영방침</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate2?.score)}>
-                                <Link to="/dashboard/employee/2" className={classes.slickLink} underline="none">
+                                <Link to="/dashboard/employee/1" className={classes.slickLink} underline="none">
                                     <div><strong>{essentialRateList?.RET_DATA?.rate2?.score ? essentialRateList?.RET_DATA?.rate2?.score : "0%"}</strong></div>
                                     <div>안전보건 총괄관리<br /> 전담조직</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate3?.score)}>
-                                <Link to="/dashboard/employee/3" className={classes.slickLink} underline="none">
+                                <Link to="/dashboard/employee/5" className={classes.slickLink} underline="none">
                                     <div><strong>{essentialRateList?.RET_DATA?.rate3?.score ? essentialRateList?.RET_DATA?.rate3?.score : "0%"}</strong></div>
                                     <div>유해요인개선<br /> 업무절차</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate4?.score)}>
-                                <Link to="/dashboard/employee/4" className={classes.slickLink} underline="none">
+                                <Link to="/dashboard/employee/7" className={classes.slickLink} underline="none">
                                     <div><strong>{essentialRateList?.RET_DATA?.rate4?.score ? essentialRateList?.RET_DATA?.rate4?.score : "0%"}</strong></div>
                                     <div>예산편성 및<br /> 집행관리</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate5?.score)}>
-                                <Link to="/dashboard/employee/5" className={classes.slickLink} underline="none">
+                                <Link to="/dashboard/employee/3" className={classes.slickLink} underline="none">
                                     <div><strong>{essentialRateList?.RET_DATA?.rate5?.score ? essentialRateList?.RET_DATA?.rate5?.score : "0%"}</strong></div>
                                     <div>업무수행 권한<br /> 및 책임</div>
                                 </Link>
@@ -940,19 +940,19 @@ const Director = () => {
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate7?.score)}>
-                                <Link to="/dashboard/employee/7" className={classes.slickLink} underline="none">
+                                <Link to="/dashboard/employee/8" className={classes.slickLink} underline="none">
                                     <div><strong>{essentialRateList?.RET_DATA?.rate7?.score ? essentialRateList?.RET_DATA?.rate7?.score : "0%"}</strong></div>
                                     <div>종사자 개선<br /> 의견수렴</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate8?.score)}>
-                                <Link to="/dashboard/employee/8" className={classes.slickLink} underline="none">
+                                <Link to="/dashboard/employee/9" className={classes.slickLink} underline="none">
                                     <div><strong>{essentialRateList?.RET_DATA?.rate8?.score ? essentialRateList?.RET_DATA?.rate8?.score : "0%"}</strong></div>
                                     <div>비상대응<br /> 절차마련</div>
                                 </Link>
                             </div>
                             <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate9?.score)}>
-                                <Link to="/dashboard/employee/9" className={classes.slickLink} underline="none">
+                                <Link to="/dashboard/employee/2" className={classes.slickLink} underline="none">
                                     <div><strong>{essentialRateList?.RET_DATA?.rate9?.score ? essentialRateList?.RET_DATA?.rate9?.score : "0%"}</strong></div>
                                     <div>도급/용역 위탁 시<br /> 안전보건 확보</div>
                                 </Link>
