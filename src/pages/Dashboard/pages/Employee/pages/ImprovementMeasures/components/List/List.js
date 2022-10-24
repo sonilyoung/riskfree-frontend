@@ -35,7 +35,8 @@ function List() {
     const [getUseUserToken] = useUserToken();
     const [workplaces, setWorkplaces] = useState([])
     const [workplaceSelect, setWorkplaceSelect] = useState(getInitialWorkplaceId())
-    const [getroleCd, setGetroleCd] = useState(getUseUserToken.getUserRoleCd());
+    //const [getroleCd, setGetroleCd] = useState(getUseUserToken.getUserRoleCd());
+    const [getroleCd, setGetroleCd] = useState('');
     const [statusCd, setStatusCd] = useState("")
     const [improvements, setImprovements] = useState([])
     const [startDate, setStartDate] = useState(null)
@@ -187,10 +188,11 @@ function List() {
                                 sx={{ width: 160 }}
                                 className={classes.selectMenu}
                                 value={getroleCd}
-                                key={getroleCd}
+                                key=''
                                 onChange={handleReqUserSelect}
                                 displayEmpty
                             >
+                                <MenuItem value="">전체</MenuItem>
                                 <MenuItem value="001">대표이사</MenuItem>
                                 <MenuItem value="002">안전책임자</MenuItem>
                                 <MenuItem value="003">안전실무자</MenuItem>

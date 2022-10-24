@@ -126,15 +126,15 @@ const Registration = () => {
         let formData = new FormData();
         if((selectedFileName === "") || (selectedFileName === null)) {
             setOkayPopupMessage("업로드할 파일을 선택하세요.");
-            setOkayPopupShow(true);   
+            setOkayPopupShow(true);
         } else {
             formData.append("files", selectedFile)
             const response = await fileUpload(formData)
             if(response.data.RET_CODE === "0000"){
+                const fileId = response.data.RET_DATA[0].atchFileId
                 setOkayPopupMessage("'파일'을 등록 하였습니다.");
                 setOkayPopupShow(true);
                 handleDialogClose();
-                const fileId = response.data.RET_DATA[0].atchFileId
                 setImprovement({ ...improvement, [dialogId]: parseInt(fileId) })
                 setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
             } else if(response.data.RET_CODE === '0433'){
@@ -311,7 +311,8 @@ const Registration = () => {
                                     <TextField
                                         id="standard-basic"
                                         variant="outlined"
-                                        value={fileReq ?? ""}
+                                        
+                                        value={filePath.reqFileId === "" ? fileReq : filePath.reqFileId }
                                         sx={{ width: 390 }}
                                         className={classes.selectMenu}
                                         style={{ cursor: "pointer" }}
@@ -426,7 +427,7 @@ const Registration = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value={filePathBefore ?? ""}
+                                            value={filePath.actionBeforeId === "" ? filePathBefore : filePath.actionBeforeId}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             style={{ cursor: "pointer" }}
@@ -442,7 +443,7 @@ const Registration = () => {
                                         <TextField
                                             id="standard-basic"
                                             variant="outlined"
-                                            value={filePathAfter ?? ""}
+                                            value={filePath.actionAfterId === "" ? filePathAfter : filePath.actionAfterId}
                                             sx={{ width: 610 }}
                                             className={classes.selectMenu}
                                             style={{ cursor: "pointer" }}
