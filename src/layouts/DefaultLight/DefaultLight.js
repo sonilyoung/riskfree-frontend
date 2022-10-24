@@ -564,7 +564,9 @@ const DefaultLight = ({ children }) => {
         } else {
             let formData = new FormData();
             formData.append("excelFile", selectedFile)
+            setLoading(true);
             const response = await excelUpload(formData)
+            setLoading(false);
             if((response.data.RET_CODE === "0000") || (response.data.RET_CODE === "0201")){
                 setExcel({ ...excel })
                 setOkPopupMessage("'파일'을 등록 하였습니다.");
@@ -575,8 +577,8 @@ const DefaultLight = ({ children }) => {
                 setOkPopupMessage("파일확장자 오류");
                 setOkPopupShow(true);
             } else {
-                setOkPopupMessage("업로드 양식에 오류가 있습니다.");
-                setOkPopupShow(true);
+                setOkayPopupMessage(response.data.RET_DESC);
+                setOkayPopupShow(true);
             }
             setSelectedFileName("");
         }
@@ -722,12 +724,8 @@ const DefaultLight = ({ children }) => {
                                         }>안전보건관리체계의 구축 및 이행 항목 등록/업데이트<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => 
                                         { 
-                                            fetchEssentialRates()
-                                            fetchEssentialDutyVerision()
-                                            fetchInspectionDocs()
-                                            fetchDutyDetailList()
-                                            setFileUploadPopup(true)
-                                            setSettingsPopup(false)
+                                            setFileUploadPopup(true) 
+                                            setSettingsPopup(false) 
                                         }
                                         }>안전보건관리체계의 구축 및 이행 서류 양식 등록<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => 
