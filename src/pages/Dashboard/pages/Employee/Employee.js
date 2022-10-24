@@ -841,7 +841,7 @@ const Employee = () => {
             if (donToken === 'Y') { 
                 clearInterval(FILEDOWNLOAD_INTERVAL);
                 setLoading(false);
-                Cookie.deleteCookie('fileDownloadToken');                
+                Cookie.setCookie('fileDownloadToken', "N", 1);                
                 setOkayPopupShow(true); 
                 setOkayPopupMessage('파일다운로드가 완료되었습니다.');
             }
@@ -1331,7 +1331,7 @@ const Employee = () => {
                                         {baselineData.isClose==='1' ? 
                                             <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => {setOkayPopupShow(true); setOkayPopupMessage('마감된 차수는 업데이트할 수 없습니다.')}}>안전보건관리체계의 구축 및 이행 항목 업데이트​<img src={arrowDown} alt="arrow down" /></Link>
                                         :
-                                            <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => {setYesNoPopupShow(true); setYesNoPopupMessage("현재차수의 데이터가 초기화 됩니다. 업데이트 하시겠습니까?") }}>안전보건관리체계의 구축 및 이행 항목 업데이트​<img src={arrowDown} alt="arrow down" /></Link>
+                                            <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => {setYesNoPopupShow(true); setYesNoPopupMessage("데이터가 초기화 됩니다.업데이트 하시겠습니까?") }}>안전보건관리체계의 구축 및 이행 항목 업데이트​<img src={arrowDown} alt="arrow down" /></Link>
                                         }
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" id="userDutyExcelUpload" onClick={handleDialogOpenEmployee}>안전보건관리체계의 구축 및 이행 항목 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
 
