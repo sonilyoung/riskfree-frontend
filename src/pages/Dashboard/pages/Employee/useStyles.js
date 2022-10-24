@@ -896,11 +896,14 @@ const useStyles = makeStyles(() => ({
             },
         },
         '& .nestedList li': {
-            padding: '0'
+            padding: '0',
+            fontSize: '15px',
+            
         },
         '&.secondList': {
             padding: '0px',
             boxSizing: 'border-box',
+            fontSize: '15px',
             '& li': {
                 marginRight: '10px',
                 borderBottom: '1px solid #363c4c',

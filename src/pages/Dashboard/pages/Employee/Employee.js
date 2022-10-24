@@ -1594,7 +1594,7 @@ const Employee = () => {
                                             if (property.includes("rate")) {
                                                 return (
                                                     <><li>
-                                                        <Link className={(clickedEssentialRateForClass == property ? classes.listLinkClicked : classes.listLink)} onClick={() => {
+                                                        <Link className={(clickedEssentialRateForClass === property ? classes.listLinkClicked : classes.listLink)} onClick={() => {
                                                             setClickedEssentialRateForClass(property)
                                                             setClickedEssentialRate(!!essentialRates[property].groupId && essentialRates[property].groupId)
                                                         }} to={"#none"} underline="none">{!!essentialRates[property].title && essentialRates[property].title}</Link>
