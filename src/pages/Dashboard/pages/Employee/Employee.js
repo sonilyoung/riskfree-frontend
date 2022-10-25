@@ -177,6 +177,10 @@ const Employee = () => {
     const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
     const [yesNoPopupShowClose, setYesNoPopupShowClose] = useState(false);
     const [yesNoPopupMessage, setYesNoPopupMessage] = useState("");
+
+    const [yesNoPopupShowLogOut, setYesNoPopupShowLogOut] = useState(false);
+    const [yesNoPopupMessageLogOut, setYesNoPopupMessageLogOut] = useState("");
+
     const [openDialog, setOpenDialog] = useState(false)
     const [openDialogEmployee, setOpenDialogEmployee] = useState(false)
     const [openSafetyDialog, setOpenSafetyDialog] = useState(false)
@@ -1214,7 +1218,7 @@ const Employee = () => {
                                     <div>{loginInfo?.loginId} / <span>{loginInfo?.roleName}</span></div>
                                     <div>계약기간 : {companyInfo?.contractStartDate} ~ {companyInfo?.contractEndDate}</div>
                                 </div>
-                                <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
+                                <LogButton className={classes.mainMenuButton} onClick={() => {setYesNoPopupShowLogOut(true); setYesNoPopupMessageLogOut("로그아웃 하시겠습니까?") }}></LogButton>
                                 {/* 설정 팝업창 */}
                                 <SettingsButton className={classes.mainMenuButton} onClick={() => setSettingsPopup(true)}></SettingsButton>
                                 <div className={settingsPopup ? (classes.headerPopup + ' settings_popup') : (classes.headerPopup + ' settings_popupClose')}>
@@ -1995,6 +1999,16 @@ const Employee = () => {
                     onConfirm={() => setOkayPopupShow(false) } />
             </Overlay>
                         
+            {/* 로그아웃 처리 */}
+            <Overlay show={yesNoPopupShowLogOut}>
+                <YesNo
+                    show={yesNoPopupShowLogOut}
+                    message={yesNoPopupMessageLogOut}
+                    onConfirmYes={handleLogOut}
+                    onConfirmNo={() => setYesNoPopupShowLogOut(false)}
+                />
+            </Overlay>
+
             {/* 관리차수 마감 처리 */}
             <Overlay show={yesNoPopupShowClose}>
                 <YesNo
@@ -2004,6 +2018,7 @@ const Employee = () => {
                     onConfirmNo={() => setYesNoPopupShowClose(false)}
                 />
             </Overlay>
+
             <Overlay show={yesNoPopupShow}>
                 <YesNo
                     show={yesNoPopupShow}
