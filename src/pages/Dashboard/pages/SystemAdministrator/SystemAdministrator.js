@@ -1722,7 +1722,11 @@ const SystemAdministrator = () => {
                                             value={subscriberView.companyName}
                                             className={classes.tableTextField}
                                             onChange={(event) => setSubscriberView({ ...subscriberView, "companyName": event.target.value })}
-                                        />
+                                            style={{backgroundColor: "#d4d9e1"}}
+                                            InputProps={{
+                                                readOnly: true,
+                                              }}                                                
+                                    />
                                     </div>
                                 </div>
                                 <div className={classes.popupRow}>
@@ -1747,6 +1751,10 @@ const SystemAdministrator = () => {
                                                 value={subscriberView.workplaceName}
                                                 className={classes.tableTextField}
                                                 onChange={(event) => setSubscriberView({ ...subscriberView, "workplaceName": event.target.value })}
+                                                style={{backgroundColor: "#d4d9e1"}}
+                                                InputProps={{
+                                                    readOnly: true,
+                                                  }}                                                
                                             />
                                         </div>
                                         <div className={classes.dataNest}>
@@ -1755,7 +1763,10 @@ const SystemAdministrator = () => {
                                                 value={subscriberView.registNo}
                                                 className={classes.tableTextField}
                                                 onChange={handleRegistNoD}
-                                                //onChange={(event) => setSubscriberView({ ...subscriberView, "registNo": event.target.value })}
+                                                style={{backgroundColor: "#d4d9e1"}}
+                                                InputProps={{
+                                                    readOnly: true,
+                                                  }}                                                
                                             />
                                         </div>
                                         <div className={classes.dataNest}>

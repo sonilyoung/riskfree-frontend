@@ -59,6 +59,10 @@ import useUserToken from '../../../../hooks/core/UserToken/UserToken';
 import { setWorkplaceId, selectWorkplaceId, selectBaselineId, setBaselineId } from '../../../../slices/selections/MainSelection';
 import { useStyles } from './useStyles';
 
+import { Overlay } from '../../../../components/Overlay';
+import Okay from '../../../../components/MessageBox/Okay';
+import YesNo from '../../../../components/MessageBox/YesNo';
+
 import adminIcon from '../../../../assets/images/btn_admin.png';
 import adminIconHover from '../../../../assets/images/btn_admin_ov.png';
 import icoFile from '../../../../assets/images/ic_file.png';
@@ -285,6 +289,9 @@ const Director = () => {
     const [getNoticeHotList] = useGetNoticeHotListMutation();
     const [getBaseLineReport] = useGetBaseLineReportMutation();
     const [getTitleReport] = useGetTitleReportMutation();
+
+    const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
+    const [yesNoPopupMessage, setYesNoPopupMessage] = useState("");
 
     const [noticesList, setNoticesList] = useState([]);
     const [userPopup, setUserPopup] = useState(false)
@@ -724,7 +731,7 @@ const Director = () => {
                                     <div>{loginInfo?.loginId} / <span>{loginInfo?.roleName}</span></div>
                                     <div>계약기간 : {companyInfo.data?.RET_DATA?.contractStartDate} ~  {companyInfo.data?.RET_DATA?.contractEndDate}</div>
                                 </div>
-                                <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
+                                <LogButton className={classes.mainMenuButton} onClick={() => {setYesNoPopupShow(true); setYesNoPopupMessage("로그아웃 하시겠습니까?") }}></LogButton>
                                 <SettingsButton className={classes.mainMenuButton} onClick={() => {
                                     if (userRoleCode === "000") { navigate("/dashboard/system-administrator") }
                                 }}></SettingsButton>
@@ -1214,7 +1221,19 @@ const Director = () => {
                 </>))
                 }
             </Grid >
+
+            {/* 로그아웃 처리 */}
+            <Overlay show={yesNoPopupShow}>
+            <YesNo
+                show={yesNoPopupShow}
+                message={yesNoPopupMessage}
+                onConfirmYes={handleLogOut}
+                onConfirmNo={() => setYesNoPopupShow(false)}
+            />
+        </Overlay>
+
         </WideLayout >
+        
     );
 };
 export default Director;

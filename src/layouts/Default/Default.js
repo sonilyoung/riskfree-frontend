@@ -802,6 +802,10 @@ const Default = ({ children }) => {
     const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
     const [yesNoPopupShowClose, setYesNoPopupShowClose] = useState(false);
     const [yesNoPopupMessage, setYesNoPopupMessage] = useState("")
+
+    const [yesNoPopupShowLogOut, setYesNoPopupShowLogOut] = useState(false);
+    const [yesNoPopupMessageLogOut, setYesNoPopupMessageLogOut] = useState("")    
+
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
     const [selectedFile, setSelectedFile] = useState(null);
@@ -1212,7 +1216,7 @@ const Default = ({ children }) => {
                                     <div>{loginInfo?.loginId} / <span>{loginInfo?.roleName}</span></div>
                                     <div>계약기간 : {companyInfo?.contractStartDate} ~ {companyInfo?.contractEndDate}</div>
                                 </div>
-                                <LogButton className={classes.mainMenuButton} onClick={handleLogOut}></LogButton>
+                                <LogButton className={classes.mainMenuButton} onClick={() => {setYesNoPopupShowLogOut(true); setYesNoPopupMessageLogOut("로그아웃 하시겠습니까?") }}></LogButton>
                                 {/* 설정 팝업창 */}
                                 {roleCd === '001'
                                     ? <SettingsButtonInactive className={classes.mainMenuButton}></SettingsButtonInactive>
@@ -1396,6 +1400,17 @@ const Default = ({ children }) => {
                     message={okayPopupMessage}
                     title={okayPopupTitle}
                     onConfirm={() => setOkayPopupShow(false)} />
+            </Overlay>
+
+
+            {/* 로그아웃 처리 */}
+            <Overlay show={yesNoPopupShowLogOut}>
+                <YesNo
+                    show={yesNoPopupShowLogOut}
+                    message={yesNoPopupMessageLogOut}
+                    onConfirmYes={handleLogOut}
+                    onConfirmNo={() => setYesNoPopupShowLogOut(false)}
+                />
             </Overlay>
 
             {/* 관리차수 마감 처리 */}
