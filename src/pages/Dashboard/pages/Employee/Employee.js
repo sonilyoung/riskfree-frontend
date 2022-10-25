@@ -1057,7 +1057,7 @@ const Employee = () => {
         fetchDutyDetailList();
         setWorkplaceChange(false);
         setLoading(false);
-    }, [baselineIdForSelect, baselineData, defaultPage, workplaceChange]);
+    }, [baselineIdForSelect, baselineData, defaultPage, workplaceChange]);  
 
     useEffect(() => {
         setLoading(true);
@@ -1072,12 +1072,14 @@ const Employee = () => {
 
     useEffect(() => {
         setLoading(true);
+        fetchEssentialRates()
         fetchDutyDetailList()
         setLoading(false);
     }, [clickedEssentialRate])
 
     useEffect(() => {
         setLoading(true);
+        fetchEssentialRates()
         fetchInspectionDocs()
         fetchDutyCycle()
         fetchDutyAssigned()
@@ -1088,6 +1090,7 @@ const Employee = () => {
 
     useEffect(() => {
         setLoading(true);
+        fetchEssentialRates()
         fetchInspectionDocs()
         setLoading(false);
     }, [uploadFlag])
@@ -1527,7 +1530,6 @@ const Employee = () => {
                     <div className={evaluationPopup ? classes.uploadedPopup : classes.uploadedPopupClose}>
                         <FormControl className={classes.searchRadio} onChange={(e) => {
                             setEvaluation(e.target.value)
-                            fetchEssentialRates()
                             }}>
                             <RadioGroup row value={evaluation || ""}>
                                 <FormControlLabel
