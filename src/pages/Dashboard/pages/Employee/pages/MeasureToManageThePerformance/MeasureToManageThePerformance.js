@@ -200,7 +200,7 @@ const MeasureToManageThePerformance = () => {
 
     async function handleDialogFileDownload() {
         setLoading(true);
-        window.location = `${BASE_URL}common/excel/relatedRawExcel?workplaceId=${loginInfos.workplaceId}&baselineId=${currentBaseline}&companyId=${loginInfos.companyId}`;
+        window.location = `${BASE_URL}common/excel/relatedRawExcel?workplaceId=${loginInfos.workplaceId}&baselineId=${currentBaseline}&companyId=${loginInfos.companyId}&lawButtonId=${lawId}`;
         const FILEDOWNLOAD_INTERVAL = setInterval(function() {
             var donToken = Cookie.getCookie('fileDownloadToken');
             if (donToken === 'Y') { 

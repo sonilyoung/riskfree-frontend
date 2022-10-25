@@ -751,10 +751,10 @@ const Director = () => {
                     </Grid>
 
                     <div className={userRoleCode === '000' ? classes.pageOverlay : classes.pageOverlayInactive}>
-                        {/* <SettingsButton className={classes.mainMenuButtonSettings} onClick={() => {
+                        {<SettingsButton className={classes.mainMenuButtonSettings} onClick={() => {
                             setSettingsPopup(true)
                             if (userRoleCode === "000") { navigate("/dashboard/system-administrator") }
-                        }}></SettingsButton> */}
+                        }}></SettingsButton>}
                     </div>
 
                     <Grid className={classes.headerWorkplace} item xs={12} sx={{ marginTop: '-45px' }}>
