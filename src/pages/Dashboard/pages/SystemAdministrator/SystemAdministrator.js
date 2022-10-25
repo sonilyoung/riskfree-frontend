@@ -775,7 +775,7 @@ const SystemAdministrator = () => {
     const [locale] = React.useState('ko');
     const [regMemberPop, setRegMemberPop] = useState(false);
     const [userInfoPop, setUserInfoPop] = useState(false);
-    const [col, setCol] = useState("");
+    const [col, setCol] = useState("all");
     const [param, setParam] = useState("");
     const [subscribersSelect] = useSubscribersSelectMutation();
     const [subscribersInsert] = useSubscribersInsertMutation();
