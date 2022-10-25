@@ -1934,12 +1934,12 @@ const Employee = () => {
                 </Grid>
                 {/* NOTIFICATION POPUP */}
                 {!!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
-                    <div className={classes.notificationPopup}>
+                    <div className={classes.notificationPopup} style={{marginTop: `${index*3 + '0'}px`, marginLeft: `${index*3 + '0'}px`}} >                    
                         <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)}></ClosePopupButton2>
                         {noticeHotItem.importCd === '001' ?
                             <div><span className={classes.slideLabelHot}>HOT</span> {noticeHotItem.title}</div>
                         :
-                        <div></div>
+                        <div>{noticeHotItem.title}</div>
                         }
                         
                         <div className={classes.popNews}>
