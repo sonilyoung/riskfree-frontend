@@ -254,7 +254,7 @@ const Update = () => {
                         관계법령에 따른 개선.시정 명령에 따른 조치 현황
                     </Typography>
                 </Grid>
-                {loginInfo.name === law.reqUserName ?
+                {loginInfo.name === law.recvUserName ?
                 <Grid item xs={12} className={classes.boxReception}>
                     <div className={classes.boxTitle}>
                         <span>개선.조치</span>
