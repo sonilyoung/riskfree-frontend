@@ -31,6 +31,7 @@ import { useLocalStorage } from '../../hooks/misc/LocalStorage';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Overlay } from '../../components/Overlay';
 import Okay from '../../components/MessageBox/Okay';
+import YesNo from '../../components/MessageBox/YesNo';
 import { useFileUploadMutation, useUpdateDocumentFileIdMutation } from '../../hooks/api/FileManagement/FIleManagement';
 import { UploadDialog, UploadEmployeeDialog } from '../../dialogs/Upload';
 import { useExcelUploadMutation } from '../../hooks/api/ExcelController/ExcelController';
@@ -299,6 +300,10 @@ const DefaultLight = ({ children }) => {
     const [updateSafetyFile] = useUpdateSafetyFileMutation()
     const [updateDocumentFileId] = useUpdateDocumentFileIdMutation()
     const [uploadFlag, setUploadFlag] = useState(false)
+
+    const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
+    const [yesNoPopupMessage, setYesNoPopupMessage] = useState("");
+        
     const [okayPopupShow, setOkayPopupShow] = useState(false);
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
@@ -854,7 +859,7 @@ const DefaultLight = ({ children }) => {
                                 <div>{loginInfo?.loginId} / <span>{loginInfo?.roleName}</span></div>
                             </div>
                             {/* <BackButton onClick={() => handleRedirect()}></BackButton> */}
-                            <LogButton className={classes.mainMenuButton} onClick={handleLogOut}>
+                            <LogButton className={classes.mainMenuButton} onClick={() => {setYesNoPopupShow(true); setYesNoPopupMessage("로그아웃 하시겠습니까?") }}>
                                 <LogoutIcon fontSize="large" sx={{ color: 'gray' }}></LogoutIcon>
                             </LogButton>
                         </Grid>
@@ -884,6 +889,16 @@ const DefaultLight = ({ children }) => {
                 enableDownload={true}
                 selectedFileName={selectedFileName}
             />
+
+            {/* 로그아웃 */}
+            <Overlay show={yesNoPopupShow}>
+                <YesNo
+                    show={yesNoPopupShow}
+                    message={yesNoPopupMessage}
+                    onConfirmYes={handleLogOut}
+                    onConfirmNo={() => setYesNoPopupShow(false)}
+                />
+            </Overlay>
 
             <Overlay show={okPopupShow}>
                 <Okay

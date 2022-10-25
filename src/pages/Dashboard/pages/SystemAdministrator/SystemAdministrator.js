@@ -1325,7 +1325,18 @@ const SystemAdministrator = () => {
         }
     };
 
-    
+     //숫자 입력시 (3자리마다) 콤마 처리
+    const inputPriceFormat = (str) => {
+        const comma = (str) => {
+          str = String(str);
+          return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
+        };
+        const uncomma = (str) => {
+          str = String(str);
+          return str.replace(/[^\d]+/g, "");
+        };
+        return comma(uncomma(str));
+    };
 
     useEffect(() => {
         fetchSubscribersList();
@@ -1333,17 +1344,6 @@ const SystemAdministrator = () => {
         fetchCommCodeListGroup2();
         fetchCommCodeListGroup3();
     }, []);
-
-    
-    // useEffect(() => {
-    //     if (subscriberInsert.registNo.length <= 10) {
-    //         //setValues({registNo: registNo.replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3')});
-    //         setSubscriberInsert({ ...subscriberInsert, "registNo": subscriberInsert.registNo.replace(/-/g, "").replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3') })
-    //     } else {
-
-    //     }
-    // }, [subscriberInsert.registNo]);
-    
 
     return (
         <DefaultLightLayout>
@@ -1465,7 +1465,6 @@ const SystemAdministrator = () => {
                                                 ? <div className={classes.tableData} style={{ cursor: "pointer" }} onDoubleClick={() => { handleDialogFileDownload(subscribersWorkplaceItem.contractFileId) }}>{subscribersWorkplaceItem.contractFileYn}</div>
                                                 : <div className={classes.tableData} style={{ cursor: "pointer" }}>{subscribersWorkplaceItem.contractFileYn}</div>
                                             }
-                                            {/* <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem?.statusCd ? <img src={monitor} alt="monitor" /> : null}</div> */}
                                         </div>);
                                     }
                                 })}
@@ -1608,7 +1607,7 @@ const SystemAdministrator = () => {
                                             value={subscriberInsert.contractAmount}
                                             className={classes.tableTextField}
                                             onChange={(e) => {
-                                                setSubscriberInsert({ ...subscriberInsert, "contractAmount": e.target.value })
+                                                setSubscriberInsert({ ...subscriberInsert, "contractAmount": inputPriceFormat(e.target.value) })
                                             }}
                                             sx={{ width: 180 }}
                                         />
@@ -1851,14 +1850,13 @@ const SystemAdministrator = () => {
                                         <TextField
                                             variant="outlined"
                                             className={classes.tableTextField}
-                                            value={subscriberView.contractAmount === null ? "" : subscriberView.contractAmount}
-                                            onChange={(event) => setSubscriberView({ ...subscriberView, "contractAmount": event.target.value })}
+                                            value={subscriberView.contractAmount === null ? "" : subscriberView.contractAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                            onChange={(event) => setSubscriberView({ ...subscriberView, "contractAmount": inputPriceFormat(event.target.value) })}
                                             sx={{ width: 190 }}
                                         />
                                         &nbsp;원
                                     </div>
                                 </div>
-
                                 <div className={classes.popupRow}>
                                     <div className={classes.popupData + ' data_head'}>계약일</div>
                                     <div className={classes.popupData}>

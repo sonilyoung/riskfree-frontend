@@ -1672,7 +1672,7 @@ const Employee = () => {
                                                             inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}>상</span>) 
                                                                 || (inspection.evaluation === "7" && <span className={'orange'}>중</span>) 
                                                                     || (inspection.evaluation === "5" && <span className={'red'}>하</span>)
-                                                                    || (inspection.evaluation === "" && <span>평가</span>))
+                                                                    || (inspection.evaluation === "0" && <span>평가</span>))
                                                             :
                                                             inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}
                                                                 onClick={() => { setEvaluation(inspection.evaluation); setEvaluationPopup(!evaluationPopup); setArticleNoForInspection(inspection.articleNo); setEvaluationIndex(index) }}>상</span>) 
