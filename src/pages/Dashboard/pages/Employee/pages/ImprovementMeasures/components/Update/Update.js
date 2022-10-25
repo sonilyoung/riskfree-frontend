@@ -16,7 +16,7 @@ import { useStyles, UploadButton, BlueButton, WhiteButton } from './useStyles';
 import { DefaultLayout } from '../../../../../../../../layouts/Default';
 import radioIcon from '../../../../../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../../../../../assets/images/ic_radio_on.png';
-import { useGetWorkplaceListMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
+import { useGetWorkplaceListMutation, useGetLoginInfoMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
 import { useImprovementViewMutation, useImprovementUpdateMutation } from '../../../../../../../../hooks/api/ImprovementsManagement/ImprovementsManagement';
 import 'dayjs/locale/ko';
 import moment from "moment"
@@ -191,8 +191,17 @@ const Registration = () => {
         }
     }
 
+    /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
+    const [loginInfos, setLoginInfos] = useState({});
+    const [getLoginInfo] = useGetLoginInfoMutation()
+    const fetchLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfos(response.data.RET_DATA)
+    }    
+
     useEffect(() => {
         fetchComapanyWorkplace()
+        fetchLoginInfo();
         fetchImprovementView()
     }, [])
 
@@ -208,122 +217,163 @@ const Registration = () => {
                         개선조치 현황
                     </Typography>
                 </Grid>
-                <Grid item xs={12} className={classes.boxFirst}>
-                    <div className={classes.boxTitle}>
-                        <span>개선.조치</span>
-                        <span>접수</span>
-                    </div>
-                    <div className={classes.boxContent}>
-                        <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}><text>*</text>사업장</div>
-                            <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>
-                                    <Select
-                                        sx={{ width: 200 }}
-                                        className={classes.selectMenu}
-                                        value={improvement && improvement.workplaceId}
-                                        onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
-                                    >
-                                        {workplaces?.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
-                                    </Select>
-                                </div>
-                                <div className={classes.rowTitle}><text>*</text>개선조치 NO</div>
-                                <div className={classes.rowInfo}>
-                                    <TextField
-                                        id="standard-basic"
-                                        variant="outlined"
-                                        sx={{ width: 200 }}
-                                        className={classes.selectMenu}
-                                        value={improvement && improvement.improveNo}
-                                        onChange={(event) => setImprovement({ ...improvement, "improveNo": event.target.value })}
-                                    />
-                                </div>
-                            </div>
+                {loginInfos.roleName === improvement.reqUserName ?
+                    <Grid item xs={12} className={classes.boxFirst}>
+                        <div className={classes.boxTitle}>
+                            <span>개선.조치</span>
+                            <span>접수</span>
                         </div>
-                        <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>
-                                <text>*</text>
-                                <span>개선.조치 </span>
-                                <span>내용</span>
-                            </div>
-                            <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>
-                                    <TextField
-                                        className={classes.textArea}
-                                        id="outlined-multiline-static"
-                                        multiline
-                                        rows={4}
-                                        value={improvement && improvement.improveCn}
-                                        onChange={(event) => setImprovement({ ...improvement, "improveCn": event.target.value })}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}><text>*</text>요청일자</div>
-                            <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-                                        <DesktopDatePicker
-                                            className={classes.selectMenuDate}
-                                            label=" "
-                                            inputFormat="YYYY-MM-DD"
-                                            value={improvement && improvement.reqDate}
-                                            onChange={(newDate) => {
-                                                const date = new Date(newDate.$d)
-                                                setImprovement({ ...improvement, "reqDate": moment(date).format("YYYY-MM-DD") })
-                                            }}
-                                            renderInput={(params) => <TextField {...params} sx={{ width: 200 }} />}
-                                        />
-                                    </LocalizationProvider>
-                                </div>
-                                <div className={classes.rowTitle}><text>*</text>요청자</div>
-                                <div className={classes.rowInfo}>
-                                    <Select
+                        <div className={classes.boxContent}>
+                            <div className={classes.boxRow}>
+                                <div className={classes.rowTitle}><text>*</text>사업장</div>
+                                <div className={classes.rowContent}>
+                                    <div className={classes.rowInfo}>
+                                        <Select
                                             sx={{ width: 200 }}
                                             className={classes.selectMenu}
-                                            value={improvement.reqUserCd}
-                                            onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
+                                            value={improvement && improvement.workplaceId}
+                                            onChange={(event) => setImprovement({ ...improvement, "workplaceId": event.target.value })}
                                         >
-                                            <MenuItem value="001">대표이사</MenuItem>
-                                            <MenuItem value="002">안전책임자</MenuItem>
-                                            <MenuItem value="003">안전실무자</MenuItem>
+                                            {workplaces?.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
                                         </Select>
-                                </div>
-                                <div className={classes.rowTitle}><text>*</text>완료요청일</div>
-                                <div className={classes.rowInfo}>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-                                        <DesktopDatePicker
-                                            className={classes.selectMenuDate}
-                                            label=" "
-                                            inputFormat="YYYY-MM-DD"
-                                            value={improvement && improvement.finDate}
-                                            onChange={(newDate) => {
-                                                const date = new Date(newDate.$d)
-                                                setImprovement({ ...improvement, "finDate": moment(date).format("YYYY-MM-DD") })
-                                            }}
-                                            renderInput={(params) => <TextField {...params} sx={{ width: 200 }} />}
+                                    </div>
+                                    <div className={classes.rowTitle}><text>*</text>개선조치 NO</div>
+                                    <div className={classes.rowInfo}>
+                                        <TextField
+                                            id="standard-basic"
+                                            variant="outlined"
+                                            sx={{ width: 200 }}
+                                            className={classes.selectMenu}
+                                            value={improvement && improvement.improveNo}
+                                            onChange={(event) => setImprovement({ ...improvement, "improveNo": event.target.value })}
                                         />
-                                    </LocalizationProvider>
+                                    </div>
                                 </div>
-                                <div className={classes.rowTitle}>첨부파일</div>
-                                <div className={classes.rowInfo}>
-                                    <TextField
-                                        id="standard-basic"
-                                        variant="outlined"
-                                        
-                                        value={filePath.reqFileId === "" ? fileReq : filePath.reqFileId }
-                                        sx={{ width: 390 }}
-                                        className={classes.selectMenu}
-                                        style={{ cursor: "pointer" }}
-                                        onDoubleClick={() => handleDialogFileDownload(improvement.reqFileId)}
-                                    />
-                                    <UploadButton id="reqFileId" onClick={handleDialogOpen}>찾아보기</UploadButton>
+                            </div>
+                            <div className={classes.boxRow}>
+                                <div className={classes.rowTitle}>
+                                    <text>*</text>
+                                    <span>개선.조치 </span>
+                                    <span>내용</span>
+                                </div>
+                                <div className={classes.rowContent}>
+                                    <div className={classes.rowInfo}>
+                                        <TextField
+                                            className={classes.textArea}
+                                            id="outlined-multiline-static"
+                                            multiline
+                                            rows={4}
+                                            value={improvement && improvement.improveCn}
+                                            onChange={(event) => setImprovement({ ...improvement, "improveCn": event.target.value })}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={classes.boxRow}>
+                                <div className={classes.rowTitle}><text>*</text>요청일자</div>
+                                <div className={classes.rowContent}>
+                                    <div className={classes.rowInfo}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                            <DesktopDatePicker
+                                                className={classes.selectMenuDate}
+                                                label=" "
+                                                inputFormat="YYYY-MM-DD"
+                                                value={improvement && improvement.reqDate}
+                                                onChange={(newDate) => {
+                                                    const date = new Date(newDate.$d)
+                                                    setImprovement({ ...improvement, "reqDate": moment(date).format("YYYY-MM-DD") })
+                                                }}
+                                                renderInput={(params) => <TextField {...params} sx={{ width: 200 }} />}
+                                            />
+                                        </LocalizationProvider>
+                                    </div>
+                                    <div className={classes.rowTitle}><text>*</text>요청자</div>
+                                    <div className={classes.rowInfo}>
+                                        <Select
+                                                sx={{ width: 200 }}
+                                                className={classes.selectMenu}
+                                                value={improvement.reqUserCd}
+                                                onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
+                                            >
+                                                <MenuItem value="001">대표이사</MenuItem>
+                                                <MenuItem value="002">안전책임자</MenuItem>
+                                                <MenuItem value="003">안전실무자</MenuItem>
+                                            </Select>
+                                    </div>
+                                    <div className={classes.rowTitle}><text>*</text>완료요청일</div>
+                                    <div className={classes.rowInfo}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
+                                            <DesktopDatePicker
+                                                className={classes.selectMenuDate}
+                                                label=" "
+                                                inputFormat="YYYY-MM-DD"
+                                                value={improvement && improvement.finDate}
+                                                onChange={(newDate) => {
+                                                    const date = new Date(newDate.$d)
+                                                    setImprovement({ ...improvement, "finDate": moment(date).format("YYYY-MM-DD") })
+                                                }}
+                                                renderInput={(params) => <TextField {...params} sx={{ width: 200 }} />}
+                                            />
+                                        </LocalizationProvider>
+                                    </div>
+                                    <div className={classes.rowTitle}>첨부파일</div>
+                                    <div className={classes.rowInfo}>
+                                        <TextField
+                                            id="standard-basic"
+                                            variant="outlined"
+                                            
+                                            value={filePath.reqFileId === "" ? fileReq : filePath.reqFileId }
+                                            sx={{ width: 390 }}
+                                            className={classes.selectMenu}
+                                            style={{ cursor: "pointer" }}
+                                            onDoubleClick={() => handleDialogFileDownload(improvement.reqFileId)}
+                                        />
+                                        <UploadButton id="reqFileId" onClick={handleDialogOpen}>찾아보기</UploadButton>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </Grid>
+                    </Grid>
+                :
+                    <Grid item xs={12} className={classes.boxFirst}>
+                        <div className={classes.boxTitle}>
+                            <span>개선.조치</span>
+                            <span>접수</span>
+                        </div>
+                        <div className={classes.boxContent}>
+                            <div className={classes.boxRow}>
+                                <div className={classes.rowTitle}><text>*</text>사업장</div>
+                                <div className={classes.rowContent}>
+                                    <div className={classes.rowInfo}>{improvement && improvement.workplaceName}</div>
+                                    <div className={classes.rowTitle}><text>*</text>개선조치 NO</div>
+                                    <div className={classes.rowInfo}>{improvement && improvement.improveNo}</div>
+                                </div>
+                            </div>
+                            <div className={classes.boxRow}>
+                                <div className={classes.rowTitle}>
+                                    <text>*</text>
+                                    <span>개선.조치 </span>
+                                    <span>내용</span>
+                                </div>
+                                <div className={classes.rowContent}>
+                                    <div className={classes.rowInfo}>{improvement && improvement.improveCn}</div>
+                                </div>
+                            </div>
+                            <div className={classes.boxRow}>
+                                <div className={classes.rowTitle}><text>*</text>요청일자</div>
+                                <div className={classes.rowContent}>
+                                    <div className={classes.rowInfo}>{improvement && improvement.reqDate}</div>
+                                    <div className={classes.rowTitle}><text>*</text>요청자</div>
+                                    <div className={classes.rowInfo}>{improvement.reqUserCd}</div>
+                                    <div className={classes.rowTitle}><text>*</text>완료요청일</div>
+                                    <div className={classes.rowInfo}>{improvement && improvement.finDate}</div>
+                                    <div className={classes.rowTitle}>첨부파일</div>
+                                    <div className={classes.rowInfo}><span onDoubleClick={() => handleDialogFileDownload(improvement.reqFileId)}>{filePath.reqFileId === "" ? fileReq : filePath.reqFileId }</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </Grid>
+                }
                 <Grid item xs={12} className={classes.boxSecond}>
                     <div className={classes.boxTitle}>
                         <span>개선.조치 </span>

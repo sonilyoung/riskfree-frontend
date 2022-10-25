@@ -70,6 +70,7 @@ const View = () => {
             setOkayPopupShow(true);
         }
     }
+
     useEffect(() => {
         fetchAccidentView()
     }, [])
@@ -86,7 +87,7 @@ const View = () => {
                     <div className={classes.boxTitle}>사고접수</div>
                     <div className={classes.boxContent}>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>접수일자</div>
+                            <div className={classes.rowTitle}>발생일자</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>{accident && accident.recvDate}</div>
                                 <div className={classes.rowTitle}>접수자</div>
@@ -105,7 +106,7 @@ const View = () => {
                         </div>
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>
-                                <span>사고조치 </span>
+                                <span>사고접수 </span>
                                 <span>내용</span>
                             </div>
                             <div className={classes.rowContent}>
@@ -120,7 +121,7 @@ const View = () => {
                     <div className={classes.boxTitle}>사고처리</div>
                     <div className={classes.boxContent}>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>발생일자</div>
+                            <div className={classes.rowTitle}>처리일자</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
                                     {accident && accident.occurDate}
@@ -251,7 +252,7 @@ const View = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
-                    {currentIsClose === "1" ?
+                    {(currentIsClose === "1") ?
                         <>
                         <BlueButton className={'button-correction'}>수정</BlueButton>
                         <WhiteButton className={'button-delete'}>삭제</WhiteButton>

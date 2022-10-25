@@ -1338,6 +1338,11 @@ const SystemAdministrator = () => {
         return comma(uncomma(str));
     };
 
+    const handlescriberInsert = (e) => {
+        return e.replace(/^\s+|\s+$/g, "")
+    }
+    
+
     useEffect(() => {
         fetchSubscribersList();
         fetchCommCodeListGroup1();
@@ -1486,7 +1491,7 @@ const SystemAdministrator = () => {
                                             variant="outlined"
                                             value={subscriberInsert.companyName}
                                             className={classes.tableTextField}
-                                            onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "companyName": e.target.value })}
+                                            onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "companyName": handlescriberInsert(e.target.value) })}
                                         />
                                     </div>
                                 </div>
@@ -1509,7 +1514,7 @@ const SystemAdministrator = () => {
                                                 variant="outlined"
                                                 value={subscriberInsert.workplaceName}
                                                 className={classes.tableTextField}
-                                                onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "workplaceName": e.target.value })}
+                                                onChange={(e) => setSubscriberInsert({ ...subscriberInsert, "workplaceName": handlescriberInsert(e.target.value) })}
                                             />
                                         </div>
                                         {/* 사업자 번호 */}

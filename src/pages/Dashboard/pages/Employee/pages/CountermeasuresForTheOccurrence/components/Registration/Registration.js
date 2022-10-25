@@ -195,6 +195,9 @@ const Registration = () => {
         if (response?.data?.RET_CODE === "0000") {
             setOkayPopupMessage("등록 되었습니다.");
             setOkayPopupShow(true);
+        } else if (response?.data?.RET_CODE === "0403") {
+            setOkayPopupMessage(response?.data?.RET_DESC);
+            setOkayPopupShow(true);
         } else {
             setOkayPopupMessage("입력정보에 오류가 있습니다 ");
             setOkayPopupShow(true);
@@ -228,7 +231,7 @@ const Registration = () => {
                     <div className={classes.boxTitle}>사고접수</div>
                     <div className={classes.boxContent}>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}><text>*</text>접수일자</div>
+                            <div className={classes.rowTitle}><text>*</text>발생일자</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>{todayDate}</div>
                                 <div className={classes.rowTitle}><text>*</text>접수자</div>
@@ -420,7 +423,7 @@ const Registration = () => {
                         <div className={classes.boxRow}>
                             <div className={classes.rowTitle}>
                                 <text>*</text>
-                                <span>사고조치 </span>
+                                <span>사고접수 </span>
                                 <span>내용</span>
                             </div>
                             <div className={classes.rowContent}>

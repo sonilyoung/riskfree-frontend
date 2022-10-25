@@ -14,6 +14,7 @@ import { useStyles, AccidentReportButton, UploadButton, BlueButton, WhiteButton 
 
 import { DefaultLayout } from '../../../../../../../../layouts/Default';
 import { useAccidentViewMutation, useAccidentDeleteMutation, useAccidentUpdateMutation } from '../../../../../../../../hooks/api/AccidentManagement/AccidentManagement';
+import { useGetLoginInfoMutation } from '../../../../../../../../hooks/api/MainManagement/MainManagement';
 import radioIcon from '../../../../../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../../../../../assets/images/ic_radio_on.png';
 import checkIcon from '../../../../../../../../assets/images/ic_chk3.png';
@@ -227,13 +228,21 @@ const Update = () => {
         }
     }
 
+    /* Data: 2022.10.03 author:Jimmy add: 로그인 정보 호출 및 설정 */
+    const [loginInfos, setLoginInfos] = useState({});
+    const [getLoginInfo] = useGetLoginInfoMutation()
+    const fetchLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfos(response.data.RET_DATA)
+    }
+
     useEffect(() => {
         window.scrollTo(0, 0);
+        fetchLoginInfo();
         fetchAccidentView()
     }, [])
 
     useEffect(() => {
-        console.log(accident)
     }, [filePath])
 
     return (
@@ -244,162 +253,193 @@ const Update = () => {
                         재해발생 및 방지대책 등 이행현황
                     </Typography>
                 </Grid>
-                <Grid item xs={12} className={classes.boxReception}>
-                    <div className={classes.boxTitle}>사고접수</div>
-                    <div className={classes.boxContent}>
-                        <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}><text>*</text>접수일자</div>
-                            <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>{accident && accident.recvDate}</div>
-                                <div className={classes.rowTitle}><text>*</text>접수자</div>
-                                <div className={classes.rowInfo}>{accident && accident.recvUserName}</div>
-                                <div className={classes.rowTitle}><text>*</text>접수형태</div>
-                                <div className={classes.rowInfo}>
-                                    <FormControl className={classes.searchRadio} onChange={(e) => setAccident({ ...accident, "recvFormCd": e.target.value })}>
-                                        <RadioGroup row value={accident && accident.recvFormCd}>
-                                            <FormControlLabel
-                                                value="001"
-                                                label="전화"
-                                                control={
-                                                    <Radio
-                                                        icon={<img src={radioIcon} alt="radio icon" />}
-                                                        checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                        value={"001"}
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value="002"
-                                                label="싸이렌"
-                                                control={
-                                                    <Radio
-                                                        icon={<img src={radioIcon} alt="radio icon" />}
-                                                        checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                        value={"002"}
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value="003"
-                                                label="안전순찰중"
-                                                control={
-                                                    <Radio
-                                                        icon={<img src={radioIcon} alt="radio icon" />}
-                                                        checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                        value={"003"}
-                                                    />
-                                                }
-                                            />
-                                        </RadioGroup>
-                                    </FormControl>
+                {loginInfos.name === accident.recvUserName ?
+                    <Grid item xs={12} className={classes.boxReception}>
+                        <div className={classes.boxTitle}>사고접수</div>
+                        <div className={classes.boxContent}>
+                            <div className={classes.boxRow}>
+                                <div className={classes.rowTitle}><text>*</text>발생일자</div>
+                                <div className={classes.rowContent}>
+                                    <div className={classes.rowInfo}>{accident && accident.recvDate}</div>
+                                    <div className={classes.rowTitle}><text>*</text>접수자</div>
+                                    <div className={classes.rowInfo}>{accident && accident.recvUserName}</div>
+                                    <div className={classes.rowTitle}><text>*</text>접수형태</div>
+                                    <div className={classes.rowInfo}>
+                                        <FormControl className={classes.searchRadio} onChange={(e) => setAccident({ ...accident, "recvFormCd": e.target.value })}>
+                                            <RadioGroup row value={accident && accident.recvFormCd}>
+                                                <FormControlLabel
+                                                    value="001"
+                                                    label="전화"
+                                                    control={
+                                                        <Radio
+                                                            icon={<img src={radioIcon} alt="radio icon" />}
+                                                            checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
+                                                            value={"001"}
+                                                        />
+                                                    }
+                                                />
+                                                <FormControlLabel
+                                                    value="002"
+                                                    label="싸이렌"
+                                                    control={
+                                                        <Radio
+                                                            icon={<img src={radioIcon} alt="radio icon" />}
+                                                            checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
+                                                            value={"002"}
+                                                        />
+                                                    }
+                                                />
+                                                <FormControlLabel
+                                                    value="003"
+                                                    label="안전순찰중"
+                                                    control={
+                                                        <Radio
+                                                            icon={<img src={radioIcon} alt="radio icon" />}
+                                                            checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
+                                                            value={"003"}
+                                                        />
+                                                    }
+                                                />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </div>
+                                    <div className={classes.rowTitle}><text>*</text>접수유형</div>
+                                    <div className={classes.rowInfo}>
+                                        <FormControl className={classes.searchRadio}>
+                                            <RadioGroup row>
+                                                <FormControlLabel
+                                                    value={""}
+                                                    label="추락"
+                                                    onChange={(e) => setAccident({ ...accident, "recvTypeCd001": accident.recvTypeCd001 ? "" : "001" })}
+                                                    control={
+                                                        <Checkbox
+                                                            icon={<img src={checkIcon} alt="check icon" />}
+                                                            checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                            checked={!!accident.recvTypeCd001}
+                                                        />
+                                                    }
+                                                />
+                                                <FormControlLabel
+                                                    value={""}
+                                                    label="끼임"
+                                                    onChange={(e) => setAccident({ ...accident, "recvTypeCd002": accident.recvTypeCd002 ? "" : "002" })}
+                                                    control={
+                                                        <Checkbox
+                                                            icon={<img src={checkIcon} alt="check icon" />}
+                                                            checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                            checked={!!accident.recvTypeCd002}
+                                                        />
+                                                    }
+                                                />
+                                                <FormControlLabel
+                                                    value={""}
+                                                    label="화재"
+                                                    onChange={(e) => setAccident({ ...accident, "recvTypeCd003": accident.recvTypeCd003 ? "" : "003" })}
+                                                    control={
+                                                        <Checkbox
+                                                            icon={<img src={checkIcon} alt="check icon" />}
+                                                            checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                            checked={!!accident.recvTypeCd003}
+                                                        />
+                                                    }
+                                                />
+                                                <FormControlLabel
+                                                    value={""}
+                                                    label="전기"
+                                                    onChange={(e) => setAccident({ ...accident, "recvTypeCd004": accident.recvTypeCd004 ? "" : "004" })}
+                                                    control={
+                                                        <Checkbox
+                                                            icon={<img src={checkIcon} alt="check icon" />}
+                                                            checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                            checked={!!accident.recvTypeCd004}
+                                                        />
+                                                    }
+                                                />
+                                                <FormControlLabel
+                                                    value={""}
+                                                    label="밀폐"
+                                                    onChange={(e) => setAccident({ ...accident, "recvTypeCd005": accident.recvTypeCd005 ? "" : "005" })}
+                                                    control={
+                                                        <Checkbox
+                                                            icon={<img src={checkIcon} alt="check icon" />}
+                                                            checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                            checked={!!accident.recvTypeCd005}
+                                                        />
+                                                    }
+                                                />
+                                                <FormControlLabel
+                                                    value={""}
+                                                    label="중량물"
+                                                    onChange={(e) => setAccident({ ...accident, "recvTypeCd006": accident.recvTypeCd006 ? "" : "006" })}
+                                                    control={
+                                                        <Checkbox
+                                                            icon={<img src={checkIcon} alt="check icon" />}
+                                                            checkedIcon={<img src={checkIconOn} alt="check icon on" />}
+                                                            checked={!!accident.recvTypeCd006}
+                                                        />
+                                                    }
+                                                />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </div>
                                 </div>
-                                <div className={classes.rowTitle}><text>*</text>접수유형</div>
-                                <div className={classes.rowInfo}>
-                                    <FormControl className={classes.searchRadio}>
-                                        <RadioGroup row>
-                                            <FormControlLabel
-                                                value={""}
-                                                label="추락"
-                                                onChange={(e) => setAccident({ ...accident, "recvTypeCd001": accident.recvTypeCd001 ? "" : "001" })}
-                                                control={
-                                                    <Checkbox
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                        checked={!!accident.recvTypeCd001}
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value={""}
-                                                label="끼임"
-                                                onChange={(e) => setAccident({ ...accident, "recvTypeCd002": accident.recvTypeCd002 ? "" : "002" })}
-                                                control={
-                                                    <Checkbox
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                        checked={!!accident.recvTypeCd002}
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value={""}
-                                                label="화재"
-                                                onChange={(e) => setAccident({ ...accident, "recvTypeCd003": accident.recvTypeCd003 ? "" : "003" })}
-                                                control={
-                                                    <Checkbox
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                        checked={!!accident.recvTypeCd003}
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value={""}
-                                                label="전기"
-                                                onChange={(e) => setAccident({ ...accident, "recvTypeCd004": accident.recvTypeCd004 ? "" : "004" })}
-                                                control={
-                                                    <Checkbox
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                        checked={!!accident.recvTypeCd004}
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value={""}
-                                                label="밀폐"
-                                                onChange={(e) => setAccident({ ...accident, "recvTypeCd005": accident.recvTypeCd005 ? "" : "005" })}
-                                                control={
-                                                    <Checkbox
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                        checked={!!accident.recvTypeCd005}
-                                                    />
-                                                }
-                                            />
-                                            <FormControlLabel
-                                                value={""}
-                                                label="중량물"
-                                                onChange={(e) => setAccident({ ...accident, "recvTypeCd006": accident.recvTypeCd006 ? "" : "006" })}
-                                                control={
-                                                    <Checkbox
-                                                        icon={<img src={checkIcon} alt="check icon" />}
-                                                        checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                        checked={!!accident.recvTypeCd006}
-                                                    />
-                                                }
-                                            />
-                                        </RadioGroup>
-                                    </FormControl>
+                            </div>
+                            <div className={classes.boxRow}>
+                                <div className={classes.rowTitle}>
+                                    <text>*</text>
+                                    <span>사고접수</span>
+                                    <span>내용</span>
+                                </div>
+                                <div className={classes.rowContent}>
+                                    <div className={classes.rowInfo}>
+                                        <TextField
+                                            className={classes.textArea}
+                                            id="outlined-multiline-static"
+                                            multiline
+                                            rows={4}
+                                            onChange={(e) => setAccident({ ...accident, "accdntCn": e.target.value })}
+                                            value={accident && accident.accdntCn}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>
-                                <text>*</text>
-                                <span>사고조치 </span>
-                                <span>내용</span>
+                    </Grid>
+                :
+                    <Grid item xs={12} className={classes.boxReception}>
+                        <div className={classes.boxTitle}>사고접수</div>
+                        <div className={classes.boxContent}>
+                            <div className={classes.boxRow}>
+                                <div className={classes.rowTitle} style={{height:'80px'}}><text>*</text>발생일자</div>
+                                <div className={classes.rowContent}>
+                                    <div className={classes.rowInfo}>{accident && accident.recvDate}</div>
+                                    <div className={classes.rowTitle} style={{height:'80px'}}><text>*</text>접수자</div>
+                                    <div className={classes.rowInfo}>{accident && accident.recvUserName}</div>
+                                    <div className={classes.rowTitle} style={{height:'80px'}}><text>*</text>접수형태</div>
+                                    <div className={classes.rowInfo}>{accident && accident.recvForm}</div>
+                                    <div className={classes.rowTitle} style={{height:'80px'}}><text>*</text>접수유형</div>
+                                    <div className={classes.rowInfo}>{accident && accident.recvType001}</div>
+                                </div>
                             </div>
-                            <div className={classes.rowContent}>
-                                <div className={classes.rowInfo}>
-                                    <TextField
-                                        className={classes.textArea}
-                                        id="outlined-multiline-static"
-                                        multiline
-                                        rows={4}
-                                        onChange={(e) => setAccident({ ...accident, "accdntCn": e.target.value })}
-                                        value={accident && accident.accdntCn}
-                                    />
+                            <div className={classes.boxRow}>
+                                <div className={classes.rowTitle}>
+                                    <text>*</text>
+                                    <span>사고접수</span>
+                                    <span>내용</span>
+                                </div>
+                                <div className={classes.rowContent}>
+                                    <div className={classes.rowInfo}>{accident && accident.accdntCn}</div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </Grid>
+                    </Grid>
+                    }                
+                
                 <Grid item xs={12} className={classes.boxRegistration}>
                     <div className={classes.boxTitle}>사고처리</div>
                     <div className={classes.boxContent}>
                         <div className={classes.boxRow}>
-                            <div className={classes.rowTitle}>발생일자</div>
+                            <div className={classes.rowTitle}>처리일자</div>
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>

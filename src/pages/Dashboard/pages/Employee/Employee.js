@@ -22,7 +22,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 
-import { useStyles, UserButton, LogButton, SettingsButton, AdminButton, ChartButton, MainNavButton, PageSideButton, DashTrigButton, FileButtonExis, FileButtonNone,
+import { useStyles, UserButton, LogButton, SettingsButton, AdminButton, ChartButton, MainNavButton, PageSideButton, DashTrigButton, FileButtonExis, FileButtonExisEm, FileButtonNone,
     ButtonClosePop, ButtonGraphNext, ButtonGraphPrev, ButtonGrid, PopupFootButton,UploadImageButton, PromptButtonBlue, PromptButtonWhite,UnknownButton1, UnknownButton2, 
     SearchButton, ClosePopupButton2, SubmitButton } from './useStyles';
 
@@ -1132,7 +1132,7 @@ const Employee = () => {
                                     <div className={classes.headerPopList}>
                                         <div className={classes.userTab}>
                                             <div className={classes.userImage}>
-                                                {!!(companyInfo) && !!companyInfo.logoImg && (<img height={50} src={`${BASE_URL}file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
+                                                {!!(companyInfo) && !!companyInfo.logoImg && (<img src={`${BASE_URL}file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
                                             </div>
                                             <div className={classes.userName}>
                                                 {companyInfo?.companyName}
@@ -1364,7 +1364,7 @@ const Employee = () => {
                             <div className={classes.adminFieldText}>{companyInfo?.shGoal}</div>
                         </div>
                         <div className={classes.adminLogo}>
-                            {!!(companyInfo) && !!companyInfo.logoImg && (<img height={60} src={`${BASE_URL}file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
+                            {!!(companyInfo) && !!companyInfo.logoImg && (<img src={`${BASE_URL}file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
                         </div>
                         <div className={classes.adminField + ' ' + classes.adminFieldRight}>
                             <div className={classes.adminFieldText}>경영방침</div>
@@ -1585,7 +1585,7 @@ const Employee = () => {
                             <div className={classes.listTitle}>필수 의무조치 내역 <span>시행율</span></div>
                             <ul className={classes.menuList + ' parentList'}>
                                 <li>
-                                    <p className={classes.listLink + ' parentLink'} to={"#none"} underline="none">안전보건관리체계의 구축 및 이행</p>
+                                    <p className={classes.listLink + ' parentLink'} to={"#none"} underline="none" style={{fontSize: '19px'}}>안전보건관리체계의 구축 및 이행</p>
                                     <span className={'normal'}>
                                         {essentialRates && essentialRates?.topRate}
                                     </span>
@@ -1606,15 +1606,15 @@ const Employee = () => {
                                     </ul>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink + ' parentLink'} to={"/dashboard/employee/accident-countermeasures-implementation/list"} underline="none">재해발생 방지대책 및 이행현황</Link>
+                                    <Link className={classes.listLink + ' parentLink'} to={"/dashboard/employee/accident-countermeasures-implementation/list"} underline="none" style={{fontSize: '19px'}}>재해발생 방지대책 및 이행현황</Link>
                                     <span className={'caution'}>{accidentsPreventionPercentage?.enforceRate}</span>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink + ' parentLink'} to={"/dashboard/employee/order-for-improvement-and-correction-under-related-law/list"} underline="none">관계법령에 따른 개선.시정명령 조치</Link>
+                                    <Link className={classes.listLink + ' parentLink'} to={"/dashboard/employee/order-for-improvement-and-correction-under-related-law/list"} underline="none" style={{fontSize: '19px'}}>관계법령에 따른 개선.시정명령 조치</Link>
                                     <span className={'warning'}>{lawOrderPercentage?.improvemetRate}</span>
                                 </li>
                                 <li>
-                                    <Link className={classes.listLink + ' parentLink'} to={"/dashboard/employee/measure-to-manage-performance-od-duties-law/list"} underline="none">관계법령에 의무이행의 관리의 조치</Link>
+                                    <Link className={classes.listLink + ' parentLink'} to={"/dashboard/employee/measure-to-manage-performance-od-duties-law/list"} underline="none" style={{fontSize: '19px'}}>관계법령에 의무이행의 관리의 조치</Link>
                                     <span className={'risk'}>{relatedLawRatePercentage?.relatedLawRate}</span>
                                 </li>
                             </ul>
@@ -1656,7 +1656,11 @@ const Employee = () => {
                                                             <FileButtonNone></FileButtonNone>
                                                         : 
                                                             <>
+                                                            {inspection.updateDate === "" || inspection.updateDate === null ?
                                                             <FileButtonExis></FileButtonExis>
+                                                            :
+                                                            <FileButtonExisEm></FileButtonExisEm>
+                                                            }
                                                         {((inspection.evaluation === "10" && <span className={'green'}>상</span>) 
                                                             || (inspection.evaluation === "7" && <span className={'orange'}>중</span>) 
                                                                 || (inspection.evaluation === "5" && <span className={'red'}>하</span>)
@@ -1667,7 +1671,11 @@ const Employee = () => {
                                                         <FileButtonNone id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone>
                                                         : 
                                                         <>
+                                                        {inspection.updateDate === "" || inspection.updateDate === null ?
                                                         <FileButtonExis id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>
+                                                        :
+                                                        <FileButtonExisEm id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExisEm>
+                                                        }
                                                         {(loginInfo.roleCd === "003") ?
                                                             inspection.fileId && ((inspection.evaluation === "10" && <span className={'green'}>상</span>) 
                                                                 || (inspection.evaluation === "7" && <span className={'orange'}>중</span>) 
@@ -1889,7 +1897,7 @@ const Employee = () => {
                                         {noticesList?.map((notice) => (
                                             <div>
                                                 <div>{notice?.insertDate}</div>
-                                                {notice?.importCd === "001" && <span className={classes.slideLabelHot}>HOT</span>}
+                                                {notice?.importCd === "001" || notice?.newYn === "Y" ? <span className={classes.slideLabelHot}>HOT</span> : ""}
                                                 <Link to={`/dashboard/employee/notifications/view/${notice?.noticeId}`} className={classes.linkBtn}>{notice?.title}</Link>
                                             </div>
                                         ))}

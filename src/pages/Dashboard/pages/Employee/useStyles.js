@@ -19,6 +19,8 @@ import chartIcon from '../../../../assets/images/btn_chart.png';
 import dashBtnUp from '../../../../assets/images/btn_up.png';
 import dashBtnDown from '../../../../assets/images/btn_down.png';
 import fileExis from '../../../../assets/images/file_exis.png';
+import fileExisEm from '../../../../assets/images/file_exis_em.png';
+
 import fileNone from '../../../../assets/images/file_none.png';
 import popupClose from '../../../../assets/images/btn_popClose.png';
 import graphNext from '../../../../assets/images/next_report.png';
@@ -137,6 +139,17 @@ const FileButtonExis = styled(ButtonUnstyled)`
     border: none;
     cursor: pointer;
 `;
+
+const FileButtonExisEm = styled(ButtonUnstyled)`
+    width: 16px;
+    height: 21px;
+    background: url(${fileExisEm}) no-repeat 50% 50%;
+    transition: background .3s;
+    border: none;
+    cursor: pointer;
+`;
+
+
 
 const FileButtonNone = styled(ButtonUnstyled)`
     width: 16px;
@@ -459,9 +472,11 @@ const useStyles = makeStyles(() => ({
         borderRadius: '50%',
         overflow: 'hidden',
         '& img': {
-            width: '70%',
-            height: '70%',
-            borderRadius: '50%',
+            width: '60%',
+            overflow: 'hidden',
+            //width: '70%',
+            //height: '70%',
+            //borderRadius: '50%',
         }
 
 
@@ -1014,7 +1029,7 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         alignItems: 'center',
         color: '#fff',
-        textDecoration: "none"
+        textDecoration: "none"        
     },
     listLinkClicked: {
         display: 'flex',
@@ -1584,12 +1599,12 @@ const useStyles = makeStyles(() => ({
         borderRadius: '50%',
         border: '4px solid #fff',
         overflow: 'hidden',
-        background: '#C3C4C9',
+        background: '#FFFFFF',
         marginBottom: '20px',
         boxShadow: '1px 2px 8px -2px rgb(0 0 0 / 40%)',
         '& img': {
             width: '100%',
-            height: '100%'
+            //height: '100%'
         }
     },
     userName: {
@@ -1851,6 +1866,7 @@ export { useStyles,
     PageSideButton, 
     DashTrigButton, 
     FileButtonExis, 
+    FileButtonExisEm,
     FileButtonNone,
     ButtonClosePop, 
     ButtonGraphNext, 

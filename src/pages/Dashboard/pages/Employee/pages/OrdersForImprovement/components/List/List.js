@@ -41,7 +41,8 @@ const List = () => {
     const [lawIssueReassonSelect] = useLawIssueReassonSelectMutation();
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
-    const [workplaceId, setWorkplaceId] = useState(getInitialWorkplaceId);
+    //const [workplaceId, setWorkplaceId] = useState(getInitialWorkplaceId);
+    const [workplaceId, setWorkplaceId] = useState("");
     const [workplaceList, setWorkplaceList] = useState([]);
     const [issueReasson, setIssueReasson] = useState([]);
     const [startDate, setStartDate] = useState(null)
@@ -135,7 +136,10 @@ const List = () => {
     const fetchLoginInfo = async () => {
         const response = await getLoginInfo()
         setLoginInfos(response.data.RET_DATA)
-        setLawImprovements({ ...lawImprovements, "workplaceId": response.data.RET_DATA.workplaceId })
+        
+        if (response.data.RET_DATA.roleCd !== "001"){ 
+            setLawImprovements({ ...lawImprovements, "workplaceId": response.data.RET_DATA.workplaceId })
+        }
     }
 
     const [locale] = React.useState('ko');
@@ -172,6 +176,7 @@ const List = () => {
                                         onChange={handleChange("workplaceId")}
                                         displayEmpty
                                     >
+                                        <MenuItem value="">전체</MenuItem>
                                         {workplaceList &&
                                             workplaceList.map((workplace) => (
                                                 <MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>

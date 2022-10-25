@@ -254,6 +254,7 @@ const Update = () => {
                         관계법령에 따른 개선.시정 명령에 따른 조치 현황
                     </Typography>
                 </Grid>
+                {loginInfo.name === law.reqUserName ?
                 <Grid item xs={12} className={classes.boxReception}>
                     <div className={classes.boxTitle}>
                         <span>개선.조치</span>
@@ -471,6 +472,44 @@ const Update = () => {
                         </div>
                     </div>
                 </Grid>
+            :
+                <Grid item xs={12} className={classes.boxReception}>
+                <div className={classes.boxTitle}>
+                    <span>개선.조치</span>
+                    <span>접수</span>
+                </div>
+                <div className={classes.boxContent}>
+                    <div className={classes.boxRow}>
+                        <div className={classes.rowTitle}><text>*</text>접수일자</div>
+                        <div className={classes.rowContent}>
+                            <div className={classes.rowInfo}>{todaysDate}</div>
+                            <div className={classes.rowTitle}><text>*</text>접수자</div>
+                            <div className={classes.rowInfo}>{loginInfo.name}</div>
+                            <div className={classes.rowTitle}><text>*</text>접수형태</div>
+                            <div className={classes.rowInfo}>{law.recvName}</div>
+                            <div className={classes.rowTitle}><text>*</text>명령구분</div>
+                            <div className={classes.rowInfo}>{law.cmmdOrgName001} {law.cmmdOrgName002} {law.cmmdOrgName003} {law.cmmdOrgName004} {law.cmmdOrgName005} {law.cmmdOrgName006}</div>
+                        </div>
+                    </div>
+                    <div className={classes.boxRow}>
+                        <div className={classes.rowTitle} style={{height: '80px'}}>
+                            <text>*</text>
+                            <span>개선.조치 </span>
+                            <span>지적내용</span>
+                        </div>
+                        <div className={classes.rowContent}>
+                            <div className={classes.rowInfo}>{law.improveCn}</div>
+                            <div className={classes.rowTitle} style={{height: '80px'}}><text>*</text>구 분</div>
+                            <div className={classes.rowInfo} style={{width: '200px'}}>{law.improveType}</div>
+                            <div className={classes.rowTitle} style={{height: '80px'}}><text>*</text>지적일자</div>
+                            <div className={classes.rowInfo} style={{width: '200px'}}>{law.orderDate}</div>
+                            <div className={classes.rowTitle} style={{height: '80px'}}><text>*</text>완료요청일</div>
+                            <div className={classes.rowInfo}>{law.dueDate}</div>
+                        </div>
+                    </div>
+                </div>
+                </Grid>
+                }            
                 <Grid item xs={12} className={classes.boxRegistration}>
                     <div className={classes.boxTitle}>
                         <span>개선.조치 </span>

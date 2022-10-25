@@ -52,7 +52,8 @@ const List = () => {
     const [managerName, setManagerName] = useState("")
     const [startDate, setStartDate] = useState(null)
     const [finishDate, setFinishDate] = useState(null)
-    const [workplaceSelect, setWorkplaceSelect] = useState(getInitialWorkplaceId())
+    //const [workplaceSelect, setWorkplaceSelect] = useState(getInitialWorkplaceId())
+    const [workplaceSelect, setWorkplaceSelect] = useState("")
     const [occurPlaceSelect, setOccurPlaceSelect] = useState("")
     const [page, setPage] = useState(1)
     const [death, setDeath] = useState(false)
@@ -262,6 +263,7 @@ const List = () => {
                                         onChange={(e) => setWorkplaceSelect(e.target.value)}
                                         displayEmpty
                                     >
+                                        <MenuItem value="">전체</MenuItem>
                                         {workplaceList && workplaceList.map((workplace) => (<MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>))}
                                     </Select>
                                 :

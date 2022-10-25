@@ -34,7 +34,8 @@ function List() {
     const [improvementSelect] = useImprovementSelectMutation()
     const [getUseUserToken] = useUserToken();
     const [workplaces, setWorkplaces] = useState([])
-    const [workplaceSelect, setWorkplaceSelect] = useState(getInitialWorkplaceId())
+    //const [workplaceSelect, setWorkplaceSelect] = useState(getInitialWorkplaceId())
+    const [workplaceSelect, setWorkplaceSelect] = useState("")
     //const [getroleCd, setGetroleCd] = useState(getUseUserToken.getUserRoleCd());
     const [getroleCd, setGetroleCd] = useState('');
     const [statusCd, setStatusCd] = useState("")
@@ -123,7 +124,7 @@ function List() {
                     <div className={classes.searchInfo}>
                         <div>
                             <div className={classes.infoTitle}>사업장</div>
-                            {getroleCd === "001" ?
+                            {loginInfos.roleCd === "001" ?
                                 <Select
                                     className={classes.selectMenu}
                                     sx={{ width: 204 }}
@@ -132,6 +133,7 @@ function List() {
                                     onChange={handleWorkplaceSelect}
                                     displayEmpty
                                 >
+                                    <MenuItem value="">전체</MenuItem>
                                     {workplaces &&
                                         workplaces.map((workplace) => (
                                             <MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>
