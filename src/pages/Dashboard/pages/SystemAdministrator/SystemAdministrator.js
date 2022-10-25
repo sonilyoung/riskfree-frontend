@@ -1338,6 +1338,11 @@ const SystemAdministrator = () => {
         return comma(uncomma(str));
     };
 
+    const inputPriceUncomma = (str) => {
+        str = String(str);
+        return str.replace(/[^\d]+/g, "");
+      };    
+
     const handlescriberInsert = (e) => {
         return e.replace(/^\s+|\s+$/g, "")
     }
@@ -1612,7 +1617,7 @@ const SystemAdministrator = () => {
                                             value={subscriberInsert.contractAmount}
                                             className={classes.tableTextField}
                                             onChange={(e) => {
-                                                setSubscriberInsert({ ...subscriberInsert, "contractAmount": inputPriceFormat(e.target.value) })
+                                                setSubscriberInsert({ ...subscriberInsert, "contractAmount": inputPriceUncomma(e.target.value) })
                                             }}
                                             sx={{ width: 180 }}
                                         />
@@ -1867,7 +1872,7 @@ const SystemAdministrator = () => {
                                             variant="outlined"
                                             className={classes.tableTextField}
                                             value={subscriberView.contractAmount === null ? "" : subscriberView.contractAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                                            onChange={(event) => setSubscriberView({ ...subscriberView, "contractAmount": inputPriceFormat(event.target.value) })}
+                                            onChange={(event) => setSubscriberView({ ...subscriberView, "contractAmount": inputPriceUncomma(event.target.value) })}
                                             sx={{ width: 190 }}
                                         />
                                         &nbsp;원
