@@ -22,6 +22,7 @@ import Okay from '../../../../../../components/MessageBox/Okay';
 import { Overlay } from '../../../../../../components/Overlay';
 import YesNo from '../../../../../../components/MessageBox/YesNo';
 import Loading from '../../../../../../pages/Loading';
+import * as Cookie from '../../../../../../pages/Cookie';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -198,9 +199,18 @@ const MeasureToManageThePerformance = () => {
     }
 
     async function handleDialogFileDownload() {
-        if (attachId) {
-            window.location = `${BASE_URL}file/fileDown?atchFileId=${attachId}&fileSn=1`;
-        }
+        setLoading(true);
+        window.location = `${BASE_URL}common/excel/relatedRawExcel?workplaceId=${loginInfos.workplaceId}&baselineId=${currentBaseline}&companyId=${loginInfos.companyId}`;
+        const FILEDOWNLOAD_INTERVAL = setInterval(function() {
+            var donToken = Cookie.getCookie('fileDownloadToken');
+            if (donToken === 'Y') { 
+                clearInterval(FILEDOWNLOAD_INTERVAL);
+                setLoading(false);
+                Cookie.setCookie('fileDownloadToken', "N", 1);                
+                setOkayPopupShow(true); 
+                setOkayPopupMessage('파일다운로드가 완료되었습니다.');
+            }
+        }, 500);  
     }
 
     const fetchLoginInfo = async () => {
