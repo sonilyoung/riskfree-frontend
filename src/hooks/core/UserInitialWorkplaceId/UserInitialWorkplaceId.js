@@ -5,6 +5,7 @@ import { useUserRole } from '../UserRole';
 import { useUserToken } from '../UserToken';
 
 const useUserInitialWorkplaceId = () => {
+
     const [userToken] = useUserToken();
     const [userRoleCodes] = useUserRole();
     const userRoleCd = userToken.getUserRoleCd();
@@ -15,6 +16,7 @@ const useUserInitialWorkplaceId = () => {
         switch(userRoleCd) {
             case userRoleCodes.employee : return userWorkplaceId
             case userRoleCodes.director : return currentWorkplaceId
+            case userRoleCodes.worker : return userWorkplaceId
         }
         return "";
     }

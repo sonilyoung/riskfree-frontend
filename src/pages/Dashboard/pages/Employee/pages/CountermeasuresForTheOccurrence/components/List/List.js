@@ -69,6 +69,7 @@ const List = () => {
 
     const [typeCheckAll, setTypeCheckAll] = useState(false);
     
+    console.log(workplaceSelect)
     const checkList = [
         {
             id: "01",
@@ -214,7 +215,12 @@ const List = () => {
     }
 
     const fetchAccidentOccurPlacesList = async () => {
-        const response = await accidentOccurPlaceSelect(currentBaseline)
+        const response = await accidentOccurPlaceSelect(
+                {
+                "baselineId" : currentBaseline,
+                "workplaceId": workplaceSelect
+                }
+            )
         setOccurPlacesList(response.data.RET_DATA)
     }
 
