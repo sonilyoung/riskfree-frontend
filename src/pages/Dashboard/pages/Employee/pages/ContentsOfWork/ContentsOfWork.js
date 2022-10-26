@@ -953,10 +953,12 @@ const WorkHistoryList = () => {
                                     <Select
                                         className={classes.selectMenu}
                                         sx={{ width: 210 }}
-                                        value={workplaceId}
+                                        value=""
+                                        key=""
                                         onChange={(e) => setWorkplaceId(e.target.value)}
                                         displayEmpty
                                     >
+                                        <MenuItem value="">전체</MenuItem>)}
                                         {workplaceList?.length > 0 && workplaceList?.map(workplace =>
                                             <MenuItem value={workplace.workplaceId}>{workplace.workplaceName}</MenuItem>)}
                                     </Select>
