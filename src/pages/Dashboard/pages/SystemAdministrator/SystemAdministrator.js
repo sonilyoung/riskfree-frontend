@@ -1622,7 +1622,7 @@ const SystemAdministrator = () => {
                                     <div className={classes.popupData}>
                                         <TextField
                                             variant="outlined"
-                                            value={subscriberInsert.contractAmount}
+                                            value={subscriberInsert.contractAmount === null ? "" : subscriberInsert.contractAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                                             className={classes.tableTextField}
                                             onChange={(e) => {
                                                 setSubscriberInsert({ ...subscriberInsert, "contractAmount": inputPriceUncomma(e.target.value) })
