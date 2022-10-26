@@ -671,6 +671,7 @@ const Employee = () => {
     const [inspectionIndex, setInspectionIndex] = useState(null)
     
 
+    //파일 업로드
     const handleDialogFileUpload = async () => {
         if(baselineData.isClose==='1'){
             setOkayPopupMessage("마감된 차수는 업로드를 할 수 없습니다.");
@@ -789,6 +790,7 @@ const Employee = () => {
                     setOkayPopupShow(true);
                     
                     const fileId = response.data.RET_DATA[0].atchFileId
+                    const updateFileId = response.data.RET_DATA[0].atchFileId
                     setEmployeeFiles({ ...employeeFiles, [dialogId]: parseInt(fileId) })
                     setFilePath({ ...filePath, [dialogId]: response.data.RET_DATA[0].originalFileName })
                     const deepCopyObj = JSON.parse(JSON.stringify(inspectionsDocs))
@@ -801,9 +803,19 @@ const Employee = () => {
                             }
                         }
                     })
+                    const updatedFileArray = deepCopyObj.map((obj, index) => {
+                        if (index === inspectionIndex) {
+                            return { "updateFileId": updateFileId }
+                        } else {
+                            return {
+                                updateFileId: obj["updateFileId"]
+                            }
+                        }
+                    })
                     const responseDocumentFile = await updateDocumentFileId({
                         "updateList": updatedArray,
-                        "articleNo": articleNoForInspection
+                        "articleNo": articleNoForInspection,
+                        "updateFileList": updatedFileArray
                     })
                     setUploadFlag(!uploadFlag)
                 } else if(response.data.RET_CODE === '0433'){
@@ -1348,7 +1360,7 @@ const Employee = () => {
                                         {baselineData.isClose==='1' ? 
                                             <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => {setOkayPopupShow(true); setOkayPopupMessage('마감된 차수는 업데이트할 수 없습니다.')}}>안전보건관리체계의 구축 및 이행 항목 업데이트​<img src={arrowDown} alt="arrow down" /></Link>
                                         :
-                                            <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => {setYesNoPopupShow(true); setYesNoPopupMessage("주의:데이터가초기화됩니다.") }}>안전보건관리체계의 구축 및 이행 항목 업데이트​<img src={arrowDown} alt="arrow down" /></Link>
+                                            <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => {setYesNoPopupShow(true); setYesNoPopupMessage("'주의' : '데이터'가 '초기화'됩니다.") }}>안전보건관리체계의 구축 및 이행 항목 업데이트​<img src={arrowDown} alt="arrow down" /></Link>
                                         }
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" id="userDutyExcelUpload" onClick={handleDialogOpenEmployee}>안전보건관리체계의 구축 및 이행 항목 업/다운로드<img src={arrowDown} alt="arrow down" /></Link>
 
