@@ -809,7 +809,7 @@ const SystemAdministrator = () => {
         "contractAmount": "",
         "contractEndDate": null,
         "contractFileId": "",
-        "contractDay": "",
+        "contractDay": null,
         "contractStartDate": null,
         "loginId": "",
         "managerEmail": subscriberInsertEmailBeforeSign + '@' + subscriberInsertEmailAfterSign,
@@ -840,7 +840,7 @@ const SystemAdministrator = () => {
         "contractAmount": "",
         "contractEndDate": null,
         "contractFileId": "",
-        "contractDay": "",
+        "contractDay": null,
         "contractStartDate": null,
         "loginId": "",
         "managerEmail": "",
@@ -1023,8 +1023,15 @@ const SystemAdministrator = () => {
             "param": param
         });
         setSubscribersList(response.data.RET_DATA);
+        
+        
+        if (param === "") {
         const plusButtonsInitialState = response.data?.RET_DATA?.map((item, index) => { return { id: index + 1, clicked: false, plus: true } });
         setPlusButtons(plusButtonsInitialState);
+        } else {
+            const plusButtonsInitialState = ""
+            setPlusButtons(plusButtonsInitialState);
+        }
     }
 
     const fetchCommCodeListGroup1 = async () => {
@@ -1084,7 +1091,7 @@ const SystemAdministrator = () => {
         setSubscriberInsert({
             "companyName": "",
             "contractAmount": "",
-            "contractDay": "",            
+            "contractDay": null,            
             "contractEndDate": null,
             "contractFileId": "",
             "contractStartDate": null,
@@ -1098,8 +1105,7 @@ const SystemAdministrator = () => {
             "sectorCd": "",
             "statusCd": "",
             "workplaceName": ""
-        });
-    }
+        });    }
 
     const handleSubscribersInsert = async () => {
         const response = await subscribersInsert({
@@ -1431,6 +1437,11 @@ const SystemAdministrator = () => {
                                             return <div className={classes.tableData}>{index + 1}</div>
                                         }
                                     })}
+                                        {plusButtons.length === 0 ?
+                                            <div className={classes.tableData}>{index + 1}</div>
+                                        :
+                                            ""
+                                        }
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.newYn === "Y" ? <span className={classes.slideLabelHot}>n</span> : ""}{subscriber.companyName}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.workplaceName}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.registNo}</div>
@@ -1441,16 +1452,13 @@ const SystemAdministrator = () => {
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.managerName}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.managerTel}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.contractAmount && parseFloat(subscriber.contractAmount).toLocaleString()}</div>
-                                    
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.contractDay}</div>
-                                    
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.contractDate}</div>
                                     <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscriber.workplaceId, subscriber.userId); }}>{subscriber.status}</div>
                                     {subscriber?.contractFileYn === "O"
                                         ? <div className={classes.tableData} style={{ cursor: "pointer" }} onDoubleClick={() => handleDialogFileDownload(subscriber.contractFileId)}>{subscriber.contractFileYn}</div>
                                         : <div className={classes.tableData} style={{ cursor: "pointer" }}>{subscriber.contractFileYn}</div>
                                     }
-                                    {/* <div className={classes.tableData} onClick={() => handleRedirect(subscriber.workplaceId, subscriber.userId, subscriber.loginId)}>{subscriber?.status ? <img src={monitor} alt="monitor" /> : null}</div> */}
                                 </div>
                                 {!!subscribersWorkplaceSelectList && !!subscribersWorkplaceSelectList?.length && subscribersWorkplaceSelectList?.map((subscribersWorkplaceItem, subscribersWorkplaceItemIndex) => {
                                     if (index + 1 === plusButtonId) {
@@ -1614,7 +1622,7 @@ const SystemAdministrator = () => {
                                     <div className={classes.popupData}>
                                         <TextField
                                             variant="outlined"
-                                            value={subscriberInsert.contractAmount}
+                                            value={subscriberInsert.contractAmount === null ? "" : subscriberInsert.contractAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                                             className={classes.tableTextField}
                                             onChange={(e) => {
                                                 setSubscriberInsert({ ...subscriberInsert, "contractAmount": inputPriceUncomma(e.target.value) })
@@ -1892,9 +1900,7 @@ const SystemAdministrator = () => {
                                             />
                                         </LocalizationProvider>
                                     </div>
-                                </div>
-
-                               
+                                </div>                               
                                 <div className={classes.popupRow}>
                                     <div className={classes.popupData + ' data_head'}>계약기간</div>
                                     <div className={classes.popupData}>
@@ -1986,7 +1992,9 @@ const SystemAdministrator = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
-                    <div>총 가입고객사 <strong>{parseFloat(!!(subscribersList) && !!(subscribersList.length) && subscribersList[0]?.totalCount).toLocaleString()}</strong> 개</div>
+                    <div>총 가입고객사
+                         <strong>{parseFloat(!!(subscribersList) && !!(subscribersList.length) && subscribersList[0]?.totalCount).toLocaleString()}</strong> 개
+                    </div>
                     <Stack spacing={2}>
                     </Stack>
                 </Grid>
