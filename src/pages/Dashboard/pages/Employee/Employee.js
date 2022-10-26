@@ -190,6 +190,7 @@ const Employee = () => {
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
     const [selectedFile, setSelectedFile] = useState(null);
     const [inspectionFileId, setInspectionFileId] = useState(null)
+    const [inspectionUpdateFileId, setInspectionUpdateFileId] = useState(null)
     const [articleNoForInspection, setArticleNoForInspection] = useState(null)
     const [uploadFlag, setUploadFlag] = useState(false)
     const [evaluation, setEvaluation] = useState("")
@@ -915,6 +916,7 @@ const Employee = () => {
         setDialogId((event.target.id).toString());
         setArticleNoForInspection(articleNo)
         setInspectionFileId(fileId)
+        setInspectionUpdateFileId(fileId)
         setInspectionIndex(index)
         setSelectedFileName("");
         if (event.target.id === "safetyFileUpload") {
@@ -1662,7 +1664,7 @@ const Employee = () => {
                                                             <FileButtonNone></FileButtonNone>
                                                         : 
                                                             <>
-                                                            {inspection.updateDate === "" || inspection.updateDate === null ?
+                                                            {(inspection.updateFileId === null || inspection.updateFileId === "null" || inspection.updateFileId === "") ? 
                                                             <FileButtonExis></FileButtonExis>
                                                             :
                                                             <FileButtonExisEm></FileButtonExisEm>
@@ -1677,7 +1679,7 @@ const Employee = () => {
                                                         <FileButtonNone id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone>
                                                         : 
                                                         <>
-                                                        {inspection.updateDate === "" || inspection.updateDate === null ?
+                                                        {(inspection.updateFileId === null || inspection.updateFileId === "null" || inspection.updateFileId === "") ?
                                                         <FileButtonExis id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>
                                                         :
                                                         <FileButtonExisEm id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExisEm>
@@ -1935,7 +1937,7 @@ const Employee = () => {
                 {/* NOTIFICATION POPUP */}
                 {!!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
                     <div className={classes.notificationPopup} style={{marginTop: `${index*3 + '0'}px`, marginLeft: `${index*3 + '0'}px`}} >
-                        <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)}></ClosePopupButton2>
+                    <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)}></ClosePopupButton2>
                         {noticeHotItem.importCd === '001' ?
                             <div><span className={classes.slideLabelHot}>HOT</span> {noticeHotItem.title}</div>
                         :
