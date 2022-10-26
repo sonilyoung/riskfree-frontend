@@ -396,7 +396,7 @@ const MeasureToManageThePerformance = () => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
-                    <div>총 게시글 <strong>{relatedRawList?.length > 0 && relatedRawList[0]?.totalCount}</strong> 건</div>
+                    <div>총 관리항목 수 <strong>{relatedRawList?.length > 0 && relatedRawList[0]?.totalCount}</strong> 건</div>
                     <Stack spacing={2}>
                         <Pagination count={relatedRawList?.length && Math.ceil(relatedRawList[0]?.totalCount / 10)} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange(lawId)} showFirstButton showLastButton />
                     </Stack>
