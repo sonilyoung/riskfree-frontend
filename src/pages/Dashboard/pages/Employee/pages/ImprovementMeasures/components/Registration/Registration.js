@@ -92,7 +92,7 @@ const Registration = () => {
             "reqDate": moment(new Date()),
             "reqFileId": atchFileId,
             "reqUserCd": getroleCd,
-            "statusCd": "001",
+            "statusCd": "002",
             "completeDate": completeDate,
             "updateId": null,
             "workplaceId": parseInt(workplaceSelect)

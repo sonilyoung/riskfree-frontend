@@ -266,7 +266,7 @@ const Update = () => {
                             <div className={classes.rowContent}>
                                 <div className={classes.rowInfo}>{todaysDate}</div>
                                 <div className={classes.rowTitle}><text>*</text>접수자</div>
-                                <div className={classes.rowInfo}>{loginInfo.name}</div>
+                                <div className={classes.rowInfo}>{law.recvUserName}</div>
                                 <div className={classes.rowTitle}><text>*</text>접수형태</div>
                                 <div className={classes.rowInfo}>
                                     <FormControl

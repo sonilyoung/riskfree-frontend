@@ -364,7 +364,7 @@ const Registration = () => {
                                 <div className={classes.rowContent}>
                                     <div className={classes.rowInfo}>{improvement && improvement.reqDate}</div>
                                     <div className={classes.rowTitle}><text>*</text>요청자</div>
-                                    <div className={classes.rowInfo}>{improvement.reqUserCd}</div>
+                                    <div className={classes.rowInfo}>{improvement.reqUserName}</div>
                                     <div className={classes.rowTitle}><text>*</text>완료요청일</div>
                                     <div className={classes.rowInfo}>{improvement && improvement.finDate}</div>
                                     <div className={classes.rowTitle}>첨부파일</div>
@@ -386,17 +386,6 @@ const Registration = () => {
                                 <div className={classes.rowInfo}>
                                     <FormControl className={classes.searchRadio} onChange={(event) => setImprovement({ ...improvement, "statusCd": event.target.value })} >
                                         <RadioGroup row value={improvement && improvement.statusCd}>
-                                            <FormControlLabel
-                                                value="001"
-                                                label="요청중"
-                                                control={
-                                                    <Radio
-                                                        icon={<img src={radioIcon} alt="radio icon" />}
-                                                        checkedIcon={<img src={radioIconOn} alt="radio icon on" />}
-                                                        value={"001"}
-                                                    />
-                                                }
-                                            />
                                             <FormControlLabel
                                                 value="002"
                                                 label="접수"
