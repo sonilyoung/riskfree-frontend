@@ -34,8 +34,7 @@ function List() {
     const [improvementSelect] = useImprovementSelectMutation()
     const [getUseUserToken] = useUserToken();
     const [workplaces, setWorkplaces] = useState([])
-    //const [workplaceSelect, setWorkplaceSelect] = useState(getInitialWorkplaceId())
-    const [workplaceSelect, setWorkplaceSelect] = useState("")
+    const [workplaceSelect, setWorkplaceSelect] = useState(getInitialWorkplaceId())
     //const [getroleCd, setGetroleCd] = useState(getUseUserToken.getUserRoleCd());
     const [getroleCd, setGetroleCd] = useState('');
     const [statusCd, setStatusCd] = useState("")
@@ -146,7 +145,8 @@ function List() {
                                 <Select
                                     className={classes.selectMenu}
                                     sx={{ width: 204 }}
-                                    value={improvements.workplaceId}
+                                    value=""
+                                    key=""
                                     onChange={(e) => setWorkplaceSelect(e.target.value)}
                                     displayEmpty
                                 >

@@ -41,8 +41,7 @@ const List = () => {
     const [lawIssueReassonSelect] = useLawIssueReassonSelectMutation();
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
-    //const [workplaceId, setWorkplaceId] = useState(getInitialWorkplaceId);
-    const [workplaceId, setWorkplaceId] = useState("");
+    const [workplaceId, setWorkplaceId] = useState(getInitialWorkplaceId);
     const [workplaceList, setWorkplaceList] = useState([]);
     const [issueReasson, setIssueReasson] = useState([]);
     const [startDate, setStartDate] = useState(null)
@@ -172,7 +171,8 @@ const List = () => {
                                     <Select
                                         className={classes.selectMenu}
                                         sx={{ width: 204 }}
-                                        value={lawImprovements.workplaceId}
+                                        value=""
+                                        key=""
                                         onChange={handleChange("workplaceId")}
                                         displayEmpty
                                     >

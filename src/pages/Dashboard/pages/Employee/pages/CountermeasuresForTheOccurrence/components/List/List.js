@@ -52,8 +52,7 @@ const List = () => {
     const [managerName, setManagerName] = useState("")
     const [startDate, setStartDate] = useState(null)
     const [finishDate, setFinishDate] = useState(null)
-    //const [workplaceSelect, setWorkplaceSelect] = useState(getInitialWorkplaceId())
-    const [workplaceSelect, setWorkplaceSelect] = useState("")
+    const [workplaceSelect, setWorkplaceSelect] = useState(getInitialWorkplaceId())
     const [occurPlaceSelect, setOccurPlaceSelect] = useState("")
     const [page, setPage] = useState(1)
     const [death, setDeath] = useState(false)
@@ -258,8 +257,8 @@ const List = () => {
                                     <Select
                                         className={classes.selectMenu}
                                         sx={{ width: 204 }}
-                                        value={workplaceSelect}
-                                        key={workplaceSelect}
+                                        value=""
+                                        key=""
                                         onChange={(e) => setWorkplaceSelect(e.target.value)}
                                         displayEmpty
                                     >
