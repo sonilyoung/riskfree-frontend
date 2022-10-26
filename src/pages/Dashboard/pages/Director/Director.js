@@ -1174,7 +1174,7 @@ const Director = () => {
                                     {noticesList?.length && noticesList?.map((notice) =>
                                     (<div>
                                         <div>{notice.insertDate}</div>
-                                        {notice.importCd === "001" && <span className={classes.slideLabelHot}>HOT</span>}
+                                        {notice?.importCd === "001" ? <span className={classes.slideLabelHot}>HOT</span> : ""}
                                         <Link to={`/dashboard/director/notifications/view/${notice.noticeId}`} className={classes.linkBtn}>{notice.title}</Link>
                                     </div>)
                                     )}
@@ -1208,7 +1208,7 @@ const Director = () => {
                 </Grid>
                 {
                 !!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
-                    <div className={classes.notificationPopup}>
+                    <div className={classes.notificationPopup} style={{marginTop: `${index*3 + '0'}px`, marginLeft: `${index*3 + '0'}px`}} >
                         <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)}></ClosePopupButton2>
                         <div><span className={classes.slideLabelHot}>HOT</span> {noticeHotItem.title}</div>
                         <div className={classes.popNews}>
