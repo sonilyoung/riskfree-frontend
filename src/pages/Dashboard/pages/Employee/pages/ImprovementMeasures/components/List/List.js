@@ -72,6 +72,9 @@ function List() {
     const currentIsClose = useSelector(selectIsClose);
 
     const handleFetchList = async () => {
+        if(loginInfos.roleCd !== "001"){
+            setWorkplaceSelect(loginInfos.workplaceId);
+        }
         const response = await improvementSelect(
             {
                 "baselineId": currentBaseline,
@@ -106,6 +109,21 @@ function List() {
         setLoginInfos(response.data.RET_DATA)
     }
     
+    const handleChange = (prop) => (event) => {
+        if (prop.includes("cmmdOrgCd00")) {
+            setImprovements({
+                ...improvements,
+                [prop]: event.target.checked ? event.target.value : "",
+            });
+            //setChecked(false);
+        } else {
+            setImprovements({
+                ...improvements,
+                [prop]: event.target.value,
+            });
+        }
+    };
+
     useEffect(() => {
         fetchLoginInfo();
         handleComapanyWorkplace()
@@ -128,9 +146,8 @@ function List() {
                                 <Select
                                     className={classes.selectMenu}
                                     sx={{ width: 204 }}
-                                    value={workplaceSelect}
-                                    key={workplaceSelect}
-                                    onChange={handleWorkplaceSelect}
+                                    value={improvements.workplaceId}
+                                    onChange={(e) => setWorkplaceSelect(e.target.value)}
                                     displayEmpty
                                 >
                                     <MenuItem value="">전체</MenuItem>
@@ -143,7 +160,9 @@ function List() {
                                 <Select
                                 className={classes.selectMenu}
                                 sx={{ width: 204 }}
-                                value={workplaceSelect}
+                                value={loginInfos.workplaceId}
+                                defaultValue={loginInfos.workplaceId}
+                                key={loginInfos.workplaceId}
                                 displayEmpty
                             >
                                 <MenuItem value={loginInfos.workplaceId}>{loginInfos.workplaceName}</MenuItem>
