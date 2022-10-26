@@ -776,6 +776,7 @@ const Default = ({ children }) => {
     const [settingsPopup, setSettingsPopup] = useState(false)
     const [companyInfo, setCompanyInfo] = useState({})
     const companyId = userToken.getUserCompanyId();
+    const workplaceId = userToken.getUserWorkplaceId();
     const roleCd = userToken.getUserRoleCd();
     const [baselineInfo, setBaselineInfo] = useState({
         "baselineName": "",
@@ -1069,7 +1070,8 @@ const Default = ({ children }) => {
 
     const fetchCompanyInfo = async () => {
         const response = await getCompanyInfo({
-            "companyId": companyId
+            "companyId": companyId,
+            "workplaceId": workplaceId
         })
         setCompanyInfo(response.data.RET_DATA)
     }
@@ -1133,7 +1135,7 @@ const Default = ({ children }) => {
                                             <div className={classes.headerPopList}>
                                                 <div className={classes.userTab}>
                                                     <div className={classes.userImage}>
-                                                        {!!(companyInfo) && !!companyInfo.logoImg && (<img height={50} src={`${BASE_URL}/file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
+                                                        {!!(companyInfo) && !!companyInfo.logoImg && (<img height={50} src={`${BASE_URL}file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
                                                     </div>
                                                     <div className={classes.userName}>
                                                         {companyInfo?.companyName}
@@ -1165,7 +1167,7 @@ const Default = ({ children }) => {
                                                 />
                                                 <div className={classes.preFootPop}>
                                                     <div>
-                                                        {filePath.logoImgUpload ? (<img height={60} src={`${BASE_URL}/file/getImg?imgPath=${filePath.logoImgUpload}`} alt="logo" />) : (<span>로고등록</span>)}
+                                                        {filePath.logoImgUpload ? (<img height={60} src={`${BASE_URL}file/getImg?imgPath=${filePath.logoImgUpload}`} alt="logo" />) : (<span>로고등록</span>)}
                                                     </div>
                                                     <div>
                                                         <UploadImageButton id={"logoImgUpload"} onClick={handleDialogOpenOnly}>찾아보기</UploadImageButton>

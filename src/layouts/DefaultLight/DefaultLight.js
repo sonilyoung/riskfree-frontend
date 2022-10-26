@@ -265,6 +265,7 @@ const DefaultLight = ({ children }) => {
     const userWorkplaceId = userToken.getUserWorkplaceId();
     const [companyInfo, setCompanyInfo] = useState({});
     const companyId = userToken.getUserCompanyId();
+    const workplaceId = userToken.getUserWorkplaceId();
     const [getCompanyInfo] = useGetCompanyInfoMutation();
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
@@ -629,7 +630,8 @@ const DefaultLight = ({ children }) => {
 
     const fetchCompanyInfo = async () => {
         const response = await getCompanyInfo({
-            "companyId": companyId
+            "companyId": companyId,
+            "workplaceId": workplaceId
         })
         setCompanyInfo(response.data.RET_DATA)
     }
