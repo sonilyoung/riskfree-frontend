@@ -321,17 +321,17 @@ const Employee = () => {
     const handleInsertBaseline = async () => {
         if (baselineInfo.baselineName.length <= 0) {
             setOkayPopupMessage("'관리차수'를 입력해주세요.");
-            setOkayPopupShow(true);                    
+            setOkayPopupShow(true);
             return false;
         }
         if (baselineInfo.baselineStart === null || baselineInfo.baselineStart.length <= 0) {
             setOkayPopupMessage("'관리차수 시작일자'를 선택하세요.");
-            setOkayPopupShow(true);                    
+            setOkayPopupShow(true);
             return false;
         }
         if (baselineInfo.baselineEnd === null || baselineInfo.baselineEnd.length <= 0) {
             setOkayPopupMessage("'관리차수 종료일자'를 선택하세요.");
-            setOkayPopupShow(true);                    
+            setOkayPopupShow(true);
             return false;
         }
         setLoading(true);
@@ -1026,6 +1026,10 @@ const Employee = () => {
         }
     };
 
+    const handelOnlyNumber = (str) => {
+        const onlyNumber = str.replace(/[^0-9]/g, '')
+        return onlyNumber
+    }
     useEffect(() => {
         setLoading(true);
         fetchBaseline(baselineIdForSelect);
@@ -1248,8 +1252,8 @@ const Employee = () => {
                                                     variant="outlined"
                                                     sx={{ width: 80 }}
                                                     className={classes.popupTextField}
-                                                    onChange={(event) => setBaselineInfo({ ...baselineInfo, "baselineName": event.target.value })}
-                                                />
+                                                    onChange={(event) => setBaselineInfo({ ...baselineInfo, "baselineName": handelOnlyNumber(event.target.value) })}
+                                                />차
                                                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
                                                     <DesktopDatePicker
                                                         className={classes.selectMenuDate}
@@ -1257,7 +1261,7 @@ const Employee = () => {
                                                         inputFormat="YYYY-MM-DD"
                                                         value={baselineInfo.baselineStart || ""}
                                                         onChange={DateChange('baselineStart')}
-                                                        renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
+                                                        renderInput={(params) => <TextField {...params} sx={{ width: 120 }} />}
                                                     />
                                                 </LocalizationProvider>
                                                 ~
@@ -1268,7 +1272,7 @@ const Employee = () => {
                                                         inputFormat="YYYY-MM-DD"
                                                         value={baselineInfo.baselineEnd || ""}
                                                         onChange={DateChange('baselineEnd')}
-                                                        renderInput={(params) => <TextField {...params} sx={{ width: 130 }} />}
+                                                        renderInput={(params) => <TextField {...params} sx={{ width: 120 }} />}
                                                     />
                                                 </LocalizationProvider>
                                             </AccordionDetails>
