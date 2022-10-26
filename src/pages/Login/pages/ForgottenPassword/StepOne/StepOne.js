@@ -76,6 +76,28 @@ const StepOne = () => {
         },
     });
 
+    //사업자 번호 정규식 유효성 검사 수행
+    const handleRegistNo = (e) => {
+        const value = e.target.value.replace(/\D+/g, "");
+        const numberLength = 10;
+        let resultNo = "";  
+        for (let i = 0; i < value.length && i < numberLength; i++) {
+        switch (i) {
+            case 3:
+                resultNo += "-";
+            break;
+            case 5:
+                resultNo += "-";
+            break;
+            default:
+            break;
+        }
+        resultNo += value[i];
+        }
+        e.target.value = resultNo;
+        setValues({...values, "registNo": {...values, value: e.target.value} }); 
+    }
+
     const handleChange = (prop) => (event) => {
         setValues({
             ...values,
@@ -136,7 +158,7 @@ const StepOne = () => {
                     <Typography variant="body1" gutterBottom>사업자 등록번호</Typography>
                 </Grid>
                 <Grid item xs={9}>
-                    <TextField id="standard-basic" onChange={handleChange("registNo")} placeholder="숫자 10자리를 입력해주세요" variant="outlined" />
+                    <TextField id="standard-basic" onChange={handleRegistNo} placeholder="숫자 10자리를 입력해주세요" variant="outlined" />
                 </Grid>
                 <Grid className={classes.preInputText} item xs={3}>
                     <Typography variant="body1" gutterBottom>담당자명</Typography>
