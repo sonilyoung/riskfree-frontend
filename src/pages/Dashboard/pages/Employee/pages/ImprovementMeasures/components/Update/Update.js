@@ -292,7 +292,7 @@ const Registration = () => {
                                         <Select
                                                 sx={{ width: 200 }}
                                                 className={classes.selectMenu}
-                                                value={improvement.reqUserName}
+                                                value={improvement.reqUserCd}
                                                 onChange={(event) => setImprovement({ ...improvement, "reqUserCd": event.target.value })}
                                             >
                                                 <MenuItem value="001">대표이사</MenuItem>
