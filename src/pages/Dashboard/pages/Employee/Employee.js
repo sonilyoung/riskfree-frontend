@@ -757,8 +757,6 @@ const Employee = () => {
                 setLoading(true);
                 let formData = new FormData();
                 formData.append("excelFile", selectedFile)
-                console.log("userWorkplaceId:"+userWorkplaceId)
-                console.log("currentBaselineId:"+currentBaselineId)
                 const params = { workplaceId: userWorkplaceId, baselineId: currentBaselineId }
                 formData.append('params', new Blob([JSON.stringify(params)], { type: 'application/json' }))                
                 const response = await getUserDutyUpload(formData);                
@@ -1063,13 +1061,13 @@ const Employee = () => {
 
     useEffect(() => {
         setLoading(true);
+        fetchInspectionDocs()
         getSafetyFile();
         fetchLoginInfo();
         fetchCompanyInfo()
         fetchWorkplaceList();
         fetchBaselineList();
         fetchEssentialRates();
-        fetchInspectionDocs();
         fetchImprovementLawOrderPercentage();
         fetchRelatedLawRatePercentage();
         fetchLeaderImprovementList();
@@ -1096,6 +1094,7 @@ const Employee = () => {
 
     useEffect(() => {
         setLoading(true);
+        fetchInspectionDocs()
         fetchEssentialRates()
         fetchDutyDetailList()
         setLoading(false);
@@ -1103,8 +1102,8 @@ const Employee = () => {
 
     useEffect(() => {
         setLoading(true);
-        fetchEssentialRates()
         fetchInspectionDocs()
+        fetchEssentialRates()
         fetchDutyCycle()
         fetchDutyAssigned()
         fetchRelatedArticle()
@@ -1114,8 +1113,8 @@ const Employee = () => {
 
     useEffect(() => {
         setLoading(true);
-        fetchEssentialRates()
         fetchInspectionDocs()
+        fetchEssentialRates()
         setLoading(false);
     }, [uploadFlag])
 
