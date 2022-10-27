@@ -596,7 +596,7 @@ const Employee = () => {
     }
 
     const fetchInspectionDocs = async () => {
-        if (clickedDuty && setSubEventExe) {
+        if (clickedDuty && SubEventExe) {
             const response = await getInspectionsDocs({
                 "articleNo": clickedDuty
             })
@@ -607,7 +607,7 @@ const Employee = () => {
     }
 
     const fetchDutyCycle = async () => {
-        if (clickedDuty && setSubEventExe) {
+        if (clickedDuty && SubEventExe) {
             const response = await getDutyCycle({
                 'articleNo': clickedDuty
             })
@@ -618,7 +618,7 @@ const Employee = () => {
     }
 
     const fetchDutyAssigned = async () => {
-        if (clickedDuty && setSubEventExe) {
+        if (clickedDuty && SubEventExe) {
             const response = await getDutyAssigned({
                 'articleNo': clickedDuty
             })
@@ -629,7 +629,7 @@ const Employee = () => {
     }
 
     const fetchRelatedArticle = async () => {
-        if (clickedDuty && setSubEventExe) {
+        if (clickedDuty && SubEventExe) {
             const response = await getRelatedArticle({
                 'articleNo': clickedDuty
             })
@@ -640,7 +640,7 @@ const Employee = () => {
     }
 
     const fetchGuideLine = async () => {
-        if (clickedDuty && setSubEventExe) {
+        if (clickedDuty && SubEventExe) {
             const response = await getGuideLine({
                 'articleNo': clickedDuty
             })
@@ -1067,15 +1067,15 @@ const Employee = () => {
         fetchLoginInfo();
         fetchCompanyInfo()
         fetchWorkplaceList();
-        fetchBaselineList()
-        fetchEssentialRates()
-        fetchImprovementLawOrderPercentage()
-        fetchRelatedLawRatePercentage()
+        fetchBaselineList();
+        fetchEssentialRates();
+        fetchInspectionDocs();
+        fetchImprovementLawOrderPercentage();
+        fetchRelatedLawRatePercentage();
         fetchLeaderImprovementList();
         fetchAccidentTotalList();
         fetchSafeWorkHistoryList();
-        fetchAccidentsPreventionPercentage()
-        fetchInspectionDocs();
+        fetchAccidentsPreventionPercentage();
         fetchNoticeList();
         fetchImprovementList();
         fetchDutyDetailList();
