@@ -23,7 +23,11 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        height: '140px'
+        height: '140px',
+        '& label': {
+            fontSize: '18px'
+        }
+        
     },
     loginOptions: {
         display: 'flex',

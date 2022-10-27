@@ -78,6 +78,11 @@ const useStyles = makeStyles(() => ({
                 marginLeft: '30px'
             },
         },
+        '& label': {
+            fontSize: '18px',
+            justifyContent: 'center',
+            boxSizing: 'border-box',
+        }
     },
     infoTitle: {
         minWidth: '65px',
@@ -243,7 +248,7 @@ const useStyles = makeStyles(() => ({
         '& button': {
             paddingLeft: '0',
         }
-    },
+    }
 }));
 
 const SearchButton = styled(ButtonUnstyled)`

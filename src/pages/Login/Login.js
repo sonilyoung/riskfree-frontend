@@ -163,8 +163,8 @@ const Login = () => {
                         <img src={logoLogin} alt="login logo" />
                     </div>
                     <div className={classes.loginInput}>
-                        <TextField id="id" onChange={handleChange("id")} placeholder="아이디" onKeyPress={handleNextInput} value={values.id.value}/>
-                        <TextField id="pawwword" type="password" onChange={handleChange("password")} onKeyPress={handleChangeSubmit} placeholder="비밀번호" variant="outlined" />
+                        <TextField id="id" label="아이디" onChange={handleChange("id")} onKeyPress={handleNextInput} value={values.id.value}/>
+                        <TextField id="pawwword" label="비밀번호" type="password" onChange={handleChange("password")} onKeyPress={handleChangeSubmit} variant="outlined" />
                     </div>
                     <div className={classes.loginOptions}>
                         <FormControlLabel

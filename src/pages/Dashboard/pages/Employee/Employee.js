@@ -6,14 +6,15 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -21,6 +22,8 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
+
+
 
 import { useStyles, UserButton, LogButton, SettingsButton, AdminButton, ChartButton, MainNavButton, PageSideButton, DashTrigButton, FileButtonExis, FileButtonExisEm, FileButtonNone,
     ButtonClosePop, ButtonGraphNext, ButtonGraphPrev, ButtonGrid, PopupFootButton,UploadImageButton, PromptButtonBlue, PromptButtonWhite,UnknownButton1, UnknownButton2, 
@@ -1259,7 +1262,7 @@ const Employee = () => {
                                             <AccordionDetails style={{ alignItems: 'center' }}>
                                                 <TextField
                                                     id="standard-basic"
-                                                    placeholder="관리차수"
+                                                    label="관리차수"
                                                     value={baselineInfo.baselineName || ""}
                                                     variant="outlined"
                                                     sx={{ width: 80 }}
@@ -1267,9 +1270,9 @@ const Employee = () => {
                                                     onChange={(event) => setBaselineInfo({ ...baselineInfo, "baselineName": handelOnlyNumber(event.target.value) })}
                                                 />차
                                                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-                                                    <DesktopDatePicker
+                                                    <DesktopDatePicker                                                        
                                                         className={classes.selectMenuDate}
-                                                        label=' '
+                                                        label='시작일자'
                                                         inputFormat="YYYY-MM-DD"
                                                         value={baselineInfo.baselineStart || ""}
                                                         onChange={DateChange('baselineStart')}
@@ -1278,9 +1281,9 @@ const Employee = () => {
                                                 </LocalizationProvider>
                                                 ~
                                                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={locale}>
-                                                    <DesktopDatePicker
+                                                    <DesktopDatePicker                                                        
                                                         className={classes.selectMenuDate}
-                                                        label=" "
+                                                        label="종료일자"
                                                         inputFormat="YYYY-MM-DD"
                                                         value={baselineInfo.baselineEnd || ""}
                                                         onChange={DateChange('baselineEnd')}
@@ -1317,15 +1320,18 @@ const Employee = () => {
                                                 {baselineData.isClose === "1" ? <span style={{color:'red'}}>※ 마감된 차수는 복사할 수 없습니다.</span>
                                                 :
                                                 <>
-                                                <Select
-                                                    className={classes.popupTextField}
-                                                    sx={{ width: 150, marginBottom: '25px !important' }}
-                                                    value={targetBaselineId+'/'+targetBaselineName}                                                    
+                                                <FormControl sx={{ width:'100%', backgroundColor: '#ffffff' }} size="small">
+                                                <InputLabel id="customized-select-label">차수선택</InputLabel>
+                                                <Select                                                    
+                                                    labelId="customized-select-label"
+                                                    id="customized-select-label"
+                                                    value={targetBaselineId+'/'+targetBaselineName}
+                                                    label="차수선택"
                                                     onChange={(event) => {
                                                         setTargetBaselineName(event.target.value.split("/")[1])
                                                         setTargetBaselineId(event.target.value.split("/")[0])
                                                     }}
-                                                >
+                                                >                                                    
                                                     {baselineList?.map(baselineItem => 
                                                         parseInt(currentBaselineId) === baselineItem.baselineId ? 
                                                             <></>
@@ -1333,6 +1339,7 @@ const Employee = () => {
                                                             <MenuItem value={baselineItem.baselineId+'/'+baselineItem.baselineName}>{baselineItem.baselineName}</MenuItem>
                                                         )}
                                                 </Select>
+                                                </FormControl>
                                                 {!!baselineList && !!baselineList?.length
                                                     && baselineList?.filter(baselineItem => baselineItem.baselineId === targetBaselineId)
                                                         ?.map(item => <span>{item.baselineStart}~{item.baselineEnd}</span>)}
@@ -1593,6 +1600,7 @@ const Employee = () => {
                             <Select
                                 className={classes.selectMenu}
                                 value={"" || baselineIdForSelect}
+                                label="관리차수"
                                 onChange={(e) => setBaselineIdForSelect(e.target.value)}
                                 inputProps={{ 'aria-label': 'Without label' }}>
                                 {!!baselineList && !!baselineList.length && baselineList?.slice(0).reverse().map((baseline, index) => (

@@ -40,6 +40,7 @@ import needleImg from '../../../../assets/images/img_needle.png';
 import gageState from '../../../../assets/images/txt_warning.png';
 
 import { styled } from '@mui/system';
+import InputBase from '@mui/material/InputBase';
 
 const UserButton = styled(ButtonUnstyled)`
     background: transparent url(${userIcon});
@@ -392,9 +393,6 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center'
-    },
-    selectMenu: {
-        height: '40px'
     },
     leftMenu: {
         position: 'relative',
@@ -1427,8 +1425,8 @@ const useStyles = makeStyles(() => ({
 
     },
     popupTextField: {
-        marginBottom: '10px !important',
-        overflow: 'hidden',
+        //marginBottom: '10px !important',
+        //overflow: 'hidden',
         height: '40px',
         '& >div': {
             background: '#fff',
@@ -1438,6 +1436,10 @@ const useStyles = makeStyles(() => ({
             fontSize: '16px',
             height: '40px',
             boxSizing: 'border-box',
+        },
+        '& label': {
+            fontSize: '16px',
+            marginTop: '-8px'            
         }
     },
     preFootPop: {
@@ -1735,6 +1737,14 @@ const useStyles = makeStyles(() => ({
         overflow: 'visible',
         transition: '.2s',
     },
+    selectMenu: {
+        height: '40px'
+    },
+    baseLineselectMenu: {
+        '& > div': {
+            background: '#fff',
+        }
+    },    
     selectMenuDate: {
         height: '40px',
         '& div': {
@@ -1749,6 +1759,10 @@ const useStyles = makeStyles(() => ({
         },
         '& button': {
             paddingLeft: '0',
+        },
+        '& label': {
+            fontSize: '16px',
+            marginTop: '-8px',
         }
     },
     pageOverlay: {

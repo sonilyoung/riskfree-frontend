@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -321,9 +323,11 @@ const List = () => {
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>사고등급</div>
+                                
                                 <Select
-                                    sx={{ width: 100 }}
+                                    sx={{ width: 100}}
                                     className={classes.selectMenu}
+                                    style={{backgroundColor: '#fff', }}
                                     value={accLevelCd === "" ? "" : accLevelCd }
                                     onChange={(e) => setAccLeveCd(e.target.value)}
                                     displayEmpty
@@ -406,18 +410,6 @@ const List = () => {
                                     value={occurPlaceSelect}
                                     onChange={(e) => setOccurPlaceSelect(e.target.value)}
                                 />
-                                {/* <Select
-                                    className={classes.selectMenu}
-                                    sx={{ width: 204 }}
-                                    value={occurPlaceSelect}
-                                    onChange={(e) => setOccurPlaceSelect(e.target.value)}
-                                    
-                                    displayEmpty
-                                >
-                                    {occurPlacesList.map((occurPlace) => (
-                                        <MenuItem value={occurPlace.occurplace}>{occurPlace.occurplace}</MenuItem>
-                                    ))}
-                                </Select> */}
                             </div>
                             <div>
                                 <div className={classes.infoTitle}>발생일자</div>
@@ -429,10 +421,6 @@ const List = () => {
                                         value={startDate}
                                         isClearable
                                         onChange={DateChange('startDate')}
-                                        // onChange={(newDate) => {
-                                        //     const date = new Date(newDate.$d)
-                                        //     setStartDate(moment(date).format("YYYY-MM-DD"))
-                                        // }}
                                         renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                     />
                                 </LocalizationProvider>
@@ -445,10 +433,6 @@ const List = () => {
                                         value={finishDate}
                                         isClearable
                                         onChange={DateChange('finishDate')}
-                                        // onChange={(newDate) => {
-                                        //     const date = new Date(newDate.$d)
-                                        //     setFinishDate(moment(date).format("YYYY-MM-DD"))
-                                        // }}
                                         renderInput={(params) => <TextField {...params} sx={{ width: 140 }} />}
                                     />
                                 </LocalizationProvider>
@@ -457,7 +441,6 @@ const List = () => {
                                 <div className={classes.infoTitle}>현장 책임자</div>
                                 <TextField
                                     id="standard-basic"
-                                    // placeholder="이름입력"
                                     variant="outlined"
                                     sx={{ width: 195 }}
                                     className={classes.selectMenu}
