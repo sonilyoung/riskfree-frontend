@@ -467,7 +467,9 @@ const Employee = () => {
     }
 
     const fetchBaselineList = async () => {
-        const response = await getBaselineList({})
+        const response = await getBaselineList({
+            "workplaceId": userWorkplaceId
+        })
         setBaselineList(response.data.RET_DATA)
         setBaselineStart(!!response.data.RET_DATA && response.data.RET_DATA.baselineStart)
     }
@@ -479,6 +481,7 @@ const Employee = () => {
         }
 
         const response = await getBaseline({
+            "workplaceId": userWorkplaceId,
             "baselineId": baselineId
         })
         setBaselineData(!!response.data.RET_DATA && response.data.RET_DATA)
