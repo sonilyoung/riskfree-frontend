@@ -142,11 +142,13 @@ const MeasureToManageThePerformance = () => {
 
         let workplaceId = 0;
         if(currentWorkplaceId===null){
-            workplaceId = parseInt(loginInfos.workplaceId);
+            workplaceId = loginInfos.workplaceId;
         }else{
             workplaceId = currentWorkplaceId;
         }
-        parseInt(loginInfos.workplaceId)
+        
+
+        console.log('버튼:', loginInfos);
         const response = await getRelatedRawButton({
             "workplaceId" : workplaceId
         });
@@ -227,16 +229,18 @@ const MeasureToManageThePerformance = () => {
     const fetchLoginInfo = async () => {
         const response = await getLoginInfo()
         setLoginInfos(response.data.RET_DATA)
+
+        
     }
 
     useEffect(() => {
-    }, [uploadFlag])
-
-    useEffect(() => {
-        fetchLoginInfo();
         setLoading(true);
         fetchRelatedRawButtonList();
         setLoading(false);
+    }, [page, loginInfos])
+
+    useEffect(() => {
+        fetchLoginInfo();
     }, [page]);
 
     return (
