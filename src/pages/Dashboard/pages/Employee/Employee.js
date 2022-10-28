@@ -1061,7 +1061,6 @@ const Employee = () => {
 
     useEffect(() => {
         setLoading(true);
-        fetchInspectionDocs()
         getSafetyFile();
         fetchLoginInfo();
         fetchCompanyInfo()
@@ -1094,7 +1093,6 @@ const Employee = () => {
 
     useEffect(() => {
         setLoading(true);
-        fetchInspectionDocs()
         fetchEssentialRates()
         fetchDutyDetailList()
         setLoading(false);
@@ -1102,19 +1100,19 @@ const Employee = () => {
 
     useEffect(() => {
         setLoading(true);
-        fetchInspectionDocs()
         fetchEssentialRates()
         fetchDutyCycle()
         fetchDutyAssigned()
         fetchRelatedArticle()
         fetchGuideLine()
+        fetchInspectionDocs()
         setLoading(false);
     }, [clickedDuty])
 
     useEffect(() => {
         setLoading(true);
-        fetchInspectionDocs()
         fetchEssentialRates()
+        fetchInspectionDocs()
         setLoading(false);
     }, [uploadFlag])
 
