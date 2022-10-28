@@ -205,6 +205,7 @@ const MeasureToManageThePerformance = () => {
             setOkayPopupMessage("관계법령을 삭제 하였습니다.");
             setOkayPopupShow(true);
             fetchRelatedRawButtonList();
+            fetchRelatedRawList();
         } else {
             setOkayPopupMessage("삭제에 실패하였습니다.");
             setOkayPopupShow(true);
