@@ -1101,11 +1101,11 @@ const Employee = () => {
     useEffect(() => {
         setLoading(true);
         fetchEssentialRates()
+        fetchInspectionDocs()
         fetchDutyCycle()
         fetchDutyAssigned()
         fetchRelatedArticle()
         fetchGuideLine()
-        fetchInspectionDocs()
         setLoading(false);
     }, [clickedDuty])
 
