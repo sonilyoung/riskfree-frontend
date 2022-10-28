@@ -1050,7 +1050,7 @@ const Employee = () => {
         setLoading(true);
         fetchBaseline(baselineIdForSelect);
         setLoading(false);
-    }, [currentBaselineId])
+    }, [currentBaselineId, defaultPage])
 
     useEffect(() => {
         setLoading(true);
