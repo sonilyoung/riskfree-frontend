@@ -139,8 +139,16 @@ const MeasureToManageThePerformance = () => {
     }
 
     const fetchRelatedRawButtonList = async () => {
+
+        let workplaceId = 0;
+        if(currentWorkplaceId===null){
+            workplaceId = parseInt(loginInfos.workplaceId);
+        }else{
+            workplaceId = currentWorkplaceId;
+        }
+        parseInt(loginInfos.workplaceId)
         const response = await getRelatedRawButton({
-            "workplaceId" : currentWorkplaceId
+            "workplaceId" : workplaceId
         });
         setRelatedRawButtonList(response.data.RET_DATA);
         if((lawId === "") || (lawId === null) || (lawId === "0")) {
