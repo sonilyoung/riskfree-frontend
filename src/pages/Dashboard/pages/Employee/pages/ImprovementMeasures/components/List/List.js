@@ -145,8 +145,8 @@ function List() {
                                 <Select
                                     className={classes.selectMenu}
                                     sx={{ width: 204 }}
-                                    value=""
-                                    key=""
+                                    key={workplaceSelect === null ? "" : workplaceSelect }
+                                    value={workplaceSelect === null ? "" : workplaceSelect }
                                     onChange={(e) => setWorkplaceSelect(e.target.value)}
                                     displayEmpty
                                 >

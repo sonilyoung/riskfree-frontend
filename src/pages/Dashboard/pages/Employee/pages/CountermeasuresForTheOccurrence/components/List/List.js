@@ -258,15 +258,15 @@ const List = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.searchBox}>
                     <div>
-                        <div className={classes.searchInfo}>
+                        <div className={classes.searchInfo}>    
                             <div>
                                 <div className={classes.infoTitle}>사업장</div>
                                 {loginInfos.roleCd === '001' ?
                                     <Select
                                         className={classes.selectMenu}
                                         sx={{ width: 204 }}
-                                        value=""
-                                        key=""
+                                        key={workplaceSelect === null ? "" : workplaceSelect }
+                                        value={workplaceSelect === null ? "" : workplaceSelect }
                                         onChange={(e) => setWorkplaceSelect(e.target.value)}
                                         displayEmpty
                                     >

@@ -14,7 +14,7 @@ import iconTabOn from '../../../../../../assets/images/ic_tab_on.png';
 import DefaultLayout from '../../../../../../layouts/Default/Default';
 import { useGetRelatedRawButtonMutation, useGetRelatedRawMutation, useInsertDutyButtonMutation, useUpdateRelatedRawMutation, useDeleteDutyButtonMutation } from '../../../../../../hooks/api/RelatedLawManagement/RelatedLawManagement';
 import { useGetLoginInfoMutation } from "../../../../../../hooks/api/MainManagement/MainManagement";
-import { selectBaselineId, selectIsClose } from '../../../../../../slices/selections/MainSelection';
+import { selectWorkplaceId, selectBaselineId, selectIsClose } from '../../../../../../slices/selections/MainSelection';
 import { useSelector } from 'react-redux';
 import { UploadEmployeeDialog } from '../../../../../../dialogs/Upload';
 import { useRelatedRawExcelUploadMutation } from '../../../../../../hooks/api/ExcelController/ExcelController';
@@ -74,6 +74,7 @@ const MeasureToManageThePerformance = () => {
     const [subscribersDeleteButton] = useDeleteDutyButtonMutation();    // 법령버튼 삭제(내용포함)
     const [relatedRawExcelUpload] = useRelatedRawExcelUploadMutation()
     const currentBaseline = useSelector(selectBaselineId);
+    const currentWorkplaceId = useSelector(selectWorkplaceId);
     const currentIsClose = useSelector(selectIsClose);
 
     const handleDialogFileUpload = async () => {
@@ -138,7 +139,9 @@ const MeasureToManageThePerformance = () => {
     }
 
     const fetchRelatedRawButtonList = async () => {
-        const response = await getRelatedRawButton({});
+        const response = await getRelatedRawButton({
+            "workplaceId" : currentWorkplaceId
+        });
         setRelatedRawButtonList(response.data.RET_DATA);
         if((lawId === "") || (lawId === null) || (lawId === "0")) {
             setLawId(response.data.RET_DATA[0].lawButtonId);

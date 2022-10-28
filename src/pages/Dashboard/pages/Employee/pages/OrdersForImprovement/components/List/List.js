@@ -28,7 +28,7 @@ import { useLawIssueReassonSelectMutation, useLawSelectMutation } from "../../..
 import { DefaultLayout } from "../../../../../../../../layouts/Default";
 import 'dayjs/locale/ko';
 import { useSelector } from "react-redux";
-import { selectBaselineId, selectIsClose } from "../../../../../../../../slices/selections/MainSelection";
+import { selectWorkplaceId, selectBaselineId, selectIsClose } from "../../../../../../../../slices/selections/MainSelection";
 import useUserInitialWorkplaceId from "../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId";
 
 const List = () => {
@@ -41,6 +41,7 @@ const List = () => {
     const [lawIssueReassonSelect] = useLawIssueReassonSelectMutation();
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
+    const currentWorkplaceId = useSelector(selectWorkplaceId);
     const [workplaceId, setWorkplaceId] = useState(getInitialWorkplaceId);
     const [workplaceList, setWorkplaceList] = useState([]);
     const [issueReasson, setIssueReasson] = useState([]);
@@ -60,7 +61,7 @@ const List = () => {
         pageNum: page,
         startDate: startDate,
         statusCd: "",
-        workplaceId: workplaceId
+        workplaceId: currentWorkplaceId
     });
 
     const [lawList, setLawList] = useState([]);
@@ -149,6 +150,8 @@ const List = () => {
         fetchLawList();
     }, []);
 
+    console.log("lawImprovements.workplaceId", lawImprovements.workplaceId)
+
     return (
         <DefaultLayout>
             <Grid
@@ -171,8 +174,8 @@ const List = () => {
                                     <Select
                                         className={classes.selectMenu}
                                         sx={{ width: 204 }}
-                                        value=""
-                                        key=""
+                                        key={lawImprovements.workplaceId === null ? "" : lawImprovements.workplaceId }
+                                        value={lawImprovements.workplaceId === null ? "" : lawImprovements.workplaceId }
                                         onChange={handleChange("workplaceId")}
                                         displayEmpty
                                     >
