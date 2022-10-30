@@ -744,7 +744,7 @@ const Director = () => {
                                 <span>
                                     <img src={`${BASE_URL}file/getImg?imgPath=${weatherData?.weatherImgUrl}`} alt="weather icon" />
                                 </span>
-                                <span>{weatherData?.temperature} °</span>
+                                <span>{weatherData?.temperature} °C</span>
                                 <span>{weatherData?.address}</span>
                             </div>
                         </Grid>
