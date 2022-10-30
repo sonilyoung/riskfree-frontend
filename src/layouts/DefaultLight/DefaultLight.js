@@ -731,8 +731,9 @@ const DefaultLight = ({ children }) => {
                                         }>안전보건관리체계의 구축 및 이행 항목 등록/업데이트<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => 
                                         { 
+                                            fetchDutyDetailList()
                                             setFileUploadPopup(true) 
-                                            setSettingsPopup(false) 
+                                            setSettingsPopup(false)
                                         }
                                         }>안전보건관리체계의 구축 및 이행 서류 양식 등록<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => 
@@ -870,7 +871,7 @@ const DefaultLight = ({ children }) => {
                 </Grid>
 
             </Grid>
-
+            
             <UploadEmployeeDialog
                 open={openDialogEmployee}
                 onClose={handleDialogCloseEmployee}
