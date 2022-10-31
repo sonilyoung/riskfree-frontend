@@ -24,6 +24,7 @@ import { useStyles } from './useStyles';
 import { RoleService } from '../../services/core/User';
 import { Overlay } from '../../components/Overlay';
 import Okey from '../../components/MessageBox/Okay';
+import Loading from '../../pages/Loading';
 
 // 아이디 저장 및 체크 
 const LS_KEY_ID = "LS_KEY_ID";
@@ -65,6 +66,8 @@ const Login = () => {
     const [wrongCredentialsPopupMessage, setWrongCredentialsPopupMessage] = useState("");
     const [wrongCredentialsPopupTitle] = useState("알림");
     const [saveIDFlag, setSaveIDFlag] = useState(false);
+    //로딩바추가
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (prop) => (event) => {
         setValues({
@@ -79,6 +82,7 @@ const Login = () => {
     }
 
     const handleLogin = async () => {
+        setLoading(true);
         const userLoginResponse = await login({
             loginId: values.id.value,
             loginPw: values.password.value
@@ -117,6 +121,7 @@ const Login = () => {
             setWrongCredentialsPopupMessage("등록되지 않은 계정입니다.");
             setWrongCredentialsPopup(true);
         }
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -192,6 +197,8 @@ const Login = () => {
                     message={wrongCredentialsPopupMessage}
                     onConfirm={() => setWrongCredentialsPopup(false)} />
             </Overlay>
+
+            {loading && <Loading/>}
         </WideLayout>
     );
 };
