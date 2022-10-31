@@ -32,6 +32,8 @@ import { selectWorkplaceId, selectBaselineId, selectIsClose } from "../../../../
 import useUserInitialWorkplaceId from "../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId";
 
 const List = () => {
+
+    console.log()
     const classes = useStyles();
     const currentBaselineId = useSelector(selectBaselineId);
     const currentIsClose = useSelector(selectIsClose);
@@ -61,7 +63,7 @@ const List = () => {
         pageNum: page,
         startDate: startDate,
         statusCd: "",
-        workplaceId: currentWorkplaceId
+        workplaceId: currentWorkplaceId === null ? workplaceId : currentWorkplaceId
     });
 
     const [lawList, setLawList] = useState([]);
