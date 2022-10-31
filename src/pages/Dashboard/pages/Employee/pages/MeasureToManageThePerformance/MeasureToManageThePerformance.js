@@ -85,12 +85,18 @@ const MeasureToManageThePerformance = () => {
         formData.append('lawButtonId', new Blob([JSON.stringify(lawButtonId)], { type: 'application/json' }))
         const response = await relatedRawExcelUpload(formData)
         setLoading(false);
-        handleDialogClose();
-        setOkayPopupMessage("등록 되었습니다.");
-        setOkayPopupShow(true);
-        setseccerrCode(response.data.RET_CODE);
-        setUploadFlag(!uploadFlag);
-        setLawId(lawButtonId.lawButtonId);
+        if ((response?.data?.RET_CODE === '0000') || (response?.data?.RET_CODE === '0201')) {
+            handleDialogClose();
+            setOkayPopupMessage("등록 되었습니다.");
+            setOkayPopupShow(true);
+            setseccerrCode(response.data.RET_CODE);
+            setUploadFlag(!uploadFlag);
+            setLawId(lawButtonId.lawButtonId);
+        } else {
+            setseccerrCode(response?.data?.RET_CODE);
+            setOkayPopupMessage(response?.data?.RET_DESC);
+            setOkayPopupShow(true);
+        }        
     }
 
     const handleDialogOpen = (id, attachId) => {
