@@ -29,6 +29,7 @@ import graphPrev from '../../../../assets/images/prev_report.png';
 import graphPrevHov from '../../../../assets/images/prev_report_ov.png';
 import searchIcon from '../../../../assets/images/ic_search.png';
 import popupClose2 from '../../../../assets/images/btn_popClose2.png';
+import popupClose3 from '../../../../assets/images/btn_popClose3.png';
 
 import imageGraph from '../../../../assets/images/graph.jpg';
 import btnNext from '../../../../assets/images/btn_next.png';
@@ -324,13 +325,15 @@ const SearchButton = styled(ButtonUnstyled)`
 `;
 
 const ClosePopupButton2 = styled(ButtonUnstyled)`
-    width: 60px;
-    height: 60px;
+    margin-top: 18px;
+    margin-right: 70px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: url(${popupClose2}) no-repeat 50% 50%;
+    background: url(${popupClose3}) no-repeat 50% 50%;
     border: none;
     cursor: pointer;
-    transition: background .2s; 
+    transition: background .2s;
 `;
 
 const SubmitButton = styled(ButtonUnstyled)`
@@ -1791,6 +1794,7 @@ const useStyles = makeStyles(() => ({
         left: '50%',
         width: '850px',
         height: '400px',
+        border: '3px solid #0183da',
         transform: 'translate(-50%, -50%)',
         borderRadius: 'var(--border_radius)',
         background: 'white',
@@ -1867,6 +1871,22 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+    },    
+    buttonDelete: {
+        width: '45px',
+        height: '21px',
+        color: '#fff',
+        fontSize: '13px',
+        marginLeft: '10px !important',
+        display: 'flex',
+        background: '#7a7a7a',
+        justifyContent: 'center',
+        alignItems: 'center',
+        cursor: 'pointer',
+        border: 'none',
+        '&:hover': {
+            backgroundImage: 'linear-gradient(#ff3300, #ffaa33)',
+        }
     }
 }));
 

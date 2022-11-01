@@ -1046,6 +1046,11 @@ const Employee = () => {
         const onlyNumber = str.replace(/[^0-9]/g, '')
         return onlyNumber
     }
+
+    const handelDelete = (baselineId) => {
+        console.log(baselineId);
+    }
+
     useEffect(() => {
         setLoading(true);
         fetchBaseline(baselineIdForSelect);
@@ -1303,8 +1308,12 @@ const Employee = () => {
                                             <AccordionDetails>
                                                 <div className={classes.readonlyTextWrapper}>
                                                     {baselineList?.length > 0 ? baselineList?.map(baselineItem => (
-                                                        <div className={classes.readonlyText}><span>{baselineItem.baselineName}</span> <span>{baselineItem.baselineStart}~{baselineItem.baselineEnd}</span></div>
+                                                        <div className={classes.readonlyText}><span>{baselineItem.baselineName}</span> 
+                                                        <span>{baselineItem.baselineStart}~{baselineItem.baselineEnd}</span>
+                                                        {baselineData.isClose !== '1' ?  <div className={classes.readonlyText} onClick={() => handelDelete(baselineItem.baselineId)}><span className={classes.buttonDelete}>삭제</span></div> : ''}
+                                                </div>
                                                     )) : <div className={classes.readonlyText}>관리차수</div>}
+                                                    
                                                 </div>
                                             </AccordionDetails>
                                         </Accordion>
@@ -1961,7 +1970,7 @@ const Employee = () => {
                 {/* NOTIFICATION POPUP */}
                 {!!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
                     <div className={classes.notificationPopup} style={{marginTop: `${index*3 + '0'}px`, marginLeft: `${index*3 + '0'}px`}} >
-                    <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)}></ClosePopupButton2>
+                    <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)} alt="Close"></ClosePopupButton2>
                         {noticeHotItem.importCd === '001' ?
                             <div><span className={classes.slideLabelHot}>HOT</span> {noticeHotItem.title}</div>
                         :

@@ -16,6 +16,7 @@ const useStyles = makeStyles(() => ({
         boxSizing: 'border-box',
         display: 'flex',
         flexWrap: 'wrap',
+        border: '3px solid #0183da',
         // display: 'none !important',
         '& >span': {
             width: '20%',
