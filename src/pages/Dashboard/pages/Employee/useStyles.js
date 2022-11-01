@@ -1886,6 +1886,9 @@ const useStyles = makeStyles(() => ({
         border: 'none',
         '&:hover': {
             backgroundImage: 'linear-gradient(#ff3300, #ffaa33)',
+        },
+        '&.close' : {
+            background: '#7a7a7a'
         }
     }
 }));

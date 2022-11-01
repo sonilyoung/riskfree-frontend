@@ -1049,6 +1049,7 @@ const Employee = () => {
 
     const handelDelete = (baselineId) => {
         console.log(baselineId);
+        fetchBaselineList();
     }
 
     useEffect(() => {
@@ -1310,7 +1311,11 @@ const Employee = () => {
                                                     {baselineList?.length > 0 ? baselineList?.map(baselineItem => (
                                                         <div className={classes.readonlyText}><span>{baselineItem.baselineName}</span> 
                                                         <span>{baselineItem.baselineStart}~{baselineItem.baselineEnd}</span>
-                                                        {baselineData.isClose !== '1' ?  <div className={classes.readonlyText} onClick={() => handelDelete(baselineItem.baselineId)}><span className={classes.buttonDelete}>삭제</span></div> : ''}
+                                                        {baselineItem.isClose !== "1" ?  
+                                                            <div className={classes.readonlyText} onClick={() => handelDelete(baselineItem.baselineId)}><span className={classes.buttonDelete}>삭제</span></div>
+                                                        : 
+                                                        <div className={classes.readonlyText}><span className={classes.buttonDelete + ' close'}>마감</span></div>
+                                                        }
                                                 </div>
                                                     )) : <div className={classes.readonlyText}>관리차수</div>}
                                                     
