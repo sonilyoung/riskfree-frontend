@@ -452,6 +452,16 @@ const List = () => {
                                 <div className={classes.infoTitle}>사고구분</div>
                                 <FormControl className={classes.searchRadio} onChange={handleAccTypeCd}>
                                     <RadioGroup row value={accTypeCd}>
+                                    <FormControlLabel
+                                            value=""
+                                            label="전체"
+                                            control={
+                                                <Radio
+                                                    icon={<img src={radioIcon} alt="check icon" />}
+                                                    checkedIcon={<img src={radioIconOn} alt="check icon on" />}
+                                                />
+                                            }
+                                        />
                                         <FormControlLabel
                                             value="001"
                                             label="자사"
