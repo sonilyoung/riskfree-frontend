@@ -35,7 +35,7 @@ import alertIcon from '../../../../assets/images/ic_refer.png';
 import radioIcon from '../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation, useGetTitleReportMutation, useGetBaseLineReportMutation, useUpdateSafetyFileMutation, useUpdateScoreMutation, useUpdateRelatedArticleMutation, useGetBaseLineReportGraphMutation ,useGetUserDutyUploadMutation} from '../../../../hooks/api/MainManagement/MainManagement';
+import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation, useGetTitleReportMutation, useGetBaseLineReportMutation, useUpdateSafetyFileMutation, useUpdateScoreMutation, useUpdateRelatedArticleMutation, useGetBaseLineReportGraphMutation ,useGetUserDutyUploadMutation, useDeleteBaselineMutation} from '../../../../hooks/api/MainManagement/MainManagement';
 import { useUserToken } from '../../../../hooks/core/UserToken';
 import moment from 'moment'
 import 'dayjs/locale/ko';
@@ -179,7 +179,9 @@ const Employee = () => {
 
     const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
     const [yesNoPopupShowClose, setYesNoPopupShowClose] = useState(false);
+    const [yesBaselineDeletePopupClose, setBaselineDeletePopupClose] = useState(false);
     const [yesNoPopupMessage, setYesNoPopupMessage] = useState("");
+    const [baselinePopupMessage, setBaselinePopupMessage] = useState("");
 
     const [yesNoPopupShowLogOut, setYesNoPopupShowLogOut] = useState(false);
     const [yesNoPopupMessageLogOut, setYesNoPopupMessageLogOut] = useState("");
@@ -202,6 +204,8 @@ const Employee = () => {
     const [getBaseLineReport] = useGetBaseLineReportMutation();
     const [condition, setCondition] = useState("1");
     const [openDialogOnly, setOpenDialogOnly] = useState(false);
+    const [deleteBaseline] = useDeleteBaselineMutation();
+    
     //const [rdom, setRdom] = useState("")
     const labelObjectOnly = {
         upperLabel: "로고 등록",
@@ -280,6 +284,7 @@ const Employee = () => {
     const [wrongCredentialsPopup, setWrongCredentialsPopup] = useState(false);
     const [getSafetyFileId] = useGetSafetyFileIdMutation()
     const [safetyFileId, setSafetyFileId] = useState("");
+    const [baselineDelete, setBaselineDelete] = useState(null);
 
     const handleChartCategoriesDisplay = (chartCategories) => {
         if(condition==="5" || condition==="6"){            
@@ -1047,9 +1052,23 @@ const Employee = () => {
         return onlyNumber
     }
 
-    const handelDelete = (baselineId) => {
-        console.log(baselineId);
+    const handelDelete = () => {
+        setBaselinePopupMessage(`선택한 차수를 삭제 하시겠습니까?`);
+        setBaselineDeletePopupClose(true);
+    }
+
+    const handlebaselineDelete = async() => {
+        setBaselineDeletePopupClose(false);
+        setLoading(true);
+        const response = await deleteBaseline({
+            "baselineId": baselineDelete,
+            "workplaceId": userWorkplaceId
+        })        
+        setLoading(false);
         fetchBaselineList();
+        setOkayPopupMessage(response.data.RET_DESC);
+        setOkayPopupShow(true);
+        
     }
 
     useEffect(() => {
@@ -1312,7 +1331,7 @@ const Employee = () => {
                                                         <div className={classes.readonlyText}><span>{baselineItem.baselineName}</span> 
                                                         <span>{baselineItem.baselineStart}~{baselineItem.baselineEnd}</span>
                                                         {baselineItem.isClose !== "1" ?  
-                                                            <div className={classes.readonlyText} onClick={() => handelDelete(baselineItem.baselineId)}><span className={classes.buttonDelete}>삭제</span></div>
+                                                            <div className={classes.readonlyText} onClick={() => {setBaselineDelete(baselineItem.baselineId); handelDelete()}}><span className={classes.buttonDelete}>삭제</span></div>
                                                         : 
                                                         <div className={classes.readonlyText}><span className={classes.buttonDelete + ' close'}>마감</span></div>
                                                         }
@@ -2063,6 +2082,16 @@ const Employee = () => {
                     message={yesNoPopupMessage}
                     onConfirmYes={handlecloseUpdate}
                     onConfirmNo={() => setYesNoPopupShowClose(false)}
+                />
+            </Overlay>
+
+            {/* 차수 삭제 처리 */}
+            <Overlay show={yesBaselineDeletePopupClose}>
+                <YesNo
+                    show={yesBaselineDeletePopupClose}
+                    message={baselinePopupMessage}
+                    onConfirmYes={handlebaselineDelete}
+                    onConfirmNo={() => setBaselineDeletePopupClose(false)}
                 />
             </Overlay>
 
