@@ -14,7 +14,7 @@ import setIcon from '../../../../assets/images/btn_set.png';
 import setIconHover from '../../../../assets/images/btn_set_ov.png';
 import weatherIcon from '../../../../assets/images/weather_icon.png';
 import chartIcon from '../../../../assets/images/btn_chart.png';
-
+import Checkbox from '@mui/material/Checkbox';
 import graphNext from '../../../../assets/images/next_report.png';
 import graphPrev from '../../../../assets/images/prev_report.png';
 import graphNextHov from '../../../../assets/images/next_report_ov.png';
@@ -35,6 +35,13 @@ import arrowDown from '../../../../assets/images/ic_down.png';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
+import checkIcon from '../../../../assets/images/ic_chk3.png';
+import checkIconOn from '../../../../assets/images/ic_chk3_on.png';
 
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
 import { styled } from '@mui/system';
@@ -67,6 +74,7 @@ import adminIcon from '../../../../assets/images/btn_admin.png';
 import adminIconHover from '../../../../assets/images/btn_admin_ov.png';
 import icoFile from '../../../../assets/images/ic_file.png';
 import popupClose2 from '../../../../assets/images/btn_popClose2.png';
+import popupClose3 from '../../../../assets/images/btn_popClose3.png';
 import Chart from 'react-apexcharts';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
@@ -240,10 +248,12 @@ const PromptButtonWhite = styled(ButtonUnstyled)`
 `;
 
 const ClosePopupButton2 = styled(ButtonUnstyled)`
-    width: 60px;
-    height: 60px;
+    margin-top: 18px;
+    margin-right: 70px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: url(${popupClose2}) no-repeat 50% 50%;
+    background: url(${popupClose3}) no-repeat 50% 50%;
     border: none;
     cursor: pointer;
     transition: background .2s; 
@@ -289,6 +299,8 @@ const Director = () => {
     const [getNoticeHotList] = useGetNoticeHotListMutation();
     const [getBaseLineReport] = useGetBaseLineReportMutation();
     const [getTitleReport] = useGetTitleReportMutation();
+
+    const onClose = useState(false);
 
     const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
     const [yesNoPopupMessage, setYesNoPopupMessage] = useState("");
@@ -410,7 +422,7 @@ const Director = () => {
     }
     
     const handleNotificationPopupsShow = (notificationIndex) => {
-        const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex != index);
+        const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex === index);
         setNoticeHotList(notificationPopupList);
     }
 
@@ -633,6 +645,20 @@ const Director = () => {
             handleChartCategoriesDisplay([]);
             setChartSeries([]);            
         }
+    }
+
+    const VISITED_NOW_DATE = moment(new Date()).format('YYYY-MM-DD');    // 현재 날짜
+
+    const today = new Date();
+    const newDay = new Date();
+
+    // 하루동안 보지않기
+    const Dayclose = (DayNum) => {
+        // +1일 계산
+        const expiryDate = moment(newDay.setDate(today.getDate() + 1 )).format('YYYY-MM-DD');
+        // 로컬스토리지 저장
+        localStorage.setItem(DayNum, expiryDate, DayNum);
+        handleNotificationPopupsShow(DayNum);
     }
 
     useEffect(() => {
@@ -1208,16 +1234,30 @@ const Director = () => {
                 </Grid>
                 {
                 !!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
-                    <div className={classes.notificationPopup} style={{marginTop: `${index*3 + '0'}px`, marginLeft: `${index*3 + '0'}px`}} >
-                        <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)}></ClosePopupButton2>
-                        <div><span className={classes.slideLabelHot}>HOT</span> {noticeHotItem.title}</div>
-                        <div className={classes.popNews}>
-                            <p>
-                                {noticeHotItem.content}
-                            </p>
+                    {
+                    localStorage.getItem(noticeHotItem.noticeId) >= VISITED_NOW_DATE ?
+                        (<></>)
+                    :
+                        (
+                        <div className={classes.notificationPopup} style={{marginTop: `${index*3 + '0'}px`, marginLeft: `${index*3 + '0'}px`}} >
+                            <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)}></ClosePopupButton2>
+                            <div><span className={classes.slideLabelHot}>HOT</span> {noticeHotItem.title}</div>
+                            <div className={classes.popNews}>
+                                <p>
+                                    {noticeHotItem.content}
+                                </p>
+                            </div>
+                            <div style={{ float: 'left', width: '100%'}}>
+                                <div style={{ width:'80%' }}>{noticeHotItem.attachId ? <img src={icoFile} alt="file icon" /> : null}{noticeHotItem.fileName}</div>
+                                <div style={{ float: 'right' }}>
+                                    <div className={classes.userInformation}>
+                                        <div style={{ backgroundColor:'#fff', cursor: 'pointer' }} onClick={() => Dayclose(noticeHotItem.noticeId)}><span>하루동안 보지않기 X</span></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div>{noticeHotItem.attachId ? <img src={icoFile} alt="file icon" /> : null}{noticeHotItem.fileName}</div>
-                    </div>
+                        ) 
+                    }
                 </>))
                 }
             </Grid >

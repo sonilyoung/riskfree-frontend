@@ -961,6 +961,7 @@ const useStyles = makeStyles(() => ({
         left: '50%',
         width: '850px',
         height: '400px',
+        border: '3px solid #0183da',
         transform: 'translate(-50%, -50%)',
         borderRadius: 'var(--border_radius)',
         background: 'white',
@@ -1171,6 +1172,20 @@ const useStyles = makeStyles(() => ({
     },
     pageOverlayInactive: {
         display: 'none',
+    },
+    searchRadio: {
+        height: '40px',
+        justifyContent: 'center',
+        boxSizing: 'border-box',
+        '& [class*=body1]': {
+            fontSize: '16px'
+        },
+        '& input': {
+            cursor: 'default'
+        },
+        '& label': {
+            marginRight: '14px'
+        }
     }
 }));
 

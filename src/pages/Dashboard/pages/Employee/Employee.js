@@ -23,11 +23,13 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
 
-
-
-import { useStyles, UserButton, LogButton, SettingsButton, AdminButton, ChartButton, MainNavButton, PageSideButton, DashTrigButton, FileButtonExis, FileButtonExisEm, FileButtonNone,
-    ButtonClosePop, ButtonGraphNext, ButtonGraphPrev, ButtonGrid, PopupFootButton,UploadImageButton, PromptButtonBlue, PromptButtonWhite,UnknownButton1, UnknownButton2, 
-    SearchButton, ClosePopupButton2, SubmitButton } from './useStyles';
+import { 
+    useStyles, UserButton, LogButton, SettingsButton, AdminButton, 
+    ChartButton, MainNavButton, PageSideButton, DashTrigButton, FileButtonExis, 
+    FileButtonExisEm, FileButtonNone, ButtonClosePop, ButtonGraphNext, ButtonGraphPrev, 
+    ButtonGrid, PopupFootButton, UploadImageButton, PromptButtonBlue, PromptButtonWhite,
+    UnknownButton1, UnknownButton2, SearchButton, ClosePopupButton2, SubmitButton 
+} from './useStyles';
 
 import arrowDown from '../../../../assets/images/ic_down.png';
 import logo from '../../../../assets/images/logo.png';
@@ -35,7 +37,16 @@ import alertIcon from '../../../../assets/images/ic_refer.png';
 import radioIcon from '../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 import { remove } from '../../../../services/core/User/Token';
-import { useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation, useGetTitleReportMutation, useGetBaseLineReportMutation, useUpdateSafetyFileMutation, useUpdateScoreMutation, useUpdateRelatedArticleMutation, useGetBaseLineReportGraphMutation ,useGetUserDutyUploadMutation, useDeleteBaselineMutation} from '../../../../hooks/api/MainManagement/MainManagement';
+import { 
+    useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, 
+    useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, 
+    useGetEssentialRateMutation, useGetAccidentsPreventionMutation, useGetImprovementLawOrderMutation, useGetRelatedLawRateMutation, useGetDutyDetailListMutation, 
+    useGetInspectiondocsMutation, useGetDutyCycleMutation, useGetDutyAssignedMutation, useGetRelatedArticleMutation, useGetGuideLineMutation, 
+    useGetWorkplaceListMutation, useGetWeatherMutation, useGetNoticeHotListMutation, useUpdateUserCompanyMutation, useCloseMutation, 
+    useInsertBaseLineDataCopyMutation, useInsertBaseLineDataUpdateMutation, useInsertBaselineMutation, useGetTitleReportMutation, useGetBaseLineReportMutation, 
+    useUpdateSafetyFileMutation, useUpdateScoreMutation, useUpdateRelatedArticleMutation, useGetBaseLineReportGraphMutation,useGetUserDutyUploadMutation, 
+    useDeleteBaselineMutation
+} from '../../../../hooks/api/MainManagement/MainManagement';
 import { useUserToken } from '../../../../hooks/core/UserToken';
 import moment from 'moment'
 import 'dayjs/locale/ko';
@@ -179,9 +190,7 @@ const Employee = () => {
 
     const [yesNoPopupShow, setYesNoPopupShow] = useState(false);
     const [yesNoPopupShowClose, setYesNoPopupShowClose] = useState(false);
-    const [yesBaselineDeletePopupClose, setBaselineDeletePopupClose] = useState(false);
     const [yesNoPopupMessage, setYesNoPopupMessage] = useState("");
-    const [baselinePopupMessage, setBaselinePopupMessage] = useState("");
 
     const [yesNoPopupShowLogOut, setYesNoPopupShowLogOut] = useState(false);
     const [yesNoPopupMessageLogOut, setYesNoPopupMessageLogOut] = useState("");
@@ -204,8 +213,6 @@ const Employee = () => {
     const [getBaseLineReport] = useGetBaseLineReportMutation();
     const [condition, setCondition] = useState("1");
     const [openDialogOnly, setOpenDialogOnly] = useState(false);
-    const [deleteBaseline] = useDeleteBaselineMutation();
-    
     //const [rdom, setRdom] = useState("")
     const labelObjectOnly = {
         upperLabel: "로고 등록",
@@ -284,7 +291,8 @@ const Employee = () => {
     const [wrongCredentialsPopup, setWrongCredentialsPopup] = useState(false);
     const [getSafetyFileId] = useGetSafetyFileIdMutation()
     const [safetyFileId, setSafetyFileId] = useState("");
-    const [baselineDelete, setBaselineDelete] = useState(null);
+
+    const [getBaselineDelete] = useDeleteBaselineMutation();
 
     const handleChartCategoriesDisplay = (chartCategories) => {
         if(condition==="5" || condition==="6"){            
@@ -297,7 +305,7 @@ const Employee = () => {
     }
 
     const handleNotificationPopupsShow = (notificationIndex) => {
-        const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex != index);
+        const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex === index);
         setNoticeHotList(notificationPopupList);
     }
 
@@ -1050,28 +1058,31 @@ const Employee = () => {
     const handelOnlyNumber = (str) => {
         const onlyNumber = str.replace(/[^0-9]/g, '')
         return onlyNumber
-    }
+    };
 
-    const handelDelete = () => {
-        setBaselinePopupMessage(`선택한 차수를 삭제 하시겠습니까?`);
-        setBaselineDeletePopupClose(true);
-    }
-
-    const handlebaselineDelete = async() => {
-        setBaselineDeletePopupClose(false);
-        setLoading(true);
-        const response = await deleteBaseline({
-            "baselineId": baselineDelete,
-            "workplaceId": userWorkplaceId
-        })        
-        setLoading(false);
+    const handelBaselineDelete = async (baselineId) => {
+        const response = await getBaselineDelete({
+            "baselineId" : baselineId
+        });
         fetchBaselineList();
-        setOkayPopupMessage(response.data.RET_DESC);
-        setOkayPopupShow(true);
-        
+    };
+
+    const VISITED_NOW_DATE = moment(new Date()).format('YYYY-MM-DD');    // 현재 날짜
+
+    const today = new Date();
+    const newDay = new Date();
+
+    // 하루동안 보지않기
+    const Dayclose = (DayNum) => {
+        // +1일 계산
+        const expiryDate = moment(newDay.setDate(today.getDate() + 1 )).format('YYYY-MM-DD');
+        // 로컬스토리지 저장
+        localStorage.setItem(DayNum, expiryDate, DayNum);
+        handleNotificationPopupsShow(DayNum);
     }
 
-    useEffect(() => {
+    
+    useEffect(async () => {
         setLoading(true);
         fetchBaseline(baselineIdForSelect);
         setLoading(false);
@@ -1323,7 +1334,7 @@ const Employee = () => {
                                                 aria-controls="panel1a-content"
                                                 id="panel1a-header"
                                             >
-                                                <Typography>관리차수 조회</Typography>
+                                            <Typography>관리차수 조회</Typography>
                                             </AccordionSummary>
                                             <AccordionDetails>
                                                 <div className={classes.readonlyTextWrapper}>
@@ -1331,9 +1342,13 @@ const Employee = () => {
                                                         <div className={classes.readonlyText}><span>{baselineItem.baselineName}</span> 
                                                         <span>{baselineItem.baselineStart}~{baselineItem.baselineEnd}</span>
                                                         {baselineItem.isClose !== "1" ?  
-                                                            <div className={classes.readonlyText} onClick={() => {setBaselineDelete(baselineItem.baselineId); handelDelete()}}><span className={classes.buttonDelete}>삭제</span></div>
+                                                            <div className={classes.readonlyText} onClick={() => handelBaselineDelete(baselineItem.baselineId)}>
+                                                                <span className={classes.buttonDelete}>삭제</span>
+                                                            </div>
                                                         : 
-                                                        <div className={classes.readonlyText}><span className={classes.buttonDelete + ' close'}>마감</span></div>
+                                                        <div className={classes.readonlyText}>
+                                                            <span className={classes.buttonDelete + ' close'}>마감</span>
+                                                        </div>
                                                         }
                                                 </div>
                                                     )) : <div className={classes.readonlyText}>관리차수</div>}
@@ -1991,24 +2006,37 @@ const Employee = () => {
                         </Grid>
                     </Grid>
                 </Grid>
+                
                 {/* NOTIFICATION POPUP */}
-                {!!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
-                    <div className={classes.notificationPopup} style={{marginTop: `${index*3 + '0'}px`, marginLeft: `${index*3 + '0'}px`}} >
-                    <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)} alt="Close"></ClosePopupButton2>
-                        {noticeHotItem.importCd === '001' ?
+                {
+                !!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
+                    {
+                    localStorage.getItem(noticeHotItem.noticeId) >= VISITED_NOW_DATE ?
+                        (<></>)
+                    :
+                        (
+                        <div className={classes.notificationPopup} style={{marginTop: `${index*3 + '0'}px`, marginLeft: `${index*3 + '0'}px`}} >
+                            <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)}></ClosePopupButton2>
                             <div><span className={classes.slideLabelHot}>HOT</span> {noticeHotItem.title}</div>
-                        :
-                        <div>{noticeHotItem.title}</div>
-                        }
-                        
-                        <div className={classes.popNews}>
-                            <p>
-                                {noticeHotItem.content}
-                            </p>
+                            <div className={classes.popNews}>
+                                <p>
+                                    {noticeHotItem.content}
+                                </p>
+                            </div>
+                            <div style={{ float: 'left', width: '100%'}}>
+                                <div style={{ width:'80%' }}>{noticeHotItem.attachId ? <img src={icoFile} alt="file icon" /> : null}{noticeHotItem.fileName}</div>
+                                <div style={{ float: 'right' }}>
+                                    <div className={classes.userInformation}>
+                                        <div style={{ backgroundColor:'#fff', cursor: 'pointer' }} onClick={() => Dayclose(noticeHotItem.noticeId)}><span>하루동안 보지않기 X</span></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div>{noticeHotItem.attachId && <img src={icoFile} alt="file icon" />} {noticeHotItem.fileName}</div>
-                    </div>
-                </>))}
+                        ) 
+                    }
+                </>))
+                }
+
             </Grid >
             <UploadDialog
                 open={openDialog}
@@ -2082,16 +2110,6 @@ const Employee = () => {
                     message={yesNoPopupMessage}
                     onConfirmYes={handlecloseUpdate}
                     onConfirmNo={() => setYesNoPopupShowClose(false)}
-                />
-            </Overlay>
-
-            {/* 차수 삭제 처리 */}
-            <Overlay show={yesBaselineDeletePopupClose}>
-                <YesNo
-                    show={yesBaselineDeletePopupClose}
-                    message={baselinePopupMessage}
-                    onConfirmYes={handlebaselineDelete}
-                    onConfirmNo={() => setBaselineDeletePopupClose(false)}
                 />
             </Overlay>
 
