@@ -142,9 +142,11 @@ const useStyles = makeStyles(() => ({
         borderRadius: '50%',
         overflow: 'hidden',
         '& img': {
-            width: '70%',
-            height: '70%',
-            borderRadius: '50%',
+            width: '60%',
+            overflow: 'hidden',
+            // width: '70%',
+            // height: '70%',
+            // borderRadius: '50%',
         }
     },
     adminField: {
