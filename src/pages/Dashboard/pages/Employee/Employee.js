@@ -2009,10 +2009,11 @@ const Employee = () => {
                 
                 {/* NOTIFICATION POPUP */}
                 {
+                    
                 !!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
                     {
                     localStorage.getItem(noticeHotItem.noticeId) >= VISITED_NOW_DATE ?
-                        (<></>)
+                        ""
                     :
                         (
                         <div className={classes.notificationPopup} style={{marginTop: `${index*3 + '0'}px`, marginLeft: `${index*3 + '0'}px`}} >

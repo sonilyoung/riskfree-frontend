@@ -325,12 +325,10 @@ const SearchButton = styled(ButtonUnstyled)`
 `;
 
 const ClosePopupButton2 = styled(ButtonUnstyled)`
-    margin-top: 18px;
-    margin-right: 70px;
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    background: url(${popupClose3}) no-repeat 50% 50%;
+    background: url(${popupClose2}) no-repeat 50% 50%;
     border: none;
     cursor: pointer;
     transition: background .2s;
