@@ -305,7 +305,7 @@ const Employee = () => {
     }
 
     const handleNotificationPopupsShow = (notificationIndex) => {
-        const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex === index);
+        const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex !== noticeHotItem.noticeId);
         setNoticeHotList(notificationPopupList);
     }
 
@@ -1068,10 +1068,8 @@ const Employee = () => {
     };
 
     const VISITED_NOW_DATE = moment(new Date()).format('YYYY-MM-DD');    // 현재 날짜
-
     const today = new Date();
     const newDay = new Date();
-
     // 하루동안 보지않기
     const Dayclose = (DayNum) => {
         // +1일 계산
@@ -1081,8 +1079,7 @@ const Employee = () => {
         handleNotificationPopupsShow(DayNum);
     }
 
-    
-    useEffect(async () => {
+    useEffect(() => {
         setLoading(true);
         fetchBaseline(baselineIdForSelect);
         setLoading(false);
@@ -1257,7 +1254,7 @@ const Employee = () => {
                                         inputProps={{ 'aria-label': 'Without label' }}
                                         disabled
                                     >
-                                        <MenuItem value=""> {companyInfo?.scale} 이하</MenuItem>
+                                        <MenuItem value=""> {[companyInfo?.scale]} 이하</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl sx={{ width: 150, marginLeft: '8px' }} className={classes.dropMenu}>
@@ -1269,7 +1266,7 @@ const Employee = () => {
                                         inputProps={{ 'aria-label': 'Without label' }}
                                         disabled
                                     >
-                                        <MenuItem value=""> {companyInfo?.sector}</MenuItem>
+                                        <MenuItem value=""> {[companyInfo?.sector]}</MenuItem>
                                     </Select>
                                 </FormControl>
                             </div>
@@ -1367,7 +1364,6 @@ const Employee = () => {
                                             <AccordionDetails>
                                                 {baselineData.isClose === "1" ? <span style={{color:'red'}}>※ 마감된 차수는 복사할 수 없습니다.</span>
                                                 :
-                                                <>
                                                 <FormControl sx={{ width:'100%', backgroundColor: '#ffffff' }} size="small">
                                                 <InputLabel id="customized-select-label">차수선택</InputLabel>
                                                 <Select                                                    
@@ -1380,14 +1376,16 @@ const Employee = () => {
                                                         setTargetBaselineId(event.target.value.split("/")[0])
                                                     }}
                                                 >                                                    
-                                                    {baselineList?.map(baselineItem => 
+                                                    {baselineList?.map(baselineItem => ([
                                                         parseInt(currentBaselineId) === baselineItem.baselineId ? 
                                                             <></>
                                                          :
                                                             <MenuItem value={baselineItem.baselineId+'/'+baselineItem.baselineName}>{baselineItem.baselineName}</MenuItem>
-                                                        )}
+                                                        ])
+                                                    )}
                                                 </Select>
                                                 </FormControl>
+                                                }
                                                 {!!baselineList && !!baselineList?.length
                                                     && baselineList?.filter(baselineItem => baselineItem.baselineId === targetBaselineId)
                                                         ?.map(item => <span>{item.baselineStart}~{item.baselineEnd}</span>)}
@@ -1403,7 +1401,6 @@ const Employee = () => {
                                                     <PromptButtonBlue onClick={() => handleInsertBaseLineDataCopy()}>예</PromptButtonBlue>
                                                     <PromptButtonWhite onClick={panelhandleChange('panel3')}>아니오</PromptButtonWhite>
                                                 </div>
-                                                </>
                                                 }
                                             </AccordionDetails>
                                         </Accordion>
@@ -1651,9 +1648,9 @@ const Employee = () => {
                                 label="관리차수"
                                 onChange={(e) => setBaselineIdForSelect(e.target.value)}
                                 inputProps={{ 'aria-label': 'Without label' }}>
-                                {!!baselineList && !!baselineList.length && baselineList?.slice(0).reverse().map((baseline, index) => (
+                                {!!baselineList && !!baselineList.length && baselineList?.slice(0).reverse().map((baseline, index) => ([
                                     <MenuItem key={index} value={"" || baseline.baselineId}>{baseline.baselineName}</MenuItem>
-                                ))}
+                                ]))}
                             </Select>
                         </FormControl>
                         <div><PageSideButton onClick={() => fetchBaseline(baselineIdForSelect)}>이동</PageSideButton></div>
@@ -1831,7 +1828,7 @@ const Employee = () => {
                                 <div className={classes.listTitle}>현장 작동성 평가 작성 지침서</div>
                                 <ul className={classes.menuList + ' fourthList'}>
                                     {guideLine?.map((guideline) => (
-                                        <li style={{"white-space": "pre-line"}}>
+                                        <li style={{"white-Space": "pre-line"}}>
                                             {guideline.guideline}
                                         </li>
                                     ))}
@@ -2010,14 +2007,12 @@ const Employee = () => {
                 {/* NOTIFICATION POPUP */}
                 {
                     
-                !!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
-                    {
+                noticeHotList?.map((noticeHotItem, index) => (
                     localStorage.getItem(noticeHotItem.noticeId) >= VISITED_NOW_DATE ?
                         ""
                     :
-                        (
                         <div className={classes.notificationPopup} style={{marginTop: `${index*3 + '0'}px`, marginLeft: `${index*3 + '0'}px`}} >
-                            <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)}></ClosePopupButton2>
+                            <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(noticeHotItem.noticeId)}></ClosePopupButton2>
                             <div><span className={classes.slideLabelHot}>HOT</span> {noticeHotItem.title}</div>
                             <div className={classes.popNews}>
                                 <p>
@@ -2028,14 +2023,12 @@ const Employee = () => {
                                 <div style={{ width:'80%' }}>{noticeHotItem.attachId ? <img src={icoFile} alt="file icon" /> : null}{noticeHotItem.fileName}</div>
                                 <div style={{ float: 'right' }}>
                                     <div className={classes.userInformation}>
-                                        <div style={{ backgroundColor:'#fff', cursor: 'pointer' }} onClick={() => Dayclose(noticeHotItem.noticeId)}><span>하루동안 보지않기 X</span></div>
+                                    <div style={{ backgroundColor:'#fff', cursor: 'pointer' }} onClick={() => Dayclose(noticeHotItem.noticeId)}><span>하루동안 보지않기 X</span></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        ) 
-                    }
-                </>))
+                ))
                 }
 
             </Grid >
