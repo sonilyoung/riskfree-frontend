@@ -234,7 +234,7 @@ function List() {
                                             />
                                         }
                                     />
-                                    <FormControlLabel
+                                    {/* <FormControlLabel
                                         value="001"
                                         label="요청중"
                                         control={
@@ -244,7 +244,7 @@ function List() {
                                                 value={"001"}
                                             />
                                         }
-                                    />
+                                    /> */}
                                     <FormControlLabel
                                         value="002"
                                         label="접수"

@@ -5,7 +5,7 @@ import { useStyles } from '../components/Overlay/useStyles';
 function Loading() {
   const classes = useStyles();
   return (
-    <div class="contentWrap" className={classes.popupOverlay} >
+    <div className={classes.popupOverlay} >
       <div
         style={{
           position: "fixed",

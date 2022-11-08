@@ -133,7 +133,7 @@ const useStyles = makeStyles(() => ({
         width: 'calc(100% - 100px)',
         borderTop: '1px solid #d5dae2',
         display: 'flex',
-        '& >div[class=*row]': {
+        '& >div[classame=*row]': {
             height: '100%'
         },
     },

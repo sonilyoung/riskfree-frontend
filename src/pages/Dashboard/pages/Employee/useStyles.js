@@ -29,7 +29,6 @@ import graphPrev from '../../../../assets/images/prev_report.png';
 import graphPrevHov from '../../../../assets/images/prev_report_ov.png';
 import searchIcon from '../../../../assets/images/ic_search.png';
 import popupClose2 from '../../../../assets/images/btn_popClose2.png';
-import popupClose3 from '../../../../assets/images/btn_popClose3.png';
 
 import imageGraph from '../../../../assets/images/graph.jpg';
 import btnNext from '../../../../assets/images/btn_next.png';

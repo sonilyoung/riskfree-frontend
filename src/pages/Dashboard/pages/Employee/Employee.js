@@ -1365,22 +1365,18 @@ const Employee = () => {
                                                 {baselineData.isClose === "1" ? <span style={{color:'red'}}>※ 마감된 차수는 복사할 수 없습니다.</span>
                                                 :
                                                 <FormControl sx={{ width:'100%', backgroundColor: '#ffffff' }} size="small">
-                                                <InputLabel id="customized-select-label">차수선택</InputLabel>
                                                 <Select                                                    
                                                     labelId="customized-select-label"
                                                     id="customized-select-label"
-                                                    value={targetBaselineId+'/'+targetBaselineName}
-                                                    label="차수선택"
-                                                    onChange={(event) => {
-                                                        setTargetBaselineName(event.target.value.split("/")[1])
-                                                        setTargetBaselineId(event.target.value.split("/")[0])
-                                                    }}
+                                                    value={targetBaselineId || ''}
+                                                    onChange={(event) => { setTargetBaselineId(event.target.value) }}
                                                 >                                                    
-                                                    {baselineList?.map(baselineItem => ([
+                                                    {baselineList?.map((baselineItem, index) => ([
                                                         parseInt(currentBaselineId) === baselineItem.baselineId ? 
-                                                            <></>
+                                                            <MenuItem disabled value='' sx={{ display: "none" }}></MenuItem>
                                                          :
-                                                            <MenuItem value={baselineItem.baselineId+'/'+baselineItem.baselineName}>{baselineItem.baselineName}</MenuItem>
+                                                            <MenuItem key={index} onClick={(eve) => { setTargetBaselineName(baselineItem.baselineName) }} 
+                                                            value={baselineItem.baselineId}>{baselineItem.baselineName}</MenuItem>
                                                         ])
                                                     )}
                                                 </Select>
@@ -1401,7 +1397,6 @@ const Employee = () => {
                                                     <PromptButtonBlue onClick={() => handleInsertBaseLineDataCopy()}>예</PromptButtonBlue>
                                                     <PromptButtonWhite onClick={panelhandleChange('panel3')}>아니오</PromptButtonWhite>
                                                 </div>
-                                                }
                                             </AccordionDetails>
                                         </Accordion>
                                         <span></span>
