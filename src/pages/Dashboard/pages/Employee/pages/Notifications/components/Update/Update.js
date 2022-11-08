@@ -234,11 +234,12 @@ const WhiteButton = styled(ButtonUnstyled)`
 
 const Update = () => {
     const classes = useStyles();
-    const { updateid } = useParams()
-    const [noticesUpdate] = useNoticesUpdateMutation()
-    const [noticesView] = useNoticesViewMutation()
-    const [openDialog, setOpenDialog] = useState(false)
-    const [selectedFile, setSelectedFile] = useState(null)
+    const { updateid } = useParams();
+    const navigate = useNavigate();
+    const [noticesUpdate] = useNoticesUpdateMutation();
+    const [noticesView] = useNoticesViewMutation();
+    const [openDialog, setOpenDialog] = useState(false);
+    const [selectedFile, setSelectedFile] = useState(null);
     const [notice, setNotice] = useState({
         "attachId": 0,
         "companyId": 1,
@@ -265,13 +266,18 @@ const Update = () => {
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
 
+    const [okayPopupShowUpdate, setOkayPopupShowUpdate] = useState(false);
+    const [okayPopupMessageUpdate, setOkayPopupMessageUpdate] = useState("");
+    const [okayPopupTitleUpdate, setOkayPopupTitleUpdate] = useState("알림");
+    
+
     const [selectedFileName, setSelectedFileName] = useState("")
 
     const [fileUpload] = useFileUploadMutation()
     const [getFileInfo] = useGetFileInfoMutation()
 
 
-    const navigate = useNavigate()
+    
     const handleRedirect = () => {
         navigate("/dashboard/director/notifications/list")
     }
@@ -333,20 +339,27 @@ const Update = () => {
         setSelectedFileName(file.name);
     }
 
+   
+    const handleUdateRedirect = () => {
+        navigate(`/dashboard/director/notifications/view/${updateid}`);
+    } 
+
+    
+
     const handleUpdate = async () => {
         if (notice.title.length <= 0) {
-            setOkayPopupMessage("필수항목 '제목'을 입력하세요.");
-            setOkayPopupShow(true);
+            setOkayPopupMessageUpdate("필수항목 '제목'을 입력하세요.");
+            setOkayPopupShowUpdate(true);
             return false;
         }
         if (notice.importCd.length <= 0) {
-            setOkayPopupMessage("필수항목 '중요공지여부'를 선택하세요.");
-            setOkayPopupShow(true);                    
+            setOkayPopupMessageUpdate("필수항목 '중요공지여부'를 선택하세요.");
+            setOkayPopupShowUpdate(true);                    
             return false;
         }
         if (notice.content.length <= 0) {
-            setOkayPopupMessage("필수항목 '내용'을 입력하세요.");
-            setOkayPopupShow(true);                    
+            setOkayPopupMessageUpdate("필수항목 '내용'을 입력하세요.");
+            setOkayPopupShowUpdate(true);                    
             return false;
         }
         const response = await noticesUpdate({
@@ -359,13 +372,13 @@ const Update = () => {
             "title": notice.title,
             "updateId": notice.updateId
         });
-        console.log(response);
+        //console.log(response);
         if (response?.data?.RET_CODE === "0000") {
-            setOkayPopupMessage("등록 되었습니다.");
-            setOkayPopupShow(true);
+            setOkayPopupMessageUpdate("수정 되었습니다.");
+            setOkayPopupShowUpdate(true);
         } else {
-            setOkayPopupMessage("사용자를 찾을수 없거나 입력정보에 오류가 있습니다 ");
-            setOkayPopupShow(true);
+            setOkayPopupMessageUpdate("사용자를 찾을수 없거나 입력정보에 오류가 있습니다 ");
+            setOkayPopupShowUpdate(true);
         }
     }
 
@@ -506,6 +519,13 @@ const Update = () => {
                         }
                     }} />
             </Overlay>
+            <Overlay show={okayPopupShowUpdate}>
+                <Okay
+                    show={okayPopupShowUpdate}
+                    message={okayPopupMessageUpdate}
+                    title={okayPopupTitleUpdate}
+                    onConfirm={() => {handleUdateRedirect()}} />
+            </Overlay>            
         </DefaultLayout>
 
     );
