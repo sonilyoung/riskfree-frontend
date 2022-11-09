@@ -2020,7 +2020,11 @@ const Employee = () => {
                                             <div key={index}>
                                                 <div>{notice?.insertDate}</div>
                                                 {notice?.importCd === "001" ? <span className={classes.slideLabelHot}>HOT</span> : ""}
-                                                <Link to={`/dashboard/employee/notifications/view/${notice?.noticeId}`} className={classes.linkBtn}>{notice?.title}</Link>
+                                                {notice?.importCd === "001" ?  
+                                                    <Link to={`/dashboard/employee/notifications/view/${notice?.noticeId}`} className={classes.hotlinkBtn}>{notice?.title}</Link>
+                                                    : 
+                                                    <Link to={`/dashboard/employee/notifications/view/${notice?.noticeId}`} className={classes.linkBtn}>{notice?.title}</Link>
+                                                }
                                             </div>
                                         ))}
                                     </Slider>

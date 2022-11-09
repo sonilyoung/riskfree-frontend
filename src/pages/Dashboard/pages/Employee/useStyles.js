@@ -1326,6 +1326,10 @@ const useStyles = makeStyles(() => ({
         borderRadius: '2px',
         fontWeight: '500'
     },
+    hotlinkBtn: {
+        textDecoration: "none",
+        color: "#fdcb05"
+    },    
     linkBtn: {
         textDecoration: "none",
         color: "white",
