@@ -2033,12 +2033,11 @@ const Employee = () => {
                                 <Grid className={classes.footBox + ' boxDown ' + classes.footDate} item xs={3}>
                                     <div className={classes.footDay + ' dateBox'}>
                                         <div>DAY</div>
-                                        <div className={classes.dayNums}>
-
                                             {dayInfo && dayFor(dayInfo.day).map((arr, i) => (
-                                                <img src={arr} />
+                                                <div className={classes.dayNums}>
+                                                    <img src={arr} />
+                                                </div>
                                             ))}
-                                        </div>
                                     </div>
                                     <div className={classes.footTime + ' dateBox'}>
                                         <div>TIME</div>
@@ -2058,7 +2057,7 @@ const Employee = () => {
                                                 : e === "9" ? num9
                                                 : ""
                                                 }/>
-                                                </div>
+                                            </div>
                                             ))}
                                             <span>:</span>
                                             {minutes?.split("").map((e, index) => (

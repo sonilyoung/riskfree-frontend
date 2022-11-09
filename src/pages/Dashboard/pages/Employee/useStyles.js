@@ -1207,9 +1207,9 @@ const useStyles = makeStyles(() => ({
     },
     dayNums: {
         display: 'flex',
-        marginLeft: '15px',
+        marginLeft: '5px',
         '& div': {
-            width: '19px',
+            width: '5px',
         }
     },
     timeNums: {
