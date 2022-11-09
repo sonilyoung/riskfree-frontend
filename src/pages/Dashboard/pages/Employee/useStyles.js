@@ -118,18 +118,14 @@ const PageSideButton = styled(ButtonUnstyled)`
         background: linear-gradient(to right, #0565c8, #0565c8);
     }   
 `;
-
+ 
 const DashTrigButton = styled(ButtonUnstyled)`
     width: 89px;
     height: 31px;
     font-size: 0;
-    background: url(${dashBtnUp}) no-repeat 50% 50%;
     transition: background .3s;
     border: none;
     cursor: pointer;
-    &:hover {
-        background: url(${dashBtnDown}) no-repeat 50% 50%;
-    }   
 `;
 
 const FileButtonExis = styled(ButtonUnstyled)`
@@ -465,19 +461,29 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '135px',
-        height: '135px',
+        width: '134px',
+        height: '134px',
         borderRadius: '50%',
         overflow: 'hidden',
         '& img': {
-            width: '60%',
+            width: '83px',
+            // width: '60%',
             overflow: 'hidden',
             //width: '70%',
             //height: '70%',
             //borderRadius: '50%',
         }
 
-
+        // .header_workplace{position:relative;width:1440px;height:135px;margin:-50px auto 0;background:url(../images/dashboard/bg_workplace.png) no-repeat 50% 50%}
+        // .header_workplace h2{display:flex;align-items:center;justify-content:center;width:134px;height:134px;margin:0 auto}
+        // .header_workplace h2 img{width:83px;height:57px;}
+        // .header_workplace .txtg{line-height:60px;font-size:0;}
+        // .header_workplace .txtg div:nth-child(1){position:absolute;bottom:16px;left:0;}
+        // .header_workplace .txtg div:nth-child(2){position:absolute;bottom:16px;right:0}
+        // .header_workplace .txtg div:nth-child(2):after{content:"";display:block;height:0;clear:both}
+        // .header_workplace .txtg dt{display:inline-block;width:200px;text-align:center;font-weight:700;font-size:28px;color:#fbe027;text-shadow:2px 2px 1px rgba(0, 0, 0, .2)}
+        // .header_workplace .txtg dd{display:inline-block;margin:0 20px;font-weight:500;font-size:28px;color:#fff}
+        // .header_workplace .txtg div:nth-child(2) dt{float:right}
     },
     adminField: {
         marginTop: '20px',
@@ -494,7 +500,7 @@ const useStyles = makeStyles(() => ({
         },
         '& *': {
             boxSizing: 'border-box',
-            padding: '15px',
+            padding: '0 15px',
         }
     },
     adminFieldLeft: {
@@ -756,12 +762,20 @@ const useStyles = makeStyles(() => ({
     },
     pageContent: {
         display: 'flex',
-        height: 'calc(100vh - 333px)',
-        padding: '0px 20px 30px 10px',
+        height: 'calc(100vh - 313px)',
+        padding: '0px 20px 0px 10px',
         '& >.MuiGrid-root': {
             height: '100%'
         }
     },
+    pageContenthover: {
+        display: 'flex',
+        height: 'calc(100vh - 313px)',
+        padding: '0px 20px 0px 10px',
+        '& >.MuiGrid-root': {
+            height: '67%'
+        }
+    },    
     contentList: {
         height: '100%',
         borderRadius: '6px 6px 0 0',
@@ -1887,6 +1901,15 @@ const useStyles = makeStyles(() => ({
         '&.close' : {
             background: '#7a7a7a'
         }
+    },
+    DashTrigStyleUp: {
+        background: 'url(' + dashBtnUp + ') no-repeat 50% 50%',
+         '&:hover': {
+            background: 'url(' + dashBtnDown + ') no-repeat 50% 50%',
+        }
+    },
+    DashTrigStyleDown: {
+        background: 'url(' + dashBtnDown + ') no-repeat 50% 50%'
     }
 }));
 

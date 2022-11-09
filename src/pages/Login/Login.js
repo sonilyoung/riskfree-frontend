@@ -130,8 +130,7 @@ const Login = () => {
         if (idFlag !== null) setSaveIDFlag(idFlag);
         if (idFlag === false) localStorage.setItem(LS_KEY_ID, "");
         let data = localStorage.getItem(LS_KEY_ID);
-        if (data !== null) setValues({...values, id: { ...values.id, value: data }
-        });
+        if (data !== null) setValues({...values, id: { ...values.id, value: data }});
     }, [])
 
     // Enter시 input으로 focus

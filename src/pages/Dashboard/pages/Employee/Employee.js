@@ -37,6 +37,18 @@ import alertIcon from '../../../../assets/images/ic_refer.png';
 import radioIcon from '../../../../assets/images/ic_radio.png';
 import radioIconOn from '../../../../assets/images/ic_radio_on.png';
 import { remove } from '../../../../services/core/User/Token';
+import num0 from '../../../../assets/images/dashboard/num0.png'
+import num1 from '../../../../assets/images/dashboard/num1.png'
+import num2 from '../../../../assets/images/dashboard/num2.png'
+import num3 from '../../../../assets/images/dashboard/num3.png'
+import num4 from '../../../../assets/images/dashboard/num4.png'
+import num5 from '../../../../assets/images/dashboard/num5.png'
+import num6 from '../../../../assets/images/dashboard/num6.png'
+import num7 from '../../../../assets/images/dashboard/num7.png'
+import num8 from '../../../../assets/images/dashboard/num8.png'
+import num9 from '../../../../assets/images/dashboard/num9.png'
+
+
 import { 
     useGetAccidentTotalMutation, useGetImprovementListMutation, useGetLeaderImprovementListMutation, useGetLoginInfoMutation, useGetSafeWorkHistoryListMutation, 
     useGetNoticeListMutation, useGetBaselineListMutation, useGetBaselineMutation, useGetCompanyInfoMutation, useGetDayInfoMutation, 
@@ -98,6 +110,8 @@ const Employee = () => {
     const [getLoginInfo] = useGetLoginInfoMutation()
     const [loginInfo, setLoginInfo] = useState({})
     const [hoverContainer, setHoverContainer] = useState(false)
+    const [hoverContainer_Skip, setHoverContainer_Skip] = useState(false)
+    
     const [clickedEssentialRate, setClickedEssentialRate] = useState(1)
     const [clickedEssentialRateForClass, setClickedEssentialRateForClass] = useState("rate1")
     const [clickedDuty, setClickedDuty] = useState(null)
@@ -1079,6 +1093,34 @@ const Employee = () => {
         handleNotificationPopupsShow(DayNum);
     }
 
+    const dayFor = (flag) => {
+        let dayarray = [];
+        for (let i = 0; i < flag.length; i++) {
+            if(flag.substr(i, 1) === "0") {
+                dayarray.push(num0);
+            } else if(flag.substr(i, 1) === "1") {
+                dayarray.push(num1);
+            } else if(flag.substr(i, 1) === "2") {
+                dayarray.push(num2);
+            } else if(flag.substr(i, 1) === "3") {
+                dayarray.push(num3);
+            } else if(flag.substr(i, 1) === "4") {
+                dayarray.push(num4);
+            } else if(flag.substr(i, 1) === "5") {
+                dayarray.push(num5);
+            } else if(flag.substr(i, 1) === "6") {
+                dayarray.push(num6);
+            } else if(flag.substr(i, 1) === "7") {
+                dayarray.push(num7);
+            } else if(flag.substr(i, 1) === "8") {
+                dayarray.push(num8);
+            } else if(flag.substr(i, 1) === "9") {
+                dayarray.push(num9);
+            } else {}            
+          }
+        return dayarray;
+
+    }
     useEffect(() => {
         setLoading(true);
         fetchBaseline(baselineIdForSelect);
@@ -1335,8 +1377,8 @@ const Employee = () => {
                                             </AccordionSummary>
                                             <AccordionDetails>
                                                 <div className={classes.readonlyTextWrapper}>
-                                                    {baselineList?.length > 0 ? baselineList?.map(baselineItem => (
-                                                        <div className={classes.readonlyText}><span>{baselineItem.baselineName}</span> 
+                                                    {baselineList?.length > 0 ? baselineList?.map((baselineItem, index) => (
+                                                        <div key={index} className={classes.readonlyText}><span>{baselineItem.baselineName}</span> 
                                                         <span>{baselineItem.baselineStart}~{baselineItem.baselineEnd}</span>
                                                         {baselineItem.isClose !== "1" ?  
                                                             <div className={classes.readonlyText} onClick={() => handelBaselineDelete(baselineItem.baselineId)}>
@@ -1384,7 +1426,7 @@ const Employee = () => {
                                                 }
                                                 {!!baselineList && !!baselineList?.length
                                                     && baselineList?.filter(baselineItem => baselineItem.baselineId === targetBaselineId)
-                                                        ?.map(item => <span>{item.baselineStart}~{item.baselineEnd}</span>)}
+                                                        ?.map((item, index) => <span key={index}>{item.baselineStart}~{item.baselineEnd}</span>)}
                                                 <div className={classes.popupPrompt}>
                                                     <Alert
                                                         icon={<img src={alertIcon} alt="alert icon" />}
@@ -1429,8 +1471,7 @@ const Employee = () => {
                             </div>
                         </Grid>
                     </Grid>
-
-                    <Grid className={classes.headerWorkplace} item xs={12} sx={{ marginTop: '-45px' }}>
+                    <Grid className={classes.headerWorkplace} item xs={12} sx={{ marginTop: '-50px' }}>
                         <div className={classes.adminField + ' ' + classes.adminFieldLeft}>
                             <div className={classes.adminFieldText}>안전보건목표</div>
                             <div className={classes.adminFieldText}>{companyInfo?.shGoal}</div>
@@ -1498,26 +1539,26 @@ const Employee = () => {
                                     <div className={classes.tableHead}>
                                         <div className={classes.tableRow}>
                                             <div className={classes.tableData}>구분</div>
-                                            {!!reportTitle && !!(reportTitle?.length) && reportTitle?.map(reportTitleItem =>
-                                                <div className={classes.tableData}>{reportTitleItem.menuTitle}</div>
+                                            {!!reportTitle && !!(reportTitle?.length) && reportTitle?.map((reportTitleItem, index) =>
+                                                <div key={index} className={classes.tableData}>{reportTitleItem.menuTitle}</div>
                                             )}
                                         </div>
                                     </div>
                                     <div className={classes.tableBody}>
                                         {!!reportList && !!(reportList?.length) && (condition === "1" || condition === "2"|| condition === "3"|| condition === "4")
-                                            ? reportList?.map((reportItem) =>
-                                            (<div className={classes.tableRow}>
+                                            ? reportList?.map((reportItem, index) =>
+                                            (<div key={index} className={classes.tableRow}>
                                                 <div className={classes.tableData}>{reportItem[0]?.workplaceName}</div>
-                                                {reportTitle?.map((reportTitleItem) => {
+                                                {reportTitle?.map((reportTitleItem, i) => {
                                                     const element = reportItem?.find(item => item.groupId === reportTitleItem.groupId);
-                                                    return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}%` : "0%"}</div>;
+                                                    return <div key={i} className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}%` : "0%"}</div>;
                                                 })}
                                             </div>))
                                             : !!reportList && !!(reportList?.length) && condition === "5"
-                                                ? reportList?.map((reportItem) =>
-                                                (<div className={classes.tableRow}>
-                                                    {reportItem?.map((item) =>
-                                                        <>
+                                                ? reportList?.map((reportItem, index) =>
+                                                (<div key={index} className={classes.tableRow}>
+                                                    {reportItem?.map((item, i) =>
+                                                        <div key={i}>
                                                             <div className={classes.tableData}>{item?.workplaceName}</div>
                                                             <div className={classes.tableData}>{item?.accType001 ? `${item?.accType001}건` : "0건"}</div>
                                                             <div className={classes.tableData}>{item?.accType001 ? `${item?.accType002}건` : "0건"}</div>
@@ -1525,24 +1566,24 @@ const Employee = () => {
                                                             <div className={classes.tableData}>{item?.accType001 ? `${item?.accType004}건` : "0건"}</div>
                                                             <div className={classes.tableData}>{item?.accType001 ? `${item?.accType005}건` : "0건"}</div>
                                                             <div className={classes.tableData}>{item?.accType001 ? `${item?.accType006}건` : "0건"}</div>
-                                                        </>
+                                                        </div>
                                                     )}
                                                 </div>))
                                                 : !!reportList && !!(reportList?.length) && condition === "6"
-                                                    ? reportList?.map((reportItem) =>
-                                                    (<div className={classes.tableRow}>
-                                                        {reportItem?.map((item) =>
-                                                            <>
+                                                    ? reportList?.map((reportItem, index) =>
+                                                    (<div key={index} className={classes.tableRow}>
+                                                        {reportItem?.map((item, i) =>
+                                                            <div key={i}>
                                                                 <div className={classes.tableData}>{item?.workplaceName}</div>
                                                                 <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd001}건` : "0건"}</div>
                                                                 <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd002}건` : "0건"}</div>
                                                                 <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd003}건` : "0건"}</div>
                                                                 <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd004}건` : "0건"}</div>
-                                                            </>
+                                                            </div>
                                                         )}
                                                     </div>))
-                                                    : reportList?.map((reportItem) =>
-                                                    (<div className={classes.tableRow}>
+                                                    : reportList?.map((reportItem, index) =>
+                                                    (<div key={index} className={classes.tableRow}>
                                                         <div className={classes.tableData}>{reportItem[0]?.workplaceName}</div>
                                                         {reportTitle?.map((reportTitleItem) => {
                                                             const element = reportItem?.find(item => item.groupId === reportTitleItem.groupId);
@@ -1556,7 +1597,7 @@ const Employee = () => {
                         </div>
                         <div className={classes.navSlider}>
                             <Slider {...headerSlider}>
-                                { /* 사업장 */}
+                                { /* 사업장 버튼*/}
                                 {!!(workplaceList) && workplaceList?.map((workplaceItem, index) => (
                                     userRoleCode === "001" ?
                                     <MainNavButton key={index} className={workplaceItem.workplaceId === parseFloat(userWorkplaceId) ? "active" : ""}
@@ -1651,7 +1692,7 @@ const Employee = () => {
                         <div><PageSideButton onClick={() => fetchBaseline(baselineIdForSelect)}>이동</PageSideButton></div>
                     </div>
                 </Grid>
-                <Grid className={classes.pageContent} item container rowSpacing={0} columnSpacing={1} xs={12}>
+                <Grid className={hoverContainer === true ? classes.pageContenthover : classes.pageContent} item container rowSpacing={0} columnSpacing={1} xs={12}>
                     <Grid item xs={2.7}>
                         <div className={classes.contentList}>
                             <div className={classes.listTitle}>필수 의무조치 내역 <span>시행율</span></div>
@@ -1696,8 +1737,8 @@ const Employee = () => {
                         <div className={classes.contentList}>
                             <div className={classes.listTitle}>의무조치별 상세 점검 항목  <span>총 <strong>{!!(dutyDetailList) && !!(dutyDetailList.length) && dutyDetailList[0]?.totalCount}</strong> 건</span></div>
                             <ul className={classes.menuList + ' secondList'}>
-                                {dutyDetailList?.map((element) => {
-                                    return (<li>
+                                {dutyDetailList?.map((element, index) => {
+                                    return (<li key={index}>
                                         <Link className={clickedDuty !== element.articleNo ? classes.listLink : classes.listLinkClicked} to={"#none"} underline="none" onClick={() => setClickedDuty(element.articleNo)}>{element.detailedItems}</Link>
                                     </li>)
                                 })}
@@ -1710,8 +1751,8 @@ const Employee = () => {
                                 <div>
                                     <div className={classes.listTitle}>점검서류 등 목록</div>
                                     <ul className={classes.menuList}>
-                                        {inspectionsDocs?.map((inspection) => (
-                                            <li>
+                                        {inspectionsDocs?.map((inspection, index) => (
+                                            <li key={index}>
                                                 <Link className={classes.listLink} to={"#none"} underline="none">{inspection?.shGoal}</Link>
                                             </li>
                                         ))}
@@ -1720,7 +1761,7 @@ const Employee = () => {
                                 <div>
                                     <div className={classes.listTitle}><strong>{!!(inspectionsDocs) && inspectionsDocs[0]?.fileCount}</strong>건 /{!!(inspectionsDocs) && !!(inspectionsDocs.length) && inspectionsDocs[0].totalCount}건</div>
                                     <ul className={classes.menuList + ' buttonList'}>
-                                        {inspectionsDocs?.map((inspection, index) => (<><li>
+                                        {inspectionsDocs?.map((inspection, index) => (<><li key={index}>
                                             <div>
                                                 {
                                                     currentIsClose === "1" ?
@@ -1774,24 +1815,24 @@ const Employee = () => {
                                 <div>
                                     <div className={classes.listTitle}>이행주기</div>
                                     <ul className={classes.menuList}>
-                                        {dutyCycle?.map((cycle) => (
-                                            <li className={'bulletList'}>{cycle.dutyCycle}</li>
+                                        {dutyCycle?.map((cycle, index) => (
+                                            <li key={index} className={'bulletList'}>{cycle.dutyCycle}</li>
                                         ))}
                                     </ul>
                                 </div>
                                 <div>
                                     <div className={classes.listTitle}>준수대상</div>
                                     <ul className={classes.menuList}>
-                                        {dutyAssigned?.map((duty) => (
-                                            <li className={'bulletList'}>{duty.dutyAssigned}</li>
+                                        {dutyAssigned?.map((duty, index) => (
+                                            <li key={index} className={'bulletList'}>{duty.dutyAssigned}</li>
                                         ))}
                                     </ul>
                                 </div>
                                 <div>
                                     <div className={classes.listTitle}>관계법령</div>
                                     <ul className={classes.menuList}>
-                                        {relatedArticle?.map(article => (
-                                            <li className={'bulletList'}>{article.relatedArticle}</li>
+                                        {relatedArticle?.map((article, index) => (
+                                            <li key={index} className={'bulletList'}>{article.relatedArticle}</li>
                                         ))}
                                     </ul>
                                 </div>
@@ -1800,19 +1841,15 @@ const Employee = () => {
                                     <ul className={classes.menuList + ' checkList'}>
                                         {inspectionsDocs?.map((checkBtn, index) => (
                                             currentIsClose === "1" ?
-                                            <>
-                                                <li>{((checkBtn.managerChecked === "0" || checkBtn.managerChecked == null || checkBtn.managerChecked === "null" || checkBtn.managerChecked === "") &&
+                                                <li key={index}>{((checkBtn.managerChecked === "0" || checkBtn.managerChecked == null || checkBtn.managerChecked === "null" || checkBtn.managerChecked === "") &&
                                                     (<Link className={classes.listLink + ' check'} to={"#none"} underline="none"></Link>)) || ((checkBtn.managerChecked === "1") &&
                                                         (<Link className={classes.listLink + ' check-blue'} to={"#none"} underline="none" ></Link>))}
                                                 </li>
-                                            </>
                                             :
-                                            <>
-                                                <li>{((checkBtn.managerChecked === "0" || checkBtn.managerChecked == null || checkBtn.managerChecked === "null" || checkBtn.managerChecked === "") &&
+                                                <li key={index}>{((checkBtn.managerChecked === "0" || checkBtn.managerChecked == null || checkBtn.managerChecked === "null" || checkBtn.managerChecked === "") &&
                                                     (<Link className={classes.listLink + ' check'} to={"#none"} underline="none" onClick={() => handleManagerChecked(checkBtn.managerChecked, index, checkBtn.articleNo)}></Link>)) || ((checkBtn.managerChecked === "1") &&
                                                         (<Link className={classes.listLink + ' check-blue'} to={"#none"} underline="none" onClick={(e) => handleManagerChecked(checkBtn.managerChecked, index, checkBtn.articleNo)}></Link>))}
                                                 </li>
-                                            </>
                                         ))}
                                     </ul>
                                 </div>
@@ -1822,8 +1859,8 @@ const Employee = () => {
                             <div className={classes.contentList}>
                                 <div className={classes.listTitle}>현장 작동성 평가 작성 지침서</div>
                                 <ul className={classes.menuList + ' fourthList'}>
-                                    {guideLine?.map((guideline) => (
-                                        <li style={{"white-Space": "pre-line"}}>
+                                    {guideLine?.map((guideline, index) => (
+                                        <li key={index} style={{"whiteSpace": "pre-line"}}>
                                             {guideline.guideline}
                                         </li>
                                     ))}
@@ -1832,11 +1869,24 @@ const Employee = () => {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid className={classes.lowerDashboard} container item xs={12}>
+                {/* 하단 컨테이너 */}
+                <Grid className={hoverContainer === true ? classes.lowerDashboard : classes.lowerDashboard + ' .hover'} container item xs={12}  onMouseLeave={() => setHoverContainer(hoverContainer_Skip)}>
                     <div className={classes.dashTrigger} >
-                        <DashTrigButton onMouseOver={() => setHoverContainer(!hoverContainer)}></DashTrigButton>
+                        { hoverContainer_Skip === false ?
+                            hoverContainer === false ?
+                                <DashTrigButton className={classes.DashTrigStyleUp + ' .hover'} onMouseOver={() => setHoverContainer(true)}></DashTrigButton>
+                            :
+                                <DashTrigButton className={classes.DashTrigStyleDown} onClick={() => setHoverContainer_Skip(true)} ></DashTrigButton>
+                        :
+                            <DashTrigButton className={classes.DashTrigStyleDown} onClick={() => 
+                                {
+                                    setHoverContainer_Skip(false) 
+                                    setHoverContainer(false) 
+                                }
+                            } ></DashTrigButton>
+                        }
                     </div>
-                    <Grid container item xs={12} className={hoverContainer ? classes.wrap_hover : classes.hoverWrap} onMouseLeave={() => setHoverContainer(false)}>
+                    <Grid container item xs={12} className={hoverContainer === true ? classes.wrap_hover : classes.hoverWrap} >
                         <Grid className={classes.gageWrap} item xs={2}>
                             <div className={classes.gageArrow}>
                                 <div className={classes.needleImg} style={{ transform: `rotate(${handleEssentailRateMeasure()}deg)` }}></div>
@@ -1847,7 +1897,7 @@ const Employee = () => {
                             <Grid container item xs={12}>
                                 <Grid className={classes.footBox + ' boxUp multiBox'} item xs={3.7}>
                                     <div className={classes.tiltBox}>
-                                        <span>개</span>
+                                        <span>개{hoverContainer}</span>
                                         <span>선</span>
                                         <span>/</span>
                                         <span>조</span>
@@ -1966,8 +2016,8 @@ const Employee = () => {
                             <Grid container item xs={12} sx={{ marginBottom: '3px' }}>
                                 <Grid className={classes.footBox + ' boxDown'} item xs={8.75}>
                                     <Slider className={classes.footSlider} {...footerSlider}>
-                                        {noticesList?.map((notice) => (
-                                            <div>
+                                        {noticesList?.map((notice, index) => (
+                                            <div key={index}>
                                                 <div>{notice?.insertDate}</div>
                                                 {notice?.importCd === "001" ? <span className={classes.slideLabelHot}>HOT</span> : ""}
                                                 <Link to={`/dashboard/employee/notifications/view/${notice?.noticeId}`} className={classes.linkBtn}>{notice?.title}</Link>
@@ -1980,16 +2030,49 @@ const Employee = () => {
                                     <div className={classes.footDay + ' dateBox'}>
                                         <div>DAY</div>
                                         <div className={classes.dayNums}>
-                                            {!!dayInfo && dayInfo.day}
+
+                                            {dayInfo && dayFor(dayInfo.day).map((arr, i) => (
+                                                <img src={arr} />
+                                            ))}
                                         </div>
                                     </div>
                                     <div className={classes.footTime + ' dateBox'}>
                                         <div>TIME</div>
                                         <div className={classes.timeNums}>
-                                            {hours?.split("").map((e) => (<div>{e}</div>
+                                            {hours?.split("").map((e, index) => (
+                                            <div key={index}>
+                                                <img src={
+                                                e === "0" ? num0
+                                                : e === "1" ? num1
+                                                : e === "2" ? num2
+                                                : e === "3" ? num3
+                                                : e === "4" ? num4
+                                                : e === "5" ? num5
+                                                : e === "6" ? num6
+                                                : e === "7" ? num7
+                                                : e === "8" ? num8
+                                                : e === "9" ? num9
+                                                : ""
+                                                }/>
+                                                </div>
                                             ))}
                                             <span>:</span>
-                                            {minutes?.split("").map((e) => (<div>{e}</div>
+                                            {minutes?.split("").map((e, index) => (
+                                            <div key={index}>
+                                                <img src={
+                                                e === "0" ? num0
+                                                : e === "1" ? num1
+                                                : e === "2" ? num2
+                                                : e === "3" ? num3
+                                                : e === "4" ? num4
+                                                : e === "5" ? num5
+                                                : e === "6" ? num6
+                                                : e === "7" ? num7
+                                                : e === "8" ? num8
+                                                : e === "9" ? num9
+                                                : ""
+                                                }/>
+                                                </div>
                                             ))}
                                         </div>
                                     </div>
@@ -2006,7 +2089,7 @@ const Employee = () => {
                     localStorage.getItem(noticeHotItem.noticeId) >= VISITED_NOW_DATE ?
                         ""
                     :
-                        <div className={classes.notificationPopup} style={{marginTop: `${index*3 + '0'}px`, marginLeft: `${index*3 + '0'}px`}} >
+                        <div key={index} className={classes.notificationPopup} style={{marginTop: `${index*3 + '0'}px`, marginLeft: `${index*3 + '0'}px`}} >
                             <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(noticeHotItem.noticeId)}></ClosePopupButton2>
                             <div><span className={classes.slideLabelHot}>HOT</span> {noticeHotItem.title}</div>
                             <div className={classes.popNews}>
