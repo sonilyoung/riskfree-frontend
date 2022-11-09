@@ -773,7 +773,7 @@ const useStyles = makeStyles(() => ({
         height: 'calc(100vh - 313px)',
         padding: '0px 20px 0px 10px',
         '& >.MuiGrid-root': {
-            height: '67%'
+            height: '63%'
         }
     },    
     contentList: {
