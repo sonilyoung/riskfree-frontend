@@ -501,43 +501,78 @@ const useStyles = makeStyles(() => ({
             backgroundImage: 'url(' + circleYellow + ')',
         },
         '&#slick_1': {
-            animation : `$listHOver 2s 0.1s`,
-            
+            animation : `$listHOver 0.5s 0.03s`,
         },
-        /*
-        '& div:nth-of-type(2)': {
-            animation : `$listHOver 80ms both`,
-        },    
-        '& div:nth-of-type(3)': {
-            animation : `$listHOver 130ms both`,
-        },    
-        '& div:nth-of-type(4)': {
-            animation : `$listHOver 180ms both`,
-        },    
-        '& div:nth-of-type(5)': {
-            animation : `$listHOver 230ms both`,
-        },    
-        '& div:nth-of-type(6)': {
-            animation : `$listHOver 280ms both`,
-        },    
-        '& div:nth-of-type(7)': {
-            animation : `$listHOver 310ms both`,
-        },    
-        '& div:nth-of-type(8)': {
-            animation : `$listHOver 360ms both`,
-        },    
-        '& div:nth-of-type(9)': {
-            animation : `$listHOver 410ms both`,
-        },    
-        '& div:nth-of-type(10)': {
-            animation : `$listHOver 460ms both`,
-        },    
-        '& div:nth-of-type(11)': {
-            animation : `$listHOver 510ms both`,
-        },    
-        '& div:nth-of-type(12)': {
-            animation : `$listHOver 560ms both`,
-        }*/   
+        '&#slick_2': {
+            animation : `$listHOver 0.5s 0.08s`,
+        },
+        '&#slick_3': {
+            animation : `$listHOver 0.5s 0.13s`,
+        },
+        '&#slick_4': {
+            animation : `$listHOver 0.5s 0.18s`,
+        },
+        '&#slick_5': {
+            animation : `$listHOver 0.5s 0.23s`,
+        },
+        '&#slick_6': {
+            animation : `$listHOver 0.5s 0.28s`,
+        },
+        '&#slick_7': {
+            animation : `$listHOver 0.5s 0.31s`,
+        },
+        '&#slick_8': {
+            animation : `$listHOver 0.5s 0.36s`,
+        },
+        '&#slick_9': {
+            animation : `$listHOver 0.5s 0.41s`,
+        },
+        '&#slick_10': {
+            animation : `$listHOver 0.5s 0.46s`,
+        },
+        '&#slick_11': {
+            animation : `$listHOver 0.5s 0.51s`,
+        },
+        '&#slick_12': {
+            animation : `$listHOver 0.5s 0.56s`,
+        },
+
+        '&#slick_13': {
+            animation : `$listHOver 0.5s 0.03s`,
+        },
+        '&#slick_14': {
+            animation : `$listHOver 0.5s 0.08s`,
+        },
+        '&#slick_15': {
+            animation : `$listHOver 0.5s 0.13s`,
+        },
+        '&#slick_16': {
+            animation : `$listHOver 0.5s 0.18s`,
+        },
+        '&#slick_17': {
+            animation : `$listHOver 0.5s 0.23s`,
+        },
+        '&#slick_18': {
+            animation : `$listHOver 0.5s 0.28s`,
+        },
+        '&#slick_19': {
+            animation : `$listHOver 0.5s 0.31s`,
+        },
+        '&#slick_20': {
+            animation : `$listHOver 0.5s 0.36s`,
+        },
+        '&#slick_21': {
+            animation : `$listHOver 0.5s 0.41s`,
+        },
+        '&#slick_22': {
+            animation : `$listHOver 0.5s 0.46s`,
+        },
+        '&#slick_23': {
+            animation : `$listHOver 0.5s 0.51s`,
+        },
+        '&#slick_24': {
+            animation : `$listHOver 0.5s 0.56s`,
+        },                                                                                              
     },
     "@keyframes listHOver": {
         "0%" : { transform: "translateY(0)" },
