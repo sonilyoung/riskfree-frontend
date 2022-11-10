@@ -1095,32 +1095,36 @@ const Employee = () => {
 
     const dayFor = (flag) => {
         let dayarray = [];
-        for (let i = 0; i < flag.length; i++) {
-            if(flag.substr(i, 1) === "0") {
-                dayarray.push(num0);
-            } else if(flag.substr(i, 1) === "1") {
-                dayarray.push(num1);
-            } else if(flag.substr(i, 1) === "2") {
-                dayarray.push(num2);
-            } else if(flag.substr(i, 1) === "3") {
-                dayarray.push(num3);
-            } else if(flag.substr(i, 1) === "4") {
-                dayarray.push(num4);
-            } else if(flag.substr(i, 1) === "5") {
-                dayarray.push(num5);
-            } else if(flag.substr(i, 1) === "6") {
-                dayarray.push(num6);
-            } else if(flag.substr(i, 1) === "7") {
-                dayarray.push(num7);
-            } else if(flag.substr(i, 1) === "8") {
-                dayarray.push(num8);
-            } else if(flag.substr(i, 1) === "9") {
-                dayarray.push(num9);
-            } else {}            
-          }
+        if((flag === '') || (flag === null) || (flag === undefined)) {
+            dayarray.push(num0);
+        } else {
+            for (let i = 0; i < flag.length; i++) {
+                if(flag.substr(i, 1) === "0") {
+                    dayarray.push(num0);
+                } else if(flag.substr(i, 1) === "1") {
+                    dayarray.push(num1);
+                } else if(flag.substr(i, 1) === "2") {
+                    dayarray.push(num2);
+                } else if(flag.substr(i, 1) === "3") {
+                    dayarray.push(num3);
+                } else if(flag.substr(i, 1) === "4") {
+                    dayarray.push(num4);
+                } else if(flag.substr(i, 1) === "5") {
+                    dayarray.push(num5);
+                } else if(flag.substr(i, 1) === "6") {
+                    dayarray.push(num6);
+                } else if(flag.substr(i, 1) === "7") {
+                    dayarray.push(num7);
+                } else if(flag.substr(i, 1) === "8") {
+                    dayarray.push(num8);
+                } else if(flag.substr(i, 1) === "9") {
+                    dayarray.push(num9);
+                } else {}
+            }
+        }
         return dayarray;
-
     }
+
     useEffect(() => {
         setLoading(true);
         fetchBaseline(baselineIdForSelect);
@@ -1460,6 +1464,7 @@ const Employee = () => {
                                 </div>
                             </div>
                         </Grid>
+                        {/* 날씨 및 주소 */}
                         <Grid className={classes.mainAsside} item xs={3}>
                             <AdminButton className={classes.mainMenuButton} style={{ display: 'none' }}></AdminButton>
                             <div className={classes.weatherSection}>
@@ -1471,6 +1476,7 @@ const Employee = () => {
                             </div>
                         </Grid>
                     </Grid>
+                    {/* 안전보건목표 및 경영방침 Bar */}
                     <Grid className={classes.headerWorkplace} item xs={12} sx={{ marginTop: '-50px' }}>
                         <div className={classes.adminField + ' ' + classes.adminFieldLeft}>
                             <div className={classes.adminFieldText}>안전보건목표</div>
