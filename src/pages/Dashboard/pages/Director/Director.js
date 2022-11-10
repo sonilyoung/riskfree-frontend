@@ -936,7 +936,7 @@ const Director = () => {
                     </div>
                     <Slider className={classes.dashSlider} {...dashboardSlider} >
                         <div className={classes.dashboardSlide}>
-                            <div className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate1?.score)}>
+                            <div id="slick_1" className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate1?.score)}>
                                 <Link to="/dashboard/employee/4" className={classes.slickLink} underline="none">
                                     <div><strong>{essentialRateList?.RET_DATA?.rate1?.score ? essentialRateList?.RET_DATA?.rate1?.score : "0%"}</strong></div>
                                     <div>안전보건 목표 및<br /> 경영방침</div>

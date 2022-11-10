@@ -1876,7 +1876,6 @@ const useStyles = makeStyles(() => ({
         display: 'flex',
         flexDirection: 'column',
         gap: '15px',
-        backgroundColor: '#fff',
         color: '#888',
         borderRadius: '8px',
         border: '1px solid #bbb'

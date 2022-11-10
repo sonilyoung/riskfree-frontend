@@ -16,6 +16,7 @@ import circleRed from '../../../../assets/images/bg_circle_red.png';
 import gageImg from '../../../../assets/images/bg_gage.png';
 import needleImg from '../../../../assets/images/img_needle.png';
 import gageState from '../../../../assets/images/txt_warning.png';
+import {keyframes} from "styled-components";
 
 const useStyles = makeStyles(() => ({
     dashboardWrap: {
@@ -498,8 +499,51 @@ const useStyles = makeStyles(() => ({
         },
         '&.yellow': {
             backgroundImage: 'url(' + circleYellow + ')',
-        }
+        },
+        '& $slick_1': {
+            animation : `$listHOver 2s 0.5s`,
+            
+        },
+        /*
+        '& div:nth-of-type(2)': {
+            animation : `$listHOver 80ms both`,
+        },    
+        '& div:nth-of-type(3)': {
+            animation : `$listHOver 130ms both`,
+        },    
+        '& div:nth-of-type(4)': {
+            animation : `$listHOver 180ms both`,
+        },    
+        '& div:nth-of-type(5)': {
+            animation : `$listHOver 230ms both`,
+        },    
+        '& div:nth-of-type(6)': {
+            animation : `$listHOver 280ms both`,
+        },    
+        '& div:nth-of-type(7)': {
+            animation : `$listHOver 310ms both`,
+        },    
+        '& div:nth-of-type(8)': {
+            animation : `$listHOver 360ms both`,
+        },    
+        '& div:nth-of-type(9)': {
+            animation : `$listHOver 410ms both`,
+        },    
+        '& div:nth-of-type(10)': {
+            animation : `$listHOver 460ms both`,
+        },    
+        '& div:nth-of-type(11)': {
+            animation : `$listHOver 510ms both`,
+        },    
+        '& div:nth-of-type(12)': {
+            animation : `$listHOver 560ms both`,
+        }*/   
     },
+    "@keyframes listHOver": {
+        "0%" : { transform: "translateY(0)" },
+        "50%" : { transform: "translateY(5px)" },
+        "100%" : { transform: "translateY(0)" }        
+    },    
     slickLink: {
         position: 'absolute',
         width: '100%',
