@@ -500,8 +500,8 @@ const useStyles = makeStyles(() => ({
         '&.yellow': {
             backgroundImage: 'url(' + circleYellow + ')',
         },
-        '& $slick_1': {
-            animation : `$listHOver 2s 0.5s`,
+        '&#slick_1': {
+            animation : `$listHOver 2s 0.1s`,
             
         },
         /*
