@@ -578,11 +578,11 @@ const Director = () => {
     const [locale] = React.useState('ko');
     
     const afterChange = (prev, next) => {
-        setUniKey(randomNumberInRange(1, 5));
+        setUniKey(randomNumberInRange(1, 100));
     };    
 
     const beforeChange = (prev, next) => {
-        setUniKey(randomNumberInRange(6, 10));
+        setUniKey(randomNumberInRange(101, 200));
     }
 
     function randomNumberInRange(min, max) {
