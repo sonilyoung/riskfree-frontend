@@ -484,7 +484,9 @@ const useStyles = makeStyles(() => ({
         height: '210px',
         margin: '1% .6% 0',
         backgroundRepeat: 'no-repeat',
-        transition: 'transform .3s',
+        transition: 'all 0.3s ease-in-out',
+        nimationDuration:'1s',
+        animationFillMode:'both',
         '&:hover': {
             transform: 'scale(1.08)',
         },
@@ -575,9 +577,10 @@ const useStyles = makeStyles(() => ({
         },                                                                                              
     },
     "@keyframes listHOver": {
-        "0%" : { opacity: "0", transform: "translateY(-10)" },
-        "50%" : { opacity: "1", transform: "translateY(10px)" },
-        "100%" : { opacity: "1", transform: "translateY(-10)" }        
+        "0%" : { opacity: "0", transform: "translateY(0) scale(1.16)" },
+        "30%" : { transform: "translateY(-5px)" },
+        "60%" : { opacity: "1", transform: "translateY(5px)" },
+        "100%" : { opacity: "1", transform: "translateY(0%)  scale(1)" }        
     },    
     slickLink: {
         position: 'absolute',
