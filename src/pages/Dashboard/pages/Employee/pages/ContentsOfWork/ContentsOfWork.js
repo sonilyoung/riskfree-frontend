@@ -906,7 +906,7 @@ const WorkHistoryList = () => {
                 setOkayPopupMessage("파일확장자 오류");
                 setOkayPopupShow(true);
             } else {
-                setOkayPopupMessage("시스템 오류");
+                setOkayPopupMessage(response.data.RET_DESC);
                 setOkayPopupShow(true);
             }
             setSelectedFileName("");
