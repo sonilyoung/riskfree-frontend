@@ -577,15 +577,53 @@ const Director = () => {
 
     const [locale] = React.useState('ko');
 
+    const afterChange = () => {
+        console.log("afterChange:", classes.dashboardSlide);
+        let element = document.querySelector(classes.dashboardSlide);
+        element?.classes(classes.slickCircle);
+    };    
+
+    const beforeChange = () => {
+        console.log("beforeChange:", classes.dashboardSlide);
+        let element = document.querySelector(classes.dashboardSlide);
+        element?.classes(classes.slickCircle);
+    };    
+
+
     const dashboardSlider = {
         dots: false,
         infinite: true,
-        speed: 1000,
+        speed: 2000,
         slidesToShow: 1,
         slidesToScroll: 1,
         nextArrow: <SampleNextArrow />,
         prevArrow: <SamplePrevArrow />,
+        accessibility: true,
+        adaptiveHeight: false,
+        arrows: true,
+        asNavFor: null,
+        autoplay: false,
+        centerMode: false,
+        centerPadding: '50px',
+        cssEase: 'ease',
+        dotsClass: 'slick-dots',
+        draggable: true,
+        easing: 'linear',
+        edgeFriction: 0.7,
+        fade: true,
+        focusOnSelect: false,
+        focusOnChange: false,
+        initialSlide: 0,
+        lazyLoad: 'ondemand',
+        mobileFirst: false,
+        pauseOnHover: true,
+        pauseOnFocus: true,
+        pauseOnDotsHover: false,
+        respondTo: 'window',
+        responsive: null,
     }
+
+
 
     function SampleNextArrow(props) {
         const { className, style, onClick } = props;

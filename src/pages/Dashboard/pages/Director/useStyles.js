@@ -576,7 +576,7 @@ const useStyles = makeStyles(() => ({
     },
     "@keyframes listHOver": {
         "0%" : { transform: "translateY(0)" },
-        "50%" : { transform: "translateY(5px)" },
+        "50%" : { transform: "translateY(20px)" },
         "100%" : { transform: "translateY(0)" }        
     },    
     slickLink: {
