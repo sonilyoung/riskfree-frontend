@@ -926,7 +926,7 @@ const Director = () => {
                                 {workplaceList?.RET_DATA?.length <= 1 ? "" :                                
                                     <div>
                                         <MainNavButton className={currentWorkplaceId === null ? "active" : ""} onClick={
-                                            () => handleFactoryChange({ ...userInfo, userWorkplaceId: null })
+                                            () => {handleFactoryChange({ ...userInfo, userWorkplaceId: null });afterChange();}
                                         }>전체사업장</MainNavButton>
                                     </div>
                                 }
@@ -935,7 +935,7 @@ const Director = () => {
                                         <MainNavButton
                                             className={currentWorkplaceId === workplaceItem.workplaceId ? "active" : workplaceList?.RET_DATA?.length <= 1 ? "active" : workplaceIdFromToken === workplaceItem.workplaceId ? "current" : ""}
                                             // className={(currentWorkplaceId === workplaceItem.workplaceId && currentWorkplaceId === workplaceIdFromToken) || currentWorkplaceId === workplaceItem.workplaceId ? "active" : workplaceIdFromToken === workplaceItem.workplaceId ? "current" : ""}
-                                            onClick={() => handleFactoryChange({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId })}
+                                            onClick={() => {handleFactoryChange({ ...userInfo, userCompanyId: workplaceItem.companyId, userWorkplaceId: workplaceItem.workplaceId });beforeChange();}}
                                         >
                                             {workplaceItem.workplaceName}
                                         </MainNavButton>
