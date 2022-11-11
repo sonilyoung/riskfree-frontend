@@ -284,7 +284,7 @@ const Director = () => {
     const classes = useStyles();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+    const [uniKey, setUniKey] = React.useState(null);
     const [userToken] = useUserToken();
     const [getDayInfo] = useGetDayInfoMutation();
     const [getNoticeList] = useGetNoticeListMutation();
@@ -576,19 +576,19 @@ const Director = () => {
     const [date, setDate] = React.useState(null);
 
     const [locale] = React.useState('ko');
-
-    const afterChange = () => {
-        console.log("afterChange:", classes.dashboardSlide);
-        let element = document.querySelector(classes.dashboardSlide);
-        element?.classes(classes.slickCircle);
+    
+    const afterChange = (prev, next) => {
+        setUniKey(randomNumberInRange(1, 5));
     };    
 
-    const beforeChange = () => {
-        console.log("beforeChange:", classes.dashboardSlide);
-        let element = document.querySelector(classes.dashboardSlide);
-        element?.classes(classes.slickCircle);
-    };    
+    const beforeChange = (prev, next) => {
+        setUniKey(randomNumberInRange(6, 10));
+    }
 
+    function randomNumberInRange(min, max) {
+        // 👇️ get number between min (inclusive) and max (inclusive)
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }   
 
     const dashboardSlider = {
         dots: false,
@@ -596,6 +596,8 @@ const Director = () => {
         speed: 2000,
         slidesToShow: 1,
         slidesToScroll: 1,
+        afterChange,
+        beforeChange,
         nextArrow: <SampleNextArrow />,
         prevArrow: <SamplePrevArrow />,
         accessibility: true,
@@ -610,7 +612,7 @@ const Director = () => {
         draggable: true,
         easing: 'linear',
         edgeFriction: 0.7,
-        fade: true,
+        fade: false,
         focusOnSelect: false,
         focusOnChange: false,
         initialSlide: 0,
@@ -621,6 +623,8 @@ const Director = () => {
         pauseOnDotsHover: false,
         respondTo: 'window',
         responsive: null,
+        useCSS:false,
+        waitForAnimate: true,
     }
 
 
@@ -972,7 +976,7 @@ const Director = () => {
                     <div className={classes.managementOrder}>
                         {baselineData && <>{baselineData?.baselineName} :<strong>{baselineData?.baselineStart} ~ {baselineData?.baselineEnd}</strong></>}
                     </div>
-                    <Slider className={classes.dashSlider} {...dashboardSlider} >
+                    <Slider className={classes.dashSlider} {...dashboardSlider} key={uniKey}>
                         <div className={classes.dashboardSlide}>
                             <div id="slick_1" className={classes.slickCircle + handleSlickCircleColor(essentialRateList?.RET_DATA?.rate1?.score)}>
                                 <Link to="/dashboard/employee/4" className={classes.slickLink} underline="none">
