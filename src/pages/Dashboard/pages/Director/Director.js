@@ -592,13 +592,14 @@ const Director = () => {
 
     const dashboardSlider = {
         infinite: true,
-        speed: 1000,
+        speed: 2000,
         slidesToShow: 1,
         slidesToScroll: 1,
         afterChange,
         beforeChange,
         nextArrow: <SampleNextArrow />,
         prevArrow: <SamplePrevArrow />,
+        swipeToSlide: false,
     }
 
 

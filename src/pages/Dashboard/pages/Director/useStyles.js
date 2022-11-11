@@ -484,8 +484,8 @@ const useStyles = makeStyles(() => ({
         height: '210px',
         margin: '1% .6% 0',
         backgroundRepeat: 'no-repeat',
-        transition: 'all 0.3s ease-in-out',
-        nimationDuration:'1s',
+        transition: 'all 3s ease-in-out',
+        animationDuration:'3s',
         animationFillMode:'both',
         '&:hover': {
             transform: 'scale(1.08)',
