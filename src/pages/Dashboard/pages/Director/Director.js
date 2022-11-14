@@ -420,7 +420,7 @@ const Director = () => {
     }
     
     const handleNotificationPopupsShow = (notificationIndex) => {
-        const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex === index);
+        const notificationPopupList = noticeHotList?.filter((noticeHotItem, index) => notificationIndex !== noticeHotItem.noticeId);
         setNoticeHotList(notificationPopupList);
     }
 
@@ -688,10 +688,8 @@ const Director = () => {
     }
 
     const VISITED_NOW_DATE = moment(new Date()).format('YYYY-MM-DD');    // 현재 날짜
-
     const today = new Date();
     const newDay = new Date();
-
     // 하루동안 보지않기
     const Dayclose = (DayNum) => {
         // +1일 계산
@@ -700,7 +698,7 @@ const Director = () => {
         localStorage.setItem(DayNum, expiryDate, DayNum);
         handleNotificationPopupsShow(DayNum);
     }
-
+    
     useEffect(() => {
         fetchDayInfo()
         fetchWeather()
