@@ -2093,7 +2093,6 @@ const Employee = () => {
                 
                 {/* NOTIFICATION POPUP */}
                 {
-                    
                 noticeHotList?.map((noticeHotItem, index) => (
                     localStorage.getItem(noticeHotItem.noticeId) >= VISITED_NOW_DATE ?
                         ""

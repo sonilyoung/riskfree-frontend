@@ -248,15 +248,13 @@ const PromptButtonWhite = styled(ButtonUnstyled)`
 `;
 
 const ClosePopupButton2 = styled(ButtonUnstyled)`
-    margin-top: 18px;
-    margin-right: 70px;
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    background: url(${popupClose3}) no-repeat 50% 50%;
+    background: url(${popupClose2}) no-repeat 50% 50%;
     border: none;
     cursor: pointer;
-    transition: background .2s; 
+    transition: background .2s;
 `;
 
 const headerSlider = {
@@ -1278,15 +1276,14 @@ const Director = () => {
                         </Grid>
                     </Grid>
                 </Grid>
-                {
-                !!noticeHotList && noticeHotList?.length && noticeHotList?.map((noticeHotItem, index) => (<>
-                    {
+                 {/* NOTIFICATION POPUP */}
+                 {
+                noticeHotList?.map((noticeHotItem, index) => (
                     localStorage.getItem(noticeHotItem.noticeId) >= VISITED_NOW_DATE ?
-                        (<></>)
+                        ""
                     :
-                        (
-                        <div className={classes.notificationPopup} style={{marginTop: `${index*3 + '0'}px`, marginLeft: `${index*3 + '0'}px`}} >
-                            <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(index)}></ClosePopupButton2>
+                        <div key={index} className={classes.notificationPopup} style={{marginTop: `${index*3 + '0'}px`, marginLeft: `${index*3 + '0'}px`}} >
+                            <ClosePopupButton2 onClick={() => handleNotificationPopupsShow(noticeHotItem.noticeId)}></ClosePopupButton2>
                             <div><span className={classes.slideLabelHot}>HOT</span> {noticeHotItem.title}</div>
                             <div className={classes.popNews}>
                                 <p>
@@ -1297,14 +1294,12 @@ const Director = () => {
                                 <div style={{ width:'80%' }}>{noticeHotItem.attachId ? <img src={icoFile} alt="file icon" /> : null}{noticeHotItem.fileName}</div>
                                 <div style={{ float: 'right' }}>
                                     <div className={classes.userInformation}>
-                                        <div style={{ backgroundColor:'#fff', cursor: 'pointer' }} onClick={() => Dayclose(noticeHotItem.noticeId)}><span>하루동안 보지않기 X</span></div>
+                                    <div style={{ backgroundColor:'#fff', cursor: 'pointer' }} onClick={() => Dayclose(noticeHotItem.noticeId)}><span>하루동안 보지않기 X</span></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        ) 
-                    }
-                </>))
+                ))
                 }
             </Grid >
 
