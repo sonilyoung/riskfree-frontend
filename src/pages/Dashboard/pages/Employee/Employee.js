@@ -1505,7 +1505,6 @@ const Employee = () => {
                                     <div className={condition === "4" ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => setCondition("4")}>항목별 대응수준 현황 (사업장별)</div>
                                     <div className={condition === "5" ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => setCondition("5")}>사업장별 재해발생 통계</div>
                                     <div className={condition === "6" ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => setCondition("6")}>개선.시정명령 조치내역 통계</div>
-                                    <div className={classes.PopListItem}>안전보건 법정교육 실시내역 통계</div>
                                 </div>
                             </div>
                             <div className={classes.chartPopGraph}>
