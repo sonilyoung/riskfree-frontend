@@ -11,7 +11,7 @@ function Okay({ show, title, message, onConfirm }) {
             </div>
             <div>{message}</div>
             <div>
-                <button onClick={onConfirm}>확인</button>
+                <button id="Okay_Btn" onClick={onConfirm}>확인</button>
             </div>
         </div>
     );

@@ -15,7 +15,6 @@ import { usePasswordResetMutation } from '../../../../../hooks/api/LoginManageme
 import Overlay from '../../../../../components/Overlay/Overlay';
 import Okay from '../../../../../components/MessageBox/Okay';
 
-
 const useStyles = makeStyles(() => ({
     pageWrap: {
         display: 'flex',
@@ -128,7 +127,7 @@ const StepOne = () => {
                 비밀번호가 기억나지 않으세요?
             </Typography>
             <Typography sx={{ textAlign: 'center' }} variant="body1" gutterBottom>
-                가입 시 등록된 정보를 입력한 후 비밀번호를 초기화합니다. 초기화 후 반듯이 비밀번호를 재설정하신 후 이용하시기 바랍니다.
+                가입 시 등록된 정보를 입력한 후 비밀번호를 초기화합니다. 초기화 후 반드시 비밀번호를 재설정하신 후 이용하시기 바랍니다.
             </Typography>
             <Grid container rowSpacing={2} columnSpacing={2}>
                 <Grid item xs={3}></Grid>

@@ -118,6 +118,7 @@ const Login = () => {
                 if (saveIDFlag) localStorage.setItem(LS_KEY_ID, values.id.value);
             } 
         } else {
+            document.getElementById("Okay_Btn").focus();
             setWrongCredentialsPopupMessage("등록되지 않은 계정입니다.");
             setWrongCredentialsPopup(true);
         }
@@ -142,7 +143,10 @@ const Login = () => {
     
     // Enter시 handleSubmit 호출
     const handleChangeSubmit = (e) => {
-        if (e.key === "Enter") handleLogin();
+        if (e.key === "Enter")  {
+            setWrongCredentialsPopup(true);
+            handleLogin();
+        }
     };
 
     const handleSaveIDFlag = (e) => {

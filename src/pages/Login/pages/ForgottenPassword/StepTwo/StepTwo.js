@@ -123,13 +123,13 @@ const StepTwo = () => {
                     <Typography variant="body1" gutterBottom>비밀번호</Typography>
                 </Grid>
                 <Grid item xs={9}>
-                    <TextField id="standard-basic" onChange={handleChange("changePwd")} placeholder="비밀번호를 입력해 주세요" variant="outlined" />
+                    <TextField type="password" id="standard-basic" onChange={handleChange("changePwd")} placeholder="비밀번호를 입력해 주세요" variant="outlined" />
                 </Grid>
                 <Grid className={classes.preInputText} item xs={3}>
                     <Typography variant="body1" gutterBottom>비밀번호 확인</Typography>
                 </Grid>
                 <Grid item xs={9}>
-                    <TextField id="standard-basic" onChange={handleChange("confirmPwd")} placeholder="비밀번호를 재입력해 주세요." variant="outlined" />
+                    <TextField type="password" id="standard-basic" onChange={handleChange("confirmPwd")} placeholder="비밀번호를 재입력해 주세요." variant="outlined" />
                 </Grid>
                 <Grid item xs={3}></Grid>
                 <Grid item xs={9}>
