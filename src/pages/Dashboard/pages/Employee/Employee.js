@@ -252,7 +252,7 @@ const Employee = () => {
             plotOptions: {
                 bar: {
                     horizontal: false,
-                    columnWidth: '55%',
+                    columnWidth: '60%',
                     endingShape: 'rounded'
                 },
             },
@@ -267,6 +267,7 @@ const Employee = () => {
             xaxis: {
                 type: 'category',
                 categories: [],
+                tickPlacement: 'on',
                 position: 'bottom',
                 labels: {
                     show: true,
@@ -1510,7 +1511,7 @@ const Employee = () => {
                             <div className={classes.chartPopGraph}>
                                 <div className={classes.graphHeader}>
                                     <div>
-                                        <ButtonGrid onClick={() => setToggleGrid(!toggleGrid)}>{toggleGrid ? "Graph" : "Grid"}</ButtonGrid>
+                                        <ButtonGrid onClick={() => setToggleGrid(!toggleGrid)}>{toggleGrid ? "그래프" : "그리드"}</ButtonGrid>
                                     </div>
                                     <div>
                                         <ButtonGraphPrev
@@ -1560,41 +1561,41 @@ const Employee = () => {
                                                 })}
                                             </div>))
                                             : !!reportList && !!(reportList?.length) && condition === "5"
-                                                ? reportList?.map((reportItem, index) =>
-                                                (<div key={index} className={classes.tableRow}>
-                                                    {reportItem?.map((item, i) =>
-                                                        <div key={i}>
+                                            ? reportList?.map((reportItem) =>
+                                            (<div className={classes.tableRow}>
+                                                {reportItem?.map((item) =>
+                                                    <>
+                                                        <div className={classes.tableData}>{item?.workplaceName}</div>
+                                                        <div className={classes.tableData}>{item?.accType001 ? `${item?.accType001}건` : "0건"}</div>
+                                                        <div className={classes.tableData}>{item?.accType001 ? `${item?.accType002}건` : "0건"}</div>
+                                                        <div className={classes.tableData}>{item?.accType001 ? `${item?.accType003}건` : "0건"}</div>
+                                                        <div className={classes.tableData}>{item?.accType001 ? `${item?.accType004}건` : "0건"}</div>
+                                                        <div className={classes.tableData}>{item?.accType001 ? `${item?.accType005}건` : "0건"}</div>
+                                                        <div className={classes.tableData}>{item?.accType001 ? `${item?.accType006}건` : "0건"}</div>
+                                                    </>
+                                                )}
+                                            </div>))
+                                                : !!reportList && !!(reportList?.length) && condition === "6"
+                                                ? reportList?.map((reportItem) =>
+                                                (<div className={classes.tableRow}>
+                                                    {reportItem?.map((item) =>
+                                                        <>
                                                             <div className={classes.tableData}>{item?.workplaceName}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType001}건` : "0건"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType002}건` : "0건"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType003}건` : "0건"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType004}건` : "0건"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType005}건` : "0건"}</div>
-                                                            <div className={classes.tableData}>{item?.accType001 ? `${item?.accType006}건` : "0건"}</div>
-                                                        </div>
+                                                            <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd001}건` : "0건"}</div>
+                                                            <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd002}건` : "0건"}</div>
+                                                            <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd003}건` : "0건"}</div>
+                                                            <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd004}건` : "0건"}</div>
+                                                        </>
                                                     )}
                                                 </div>))
-                                                : !!reportList && !!(reportList?.length) && condition === "6"
-                                                    ? reportList?.map((reportItem, index) =>
-                                                    (<div key={index} className={classes.tableRow}>
-                                                        {reportItem?.map((item, i) =>
-                                                            <div key={i}>
-                                                                <div className={classes.tableData}>{item?.workplaceName}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd001}건` : "0건"}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd002}건` : "0건"}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd003}건` : "0건"}</div>
-                                                                <div className={classes.tableData}>{item?.cmmdOrgCd001 ? `${item?.cmmdOrgCd004}건` : "0건"}</div>
-                                                            </div>
-                                                        )}
-                                                    </div>))
-                                                    : reportList?.map((reportItem, index) =>
-                                                    (<div key={index} className={classes.tableRow}>
-                                                        <div className={classes.tableData}>{reportItem[0]?.workplaceName}</div>
-                                                        {reportTitle?.map((reportTitleItem) => {
-                                                            const element = reportItem?.find(item => item.groupId === reportTitleItem.groupId);
-                                                            return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}건` : "0건"}</div>;
-                                                        })}
-                                                    </div>))
+                                                : reportList?.map((reportItem) =>
+                                                (<div className={classes.tableRow}>
+                                                    <div className={classes.tableData}>{reportItem[0]?.workplaceName}</div>
+                                                    {reportTitle?.map((reportTitleItem) => {
+                                                        const element = reportItem?.find(item => item.groupId === reportTitleItem.groupId);
+                                                        return <div className={classes.tableData}>{element?.evaluationRate ? `${element.evaluationRate}건` : "0건"}</div>;
+                                                    })}
+                                                </div>))
                                         }                                    
                                     </div>
                                 </Grid>

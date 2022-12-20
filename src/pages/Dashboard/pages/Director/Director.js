@@ -355,7 +355,7 @@ const Director = () => {
             plotOptions: {
                 bar: {
                     horizontal: false,
-                    columnWidth: '55%',
+                    columnWidth: '60%',
                     endingShape: 'rounded'
                 },
             },
@@ -854,8 +854,7 @@ const Director = () => {
                             <div className={classes.chartPopGraph}>
                                 <div className={classes.graphHeader}>
                                     <div>
-                                        <ButtonGrid onClick={() => setToggleGrid(!toggleGrid)}>{toggleGrid ? "Graph" : "Grid"}</ButtonGrid>
-                                    </div>
+                                        <ButtonGrid onClick={() => setToggleGrid(!toggleGrid)}>{toggleGrid ? "그래프" : "그리드"}</ButtonGrid>                                    </div>
                                     <div>
                                         <ButtonGraphPrev
                                             onClick={() => {
