@@ -1411,20 +1411,24 @@ const Employee = () => {
                                                 {baselineData.isClose === "1" ? <span style={{color:'red'}}>※ 마감된 차수는 복사할 수 없습니다.</span>
                                                 :
                                                 <FormControl sx={{ width:'100%', backgroundColor: '#ffffff' }} size="small">
-                                                <Select                                                    
+                                                <InputLabel style={{fontSize:'16px'}} id="customized-select-label">차수를 선택하세요</InputLabel>
+                                                <Select
+                                                    label= " 차수를 선택하세요"
                                                     labelId="customized-select-label"
-                                                    id="customized-select-label"
+                                                    id="customized-select"
                                                     value={targetBaselineId || ''}
                                                     onChange={(event) => { setTargetBaselineId(event.target.value) }}
-                                                >                                                    
-                                                    {baselineList?.map((baselineItem, index) => ([
+                                                >
+                                                    {
+                                                    baselineList?.map((baselineItem, index) => ([
                                                         parseInt(currentBaselineId) === baselineItem.baselineId ? 
-                                                            <MenuItem disabled value='' sx={{ display: "none" }}></MenuItem>
+                                                            ""
                                                          :
                                                             <MenuItem key={index} onClick={(eve) => { setTargetBaselineName(baselineItem.baselineName) }} 
                                                             value={baselineItem.baselineId}>{baselineItem.baselineName}</MenuItem>
                                                         ])
                                                     )}
+                                                
                                                 </Select>
                                                 </FormControl>
                                                 }
@@ -1446,7 +1450,11 @@ const Employee = () => {
                                             </AccordionDetails>
                                         </Accordion>
                                         <span></span>
+                                        {baselineData.isClose === "1" ? 
+                                        <div className={classes.listLink + ' activeLink ' + classes.popupLink} underline="none">관리차수 마감<img src={arrowDown} alt="arrow down" /></div>
+                                        :
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => handleClose()}>관리차수 마감<img src={arrowDown} alt="arrow down" /></Link>
+                                        }
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"/dashboard/employee/notifications/list"} underline="none">전사 공지사항 등록<img src={arrowDown} alt="arrow down" /></Link>
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" id="safetyFileUpload" onClick={handleDialogOpenEmployee}>안전작업허가서 양식 업/다운로드​<img src={arrowDown} alt="arrow down" /></Link>
                                         
