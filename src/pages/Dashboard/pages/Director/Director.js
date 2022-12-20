@@ -827,7 +827,7 @@ const Director = () => {
                             <div className={classes.adminFieldText}> {companyInfo.data?.RET_DATA?.shGoal}</div>
                         </div>
                         <div className={classes.adminLogo}>
-                            {companyInfo.data && !!(companyInfo.data.RET_DATA) && !!companyInfo.data.RET_DATA.logoImg && <img heigth={60} src={`${BASE_URL}/file/getImg?imgPath=${companyInfo?.data?.RET_DATA?.logoImg}`} alt="logo" />}
+                            {!!(companyInfo) && !!companyInfo.logoImg && (<img src={`${BASE_URL}file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
                         </div>
                         <div className={classes.adminField + ' ' + classes.adminFieldRight}>
                             <div className={classes.adminFieldText}>경영방침</div>
@@ -848,8 +848,7 @@ const Director = () => {
                                     <div className={condition === "3" ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => setCondition("3")}>항목별 대응수준 현황 (통합)</div>
                                     <div className={condition === "4" ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => setCondition("4")}>항목별 대응수준 현황 (사업장별)</div>
                                     <div className={condition === "5" ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => setCondition("5")}>사업장별 재해발생 통계</div>
-                                    <div className={condition === "6" ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => setCondition("6")}>개선.시정명령 조치내역 통계</div>
-                                    <div className={classes.PopListItem}>안전보건 법정교육 실시내역 통계</div>
+                                    <div className={condition === "6" ? classes.PopListItem + ' active' : classes.PopListItem} onClick={() => setCondition("6")}>개선.시정명령 조치내역 통계</div>                                    
                                 </div>
                             </div>
                             <div className={classes.chartPopGraph}>

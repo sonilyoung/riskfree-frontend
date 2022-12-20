@@ -182,6 +182,14 @@ const Update = () => {
 
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
+
+        var fileVal = selectedFile.name.slice(selectedFile.name.indexOf(".")+1).toLowerCase(); 
+        if(fileVal !== "jpg" && fileVal !== "png" && fileVal !== "jpeg" && fileVal !== "gif" && fileVal !== "bmp"){ 
+            setOkayPopupMessage("이미지파일만 가능합니다.");
+            setOkayPopupShow(true);   
+            return false;            
+        } 
+
         if((selectedFileName === "") || (selectedFileName === null)) {
             setOkayPopupMessage("업로드할 파일을 선택하세요.");
             setOkayPopupShow(true);   

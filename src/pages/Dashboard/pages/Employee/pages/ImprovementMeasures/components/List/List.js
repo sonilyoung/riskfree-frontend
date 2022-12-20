@@ -25,6 +25,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import 'dayjs/locale/ko';
 import useUserInitialWorkplaceId from '../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
 import useUserToken from '../../../../../../../../hooks/core/UserToken/UserToken';
+import moment from "moment"
 
 function List() {
     const classes = useStyles();
@@ -39,9 +40,10 @@ function List() {
     const [getroleCd, setGetroleCd] = useState('');
     const [statusCd, setStatusCd] = useState("")
     const [improvements, setImprovements] = useState([])
-    const [startDate, setStartDate] = useState(null)
-    const [endDate, setEndDate] = useState(null)
+    const [startDate, setStartDate] = useState(moment(new Date()))
+    const [endDate, setEndDate] = useState(moment(new Date()))
     const [page, setPage] = useState(1)
+    const [defaultVar, setDefaultVar] = useState("")
 
     const handleWorkplaceSelect = (event) => {
         setWorkplaceSelect(event.target.value);
@@ -145,9 +147,10 @@ function List() {
                                 <Select
                                     className={classes.selectMenu}
                                     sx={{ width: 204 }}
-                                    key={workplaceSelect === null ? "" : workplaceSelect }
-                                    value={workplaceSelect === null ? "" : workplaceSelect }
+                                    key=""
+                                    value=""
                                     onChange={(e) => setWorkplaceSelect(e.target.value)}
+                                    defaultValue={defaultVar}
                                     displayEmpty
                                 >
                                     <MenuItem value="">전체</MenuItem>

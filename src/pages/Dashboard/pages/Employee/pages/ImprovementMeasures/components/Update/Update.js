@@ -21,7 +21,7 @@ import { useImprovementViewMutation, useImprovementUpdateMutation } from '../../
 import 'dayjs/locale/ko';
 import moment from "moment"
 import useUserInitialWorkplaceId from '../../../../../../../../hooks/core/UserInitialWorkplaceId/UserInitialWorkplaceId';
-import { UploadDialog } from '../../../../../../../../dialogs/Upload';
+import { SafetyUploadDialog } from '../../../../../../../../dialogs/Upload';
 import { useFileUploadMutation, useGetFileInfoMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 import { useFileDownMutation } from '../../../../../../../../hooks/api/FileManagement/FIleManagement';
 import Okay from '../../../../../../../../components/MessageBox/Okay';
@@ -51,6 +51,10 @@ const Registration = () => {
     const [filePathBefore, setFilePathBefore] = useState("")
     const [filePathAfter, setFilePathAfter] = useState("")
     const [fileReq, setFileReq] = useState("")
+
+    const [infoPopupShow, setInfoPopupShow] = useState(false);
+    const [infoPopupMessage, setInfoPopupMessage] = useState("");
+    const [infoPopupTitle, setInfoPopupTitle] = useState("알림");
 
     const [filePath, setFilePath] = useState({
         "reqFileId": "",
@@ -124,6 +128,16 @@ const Registration = () => {
 
     const handleDialogFileUpload = async () => {
         let formData = new FormData();
+
+        if(dialogId !== 'reqFileId'){
+            var fileVal = selectedFile.name.slice(selectedFile.name.indexOf(".")+1).toLowerCase(); 
+            if(fileVal !== "jpg" && fileVal !== "png" && fileVal !== "jpeg" && fileVal !== "gif" && fileVal !== "bmp"){ 
+                setOkayPopupMessage("이미지파일만 가능합니다.");
+                setOkayPopupShow(true);         
+                return false;      
+            } 
+        }
+
         if((selectedFileName === "") || (selectedFileName === null)) {
             setOkayPopupMessage("업로드할 파일을 선택하세요.");
             setOkayPopupShow(true);
@@ -158,6 +172,10 @@ const Registration = () => {
         const fileId = improvement[dialogId]
         if (fileId || id) {
             window.location = `${BASE_URL}file/fileDown?atchFileId=${fileId || id}&fileSn=1`;
+        }else{
+            setInfoPopupMessage("등록된 양식이 없습니다.");
+            setInfoPopupShow(true);   
+            return false;            
         }
     }
     
@@ -501,7 +519,7 @@ const Registration = () => {
                     <WhiteButton className={'button-cancellation'} onClick={() => handleRedirect()}>취소</WhiteButton>
                 </Grid>
             </Grid>
-            <UploadDialog
+            <SafetyUploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}
@@ -524,6 +542,14 @@ const Registration = () => {
                         }
                     }} />
             </Overlay>
+            <Overlay show={infoPopupShow}>
+                <Okay
+                    show={infoPopupShow}
+                    message={infoPopupMessage}
+                    title={infoPopupTitle}
+                    onConfirm={() => setInfoPopupShow(false)} />
+            </Overlay>
+
         </DefaultLayout>
     );
 };

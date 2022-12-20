@@ -29,6 +29,9 @@ const View = () => {
     const [okayPopupShow, setOkayPopupShow] = useState(false);
     const [okayPopupMessage, setOkayPopupMessage] = useState("");
     const [okayPopupTitle, setOkayPopupTitle] = useState("알림");
+    const [infoPopupShow, setInfoPopupShow] = useState(false);
+    const [infoPopupMessage, setInfoPopupMessage] = useState("");
+    const [infoPopupTitle, setInfoPopupTitle] = useState("알림");
 
     const currentIsClose = useSelector(selectIsClose);
 
@@ -56,6 +59,9 @@ const View = () => {
     async function handleDialogFileDownload(id) {
         if (id) {
             window.location = `${BASE_URL}file/fileDown?atchFileId=${id}&fileSn=1`;
+        }else{
+            setInfoPopupMessage("등록된 보고서가 없습니다.");
+            setInfoPopupShow(true);            
         }
     }
 
@@ -280,6 +286,13 @@ const View = () => {
                     message={okayPopupMessage}
                     title={okayPopupTitle}
                     onConfirm={() => {handleRedirect()}} />
+            </Overlay>
+            <Overlay show={infoPopupShow}>
+                <Okay
+                    show={infoPopupShow}
+                    message={infoPopupMessage}
+                    title={infoPopupTitle}
+                    onConfirm={() => setInfoPopupShow(false)} />
             </Overlay>
         </DefaultLayout >
     )

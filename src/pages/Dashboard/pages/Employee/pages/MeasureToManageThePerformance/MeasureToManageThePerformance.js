@@ -160,8 +160,10 @@ const MeasureToManageThePerformance = () => {
         });
         setRelatedRawButtonList(response.data.RET_DATA);
         if((lawId === "") || (lawId === null) || (lawId === "0")) {
-            setLawId(response.data.RET_DATA[0].lawButtonId);
-            fetchRelatedRawList(response.data.RET_DATA[0].lawButtonId);
+            if(response.data.RET_DATA.length > 0){
+                setLawId(response.data.RET_DATA[0].lawButtonId);
+                fetchRelatedRawList(response.data.RET_DATA[0].lawButtonId);
+            }
         } else {
             setLawId(lawId);
             fetchRelatedRawList(lawId);

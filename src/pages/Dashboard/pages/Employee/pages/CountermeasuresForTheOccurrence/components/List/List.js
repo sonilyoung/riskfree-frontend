@@ -223,7 +223,7 @@ const List = () => {
                 "workplaceId": workplaceSelect
                 }
             )
-        setOccurPlacesList(response.data.RET_DATA)
+        setOccurPlacesList(response.data?.RET_DATA)
     }
 
     const handleAccTypeCd = (e) => {
@@ -376,8 +376,8 @@ const List = () => {
                                                 <Checkbox
                                                     icon={<img src={checkIcon} alt="check icon" />}
                                                     checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    checked={job}
-                                                    onChange={() => setJob(!job)}
+                                                    checked={same}
+                                                    onChange={() => setSame(!same)}
                                                 />
                                             }
                                         />
@@ -388,8 +388,8 @@ const List = () => {
                                                 <Checkbox
                                                     icon={<img src={checkIcon} alt="check icon" />}
                                                     checkedIcon={<img src={checkIconOn} alt="check icon on" />}
-                                                    checked={same}
-                                                    onChange={() => setSame(!same)}
+                                                    checked={job}
+                                                    onChange={() => setJob(!job)}
                                                 />
                                             }
                                         />

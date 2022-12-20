@@ -853,7 +853,9 @@ const WorkHistoryList = () => {
         //console.log(response);
         setSafeWorkList(response.data.RET_DATA);
         if(getInitialWorkplaceId()===null || getInitialWorkplaceId()===""){
-            setWorkplaceId(response.data.RET_DATA?.[0].workplaceId)
+            if(response.data.RET_DATA.length > 0){
+                setWorkplaceId(response.data.RET_DATA[0].workplaceId)
+            }
         }          
     }
 
