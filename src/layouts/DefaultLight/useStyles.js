@@ -183,8 +183,8 @@ const useStyles = makeStyles(() => ({
         },
         '&.admincenter_popup': {
             width: '1024px',
-            height: '700px',
-            top: '80px',
+            height: '870px',
+            top: '30px',
             left: '-1024px'
         },
         '&.admincenter_popupClose': {

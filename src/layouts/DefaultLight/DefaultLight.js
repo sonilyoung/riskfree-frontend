@@ -547,10 +547,10 @@ const DefaultLight = ({ children }) => {
         }
     }
 
-    const handleDialogOpen = (event) => {
+    const handleDialogOpen = () => {
         setSelectedFileName("");
         setOpenDialog(true);
-        setDialogId(event.target.id);
+        setDialogId();
         setLabelObject({
             ...labelObject,
             upperLabel: "안전작업허가서 양식 관리",
@@ -603,6 +603,9 @@ const DefaultLight = ({ children }) => {
         const fileId = excel[dialogId]
         if (fileId || essentialDutyFileId) {
             window.location = `${BASE_URL}/file/fileDown?atchFileId=${fileId || essentialDutyFileId}&fileSn=1`;
+        } else {
+            setOkPopupMessage("등록된 양식이 없습니다");
+            setOkPopupShow(true);
         }
     }
 
@@ -729,6 +732,7 @@ const DefaultLight = ({ children }) => {
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => 
                                             handleDialogOpen()
                                         }>안전보건관리체계의 구축 및 이행 항목 등록/업데이트<img src={arrowDown} alt="arrow down" /></Link>
+
                                         <Link className={classes.listLink + ' activeLink ' + classes.popupLink} to={"#none"} underline="none" onClick={() => 
                                         { 
                                             fetchDutyDetailList()

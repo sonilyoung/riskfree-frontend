@@ -1474,7 +1474,7 @@ const SystemAdministrator = () => {
                                             <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.managerName}</div>
                                             <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.managerTel}</div>
                                             <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.contractAmount && parseFloat(subscribersWorkplaceItem.contractAmount).toLocaleString()}</div>
-                                            
+
                                             <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.contractDay}</div>
 
                                             <div className={classes.tableData} onDoubleClick={() => { setUserInfoPop(true); fetchSubscriberView(subscribersWorkplaceItem.workplaceId, subscribersWorkplaceItem.userId); }}>{subscribersWorkplaceItem.contractDate}</div>
@@ -1993,7 +1993,7 @@ const SystemAdministrator = () => {
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
                     <div>총 가입고객사
-                         <strong>{parseFloat(!!(subscribersList) && !!(subscribersList.length) && subscribersList[0]?.totalCount).toLocaleString()}</strong> 개
+                         <strong>{subscribersList.length === 0 ? "0" : parseFloat(!!(subscribersList) && !!(subscribersList.length) && subscribersList[0]?.totalCount).toLocaleString()}</strong> 개
                     </div>
                     <Stack spacing={2}>
                     </Stack>

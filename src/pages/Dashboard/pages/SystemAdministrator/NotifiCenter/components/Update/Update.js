@@ -49,10 +49,10 @@ const useStyles = makeStyles(() => ({
     boxRow: {
         display: 'flex',
         width: '100%',
-        minHeight: '60px',
+        minHeight: '80px',
         color: '#333333',
         '&:nth-last-of-type(2)': {
-            height: '230px',
+            height: '360px',
             borderBottom: 'none',
             '& >span': {
                 width: '100%'
@@ -278,10 +278,8 @@ const Update = (props) => {
     const [getFileInfo] = useGetFileInfoMutation()
 
 
-    const navigate = useNavigate()
     const handleRedirect = () => {
-        //navigate("/dashboard/director/notifications/list")
-        props.onCallback("View");
+        props.onCallback("List");
     }
 
     const handleFetchView = async () => {
@@ -457,7 +455,7 @@ const Update = (props) => {
                                 className={classes.textArea}
                                 id="outlined-multiline-static"
                                 multiline
-                                rows={7}
+                                rows={13}
                                 placeholder="내용을 입력하세요"
                                 value={notice.content}
                                 onChange={(e) => setNotice({ ...notice, "content": e.target.value })} />
@@ -506,7 +504,7 @@ const Update = (props) => {
                     message={okayPopupMessage}
                     title={okayPopupTitle}
                     onConfirm={() => {
-                        if (okayPopupMessage === "등록 되었습니다.") {
+                        if (okayPopupMessage === "수정 되었습니다.") {
                             setOkayPopupShow(false);
                             handleRedirect();
                         } else {

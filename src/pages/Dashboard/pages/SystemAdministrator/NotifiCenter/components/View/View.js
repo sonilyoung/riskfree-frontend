@@ -33,10 +33,10 @@ const useStyles = makeStyles(() => ({
     boxRow: {
         display: 'flex',
         width: '100%',
-        height: '60px',
+        height: '80px',
         color: '#333333',
         '&:nth-last-of-type(2)': {
-            height: '260px',
+            height: '360px',
             borderBottom: 'none',
             '& span': {
                 width: '100%'
