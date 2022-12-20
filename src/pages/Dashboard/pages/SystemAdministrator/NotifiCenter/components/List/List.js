@@ -417,7 +417,7 @@ function List(props) {
                     </>
                 </Grid>
                 <Grid item xs={12} className={classes.pagingBox}>
-                    <div>총 게시글&nbsp;<strong>{noticesList && noticesList[0]?.totalCount}</strong>&nbsp;건</div>
+                    <div>총 게시글&nbsp;<strong>{noticesList?.length === 0 ? "0" : noticesList && noticesList[0]?.totalCount}</strong>&nbsp;건</div>
                     <Stack spacing={2}>
                         {!!noticesForCount?.data?.RET_DATA && <Pagination count={!!noticesForCount?.data?.RET_DATA && (Math.floor(noticesForCount?.data?.RET_DATA[0]?.totalCount / 10))} boundaryCount={3} shape="rounded" page={page} onChange={handlePageChange} showFirstButton showLastButton />}
                     </Stack>
