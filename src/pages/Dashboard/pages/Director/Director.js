@@ -76,6 +76,7 @@ import icoFile from '../../../../assets/images/ic_file.png';
 import popupClose2 from '../../../../assets/images/btn_popClose2.png';
 import popupClose3 from '../../../../assets/images/btn_popClose3.png';
 import Chart from 'react-apexcharts';
+import Loading from '../../../../pages/Loading';
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -278,7 +279,11 @@ const footerSlider = {
     autoplaySpeed: 3000,
 }
 
+
 const Director = () => {
+    //로딩바추가
+    const [loading, setLoading] = useState(true);    
+
     const classes = useStyles();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -558,11 +563,13 @@ const Director = () => {
     }
 
     const fetchBaseLineReportList = async () => {
+        setLoading(true);
         const response = await getBaseLineReport({
             "baselineId": currentBaselineId,
             "condition": condition
         });
         setReportList(response.data.RET_DATA);
+        setLoading(false);
     }
 
     const refreshClock = () => {
@@ -673,6 +680,7 @@ const Director = () => {
     }
 
     const fetchBaseLineReportGraph = async () => {
+        setLoading(true);
         const response = await getBaseLineReportGraph({
             "baselineId": currentBaselineId,
             "condition": condition
@@ -685,6 +693,7 @@ const Director = () => {
             handleChartCategoriesDisplay([]);
             setChartSeries([]);            
         }
+        setLoading(false);
     }
 
     const VISITED_NOW_DATE = moment(new Date()).format('YYYY-MM-DD');    // 현재 날짜
@@ -1308,7 +1317,7 @@ const Director = () => {
                 onConfirmNo={() => setYesNoPopupShow(false)}
             />
         </Overlay>
-
+        {loading && <Loading/>}
         </WideLayout >
         
     );

@@ -1041,14 +1041,17 @@ const Employee = () => {
     }
 
     const fetchBaseLineReportList = async () => {
+        setLoading(true);
         const response = await getBaseLineReport({
             "baselineId": currentBaselineId,
             "condition": condition
         });
         setReportList(response.data.RET_DATA);
+        setLoading(false);
     }
 
     const fetchBaseLineReportGraph = async () => {
+        setLoading(true);
         const response = await getBaseLineReportGraph({
             "baselineId": currentBaselineId,
             "condition": condition
@@ -1060,6 +1063,7 @@ const Employee = () => {
             handleChartCategoriesDisplay([]);
             setChartSeries([]);            
         }
+        setLoading(false);
     }
 
     const DateChange = name => (date) => {
@@ -1161,14 +1165,12 @@ const Employee = () => {
     }, [baselineIdForSelect, baselineData, defaultPage, workplaceChange]);  
 
     useEffect(() => {
-        setLoading(true);
         if (toggleGrid) {
             fetchTitleReport();
             fetchBaseLineReportList();
         } else {
             fetchBaseLineReportGraph();
         }
-        setLoading(false);
     }, [condition, currentBaselineId, toggleGrid]);
 
     useEffect(() => {

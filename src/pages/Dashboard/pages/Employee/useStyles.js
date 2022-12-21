@@ -529,7 +529,7 @@ const useStyles = makeStyles(() => ({
         height: '64px'
     },
     chartPopup: {
-        zIndex: '1000',
+        zIndex: '1',
         position: 'absolute',
         top: '-20px',
         left: '-140px',
