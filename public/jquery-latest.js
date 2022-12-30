@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-unused-expressions */
 /*!
  * jQuery JavaScript Library v1.11.1
  * http://jquery.com/

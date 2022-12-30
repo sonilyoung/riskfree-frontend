@@ -1423,15 +1423,15 @@ const Employee = () => {
                                                     onChange={(event) => { setTargetBaselineId(event.target.value) }}
                                                 >
                                                     {
-                                                    baselineList?.map((baselineItem, index) => ([
-                                                        parseInt(currentBaselineId) === baselineItem.baselineId ? 
-                                                            ""
-                                                         :
-                                                            <MenuItem key={index} onClick={(eve) => { setTargetBaselineName(baselineItem.baselineName) }} 
-                                                            value={baselineItem.baselineId}>{baselineItem.baselineName}</MenuItem>
-                                                        ])
-                                                    )}
-                                                
+                                                        baselineList.map((baselineItem, index) => ([
+                                                                parseInt(currentBaselineId) === baselineItem.baselineId ? 
+                                                                <MenuItem></MenuItem>
+                                                                :
+                                                                <MenuItem key={index} onClick={(eve) => { setTargetBaselineName(baselineItem.baselineName) }} 
+                                                                value={baselineItem.baselineId}>{baselineItem.baselineName}</MenuItem>
+                                                            ])
+                                                        )
+                                                    }
                                                 </Select>
                                                 </FormControl>
                                                 }
