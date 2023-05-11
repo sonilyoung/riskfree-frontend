@@ -835,9 +835,16 @@ const Director = () => {
                             <div className={classes.adminFieldText}>안전보건목표</div>
                             <div className={classes.adminFieldText}> {companyInfo.data?.RET_DATA?.shGoal}</div>
                         </div>
+
+                        {companyInfo?.logoImg !== '/' && !!(companyInfo) && !!companyInfo.logoImg ?
                         <div className={classes.adminLogo}>
-                            {!!(companyInfo) && !!companyInfo.logoImg && (<img src={`${BASE_URL}file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
+                            <img src={`${BASE_URL}file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />
                         </div>
+                        :
+                        <div className={classes.adminLogo}>
+                        </div>                        
+                        }
+
                         <div className={classes.adminField + ' ' + classes.adminFieldRight}>
                             <div className={classes.adminFieldText}>경영방침</div>
                             <div className={classes.adminFieldText}>{companyInfo.data?.RET_DATA?.missionStatements}</div>

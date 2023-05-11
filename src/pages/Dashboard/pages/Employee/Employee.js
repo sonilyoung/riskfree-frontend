@@ -718,6 +718,16 @@ const Employee = () => {
                 setOkayPopupMessage("업로드할 파일을 선택하세요.");
                 setOkayPopupShow(true);   
             } else {
+
+                if (dialogId === "logoImgUpload") {
+                    var fileVal = selectedFile.name.slice(selectedFile.name.indexOf(".")+1).toLowerCase(); 
+                    if(fileVal !== "jpg" && fileVal !== "png" && fileVal !== "jpeg" && fileVal !== "gif" && fileVal !== "bmp"){ 
+                        setOkayPopupMessage("이미지파일만 가능합니다.");
+                        setOkayPopupShow(true);         
+                        return false;      
+                    }
+                }
+
                 setLoading(true);
                 let formData = new FormData();
                 formData.append("files", selectedFile)
@@ -1493,13 +1503,19 @@ const Employee = () => {
                             <div className={classes.adminFieldText}>안전보건목표</div>
                             <div className={classes.adminFieldText}>{companyInfo?.shGoal}</div>
                         </div>
+                        {companyInfo?.logoImg !== '/' && !!(companyInfo) && !!companyInfo.logoImg ?
                         <div className={classes.adminLogo}>
-                            {!!(companyInfo) && !!companyInfo.logoImg && (<img src={`${BASE_URL}file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />)}
+                            <img src={`${BASE_URL}file/getImg?imgPath=${companyInfo?.logoImg}`} alt="logo" />
                         </div>
+                        :
+                        <div className={classes.adminLogo}>
+                        </div>                        
+                        }
+
                         <div className={classes.adminField + ' ' + classes.adminFieldRight}>
                             <div className={classes.adminFieldText}>경영방침</div>
                             <div className={classes.adminFieldText}>{companyInfo?.missionStatements}</div>
-                        </div>
+                        </div>                        
                     </Grid>
                     <Grid className={classes.headerNavigation} item xs={5.8}>
                         <ChartButton onClick={() => setChartPop(true)}></ChartButton>
@@ -1782,13 +1798,13 @@ const Employee = () => {
                                                 {
                                                     currentIsClose === "1" ?
                                                         (inspection.fileId === null || inspection.fileId === "null" || inspection.fileId === "") ? 
-                                                            <FileButtonNone></FileButtonNone>
-                                                        : 
+                                                            <FileButtonNone id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonNone>
+                                                            : 
                                                             <>
-                                                            {(inspection.updateFileId === null || inspection.updateFileId === "null" || inspection.updateFileId === "") ? 
-                                                            <FileButtonExis></FileButtonExis>
+                                                            {(inspection.updateFileId === null || inspection.updateFileId === "null" || inspection.updateFileId === "") ?
+                                                            <FileButtonExis id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExis>
                                                             :
-                                                            <FileButtonExisEm></FileButtonExisEm>
+                                                            <FileButtonExisEm id="inspectionFile" onClick={(event) => handleDialogOpenEmployee(event, inspection.articleNo, inspection.fileId, index)}></FileButtonExisEm>
                                                             }
                                                         {((inspection.evaluation === "10" && <span className={'green'}>상</span>) 
                                                             || (inspection.evaluation === "7" && <span className={'orange'}>중</span>) 

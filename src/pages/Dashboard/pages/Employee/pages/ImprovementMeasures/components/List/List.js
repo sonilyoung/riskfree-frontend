@@ -40,14 +40,9 @@ function List() {
     const [getroleCd, setGetroleCd] = useState('');
     const [statusCd, setStatusCd] = useState("")
     const [improvements, setImprovements] = useState([])
-    const [startDate, setStartDate] = useState(moment(new Date()))
-    const [endDate, setEndDate] = useState(moment(new Date()))
+    const [startDate, setStartDate] = useState(moment().format("YYYY-MM-DD"))
+    const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"))
     const [page, setPage] = useState(1)
-    const [defaultVar, setDefaultVar] = useState("")
-
-    const handleWorkplaceSelect = (event) => {
-        setWorkplaceSelect(event.target.value);
-    };
 
     const handleReqUserSelect = (event) => {
         setGetroleCd(event.target.value);
@@ -73,9 +68,6 @@ function List() {
     const currentIsClose = useSelector(selectIsClose);
 
     const handleFetchList = async () => {
-        if(loginInfos.roleCd !== "001"){
-            setWorkplaceSelect(loginInfos.workplaceId);
-        }
         const response = await improvementSelect(
             {
                 "baselineId": currentBaseline,
@@ -94,9 +86,9 @@ function List() {
 
     const DateChange = name => (date) => {
         if(name === 'startDate') {
-            setStartDate(date);
+            setStartDate(date.format("YYYY-MM-DD"));
         } else {
-            setEndDate(date);
+            setEndDate(date.format("YYYY-MM-DD"));
         }
     };
 
@@ -128,7 +120,6 @@ function List() {
     useEffect(() => {
         fetchLoginInfo();
         handleComapanyWorkplace()
-        handleFetchList()
     }, [page])
 
     return (
@@ -147,10 +138,9 @@ function List() {
                                 <Select
                                     className={classes.selectMenu}
                                     sx={{ width: 204 }}
-                                    key=""
-                                    value=""
+                                    key={workplaceSelect === null ? "" : workplaceSelect }
+                                    value={workplaceSelect === null ? "" : workplaceSelect }
                                     onChange={(e) => setWorkplaceSelect(e.target.value)}
-                                    defaultValue={defaultVar}
                                     displayEmpty
                                 >
                                     <MenuItem value="">전체</MenuItem>

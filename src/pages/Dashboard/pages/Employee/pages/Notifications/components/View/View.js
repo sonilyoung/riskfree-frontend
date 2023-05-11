@@ -8,8 +8,10 @@ import { makeStyles } from '@mui/styles';
 import { DefaultLayout } from '../../../../../../../../layouts/Default';
 import { useNoticesViewMutation, useNoticesDeleteMutation } from '../../../../../../../../hooks/api/NoticesManagement/NoticesManagement';
 import { Overlay } from '../../../../../../../../components/Overlay';
+import { useGetLoginInfoMutation} from '../../../../../../../../hooks/api/MainManagement/MainManagement';
 import YesNo from '../../../../../../../../components/MessageBox/YesNo';
 import Okay from '../../../../../../../../components/MessageBox/Okay';
+
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const useStyles = makeStyles(() => ({
@@ -185,6 +187,9 @@ const WhiteButton = styled(ButtonUnstyled)`
 `;
 
 const View = (props) => {
+    const [getLoginInfo] = useGetLoginInfoMutation()
+    const [loginInfo, setLoginInfo] = useState({})
+
     const classes = useStyles();
     const { id } = useParams()
 
@@ -227,7 +232,13 @@ const View = (props) => {
         window.location = `${BASE_URL}file/fileDown?atchFileId=${notice?.data?.RET_DATA?.attachId}&fileSn=1`;
     }
 
+    const handleLoginInfo = async () => {
+        const response = await getLoginInfo()
+        setLoginInfo(response.data.RET_DATA)
+    }    
+
     useEffect(() => {
+        handleLoginInfo();
         handleFetch();
     }, [])
 
@@ -275,9 +286,17 @@ const View = (props) => {
                     </div>
                 </Grid>
                 <Grid item xs={12} className={classes.footerButtons}>
-                    <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/director/notifications/update/${notice?.data.RET_DATA.noticeId}`)}>수정</BlueButton>
-                    <WhiteButton className={'button-delete'} onClick={() => setYesNoPopupShow(true)}>삭제</WhiteButton>
-                    <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
+                    {
+                        loginInfo?.userId === notice?.data.RET_DATA.insertId ?
+                        <>
+                        <BlueButton className={'button-correction'} onClick={() => navigate(`/dashboard/director/notifications/update/${notice?.data.RET_DATA.noticeId}`)}>수정</BlueButton>
+                        <WhiteButton className={'button-delete'} onClick={() => setYesNoPopupShow(true)}>삭제</WhiteButton>
+                        <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
+                        </>
+                        :
+                        <WhiteButton className={'button-list'} onClick={() => handleRedirect()}>목록</WhiteButton>
+                    }
+
                 </Grid>
             </Grid>
             <Overlay show={yesNoPopupShow}>

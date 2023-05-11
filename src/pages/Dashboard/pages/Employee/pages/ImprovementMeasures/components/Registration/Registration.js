@@ -89,7 +89,7 @@ const Registration = () => {
             "improveId": null,
             "improveNo": generatedKey,
             "insertId": null,
-            "reqDate": moment(new Date()),
+            "reqDate": reqDate,
             "reqFileId": atchFileId,
             "reqUserCd": getroleCd,
             "statusCd": "002",
@@ -200,11 +200,11 @@ const Registration = () => {
 
     const DateChange = name => (date) => {
         if(name === 'finDate') {
-            setImprovement({ ...improvement, "finDate": date});
+            setImprovement({ ...improvement, "finDate" : date.format("YYYY-MM-DD") });
         } else if(name === 'completeDate') {
-            setImprovement({ ...improvement, "completeDate": date});
+            setImprovement({ ...improvement, "completeDate" : date.format("YYYY-MM-DD") });
         } else if(name === 'reqDate') {
-            setImprovement({ ...improvement, "reqDate": date});
+            setImprovement({ ...improvement, "reqDate" : date.format("YYYY-MM-DD") });
         }
     };
 

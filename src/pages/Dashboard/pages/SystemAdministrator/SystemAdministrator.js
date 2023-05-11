@@ -46,7 +46,7 @@ import { useNavigate } from 'react-router-dom';
 import useUserURLRedirect from '../../../../hooks/core/UserURLRedirect/UserURLRedirect';
 import { CleaningServices } from '@mui/icons-material';
 import { useFileUploadMutation, useFileDownMutation, useGetFileInfoMutation } from '../../../../hooks/api/FileManagement/FIleManagement';
-import { DownloadDialog, OnlyUploadDialog, UploadDialog } from '../../../../dialogs/Upload';
+import { DownloadDialog, OnlyUploadDialog, ContractUploadDialog } from '../../../../dialogs/Upload';
 import { Overlay } from '../../../../components/Overlay';
 import Okay from '../../../../components/MessageBox/Okay';
 import YesNo from '../../../../components/MessageBox/YesNo';
@@ -1999,7 +1999,7 @@ const SystemAdministrator = () => {
                     </Stack>
                 </Grid>
             </Grid>
-            <UploadDialog
+            <ContractUploadDialog
                 open={openDialog}
                 onClose={handleDialogClose}
                 onInputChange={handleDialogInputChange}

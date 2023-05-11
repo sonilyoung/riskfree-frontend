@@ -858,7 +858,7 @@ const useStyles = makeStyles(() => ({
             width: '25px',
             height: '25px',
             right: '51px',
-            zIndex: '1',
+            zIndex: '0',
             transition: 'background-color .2s',
             '&:hover': {
                 backgroundColor: '#3f4d72'
